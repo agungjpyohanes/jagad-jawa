@@ -11,13 +11,11 @@ export function switchTab(tabId) {
     target.classList.add('block');
   }
 
-  document.querySelectorAll('.nav-btn').forEach(btn => {
+  document.querySelectorAll('.nav-btn, .nav-link').forEach(btn => {
     if (btn.dataset.tab === tabId) {
-      btn.classList.add('text-prada', 'bg-sogan-900/80');
-      btn.classList.remove('text-sogan-200');
+      btn.classList.add('active');
     } else {
-      btn.classList.remove('text-prada', 'bg-sogan-900/80');
-      btn.classList.add('text-sogan-200');
+      btn.classList.remove('active');
     }
   });
 
@@ -25,6 +23,8 @@ export function switchTab(tabId) {
     // Canvas init will be handled by aksara module
     window.dispatchEvent(new CustomEvent('init-aksara-canvas'));
   }
+
+  window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

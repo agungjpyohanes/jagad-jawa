@@ -20,8 +20,12 @@ import {
   HASIL_IV_JODOH, HASIL_V_JODOH, HASIL_VI_JODOH
 } from './data/marriage.js';
 import { TARGET_HARI_SELAMETAN, TARGET_PASARAN_SELAMETAN, JENIS_SELAMETAN } from './data/selametan.js';
-import { AKSARA_NGLEGENA } from './data/aksara.js';
-import { WAYANG_CHARACTERS } from './data/wayang.js';
+import { 
+  AKSARA_NGLEGENA, PASANGAN_MAP, SANDHANGAN_SWARA, SANDHANGAN_PANYIGEG,
+  SANDHANGAN_WYANJANA, AKSARA_MURDA, AKSARA_SWARA, ANGKA_JAWA, PADA_JAWA,
+  transliterateLatinToJawa
+} from './data/aksara.js';
+import { WAYANG_CHARACTERS, WAYANG_LIST } from './data/wayang.js';
 import { PITUTUR_LIST, QUIZ_QUESTIONS } from './data/pitutur.js';
 
 // ─── Expose globals for inline HTML handlers ───────────────────────────────
@@ -191,8 +195,15 @@ function initTahunHitungSelect() {
 
 window.updateKepribadianQuickInfo = function () {
   const tglVal = document.getElementById('tglLahirKepribadian')?.value;
-  if (!tglVal) return;
+  if (!tglVal) {
+    const elDino = document.getElementById('outHariPasaranPribadi');
+    const elNeptu = document.getElementById('outNeptuWukuPribadi');
+    if (elDino) elDino.innerText = '-';
+    if (elNeptu) elNeptu.innerText = '-';
+    return;
+  }
   const [y, m, d] = tglVal.split('-').map(Number);
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return;
   const info = getDayInfo(y, m, d);
   const dino = HARI[info.weekdayId];
   const pas = PASARAN[info.pasaranId];
@@ -205,12 +216,12 @@ window.updateKepribadianQuickInfo = function () {
 
 window.hitungKepribadianLengkap = function () {
   const tglVal = document.getElementById('tglLahirKepribadian').value;
-  const nama = document.getElementById('namaKepribadian').value.trim() || 'Raden Hamengku';
-  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian').value) || 2026;
-  const alamatTinggal = document.getElementById('alamatTinggal').value.trim() || 'Soditan';
-  const alamatKerja = document.getElementById('alamatKerja').value.trim() || 'Madegondo';
-
   if (!tglVal) { showToast('Pilih tanggal lahir terlebih dahulu.'); return; }
+
+  const nama = document.getElementById('namaKepribadian').value.trim() || '-';
+  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian').value) || 2026;
+  const alamatTinggal = document.getElementById('alamatTinggal').value.trim() || '-';
+  const alamatKerja = document.getElementById('alamatKerja').value.trim() || '-';
   const [y, m, d] = tglVal.split('-').map(Number);
   const info = getDayInfo(y, m, d);
   const dino = HARI[info.weekdayId];
@@ -329,8 +340,12 @@ window.autoDetectAksara = function (side) {
 
 window.autoWetonPerjodohan = function (side) {
   const tgl = document.getElementById('tgl' + side).value;
-  if (!tgl) return;
+  if (!tgl) {
+    document.getElementById('neptu' + side + 'Badge').innerText = '-';
+    return;
+  }
   const [y, m, d] = tgl.split('-').map(Number);
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return;
   const info = getDayInfo(y, m, d);
   document.getElementById('hari' + side).value = HARI[info.weekdayId];
   document.getElementById('pasaran' + side).value = PASARAN[info.pasaranId];
@@ -342,17 +357,29 @@ window.updateNeptuPerjodohan = function (side) {
   const p = document.getElementById('pasaran' + side).value;
   const hIdx = HARI.indexOf(h);
   const pIdx = PASARAN.indexOf(p);
-  const n = (hIdx >= 0 ? NEPTU_HARI[hIdx] : 0) + (pIdx >= 0 ? NEPTU_PASARAN[pIdx] : 0);
-  document.getElementById('neptu' + side + 'Badge').innerText = n;
+  if (hIdx >= 0 && pIdx >= 0) {
+    const n = NEPTU_HARI[hIdx] + NEPTU_PASARAN[pIdx];
+    document.getElementById('neptu' + side + 'Badge').innerText = n;
+  } else {
+    document.getElementById('neptu' + side + 'Badge').innerText = '-';
+  }
 };
 
 window.hitungNujumPerjodohan = function () {
-  const neptuP = parseInt(document.getElementById('neptuPBadge').innerText) || 0;
-  const neptuL = parseInt(document.getElementById('neptuLBadge').innerText) || 0;
+  const neptuPText = document.getElementById('neptuPBadge').innerText;
+  const neptuLText = document.getElementById('neptuLBadge').innerText;
+  const neptuP = parseInt(neptuPText);
+  const neptuL = parseInt(neptuLText);
+
+  if (!neptuP || !neptuL || isNaN(neptuP) || isNaN(neptuL)) {
+    showToast('Pilih tanggal lahir atau tentukan weton kedua calon pengantin terlebih dahulu.');
+    return;
+  }
+
   const hariP = document.getElementById('hariP').value;
   const hariL = document.getElementById('hariL').value;
-  const namaP = document.getElementById('namaP').value || 'Wanita';
-  const namaL = document.getElementById('namaL').value || 'Pria';
+  const namaP = document.getElementById('namaP').value.trim() || 'Calon Pengantin Wanita';
+  const namaL = document.getElementById('namaL').value.trim() || 'Calon Pengantin Pria';
 
   const akDP = document.getElementById('aksaraDepanP').value;
   const akBP = document.getElementById('aksaraBelakangP').value;
@@ -392,14 +419,24 @@ window.hitungNujumPerjodohan = function () {
     else if (r.h.status === 'buruk') buruk++;
     else campur++;
 
-    const badge = r.h.status === 'baik' ? 'bg-emerald-950 text-emerald-300 border-emerald-500' : (r.h.status === 'buruk' ? 'bg-rose-950 text-rose-300 border-rose-500' : 'bg-amber-950 text-amber-300 border-amber-500');
-    const badgeLabel = r.h.status === 'baik' ? '✅ BAIK' : (r.h.status === 'buruk' ? '❌ BURUK' : '• CAMPUR');
+    let badgeClass = '';
+    let badgeSymbol = '';
+    if (r.h.status === 'baik') {
+      badgeClass = 'bg-emerald-950/80 text-emerald-300 border-emerald-500/70';
+      badgeSymbol = '✓ BAIK';
+    } else if (r.h.status === 'buruk') {
+      badgeClass = 'bg-rose-950/80 text-rose-300 border-rose-500/70';
+      badgeSymbol = '⊗ BURUK';
+    } else {
+      badgeClass = 'bg-amber-950/80 text-amber-300 border-amber-500/70';
+      badgeSymbol = '• CAMPUR';
+    }
 
     tbody += `<tr class="border-b border-sogan-800/80 hover:bg-sogan-900/30">
       <td class="p-3 font-bold text-prada">${r.no}</td>
       <td class="p-3 font-marcellus font-bold text-sogan-100">${r.h.nama}</td>
       <td class="p-3 text-sogan-200">${r.h.arti} <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${r.rumus}</div></td>
-      <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full border text-[10px] font-bold ${badge}">${badgeLabel}</span></td>
+      <td class="p-3 text-center"><span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${badgeClass}">${badgeSymbol}</span></td>
     </tr>`;
   });
 
@@ -407,8 +444,11 @@ window.hitungNujumPerjodohan = function () {
   document.getElementById('perjodohanPairInfo').innerHTML = `${namaP} (${neptuP}) · ${namaL} (${neptuL}) · Jumlah Neptu: <strong class="text-prada font-mono">${totalNeptu}</strong>`;
   document.getElementById('ringkasanPerjodohanBox').innerHTML = `
     <div class="font-bold text-prada text-sm">Ringkasan Kecocokan Pitung Jawa:</div>
-    <p class="text-sogan-200">Dari 7 perhitungan metode primbon: <strong class="text-emerald-400">${baik} Baik</strong>, <strong class="text-rose-400">${buruk} Kurang Baik</strong>, dan <strong class="text-amber-400">${campur} Campuran</strong>. Hubungan memiliki keharmonisan yang perlu dijaga dengan saling menghargai.</p>
+    <p class="text-sogan-200">Dari 7 perhitungan metode primbon: <strong class="text-emerald-400">✓ ${baik} Baik</strong>, <strong class="text-amber-400">• ${campur} Campuran</strong>, dan <strong class="text-rose-400">⊗ ${buruk} Kurang Baik</strong>. Hubungan memiliki keharmonisan yang perlu dijaga dengan saling menghargai.</p>
   `;
+
+  const emptyBox = document.getElementById('emptyPerjodohanBox');
+  if (emptyBox) emptyBox.classList.add('hidden');
   document.getElementById('hasilPerjodohanCard').classList.remove('hidden');
   document.getElementById('btnPrintPerjodohan').style.display = 'inline-block';
   showToast('Pitung perjodohan kasil kapetung!');
@@ -531,101 +571,251 @@ window.hitBonang = function (num, freq, el) {
   }
 };
 
-// ─── AKSARA ────────────────────────────────────────────────────────────────
+// ─── AKSARA (ENGINE STANDAR & VIRTUAL KEYBOARD) ───────────────────────────
 window.convertLatinToJawa = function () {
-  const input = document.getElementById('latinInput').value.toLowerCase().trim();
+  const inputEl = document.getElementById('latinInput');
   const outputEl = document.getElementById('jawaOutput');
   const countEl = document.getElementById('charCountLabel');
+  if (!inputEl || !outputEl) return;
 
-  if (!input) {
-    outputEl.innerText = 'ꦲꦤꦕꦫꦏ';
-    countEl.innerText = '0 Karakter';
+  const raw = inputEl.value;
+  if (!raw.trim()) {
+    outputEl.value = '';
+    if (countEl) countEl.innerText = '0 Aksara';
     return;
   }
 
-  function applySandhangan(base, vokal) {
-    if (vokal === 'i') return base + 'ꦶ';
-    if (vokal === 'u') return base + 'ꦸ';
-    if (vokal === 'e') return base + 'ꦼ';
-    if (vokal === 'é') return 'ꦺ' + base;
-    if (vokal === 'o') return 'ꦺ' + base + 'ꦴ';
-    return base;
+  const converted = transliterateLatinToJawa(raw);
+  outputEl.value = converted;
+  window.updateAksaraCharCount();
+};
+
+window.updateAksaraCharCount = function () {
+  const outputEl = document.getElementById('jawaOutput');
+  const countEl = document.getElementById('charCountLabel');
+  if (outputEl && countEl) {
+    const len = [...outputEl.value].length;
+    countEl.innerText = `${len} Aksara`;
   }
-
-  let res = '';
-  let i = 0;
-  while (i < input.length) {
-    if (input[i] === ' ') { res += ' '; i++; continue; }
-    let threeChar = input.substring(i, i + 3);
-    let twoChar = input.substring(i, i + 2);
-
-    if (['nya', 'dha', 'tha', 'nga'].includes(threeChar)) {
-      let base = AKSARA_NGLEGENA[threeChar] || 'ꦲ';
-      i += 3;
-      if (i < input.length && ['a', 'i', 'u', 'e', 'é', 'o'].includes(input[i])) {
-        let v = input[i];
-        if (v !== 'a') res += applySandhangan(base, v);
-        else res += base;
-        i++;
-      } else res += base;
-    } else if (twoChar in AKSARA_NGLEGENA) {
-      res += AKSARA_NGLEGENA[twoChar];
-      i += 2;
-    } else {
-      let char = input[i];
-      let next = input[i + 1] || '';
-      let syl = char + (['a', 'i', 'u', 'e', 'é', 'o'].includes(next) ? next : '');
-      if (syl.length === 2) {
-        let baseAksara = AKSARA_NGLEGENA[char + 'a'] || 'ꦲ';
-        if (syl[1] === 'a') res += baseAksara;
-        else res += applySandhangan(baseAksara, syl[1]);
-        i += 2;
-      } else {
-        if (input.substring(i, i + 2) === 'ng') { res += 'ꦁ'; i += 2; }
-        else if (char === 'r') { res += 'ꦂ'; i++; }
-        else if (char === 'h') { res += 'ꦃ'; i++; }
-        else if (AKSARA_NGLEGENA[char + 'a']) { res += AKSARA_NGLEGENA[char + 'a'] + '꧀'; i++; }
-        else { res += char; i++; }
-      }
-    }
-  }
-
-  outputEl.innerText = res || 'ꦲꦤꦕꦫꦏ';
-  countEl.innerText = `${input.length} Karakter`;
 };
 
 window.setSampleAksara = (text) => {
-  document.getElementById('latinInput').value = text;
-  window.convertLatinToJawa();
+  const inputEl = document.getElementById('latinInput');
+  if (inputEl) {
+    inputEl.value = text;
+    window.convertLatinToJawa();
+  }
 };
 
 window.clearAksaraInput = () => {
-  document.getElementById('latinInput').value = '';
+  const inputEl = document.getElementById('latinInput');
+  if (inputEl) inputEl.value = '';
   window.convertLatinToJawa();
-  showToast("Kolom teks aksara sampun dipun resiki.");
+  showToast("Kolom teks Latin sampun dipun resiki.");
+};
+
+window.clearJawaText = () => {
+  const outputEl = document.getElementById('jawaOutput');
+  if (outputEl) outputEl.value = '';
+  window.updateAksaraCharCount();
+  showToast("Kolom Aksara Jawa kasil dipun resiki.");
 };
 
 window.copyJawaText = () => {
-  const text = document.getElementById('jawaOutput').innerText;
+  const outputEl = document.getElementById('jawaOutput');
+  const text = outputEl ? outputEl.value : '';
+  if (!text) {
+    showToast("Boten wonten aksara ingkang saged dipun salin.");
+    return;
+  }
   copyToClipboard(text, "Aksara Jawa kasil dipun salin!");
 };
 
-function renderNglegenaGrid() {
-  const container = document.getElementById('nglegenaGrid');
+// Virtual Keyboard Logic
+let currentAksaraKeyboardTab = 'nglegena';
+
+window.switchAksaraKeyboardTab = function (tab) {
+  currentAksaraKeyboardTab = tab;
+  document.querySelectorAll('.vk-tab-btn').forEach(btn => {
+    if (btn.getAttribute('data-tab') === tab) {
+      btn.className = 'vk-tab-btn px-3 py-1 rounded-full border border-prada bg-prada/20 text-prada font-semibold transition';
+    } else {
+      btn.className = 'vk-tab-btn px-3 py-1 rounded-full border border-sogan-700 bg-keraton text-sogan-300 hover:border-prada hover:text-prada transition';
+    }
+  });
+  renderAksaraKeyboardPalette();
+};
+
+window.insertAksaraChar = function (char) {
+  const el = document.getElementById('jawaOutput');
+  if (!el) return;
+  const start = el.selectionStart !== undefined ? el.selectionStart : el.value.length;
+  const end = el.selectionEnd !== undefined ? el.selectionEnd : el.value.length;
+  const val = el.value;
+  el.value = val.substring(0, start) + char + val.substring(end);
+  el.focus();
+  el.selectionStart = el.selectionEnd = start + char.length;
+  window.updateAksaraCharCount();
+};
+
+window.handleAksaraBackspace = function () {
+  const el = document.getElementById('jawaOutput');
+  if (!el) return;
+  const start = el.selectionStart;
+  const end = el.selectionEnd;
+  const val = el.value;
+  if (start !== end) {
+    el.value = val.substring(0, start) + val.substring(end);
+    el.selectionStart = el.selectionEnd = start;
+  } else if (start > 0) {
+    const chars = [...val];
+    let idx = 0;
+    let charOffset = 0;
+    for (let c of chars) {
+      if (idx + c.length >= start) break;
+      idx += c.length;
+      charOffset++;
+    }
+    chars.splice(charOffset, 1);
+    el.value = chars.join('');
+    el.selectionStart = el.selectionEnd = idx;
+  }
+  el.focus();
+  window.updateAksaraCharCount();
+};
+
+function renderAksaraKeyboardPalette() {
+  const container = document.getElementById('virtualKeyboardPalette');
   if (!container) return;
-  container.innerHTML = '';
-  for (const [latin, aksara] of Object.entries(AKSARA_NGLEGENA)) {
-    const btn = document.createElement('button');
-    btn.className = 'p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada transition text-center group active:scale-95';
-    btn.innerHTML = `
-      <div class="text-prada font-jawa text-lg group-hover:scale-110 transition">${aksara}</div>
-      <div class="text-[10px] text-sogan-400 font-mono uppercase mt-0.5">${latin}</div>
+
+  if (currentAksaraKeyboardTab === 'nglegena') {
+    container.innerHTML = `
+      <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-2">
+        ${Object.entries(AKSARA_NGLEGENA).map(([latin, aksara]) => `
+          <button onclick="insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+            <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
+            <div class="text-[10px] text-sogan-400 font-mono uppercase mt-0.5">${latin}</div>
+          </button>
+        `).join('')}
+      </div>
     `;
-    btn.onclick = () => {
-      document.getElementById('latinInput').value += latin + ' ';
-      window.convertLatinToJawa();
-    };
-    container.appendChild(btn);
+  } else if (currentAksaraKeyboardTab === 'pasangan') {
+    container.innerHTML = `
+      <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-2">
+        ${Object.entries(PASANGAN_MAP).map(([latin, aksara]) => `
+          <button onclick="insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+            <div class="text-amber-300 font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
+            <div class="text-[9px] text-sogan-400 font-mono mt-0.5">pas. ${latin}</div>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  } else if (currentAksaraKeyboardTab === 'sandhangan') {
+    container.innerHTML = `
+      <div class="space-y-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Sandhangan Swara</span>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+            ${Object.entries(SANDHANGAN_SWARA).map(([key, item]) => `
+              <button onclick="insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
+                <span class="text-prada font-jawa text-xl">${item.aksara}</span>
+                <div class="text-left">
+                  <div class="text-xs text-sogan-100 font-semibold">${item.latin}</div>
+                  <div class="text-[9px] text-sogan-400">${item.nama.split('(')[0].trim()}</div>
+                </div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-sogan-800/80">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Panyigeg Wanda</span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              ${Object.entries(SANDHANGAN_PANYIGEG).map(([key, item]) => `
+                <button onclick="insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
+                  <div class="text-prada font-jawa text-lg">${item.aksara}</div>
+                  <div class="text-[10px] text-sogan-300 font-medium">${item.latin}</div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Sandhangan Wyanjana & Vokal Khusus</span>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              ${Object.entries(SANDHANGAN_WYANJANA).map(([key, item]) => `
+                <button onclick="insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
+                  <div class="text-prada font-jawa text-lg">${item.aksara}</div>
+                  <div class="text-[9px] text-sogan-300 font-medium">${item.latin}</div>
+                </button>
+              `).join('')}
+              <button onclick="insertAksaraChar('ꦉ')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Pa Cerek (re pepet)">
+                <div class="text-prada font-jawa text-lg">ꦉ</div>
+                <div class="text-[9px] text-sogan-300 font-medium">Pa Cerek</div>
+              </button>
+              <button onclick="insertAksaraChar('ꦊ')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Nga Lelet (le pepet)">
+                <div class="text-prada font-jawa text-lg">ꦊ</div>
+                <div class="text-[9px] text-sogan-300 font-medium">Nga Lelet</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (currentAksaraKeyboardTab === 'murda') {
+    container.innerHTML = `
+      <div class="space-y-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Aksara Murda (Huruf Kapital Tradisional)</span>
+          <div class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+            ${Object.entries(AKSARA_MURDA).map(([latin, aksara]) => `
+              <button onclick="insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+                <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
+                <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${latin}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        <div class="pt-2 border-t border-sogan-800/80">
+          <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Aksara Swara (Vokal Mandiri)</span>
+          <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            ${Object.entries(AKSARA_SWARA).map(([latin, aksara]) => `
+              <button onclick="insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+                <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
+                <div class="text-[10px] text-sogan-400 font-mono mt-0.5">Swara ${latin}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (currentAksaraKeyboardTab === 'angka') {
+    container.innerHTML = `
+      <div class="space-y-3">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Angka Jawa (0 - 9)</span>
+          <div class="grid grid-cols-5 sm:grid-cols-10 gap-2">
+            ${Object.entries(ANGKA_JAWA).map(([latin, aksara]) => `
+              <button onclick="insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+                <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
+                <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${latin}</div>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        <div class="pt-2 border-t border-sogan-800/80">
+          <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Tandha Wacan (Tanda Baca)</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            ${Object.entries(PADA_JAWA).map(([key, item]) => `
+              <button onclick="insertAksaraChar('${item.aksara} ')" class="p-2.5 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
+                <span class="text-prada font-jawa text-xl">${item.aksara}</span>
+                <span class="text-xs text-sogan-200 font-medium">${item.nama}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
   }
 }
 
@@ -696,27 +886,196 @@ window.downloadCanvasArt = () => {
 
 window.addEventListener('init-aksara-canvas', initDrawingCanvas);
 
-// ─── WAYANG ────────────────────────────────────────────────────────────────
+// ─── WAYANG (GAGRAG SURAKARTA) ─────────────────────────────────────────────
+let currentWayangCategory = 'all';
+
+window.filterWayangCategory = function (category) {
+  currentWayangCategory = category;
+  document.querySelectorAll('.wayang-cat-btn').forEach(btn => {
+    const btnCat = btn.getAttribute('data-cat');
+    if (btnCat === category) {
+      btn.className = 'wayang-cat-btn px-3 py-1 rounded-full border border-prada bg-prada/20 text-prada font-semibold transition';
+    } else {
+      btn.className = 'wayang-cat-btn px-3 py-1 rounded-full border border-sogan-700 bg-keraton text-sogan-300 hover:border-prada hover:text-prada transition';
+    }
+  });
+
+  const cards = document.querySelectorAll('.wayang-card-item');
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-kategori');
+    if (category === 'all' || cardCat === category) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+};
+
 window.selectWayangCharacter = function (key) {
   const data = WAYANG_CHARACTERS[key];
   if (!data) return;
 
-  document.getElementById('wayangActorName').innerText = data.name;
-  document.getElementById('puppetVisual').innerHTML = data.svg;
-  document.getElementById('puppetBioBox').innerHTML = `
-    <strong class="text-prada font-marcellus text-sm block mb-1">${data.name}</strong>
-    ${data.bio}
-  `;
+  // 1. Update Aktor Name & Kelir Stage Image
+  const actorNameEl = document.getElementById('wayangActorName');
+  if (actorNameEl) actorNameEl.innerText = data.nama || data.name;
 
-  document.querySelectorAll('.wayang-btn').forEach(btn => {
-    btn.classList.remove('border-prada');
-    btn.classList.add('border-sogan-800');
+  const visualEl = document.getElementById('puppetVisual');
+  if (visualEl) {
+    visualEl.innerHTML = `
+      <img src="${data.gambar}" alt="${data.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] transition-all duration-300 select-none pointer-events-none" onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';" />
+    `;
+  }
+
+  // 2. Update Comprehensive Keraton Bio Card
+  const bioBox = document.getElementById('puppetBioBox');
+  if (bioBox) {
+    bioBox.innerHTML = `
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sogan-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="px-2.5 py-0.5 rounded-full bg-prada/20 border border-prada/50 text-[10px] text-prada font-bold uppercase tracking-wider">
+                ${data.kategori}
+              </span>
+              <span class="text-xs text-sogan-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-landmark text-prada text-[11px]"></i> ${data.kasatriyan}
+              </span>
+            </div>
+            <h4 class="font-marcellus text-lg sm:text-xl font-bold gold-gradient-text tracking-wide">${data.nama}</h4>
+          </div>
+          <div class="text-[11px] text-sogan-400 bg-sogan-950/80 px-3 py-1.5 rounded-lg border border-sogan-800 self-start sm:self-auto">
+            <span class="text-prada font-medium">Gagrag:</span> Surakarta Hadiningrat (Solo)
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
+          <div class="space-y-2.5">
+            <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/90">
+              <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 mb-1.5 tracking-wider">
+                <i class="fa-solid fa-feather-pointed"></i> Watak & Bebudene
+              </span>
+              <p class="text-sogan-200 leading-relaxed">${data.watak}</p>
+            </div>
+            <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/90">
+              <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 mb-1.5 tracking-wider">
+                <i class="fa-solid fa-shield-halved"></i> Pusaka & Gegaman
+              </span>
+              <p class="text-sogan-200 font-medium">${data.pusaka}</p>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/90">
+                <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1 mb-1 tracking-wider">
+                  <i class="fa-solid fa-heart"></i> Pasangan (Garwa)
+                </span>
+                <p class="text-sogan-200">${data.pasangan || '-'}</p>
+              </div>
+              <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/90">
+                <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1 mb-1 tracking-wider">
+                  <i class="fa-solid fa-horse-head"></i> Tunggangan
+                </span>
+                <p class="text-sogan-200">${data.tunggangan || '-'}</p>
+              </div>
+            </div>
+            <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/90">
+              <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 mb-1 tracking-wider">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Ajian & Kasekten
+              </span>
+              <p class="text-sogan-200">${data.ajian || '-'}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-sogan-800 flex justify-end">
+          <button onclick="openWayangDetailModal('${data.id}')" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sogan-800 to-sogan-900 border border-prada/60 hover:border-prada text-prada text-xs font-semibold flex items-center gap-2 transition shadow hover:shadow-[0_0_12px_rgba(212,175,55,0.3)] active:scale-95">
+            <i class="fa-solid fa-circle-info"></i> Amirsani Katrangan Jangkep (Detail Lengkap)
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // 3. Highlight Selected Button in Grid
+  document.querySelectorAll('.wayang-card-item').forEach(btn => {
+    if (btn.getAttribute('data-id') === key) {
+      btn.classList.add('border-prada', 'bg-prada/15', 'shadow-[0_0_14px_rgba(212,175,55,0.35)]');
+      btn.classList.remove('border-sogan-800', 'bg-keraton');
+    } else {
+      btn.classList.remove('border-prada', 'bg-prada/15', 'shadow-[0_0_14px_rgba(212,175,55,0.35)]');
+      btn.classList.add('border-sogan-800', 'bg-keraton');
+    }
   });
-  if (event && event.currentTarget) event.currentTarget.classList.add('border-prada');
 
   playDalangFX('kepyak', showToast);
-  showToast(`Tokoh wayang katetepaken: ${data.name}`);
+  showToast(`Tokoh wayang katetepaken: ${data.nama}`);
 };
+
+window.openWayangDetailModal = function (id) {
+  const data = WAYANG_CHARACTERS[id];
+  if (!data) return;
+
+  const modal = document.getElementById('wayangDetailModal');
+  if (!modal) return;
+
+  document.getElementById('modalWayangNama').innerText = data.nama;
+  document.getElementById('modalWayangKategori').innerText = data.kategori;
+  document.getElementById('modalWayangKasatriyan').innerHTML = `<i class="fa-solid fa-landmark text-amber-400 mr-1"></i> ${data.kasatriyan}`;
+  document.getElementById('modalWayangWatak').innerText = data.watak;
+  document.getElementById('modalWayangPusaka').innerText = data.pusaka || '-';
+  document.getElementById('modalWayangPasangan').innerText = data.pasangan || '-';
+  document.getElementById('modalWayangTunggangan').innerText = data.tunggangan || '-';
+  document.getElementById('modalWayangAjian').innerText = data.ajian || '-';
+
+  const imgEl = document.getElementById('modalWayangImg');
+  if (imgEl) {
+    imgEl.src = data.gambar;
+    imgEl.alt = data.nama;
+  }
+
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+};
+
+window.closeWayangDetailModal = function () {
+  const modal = document.getElementById('wayangDetailModal');
+  if (!modal) return;
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+};
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    window.closeWayangDetailModal();
+  }
+});
+
+function renderWayangGrid() {
+  const container = document.getElementById('wayangCharacterGrid');
+  if (!container) return;
+
+  container.innerHTML = WAYANG_LIST.map(char => `
+    <button onclick="selectWayangCharacter('${char.id}')" 
+      class="wayang-card-item p-2.5 rounded-xl bg-keraton border border-sogan-800 text-left transition hover:border-prada hover:scale-[1.02] group flex flex-col items-center text-center cursor-pointer"
+      data-id="${char.id}" data-kategori="${char.kategori}">
+      <div class="w-16 h-20 mb-2 flex items-center justify-center overflow-hidden">
+        <img src="${char.gambar}" alt="${char.nama}" class="max-h-full max-w-full object-contain filter group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)] transition duration-200" onerror="this.style.display='none'" />
+      </div>
+      <div class="w-full">
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-sogan-900 border border-sogan-700 text-prada block truncate mb-1">
+          ${char.kategori}
+        </span>
+        <div class="font-bold text-sogan-100 group-hover:text-prada text-xs truncate" title="${char.nama}">
+          ${char.nama.split('(')[0].trim()}
+        </div>
+        <div class="text-[10px] text-sogan-400 truncate mt-0.5" title="${char.kasatriyan}">
+          ${char.kasatriyan.split('(')[0].trim()}
+        </div>
+      </div>
+    </button>
+  `).join('');
+}
 
 function initWayangDraggable() {
   const puppet = document.getElementById('wayangPuppet');
@@ -745,24 +1104,66 @@ function initWayangDraggable() {
 }
 
 // ─── PITUTUR & KUIS ────────────────────────────────────────────────────────
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 window.generateRandomPitutur = function () {
   const idx = Math.floor(Math.random() * PITUTUR_LIST.length);
   const item = PITUTUR_LIST[idx];
-  document.getElementById('pituturJawaText').innerText = item.jawa;
-  document.getElementById('pituturArtiText').innerText = item.arti;
+
+  const aksaraEl = document.getElementById('pituturAksaraText');
+  const jawaEl = document.getElementById('pituturJawaText');
+  const artiEl = document.getElementById('pituturArtiText');
+  const maknaEl = document.getElementById('pituturMaknaText');
+  const badgeEl = document.getElementById('pituturSumberBadge');
+
+  if (aksaraEl) aksaraEl.innerText = item.aksara || '';
+  if (jawaEl) jawaEl.innerText = `"${item.jawa}"`;
+  if (artiEl) artiEl.innerText = item.artiHarfiah || item.arti || '';
+  if (maknaEl) maknaEl.innerText = item.makna || '';
+  if (badgeEl) badgeEl.innerText = item.sumber || 'Falsafah Luhur Jawa';
+
   showToast("Pitutur luhur enggal sampun kabiak.");
 };
 
 window.copyPituturText = function () {
-  const text = document.getElementById('pituturJawaText').innerText + " - " + document.getElementById('pituturArtiText').innerText;
+  const aksara = document.getElementById('pituturAksaraText')?.innerText || '';
+  const jawa = document.getElementById('pituturJawaText')?.innerText || '';
+  const arti = document.getElementById('pituturArtiText')?.innerText || '';
+  const makna = document.getElementById('pituturMaknaText')?.innerText || '';
+  const text = `${jawa}\n${aksara}\nTeges Harfiah: ${arti}\nMakna: ${makna}`;
   copyToClipboard(text, "Pitutur luhur kasil dipun salin!");
 };
 
-let quizIndex = 0, quizScore = 0;
+const QUESTIONS_PER_SESSION = 5;
+let activeQuizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+
+function initNewQuizSession() {
+  activeQuizQuestions = shuffleArray(QUIZ_QUESTIONS).slice(0, QUESTIONS_PER_SESSION);
+  quizIndex = 0;
+  quizScore = 0;
+  const qBox = document.getElementById('quizBox');
+  const resBox = document.getElementById('quizResultBox');
+  if (qBox) qBox.classList.remove('hidden');
+  if (resBox) resBox.classList.add('hidden');
+  renderQuiz();
+}
 
 function renderQuiz() {
-  const q = QUIZ_QUESTIONS[quizIndex];
-  document.getElementById('quizCounter').innerText = `${quizIndex + 1}/${QUIZ_QUESTIONS.length}`;
+  if (!activeQuizQuestions || activeQuizQuestions.length === 0) {
+    initNewQuizSession();
+    return;
+  }
+  const q = activeQuizQuestions[quizIndex];
+  document.getElementById('quizCounter').innerText = `${quizIndex + 1}/${activeQuizQuestions.length}`;
   document.getElementById('quizScore').innerText = quizScore;
   document.getElementById('quizQuestion').innerText = q.q;
 
@@ -779,25 +1180,29 @@ function renderQuiz() {
 }
 
 function answerQuiz(selectedIdx, btnEl) {
-  const q = QUIZ_QUESTIONS[quizIndex];
+  const q = activeQuizQuestions[quizIndex];
   const isCorrect = selectedIdx === q.correct;
   const allBtns = document.querySelectorAll('#quizOptionsContainer button');
   allBtns.forEach(b => b.disabled = true);
 
+  const pointsPerQuestion = Math.round(100 / activeQuizQuestions.length);
+
   if (isCorrect) {
     btnEl.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-200');
-    quizScore += 20;
+    quizScore += pointsPerQuestion;
     document.getElementById('quizScore').innerText = quizScore;
     showToast("Leres sanget! Wangsulan sampeyan trep.");
   } else {
     btnEl.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-200');
-    allBtns[q.correct].classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-200');
+    if (allBtns[q.correct]) {
+      allBtns[q.correct].classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-200');
+    }
     showToast("Kirang trep, sinau malih nggih.");
   }
 
   setTimeout(() => {
     quizIndex++;
-    if (quizIndex < QUIZ_QUESTIONS.length) {
+    if (quizIndex < activeQuizQuestions.length) {
       renderQuiz();
     } else {
       document.getElementById('quizBox').classList.add('hidden');
@@ -813,12 +1218,17 @@ function answerQuiz(selectedIdx, btnEl) {
 }
 
 window.restartQuiz = function () {
-  quizIndex = 0;
-  quizScore = 0;
-  document.getElementById('quizBox').classList.remove('hidden');
-  document.getElementById('quizResultBox').classList.add('hidden');
-  renderQuiz();
+  initNewQuizSession();
 };
+
+window.addEventListener('tab-switched', (e) => {
+  if (e.detail && e.detail.tabId === 'pitutur') {
+    window.generateRandomPitutur();
+    if (quizIndex === 0 && quizScore === 0) {
+      initNewQuizSession();
+    }
+  }
+});
 
 // ─── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────
 window.addEventListener('keydown', (e) => {
@@ -862,12 +1272,15 @@ window.onload = function () {
   initTahunHitungSelect();
   window.updateKepribadianQuickInfo();
   initPerjodohanSelects();
-  window.hitungNujumPerjodohan();
+  // Catatan: window.hitungNujumPerjodohan() sengaja tidak dipanggil saat awal agar berada pada clean empty state
   window.hitungSelametan();
   renderGamelanKeys();
-  renderNglegenaGrid();
+  renderAksaraKeyboardPalette();
   window.convertLatinToJawa();
   initWayangDraggable();
-  renderQuiz();
+  renderWayangGrid();
+  window.selectWayangCharacter('arjuna');
+  window.generateRandomPitutur();
+  initNewQuizSession();
   initQuickTodayBadge();
 };

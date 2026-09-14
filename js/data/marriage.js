@@ -15,27 +15,27 @@ export const AKSARA_PERJODOHAN = [
 
 export const HASIL_I_JODOH = {
   0: { nama: 'PUNGGEL', arti: 'Padudon, Pisah/Pegat', status: 'buruk' },
-  1: { nama: 'GENTHA', arti: 'Larang Anak', status: 'buruk' },
-  2: { nama: 'GEMBILI', arti: 'Sugih Anak', status: 'baik' },
-  3: { nama: 'SRI', arti: 'Sugih Rejeki', status: 'baik' }
+  1: { nama: 'GENTHA', arti: 'Larang Anak, gampang rejeki', status: 'campur' },
+  2: { nama: 'GEMBILI', arti: 'Sugih Anak, rejeki pas-pasan', status: 'buruk' },
+  3: { nama: 'SRI', arti: 'Sugih Rejeki, ayem tentrem', status: 'baik' }
 };
 
 export const HASIL_II_JODOH = {
   0: { nama: 'PATI', arti: 'Melarat', status: 'buruk' },
   1: { nama: 'SRI', arti: 'Sandang Pangan', status: 'baik' },
-  2: { nama: 'LUNGGUH', arti: 'Kajen Kelingan (dihormati sesama)', status: 'baik' },
+  2: { nama: 'LUNGGUH', arti: 'Kajen Kelingan', status: 'baik' },
   3: { nama: 'GEDHONG', arti: 'Tentrem Ayem', status: 'baik' },
-  4: { nama: 'LARA', arti: 'Rekasa (sering kesulitan)', status: 'buruk' }
+  4: { nama: 'LARA', arti: 'Rekasa', status: 'buruk' }
 };
 
 export const HASIL_III_JODOH = {
-  0: { nama: 'LEBU KETIYUP ANGIN', arti: 'Kerep Pindah Omah & Kurang Begjane', status: 'buruk' },
-  1: { nama: 'WASESA SEGARA', arti: 'Jembar Budine, Berwibawa', status: 'baik' },
-  2: { nama: 'TUNGGAK SEMI', arti: 'Sugih Anak sarta Gampang Rejekine', status: 'campur' },
+  0: { nama: 'LEBU KETIYUP ANGIN', arti: 'Kurang Begjane sarta kerep Pindah Omah', status: 'buruk' },
+  1: { nama: 'WASESA SEGARA', arti: 'Jembar Budine', status: 'baik' },
+  2: { nama: 'TUNGGAK SEMI', arti: 'Sugih Anak sarta tansah Lara-Laranen', status: 'campur' },
   3: { nama: 'SATRIYA WIBAWA', arti: 'Gede Begjane lan Bisa Sugih', status: 'baik' },
   4: { nama: 'SUMUR SINABA', arti: 'Bisa Dadi Pengayoman Sanak Kadang', status: 'baik' },
-  5: { nama: 'SATRIYA WIRANG', arti: 'Kerep Nemoni Halangan', status: 'buruk' },
-  6: { nama: 'BUMI KAPETAK', arti: 'Kuat Nyimpen Banda Donyane', status: 'campur' }
+  5: { nama: 'SATRIYA WIRANG', arti: 'Kerep Susah kang Andadekake Melarat', status: 'buruk' },
+  6: { nama: 'BUMI KAPETAK', arti: 'Dikucilkan ing wong nanging bisa Simpen Banda Donyane', status: 'campur' }
 };
 
 export const HASIL_IV_JODOH = {
