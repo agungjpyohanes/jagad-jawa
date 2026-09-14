@@ -26,39 +26,7 @@ function copyToClipboard(text, msg) {
   showToast(msg);
 }
 
-// ─── Navigation Handlers ──────────────────────────────────────────────────
-const switchTab = window.switchTab || function(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => {
-    el.classList.add('hidden');
-    el.classList.remove('block');
-  });
-  const target = document.getElementById(`tab-${tabId}`);
-  if (target) {
-    target.classList.remove('hidden');
-    target.classList.add('block');
-  }
-  document.querySelectorAll('.nav-btn, .nav-link').forEach(btn => {
-    if (btn.dataset.tab === tabId) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  });
-  if (tabId === 'aksara') {
-    window.dispatchEvent(new CustomEvent('init-aksara-canvas'));
-  }
-  window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
 
-const toggleMobileMenu = window.toggleMobileMenu || function() {
-  const menu = document.getElementById('mobileMenu');
-  if (menu) menu.classList.toggle('hidden');
-};
-
-const printSection = window.printSection || function(sectionId) {
-  window.print();
-};
 
 // ─── Audio Engine ─────────────────────────────────────────────────────────
 let audioCtx = null;
@@ -488,32 +456,7 @@ const JENIS_SELAMETAN = [
   { nama: 'Nyewu (1000 Hari)', approx: 1000, idx: 6 }
 ];
 
-// ─── Aksara Jawa & Transliterasi ──────────────────────────────────────────
-const AKSARA_NGLEGENA = window.AKSARA_NGLEGENA || {};
-const PASANGAN_MAP = window.PASANGAN_MAP || {};
-const SANDHANGAN_SWARA = window.SANDHANGAN_SWARA || {};
-const SANDHANGAN_PANYIGEG = window.SANDHANGAN_PANYIGEG || {};
-const SANDHANGAN_WYANJANA = window.SANDHANGAN_WYANJANA || {};
-const AKSARA_MURDA = window.AKSARA_MURDA || {};
-const AKSARA_SWARA = window.AKSARA_SWARA || {};
-const ANGKA_JAWA = window.ANGKA_JAWA || {};
-const PADA_JAWA = window.PADA_JAWA || {};
-const transliterateLatinToJawa = (t) => (window.transliterateLatinToJawa ? window.transliterateLatinToJawa(t) : t);
 
-// ─── Data Wayang ──────────────────────────────────────────────────────────
-const WAYANG_LIST = window.WAYANG_LIST || [];
-const WAYANG_CHARACTERS = window.WAYANG_CHARACTERS || {};
-
-// ─── Data Perjodohan & Pitutur ────────────────────────────────────────────
-const AKSARA_PERJODOHAN = window.AKSARA_PERJODOHAN || [];
-const HASIL_I_JODOH = window.HASIL_I_JODOH || {};
-const HASIL_II_JODOH = window.HASIL_II_JODOH || {};
-const HASIL_III_JODOH = window.HASIL_III_JODOH || {};
-const HASIL_IV_JODOH = window.HASIL_IV_JODOH || {};
-const HASIL_V_JODOH = window.HASIL_V_JODOH || {};
-const HASIL_VI_JODOH = window.HASIL_VI_JODOH || {};
-const PITUTUR_LIST = window.PITUTUR_LIST || [];
-const QUIZ_QUESTIONS = window.QUIZ_QUESTIONS || [];
 
 // ─── Expose globals for inline HTML handlers ───────────────────────────────
 window.switchTab = switchTab;
