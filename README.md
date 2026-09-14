@@ -1,6 +1,6 @@
-# Jagad Jawa — Portal Budaya Terpadu (Modular Architecture)
+# Jagad Jawa — Menjelajahi Kebudayaan Luhur Nusantara
 
-**Aether Code** · Versi Framework / Non-Monolitik
+**JAGAD JAWA** · Versi Antigravity Heritage v1.0 (Modular Architecture)
 
 ## Struktur Direktori
 
@@ -115,4 +115,4 @@ Jika mengembangkan lewat Google Antigravity:
 - Data di `js/data/` sudah pure → cocok untuk unit test atau backend API.
 - Audio engine terisolasi di `modules/audio.js`.
 
-© 2026 Aether Code
+© 2026 JAGAD JAWA — Menjelajahi Kebudayaan Luhur Nusantara

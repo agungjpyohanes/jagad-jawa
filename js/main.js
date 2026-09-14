@@ -1,6 +1,6 @@
 /**
- * Jagad Jawa — Portal Budaya Terpadu
- * Modular Entry Point | Aether Code
+ * Jagad Jawa — Portal Budaya Luhur Nusantara
+ * Modular Entry Point | Jagad Jawa
  * Architecture: ES Modules (data / modules / ui)
  */
 
@@ -73,7 +73,7 @@ function buildWatermarkKalender() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const s = document.createElement('span');
-      s.textContent = 'AETHER CODE';
+      s.textContent = 'JAGAD JAWA';
       s.style.left = (c * stepX - stepY) + 'px';
       s.style.top = (r * stepY) + 'px';
       frag.appendChild(s);
@@ -104,11 +104,11 @@ window.renderKalender = function () {
   const cornerHijriYear = janInfo.hijri[2];
 
   document.getElementById('printTitleKalender').textContent =
-    BULAN_MASEHI[bulan - 1].toUpperCase() + ' ' + tahun + '  ·  ' + cornerHijriYear + ' H — Aether Code';
+    BULAN_MASEHI[bulan - 1].toUpperCase() + ' ' + tahun + '  ·  ' + cornerHijriYear + ' H — Jagad Jawa';
 
   let html = `<tr class="bg-gradient-to-r from-[#2a3660] to-[#1b2540] text-paper text-white text-center font-bold">
     <td class="p-3 text-prada font-mono text-sm">${tahun}</td>
-    <td colspan="7" class="p-3 font-fraunces text-xl tracking-wider text-prada">${BULAN_MASEHI[bulan - 1].toUpperCase()}</td>
+    <td colspan="7" class="p-3 font-marcellus text-xl tracking-wider text-prada">${BULAN_MASEHI[bulan - 1].toUpperCase()}</td>
     <td class="p-3 text-prada font-mono text-sm">${cornerHijriYear} H</td>
   </tr>`;
 
@@ -145,7 +145,7 @@ window.renderKalender = function () {
         repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
       }
       cellsHtml += `<td class="p-1.5 sm:p-2.5 ${bgCls} border border-black/10 h-16 sm:h-20 align-top">
-        <div class="flex justify-between items-baseline font-bold font-fraunces text-base sm:text-lg">
+        <div class="flex justify-between items-baseline font-bold font-marcellus text-base sm:text-lg">
           <span>${cur.getUTCDate()}</span>
           <span class="font-mono text-[10px] opacity-80 border-b border-current">${neptuC}</span>
         </div>
@@ -159,13 +159,13 @@ window.renderKalender = function () {
 
     html += `<tr>
       <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
-        <b class="font-fraunces text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
+        <b class="font-marcellus text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
         <div class="text-[10px] italic opacity-80">${DUNUNGE[wukuId]}</div>
         ${isNgisor ? '<div class="text-[9px] text-ala font-bold">⚠ ngisor</div>' : ''}
       </td>
       ${cellsHtml}
       <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
-        <b class="font-fraunces text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
+        <b class="font-marcellus text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
         <div class="text-[10px] italic opacity-80">${DUNUNGE[wukuId]}</div>
         <div class="text-[9px] font-mono opacity-80 mt-1">${repMonthLabel} ${repYearLabel}</div>
       </td>
@@ -234,12 +234,12 @@ window.hitungKepribadianLengkap = function () {
   const html = `
     <div class="border-b border-sogan-700 pb-3 flex items-center justify-between">
       <div>
-        <span class="text-[10px] font-mono text-prada uppercase">Pawiyatan · Aether Code</span>
-        <h3 class="font-fraunces text-lg sm:text-xl font-bold text-prada">${nama.toUpperCase()}</h3>
+        <span class="text-[10px] font-mono text-prada uppercase">Pawiyatan · Jagad Jawa</span>
+        <h3 class="font-marcellus text-lg sm:text-xl font-bold text-prada">${nama.toUpperCase()}</h3>
       </div>
       <div class="text-right">
         <span class="text-[10px] text-sogan-400">Weton & Neptu</span>
-        <div class="font-fraunces font-bold text-base text-sogan-100">${dino} ${pas} (${neptu})</div>
+        <div class="font-marcellus font-bold text-base text-sogan-100">${dino} ${pas} (${neptu})</div>
       </div>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-wulung p-3 rounded-xl border border-sogan-800">
@@ -249,7 +249,7 @@ window.hitungKepribadianLengkap = function () {
       <div><span class="text-sogan-400 block">Padamelan:</span><strong>${alamatKerja}</strong></div>
     </div>
     <div class="space-y-2">
-      <h4 class="font-fraunces font-bold text-prada text-sm flex items-center gap-1.5"><i class="fa-solid fa-compass"></i> Bincil & Petungan Jawa</h4>
+      <h4 class="font-marcellus font-bold text-prada text-sm flex items-center gap-1.5"><i class="fa-solid fa-compass"></i> Bincil & Petungan Jawa</h4>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
         <div class="p-2.5 bg-wulung rounded-lg border border-sogan-800">
           <span class="text-[10px] text-sogan-400 uppercase">Pancasuda</span>
@@ -269,7 +269,7 @@ window.hitungKepribadianLengkap = function () {
       </div>
     </div>
     <div class="space-y-2">
-      <h4 class="font-fraunces font-bold text-prada text-sm flex items-center gap-1.5"><i class="fa-solid fa-gem"></i> Asesoris & Ageman</h4>
+      <h4 class="font-marcellus font-bold text-prada text-sm flex items-center gap-1.5"><i class="fa-solid fa-gem"></i> Asesoris & Ageman</h4>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-wulung p-3 rounded-xl border border-sogan-800">
         <div><span class="text-sogan-400 block">Watu Mulia:</span><strong class="text-prada-light">${aseso.watu}</strong></div>
         <div><span class="text-sogan-400 block">Warna Ageman:</span><strong>${aseso.warna}</strong></div>
@@ -279,7 +279,7 @@ window.hitungKepribadianLengkap = function () {
     </div>
     <div class="p-3.5 rounded-xl bg-sogan-950 border border-sogan-700 text-xs space-y-1.5">
       <div class="flex items-center justify-between">
-        <span class="font-bold text-prada font-fraunces">Faalakiah Asma: ${faal.nabi} (Kode ${faal.kode})</span>
+        <span class="font-bold text-prada font-marcellus">Faalakiah Asma: ${faal.nabi} (Kode ${faal.kode})</span>
         <span class="text-[10px] font-mono text-sogan-400">Jumlah Aksara: ${faal.sum}</span>
       </div>
       <p class="text-sogan-200 leading-relaxed">${faal.desc}</p>
@@ -397,7 +397,7 @@ window.hitungNujumPerjodohan = function () {
 
     tbody += `<tr class="border-b border-sogan-800/80 hover:bg-sogan-900/30">
       <td class="p-3 font-bold text-prada">${r.no}</td>
-      <td class="p-3 font-fraunces font-bold text-sogan-100">${r.h.nama}</td>
+      <td class="p-3 font-marcellus font-bold text-sogan-100">${r.h.nama}</td>
       <td class="p-3 text-sogan-200">${r.h.arti} <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${r.rumus}</div></td>
       <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full border text-[10px] font-bold ${badge}">${badgeLabel}</span></td>
     </tr>`;
@@ -688,7 +688,7 @@ window.clearCanvas = () => {
 window.downloadCanvasArt = () => {
   if (!drawCanvas) return;
   const a = document.createElement('a');
-  a.download = 'Aksara_Jawa_AetherCode.png';
+  a.download = 'Aksara_Jawa_JagadJawa.png';
   a.href = drawCanvas.toDataURL();
   a.click();
   showToast("Gambar aksara kasil dipun undhuh!");
@@ -704,7 +704,7 @@ window.selectWayangCharacter = function (key) {
   document.getElementById('wayangActorName').innerText = data.name;
   document.getElementById('puppetVisual').innerHTML = data.svg;
   document.getElementById('puppetBioBox').innerHTML = `
-    <strong class="text-prada font-fraunces text-sm block mb-1">${data.name}</strong>
+    <strong class="text-prada font-marcellus text-sm block mb-1">${data.name}</strong>
     ${data.bio}
   `;
 

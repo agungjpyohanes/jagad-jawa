@@ -1,19 +1,164 @@
-/* Jagad Jawa — Modular Styles | Aether Code */
+/* Jagad Jawa — Portal Budaya Luhur Nusantara */
 
-/* Latar Belakang Ornamen Batik Keraton */
-.bg-batik-grid {
-  background-color: #0f141d;
+/* Latar Belakang Kosmik Antigravity: Deep Indigo & Dark Amber Gradient */
+.bg-antigravity-space {
+  background-color: #080c16;
   background-image: 
+    radial-gradient(ellipse 65% 45% at 20% 12%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 85% 25%, rgba(20, 28, 48, 0.85) 0%, transparent 70%),
+    radial-gradient(circle at 50% 85%, rgba(45, 23, 11, 0.75) 0%, transparent 65%),
     radial-gradient(#d4af3715 1.5px, transparent 1.5px),
-    radial-gradient(#b87c2410 1.5px, #0f141d 1.5px);
-  background-size: 32px 32px;
-  background-position: 0 0, 16px 16px;
+    radial-gradient(#b87c2410 1.5px, #080c16 1.5px);
+  background-size: auto, auto, auto, 36px 36px, 36px 36px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 18px 18px;
+  background-attachment: fixed;
 }
 
+/* Tipografi & Warna Emas/Amber */
 .gold-gradient-text {
-  background: linear-gradient(135deg, #fff3c2 0%, #d4af37 50%, #9a7b1c 100%);
+  background: linear-gradient(135deg, #fff5d6 0%, #f5c542 35%, #d4af37 70%, #9a7b1c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.amber-glow-text {
+  text-shadow: 0 0 20px rgba(245, 197, 66, 0.45), 0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+/* ========================================================================= */
+/* ELEMEN ANTIGRAVITY (KEYFRAMES & ANIMASI MELAYANG)                         */
+/* ========================================================================= */
+
+@keyframes antigravityFloat1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1.2deg);
+  }
+}
+
+@keyframes antigravityFloat2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(-1.5deg);
+  }
+}
+
+@keyframes antigravityFloat3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.8deg);
+  }
+}
+
+@keyframes antigravityDrift {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(8px, -12px) rotate(1.5deg);
+  }
+  66% {
+    transform: translate(-6px, -18px) rotate(-1deg);
+  }
+}
+
+@keyframes floatBadge {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+}
+
+@keyframes amberPulseGlow {
+  0%, 100% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
+  }
+  50% {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 22px rgba(245, 197, 66, 0.75));
+  }
+}
+
+@keyframes trailFlow {
+  0% {
+    stroke-dashoffset: 1200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Kelas Efek Melayang */
+.float-card-1 {
+  animation: antigravityFloat1 6.5s ease-in-out infinite;
+}
+
+.float-card-2 {
+  animation: antigravityFloat2 8s ease-in-out infinite 0.7s;
+}
+
+.float-card-3 {
+  animation: antigravityFloat3 7.2s ease-in-out infinite 1.4s;
+}
+
+.float-element-slow {
+  animation: antigravityDrift 14s ease-in-out infinite;
+}
+
+.float-element-reverse {
+  animation: antigravityFloat2 11s ease-in-out infinite 1.8s;
+}
+
+.float-element-subtle {
+  animation: antigravityFloat3 6s ease-in-out infinite 0.4s;
+}
+
+.float-badge {
+  animation: floatBadge 4.5s ease-in-out infinite;
+}
+
+/* Kartu UI Antigravity Melayang dengan Kedalaman & Bayangan Halus */
+.amber-glow-card {
+  background: rgba(16, 22, 36, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 
+    0 20px 45px -15px rgba(0, 0, 0, 0.85),
+    0 0 25px rgba(212, 175, 55, 0.12),
+    inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.amber-glow-card:hover {
+  border-color: rgba(245, 197, 66, 0.65);
+  box-shadow: 
+    0 28px 55px -10px rgba(0, 0, 0, 0.95),
+    0 0 35px rgba(245, 197, 66, 0.28),
+    inset 0 1px 2px rgba(255, 245, 214, 0.2);
+}
+
+/* Magical Amber Light Trails */
+.amber-light-trail-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.light-trail-path {
+  stroke-dasharray: 240, 360;
+  animation: trailFlow 18s linear infinite;
 }
 
 /* Efek Blencong Lampu Wayang */
@@ -23,8 +168,8 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #0f141d; }
-::-webkit-scrollbar-thumb { background: #552e16; border-radius: 4px; }
+::-webkit-scrollbar-track { background: #080c16; }
+::-webkit-scrollbar-thumb { background: #552e16; border-radius: 4px; border: 1px solid rgba(212,175,55,0.2); }
 ::-webkit-scrollbar-thumb:hover { background: #d4af37; }
 
 /* Keyframe getar gamelan */
@@ -34,22 +179,22 @@
 }
 .hit-anim { animation: keyStrike 0.15s ease-out; }
 
-/* Watermark Screen / Print */
-.wm-aether-screen {
+/* Watermark Screen */
+.wm-screen {
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
 }
-.wm-aether-screen span {
+.wm-screen span {
   position: absolute;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Marcellus', serif;
   font-weight: 700;
-  font-size: 11px;
-  letter-spacing: .12em;
-  color: #000;
-  opacity: .07;
+  font-size: 12px;
+  letter-spacing: .2em;
+  color: #d4af37;
+  opacity: .05;
   white-space: nowrap;
   transform: rotate(-28deg);
 }
@@ -62,7 +207,7 @@
     padding: 0 !important;
     margin: 0 !important;
   }
-  header, nav, .no-print, #ambientPlayerBar, #toastBox {
+  header, nav, .no-print, #ambientPlayerBar, #toastBox, .amber-light-trail-wrap, .floating-decor {
     display: none !important;
   }
   .print-area-active {
@@ -88,7 +233,7 @@
     z-index: 9999;
     pointer-events: none;
     white-space: nowrap;
-    font-family: Georgia, serif;
+    font-family: 'Marcellus', Georgia, serif;
   }
 }
 .watermark-print { display: none; }
