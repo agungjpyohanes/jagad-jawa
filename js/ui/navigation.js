@@ -1,6 +1,6 @@
 // Tab Navigation & Mobile Menu
 
-export function switchTab(tabId) {
+function switchTab(tabId) {
   document.querySelectorAll('.tab-content').forEach(el => {
     el.classList.add('hidden');
     el.classList.remove('block');
@@ -29,11 +29,20 @@ export function switchTab(tabId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-export function toggleMobileMenu() {
+function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
   if (menu) menu.classList.toggle('hidden');
 }
 
-export function printSection(sectionId) {
+function printSection(sectionId) {
   window.print();
+}
+
+if (typeof window !== 'undefined') {
+  window.switchTab = switchTab;
+  window.toggleMobileMenu = toggleMobileMenu;
+  window.printSection = printSection;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { switchTab, toggleMobileMenu, printSection };
 }

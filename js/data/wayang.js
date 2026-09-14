@@ -1,7 +1,7 @@
 // Data Karakter Wayang Purwa Gagrag Surakarta (Solo)
 // Standar skema: id, nama, kategori, kasatriyan, watak, pusaka, pasangan, tunggangan, ajian, gambar
 
-export const WAYANG_LIST = [
+const WAYANG_LIST = [
   // ==========================================
   // KATEGORI: PANDAWA LIMA
   // ==========================================
@@ -324,10 +324,18 @@ export const WAYANG_LIST = [
 ];
 
 // Peta Objek Keyed-by-ID untuk Kompatibilitas & Akses Cepat
-export const WAYANG_CHARACTERS = WAYANG_LIST.reduce((acc, item) => {
+const WAYANG_CHARACTERS = WAYANG_LIST.reduce((acc, item) => {
   item.name = item.nama;
   item.bio = `${item.watak} Ksatria/Dewa saka ${item.kasatriyan}, kagungan pusaka ${item.pusaka}.`;
   acc[item.id] = item;
   return acc;
 }, {});
+
+if (typeof window !== 'undefined') {
+  window.WAYANG_LIST = WAYANG_LIST;
+  window.WAYANG_CHARACTERS = WAYANG_CHARACTERS;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { WAYANG_LIST, WAYANG_CHARACTERS };
+}
 

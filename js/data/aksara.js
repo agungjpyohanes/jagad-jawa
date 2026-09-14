@@ -1,21 +1,21 @@
 // Data Aksara Jawa (Hanacaraka) & Engine Transliterasi Standar
 // Mematuhi Kaidah Kongres Bahasa Jawa, Sastra.org & Aksarajawa.id
 
-export const AKSARA_NGLEGENA = {
+const AKSARA_NGLEGENA = {
   'ha': 'ꦲ', 'na': 'ꦤ', 'ca': 'ꦕ', 'ra': 'ꦫ', 'ka': 'ꦏ',
   'da': 'ꦢ', 'ta': 'ꦠ', 'sa': 'ꦱ', 'wa': 'ꦮ', 'la': 'ꦭ',
   'pa': 'ꦥ', 'dha': 'ꦝ', 'ja': 'ꦗ', 'ya': 'ꦪ', 'nya': 'ꦚ',
   'ma': 'ꦩ', 'ga': 'ꦒ', 'ba': 'ꦧ', 'tha': 'ꦛ', 'nga': 'ꦔ'
 };
 
-export const PASANGAN_MAP = {
+const PASANGAN_MAP = {
   'ha': '꧀ꦲ', 'na': '꧀ꦤ', 'ca': '꧀ꦕ', 'ra': '꧀ꦫ', 'ka': '꧀ꦏ',
   'da': '꧀ꦢ', 'ta': '꧀ꦠ', 'sa': '꧀ꦱ', 'wa': '꧀ꦮ', 'la': '꧀ꦭ',
   'pa': '꧀ꦥ', 'dha': '꧀ꦝ', 'ja': '꧀ꦗ', 'ya': '꧀ꦪ', 'nya': '꧀ꦚ',
   'ma': '꧀ꦩ', 'ga': '꧀ꦒ', 'ba': '꧀ꦧ', 'tha': '꧀ꦛ', 'nga': '꧀ꦔ'
 };
 
-export const SANDHANGAN_SWARA = {
+const SANDHANGAN_SWARA = {
   'wulu': { aksara: 'ꦶ', latin: 'i', nama: 'Wulu (vokal i)' },
   'suku': { aksara: 'ꦸ', latin: 'u', nama: 'Suku (vokal u)' },
   'taling': { aksara: 'ꦺ', latin: 'é', nama: 'Taling (vokal é/è)' },
@@ -23,34 +23,34 @@ export const SANDHANGAN_SWARA = {
   'taling_tarung': { aksara: 'ꦺꦴ', latin: 'o', nama: 'Taling Tarung (vokal o)' }
 };
 
-export const SANDHANGAN_PANYIGEG = {
+const SANDHANGAN_PANYIGEG = {
   'layar': { aksara: 'ꦂ', latin: 'r mati', nama: 'Layar (-r)' },
   'wignyan': { aksara: 'ꦃ', latin: 'h mati', nama: 'Wignyan (-h)' },
   'cecak': { aksara: 'ꦁ', latin: 'ng mati', nama: 'Cecak (-ng)' },
   'pangkon': { aksara: '꧀', latin: 'paten', nama: 'Pangkon (paten)' }
 };
 
-export const SANDHANGAN_WYANJANA = {
+const SANDHANGAN_WYANJANA = {
   'cakra': { aksara: 'ꦿ', latin: '-ra-', nama: 'Cakra (+ra)' },
   'cakra_keret': { aksara: 'ꦽ', latin: '-re-', nama: 'Cakra Keret (+re pepet)' },
   'pengkal': { aksara: 'ꦾ', latin: '-ya-', nama: 'Pengkal (+ya)' }
 };
 
-export const AKSARA_MURDA = {
+const AKSARA_MURDA = {
   'Na': 'ꦟ', 'Ka': 'ꦑ', 'Ta': 'ꦡ', 'Sa': 'ꦰ',
   'Pa': 'ꦦ', 'Nya': 'ꦘ', 'Ga': 'ꦓ', 'Ba': 'ꦨ'
 };
 
-export const AKSARA_SWARA = {
+const AKSARA_SWARA = {
   'A': 'ꦄ', 'I': 'ꦅ', 'U': 'ꦈ', 'E': 'ꦌ', 'O': 'ꦎ'
 };
 
-export const ANGKA_JAWA = {
+const ANGKA_JAWA = {
   '0': '꧐', '1': '꧑', '2': '꧒', '3': '꧓', '4': '꧔',
   '5': '꧕', '6': '꧖', '7': '꧗', '8': '꧘', '9': '꧙'
 };
 
-export const PADA_JAWA = {
+const PADA_JAWA = {
   'lingsa': { aksara: '꧈', nama: 'Pada Lingsa (Koma)' },
   'lungsi': { aksara: '꧉', nama: 'Pada Lungsi (Titik)' },
   'pangkat': { aksara: '꧇', nama: 'Pada Pangkat (Titik Dua / Pengapit Angka)' }
@@ -76,7 +76,7 @@ const VOWEL_LIST = ['a', 'i', 'u', 'e', 'é', 'è', 'o'];
  * 5. Vokal khusus: 're' pepet mandiri -> Pa Cerek (ꦉ), 'le' pepet -> Nga Lelet (ꦊ)
  * 6. Fonem ganda: dh (ꦝ), th (ꦛ), ny (ꦚ), ng (ꦔ)
  */
-export function transliterateLatinToJawa(rawText) {
+function transliterateLatinToJawa(rawText) {
   if (!rawText) return '';
 
   let text = rawText
@@ -283,5 +283,25 @@ export function transliterateLatinToJawa(rawText) {
   }
 
   return result;
+}
+
+if (typeof window !== 'undefined') {
+  window.AKSARA_NGLEGENA = AKSARA_NGLEGENA;
+  window.PASANGAN_MAP = PASANGAN_MAP;
+  window.SANDHANGAN_SWARA = SANDHANGAN_SWARA;
+  window.SANDHANGAN_PANYIGEG = SANDHANGAN_PANYIGEG;
+  window.SANDHANGAN_WYANJANA = SANDHANGAN_WYANJANA;
+  window.AKSARA_MURDA = AKSARA_MURDA;
+  window.AKSARA_SWARA = AKSARA_SWARA;
+  window.ANGKA_JAWA = ANGKA_JAWA;
+  window.PADA_JAWA = PADA_JAWA;
+  window.transliterateLatinToJawa = transliterateLatinToJawa;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    AKSARA_NGLEGENA, PASANGAN_MAP, SANDHANGAN_SWARA, SANDHANGAN_PANYIGEG,
+    SANDHANGAN_WYANJANA, AKSARA_MURDA, AKSARA_SWARA, ANGKA_JAWA, PADA_JAWA,
+    transliterateLatinToJawa
+  };
 }
 

@@ -1,6 +1,6 @@
 // Data Nujum Perjodohan (Pitung Jawa 7 Metode)
 
-export const AKSARA_PERJODOHAN = [
+const AKSARA_PERJODOHAN = [
   { kode: 'HA',  iv: 6, vvi: 5  }, { kode: 'NA',  iv: 3, vvi: 2  },
   { kode: 'CA',  iv: 3, vvi: 3  }, { kode: 'RA',  iv: 3, vvi: 4  },
   { kode: 'KA',  iv: 3, vvi: 5  }, { kode: 'DA',  iv: 5, vvi: 6  },
@@ -13,14 +13,14 @@ export const AKSARA_PERJODOHAN = [
   { kode: 'THA', iv: 4, vvi: 19 }, { kode: 'NGA', iv: 2, vvi: 20 }
 ];
 
-export const HASIL_I_JODOH = {
+const HASIL_I_JODOH = {
   0: { nama: 'PUNGGEL', arti: 'Padudon, Pisah/Pegat', status: 'buruk' },
   1: { nama: 'GENTHA', arti: 'Larang Anak, gampang rejeki', status: 'campur' },
   2: { nama: 'GEMBILI', arti: 'Sugih Anak, rejeki pas-pasan', status: 'buruk' },
   3: { nama: 'SRI', arti: 'Sugih Rejeki, ayem tentrem', status: 'baik' }
 };
 
-export const HASIL_II_JODOH = {
+const HASIL_II_JODOH = {
   0: { nama: 'PATI', arti: 'Melarat', status: 'buruk' },
   1: { nama: 'SRI', arti: 'Sandang Pangan', status: 'baik' },
   2: { nama: 'LUNGGUH', arti: 'Kajen Kelingan', status: 'baik' },
@@ -28,7 +28,7 @@ export const HASIL_II_JODOH = {
   4: { nama: 'LARA', arti: 'Rekasa', status: 'buruk' }
 };
 
-export const HASIL_III_JODOH = {
+const HASIL_III_JODOH = {
   0: { nama: 'LEBU KETIYUP ANGIN', arti: 'Kurang Begjane sarta kerep Pindah Omah', status: 'buruk' },
   1: { nama: 'WASESA SEGARA', arti: 'Jembar Budine', status: 'baik' },
   2: { nama: 'TUNGGAK SEMI', arti: 'Sugih Anak sarta tansah Lara-Laranen', status: 'campur' },
@@ -38,7 +38,7 @@ export const HASIL_III_JODOH = {
   6: { nama: 'BUMI KAPETAK', arti: 'Dikucilkan ing wong nanging bisa Simpen Banda Donyane', status: 'campur' }
 };
 
-export const HASIL_IV_JODOH = {
+const HASIL_IV_JODOH = {
   0: { nama: 'PANDHAWA', arti: 'Ayem Tentrem Saklawase', status: 'baik' },
   1: { nama: 'TUNGGAK TANPA SEMI', arti: 'Sengsara Saklawase', status: 'buruk' },
   2: { nama: 'PISANG PINUNGGEL', arti: 'Pedhot Salah Sawiji', status: 'buruk' },
@@ -48,7 +48,7 @@ export const HASIL_IV_JODOH = {
   6: { nama: 'SATRIYA LELAKU', arti: 'Kudu Giat Among Dagang', status: 'baik' }
 };
 
-export const HASIL_V_JODOH = {
+const HASIL_V_JODOH = {
   0: { nama: 'LINTANG PURNAMA', arti: 'Luwih becik bakal kasembadan', status: 'baik' },
   1: { nama: 'ASIH ALAKI', arti: 'Rukun wus tunggal karepe', status: 'baik' },
   2: { nama: 'KEMARON SIH', arti: 'Kerep padudon pikirane', status: 'buruk' },
@@ -58,7 +58,7 @@ export const HASIL_V_JODOH = {
   6: { nama: 'SUKA SUGIH', arti: 'Becik bakal sugih donya', status: 'baik' }
 };
 
-export const HASIL_VI_JODOH = {
+const HASIL_VI_JODOH = {
   0: { nama: 'LATAR', arti: 'Tansah susah', status: 'buruk' },
   1: { nama: 'LARUNG', arti: 'Gelis teka lan lunga rejekine', status: 'buruk' },
   2: { nama: 'GONDANG', arti: 'Bisa nyimpen banda donya', status: 'baik' },
@@ -66,3 +66,19 @@ export const HASIL_VI_JODOH = {
   4: { nama: 'BALI', arti: 'Boros rejekine', status: 'buruk' },
   5: { nama: 'PAWON', arti: 'Ora tau kekurangan pangan', status: 'baik' }
 };
+
+if (typeof window !== 'undefined') {
+  window.AKSARA_PERJODOHAN = AKSARA_PERJODOHAN;
+  window.HASIL_I_JODOH = HASIL_I_JODOH;
+  window.HASIL_II_JODOH = HASIL_II_JODOH;
+  window.HASIL_III_JODOH = HASIL_III_JODOH;
+  window.HASIL_IV_JODOH = HASIL_IV_JODOH;
+  window.HASIL_V_JODOH = HASIL_V_JODOH;
+  window.HASIL_VI_JODOH = HASIL_VI_JODOH;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    AKSARA_PERJODOHAN, HASIL_I_JODOH, HASIL_II_JODOH, HASIL_III_JODOH,
+    HASIL_IV_JODOH, HASIL_V_JODOH, HASIL_VI_JODOH
+  };
+}

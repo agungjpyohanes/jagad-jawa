@@ -1,6 +1,6 @@
 // Data Pitutur Luhur & Kuis Budaya Jawa (Korpus Lengkap & Bank Soal Interaktif)
 
-export const PITUTUR_LIST = [
+const PITUTUR_LIST = [
   {
     jawa: 'Urip iku urup',
     aksara: 'ꦈꦫꦶꦥ꧀ꦲꦶꦏꦸꦲꦸꦫꦸꦥ꧀',
@@ -213,7 +213,7 @@ export const PITUTUR_LIST = [
   }
 ];
 
-export const QUIZ_QUESTIONS = [
+const QUIZ_QUESTIONS = [
   {
     q: 'Menapa tegesipun sesanti falsafah Jawa "Urip Iku Urup"?',
     opts: [
@@ -435,3 +435,11 @@ export const QUIZ_QUESTIONS = [
     kategori: 'Kalender Jawa'
   }
 ];
+
+if (typeof window !== 'undefined') {
+  window.PITUTUR_LIST = PITUTUR_LIST;
+  window.QUIZ_QUESTIONS = QUIZ_QUESTIONS;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { PITUTUR_LIST, QUIZ_QUESTIONS };
+}

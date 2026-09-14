@@ -1,32 +1,519 @@
 /**
  * Jagad Jawa — Portal Budaya Luhur Nusantara
- * Modular Entry Point | Jagad Jawa
- * Architecture: ES Modules (data / modules / ui)
+ * Logika & Engine Utama
  */
 
-import { showToast, copyToClipboard } from './ui/toast.js';
-import { switchTab, toggleMobileMenu, printSection } from './ui/navigation.js';
-import { playGamelanTone, toggleKetawangPuspawarna, playDalangFX } from './modules/audio.js';
-import {
-  HARI, NEPTU_HARI, PASARAN, NEPTU_PASARAN, BULAN_MASEHI, BULAN_JAWA, WINDU,
-  WUKU, DUNUNGE, GRID, KETERANGAN, getDayInfo
-} from './data/calendar.js';
-import {
-  KARAKTER, PADEWAN, getFaalakiah, getAsesoris,
-  PANCASUDA_ARTI, PAARASAN_ARTI, KAMAROKAN_ARTI
-} from './data/personality.js';
-import {
-  AKSARA_PERJODOHAN, HASIL_I_JODOH, HASIL_II_JODOH, HASIL_III_JODOH,
-  HASIL_IV_JODOH, HASIL_V_JODOH, HASIL_VI_JODOH
-} from './data/marriage.js';
-import { TARGET_HARI_SELAMETAN, TARGET_PASARAN_SELAMETAN, JENIS_SELAMETAN } from './data/selametan.js';
-import { 
-  AKSARA_NGLEGENA, PASANGAN_MAP, SANDHANGAN_SWARA, SANDHANGAN_PANYIGEG,
-  SANDHANGAN_WYANJANA, AKSARA_MURDA, AKSARA_SWARA, ANGKA_JAWA, PADA_JAWA,
-  transliterateLatinToJawa
-} from './data/aksara.js';
-import { WAYANG_CHARACTERS, WAYANG_LIST } from './data/wayang.js';
-import { PITUTUR_LIST, QUIZ_QUESTIONS } from './data/pitutur.js';
+// ─── UI / Toast Utility ───────────────────────────────────────────────────
+function showToast(msg) {
+  const toast = document.getElementById('toastBox');
+  if (!toast) return;
+  document.getElementById('toastMessage').innerText = msg;
+  toast.classList.remove('translate-y-24', 'opacity-0');
+  toast.classList.add('translate-y-0', 'opacity-100');
+  setTimeout(() => {
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('translate-y-24', 'opacity-0');
+  }, 2800);
+}
+
+function copyToClipboard(text, msg) {
+  const tempInput = document.createElement('textarea');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand('copy');
+  document.body.removeChild(tempInput);
+  showToast(msg);
+}
+
+// ─── Navigation Handlers ──────────────────────────────────────────────────
+const switchTab = window.switchTab || function(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => {
+    el.classList.add('hidden');
+    el.classList.remove('block');
+  });
+  const target = document.getElementById(`tab-${tabId}`);
+  if (target) {
+    target.classList.remove('hidden');
+    target.classList.add('block');
+  }
+  document.querySelectorAll('.nav-btn, .nav-link').forEach(btn => {
+    if (btn.dataset.tab === tabId) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  if (tabId === 'aksara') {
+    window.dispatchEvent(new CustomEvent('init-aksara-canvas'));
+  }
+  window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+const toggleMobileMenu = window.toggleMobileMenu || function() {
+  const menu = document.getElementById('mobileMenu');
+  if (menu) menu.classList.toggle('hidden');
+};
+
+const printSection = window.printSection || function(sectionId) {
+  window.print();
+};
+
+// ─── Audio Engine ─────────────────────────────────────────────────────────
+let audioCtx = null;
+let isPuspawarnaPlaying = false;
+let puspawarnaInterval = null;
+let puspawarnaStep = 0;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+function playGamelanTone(freq, type = 'saron') {
+  try {
+    initAudio();
+    const now = audioCtx.currentTime;
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(freq, now);
+
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(freq * 2.76, now);
+
+    if (type === 'saron') {
+      gain1.gain.setValueAtTime(0.7, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+      gain2.gain.setValueAtTime(0.3, now);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+    } else if (type === 'bonang') {
+      gain1.gain.setValueAtTime(0.8, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      gain2.gain.setValueAtTime(0.35, now);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+    } else if (type === 'gong') {
+      gain1.gain.setValueAtTime(1.3, now);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 4.8);
+      gain2.gain.setValueAtTime(0.6, now);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+    } else if (type === 'kempul') {
+      gain1.gain.setValueAtTime(0.9, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+      gain2.gain.setValueAtTime(0.3, now);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+    } else if (type === 'kenong') {
+      gain1.gain.setValueAtTime(0.9, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+      gain2.gain.setValueAtTime(0.4, now);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 1.0);
+    }
+
+    osc1.connect(gain1); gain1.connect(audioCtx.destination);
+    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+
+    osc1.start(now); osc2.start(now);
+    osc1.stop(now + 5.0); osc2.stop(now + 5.0);
+  } catch (e) {
+    console.warn('Audio Web API restricted:', e);
+  }
+}
+
+const PUSPAWARNA_SLENDRO_PATHE_MANYURA = [
+  { freq: 288, type: 'saron' },
+  { freq: 324, type: 'saron' },
+  { freq: 364, type: 'bonang' },
+  { freq: 432, type: 'saron' },
+  { freq: 486, type: 'kenong' },
+  { freq: 432, type: 'saron' },
+  { freq: 364, type: 'saron' },
+  { freq: 324, type: 'kempul' },
+  { freq: 288, type: 'saron' },
+  { freq: 324, type: 'saron' },
+  { freq: 432, type: 'saron' },
+  { freq: 486, type: 'kenong' },
+  { freq: 432, type: 'bonang' },
+  { freq: 364, type: 'saron' },
+  { freq: 324, type: 'saron' },
+  { freq: 216, type: 'gong' }
+];
+
+function toggleKetawangPuspawarna(showToastFn = showToast) {
+  const btn = document.getElementById('playPuspawarnaBtn');
+  const icon = document.getElementById('audioBtnIcon');
+  const label = document.getElementById('audioBtnLabel');
+
+  if (isPuspawarnaPlaying) {
+    clearInterval(puspawarnaInterval);
+    isPuspawarnaPlaying = false;
+    puspawarnaInterval = null;
+    if (btn) btn.classList.remove('playing');
+    if (icon) icon.className = 'fa-solid fa-play text-prada';
+    if (label) label.innerText = 'Puspawarna';
+    if (showToastFn) showToastFn('Gendhing Puspawarna dipun suwun mandheg.');
+  } else {
+    initAudio();
+    isPuspawarnaPlaying = true;
+    if (btn) btn.classList.add('playing');
+    if (icon) icon.className = 'fa-solid fa-pause text-prada animate-pulse';
+    if (label) label.innerText = 'Mungel...';
+    if (showToastFn) showToastFn('Nglaras Gendhing Ketawang Puspawarna (Slendro Manyura)...');
+
+    puspawarnaStep = 0;
+    const playNextNote = () => {
+      const note = PUSPAWARNA_SLENDRO_PATHE_MANYURA[puspawarnaStep % PUSPAWARNA_SLENDRO_PATHE_MANYURA.length];
+      playGamelanTone(note.freq, note.type);
+      puspawarnaStep++;
+    };
+
+    playNextNote();
+    puspawarnaInterval = setInterval(playNextNote, 850);
+  }
+}
+
+function playDalangFX(type, showToastFn = showToast) {
+  try {
+    initAudio();
+    const now = audioCtx.currentTime;
+
+    if (type === 'kepyak') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(1400, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+      gain.gain.setValueAtTime(0.8, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.09);
+      if (showToastFn) showToastFn('Swanten Kepyak Dalang (Kecrk!)');
+    } else if (type === 'dodokan') {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(120, now);
+      osc.frequency.exponentialRampToValueAtTime(35, now + 0.18);
+      gain.gain.setValueAtTime(1.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(now); osc.stop(now + 0.22);
+      if (showToastFn) showToastFn('Dodokan Kotak Wayang (Dhod-dhod!)');
+    }
+  } catch (e) {
+    console.warn('FX Error:', e);
+  }
+}
+
+// ─── Data Kalender & Pranata Mangsa ─────────────────────────────────────────
+const HARI = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+const NEPTU_HARI = [5,4,3,7,8,6,9];
+const PASARAN = ["Legi","Pahing","Pon","Wage","Kliwon"];
+const NEPTU_PASARAN = [5,9,7,4,8];
+const BULAN_MASEHI = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const BULAN_JAWA = ["Sura","Sapar","Mulud","Bakda Mulud","Jumadilawal","Jumadilakhir","Rejeb","Ruwah","Pasa","Sawal","Dulkangidah","Besar"];
+const WINDU = ["Alip","Ehe","Jimawal","Je","Dal","Be","Wawu","Jimakir"];
+
+const WUKU = [
+  "Shinto","Landep","Wukir","Kurantil","Tolu","Gumbreg","Warigalit","Warigagung",
+  "Julung Wangi","Sungsang","Galungan","Kuningan","Langkir","Mandasiya","Julung Pujut","Pahang",
+  "Kuruwelut","Marakeh","Tambir","Madangkungan","Maktal","Wuye","Manahil","Prangbakat","Bala",
+  "Wugu","Wayang","Kulawu","Dukut","Watu Gunung"
+];
+
+const DUNUNGE = [
+  "Lor Wetan","Kulon","Kidul Wetan","Ngisor","Lor Kulon","Kidul Wetan","Duwur","Lor","Kidul Kulon","Wetan",
+  "Lor Wetan","Kulon","Kidul Wetan","Ngisor","Lor Kulon","Kidul","Duwur","Lor","Kidul Kulon","Wetan",
+  "Lor Wetan","Kulon","Kidul Wetan","Ngisor","Lor Kulon","Kidul","Duwur","Lor","Kidul Kulon","Wetan"
+];
+
+const GRID = [
+  [["PS","R",0],["RAT","R",0],["S","R",1],["NS","R",0],["","G",0],["","G",0],["P","R",0]],
+  [["RT","R",1],["","G",0],["N","G",0],["WQ","R",0],["","G",0],["P","R",0],["R","R",1]],
+  [["","G",0],["N","G",0],["","G",0],["","G",0],["I","G",0],["R","R",1],["","G",0]],
+  [["N","R",0],["","G",1],["OP","G",0],["XT","R",0],["R","R",0],["","G",0],["N","R",0]],
+  [["","G",1],["P","G",0],["I","G",0],["R","R",1],["P","R",0],["I","G",0],["","G",0]],
+  [["P","R",0],["T","G",0],["R","R",1],["N","R",0],["","G",0],["","G",0],["P","R",0]],
+  [["T","R",0],["RA","G",0],["N","G",0],["Q","R",0],["W","G",0],["P","R",0],["","G",1]],
+  [["RK","G",0],["N","G",0],["","G",0],["","G",0],["I","R",0],["S","G",1],["RS","G",0]],
+  [["N","R",0],["","R",1],["OP","R",0],["I","R",0],["","G",0],["R","R",0],["N","R",0]],
+  [["","G",1],["P","R",0],["T","R",0],["S","R",0],["RP","R",0],["T","R",0],["","G",0]],
+  [["DP","R",0],["DT","R",0],["D","R",1],["XRN","R",0],["","G",0],["","G",0],["P","R",0]],
+  [["I","R",1],["","G",0],["RN","R",0],["Q","R",1],["","G",0],["PW","R",0],["S","R",1]],
+  [["","G",0],["RAN","R",0],["","G",0],["","G",0],["T","G",0],["","G",1],["","G",0]],
+  [["RN","R",0],["","G",1],["OP","R",0],["I","R",0],["","G",0],["","G",0],["RN","R",0]],
+  [["","G",1],["P","G",0],["I","R",0],["","G",1],["P","R",0],["RT","R",0],["","G",1]],
+  [["P","R",0],["T","R",0],["","G",1],["N","R",0],["R","R",1],["","G",0],["P","R",0]],
+  [["KI","R",0],["","G",0],["N","R",0],["RQ","R",1],["","G",0],["P","R",0],["W","R",1]],
+  [["","G",0],["N","R",0],["R","G",1],["X","R",0],["I","R",0],["","G",1],["","G",0]],
+  [["N","R",0],["RA","R",1],["OP","R",0],["T","R",0],["","G",0],["","R",0],["N","R",0]],
+  [["R","R",1],["P","R",0],["I","R",0],["","G",0],["P","R",0],["I","R",0],["R","R",1]],
+  [["P","R",0],["I","R",0],["","G",1],["N","R",0],["","G",0],["R","R",0],["","R",0]],
+  [["T","R",0],["W","R",0],["N","R",0],["Q","R",1],["R","R",0],["P","R",0],["","G",1]],
+  [["","G",0],["N","G",0],["","G",0],["R","R",0],["I","R",0],["","G",1],["","G",0]],
+  [["N","R",0],["","G",1],["ROP","R",0],["I","R",0],["","G",0],["","G",0],["N","R",0]],
+  [["","G",1],["RAP","R",0],["T","R",0],["X","R",1],["P","R",0],["T","R",0],["","G",0]],
+  [["PRK","R",0],["I","R",0],["","G",1],["N","R",0],["","G",1],["","G",0],["RP","R",0]],
+  [["I","R",0],["","G",0],["NW","R",0],["Q","R",1],["S","R",0],["RP","R",0],["","G",1]],
+  [["","G",0],["N","G",0],["","G",0],["","G",0],["RT","R",0],["","G",1],["","G",0]],
+  [["N","R",0],["","G",1],["OP","R",0],["RT","R",0],["","G",0],["","G",0],["N","R",0]],
+  [["","G",1],["P","R",0],["RT","R",0],["","G",1],["P","R",0],["I","R",0],["","G",0]]
+];
+
+const KETERANGAN = [
+  ["S","Tangise Dewi Sinto"],["O","Anggoro Kasih"],["W","Tali Wangke"],["N","Nuju Padu"],
+  ["Q","Dino ora kanggonan tanggal"],["R","Ringkel Jalma"],["K","Kala Dite"],["T","Kala Tinantang"],
+  ["P","Nuju Pati"],["D","Dungulan"],["A","Sampar Wangke"],["X","Sarik Agung"]
+];
+
+function toJDN(y, m, d) {
+  const a = Math.floor((14 - m) / 12);
+  const y2 = y + 4800 - a;
+  const m2 = m + 12 * a - 3;
+  return d + Math.floor((153 * m2 + 2) / 5) + 365 * y2 + Math.floor(y2 / 4) - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045;
+}
+
+const ISLAMIC_EPOCH = 1948440;
+
+function jdnToIslamic(jdn) {
+  jdn = Math.floor(jdn);
+  const n = jdn - ISLAMIC_EPOCH + 10632;
+  const cyc = Math.floor(n / 10631);
+  const rem0 = n % 10631 + 354;
+  const j = Math.floor((10985 - rem0) / 5316) * Math.floor((50 * rem0) / 17719) + Math.floor(rem0 / 5670) * Math.floor((43 * rem0) / 15238);
+  const rem2 = rem0 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+  const m = Math.floor((24 * rem2) / 709);
+  const d = rem2 - Math.floor((709 * m) / 24);
+  const y = 30 * cyc + j - 30;
+  return [y, m, d];
+}
+
+const JDN_LEGI_ANCHOR = toJDN(2022, 1, 10);
+const SUN_ANCHOR = new Date(Date.UTC(2022, 0, 9));
+const WUKU_ANCHOR_IDX = 19;
+
+function getDayInfo(y, m, d) {
+  const jdn = toJDN(y, m, d);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  const weekdayId = dt.getUTCDay();
+  const pasaranId = ((jdn - JDN_LEGI_ANCHOR) % 5 + 5) % 5;
+  const sundayOfWeek = new Date(dt);
+  sundayOfWeek.setUTCDate(dt.getUTCDate() - weekdayId);
+  const weeksDiff = Math.round((sundayOfWeek - SUN_ANCHOR) / (7 * 86400000));
+  const wukuId = ((WUKU_ANCHOR_IDX + weeksDiff) % 30 + 30) % 30;
+  const [hy, hm, hd] = jdnToIslamic(jdn);
+  const ajYear = hy + 512;
+  return { jdn, weekdayId, pasaranId, wukuId, hijri: [hd, hm, hy], ajYear };
+}
+
+// ─── Data Kepribadian & Faalakiah ─────────────────────────────────────────
+const KARAKTER = {
+  1: "Leader", 2: "Diplomat", 3: "Analisis", 4: "Realis",
+  5: "Adventurer", 6: "Idealis", 7: "Edukatif", 8: "Eksekutor", 0: "Entertainer"
+};
+
+const PADEWAN = [
+  "Batara Suryo", "Batara Bromo", "Batari Durgo", "Batara Asmoro",
+  "Batara Isworo", "Batari Nogogini", "Batara Komojoyo", "Batara Sri",
+  "Batara Bayu", "Batara Wisnu", "Batara Endro", "Batara Yamadipati"
+];
+
+const AKSARA_FAAL = {
+  "HA": 1, "NA": 2, "CA": 3, "RA": 4, "KA": 5, "DA": 6, "TA": 7, "SA": 8, "WA": 9, "LA": 10,
+  "PA": 11, "DHA": 12, "JA": 13, "YA": 14, "NYA": 15, "MA": 16, "GA": 17, "BA": 18, "THA": 19, "NGA": 20
+};
+
+const NABI_FAAL = {
+  1: "Nabi Yusuf", 2: "Nabi Ahmad", 3: "Nabi Isa", 4: "Nabi Dawut", 5: "Nabi Soleman",
+  6: "Nabi Adam", 7: "Nabi Ibrahim", 8: "Nabi Idris", 9: "Nabi Nuh", 10: "Nabi Musa",
+  11: "Nabi Ayub", 0: "Nabi Yunus"
+};
+
+const FAAL_DESC = {
+  1: "Antuk rahmate Pangeran, agung kaluhurane, pinter bisa nindakake sembarang pagaweyan. Bilahine amarga kapiterane dewe. Tolak: sedekaha WEDUS sakwayahe. Dzikir: YA ALIMU 15x setiap malam.",
+  2: "Ora bisa sugih rajabrana, nanging becik atine. Bilahine tansah diudi dening wong supaya rusak nanging ora bisa. Tolak: sedekaha JARIT PUTIH lan ALI-ALI SALOKA. Jangan makan umbi-umbian.",
+  3: "Tansah ditresnani lan diwedeni. Tolak: sedekaha BERAS ABANG lan BERAS PUTIH sarta PITIK IRENG MULUS lan PITIK PUTIH MULUS. Larangan: ojo dahar kewan mabur lan endog. Dzikir: YA ROBBI 400x.",
+  4: "Akeh begja lan daulate, nanging bandane sarta anake akeh kang ilang. Bilahi dari lawan jenis. Tolak: sedekaha SALOKA bobot 3 aga lan dinar 5 iji. Dzikir: YA KADIRU 100x.",
+  5: "Akeh begja lan daulate, sugih donya lan sugih anak. Bilahi karena sering nyidrani janji. Tolak: sedekaha JARIK IRENG saklembar. Larangan: ojo dahar pucukan. Dzikir: YA ALIMU 50x.",
+  6: "Akeh begja, antuk kanugrahan, ora kendat rejekine. Anak akeh kang ilang/cacat. Bilahi dari lawan jenis. Tolak: sedekaha KERIS. Larangan: ojo dahar kewan mabur. Dzikir: YA KALKU 90x.",
+  7: "Sumadiya manggon ana ing omah ibadah amarga deweke wis nandang bilahine, kabeh banda donyane wis ditinggalke. Tolak: sidekaha EMAS bobot telung aga. Prayoga ojo dahar ENDOG saklawase urip. Dzikir: YA RAHIMU 9x saben wengi.",
+  8: "Demen marang kabecikan, binuka ing ngelmu gaib. Becik dadi ahlul ibadah. Sugih anak nanging akeh cacat. Tolak: sidekaha DAGING dicampur BANYU sarta JARIK PUTIH. Larangan: ojo dahar WALANG. Dzikir: YA SALAMU 100x.",
+  9: "Agung rahmate, sugih banda untuk dagang/tani. Anak bakal murang sarak. Bilahi dari rabi atau anak. Tolak: sidekaha JARIK BATIK. Larangan: ojo dahar kewan mabur. Dzikir: YA KAFI, YA MUKNIYA 9x.",
+  10: "Adoh banget lelakone/pacobane. Asring tapa lan perang nanging ora tahu kalah. Watake ora sabaran. Tolak: sidekaha JARIK PUTIH. Dzikir: YA ROBBI 8x.",
+  11: "Tansah nandang lara-laranen. Kabejane tinemu ing buri. Bilahi dari lawan jenis. Tolak: sidekaha GANGSA bobot rong kati. Dzikir: YA MUKYI 8x.",
+  0: "Ora sugih banda donya nanging sugih anak. Harta dijaga Naga lan Singa. Tolak: sidekaha TIMAH bobot rong kati lan ALI-ALI SALOKA. Larangan: ojo dahar IWAK ATI. Dzikir: YA KADIRU 100x."
+};
+
+const PAARASAN_ARTI = {
+  "Aras Tuding": "Pemberani dan terpakai kinerjanya tapi sering menjual perabotnya",
+  "Aras Kembang": "Larang anak tetapi dikasihi banyak orang dan mudah bekerja",
+  "Lakuning Lintang": "Pendiam, rendah hati, betah melek, sering pindah rumah",
+  "Lakuning Rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya",
+  "Lakuning Srengenge": "Pengertian, manis bicaranya, kreatif, selalu mengalah",
+  "Lakuning Banyu": "Teguh, rajin, ramah, berjiwa pemimpin",
+  "Lakuning Bumi": "Pendiam, mudah tersinggung, suka ketenangan dan welas asih",
+  "Lakuning Geni": "Pemarah, pemberani, banyak rencana dan teguh pendirian",
+  "Lakuning Angin": "Pendiam, suka disanjung, lincah dan menyenangkan orang lain",
+  "Aras Pepet": "Pendiam, tajam pikirannya, berbakat mendalami ilmu kebatinan"
+};
+
+const PANCASUDA_ARTI = {
+  "Wasesa Segara": "Berjiwa besar, pemaaf, berwibawa laksana samudra luas",
+  "Tunggak Semi": "Banyak rejeki, walau terpotong tetap bersemi kembali",
+  "Satriya Wibawa": "Dimanapun selalu berwibawa dan dihormati sesama",
+  "Sumur Sinaba": "Menjadi sumber rujukan dan tempat menimba ilmu kebajikan",
+  "Satriya Wirang": "Sering menghadapi ujian kesabaran dan aral rintangan",
+  "Bumi Kapetak": "Bersih hatinya, kuat pendiriannya, tahan uji",
+  "Lebu Katiyup Angin": "Suka berkelana, berimajinasi luas, cocok untuk perantau"
+};
+
+const KAMAROKAN_ARTI = {
+  "Sanggar Waringin": "Tentrem, bahagia, banyak rejeki, menjadi pengayom",
+  "Mantri Sinarojo": "Tercapai cita-citanya, murah sandang-pangan",
+  "Macan Ketawan": "Cukupan, disegani dan dihormati dalam pergaulan",
+  "Nuju Padu": "Sering berbeda pendapat, perlu menjaga tutur kata",
+  "Kala Tinantang": "Pemberani, menghadapi tantangan hidup dengan tegar",
+  "Nuju Pati": "Perlu kehati-hatian dalam mengelola rezeki dan kesehatan"
+};
+
+function namaKeAksaraList(nama) {
+  const clean = (nama || '').toLowerCase().replace(/[^a-z\s]/g, " ").replace(/\s+/g, " ").trim();
+  if (!clean) return [];
+  const VOKAL = "aiueo";
+  const hasil = [];
+  const kataList = clean.split(" ");
+  for (const kata of kataList) {
+    if (!kata) continue;
+    let i = 0;
+    while (i < kata.length) {
+      const c = kata[i];
+      if (VOKAL.includes(c)) { hasil.push("HA"); i++; continue; }
+      let kons = c;
+      let next = kata[i + 1] || "";
+      if ((c === "n" && next === "y") || (c === "n" && next === "g") || (c === "d" && next === "h") || (c === "t" && next === "h")) {
+        kons = c + next; i += 2;
+      } else { i += 1; }
+      if (i < kata.length && VOKAL.includes(kata[i])) { i++; if (i < kata.length && VOKAL.includes(kata[i])) i++; }
+      else { continue; }
+      const mapKons = {
+        "h": "HA", "n": "NA", "c": "CA", "r": "RA", "k": "KA", "d": "DA", "t": "TA", "s": "SA",
+        "w": "WA", "l": "LA", "p": "PA", "j": "JA", "y": "YA", "m": "MA", "g": "GA", "b": "BA",
+        "ny": "NYA", "ng": "NGA", "th": "THA", "dh": "DHA"
+      };
+      hasil.push(mapKons[kons] || mapKons[kons[0]] || "HA");
+    }
+  }
+  return hasil;
+}
+
+function getFaalakiah(nama) {
+  const aksaraList = namaKeAksaraList(nama);
+  if (aksaraList.length === 0) return { kode: 0, nabi: NABI_FAAL[0], desc: FAAL_DESC[0], aksaraStr: "-", sum: 0 };
+  let sum = 0;
+  for (const ak of aksaraList) sum += (AKSARA_FAAL[ak] || 1);
+  const kode = sum % 12;
+  return {
+    kode,
+    nabi: NABI_FAAL[kode] || NABI_FAAL[0],
+    desc: FAAL_DESC[kode] || FAAL_DESC[0],
+    aksaraStr: aksaraList.join(" "),
+    sum
+  };
+}
+
+function getAsesoris(bulan, tanggal) {
+  const data = {
+    1: { dino: "Senin, Kamis lan Sabtu", sasi: "Januari lan Februari", lelara: "Kulit, Reumatik, Pencernaan", watu: "Black Onyx, Ruby, Giok", warna: "Biru Laut lan Ijo Tua", kembang: "Melati, Sedap Malam, Leli Putih" },
+    2: { dino: "Selasa, Rabu lan Sabtu", sasi: "Februari lan Maret", lelara: "Umum", watu: "Safir Biru, Kalimaya, Amethyst", warna: "Oranye lan Abang Enom", kembang: "Mawar Oranye lan Mawar Abang" },
+    3: { dino: "Selasa, Kamis lan Minggu", sasi: "Mei lan Juni", lelara: "Kulit Gatal, Reumatik", watu: "Safir Biru, Jamrud Ijo", warna: "Abu-abu", kembang: "Melati, Leli Putih, Ceplok Piring" },
+    4: { dino: "Selasa", sasi: "Desember", lelara: "Mata, Ginjal, Hati", watu: "Kecubung, Intan, Badar Besi", warna: "Abang Tua lan Kuning", kembang: "Mawar Abang lan Leli Kuning" },
+    5: { dino: "Rabu lan Jumat", sasi: "November", lelara: "Gulu Kejang, Jantung", watu: "Jamrud Ijo, Safir, Pirus Biru", warna: "Biru Tua, Coklat, Oranye", kembang: "Mawar Oranye, Anyelir, Suplir" },
+    6: { dino: "Rabu lan Sabtu", sasi: "Februari", lelara: "Watuk, Mumet", watu: "Aquamarine, Jamrud Ijo", warna: "Putih, Kuning, Biru Enom", kembang: "Melati, Leli Putih, Anggrek" },
+    7: { dino: "Senin", sasi: "Februari", lelara: "Weteng, Paru-paru", watu: "Mutiara, Mata Kucing, Biduri Bulan", warna: "Kuning Biru, Coklat", kembang: "Melati, Sedap Malam" },
+    8: { dino: "Jumat lan Minggu", sasi: "Maret", lelara: "Mumet, Sendi", watu: "Berlian, Ruby Star, Topas Kuning", warna: "Kuning, Ijo, Oranye", kembang: "Melati, Leli, Anggrek" },
+    9: { dino: "Rabu lan Sabtu", sasi: "April lan Agustus", lelara: "Maag, Angel Turu", watu: "Giok, Akik Lapis, Carnelian", warna: "Kuning lan Ijo", kembang: "Melati, Sedap Malam" },
+    10: { dino: "Jumat", sasi: "Mei lan Agustus", lelara: "Umum", watu: "Opal, Berlian, Merjan", warna: "Biru lan Abang Anggur", kembang: "Kenanga Kuning, Wijaya Kusuma" },
+    11: { dino: "Minggu lan Selasa", sasi: "Agustus", lelara: "Reumatik, Ginjal", watu: "Topas, Kalimaya, Aquamarine", warna: "Abang lan Putih", kembang: "Melati, Anggrek" },
+    12: { dino: "Kamis lan Minggu", sasi: "Juli lan Oktober", lelara: "Tenggorokan, Paru-paru", watu: "Berlian, Nilam, Pirus", warna: "Ijo, Oranye, Kuning", kembang: "Melati, Leli Putih, Mawar" }
+  };
+  let k = 5;
+  if ((bulan === 12 && tanggal >= 23) || bulan === 1 || (bulan === 2 && tanggal <= 3)) k = 1;
+  else if (bulan === 2 && tanggal >= 4) k = 2;
+  else if (bulan === 3 && tanggal <= 26) k = 3;
+  else if ((bulan === 3 && tanggal >= 27) || (bulan === 4 && tanggal <= 19)) k = 4;
+  else if ((bulan === 4 && tanggal >= 20) || (bulan === 5 && tanggal <= 12)) k = 5;
+  else if ((bulan === 5 && tanggal >= 13) || (bulan === 6 && tanggal <= 22)) k = 6;
+  else if ((bulan === 6 && tanggal >= 23) || bulan === 7 || (bulan === 8 && tanggal <= 2)) k = 7;
+  else if (bulan === 8 && tanggal >= 3 && tanggal <= 25) k = 8;
+  else if ((bulan === 8 && tanggal >= 26) || (bulan === 9 && tanggal <= 18)) k = 9;
+  else if ((bulan === 9 && tanggal >= 19) || (bulan === 10 && tanggal <= 13)) k = 10;
+  else if ((bulan === 10 && tanggal >= 14) || (bulan === 11 && tanggal <= 9)) k = 11;
+  else k = 12;
+  return data[k];
+}
+
+// ─── Data Selametan ───────────────────────────────────────────────────────
+const TARGET_HARI_SELAMETAN = [
+  ['Selasa', 'Sabtu', 'Kamis', 'Senin', 'Rabu', 'Selasa', "Jumat"],
+  ['Rabu', 'Minggu', "Jumat", 'Selasa', 'Kamis', 'Rabu', 'Sabtu'],
+  ['Kamis', 'Senin', 'Sabtu', 'Rabu', "Jumat", 'Kamis', 'Minggu'],
+  ["Jumat", 'Selasa', 'Minggu', 'Kamis', 'Sabtu', "Jumat", 'Senin'],
+  ['Sabtu', 'Rabu', 'Senin', "Jumat", 'Minggu', 'Sabtu', 'Selasa'],
+  ['Minggu', 'Kamis', 'Selasa', 'Sabtu', 'Senin', 'Minggu', 'Rabu'],
+  ['Senin', "Jumat", 'Rabu', 'Minggu', 'Selasa', 'Senin', 'Kamis']
+];
+
+const TARGET_PASARAN_SELAMETAN = {
+  'Pahing': ['Wage', 'Pon', 'Legi', 'Legi', 'Kliwon', 'Legi', 'Legi'],
+  'Pon':    ['Kliwon', 'Wage', 'Pahing', 'Pahing', 'Legi', 'Pahing', 'Pahing'],
+  'Wage':   ['Legi', 'Kliwon', 'Pon', 'Pon', 'Pahing', 'Pon', 'Pon'],
+  'Kliwon': ['Pahing', 'Legi', 'Wage', 'Wage', 'Pon', 'Wage', 'Wage'],
+  'Legi':   ['Pon', 'Pahing', 'Kliwon', 'Kliwon', 'Wage', 'Kliwon', 'Kliwon']
+};
+
+const JENIS_SELAMETAN = [
+  { nama: '3 Harian', approx: 3, idx: 0 },
+  { nama: '7 Harian', approx: 7, idx: 1 },
+  { nama: '40 Harian', approx: 40, idx: 2 },
+  { nama: '100 Harian', approx: 100, idx: 3 },
+  { nama: 'Pendak Pisan (1 Tahun)', approx: 354, idx: 4 },
+  { nama: 'Pendak Pindho (2 Tahun)', approx: 710, idx: 5 },
+  { nama: 'Nyewu (1000 Hari)', approx: 1000, idx: 6 }
+];
+
+// ─── Aksara Jawa & Transliterasi ──────────────────────────────────────────
+const AKSARA_NGLEGENA = window.AKSARA_NGLEGENA || {};
+const PASANGAN_MAP = window.PASANGAN_MAP || {};
+const SANDHANGAN_SWARA = window.SANDHANGAN_SWARA || {};
+const SANDHANGAN_PANYIGEG = window.SANDHANGAN_PANYIGEG || {};
+const SANDHANGAN_WYANJANA = window.SANDHANGAN_WYANJANA || {};
+const AKSARA_MURDA = window.AKSARA_MURDA || {};
+const AKSARA_SWARA = window.AKSARA_SWARA || {};
+const ANGKA_JAWA = window.ANGKA_JAWA || {};
+const PADA_JAWA = window.PADA_JAWA || {};
+const transliterateLatinToJawa = (t) => (window.transliterateLatinToJawa ? window.transliterateLatinToJawa(t) : t);
+
+// ─── Data Wayang ──────────────────────────────────────────────────────────
+const WAYANG_LIST = window.WAYANG_LIST || [];
+const WAYANG_CHARACTERS = window.WAYANG_CHARACTERS || {};
+
+// ─── Data Perjodohan & Pitutur ────────────────────────────────────────────
+const AKSARA_PERJODOHAN = window.AKSARA_PERJODOHAN || [];
+const HASIL_I_JODOH = window.HASIL_I_JODOH || {};
+const HASIL_II_JODOH = window.HASIL_II_JODOH || {};
+const HASIL_III_JODOH = window.HASIL_III_JODOH || {};
+const HASIL_IV_JODOH = window.HASIL_IV_JODOH || {};
+const HASIL_V_JODOH = window.HASIL_V_JODOH || {};
+const HASIL_VI_JODOH = window.HASIL_VI_JODOH || {};
+const PITUTUR_LIST = window.PITUTUR_LIST || [];
+const QUIZ_QUESTIONS = window.QUIZ_QUESTIONS || [];
 
 // ─── Expose globals for inline HTML handlers ───────────────────────────────
 window.switchTab = switchTab;
