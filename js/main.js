@@ -464,8 +464,19 @@ window.toggleMobileMenu = toggleMobileMenu;
 window.printSection = printSection;
 window.showToast = showToast;
 window.playGamelanTone = playGamelanTone;
-window.toggleKetawangPuspawarna = () => toggleKetawangPuspawarna(showToast);
-window.playDalangFX = (type) => playDalangFX(type, showToast);
+window.toggleKetawangPuspawarna = toggleKetawangPuspawarna;
+window.playDalangFX = playDalangFX;
+window.playGamelanFX = function (typeOrFreq, optType = 'saron') {
+  if (typeof typeOrFreq === 'string') {
+    if (typeOrFreq === 'kepyak' || typeOrFreq === 'dodokan') {
+      playDalangFX(typeOrFreq);
+    } else {
+      playGamelanTone(typeOrFreq === 'gong' ? 65 : 140, typeOrFreq);
+    }
+  } else {
+    playGamelanTone(typeOrFreq, optType);
+  }
+};
 
 // ─── KALENDER ──────────────────────────────────────────────────────────────
 function initKalenderSelects() {
