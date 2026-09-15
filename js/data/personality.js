@@ -1,4 +1,12 @@
 // Data Nujum Kepribadian, Faalakiah, Bincil, Asesoris
+import nujumMatrixPkg from './nujum-matrix.js';
+import { HARI, PASARAN, WUKU, NEPTU_HARI, NEPTU_PASARAN } from './calendar.js';
+
+export const primbonMatrix = nujumMatrixPkg.primbonMatrix || nujumMatrixPkg;
+export const nujumMatrix = primbonMatrix;
+export const nujumDatabase = primbonMatrix;
+export const getNujumFromMatrix = nujumMatrixPkg.getNujumFromMatrix || nujumMatrixPkg.getNujumFromDatabase;
+export const getNujumFromDatabase = getNujumFromMatrix;
 
 export const KARAKTER = {
   1: "Leader", 2: "Diplomat", 3: "Analisis", 4: "Realis",
@@ -37,48 +45,248 @@ export const FAAL_DESC = {
   0: "Ora sugih banda donya nanging sugih anak. Harta dijaga Naga lan Singa. Tolak: sidekaha TIMAH bobot rong kati lan ALI-ALI SALOKA. Larangan: ojo dahar IWAK ATI. Dzikir: YA KADIRU 100x."
 };
 
-export const PARINGKELAN_ARTI = {
-  "Tungle": "Tidak tepat janji", "Aryang": "Pelupa", "Wurukung": "Lengah",
-  "Paningron": "Takabur", "Uwas": "Melikan", "Mawulu": "Sering sakit"
+// 1. PADEWAN (Astawara / 8 Dewa)
+export const PADEWAN_DATA = {
+  1: { nama: "Sri", arti: "Welas asih" },
+  2: { nama: "Indra", arti: "Teliti, angkuh" },
+  3: { nama: "Guru", arti: "Memberi percobaan, lelemeran" },
+  4: { nama: "Yamadipati", arti: "Pengertian, malas" },
+  5: { nama: "Rudra", arti: "Berbudi luhur" },
+  6: { nama: "Brama", arti: "Brangasan" },
+  7: { nama: "Kala", arti: "Serakah, bohong" },
+  8: { nama: "Uma", arti: "Welas asih" }
 };
 
-export const PANDAGON_ARTI = {
-  "Dangu": "Pendiam, kerashati", "Jagur": "Luwes, kuat, irihati", "Gigis": "Kuat dapat menerima keadaan",
-  "Kerangan": "Teliti, berpendirian", "Nohan": "Welasasih", "Wogan": "Tekun, hemat",
-  "Tulus": "Jujur, banyak kemauannya", "Wurung": "Berangasan, tidak sabaran", "Dadi": "Tidak mau disaingi"
+export const PADEWAN_ARTI = {
+  "Sri": "Welas asih",
+  "Indra": "Teliti, angkuh",
+  "Guru": "Memberi percobaan, lelemeran",
+  "Yamadipati": "Pengertian, malas",
+  "Rudra": "Berbudi luhur",
+  "Brama": "Brangasan",
+  "Kala": "Serakah, bohong",
+  "Uma": "Welas asih"
+};
+
+// 2. PARINGKELAN (Sadwara / 6 Hari)
+export const PARINGKELAN_DATA = {
+  1: { nama: "Tungle", arti: "Tidak tepat janji" },
+  2: { nama: "Aryang", arti: "Pelupa" },
+  3: { nama: "Wurukung", arti: "Lengah" },
+  4: { nama: "Paningron", arti: "Takabur" },
+  5: { nama: "Uwas", arti: "Melikan" },
+  6: { nama: "Mawulu", arti: "Sering sakit" }
+};
+
+export const PARINGKELAN_ARTI = {
+  "Tungle": "Tidak tepat janji",
+  "Aryang": "Pelupa",
+  "Wurukung": "Lengah",
+  "Paningron": "Takabur",
+  "Uwas": "Melikan",
+  "Mawulu": "Sering sakit"
+};
+
+// 3. PANDANGON (Sangawara / 9 Hari)
+export const PANDANGON_DATA = {
+  1: { nama: "Dangu", arti: "Pendiam, bodoh, kerashati" },
+  2: { nama: "Jagur", arti: "Luwes, kuat, irihatin" },
+  3: { nama: "Gigis", arti: "Kuat dapat menerima keadaan" },
+  4: { nama: "Kerangan", arti: "Teliti, berpendirian" },
+  5: { nama: "Nohan", arti: "Welasasih" },
+  6: { nama: "Wogan", arti: "Tekun, hemat dan kuat pendiriannya" },
+  7: { nama: "Tulus", arti: "Jujur, banyak kemauannya" },
+  8: { nama: "Wurung", arti: "Berangasan dan tidak sabaran" },
+  9: { nama: "Dadi", arti: "Tidak mau disaingi" }
+};
+
+export const PANDANGON_ARTI = {
+  "Dangu": "Pendiam, bodoh, kerashati",
+  "Jagur": "Luwes, kuat, irihatin",
+  "Gigis": "Kuat dapat menerima keadaan",
+  "Kerangan": "Teliti, berpendirian",
+  "Nohan": "Welasasih",
+  "Wogan": "Tekun, hemat dan kuat pendiriannya",
+  "Tulus": "Jujur, banyak kemauannya",
+  "Wurung": "Berangasan dan tidak sabaran",
+  "Dadi": "Tidak mau disaingi"
+};
+
+// 4. BINCIL PAARASAN (10 Watak)
+export const PAARASAN_DATA = {
+  1: { nama: "Aras Tuding", arti: "Pemberi dan terpakai kinerjanya tapi sering menjual perabotnya dan suka mencuri (climut)" },
+  2: { nama: "Aras Kembang", arti: "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang" },
+  3: { nama: "Lakuning Lintang", arti: "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah" },
+  4: { nama: "Lakuning Rembulan", arti: "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan" },
+  5: { nama: "Lakuning Srengenge", arti: "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan" },
+  6: { nama: "Lakuning Banyu", arti: "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar" },
+  7: { nama: "Lakuning Bumi", arti: "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara" },
+  8: { nama: "Lakuning Geni", arti: "Pemarah, dengki, pemberi, banyak rencana dan untuk perempuan banyak celakanya" },
+  9: { nama: "Lakuning Angin", arti: "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang" },
+  10: { nama: "Aras Pepet", arti: "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya" }
 };
 
 export const PAARASAN_ARTI = {
-  "Aras Tuding": "Pemberani dan terpakai kinerjanya tapi sering menjual perabotnya",
-  "Aras Kembang": "Larang anak tetapi dikasihi banyak orang dan mudah bekerja",
-  "Lakuning Lintang": "Pendiam, rendah hati, betah melek, sering pindah rumah",
-  "Lakuning Rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya",
-  "Lakuning Srengenge": "Pengertian, manis bicaranya, kreatif, selalu mengalah",
-  "Lakuning Banyu": "Teguh, rajin, ramah, berjiwa pemimpin",
-  "Lakuning Bumi": "Pendiam, mudah tersinggung, suka ketenangan dan welas asih",
-  "Lakuning Geni": "Pemarah, pemberani, banyak rencana dan teguh pendirian",
-  "Lakuning Angin": "Pendiam, suka disanjung, lincah dan menyenangkan orang lain",
-  "Aras Pepet": "Pendiam, tajam pikirannya, berbakat mendalami ilmu kebatinan"
+  "Aras Tuding": "Pemberi dan terpakai kinerjanya tapi sering menjual perabotnya dan suka mencuri (climut)",
+  "Aras Kembang": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
+  "Lakuning Lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
+  "Lakuning Rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
+  "Lakuning Srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
+  "Lakuning Banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
+  "Lakuning Bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
+  "Lakuning Geni": "Pemarah, dengki, pemberi, banyak rencana dan untuk perempuan banyak celakanya",
+  "Lakuning Angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
+  "Aras Pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya"
+};
+
+// 5. BINCIL PANCASUDA (7 Watak)
+export const PANCASUDA_DATA = {
+  1: { nama: "Wasesa Segara", arti: "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa" },
+  2: { nama: "Tunggak Semi", arti: "Banyak rejeki, walau dipotong tetap ada rejekinya" },
+  3: { nama: "Satriya Wibawa", arti: "Dimanapun selalu berwibawa dan dihormati orang" },
+  4: { nama: "Sumur Sinaba", arti: "Menjadi tempat menimba ilmu" },
+  5: { nama: "Satriya Wirang", arti: "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan" },
+  6: { nama: "Bumi Kapetak", arti: "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar , harus rajin belajar" },
+  7: { nama: "Lebu Ketiyup Angin", arti: "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu" }
 };
 
 export const PANCASUDA_ARTI = {
-  "Wasesa Segara": "Berjiwa besar, pemaaf, berwibawa laksana samudra luas",
-  "Tunggak Semi": "Banyak rejeki, walau terpotong tetap bersemi kembali",
-  "Satriya Wibawa": "Dimanapun selalu berwibawa dan dihormati sesama",
-  "Sumur Sinaba": "Menjadi sumber rujukan dan tempat menimba ilmu kebajikan",
-  "Satriya Wirang": "Sering menghadapi ujian kesabaran dan aral rintangan",
-  "Bumi Kapetak": "Bersih hatinya, kuat pendiriannya, tahan uji",
-  "Lebu Katiyup Angin": "Suka berkelana, berimajinasi luas, cocok untuk perantau"
+  "Wasesa Segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
+  "Tunggak Semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
+  "Satriya Wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
+  "Sumur Sinaba": "Menjadi tempat menimba ilmu",
+  "Satriya Wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
+  "Bumi Kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar , harus rajin belajar",
+  "Lebu Ketiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
+  "Lebu Katiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
+};
+
+// 6. BINCIL KAMAROKAN (6 Watak)
+export const KAMAROKAN_DATA = {
+  1: { nama: "Nuju Padu", arti: "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan" },
+  2: { nama: "Kala Tinantang", arti: "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya" },
+  3: { nama: "Sanggar Waringin", arti: "Baik, tentram , bahagia, banyak rejeki , berkembang , terang hatinya , menjadi pelindung" },
+  4: { nama: "Mantri Sinarojo", arti: "Baik, tercapai cita-citanya , senang hidupnya, murah sandang-pangan dan banyak anak" },
+  5: { nama: "Macan Ketawan", arti: "Cukupan, disegani tetapi juga dijauhi orang , sering kehilangan , ada niat jelek" },
+  6: { nama: "Nuju Pati", arti: "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana" }
 };
 
 export const KAMAROKAN_ARTI = {
-  "Sanggar Waringin": "Tentrem, bahagia, banyak rejeki, menjadi pengayom",
-  "Mantri Sinarojo": "Tercapai cita-citanya, murah sandang-pangan",
-  "Macan Ketawan": "Cukupan, disegani dan dihormati dalam pergaulan",
-  "Nuju Padu": "Sering berbeda pendapat, perlu menjaga tutur kata",
-  "Kala Tinantang": "Pemberani, menghadapi tantangan hidup dengan tegar",
-  "Nuju Pati": "Perlu kehati-hatian dalam mengelola rezeki dan kesehatan"
+  "Nuju Padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
+  "Kala Tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya",
+  "Sanggar Waringin": "Baik, tentram , bahagia, banyak rejeki , berkembang , terang hatinya , menjadi pelindung",
+  "Mantri Sinarojo": "Baik, tercapai cita-citanya , senang hidupnya, murah sandang-pangan dan banyak anak",
+  "Macan Ketawan": "Cukupan, disegani tetapi juga dijauhi orang , sering kehilangan , ada niat jelek",
+  "Nuju Pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana"
 };
+
+// Urip Kerta-Aji untuk Pancasuda (7 Siklus)
+export const KERTA_AJI_HARI = [6, 4, 3, 7, 5, 7, 8]; // Minggu=6, Senin=4, Selasa=3, Rabu=7, Kamis=5, Jumat=7, Sabtu=8
+export const KERTA_AJI_PASARAN = [5, 9, 7, 4, 8]; // Legi=5, Pahing=9, Pon=7, Wage=4, Kliwon=8
+
+// Urip Rakam untuk Kamarokan (6 Siklus)
+export const RAKAM_HARI = [3, 4, 5, 6, 7, 1, 2]; // Jumat=1, Sabtu=2, Minggu=3, Senin=4, Selasa=5, Rabu=6, Kamis=7
+export const RAKAM_PASARAN = [2, 3, 4, 5, 1]; // Kliwon=1, Legi=2, Pahing=3, Pon=4, Wage=5
+
+// =========================================================================
+// SISTEM MATRIKS LOOKUP TABEL BAKU (primbonMatrix)
+// =========================================================================
+
+export function getNujumLengkap(wukuId, weekdayId, pasaranId) {
+  const hari = HARI[weekdayId];
+  const pasaran = PASARAN[pasaranId];
+  const wuku = WUKU[wukuId];
+  const cleanWuku = String(wuku || '').replace(/\s+/g, '');
+  const key = `${hari}${pasaran}_${cleanWuku}`;
+
+  const raw = (typeof getNujumFromMatrix === 'function' ? getNujumFromMatrix(hari, pasaran, wuku) : null)
+    || (typeof primbonMatrix !== 'undefined' ? (
+      primbonMatrix[key] ||
+      primbonMatrix[`${hari}${pasaran}_${wuku}`] ||
+      (cleanWuku === 'Sinta' ? primbonMatrix[`${hari}${pasaran}_Shinto`] : null) ||
+      (cleanWuku === 'Shinto' ? primbonMatrix[`${hari}${pasaran}_Sinta`] : null)
+    ) : null);
+
+  const neptu = (NEPTU_HARI[weekdayId] || 0) + (NEPTU_PASARAN[pasaranId] || 0);
+
+  if (raw) {
+    return {
+      key,
+      neptu,
+      padewan: {
+        nama: raw.padewan,
+        arti: PADEWAN_ARTI[raw.padewan] || "-",
+        sisa: Object.keys(PADEWAN_DATA).find(k => PADEWAN_DATA[k].nama === raw.padewan) || "-"
+      },
+      paringkelan: {
+        nama: raw.paringkelan,
+        arti: PARINGKELAN_ARTI[raw.paringkelan] || "-",
+        sisa: Object.keys(PARINGKELAN_DATA).find(k => PARINGKELAN_DATA[k].nama === raw.paringkelan) || "-"
+      },
+      pandangon: {
+        nama: raw.pandangon,
+        arti: PANDANGON_ARTI[raw.pandangon] || "-",
+        sisa: Object.keys(PANDANGON_DATA).find(k => PANDANGON_DATA[k].nama === raw.pandangon) || "-"
+      },
+      paarasan: {
+        nama: raw.paarasan,
+        arti: PAARASAN_ARTI[raw.paarasan] || "-",
+        sisa: Object.keys(PAARASAN_DATA).find(k => PAARASAN_DATA[k].nama === raw.paarasan) || "-"
+      },
+      pancasuda: {
+        nama: raw.pancasuda,
+        arti: PANCASUDA_ARTI[raw.pancasuda] || "-",
+        sisa: Object.keys(PANCASUDA_DATA).find(k => PANCASUDA_DATA[k].nama === raw.pancasuda) || "-"
+      },
+      kamarokan: {
+        nama: raw.kamarokan,
+        arti: KAMAROKAN_ARTI[raw.kamarokan] || "-",
+        sisa: Object.keys(KAMAROKAN_DATA).find(k => KAMAROKAN_DATA[k].nama === raw.kamarokan) || "-"
+      }
+    };
+  }
+
+  return {
+    key,
+    neptu,
+    padewan: { nama: "-", arti: "-", sisa: "-" },
+    paringkelan: { nama: "-", arti: "-", sisa: "-" },
+    pandangon: { nama: "-", arti: "-", sisa: "-" },
+    paarasan: { nama: "-", arti: "-", sisa: "-" },
+    pancasuda: { nama: "-", arti: "-", sisa: "-" },
+    kamarokan: { nama: "-", arti: "-", sisa: "-" }
+  };
+}
+
+export function hitungPadewan(wukuId, weekdayId, pasaranId) {
+  const p = (pasaranId !== undefined) ? pasaranId : ((1 + wukuId * 7 + weekdayId) % 5);
+  return getNujumLengkap(wukuId, weekdayId, p).padewan;
+}
+
+export function hitungParingkelan(wukuId, weekdayId, pasaranId) {
+  const p = (pasaranId !== undefined) ? pasaranId : ((1 + wukuId * 7 + weekdayId) % 5);
+  return getNujumLengkap(wukuId, weekdayId, p).paringkelan;
+}
+
+export function hitungPandangon(wukuId, weekdayId, pasaranId) {
+  const p = (pasaranId !== undefined) ? pasaranId : ((1 + wukuId * 7 + weekdayId) % 5);
+  return getNujumLengkap(wukuId, weekdayId, p).pandangon;
+}
+
+export function hitungPaarasan(weekdayId, pasaranId) {
+  const wukuId = 0;
+  return getNujumLengkap(wukuId, weekdayId, pasaranId).paarasan;
+}
+
+export function hitungPancasuda(weekdayId, pasaranId) {
+  const wukuId = 0;
+  return getNujumLengkap(wukuId, weekdayId, pasaranId).pancasuda;
+}
+
+export function hitungKamarokan(weekdayId, pasaranId) {
+  const wukuId = 0;
+  return getNujumLengkap(wukuId, weekdayId, pasaranId).kamarokan;
+}
 
 export function namaKeAksaraList(nama) {
   const clean = nama.toLowerCase().replace(/[^a-z\s]/g, " ").replace(/\s+/g, " ").trim();
