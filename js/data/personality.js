@@ -1,12 +1,19 @@
 // Data Nujum Kepribadian, Faalakiah, Bincil, Asesoris
 import nujumMatrixPkg from './nujum-matrix.js';
+import pawukonPkg from './pawukon.js';
 import { HARI, PASARAN, WUKU, NEPTU_HARI, NEPTU_PASARAN } from './calendar.js';
 
 export const primbonMatrix = nujumMatrixPkg.primbonMatrix || nujumMatrixPkg;
+export const bincilDatabase = nujumMatrixPkg.bincilDatabase || primbonMatrix;
 export const nujumMatrix = primbonMatrix;
 export const nujumDatabase = primbonMatrix;
+export const getNujumData = nujumMatrixPkg.getNujumData;
 export const getNujumFromMatrix = nujumMatrixPkg.getNujumFromMatrix || nujumMatrixPkg.getNujumFromDatabase;
 export const getNujumFromDatabase = getNujumFromMatrix;
+
+export const pawukonDatabase = pawukonPkg.pawukonDatabase;
+export const getPawukonData = pawukonPkg.getPawukonData;
+export const PAWUKON_LIST = pawukonPkg.PAWUKON_LIST;
 
 export const KARAKTER = {
   1: "Leader", 2: "Diplomat", 3: "Analisis", 4: "Realis",
@@ -196,53 +203,45 @@ export function getNujumLengkap(wukuId, weekdayId, pasaranId) {
   const hari = HARI[weekdayId];
   const pasaran = PASARAN[pasaranId];
   const wuku = WUKU[wukuId];
-  const cleanWuku = String(wuku || '').replace(/\s+/g, '');
-  const key = `${hari}${pasaran}_${cleanWuku}`;
-
-  const raw = (typeof getNujumFromMatrix === 'function' ? getNujumFromMatrix(hari, pasaran, wuku) : null)
-    || (typeof primbonMatrix !== 'undefined' ? (
-      primbonMatrix[key] ||
-      primbonMatrix[`${hari}${pasaran}_${wuku}`] ||
-      (cleanWuku === 'Sinta' ? primbonMatrix[`${hari}${pasaran}_Shinto`] : null) ||
-      (cleanWuku === 'Shinto' ? primbonMatrix[`${hari}${pasaran}_Sinta`] : null)
-    ) : null);
-
+  const data = (typeof getNujumData === 'function') ? getNujumData(hari, pasaran, wuku) : null;
   const neptu = (NEPTU_HARI[weekdayId] || 0) + (NEPTU_PASARAN[pasaranId] || 0);
+  const key = `${hari}${pasaran}_${String(wuku || '').replace(/\s+/g, '')}`;
 
-  if (raw) {
+  if (data && data.found) {
     return {
       key,
       neptu,
       padewan: {
-        nama: raw.padewan,
-        arti: PADEWAN_ARTI[raw.padewan] || "-",
-        sisa: Object.keys(PADEWAN_DATA).find(k => PADEWAN_DATA[k].nama === raw.padewan) || "-"
+        nama: data.padewan.nama,
+        arti: data.padewan.arti,
+        sisa: Object.keys(PADEWAN_DATA).find(k => PADEWAN_DATA[k].nama === data.padewan.nama) || "-"
       },
       paringkelan: {
-        nama: raw.paringkelan,
-        arti: PARINGKELAN_ARTI[raw.paringkelan] || "-",
-        sisa: Object.keys(PARINGKELAN_DATA).find(k => PARINGKELAN_DATA[k].nama === raw.paringkelan) || "-"
+        nama: data.paringkelan.nama,
+        arti: data.paringkelan.arti,
+        sisa: Object.keys(PARINGKELAN_DATA).find(k => PARINGKELAN_DATA[k].nama === data.paringkelan.nama) || "-"
       },
       pandangon: {
-        nama: raw.pandangon,
-        arti: PANDANGON_ARTI[raw.pandangon] || "-",
-        sisa: Object.keys(PANDANGON_DATA).find(k => PANDANGON_DATA[k].nama === raw.pandangon) || "-"
+        nama: data.pandangon.nama,
+        arti: data.pandangon.arti,
+        sisa: Object.keys(PANDANGON_DATA).find(k => PANDANGON_DATA[k].nama === data.pandangon.nama) || "-"
       },
       paarasan: {
-        nama: raw.paarasan,
-        arti: PAARASAN_ARTI[raw.paarasan] || "-",
-        sisa: Object.keys(PAARASAN_DATA).find(k => PAARASAN_DATA[k].nama === raw.paarasan) || "-"
+        nama: data.paarasan.nama,
+        arti: data.paarasan.arti,
+        sisa: Object.keys(PAARASAN_DATA).find(k => PAARASAN_DATA[k].nama === data.paarasan.nama) || "-"
       },
       pancasuda: {
-        nama: raw.pancasuda,
-        arti: PANCASUDA_ARTI[raw.pancasuda] || "-",
-        sisa: Object.keys(PANCASUDA_DATA).find(k => PANCASUDA_DATA[k].nama === raw.pancasuda) || "-"
+        nama: data.pancasuda.nama,
+        arti: data.pancasuda.arti,
+        sisa: Object.keys(PANCASUDA_DATA).find(k => PANCASUDA_DATA[k].nama === data.pancasuda.nama) || "-"
       },
       kamarokan: {
-        nama: raw.kamarokan,
-        arti: KAMAROKAN_ARTI[raw.kamarokan] || "-",
-        sisa: Object.keys(KAMAROKAN_DATA).find(k => KAMAROKAN_DATA[k].nama === raw.kamarokan) || "-"
-      }
+        nama: data.kamarokan.nama,
+        arti: data.kamarokan.arti,
+        sisa: Object.keys(KAMAROKAN_DATA).find(k => KAMAROKAN_DATA[k].nama === data.kamarokan.nama) || "-"
+      },
+      pawukon: data.pawukon
     };
   }
 
@@ -254,7 +253,8 @@ export function getNujumLengkap(wukuId, weekdayId, pasaranId) {
     pandangon: { nama: "-", arti: "-", sisa: "-" },
     paarasan: { nama: "-", arti: "-", sisa: "-" },
     pancasuda: { nama: "-", arti: "-", sisa: "-" },
-    kamarokan: { nama: "-", arti: "-", sisa: "-" }
+    kamarokan: { nama: "-", arti: "-", sisa: "-" },
+    pawukon: null
   };
 }
 
@@ -331,6 +331,34 @@ export function getFaalakiah(nama) {
     aksaraStr: aksaraList.join(" "),
     sum
   };
+}
+
+export const UNICODE_JAWA_TO_FAAL = {
+  'ꦲ': 'HA', 'ꦤ': 'NA', 'ꦕ': 'CA', 'ꦫ': 'RA', 'ꦏ': 'KA',
+  'ꦢ': 'DA', 'ꦠ': 'TA', 'ꦱ': 'SA', 'ꦮ': 'WA', 'ꦭ': 'LA',
+  'ꦥ': 'PA', 'ꦝ': 'DHA', 'ꦗ': 'JA', 'ꦪ': 'YA', 'ꦚ': 'NYA',
+  'ꦩ': 'MA', 'ꦒ': 'GA', 'ꦧ': 'BA', 'ꦛ': 'THA', 'ꦔ': 'NGA',
+  'ꦟ': 'NA', 'ꦑ': 'KA', 'ꦡ': 'TA', 'ꦰ': 'SA',
+  'ꦦ': 'PA', 'ꦘ': 'NYA', 'ꦓ': 'GA', 'ꦨ': 'BA',
+  'ꦄ': 'HA', 'ꦅ': 'HA', 'ꦈ': 'HA', 'ꦌ': 'HA', 'ꦎ': 'HA',
+  'ꦂ': 'RA', 'ꦁ': 'NGA', 'ꦃ': 'HA',
+  'ꦿ': 'RA', 'ꦽ': 'RA', 'ꦾ': 'YA'
+};
+
+export function parseAksaraForFaalakiah(text) {
+  if (!text || !text.trim()) return [];
+  const clean = text.trim();
+  const jawaChars = clean.match(/[\uA980-\uA9DF]/g);
+  if (jawaChars && jawaChars.length > 0) {
+    const list = [];
+    for (const ch of jawaChars) {
+      if (UNICODE_JAWA_TO_FAAL[ch]) {
+        list.push(UNICODE_JAWA_TO_FAAL[ch]);
+      }
+    }
+    if (list.length > 0) return list;
+  }
+  return namaKeAksaraList(clean);
 }
 
 export function getAsesoris(bulan, tanggal) {

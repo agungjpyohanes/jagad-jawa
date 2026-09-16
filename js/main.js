@@ -17,12 +17,18 @@ function showToast(msg) {
 }
 
 function copyToClipboard(text, msg) {
+  if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => {});
+  }
   const tempInput = document.createElement('textarea');
   tempInput.value = text;
-  document.body.appendChild(tempInput);
-  tempInput.select();
-  document.execCommand('copy');
-  document.body.removeChild(tempInput);
+  const parent = document.body || document.documentElement || (document.getElementById && document.getElementById('hasilKepribadianBox'));
+  if (parent && parent.appendChild) {
+    parent.appendChild(tempInput);
+    if (tempInput.select) tempInput.select();
+    if (document.execCommand) document.execCommand('copy');
+    if (parent.removeChild) parent.removeChild(tempInput);
+  }
   showToast(msg);
 }
 
@@ -324,7 +330,7 @@ const FAAL_DESC = {
 // =========================================================================
 
 // 1. PADEWAN (Astawara / 8 Dewa)
-const PADEWAN_DATA = {
+var PADEWAN_DATA = (typeof window !== 'undefined' && window.PADEWAN_DATA) || {
   1: { nama: "Sri", arti: "Welas asih" },
   2: { nama: "Indra", arti: "Teliti, angkuh" },
   3: { nama: "Guru", arti: "Memberi percobaan, lelemeran" },
@@ -334,8 +340,9 @@ const PADEWAN_DATA = {
   7: { nama: "Kala", arti: "Serakah, bohong" },
   8: { nama: "Uma", arti: "Welas asih" }
 };
+if (typeof window !== 'undefined') window.PADEWAN_DATA = PADEWAN_DATA;
 
-const PADEWAN_ARTI = {
+var PADEWAN_ARTI = (typeof window !== 'undefined' && window.PADEWAN_ARTI) || {
   "Sri": "Welas asih",
   "Indra": "Teliti, angkuh",
   "Guru": "Memberi percobaan, lelemeran",
@@ -345,9 +352,10 @@ const PADEWAN_ARTI = {
   "Kala": "Serakah, bohong",
   "Uma": "Welas asih"
 };
+if (typeof window !== 'undefined') window.PADEWAN_ARTI = PADEWAN_ARTI;
 
 // 2. PARINGKELAN (Sadwara / 6 Hari)
-const PARINGKELAN_DATA = {
+var PARINGKELAN_DATA = (typeof window !== 'undefined' && window.PARINGKELAN_DATA) || {
   1: { nama: "Tungle", arti: "Tidak tepat janji" },
   2: { nama: "Aryang", arti: "Pelupa" },
   3: { nama: "Wurukung", arti: "Lengah" },
@@ -355,8 +363,9 @@ const PARINGKELAN_DATA = {
   5: { nama: "Uwas", arti: "Melikan" },
   6: { nama: "Mawulu", arti: "Sering sakit" }
 };
+if (typeof window !== 'undefined') window.PARINGKELAN_DATA = PARINGKELAN_DATA;
 
-const PARINGKELAN_ARTI = {
+var PARINGKELAN_ARTI = (typeof window !== 'undefined' && window.PARINGKELAN_ARTI) || {
   "Tungle": "Tidak tepat janji",
   "Aryang": "Pelupa",
   "Wurukung": "Lengah",
@@ -364,9 +373,10 @@ const PARINGKELAN_ARTI = {
   "Uwas": "Melikan",
   "Mawulu": "Sering sakit"
 };
+if (typeof window !== 'undefined') window.PARINGKELAN_ARTI = PARINGKELAN_ARTI;
 
 // 3. PANDANGON (Sangawara / 9 Hari)
-const PANDANGON_DATA = {
+var PANDANGON_DATA = (typeof window !== 'undefined' && window.PANDANGON_DATA) || {
   1: { nama: "Dangu", arti: "Pendiam, bodoh, kerashati" },
   2: { nama: "Jagur", arti: "Luwes, kuat, irihatin" },
   3: { nama: "Gigis", arti: "Kuat dapat menerima keadaan" },
@@ -377,8 +387,9 @@ const PANDANGON_DATA = {
   8: { nama: "Wurung", arti: "Berangasan dan tidak sabaran" },
   9: { nama: "Dadi", arti: "Tidak mau disaingi" }
 };
+if (typeof window !== 'undefined') window.PANDANGON_DATA = PANDANGON_DATA;
 
-const PANDANGON_ARTI = {
+var PANDANGON_ARTI = (typeof window !== 'undefined' && window.PANDANGON_ARTI) || {
   "Dangu": "Pendiam, bodoh, kerashati",
   "Jagur": "Luwes, kuat, irihatin",
   "Gigis": "Kuat dapat menerima keadaan",
@@ -389,82 +400,89 @@ const PANDANGON_ARTI = {
   "Wurung": "Berangasan dan tidak sabaran",
   "Dadi": "Tidak mau disaingi"
 };
+if (typeof window !== 'undefined') window.PANDANGON_ARTI = PANDANGON_ARTI;
 
 // 4. BINCIL PAARASAN (10 Watak)
-const PAARASAN_DATA = {
-  1: { nama: "Aras Tuding", arti: "Pemberi dan terpakai kinerjanya tapi sering menjual perabotnya dan suka mencuri (climut)" },
+var PAARASAN_DATA = (typeof window !== 'undefined' && window.PAARASAN_DATA) || {
+  1: { nama: "Aras Tuding", arti: "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)" },
   2: { nama: "Aras Kembang", arti: "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang" },
   3: { nama: "Lakuning Lintang", arti: "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah" },
   4: { nama: "Lakuning Rembulan", arti: "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan" },
   5: { nama: "Lakuning Srengenge", arti: "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan" },
   6: { nama: "Lakuning Banyu", arti: "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar" },
   7: { nama: "Lakuning Bumi", arti: "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara" },
-  8: { nama: "Lakuning Geni", arti: "Pemarah, dengki, pemberi, banyak rencana dan untuk perempuan banyak celakanya" },
+  8: { nama: "Lakuning Geni", arti: "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya" },
   9: { nama: "Lakuning Angin", arti: "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang" },
   10: { nama: "Aras Pepet", arti: "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya" }
 };
+if (typeof window !== 'undefined') window.PAARASAN_DATA = PAARASAN_DATA;
 
-const PAARASAN_ARTI = {
-  "Aras Tuding": "Pemberi dan terpakai kinerjanya tapi sering menjual perabotnya dan suka mencuri (climut)",
+var PAARASAN_ARTI = (typeof window !== 'undefined' && window.PAARASAN_ARTI) || {
+  "Aras Tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
   "Aras Kembang": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
   "Lakuning Lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
   "Lakuning Rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
   "Lakuning Srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
   "Lakuning Banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
   "Lakuning Bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
-  "Lakuning Geni": "Pemarah, dengki, pemberi, banyak rencana dan untuk perempuan banyak celakanya",
+  "Lakuning Geni": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
   "Lakuning Angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
   "Aras Pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya"
 };
+if (typeof window !== 'undefined') window.PAARASAN_ARTI = PAARASAN_ARTI;
 
 // 5. BINCIL PANCASUDA (7 Watak)
-const PANCASUDA_DATA = {
+var PANCASUDA_DATA = (typeof window !== 'undefined' && window.PANCASUDA_DATA) || {
   1: { nama: "Wasesa Segara", arti: "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa" },
   2: { nama: "Tunggak Semi", arti: "Banyak rejeki, walau dipotong tetap ada rejekinya" },
   3: { nama: "Satriya Wibawa", arti: "Dimanapun selalu berwibawa dan dihormati orang" },
   4: { nama: "Sumur Sinaba", arti: "Menjadi tempat menimba ilmu" },
   5: { nama: "Satriya Wirang", arti: "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan" },
-  6: { nama: "Bumi Kapetak", arti: "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar , harus rajin belajar" },
+  6: { nama: "Bumi Kapetak", arti: "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar" },
   7: { nama: "Lebu Ketiyup Angin", arti: "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu" }
 };
+if (typeof window !== 'undefined') window.PANCASUDA_DATA = PANCASUDA_DATA;
 
-const PANCASUDA_ARTI = {
+var PANCASUDA_ARTI = (typeof window !== 'undefined' && window.PANCASUDA_ARTI) || {
   "Wasesa Segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
   "Tunggak Semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
   "Satriya Wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
   "Sumur Sinaba": "Menjadi tempat menimba ilmu",
   "Satriya Wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
-  "Bumi Kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar , harus rajin belajar",
+  "Bumi Kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar",
   "Lebu Ketiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
   "Lebu Katiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
 };
+if (typeof window !== 'undefined') window.PANCASUDA_ARTI = PANCASUDA_ARTI;
 
 // 6. BINCIL KAMAROKAN (6 Watak)
-const KAMAROKAN_DATA = {
+var KAMAROKAN_DATA = (typeof window !== 'undefined' && window.KAMAROKAN_DATA) || {
   1: { nama: "Nuju Padu", arti: "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan" },
-  2: { nama: "Kala Tinantang", arti: "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya" },
-  3: { nama: "Sanggar Waringin", arti: "Baik, tentram , bahagia, banyak rejeki , berkembang , terang hatinya , menjadi pelindung" },
-  4: { nama: "Mantri Sinarojo", arti: "Baik, tercapai cita-citanya , senang hidupnya, murah sandang-pangan dan banyak anak" },
-  5: { nama: "Macan Ketawan", arti: "Cukupan, disegani tetapi juga dijauhi orang , sering kehilangan , ada niat jelek" },
+  2: { nama: "Kala Tinantang", arti: "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya" },
+  3: { nama: "Sanggar Waringin", arti: "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung" },
+  4: { nama: "Mantri Sinarojo", arti: "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak" },
+  5: { nama: "Macan Ketawan", arti: "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek" },
   6: { nama: "Nuju Pati", arti: "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana" }
 };
+if (typeof window !== 'undefined') window.KAMAROKAN_DATA = KAMAROKAN_DATA;
 
-const KAMAROKAN_ARTI = {
+var KAMAROKAN_ARTI = (typeof window !== 'undefined' && window.KAMAROKAN_ARTI) || {
   "Nuju Padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
-  "Kala Tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya",
-  "Sanggar Waringin": "Baik, tentram , bahagia, banyak rejeki , berkembang , terang hatinya , menjadi pelindung",
-  "Mantri Sinarojo": "Baik, tercapai cita-citanya , senang hidupnya, murah sandang-pangan dan banyak anak",
-  "Macan Ketawan": "Cukupan, disegani tetapi juga dijauhi orang , sering kehilangan , ada niat jelek",
+  "Kala Tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya",
+  "Sanggar Waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung",
+  "Mantri Sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
+  "Macan Ketawan": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek",
   "Nuju Pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana"
 };
+if (typeof window !== 'undefined') window.KAMAROKAN_ARTI = KAMAROKAN_ARTI;
 
 // Urip Kerta-Aji untuk Pancasuda (7 Siklus)
-const KERTA_AJI_HARI = [6, 4, 3, 7, 5, 7, 8]; // Minggu=6, Senin=4, Selasa=3, Rabu=7, Kamis=5, Jumat=7, Sabtu=8
-const KERTA_AJI_PASARAN = [5, 9, 7, 4, 8]; // Legi=5, Pahing=9, Pon=7, Wage=4, Kliwon=8
+var KERTA_AJI_HARI = [6, 4, 3, 7, 5, 7, 8]; // Minggu=6, Senin=4, Selasa=3, Rabu=7, Kamis=5, Jumat=7, Sabtu=8
+var KERTA_AJI_PASARAN = [5, 9, 7, 4, 8]; // Legi=5, Pahing=9, Pon=7, Wage=4, Kliwon=8
 
 // Urip Rakam untuk Kamarokan (6 Siklus)
-const RAKAM_HARI = [3, 4, 5, 6, 7, 1, 2]; // Jumat=1, Sabtu=2, Minggu=3, Senin=4, Selasa=5, Rabu=6, Kamis=7
-const RAKAM_PASARAN = [2, 3, 4, 5, 1]; // Kliwon=1, Legi=2, Pahing=3, Pon=4, Wage=5
+var RAKAM_HARI = [3, 4, 5, 6, 7, 1, 2]; // Jumat=1, Sabtu=2, Minggu=3, Senin=4, Selasa=5, Rabu=6, Kamis=7
+var RAKAM_PASARAN = [2, 3, 4, 5, 1]; // Kliwon=1, Legi=2, Pahing=3, Pon=4, Wage=5
 
 // =========================================================================
 // SISTEM MATRIKS LOOKUP TABEL BAKU PRIMBON (primbonMatrix)
@@ -476,56 +494,158 @@ function getNujumLengkap(wukuId, weekdayId, pasaranId) {
   const wuku = WUKU[wukuId];
   const cleanWuku = String(wuku || '').replace(/\s+/g, '');
   const key = `${hari}${pasaran}_${cleanWuku}`;
+  const neptu = (NEPTU_HARI[weekdayId] || 0) + (NEPTU_PASARAN[pasaranId] || 0);
 
-  const matrix = (typeof primbonMatrix !== 'undefined' ? primbonMatrix : null)
-    || (typeof nujumMatrix !== 'undefined' ? nujumMatrix : null)
-    || (typeof nujumDatabase !== 'undefined' ? nujumDatabase : null);
+  // Helper untuk sisa
+  const getSisa = (dict, name) => {
+    if (!dict || !name) return "-";
+    const target = String(name).trim().toLowerCase();
+    return Object.keys(dict).find(k => (dict[k].nama || '').trim().toLowerCase() === target) || "-";
+  };
+
+  // 1. Coba via master data exact lookup (window.getNujumResult)
+  const fnGetResult = (typeof getNujumResult === 'function') ? getNujumResult : (typeof window !== 'undefined' ? window.getNujumResult : null);
+  const fnGetPawukon = (typeof getPawukonDetail === 'function') ? getPawukonDetail : (typeof getPawukonData === 'function' ? getPawukonData : (typeof window !== 'undefined' ? (window.getPawukonDetail || window.getPawukonData) : null));
+
+  if (fnGetResult) {
+    const res = fnGetResult(wuku, hari, pasaran);
+    if (res && res.found) {
+      return {
+        key,
+        neptu,
+        padewan: {
+          nama: res.padewan,
+          arti: res.padewan_arti,
+          sisa: getSisa(PADEWAN_DATA, res.padewan)
+        },
+        paringkelan: {
+          nama: res.paringkelan,
+          arti: res.paringkelan_arti,
+          sisa: getSisa(PARINGKELAN_DATA, res.paringkelan)
+        },
+        pandangon: {
+          nama: res.pandangon,
+          arti: res.pandangon_arti,
+          sisa: getSisa(PANDANGON_DATA, res.pandangon)
+        },
+        paarasan: {
+          nama: res.paarasan,
+          arti: res.paarasan_arti,
+          sisa: getSisa(PAARASAN_DATA, res.paarasan)
+        },
+        pancasuda: {
+          nama: res.pancasuda,
+          arti: res.pancasuda_arti,
+          sisa: getSisa(PANCASUDA_DATA, res.pancasuda)
+        },
+        kamarokan: {
+          nama: res.kamarokan,
+          arti: res.kamarokan_arti,
+          sisa: getSisa(KAMAROKAN_DATA, res.kamarokan)
+        },
+        pawukon: fnGetPawukon ? fnGetPawukon(wuku) : null
+      };
+    }
+  }
+
+  // 2. Coba via window.getNujumData
+  const fnGetData = (typeof getNujumData === 'function') ? getNujumData : (typeof window !== 'undefined' ? window.getNujumData : null);
+  const data = fnGetData ? fnGetData(hari, pasaran, wuku) : null;
+  if (data && data.found) {
+    return {
+      key,
+      neptu,
+      padewan: {
+        nama: data.padewan.nama,
+        arti: data.padewan.arti,
+        sisa: getSisa(PADEWAN_DATA, data.padewan.nama)
+      },
+      paringkelan: {
+        nama: data.paringkelan.nama,
+        arti: data.paringkelan.arti,
+        sisa: getSisa(PARINGKELAN_DATA, data.paringkelan.nama)
+      },
+      pandangon: {
+        nama: data.pandangon.nama,
+        arti: data.pandangon.arti,
+        sisa: getSisa(PANDANGON_DATA, data.pandangon.nama)
+      },
+      paarasan: {
+        nama: data.paarasan.nama,
+        arti: data.paarasan.arti,
+        sisa: getSisa(PAARASAN_DATA, data.paarasan.nama)
+      },
+      pancasuda: {
+        nama: data.pancasuda.nama,
+        arti: data.pancasuda.arti,
+        sisa: getSisa(PANCASUDA_DATA, data.pancasuda.nama)
+      },
+      kamarokan: {
+        nama: data.kamarokan.nama,
+        arti: data.kamarokan.arti,
+        sisa: getSisa(KAMAROKAN_DATA, data.kamarokan.nama)
+      },
+      pawukon: data.pawukon || (fnGetPawukon ? fnGetPawukon(wuku) : null)
+    };
+  }
+
+  // 3. Fallback ke matriks / database objek langsung
+  const matrix = (typeof MASTER_BINCIL_MATRIX !== 'undefined' ? MASTER_BINCIL_MATRIX : null)
+    || (typeof bincilDatabase !== 'undefined' ? bincilDatabase : null)
+    || (typeof primbonMatrix !== 'undefined' ? primbonMatrix : null)
+    || (typeof nujumMatrix !== 'undefined' ? nujumMatrix : null);
 
   const raw = (typeof getNujumFromMatrix === 'function' ? getNujumFromMatrix(hari, pasaran, wuku) : null)
     || (typeof getNujumFromDatabase === 'function' ? getNujumFromDatabase(hari, pasaran, wuku) : null)
     || (matrix ? (
+      matrix[`${String(wuku).toLowerCase()}_${String(hari).toLowerCase()}_${String(pasaran).toLowerCase()}`] ||
       matrix[key] ||
       matrix[`${hari}${pasaran}_${wuku}`] ||
       (cleanWuku === 'Sinta' ? matrix[`${hari}${pasaran}_Shinto`] : null) ||
       (cleanWuku === 'Shinto' ? matrix[`${hari}${pasaran}_Sinta`] : null)
     ) : null);
 
-  const neptu = (NEPTU_HARI[weekdayId] || 0) + (NEPTU_PASARAN[pasaranId] || 0);
-
   if (raw) {
+    const ket = (typeof MASTER_KET_BINCIL !== 'undefined' ? MASTER_KET_BINCIL : null) || (typeof KET_BINCIL !== 'undefined' ? KET_BINCIL : null);
+    const getKet = (cat, val) => {
+      if (!val || val === '-') return '-';
+      if (ket && ket[cat] && ket[cat][String(val).toLowerCase()]) return ket[cat][String(val).toLowerCase()];
+      return '-';
+    };
     return {
       key,
       neptu,
       padewan: {
         nama: raw.padewan,
-        arti: PADEWAN_ARTI[raw.padewan] || "-",
-        sisa: Object.keys(PADEWAN_DATA).find(k => PADEWAN_DATA[k].nama === raw.padewan) || "-"
+        arti: getKet('padewan', raw.padewan) || PADEWAN_ARTI[raw.padewan] || "-",
+        sisa: getSisa(PADEWAN_DATA, raw.padewan)
       },
       paringkelan: {
         nama: raw.paringkelan,
-        arti: PARINGKELAN_ARTI[raw.paringkelan] || "-",
-        sisa: Object.keys(PARINGKELAN_DATA).find(k => PARINGKELAN_DATA[k].nama === raw.paringkelan) || "-"
+        arti: getKet('paringkelan', raw.paringkelan) || PARINGKELAN_ARTI[raw.paringkelan] || "-",
+        sisa: getSisa(PARINGKELAN_DATA, raw.paringkelan)
       },
       pandangon: {
         nama: raw.pandangon,
-        arti: PANDANGON_ARTI[raw.pandangon] || "-",
-        sisa: Object.keys(PANDANGON_DATA).find(k => PANDANGON_DATA[k].nama === raw.pandangon) || "-"
+        arti: getKet('pandangon', raw.pandangon) || PANDANGON_ARTI[raw.pandangon] || "-",
+        sisa: getSisa(PANDANGON_DATA, raw.pandangon)
       },
       paarasan: {
         nama: raw.paarasan,
-        arti: PAARASAN_ARTI[raw.paarasan] || "-",
-        sisa: Object.keys(PAARASAN_DATA).find(k => PAARASAN_DATA[k].nama === raw.paarasan) || "-"
+        arti: getKet('paarasan', raw.paarasan) || PAARASAN_ARTI[raw.paarasan] || "-",
+        sisa: getSisa(PAARASAN_DATA, raw.paarasan)
       },
       pancasuda: {
         nama: raw.pancasuda,
-        arti: PANCASUDA_ARTI[raw.pancasuda] || "-",
-        sisa: Object.keys(PANCASUDA_DATA).find(k => PANCASUDA_DATA[k].nama === raw.pancasuda) || "-"
+        arti: getKet('pancasuda', raw.pancasuda) || PANCASUDA_ARTI[raw.pancasuda] || "-",
+        sisa: getSisa(PANCASUDA_DATA, raw.pancasuda)
       },
       kamarokan: {
         nama: raw.kamarokan,
-        arti: KAMAROKAN_ARTI[raw.kamarokan] || "-",
-        sisa: Object.keys(KAMAROKAN_DATA).find(k => KAMAROKAN_DATA[k].nama === raw.kamarokan) || "-"
-      }
+        arti: getKet('kamarokan', raw.kamarokan) || KAMAROKAN_ARTI[raw.kamarokan] || "-",
+        sisa: getSisa(KAMAROKAN_DATA, raw.kamarokan)
+      },
+      pawukon: fnGetPawukon ? fnGetPawukon(wuku) : null
     };
   }
 
@@ -537,9 +657,11 @@ function getNujumLengkap(wukuId, weekdayId, pasaranId) {
     pandangon: { nama: "-", arti: "-", sisa: "-" },
     paarasan: { nama: "-", arti: "-", sisa: "-" },
     pancasuda: { nama: "-", arti: "-", sisa: "-" },
-    kamarokan: { nama: "-", arti: "-", sisa: "-" }
+    kamarokan: { nama: "-", arti: "-", sisa: "-" },
+    pawukon: fnGetPawukon ? fnGetPawukon(wuku) : null
   };
 }
+window.getNujumLengkap = getNujumLengkap;
 
 function hitungPadewan(wukuId, weekdayId, pasaranId) {
   const p = (pasaranId !== undefined) ? pasaranId : ((1 + wukuId * 7 + weekdayId) % 5);
@@ -616,6 +738,80 @@ function getFaalakiah(nama) {
   };
 }
 
+const UNICODE_JAWA_TO_FAAL = {
+  'ꦲ': 'HA', 'ꦤ': 'NA', 'ꦕ': 'CA', 'ꦫ': 'RA', 'ꦏ': 'KA',
+  'ꦢ': 'DA', 'ꦠ': 'TA', 'ꦱ': 'SA', 'ꦮ': 'WA', 'ꦭ': 'LA',
+  'ꦥ': 'PA', 'ꦝ': 'DHA', 'ꦗ': 'JA', 'ꦪ': 'YA', 'ꦚ': 'NYA',
+  'ꦩ': 'MA', 'ꦒ': 'GA', 'ꦧ': 'BA', 'ꦛ': 'THA', 'ꦔ': 'NGA',
+  // Aksara Murda
+  'ꦟ': 'NA', 'ꦑ': 'KA', 'ꦡ': 'TA', 'ꦰ': 'SA',
+  'ꦦ': 'PA', 'ꦘ': 'NYA', 'ꦓ': 'GA', 'ꦨ': 'BA',
+  // Aksara Swara
+  'ꦄ': 'HA', 'ꦅ': 'HA', 'ꦈ': 'HA', 'ꦌ': 'HA', 'ꦎ': 'HA',
+  // Sandhangan Panyigeg & Wyanjana
+  'ꦂ': 'RA', 'ꦁ': 'NGA', 'ꦃ': 'HA',
+  'ꦿ': 'RA', 'ꦽ': 'RA', 'ꦾ': 'YA'
+};
+
+function parseAksaraForFaalakiah(text) {
+  if (!text || !text.trim()) return [];
+  const clean = text.trim();
+  const jawaChars = clean.match(/[\uA980-\uA9DF]/g);
+  if (jawaChars && jawaChars.length > 0) {
+    const list = [];
+    for (const ch of jawaChars) {
+      if (UNICODE_JAWA_TO_FAAL[ch]) {
+        list.push(UNICODE_JAWA_TO_FAAL[ch]);
+      }
+    }
+    if (list.length > 0) return list;
+  }
+  return namaKeAksaraList(clean);
+}
+
+function updateFaalFromAksaraManual(val) {
+  const aksaraList = parseAksaraForFaalakiah(val);
+  const sumEl = document.getElementById('faalAksaraSum');
+  const listEl = document.getElementById('faalAksaraList');
+  const headEl = document.getElementById('faalHeading');
+  const descEl = document.getElementById('faalDesc');
+
+  if (aksaraList.length === 0) {
+    const defaultNabi = NABI_FAAL[0];
+    const defaultDesc = FAAL_DESC[0];
+    if (headEl) headEl.innerHTML = `Faalakiah Asma: ${defaultNabi} (Kode <span id="faalKode">0</span>)`;
+    if (sumEl) sumEl.textContent = '0';
+    if (listEl) listEl.textContent = '-';
+    if (descEl) descEl.textContent = defaultDesc;
+    return;
+  }
+
+  let sum = 0;
+  for (const ak of aksaraList) {
+    sum += (AKSARA_FAAL[ak] || 1);
+  }
+  const kode = sum % 12;
+  const nabi = NABI_FAAL[kode] || NABI_FAAL[0];
+  const desc = FAAL_DESC[kode] || FAAL_DESC[0];
+
+  if (headEl) headEl.innerHTML = `Faalakiah Asma: ${nabi} (Kode <span id="faalKode">${kode}</span>)`;
+  if (sumEl) sumEl.textContent = String(sum);
+  if (listEl) listEl.textContent = aksaraList.join(' ');
+  if (descEl) descEl.textContent = desc;
+}
+window.updateFaalFromAksaraManual = updateFaalFromAksaraManual;
+
+function salinAksaraFaal() {
+  const el = document.getElementById('faalAksaraJawaInput');
+  const txt = el ? el.value.trim() : '';
+  if (!txt) {
+    showToast('Aksara Jawa taksih kosong.');
+    return;
+  }
+  copyToClipboard(txt, 'Aksara Jawa kasil dipun salin!');
+}
+window.salinAksaraFaal = salinAksaraFaal;
+
 function getAsesoris(bulan, tanggal) {
   const data = {
     1: { dino: "Senin, Kamis lan Sabtu", sasi: "Januari lan Februari", lelara: "Kulit, Reumatik, Pencernaan", watu: "Black Onyx, Ruby, Giok", warna: "Biru Laut lan Ijo Tua", kembang: "Melati, Sedap Malam, Leli Putih" },
@@ -683,6 +879,8 @@ window.switchTab = switchTab;
 window.toggleMobileMenu = toggleMobileMenu;
 window.printSection = printSection;
 window.showToast = showToast;
+window.getNujumData = (typeof getNujumData === 'function') ? getNujumData : null;
+window.getPawukonData = (typeof getPawukonData === 'function') ? getPawukonData : null;
 window.playGamelanTone = playGamelanTone;
 window.toggleKetawangPuspawarna = toggleKetawangPuspawarna;
 window.playDalangFX = playDalangFX;
@@ -854,7 +1052,7 @@ function initTahunHitungSelect() {
   }
 }
 
-window.updateKepribadianQuickInfo = function () {
+function updateKepribadianQuickInfo() {
   const tglVal = document.getElementById('tglLahirKepribadian')?.value;
   if (!tglVal) {
     const elDino = document.getElementById('outHariPasaranPribadi');
@@ -871,11 +1069,14 @@ window.updateKepribadianQuickInfo = function () {
   const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
   const wukuName = WUKU[info.wukuId];
 
-  document.getElementById('outHariPasaranPribadi').innerText = `${dino} ${pas}`;
-  document.getElementById('outNeptuWukuPribadi').innerText = `Neptu ${neptu} · Wuku ${wukuName}`;
-};
+  const elHP = document.getElementById('outHariPasaranPribadi');
+  const elNW = document.getElementById('outNeptuWukuPribadi');
+  if (elHP) elHP.innerText = `${dino} ${pas}`;
+  if (elNW) elNW.innerText = `Neptu ${neptu} · Wuku ${wukuName}`;
+}
+window.updateKepribadianQuickInfo = updateKepribadianQuickInfo;
 
-window.hitungKepribadianLengkap = function () {
+function hitungKepribadianLengkap() {
   const tglVal = document.getElementById('tglLahirKepribadian').value;
   if (!tglVal) { showToast('Pilih tanggal lahir terlebih dahulu.'); return; }
 
@@ -901,8 +1102,11 @@ window.hitungKepribadianLengkap = function () {
   const paa = nujumRes.paarasan;
   const pcs = nujumRes.pancasuda;
   const kam = nujumRes.kamarokan;
+  const pwk = nujumRes.pawukon || (typeof getPawukonData === 'function' ? getPawukonData(wukuName) : null);
 
   const faal = getFaalakiah(nama);
+  const fnTranslit = (typeof transliterateLatinToJawa === 'function') ? transliterateLatinToJawa : (typeof window !== 'undefined' ? window.transliterateLatinToJawa : null);
+  const aksaraJawa = (fnTranslit && nama !== '-') ? fnTranslit(nama) : (faal.aksaraStr !== '-' ? faal.aksaraStr : '');
   const aseso = getAsesoris(m, d);
 
   const html = `
@@ -987,6 +1191,58 @@ window.hitungKepribadianLengkap = function () {
         </div>
       </div>
     </div>
+
+    <!-- RINCIAN ENSIKLOPEDIA WUKU NUSANTARA -->
+    ${pwk ? `
+    <div class="space-y-3 bg-wulung p-4 rounded-xl border border-prada/30">
+      <div class="flex flex-wrap items-center justify-between border-b border-sogan-700/80 pb-2.5 gap-2">
+        <h4 class="font-marcellus font-bold text-prada text-sm sm:text-base flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-prada"></i> Pawukon Jawa: Wuku ${pwk.nama_wuku} (${pwk.no_wuku})
+        </h4>
+        <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">Dewane: <strong class="text-prada-light">${pwk.dewane}</strong></span>
+      </div>
+
+      <div class="space-y-2.5 text-xs">
+        <div class="p-3 bg-keraton/90 rounded-lg border border-sogan-800">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-1"><i class="fa-solid fa-user-astronaut text-prada/80 mr-1"></i> Watak</span>
+          <p class="text-sogan-200 leading-relaxed text-[11px] sm:text-xs">${pwk.watek_budi_pangerti}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          <div class="p-3 bg-keraton/90 rounded-lg border border-amber-900/40">
+            <span class="text-[10px] text-amber-300 uppercase font-semibold block mb-1"><i class="fa-solid fa-triangle-exclamation mr-1 text-amber-400"></i> Bilahi & Bebaya (Pantangan)</span>
+            <p class="text-sogan-200 leading-relaxed text-[11px]">${pwk.bilahi_bebaya}</p>
+          </div>
+
+          <div class="p-3 bg-keraton/90 rounded-lg border border-emerald-900/40 space-y-2">
+            <div>
+              <span class="text-[10px] text-emerald-300 uppercase font-semibold block mb-0.5"><i class="fa-solid fa-briefcase mr-1 text-emerald-400"></i> Pangupaya Jiwa (Kiprah & Pakaryan)</span>
+              <p class="text-sogan-200 leading-relaxed text-[11px] font-medium">${pwk.pangupaya_jiwa}</p>
+            </div>
+            <div class="pt-2 border-t border-sogan-800/80">
+              <span class="text-[10px] text-teal-300 uppercase font-semibold block mb-0.5"><i class="fa-solid fa-mortar-pestle mr-1 text-teal-400"></i> Tamba Yen Lara (Jamu/Usada)</span>
+              <p class="text-sogan-200 leading-relaxed text-[11px] italic">${pwk.tamba_yen_lara}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-sogan-950 rounded-lg border border-sogan-700/70 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sogan-800/80 pb-1.5">
+            <span class="text-[10px] text-prada uppercase font-semibold flex items-center gap-1.5"><i class="fa-solid fa-hands-praying"></i> Donga Slamet & Ruwatan</span>
+            <span class="text-[11px] font-marcellus font-bold text-prada-light">Donga: ${pwk.donga_slamet}</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[10px] text-sogan-300">
+            <div><span class="text-sogan-400 block font-medium">Sesaji Ruwat:</span><span class="text-sogan-200">${pwk.sesaji_ruwat}</span></div>
+            <div><span class="text-sogan-400 block font-medium">Tindih Ruwat:</span><span class="text-sogan-200">${pwk.tindih_ruwat}</span></div>
+            <div><span class="text-sogan-400 block font-medium">Sega Selamatan:</span><span class="text-sogan-200">${pwk.selamatan_sega}</span></div>
+            <div><span class="text-sogan-400 block font-medium">Iwak Selamatan:</span><span class="text-sogan-200">${pwk.selamatan_iwak}</span></div>
+            <div><span class="text-sogan-400 block font-medium">Salawat:</span><span class="text-sogan-200">${pwk.salawat}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ` : ''}
+
     <div class="space-y-2">
       <h4 class="font-marcellus font-bold text-prada text-sm flex items-center gap-1.5"><i class="fa-solid fa-gem"></i> Asesoris & Ageman</h4>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-wulung p-3 rounded-xl border border-sogan-800">
@@ -996,19 +1252,44 @@ window.hitungKepribadianLengkap = function () {
         <div><span class="text-sogan-400 block">Dino Becik:</span><strong>${aseso.dino}</strong></div>
       </div>
     </div>
-    <div class="p-3.5 rounded-xl bg-sogan-950 border border-sogan-700 text-xs space-y-1.5">
-      <div class="flex items-center justify-between">
-        <span class="font-bold text-prada font-marcellus">Faalakiah Asma: ${faal.nabi} (Kode ${faal.kode})</span>
-        <span class="text-[10px] font-mono text-sogan-400">Jumlah Aksara: ${faal.sum}</span>
+    <div class="p-3.5 sm:p-4 rounded-xl bg-sogan-950 border border-sogan-700 text-xs space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sogan-800/80 pb-2">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-feather-pointed text-prada"></i>
+          <span id="faalHeading" class="font-bold text-prada font-marcellus text-sm sm:text-base">Faalakiah Asma: ${faal.nabi} (Kode <span id="faalKode">${faal.kode}</span>)</span>
+        </div>
+        <span class="text-[11px] font-mono text-prada/90 bg-keraton px-2.5 py-1 rounded border border-sogan-700/80">Jumlah Aksara: <strong id="faalAksaraSum" class="text-prada-light">${faal.sum}</strong></span>
       </div>
-      <p class="text-sogan-200 leading-relaxed">${faal.desc}</p>
+
+      <!-- Editor Interaktif Aksara Jawa -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between">
+          <label for="faalAksaraJawaInput" class="text-[10px] uppercase font-semibold text-sogan-400 tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-pen-to-square text-prada/80"></i> Aksara Jawa (Dapat Diedit Manual)
+          </label>
+          <button type="button" onclick="salinAksaraFaal()" class="px-2.5 py-1 rounded-lg bg-sogan-900 border border-sogan-700 hover:border-prada text-prada hover:bg-prada/20 text-[11px] font-semibold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="Salin Aksara Jawa ke Clipboard">
+            <i class="fa-regular fa-copy"></i> Salin Aksara
+          </button>
+        </div>
+        <textarea id="faalAksaraJawaInput" oninput="updateFaalFromAksaraManual(this.value)" rows="2" placeholder="ꦲꦤꦕꦫꦏ..." class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl p-3 text-prada font-jawa text-xl sm:text-2xl leading-relaxed tracking-wider outline-none resize-y min-h-[64px] transition shadow-inner">${aksaraJawa}</textarea>
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[10px] text-sogan-400 px-1">
+          <span>Rincian Aksara: <strong id="faalAksaraList" class="font-mono text-sogan-200">${faal.aksaraStr}</strong></span>
+          <span class="italic text-[9px] text-sogan-400">*Sunting teks aksara/latin ing nginggil kanggé nganyari petungan Faalakiah kanthi langsung.</span>
+        </div>
+      </div>
+
+      <div class="p-3 bg-keraton/80 rounded-lg border border-sogan-800">
+        <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-1">Katerangan & Pitutur Faalakiah</span>
+        <p id="faalDesc" class="text-sogan-200 leading-relaxed text-[11px] sm:text-xs">${faal.desc}</p>
+      </div>
     </div>
   `;
 
   document.getElementById('hasilKepribadianBox').innerHTML = html;
   document.getElementById('btnPrintKepribadian').style.display = 'inline-block';
   showToast('Nujum kepribadian kasil kapetung!');
-};
+}
+window.hitungKepribadianLengkap = hitungKepribadianLengkap;
 
 // ─── PERJODOHAN ────────────────────────────────────────────────────────────
 function initPerjodohanSelects() {

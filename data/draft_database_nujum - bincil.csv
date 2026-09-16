@@ -1,0 +1,211 @@
+id,no_wuku,wuku,dino,pasaran,padewan,paringkelan,pandagon,paarasan,pancasuda,kamarokan
+,1,Shinto,Minggu,Pahing,Sri,Tungle,Dangu,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,1,Shinto,Senin,Pon,Indra,Aryang,Dangu,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,1,Shinto,Selasa,Wage,Guru,Wurukung,Dangu,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,1,Shinto,Rabu,Kliwon,Yamadipati,Paningron,Dangu,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,1,Shinto,Kamis,Legi,Rudra,Uwas,Jagur,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,1,Shinto,Jumat,Pahing,Brama,Mawulu,Gigis,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,1,Shinto,Sabtu,Pon,Kala,Tungle,Kerangan,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,2,Landep,Minggu,Wage,Uma,Aryang,Nohan,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,2,Landep,Senin,Kliwon,Sri,Wurukung,Wogan,Aras Kembang,Satriya Wirang,Macan Ketawan
+,2,Landep,Selasa,Legi,Indra,Paningron,Tulus,Lakuning Geni,Wasesa Segara,Nuju Padu
+,2,Landep,Rabu,Pahing,Guru,Uwas,Wurung,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,2,Landep,Kamis,Pon,Yamadipati,Mawulu,Dadi,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,2,Landep,Jumat,Wage,Rudra,Tungle,Dangu,Aras Pepet,Sumur Sinaba,Nuju Pati
+,2,Landep,Sabtu,Kliwon,Brama,Aryang,Jagur,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,3,Wukir,Minggu,Legi,Kala,Wurukung,Gigis,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,3,Wukir,Senin,Pahing,Uma,Paningron,Kerangan,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,3,Wukir,Selasa,Pon,Sri,Uwas,Nohan,Aras Pepet,Satriya Wibawa,Sanggar Waringin
+,3,Wukir,Rabu,Wage,Indra,Mawulu,Wogan,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,3,Wukir,Kamis,Kliwon,Guru,Tungle,Tulus,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,3,Wukir,Jumat,Legi,Yamadipati,Aryang,Wurung,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,3,Wukir,Sabtu,Pahing,Rudra,Wurukung,Dadi,Lakuning Geni,Satriya Wibawa,Macan Ketawan
+,4,Kurantil,Minggu,Pon,Brama,Paningron,Dangu,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,4,Kurantil,Senin,Wage,Kala,Uwas,Jagur,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,4,Kurantil,Selasa,Kliwon,Uma,Mawulu,Gigis,Aras Tuding,Sumur Sinaba,Nuju Pati
+,4,Kurantil,Rabu,Legi,Sri,Tungle,Kerangan,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,4,Kurantil,Kamis,Pahing,Indra,Aryang,Nohan,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,4,Kurantil,Jumat,Pon,Guru,Wurukung,Wogan,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,4,Kurantil,Sabtu,Wage,Yamadipati,Paningron,Tulus,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,5,Tolu,Minggu,Kliwon,Rudra,Uwas,Wurung,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,5,Tolu,Senin,Legi,Brama,Mawulu,Dadi,Lakuning Angin,Tunggak Semi,Nuju Pati
+,5,Tolu,Selasa,Pahing,Kala,Tungle,Dangu,Aras Kembang,Satriya Wibawa,Kala Tinantang
+,5,Tolu,Rabu,Pon,Uma,Aryang,Jagur,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,5,Tolu,Kamis,Wage,Sri,Wurukung,Gigis,Aras Kembang,Tunggak Semi,Nuju Pati
+,5,Tolu,Jumat,Kliwon,Indra,Paningron,Kerangan,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,5,Tolu,Sabtu,Legi,Guru,Uwas,Nohan,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,6,Gumbreg,Minggu,Pahing,Yamadipati,Mawulu,Wogan,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,6,Gumbreg,Senin,Pon,Rudra,Tungle,Tulus,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,6,Gumbreg,Selasa,Wage,Brama,Aryang,Wurung,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,6,Gumbreg,Rabu,Kliwon,Kala,Wurukung,Dadi,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,6,Gumbreg,Kamis,Legi,Uma,Paningron,Dangu,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,6,Gumbreg,Jumat,Pahing,Sri,Uwas,Jagur,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,6,Gumbreg,Sabtu,Pon,Indra,Mawulu,Gigis,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,7,Warigalit,Minggu,Wage,Guru,Tungle,Kerangan,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,7,Warigalit,Senin,Kliwon,Yamadipati,Aryang,Nohan,Aras Kembang,Satriya Wirang,Macan Ketawan
+,7,Warigalit,Selasa,Legi,Rudra,Wurukung,Wogan,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,7,Warigalit,Rabu,Pahing,Brama,Paningron,Tulus,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,7,Warigalit,Kamis,Pon,Kala,Uwas,Wurung,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,7,Warigalit,Jumat,Wage,Uma,Mawulu,Dadi,Aras Pepet,Sumur Sinaba,Nuju Pati
+,7,Warigalit,Sabtu,Kliwon,Sri,Tungle,Dangu,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,8,Wariagung,Minggu,Legi,Indra,Aryang,Jagur,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,8,Wariagung,Senin,Pahing,Guru,Wurukung,Gigis,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,8,Wariagung,Selasa,Pon,Yamadipati,Paningron,Kerangan,Aras Pepet,Satriya Wibawa,Sanggar Waringin
+,8,Wariagung,Rabu,Wage,Rudra,Uwas,Nohan,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,8,Wariagung,Kamis,Kliwon,Brama,Mawulu,Wogan,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,8,Wariagung,Jumat,Legi,Kala,Tungle,Tulus,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,8,Wariagung,Sabtu,Pahing,Uma,Aryang,Wurung,Lakuning Geni,Satriya Wibawa,Macan Ketawan
+,9,Julungwangi,Minggu,Pon,Sri,Wurukung,Dangu,Aras Kembang,Bumi Kapetak,Nuju Padu
+,9,Julungwangi,Senin,Wage,Indra,Paningron,Dangu,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,9,Julungwangi,Selasa,Kliwon,Guru,Uwas,Jagur,Aras Tuding,Sumur Sinaba,Nuju Pati
+,9,Julungwangi,Rabu,Legi,Yamadipati,Mawulu,Gigis,Aras Kembang,Sumur Sinaba,Kala Tinantang
+,9,Julungwangi,Kamis,Pahing,Rudra,Tungle,Kerangan,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,9,Julungwangi,Jumat,Pon,Brama,Aryang,Nohan,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,9,Julungwangi,Sabtu,Wage,Kala,Wurukung,Wogan,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,10,Sungsang,Minggu,Kliwon,Uma,Paningron,Tulus,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,10,Sungsang,Senin,Legi,Sri,Uwas,Wurung,Lakuning Angin,Tunggak Semi,Nuju Pati
+,10,Sungsang,Selasa,Pahing,Indra,Mawulu,Dadi,Aras Kembang,Satriya Wirang,Kala Tinantang
+,10,Sungsang,Rabu,Pon,Guru,Tungle,Dangu,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,10,Sungsang,Kamis,Wage,Yamadipati,Aryang,Jagur,Aras Kembang,Bumi Kapetak,Nuju Pati
+,10,Sungsang,Jumat,Kliwon,Rudra,Wurukung,Gigis,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,10,Sungsang,Sabtu,Legi,Brama,Paningron,Kerangan,Lakuning Rembulan,Tunggak Semi,Mantri Sinarojo
+,11,Galungan,Minggu,Pahing,Kala,Uwas,Nohan,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,11,Galungan,Senin,Pon,Kala,Mawulu,Wogan,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,11,Galungan,Selasa,Wage,Kala,Tungle,Tulus,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,11,Galungan,Rabu,Kliwon,Uma,Aryang,Wurung,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,11,Galungan,Kamis,Legi,Sri,Wurukung,Dadi,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,11,Galungan,Jumat,Pahing,Indra,Paningron,Dangu,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,11,Galungan,Sabtu,Pon,Guru,Uwas,Jagur,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,12,Kuningan,Minggu,Wage,Yamadipati,Mawulu,Gigis,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,12,Kuningan,Senin,Kliwon,Rudra,Tungle,Kerangan,Aras Kembang,Satriya Wirang,Macan Ketawan
+,12,Kuningan,Selasa,Legi,Brama,Aryang,Nohan,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,12,Kuningan,Rabu,Pahing,Kala,Wurukung,Wogan,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,12,Kuningan,Kamis,Pon,Uma,Paningron,Tulus,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,12,Kuningan,Jumat,Wage,Sri,Uwas,Wurung,Aras Pepet,Sumur Sinaba,Nuju Pati
+,12,Kuningan,Sabtu,Kliwon,Indra,Mawulu,Dadi,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,13,Langkir,Minggu,Legi,Guru,Tungle,Dangu,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,13,Langkir,Senin,Pahing,Yamadipati,Aryang,Jagur,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,13,Langkir,Selasa,Pon,Rudra,Wurukung,Gigis,Aras Pepet,Satriya Wirang,Sanggar Waringin
+,13,Langkir,Rabu,Wage,Brama,Paningron,Kerangan,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,13,Langkir,Kamis,Kliwon,Kala,Uwas,Nohan,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,13,Langkir,Jumat,Legi,Uma,Mawulu,Wogan,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,13,Langkir,Sabtu,Pahing,Sri,Tungle,Tulus,Lakuning Geni,Satriya Wibawa,Macan Ketawan
+,14,Mandasiya,Minggu,Pon,Indra,Aryang,Wurung,Aras Kembang,Bumi Kapetak,Nuju Padu
+,14,Mandasiya,Senin,Wage,Guru,Wurukung,Dadi,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,14,Mandasiya,Selasa,Kliwon,Yamadipati,Paningron,Dangu,Aras Tuding,Sumur Sinaba,Nuju Pati
+,14,Mandasiya,Rabu,Legi,Rudra,Uwas,Jagur,Aras Kembang,Sumur Sinaba,Kala Tinantang
+,14,Mandasiya,Kamis,Pahing,Brama,Mawulu,Gigis,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,14,Mandasiya,Jumat,Pon,Kala,Tungle,Kerangan,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,14,Mandasiya,Sabtu,Wage,Uma,Aryang,Nohan,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,15,Julungpujut,Minggu,Kliwon,Sri,Wurukung,Wogan,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,15,Julungpujut,Senin,Legi,Indra,Paningron,Tulus,Lakuning Angin,Tunggak Semi,Nuju Pati
+,15,Julungpujut,Selasa,Pahing,Guru,Uwas,Wurung,Aras Kembang,Satriya Wibawa,Kala Tinantang
+,15,Julungpujut,Rabu,Pon,Yamadipati,Mawulu,Dadi,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,15,Julungpujut,Kamis,Wage,Rudra,Tungle,Dangu,Aras Kembang,Tunggak Semi,Nuju Pati
+,15,Julungpujut,Jumat,Kliwon,Brama,Aryang,Jagur,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,15,Julungpujut,Sabtu,Legi,Kala,Wurukung,Gigis,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,16,Pahang,Minggu,Pahing,Uma,Paningron,Kerangan,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,16,Pahang,Senin,Pon,Sri,Uwas,Nohan,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,16,Pahang,Selasa,Wage,Indra,Mawulu,Wogan,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,16,Pahang,Rabu,Kliwon,Guru,Tungle,Tulus,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,16,Pahang,Kamis,Legi,Yamadipati,Aryang,Wurung,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,16,Pahang,Jumat,Pahing,Rudra,Wurukung,Dadi,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,16,Pahang,Sabtu,Pon,Brama,Paningron,Dangu,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,17,Kuruwelut,Minggu,Wage,Kala,Uwas,Jagur,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,17,Kuruwelut,Senin,Kliwon,Uma,Mawulu,Gigis,Aras Kembang,Satriya Wirang,Macan Ketawan
+,17,Kuruwelut,Selasa,Legi,Sri,Tungle,Kerangan,Lakuning Geni,Wasesa Segara,Nuju Padu
+,17,Kuruwelut,Rabu,Pahing,Indra,Aryang,Nohan,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,17,Kuruwelut,Kamis,Pon,Guru,Wurukung,Wogan,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,17,Kuruwelut,Jumat,Wage,Yamadipati,Paningron,Tulus,Aras Pepet,Sumur Sinaba,Nuju Pati
+,17,Kuruwelut,Sabtu,Kliwon,Rudra,Uwas,Wurung,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,18,Marakeh,Minggu,Legi,Brama,Mawulu,Dadi,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,18,Marakeh,Senin,Pahing,Kala,Tungle,Dangu,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,18,Marakeh,Selasa,Pon,Uma,Aryang,Jagur,Aras Pepet,Satriya Wibawa,Sanggar Waringin
+,18,Marakeh,Rabu,Wage,Sri,Wurukung,Gigis,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,18,Marakeh,Kamis,Kliwon,Indra,Paningron,Kerangan,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,18,Marakeh,Jumat,Legi,Guru,Uwas,Nohan,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,18,Marakeh,Sabtu,Pahing,Yamadipati,Mawulu,Wogan,Lakuning Geni,Satriya Wibawa,Macan Ketawan
+,19,Tambir,Minggu,Pon,Rudra,Tungle,Tulus,Aras Kembang,Bumi Kapetak,Nuju Padu
+,19,Tambir,Senin,Wage,Brama,Aryang,Wurung,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,19,Tambir,Selasa,Kliwon,Kala,Wurukung,Dadi,Aras Tuding,Sumur Sinaba,Nuju Pati
+,19,Tambir,Rabu,Legi,Uma,Paningron,Dangu,Aras Kembang,Sumur Sinaba,Kala Tinantang
+,19,Tambir,Kamis,Pahing,Sri,Uwas,Jagur,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,19,Tambir,Jumat,Pon,Indra,Mawulu,Gigis,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,19,Tambir,Sabtu,Wage,Guru,Tungle,Kerangan,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,20,Madangkungan,Minggu,Kliwon,Yamadipati,Aryang,Nohan,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,20,Madangkungan,Senin,Legi,Rudra,Wurukung,Wogan,Lakuning Angin,Tunggak Semi,Nuju Pati
+,20,Madangkungan,Selasa,Pahing,Brama,Paningron,Tulus,Aras Kembang,Satriya Wirang,Kala Tinantang
+,20,Madangkungan,Rabu,Pon,Kala,Uwas,Wurung,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,20,Madangkungan,Kamis,Wage,Uma,Mawulu,Dadi,Aras Kembang,Tunggak Semi,Nuju Pati
+,20,Madangkungan,Jumat,Kliwon,Sri,Tungle,Dangu,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,20,Madangkungan,Sabtu,Legi,Indra,Aryang,Jagur,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,21,Maktal,Minggu,Pahing,Guru,Wurukung,Gigis,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,21,Maktal,Senin,Pon,Yamadipati,Paningron,Kerangan,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,21,Maktal,Selasa,Wage,Rudra,Uwas,Nohan,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,21,Maktal,Rabu,Kliwon,Brama,Mawulu,Wogan,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,21,Maktal,Kamis,Legi,Kala,Tungle,Tulus,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,21,Maktal,Jumat,Pahing,Uma,Aryang,Wurung,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,21,Maktal,Sabtu,Pon,Sri,Wurukung,Dadi,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,22,Wuye,Minggu,Wage,Indra,Paningron,Dangu,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,22,Wuye,Senin,Kliwon,Guru,Uwas,Jagur,Aras Kembang,Satriya Wirang,Macan Ketawan
+,22,Wuye,Selasa,Legi,Yamadipati,Mawulu,Gigis,Lakuning Geni,Wasesa Segara,Nuju Padu
+,22,Wuye,Rabu,Pahing,Rudra,Tungle,Kerangan,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,22,Wuye,Kamis,Pon,Brama,Aryang,Nohan,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,22,Wuye,Jumat,Wage,Kala,Wurukung,Wogan,Aras Kembang,Sumur Sinaba,Nuju Pati
+,22,Wuye,Sabtu,Kliwon,Uma,Paningron,Tulus,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,23,Manahil,Minggu,Legi,Sri,Uwas,Wurung,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,23,Manahil,Senin,Pahing,Indra,Mawulu,Dadi,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,23,Manahil,Selasa,Pon,Guru,Tungle,Dangu,Aras Pepet,Satriya Wibawa,Sanggar Waringin
+,23,Manahil,Rabu,Wage,Yamadipati,Aryang,Jagur,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,23,Manahil,Kamis,Kliwon,Rudra,Wurukung,Gigis,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,23,Manahil,Jumat,Legi,Brama,Paningron,Kerangan,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,23,Manahil,Sabtu,Pahing,Kala,Uwas,Nohan,Lakuning Geni,Tunggak Semi,Macan Ketawan
+,24,Prangbakat,Minggu,Pon,Uma,Mawulu,Wogan,Aras Kembang,Bumi Kapetak,Nuju Padu
+,24,Prangbakat,Senin,Wage,Sri,Tungle,Tulus,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,24,Prangbakat,Selasa,Kliwon,Indra,Aryang,Wurung,Aras Tuding,Sumur Sinaba,Nuju Pati
+,24,Prangbakat,Rabu,Legi,Guru,Wurukung,Dadi,Aras Kembang,Sumur Sinaba,Kala Tinantang
+,24,Prangbakat,Kamis,Pahing,Yamadipati,Paningron,Dangu,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,24,Prangbakat,Jumat,Pon,Rudra,Uwas,Jagur,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,24,Prangbakat,Sabtu,Wage,Brama,Mawulu,Gigis,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,25,Bala,Minggu,Kliwon,Kala,Tungle,Kerangan,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,25,Bala,Senin,Legi,Uma,Aryang,Nohan,Lakuning Angin,Tunggak Semi,Nuju Pati
+,25,Bala,Selasa,Pahing,Sri,Wurukung,Wogan,Aras Kembang,Satriya Wirang,Kala Tinantang
+,25,Bala,Rabu,Pon,Indra,Paningron,Tulus,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,25,Bala,Kamis,Wage,Guru,Uwas,Wurung,Aras Kembang,Tunggak Semi,Nuju Pati
+,25,Bala,Jumat,Kliwon,Yamadipati,Mawulu,Dadi,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,25,Bala,Sabtu,Legi,Rudra,Tungle,Dangu,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,26,Wugu,Minggu,Pahing,Brama,Aryang,Jagur,Lakuning Rembulan,Wasesa Segara,Nuju Pati
+,26,Wugu,Senin,Pon,Kala,Wurukung,Gigis,Aras Tuding,Sumur Sinaba,Kala Tinantang
+,26,Wugu,Selasa,Wage,Uma,Paningron,Kerangan,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,26,Wugu,Rabu,Kliwon,Sri,Uwas,Nohan,Lakuning Srengenge,Lebu Katiyup Angin,Nuju Padu
+,26,Wugu,Kamis,Legi,Indra,Mawulu,Wogan,Lakuning Lintang,Satriya Wibawa,Sanggar Waringin
+,26,Wugu,Jumat,Pahing,Guru,Tungle,Tulus,Lakuning Srengenge,Tunggak Semi,Mantri Sinarojo
+,26,Wugu,Sabtu,Pon,Yamadipati,Aryang,Wurung,Lakuning Banyu,Wasesa Segara,Nuju Pati
+,27,Wayang,Minggu,Wage,Rudra,Wurukung,Dadi,Lakuning Angin,Satriya Wibawa,Kala Tinantang
+,27,Wayang,Senin,Kliwon,Brama,Paningron,Dangu,Aras Kembang,Satriya Wirang,Macan Ketawan
+,27,Wayang,Selasa,Legi,Kala,Uwas,Jagur,Lakuning Geni,Wasesa Segara,Nuju Padu
+,27,Wayang,Rabu,Pahing,Uma,Mawulu,Gigis,Lakuning Banyu,Wasesa Segara,Sanggar Waringin
+,27,Wayang,Kamis,Pon,Sri,Tungle,Kerangan,Lakuning Srengenge,Satriya Wirang,Macan Ketawan
+,27,Wayang,Jumat,Wage,Indra,Aryang,Nohan,Aras Pepet,Sumur Sinaba,Nuju Pati
+,27,Wayang,Sabtu,Kliwon,Guru,Wurukung,Wogan,Lakuning Bumi,Tunggak Semi,Sanggar Waringin
+,28,Kulawu,Minggu,Legi,Yamadipati,Paningron,Tulus,Aras Pepet,Sumur Sinaba,Macan Ketawan
+,28,Kulawu,Senin,Pahing,Rudra,Uwas,Wurung,Lakuning Lintang,Bumi Kapetak,Nuju Padu
+,28,Kulawu,Selasa,Pon,Brama,Mawulu,Dadi,Aras Pepet,Satriya Wibawa,Sanggar Waringin
+,28,Kulawu,Rabu,Wage,Kala,Tungle,Dangu,Aras Tuding,Satriya Wibawa,Macan Ketawan
+,28,Kulawu,Kamis,Kliwon,Uma,Aryang,Jagur,Lakuning Banyu,Bumi Kapetak,Kala Tinantang
+,28,Kulawu,Jumat,Legi,Sri,Wurukung,Gigis,Aras Tuding,Satriya Wirang,Sanggar Waringin
+,28,Kulawu,Sabtu,Pahing,Indra,Paningron,Kerangan,Lakuning Geni,Satriya Wibawa,Macan Ketawan
+,29,Dukut,Minggu,Pon,Guru,Uwas,Nohan,Aras Kembang,Bumi Kapetak,Nuju Padu
+,29,Dukut,Senin,Wage,Yamadipati,Mawulu,Wogan,Lakuning Geni,Wasesa Segara,Sanggar Waringin
+,29,Dukut,Selasa,Kliwon,Rudra,Tungle,Tulus,Aras Tuding,Sumur Sinaba,Nuju Pati
+,29,Dukut,Rabu,Legi,Brama,Aryang,Wurung,Aras Kembang,Sumur Sinaba,Kala Tinantang
+,29,Dukut,Kamis,Pahing,Kala,Wurukung,Dadi,Lakuning Bumi,Lebu Katiyup Angin,Mantri Sinarojo
+,29,Dukut,Jumat,Pon,Uma,Paningron,Dangu,Lakuning Lintang,Lebu Katiyup Angin,Macan Ketawan
+,29,Dukut,Sabtu,Wage,Sri,Uwas,Jagur,Lakuning Lintang,Satriya Wirang,Nuju Padu
+,30,Watugunung,Minggu,Kliwon,Indra,Mawulu,Gigis,Lakuning Lintang,Lebu Katiyup Angin,Mantri Sinarojo
+,30,Watugunung,Senin,Legi,Guru,Tungle,Kerangan,Lakuning Angin,Tunggak Semi,Nuju Pati
+,30,Watugunung,Selasa,Pahing,Yamadipati,Aryang,Nohan,Aras Kembang,Satriya Wirang,Kala Tinantang
+,30,Watugunung,Rabu,Pon,Rudra,Wurukung,Wogan,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
+,30,Watugunung,Kamis,Wage,Brama,Paningron,Tulus,Aras Kembang,Tunggak Semi,Nuju Pati
+,30,Watugunung,Jumat,Kliwon,Kala,Uwas,Wurung,Lakuning Rembulan,Wasesa Segara,Kala Tinantang
+,30,Watugunung,Sabtu,Legi,Uma,Mawulu,Dadi,Lakuning Rembulan,Bumi Kapetak,Mantri Sinarojo
