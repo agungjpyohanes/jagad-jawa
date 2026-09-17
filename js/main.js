@@ -120,36 +120,89 @@ const PUSPAWARNA_SLENDRO_PATHE_MANYURA = [
   { freq: 216, type: 'gong' }
 ];
 
+let puspawarnaAudio = null;
+let isPuspawarnaPlaying = false;
+
 function toggleKetawangPuspawarna(showToastFn = showToast) {
-  const btn = document.getElementById('playPuspawarnaBtn');
-  const icon = document.getElementById('audioBtnIcon');
-  const label = document.getElementById('audioBtnLabel');
+  const btn = document.getElementById('puspawarnaBtn') || document.getElementById('playPuspawarnaBtn');
+  const icon = document.getElementById('puspawarnaIcon') || document.getElementById('audioBtnIcon');
+  const label = document.getElementById('puspawarnaLabel') || document.getElementById('audioBtnLabel');
+  const labelShort = document.getElementById('puspawarnaLabelShort');
+  const heroIcon = document.getElementById('heroPlayIcon');
+  const eq = document.getElementById('audioEqualizer');
+
+  if (!puspawarnaAudio) {
+    const existingEl = document.getElementById('puspawarnaAudioElement');
+    if (existingEl) {
+      puspawarnaAudio = existingEl;
+    } else if (typeof Audio !== 'undefined') {
+      puspawarnaAudio = new Audio('assets/audio/puspowarno.mp3');
+      puspawarnaAudio.id = 'puspawarnaAudioElement';
+      puspawarnaAudio.loop = true;
+      if (typeof document !== 'undefined' && document.body) {
+        document.body.appendChild(puspawarnaAudio);
+      }
+    }
+    if (puspawarnaAudio) {
+      puspawarnaAudio.loop = true;
+      puspawarnaAudio.addEventListener('ended', () => {
+        isPuspawarnaPlaying = false;
+        updatePuspawarnaUI(false);
+      });
+      puspawarnaAudio.addEventListener('pause', () => {
+        isPuspawarnaPlaying = false;
+        updatePuspawarnaUI(false);
+      });
+      puspawarnaAudio.addEventListener('play', () => {
+        isPuspawarnaPlaying = true;
+        updatePuspawarnaUI(true);
+      });
+    }
+  }
+
+  function updatePuspawarnaUI(playing) {
+    if (playing) {
+      if (btn) btn.classList.add('playing');
+      if (icon) icon.className = 'fa-solid fa-circle-pause text-sm text-prada animate-pulse';
+      if (label) label.innerText = 'Nembang Puspawarna...';
+      if (labelShort) labelShort.innerText = 'Nembang...';
+      if (heroIcon) heroIcon.className = 'fa-solid fa-pause text-2xl text-keraton ml-0';
+      if (eq) eq.classList.remove('hidden');
+    } else {
+      if (btn) btn.classList.remove('playing');
+      if (icon) icon.className = 'fa-solid fa-circle-play text-sm text-prada';
+      if (label) label.innerText = 'Ketawang Puspawarna';
+      if (labelShort) labelShort.innerText = 'Gamelan';
+      if (heroIcon) heroIcon.className = 'fa-solid fa-play text-2xl text-keraton ml-1';
+      if (eq) eq.classList.add('hidden');
+    }
+  }
 
   if (isPuspawarnaPlaying) {
-    clearInterval(puspawarnaInterval);
+    if (puspawarnaAudio) puspawarnaAudio.pause();
     isPuspawarnaPlaying = false;
-    puspawarnaInterval = null;
-    if (btn) btn.classList.remove('playing');
-    if (icon) icon.className = 'fa-solid fa-play text-prada';
-    if (label) label.innerText = 'Puspawarna';
-    if (showToastFn) showToastFn('Gendhing Puspawarna dipun suwun mandheg.');
+    updatePuspawarnaUI(false);
+    if (showToastFn) showToastFn('Gendhing Puspawarna dipun leremaken.');
   } else {
-    initAudio();
     isPuspawarnaPlaying = true;
-    if (btn) btn.classList.add('playing');
-    if (icon) icon.className = 'fa-solid fa-pause text-prada animate-pulse';
-    if (label) label.innerText = 'Mungel...';
-    if (showToastFn) showToastFn('Nglaras Gendhing Ketawang Puspawarna (Slendro Manyura)...');
-
-    puspawarnaStep = 0;
-    const playNextNote = () => {
-      const note = PUSPAWARNA_SLENDRO_PATHE_MANYURA[puspawarnaStep % PUSPAWARNA_SLENDRO_PATHE_MANYURA.length];
-      playGamelanTone(note.freq, note.type);
-      puspawarnaStep++;
-    };
-
-    playNextNote();
-    puspawarnaInterval = setInterval(playNextNote, 850);
+    if (puspawarnaAudio) {
+      const playPromise = puspawarnaAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          updatePuspawarnaUI(true);
+          if (showToastFn) showToastFn('Nglaras Gendhing Ketawang Puspawarna (Laras Slendro Manyura)...');
+        }).catch(err => {
+          console.warn('Audio autoplay prevented or error:', err);
+          isPuspawarnaPlaying = false;
+          updatePuspawarnaUI(false);
+          if (showToastFn) showToastFn('Klik malih kanggé miwiti alunan gamelan.');
+        });
+      } else {
+        updatePuspawarnaUI(true);
+      }
+    } else {
+      updatePuspawarnaUI(true);
+    }
   }
 }
 
@@ -1172,7 +1225,7 @@ function updateKepribadianQuickInfo() {
   }
   if (elKarakter) {
     if (karakterRes && karakterRes.data && karakterRes.data.tipe && karakterRes.data.tipe !== '-') {
-      elKarakter.innerText = `Tipe ${karakterRes.noKarakter}: ${karakterRes.data.tipe} (Digit ${karakterRes.totalSum})`;
+      elKarakter.innerText = `Tipe ${karakterRes.noKarakter}: ${karakterRes.data.tipe}`;
     } else {
       elKarakter.innerText = '-';
     }
@@ -1648,12 +1701,12 @@ function renderKarakterDasarCardHtml(karakterRes) {
             <span class="px-2.5 py-0.5 rounded-full bg-prada/20 border border-prada/50 text-[10px] text-prada font-bold uppercase tracking-wider">
               Analisis Tanggal Lahir Masehi
             </span>
-            <span class="px-2 py-0.5 rounded-full bg-sogan-950 border border-sogan-700 text-[10px] text-sogan-300 font-mono">
-              Jumlah Digit: ${karakterRes.totalSum} &rarr; Sisa: ${karakterRes.noKarakter}
+            <span class="px-2.5 py-0.5 rounded-full bg-sogan-950 border border-prada/40 text-[10px] text-prada font-mono font-bold">
+              Tipe #${karakterRes.noKarakter}
             </span>
           </div>
           <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
-            <i class="fa-solid fa-brain text-prada"></i> Karakter Dasar: Tipe ${d.tipe} (Tipe #${karakterRes.noKarakter})
+            <i class="fa-solid fa-brain text-prada"></i> Karakter Dasar: ${d.tipe} (Tipe #${karakterRes.noKarakter})
           </h4>
         </div>
         <div class="text-right">
@@ -2592,6 +2645,40 @@ function renderLaporanResmiPetungPrintHtml(dObj) {
               </tr>
             </tbody>
           </table>
+
+          <table class="doc-table mt-1">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">C. Shio Kelahiran &amp; Teori 5 Elemen (Wu Xing)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Shio &amp; Elemen Tahun Lahir</td>
+                <td style="width: 28%;"><strong>Shio ${shioLahir?.shio || '-'}</strong> (${shioLahir?.elemenTahun || '-'})</td>
+                <td class="doc-label-cell">Elemen Tetap Shio</td>
+                <td style="width: 28%;">${shioLahir?.elemenTetap || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Karakteristik Elemen</td>
+                <td colspan="3">${shioLahir?.sifatElemen || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Sifat Dasar &amp; Karir</td>
+                <td colspan="3">
+                  <strong>Sifat Dasar:</strong> ${shioLahir?.detail?.sifatDasar || '-'} &nbsp;|&nbsp; 
+                  <strong>Karir:</strong> ${shioLahir?.detail?.karir || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Jodoh &amp; Pantangan</td>
+                <td colspan="3">
+                  <strong>Jodoh Selaras:</strong> ${shioLahir?.detail?.jodoh || '-'} &nbsp;|&nbsp; 
+                  <strong>Pantangan:</strong> ${shioLahir?.detail?.pantangan || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- BAGIAN 5: ASESORIS & AGEMAN -->
@@ -2623,9 +2710,11 @@ function renderLaporanResmiPetungPrintHtml(dObj) {
               <tr>
                 <td class="doc-label-cell">Karakter Dasar (Tgl Masehi)</td>
                 <td colspan="3">
-                  <strong>${karakterRes?.data ? 'Tipe #' + karakterRes.noKarakter + ': ' + (karakterRes.data.tipe || karakterRes.data.tipe_karakter) : '-'}</strong> &middot; 
-                  <em>Formula: ${karakterRes ? karakterRes.formulaStr + ' = ' + karakterRes.totalSum + ' (Modulo 9 &rarr; Sisa ' + karakterRes.noKarakter + ')' : '-'}</em><br/>
-                  <strong>Watak &amp; Ciri Khas:</strong> ${karakterRes?.data ? (karakterRes.data.ringkasan || karakterRes.data.deskripsi_karakter || '-') : '-'}<br/>
+                  <strong>${karakterRes?.data ? 'Tipe #' + karakterRes.noKarakter + ': ' + (karakterRes.data.tipe || karakterRes.data.tipe_karakter) : '-'}</strong><br/>
+                  <strong>Ringkasan Karakter:</strong> ${karakterRes?.data ? (karakterRes.data.ringkasan || karakterRes.data.deskripsi_karakter || '-') : '-'}<br/>
+                  ${karakterRes?.data?.kekuatan ? `<strong>Kekuatan &amp; Potensi:</strong> ${karakterRes.data.kekuatan}<br/>` : ''}
+                  ${karakterRes?.data?.kelemahan ? `<strong>Kelemahan &amp; Titik Kritis:</strong> ${karakterRes.data.kelemahan} &nbsp;|&nbsp; <strong>Kunci Pendekatan &amp; Negosiasi:</strong> ${karakterRes.data.negosiasi || '-'}<br/>` : ''}
+                  ${karakterRes?.data?.sikap ? `<strong>Sikap yang Harus Dibangun:</strong> ${karakterRes.data.sikap} &nbsp;|&nbsp; <strong>Motto Bawah Sadar:</strong> <em>&ldquo;${karakterRes.data.motto || '-'}&rdquo;</em><br/>` : ''}
                   <strong>Profesi Cocok:</strong> ${karakterRes?.data ? (karakterRes.data.profesi || karakterRes.data.rekomendasi_profesi || '-') : '-'}
                 </td>
               </tr>
@@ -2794,15 +2883,7 @@ function renderLaporanResmiPetungPrintHtml(dObj) {
                   <strong>Shio ${siklusTahunanRes?.shio?.shio || '-'}</strong>: ${siklusTahunanRes?.shio?.tegese || '-'}
                 </td>
               </tr>
-              <tr>
-                <td class="doc-label-cell">Shio Lahir &amp; 5 Elemen (Wu Xing)</td>
-                <td colspan="3">
-                  <strong>Shio ${shioLahir?.shio || '-'} &middot; Elemen ${shioLahir?.elemenTahun || '-'}</strong> (Elemen Tetap: ${shioLahir?.elemenTetap || '-'})<br/>
-                  <strong>Karakteristik Elemen:</strong> ${shioLahir?.sifatElemen || '-'}<br/>
-                  <strong>Sifat Dasar:</strong> ${shioLahir?.detail?.sifatDasar || '-'} &nbsp;|&nbsp; <strong>Karir:</strong> ${shioLahir?.detail?.karir || '-'}<br/>
-                  <strong>Jodoh Selaras:</strong> ${shioLahir?.detail?.jodoh || '-'} &nbsp;|&nbsp; <strong>Pantangan:</strong> ${shioLahir?.detail?.pantangan || '-'}
-                </td>
-              </tr>
+
               <tr>
                 <td class="doc-label-cell">Dewa Pelindung Siklus</td>
                 <td colspan="3" id="doc_siklus_dewa"><strong>${siklusTahunanRes?.padewan?.dewa || '-'} (${siklusTahunanRes?.padewan?.nama || '-'})</strong></td>
@@ -3101,6 +3182,7 @@ function hitungKepribadianLengkap() {
 
       <!-- 4. PRANATA MANGSA & ZODIAK SURYA -->
       ${pranataZodiakCardHtml}
+      ${shioElemenCardHtml}
 
       <!-- 5. ASESORIS & AGEMAN -->
       <div class="space-y-2 print-card-avoid-break">
@@ -3157,9 +3239,6 @@ function hitungKepribadianLengkap() {
 
       <!-- 9. SIKLUS TAHUNAN -->
       ${siklusCardHtml}
-
-      <!-- SHIO KELAHIRAN & TEORI 5 ELEMEN (WU XING) -->
-      ${shioElemenCardHtml}
 
     <!-- FOOTER DOKUMEN CETAK KERATON -->
     <div class="print-footer text-center pt-4 border-t border-sogan-800 text-[10px] text-sogan-400">

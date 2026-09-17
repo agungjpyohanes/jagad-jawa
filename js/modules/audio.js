@@ -82,39 +82,88 @@ const puspawarnaScore = [
   { b: 329.63, k: 0, g: 0 }, { b: 293.66, k: 293.66, g: 65, kp: 140 }
 ];
 
-export function toggleKetawangPuspawarna(showToast) {
-  initAudio();
-  isPuspawarnaPlaying = !isPuspawarnaPlaying;
+let puspawarnaAudio = null;
 
+export function toggleKetawangPuspawarna(showToast) {
+  const btn = document.getElementById('puspawarnaBtn');
   const btnIcon = document.getElementById('puspawarnaIcon');
   const label = document.getElementById('puspawarnaLabel');
+  const labelShort = document.getElementById('puspawarnaLabelShort');
   const heroIcon = document.getElementById('heroPlayIcon');
   const eq = document.getElementById('audioEqualizer');
 
-  if (isPuspawarnaPlaying) {
-    btnIcon.className = 'fa-solid fa-circle-pause text-base text-prada';
-    label.innerText = 'Nembang Puspawarna...';
-    if (heroIcon) heroIcon.className = 'fa-solid fa-pause text-2xl text-keraton ml-0';
-    eq.classList.remove('hidden');
-    if (showToast) showToast("Memutar Ketawang Puspawarna (Laras Slendro Manyura)");
+  if (!puspawarnaAudio) {
+    const existingEl = document.getElementById('puspawarnaAudioElement');
+    if (existingEl) {
+      puspawarnaAudio = existingEl;
+    } else if (typeof Audio !== 'undefined') {
+      puspawarnaAudio = new Audio('assets/audio/puspowarno.mp3');
+      puspawarnaAudio.id = 'puspawarnaAudioElement';
+      puspawarnaAudio.loop = true;
+      if (typeof document !== 'undefined' && document.body) {
+        document.body.appendChild(puspawarnaAudio);
+      }
+    }
+    if (puspawarnaAudio) {
+      puspawarnaAudio.loop = true;
+      puspawarnaAudio.addEventListener('ended', () => {
+        isPuspawarnaPlaying = false;
+        updatePuspawarnaUI(false);
+      });
+      puspawarnaAudio.addEventListener('pause', () => {
+        isPuspawarnaPlaying = false;
+        updatePuspawarnaUI(false);
+      });
+      puspawarnaAudio.addEventListener('play', () => {
+        isPuspawarnaPlaying = true;
+        updatePuspawarnaUI(true);
+      });
+    }
+  }
 
-    puspawarnaStep = 0;
-    puspawarnaInterval = setInterval(() => {
-      if (!isPuspawarnaPlaying) return;
-      const note = puspawarnaScore[puspawarnaStep];
-      if (note.b) playGamelanTone(note.b, 'saron');
-      if (note.k) playGamelanTone(note.k, 'kenong');
-      if (note.kp) playGamelanTone(note.kp, 'kempul');
-      if (note.g) playGamelanTone(note.g, 'gong');
-      puspawarnaStep = (puspawarnaStep + 1) % puspawarnaScore.length;
-    }, 750);
-  } else {
-    btnIcon.className = 'fa-solid fa-circle-play text-base text-prada';
-    label.innerText = 'Ketawang Puspawarna';
-    if (heroIcon) heroIcon.className = 'fa-solid fa-play text-2xl text-keraton ml-1';
-    eq.classList.add('hidden');
-    clearInterval(puspawarnaInterval);
+  function updatePuspawarnaUI(playing) {
+    if (playing) {
+      if (btn) btn.classList.add('playing');
+      if (btnIcon) btnIcon.className = 'fa-solid fa-circle-pause text-sm text-prada animate-pulse';
+      if (label) label.innerText = 'Nembang Puspawarna...';
+      if (labelShort) labelShort.innerText = 'Nembang...';
+      if (heroIcon) heroIcon.className = 'fa-solid fa-pause text-2xl text-keraton ml-0';
+      if (eq) eq.classList.remove('hidden');
+    } else {
+      if (btn) btn.classList.remove('playing');
+      if (btnIcon) btnIcon.className = 'fa-solid fa-circle-play text-sm text-prada';
+      if (label) label.innerText = 'Ketawang Puspawarna';
+      if (labelShort) labelShort.innerText = 'Gamelan';
+      if (heroIcon) heroIcon.className = 'fa-solid fa-play text-2xl text-keraton ml-1';
+      if (eq) eq.classList.add('hidden');
+    }
+  }
+
+  if (isPuspawarnaPlaying) {
+    if (puspawarnaAudio) puspawarnaAudio.pause();
+    isPuspawarnaPlaying = false;
+    updatePuspawarnaUI(false);
     if (showToast) showToast("Gendhing Puspawarna dipun leremaken.");
+  } else {
+    isPuspawarnaPlaying = true;
+    if (puspawarnaAudio) {
+      const playPromise = puspawarnaAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          updatePuspawarnaUI(true);
+          if (showToast) showToast("Nglaras Gendhing Ketawang Puspawarna (Laras Slendro Manyura)...");
+        }).catch(err => {
+          console.warn('Audio play error:', err);
+          isPuspawarnaPlaying = false;
+          updatePuspawarnaUI(false);
+          if (showToast) showToast("Puteran audio dipun blokir dening browser. Mangga klik malih.");
+        });
+      } else {
+        updatePuspawarnaUI(true);
+      }
+    } else {
+      updatePuspawarnaUI(true);
+    }
   }
 }
 
