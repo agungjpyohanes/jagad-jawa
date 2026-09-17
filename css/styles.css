@@ -352,41 +352,264 @@
   transform: rotate(-28deg);
 }
 
-/* Print styling motif batik Kumudowati */
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRINT STYLESHEET: LAPORAN RESMI MONOKROM & WATERMARK AETHER CODE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Sembunyikan elemen cetak di layar biasa */
+#laporan-cetak-pdf,
+.print-only-document,
+.print-watermark,
+.print-doc-watermark,
+.print-running-header,
+.print-running-footer,
+.watermark-print {
+  display: none !important;
+}
+
+/* Base style untuk laporan di layar web */
+.screen-only-report {
+  display: block;
+}
+
+/* Base style untuk frame Kumudowati di layar web */
+.print-kumudowati-frame {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
   body {
     background: #ffffff !important;
-    color: #1a1208 !important;
+    color: #000000 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.35 !important;
     padding: 0 !important;
     margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  header, nav, .no-print, #ambientPlayerBar, #toastBox, .amber-light-trail-wrap, .floating-decor {
+
+  /* Sembunyikan seluruh container app biasa, navbar, dashboard, form, tombol, audio player */
+  header,
+  nav,
+  footer,
+  main,
+  #app,
+  .dashboard-container,
+  form,
+  button,
+  .btn-print,
+  #btnPrintKepribadian,
+  #btnPrintPerjodohan,
+  #btnPrintSelametan,
+  .no-print,
+  #ambientPlayerBar,
+  #toastBox,
+  .amber-light-trail-wrap,
+  .floating-decor,
+  .tab-content,
+  section,
+  #mobileMenu,
+  .screen-only-report {
     display: none !important;
   }
-  .print-area-active {
+
+  /* Sembunyikan semua direct children body KECUALI #laporan-cetak-pdf dan elemen print fixed */
+  body > *:not(#laporan-cetak-pdf):not(.print-watermark):not(.watermark-print):not(.print-doc-watermark):not(.print-running-header):not(.print-running-footer) {
+    display: none !important;
+  }
+
+  /* Hanya tampilkan container khusus laporan cetak */
+  #laporan-cetak-pdf {
     display: block !important;
-    background: #fffef8 !important;
-    padding: 20px !important;
+    position: relative !important;
+    width: 100% !important;
     margin: 0 !important;
-    border: 12px solid transparent !important;
-    border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23c9a227'/%3E%3Ccircle cx='40' cy='40' r='18' fill='none' stroke='%237a3b12' stroke-width='2.5'/%3E%3Ccircle cx='40' cy='40' r='8' fill='%237a3b12'/%3E%3Cpath d='M40 8 L44 28 L40 22 L36 28 Z' fill='%237a3b12'/%3E%3Cpath d='M40 72 L44 52 L40 58 L36 52 Z' fill='%237a3b12'/%3E%3Cpath d='M8 40 L28 44 L22 40 L28 36 Z' fill='%237a3b12'/%3E%3Cpath d='M72 40 L52 44 L58 40 L52 36 Z' fill='%237a3b12'/%3E%3C/svg%3E") 16 round !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+    color: #000000 !important;
+    font-family: 'Times New Roman', Times, 'Georgia', serif !important;
   }
-  @page {
-    margin: 10mm;
-    size: A4;
+
+  #laporan-cetak-pdf * {
+    color: #000000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
+
+  /* Pastikan semua tabel dan teks tidak tertutup watermark di belakang */
+  #laporan-cetak-pdf, .laporan-page, table {
+    position: relative;
+    background-color: transparent !important; /* Supaya watermark terlihat samar di balik tabel */
+  }
+
+  /* Watermark Cetak AETHER CODE di Belakang Teks (Opacity 12%, z-index -1) */
+  .print-watermark,
+  .print-doc-watermark,
   .watermark-print {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-35deg);
-    font-size: 4.5rem;
-    font-weight: 800;
-    color: rgba(139, 69, 19, 0.08);
-    z-index: 9999;
-    pointer-events: none;
-    white-space: nowrap;
-    font-family: 'Marcellus', Georgia, serif;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-45deg) !important;
+    font-family: 'Times New Roman', Georgia, serif !important;
+    font-size: 78pt !important;
+    font-weight: 900 !important;
+    color: rgba(0, 0, 0, 0.12) !important; /* Opasitas 12% halus, transparan di belakang teks */
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    white-space: nowrap !important;
+    pointer-events: none !important;
+    z-index: -1 !important; /* WAJIB di belakang teks dan tabel */
+    user-select: none !important;
+  }
+
+  /* Struktur Halaman Laporan Kumudowati A4 */
+  .laporan-page {
+    position: relative !important;
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: 12mm 14mm !important;
+    margin: 0 auto !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    
+    /* Border dobel klasik motif Kumudowati */
+    border: 3px double #000000 !important;
+    outline: 1px solid #000000 !important;
+    outline-offset: -6px !important;
+  }
+
+  /* Tambahkan aksen ornamen sudut batik Kumudowati di 4 sudut halaman */
+  .laporan-page::before {
+    content: "❖";
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    font-size: 14pt;
+    color: #000000;
+    line-height: 1;
+  }
+  .laporan-page::after {
+    content: "❖";
+    position: absolute;
+    bottom: 4px;
+    right: 5px;
+    font-size: 14pt;
+    color: #000000;
+    line-height: 1;
+  }
+
+  .laporan-page .corner-tr {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    font-size: 14pt;
+    color: #000000;
+    line-height: 1;
+  }
+
+  .laporan-page .corner-bl {
+    position: absolute;
+    bottom: 4px;
+    left: 5px;
+    font-size: 14pt;
+    color: #000000;
+    line-height: 1;
+  }
+
+  .laporan-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* Penataan Tabel Dokumen Resmi B&W (Clean Booktabs) */
+  .doc-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 8px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    border: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    background: transparent !important;
+  }
+
+  .doc-table th,
+  .doc-table td {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: 0.5pt solid #d1d5db !important;
+    padding: 5pt 8pt !important;
+    font-size: 8pt !important;
+    line-height: 1.35 !important;
+    color: #111827 !important;
+    vertical-align: top !important;
+  }
+
+  .doc-table thead th,
+  .doc-table th {
+    border-top: 1.2pt solid #111827 !important;
+    border-bottom: 1.2pt solid #111827 !important;
+    border-left: none !important;
+    border-right: none !important;
+    background-color: #f3f4f6 !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    padding: 5pt 8pt !important;
+  }
+
+  /* Aksen belang selang-seling baris yang sangat lembut (Clean Booktabs) */
+  .doc-table tbody tr:nth-child(even),
+  .doc-table tr:nth-child(even) {
+    background-color: #fafafa !important;
+  }
+  .doc-table tbody tr:nth-child(odd),
+  .doc-table tr:nth-child(odd) {
+    background-color: transparent !important;
+  }
+
+  .doc-label-cell {
+    font-weight: bold !important;
+    width: 22% !important;
+    color: #111827 !important;
+    background-color: transparent !important;
+  }
+
+  .doc-section-title {
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 8.5pt !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin-top: 8px !important;
+    margin-bottom: 3px !important;
+    border-bottom: 1px solid #000000 !important;
+    padding-bottom: 1px !important;
+    color: #000000 !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .doc-section-block {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* Hapus bayangan dan efek glow di cetak */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
   }
 }
-.watermark-print { display: none; }

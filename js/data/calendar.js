@@ -100,3 +100,51 @@ export function getDayInfo(y, m, d) {
   const ajYear = hy + 512;
   return { jdn, weekdayId, pasaranId, wukuId, hijri: [hd, hm, hy], ajYear };
 }
+
+export function getTanggalJawaLengkap(y, m, d) {
+  const info = getDayInfo(y, m, d);
+  const dino = HARI[info.weekdayId];
+  const pas = PASARAN[info.pasaranId];
+  const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
+  const wukuName = WUKU[info.wukuId];
+  const wukuNo = info.wukuId + 1;
+
+  const tglJawa = info.hijri[0];
+  const bulanJawa = BULAN_JAWA[info.hijri[1] - 1] || "-";
+  const tahunAJ = info.ajYear;
+  
+  const TAHUN_SIKLUS_8 = ["Alip", "Ehe", "Jimawal", "Je", "Dal", "Be", "Wawu", "Jimakir"];
+  const tahunSiklus = TAHUN_SIKLUS_8[((tahunAJ - 1955) % 8 + 8) % 8];
+  
+  const WINDU_4 = ["Kuntara (Adi)", "Sangara", "Sancaya", "Buntara (Pangsa)"];
+  const winduIndex = ((Math.floor((tahunAJ - 1955) / 8) % 4) + 4) % 4;
+  const namaWindu = WINDU_4[winduIndex];
+
+  const fullStr = `${tglJawa} ${bulanJawa} ${tahunAJ} AJ (Tahun ${tahunSiklus}, Windu ${namaWindu})`;
+  const shortStr = `${tglJawa} ${bulanJawa} ${tahunAJ} AJ`;
+
+  return {
+    tglJawa,
+    bulanJawa,
+    tahunAJ,
+    tahunSiklus,
+    namaWindu,
+    dino,
+    pas,
+    neptu,
+    wukuName,
+    wukuNo,
+    fullStr,
+    shortStr
+  };
+}
+
+if (typeof window !== 'undefined') {
+  window.getDayInfo = getDayInfo;
+  window.getTanggalJawaLengkap = getTanggalJawaLengkap;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports.getDayInfo = getDayInfo;
+  module.exports.getTanggalJawaLengkap = getTanggalJawaLengkap;
+}
+

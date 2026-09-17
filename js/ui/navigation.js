@@ -35,7 +35,30 @@ function toggleMobileMenu() {
 }
 
 function printSection(sectionId) {
-  window.print();
+  let target = document.getElementById(sectionId);
+  if ((sectionId === 'hasilKepribadianBox' || !target) && document.getElementById('laporan-cetak-pdf')) {
+    target = document.getElementById('laporan-cetak-pdf');
+  }
+  if (!target) {
+    window.print();
+    return;
+  }
+
+  // Tag body and target element for specialized print styling
+  document.querySelectorAll('.print-target-active').forEach(el => el.classList.remove('print-target-active'));
+  document.body.classList.add('print-mode-active');
+  target.classList.add('print-target-active');
+
+  // Trigger print
+  setTimeout(() => {
+    window.print();
+  }, 50);
+
+  // Cleanup after print dialog closes
+  window.addEventListener('afterprint', () => {
+    document.body.classList.remove('print-mode-active');
+    target.classList.remove('print-target-active');
+  }, { once: true });
 }
 
 if (typeof window !== 'undefined') {
