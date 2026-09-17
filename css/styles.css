@@ -34,35 +34,48 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(15, 17, 23, 0.92);
+  background: rgba(15, 17, 23, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(212, 175, 55, 0.25);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  padding: 0.6rem 1.5rem;
+  padding: 0.4rem 0.75rem;
 }
 
 .nav-container {
   max-width: 1440px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .header-nav {
+    padding: 0.55rem 1.25rem;
+  }
+  .nav-container {
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
 }
 
 /* Brand Section */
 .brand-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   text-decoration: none;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .brand-logo {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,44 +83,65 @@
   background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(26, 18, 9, 0.8) 100%);
   border: 1px solid rgba(212, 175, 55, 0.5);
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+  flex-shrink: 0;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
 }
 
 .brand-title {
   font-family: 'Cinzel', 'Cinzel Decorative', Georgia, serif;
-  font-size: 1.18rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1.3;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
   display: inline-block;
   background: linear-gradient(135deg, #FFF0C2 0%, #D4AF37 50%, #AA820A 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  padding-top: 2px;
-  padding-bottom: 1px;
-}
-
-.brand-subtitle {
-  font-size: 0.68rem;
-  color: #a8a29e;
-  letter-spacing: 0.04em;
-  margin-top: 1px;
-  line-height: 1.25;
   white-space: nowrap;
 }
 
-/* Nav Menu Items */
+@media (min-width: 640px) {
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+  }
+  .brand-title {
+    font-size: 1.18rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+.brand-subtitle {
+  font-size: 0.65rem;
+  color: #a8a29e;
+  letter-spacing: 0.03em;
+  margin-top: 1px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Nav Menu Items & Scrollbar Utilities */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .nav-center-scroll {
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-center-scroll::-webkit-scrollbar {
@@ -121,24 +155,26 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  white-space: nowrap;
 }
 
 .nav-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.45rem 0.75rem;
-  font-size: 0.82rem;
+  padding: 0.42rem 0.7rem;
+  font-size: 0.8rem;
   font-weight: 500;
   color: #d6d3d1;
   text-decoration: none;
   border-radius: 8px;
   transition: all 0.2s ease;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-link svg, .nav-link i {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   opacity: 0.8;
 }
 
@@ -604,6 +640,100 @@
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     margin-bottom: 6px !important;
+  }
+
+  /* ========================================================================= */
+  /* TEMA ESTETIKA KERTAS KUNO (ROYAL PARCHMENT / HERITAGE KERATON)            */
+  /* ========================================================================= */
+  body.print-theme-parchment {
+    background-color: #fdf6e2 !important;
+    color: #2b1d0c !important;
+  }
+
+  body.print-theme-parchment #laporan-cetak-pdf,
+  #laporan-cetak-pdf.theme-parchment {
+    background-color: #fdf6e2 !important;
+    color: #2b1d0c !important;
+  }
+
+  body.print-theme-parchment #laporan-cetak-pdf *,
+  #laporan-cetak-pdf.theme-parchment * {
+    color: #2b1d0c !important;
+  }
+
+  body.print-theme-parchment .laporan-page,
+  #laporan-cetak-pdf.theme-parchment .laporan-page {
+    background-color: #fdf6e2 !important;
+    border: 3px double #8c6224 !important;
+    outline: 1.5px solid #d4af37 !important;
+    outline-offset: -6px !important;
+    color: #2b1d0c !important;
+  }
+
+  body.print-theme-parchment .laporan-page::before,
+  body.print-theme-parchment .laporan-page::after,
+  body.print-theme-parchment .laporan-page .corner-tr,
+  body.print-theme-parchment .laporan-page .corner-bl,
+  #laporan-cetak-pdf.theme-parchment .laporan-page::before,
+  #laporan-cetak-pdf.theme-parchment .laporan-page::after,
+  #laporan-cetak-pdf.theme-parchment .laporan-page .corner-tr,
+  #laporan-cetak-pdf.theme-parchment .laporan-page .corner-bl {
+    color: #8c6224 !important;
+  }
+
+  body.print-theme-parchment .print-watermark,
+  body.print-theme-parchment .print-doc-watermark,
+  body.print-theme-parchment .watermark-print,
+  #laporan-cetak-pdf.theme-parchment .print-watermark {
+    color: rgba(140, 98, 36, 0.10) !important;
+  }
+
+  body.print-theme-parchment .doc-header-kop,
+  #laporan-cetak-pdf.theme-parchment .doc-header-kop {
+    border-bottom: 2px solid #8c6224 !important;
+  }
+
+  body.print-theme-parchment .doc-section-title,
+  #laporan-cetak-pdf.theme-parchment .doc-section-title {
+    color: #8c6224 !important;
+    border-bottom: 1.5px solid #8c6224 !important;
+  }
+
+  body.print-theme-parchment .page-inner-header,
+  body.print-theme-parchment .page-inner-footer,
+  #laporan-cetak-pdf.theme-parchment .page-inner-header,
+  #laporan-cetak-pdf.theme-parchment .page-inner-footer {
+    border-color: #8c6224 !important;
+    color: #5a3e1b !important;
+  }
+
+  body.print-theme-parchment .doc-table thead th,
+  body.print-theme-parchment .doc-table th,
+  #laporan-cetak-pdf.theme-parchment .doc-table thead th,
+  #laporan-cetak-pdf.theme-parchment .doc-table th {
+    background-color: #f5eccf !important;
+    color: #2b1d0c !important;
+    border-top: 1.5pt solid #8c6224 !important;
+    border-bottom: 1.5pt solid #8c6224 !important;
+  }
+
+  body.print-theme-parchment .doc-table td,
+  #laporan-cetak-pdf.theme-parchment .doc-table td {
+    color: #2b1d0c !important;
+    border-bottom: 0.5pt solid rgba(140, 98, 36, 0.35) !important;
+  }
+
+  body.print-theme-parchment .doc-table tbody tr:nth-child(even),
+  body.print-theme-parchment .doc-table tr:nth-child(even),
+  #laporan-cetak-pdf.theme-parchment .doc-table tbody tr:nth-child(even),
+  #laporan-cetak-pdf.theme-parchment .doc-table tr:nth-child(even) {
+    background-color: rgba(212, 175, 55, 0.08) !important;
+  }
+
+  body.print-theme-parchment .doc-label-cell,
+  #laporan-cetak-pdf.theme-parchment .doc-label-cell {
+    color: #3e2710 !important;
+    font-weight: bold !important;
   }
 
   /* Hapus bayangan dan efek glow di cetak */

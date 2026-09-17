@@ -7,16 +7,91 @@
 (function (root) {
   // 1. MASTER KARAKTER DASAR (1 s.d. 9 Berdasarkan Penjumlahan Seluruh Digit Tanggal Lahir)
   const MASTER_KARAKTER_DASAR = {
-    1: { tipe: "LEADER", ringkasan: "Pemimpin berorientasi aksi, pragmatis, cepat, fokus hasil dan materi, namun lemah dalam pembinaan serta enggan dikritik.", kekuatan: "• Tergesa-gesa & tidak sabaran\n• To The Point, blak-blakan\n• Cepat marah tapi tak dipendam\n• Jiwa leadership besar\n• Egosentris & suka cara baru\n• Jago jualan & melobby\n• Pragmatis & orientasi materi", kelemahan: "Tidak suka dikritik / dibantah, gengsi besar", negosiasi: "Disanjung, diperhatikan dan dilayani", sikap: "Belajar leadership, lebih sabar", motto: "Aku datang... aku buktikan... aku menang!" },
-    2: { tipe: "DIPLOMAT", ringkasan: "Sosok konvensional, santun, cinta damai, setia dan tekun di balik layar, namun ragu mengambil keputusan serta takut risiko/perubahan.", kekuatan: "• Konvensional & tradisional\n• Halus, sopan santun\n• Peka & religius/filosofis\n• Bermain di balik layar\n• Tekun & setia sampai akhir", kelemahan: "Sulit membuat keputusan, takut perubahan & risiko", negosiasi: "Disanjung, dilayani, dibuka paradigma berpikirnya", sikap: "Berani tampil & ambil risiko", motto: "Hidup untuk dinikmati, mengapa harus berubah?" },
-    3: { tipe: "ANALIS", ringkasan: "Analitis, teliti, terstruktur, berorientasi pada data dan perencanaan matang, namun cenderung kaku dan perfeksionis berlebihan.", kekuatan: "• Analitis & terstruktur\n• Teliti dalam detail\n• Perencana yang matang\n• Objektif & logis", kelemahan: "Kaku, overthinking, perfeksionis berlebihan", negosiasi: "Disajikan data akurat, logika & fakta jelas", sikap: "Lebih fleksibel & berani mengambil aksi cepat", motto: "Rencana yang matang adalah kunci kemenangan mutlak." },
-    4: { tipe: "STRATEGIST", ringkasan: "Strategis, visioner, perencana jangka panjang, taktis, namun terkadang keras kepala dalam mempertahankan pandangannya.", kekuatan: "• Visi jauh ke depan\n• Taktis & penuh perhitungan\n• Pengambil keputusan yang tegas", kelemahan: "Keras kepala, kurang fleksibel pada perubahan mendadak", negosiasi: "Diskusikan visi jangka panjang & keuntungan strategis", sikap: "Lebih terbuka terhadap masukan taktis di lapangan", motto: "Strategi yang tepat mengalahkan kekuatan apa pun." },
-    5: { tipe: "EXPLORER", ringkasan: "Dinamis, menyukai kebebasan, petualang, adaptif terhadap perubahan, namun kurang disiplin dan sulit terikat rutinitas.", kekuatan: "• Dinamis & fleksibel\n• Suka tantangan & petualangan\n• Cepat beradaptasi\n• Berjiwa bebas", kelemahan: "Kurang disiplin, mudah bosan, tidak suka aturan kaku", negosiasi: "Diberi kebebasan, hindari birokrasi rumit", sikap: "Tingkatkan komitmen & disiplin waktu", motto: "Hidup adalah petualangan tanpa batas!" },
-    6: { tipe: "PROTECTOR", ringkasan: "Penuh kasih sayang, bertanggung jawab, pengabdi keluarga/kelompok, pelindung yang setia, namun sering mengorbankan diri sendiri.", kekuatan: "• Penyayang & perhatian\n• Bertanggung jawab tinggi\n• Setia kawan & keluarga\n• Pemaaf & penolong", kelemahan: "Terlalu emosional, sulit menolak permintaan orang lain", negosiasi: "Pendekatan personal yang hangat & penuh empati", sikap: "Belajar berkata 'tidak' untuk melindungi diri sendiri", motto: "Kebahagiaan sejati adalah saat bisa melindungi sesama." },
-    7: { tipe: "VISIONARY", ringkasan: "Intuitif, spiritual, memiliki pandangan jauh ke depan, bijaksana, namun kadang tampak misterius dan sulit ditebak.", kekuatan: "• Intuitif & tajam perasaannya\n• Berwawasan luas & spiritual\n• Bijaksana dalam memandang hidup", kelemahan: "Terlalu idealis, sering hidup dalam angan-angan", negosiasi: "Pendekatan filosofis, mendalam & bermakna", sikap: "Bumikan gagasan agar realistis & bisa dieksekusi", motto: "Melihat melampaui batas yang tampak oleh mata." },
-    8: { tipe: "EXECUTER", ringkasan: "Pekerja keras, gigih, berorientasi hasil nyata, tangguh menghadapi tekanan, namun bisa menjadi keras kepala dan materialistis.", kekuatan: "• Pekerja keras & gigih\n• Tangguh di bawah tekanan\n• Sangat produktif\n• Disiplin & terarah", kelemahan: "Keras kepala, workaholic, materialistis", negosiasi: "Berikan hasil konkret, keuntungan & efisiensi", sikap: "Seimbangkan kerja keras dengan kehidupan batin & sosial", motto: "Hasil nyata berbicara lebih keras daripada kata-kata." },
-    9: { tipe: "HUMANIST", ringkasan: "Dermawan, berjiwa sosial tinggi, pemaaf, toleran, peduli pada sesama, namun rentan dimanfaatkan dan kurang tegas dalam urusan finansial.", kekuatan: "• Berjiwa sosial & dermawan\n• Toleran & pemaaf\n• Sangat peduli pada sesama\n• Berhati tulus", kelemahan: "Mudah dimanfaatkan, kurang tegas, pelupa urusan pribadi", negosiasi: "Gugah sisi kemanusiaan & kepedulian sosialnya", sikap: "Tingkatkan ketegasan & batasan diri yang sehat", motto: "Hidup berarti memberi dan bermanfaat bagi semesta." }
+    1: {
+      tipe: "Leader",
+      ringkasan: "Pemimpin berorientasi aksi, pragmatis, cepat, fokus hasil dan materi, namun lemah dalam pembinaan serta enggan dikritik.",
+      kekuatan: "• Tergesa-gesa dan tidak sabaran\n• To The Point, blak-blakan / terbuka\n• Cepat marah tetapi suka damai (kemarahannya tidak dipendam)\n• Aura leadership besar, tetapi lemah dalam pembinaan\n• Egosentris (egois), senang tampil di depan\n• Suka dengan sistem / cara-cara yang baru\n• Jago menjual dan jago melobby\n• Praktis, pragmatis, orientasi ke materi\n• Punya prinsip yang keras, tidak bisa bekerja di bawah orang lain",
+      kelemahan: "Tidak suka dikritik / dilampaui / dibantah, gengsi besar",
+      negosiasi: "Disanjung, diperhatikan dan dilayani",
+      sikap: "Belajar tentang leadership, lebih sabar dan mau menerima pendapat / saran orang lain",
+      motto: "Aku datang... aku buktikan... aku menang! Dan terbukti dalam bentuk materi."
+    },
+    2: {
+      tipe: "Diplomat",
+      ringkasan: "Sosok konvensional, santun, cinta damai, setia dan tekun di balik layar, namun ragu mengambil keputusan serta takut risiko/perubahan.",
+      kekuatan: "• Konvensional, tradisional\n• Halus, sopan santun, memelihara etika\n• Sangat sulit untuk membuat keputusan\n• Peka dengan situasi sekitarnya\n• Suka dengan hal-hal yang filosofis dan religius\n• Bermain di balik layar\n• Suka damai, tidak suka keributan dan mencampuri urusan orang lain\n• Tekun, bisa melakukan hal membosankan secara berulang-ulang\n• Loyalitas, setia sampai akhir",
+      kelemahan: "Sulit membuat keputusan, takut perubahan, kurang berani mengambil risiko",
+      negosiasi: "Disanjung, dilayani, diperhatikan dan dibuka paradigma berpikirnya",
+      sikap: "Berani tampil dan lebih berani mengambil risiko",
+      motto: "Hidup adalah untuk dinikmati, masih bisa enak-enak begini, mengapa harus berubah?"
+    },
+    3: {
+      tipe: "Analisis",
+      ringkasan: "Sosok perfeksionis estetis, analitis dan kritis, gemar menolong namun teoritis dan sangat sensitif terhadap perhatian serta penghargaan.",
+      kekuatan: "• Perfeksionis, sangat menyukai keindahan/estetika\n• Senang menolong, penasihat yang baik\n• Analitis, teliti, kritis, dan berorientasi data\n• Sering mengandalkan teori dan konseptual\n• Sangat sensitif, butuh perhatian dan penghargaan tinggi\n• Menjaga gengsi dan penampilan luar\n• Terkadang ragu dalam eksekusi praktis di lapangan",
+      kelemahan: "Sensitif, terlalu teoritis, mudah tersinggung jika kurang dihargai",
+      negosiasi: "Diberi apresiasi tulus, diakui karya dan ketelitiannya",
+      sikap: "Lebih praktis, kurangi overthinking, dan berani eksekusi langsung",
+      motto: "Segala sesuatu harus tertata sempurna, indah, dan akurat."
+    },
+    4: {
+      tipe: "Realis",
+      ringkasan: "Praktis, realistis, berpijak pada kenyataan dan efisiensi tindakan.",
+      kekuatan: "• Berpijak pada kenyataan (realistis)\n• Sangat menghargai efisiensi dan waktu\n• Solutif dalam menghadapi kendala teknis\n• Tidak mudah percaya pada hal abstrak tanpa bukti nyata",
+      kelemahan: "Kurang memiliki visi jangka panjang yang imajinatif",
+      negosiasi: "Berikan bukti nyata, data empiris, dan hasil konkret",
+      sikap: "Buka diri terhadap inovasi dan pemikiran baru di luar kebiasaan",
+      motto: "Bukti nyata di depan mata lebih berarti daripada sejuta teori."
+    },
+    5: {
+      tipe: "Adventurer",
+      ringkasan: "Dinamis, menyukai kebebasan, petualang, adaptif terhadap perubahan.",
+      kekuatan: "• Dinamis, energik, dan tidak betah diam\n• Menyukai petualangan dan tantangan baru\n• Cepat beradaptasi dengan lingkungan asing\n• Berjiwa bebas dan kreatif",
+      kelemahan: "Mudah bosan, kurang disiplin pada rutinitas ketat",
+      negosiasi: "Berikan keleluasaan gerak dan hindari aturan birokrasi kaku",
+      sikap: "Tingkatkan ketekunan dan fokus pada satu tujuan akhir",
+      motto: "Hidup adalah kebebasan untuk menjelajah dan menemukan."
+    },
+    6: {
+      tipe: "Idealis",
+      ringkasan: "Memiliki cita-cita luhur, berpegang teguh pada prinsip, nilai moral, dan keyakinan.",
+      kekuatan: "• Memiliki cita-cita luhur dan standar moral tinggi\n• Setia pada prinsip hidup dan keyakinan\n• Membela kebenaran dengan penuh semangat\n• Memiliki integritas batin yang kuat",
+      kelemahan: "Terkadang terlalu kaku, sulit berkompromi dengan realitas praktis",
+      negosiasi: "Gugah nilai etika, moral, dan misi luhur perjuangannya",
+      sikap: "Lebih fleksibel memahami sudut pandang orang lain tanpa kehilangan prinsip",
+      motto: "Prinsip hidup dan kebenaran adalah segalanya."
+    },
+    7: {
+      tipe: "Edukatif",
+      ringkasan: "Berorientasi pada pembelajaran, bimbingan, pencerahan, dan penyebaran ilmu pengetahuan.",
+      kekuatan: "• Suka membagikan ilmu, membimbing, dan mencerahkan\n• Sabar dalam mendidik dan mengarahkan sesama\n• Berwawasan luas dan gemar membaca/belajar\n• Menjadi rujukan nasihat bagi orang lain",
+      kelemahan: "Terkadang tampak menggurui atau terlalu banyak bicara teori",
+      negosiasi: "Hargai pengetahuannya dan ajak berdiskusi secara bijak",
+      sikap: "Imbangi teori dengan praktik nyata yang membumi",
+      motto: "Ilmu yang bermanfaat adalah pelita bagi kehidupan."
+    },
+    8: {
+      tipe: "Eksekutor",
+      ringkasan: "Pekerja keras, gigih, berorientasi hasil nyata, tangguh menghadapi tekanan eksekusi.",
+      kekuatan: "• Pekerja keras yang sangat tangguh di bawah tekanan\n• Berorientasi pada hasil nyata dan penyelesaian tugas\n• Disiplin, fokus, dan pantang menyerah\n• Handal dalam menggerakkan operasional",
+      kelemahan: "Keras kepala, terkadang mengabaikan aspek perasaan orang lain",
+      negosiasi: "Berikan target yang jelas, wewenang, dan kejelasan hasil",
+      sikap: "Tingkatkan empati dan kelembutan dalam berinteraksi sosial",
+      motto: "Kerja tuntas, hasil nyata, tanpa banyak alasan."
+    },
+    9: {
+      tipe: "Entertainer",
+      ringkasan: "Komunikatif, ekspresif, ceria, memiliki daya tarik sosial dan menghibur sesama.",
+      kekuatan: "• Komunikatif, ekspresif, dan ceria\n• Memiliki daya tarik sosial yang kuat di tengah keramaian\n• Mampu mencairkan suasana dan menghibur orang lain\n• Mudah diterima di berbagai kalangan",
+      kelemahan: "Mudah terdistraksi, kurang sabar dalam hal detail teknis",
+      negosiasi: "Gunakan pendekatan yang menyenangkan, santai, dan penuh antusiasme",
+      sikap: "Tingkatkan kedisiplinan dan ketelitian dalam mengelola urusan penting",
+      motto: "Hidup harus membawa keceriaan dan kebahagiaan bagi sesama."
+    }
   };
+  if (typeof window !== 'undefined') {
+    window.MASTER_KARAKTER_DASAR = MASTER_KARAKTER_DASAR;
+  }
 
   // 2. MASTER DINA (WATAK HARI LAHIR MASEHI: SENIN s.d. MINGGU)
   const MASTER_DINA = {
@@ -231,27 +306,58 @@
     "silit": "Silit ini pintar mencari namun menampung dari buangannya waduk. Namun membuangnya juga tetap."
   };
 
-  // 8. FUNGSI KALKULATOR & LOOKUP
+  // 8. MASTER PAKARTI BADAN (FILOSOFI ANGGOTA TUBUH)
+  const MASTER_PAKARTI_BADAN = {
+    "dubur": "Dubur itu organ yang berfungsi untuk menahan dan mengeluarkan sisa; maknanya, orangnya memiliki watak yang sangat tertutup, pandai menyimpan rahasia rapat-rapat, namun kadang bisa sangat tegas/tertutup pendiriannya.",
+    "cangkem": "Cangkem itu alat untuk berbicara dan menyampaikan isi perut; maknanya, orangnya pandai berucap, komunikatif, lancar dalam pergaulan, namun harus berhati-hati agar tidak asal bicara (ceplas-ceplos).",
+    "silit": "Silit itu bagian pembuangan yang sifatnya mengunci dan menyaring; maknanya, orangnya sangat hati-hati, waspada, pandai menjaga diri dari hal-hal tersembunyi, serta ulet dalam menyimpan prinsip hidup.",
+    "tangan": "Tangan itu alat untuk bekerja, meraih, dan berbuat; maknanya, orangnya bertipe pekerja keras, cekatan, terampil, dan menggantungkan kemajuan hidupnya dari hasil usaha dan keringatnya sendiri.",
+    "tungkak": "Tungkak itu bagian bawah yang menjadi tumpuan seluruh berat badan; maknanya, orangnya memiliki pendirian yang sangat kokoh, tahan banting, tahan menghadapi tekanan hidup, dan memiliki prinsip yang teguh.",
+    "mata": "Mata itu alat untuk melihat dan mengamati keadaan; maknanya, orangnya memiliki ketajaman insting, jeli melihat peluang, waspada terhadap lingkungan, dan memiliki pandangan hidup yang luas/visioner.",
+    "kuping": "Kuping itu alat untuk mendengar suara dari luar; maknanya, orangnya pendengar yang baik, peka terhadap informasi atau nasihat orang lain, serta mudah memahami situasi sosial di sekitarnya.",
+    "irung": "Irung itu alat untuk bernapas dan mencium bau; maknanya, orangnya memiliki kepekaan batin atau intuisi yang tajam, harga diri yang tinggi, serta cepat tanggap terhadap gelagat atau perubahan situasi."
+  };
+
+  if (typeof window !== 'undefined') {
+    window.MASTER_PAKARTI_BADAN = MASTER_PAKARTI_BADAN;
+    window.MASTER_PAKARTI_REJEKI = MASTER_PAKARTI_REJEKI;
+  }
+
+  // 9. FUNGSI KALKULATOR & LOOKUP
   /**
    * hitungKarakterDasar
    * Menghitung Karakter Dasar (1 s.d. 9) berdasarkan penjumlahan seluruh digit Tanggal + Bulan + Tahun Masehi.
-   * Contoh: 1 Mei 1986 -> '01/05/1986' -> 1 + 5 + 1 + 9 + 8 + 6 = 30 -> 30 % 9 = 3 (Tipe: ANALIS).
+   * Contoh: 1 Mei 1986 -> '01/05/1986' -> 1 + 5 + 1 + 9 + 8 + 6 = 30 -> 30 % 9 = 3 (Tipe: Analisis).
    * Jika sisa === 0, maka no_karakter adalah 9.
    */
   const hitungKarakterDasar = function (tglStr, blnStr, thnStr) {
     let combined = `${tglStr}${blnStr !== undefined ? blnStr : ''}${thnStr !== undefined ? thnStr : ''}`.replace(/\D/g, '');
-    let sum = combined.split('').map(Number).reduce((a, b) => a + b, 0);
+    let digits = combined.split('').map(Number);
+    let sum = digits.reduce((a, b) => a + b, 0);
     let sisa = sum % 9;
     let noKarakter = (sisa === 0) ? 9 : sisa;
-    const lookup = (typeof MASTER_KARAKTER_DASAR !== 'undefined') ? MASTER_KARAKTER_DASAR : (root.MASTER_KARAKTER_DASAR || {});
+    const lookup = (typeof MASTER_KARAKTER_DASAR !== 'undefined') ? MASTER_KARAKTER_DASAR : (root.MASTER_KARAKTER_DASAR || (typeof window !== 'undefined' ? window.MASTER_KARAKTER_DASAR : {}));
     return {
       totalSum: sum,
+      formulaStr: digits.join(' + '),
       noKarakter: noKarakter,
       data: lookup[noKarakter] || {
         tipe: "-", ringkasan: "-", kekuatan: "-", kelemahan: "-", negosiasi: "-", sikap: "-", motto: "-"
       }
     };
   };
+
+  const getPakartiBadanArtinya = function (namaBadan) {
+    if (!namaBadan) return "-";
+    let key = namaBadan.trim().toLowerCase();
+    const lookup = (typeof MASTER_PAKARTI_BADAN !== 'undefined') ? MASTER_PAKARTI_BADAN : (root.MASTER_PAKARTI_BADAN || (typeof window !== 'undefined' ? window.MASTER_PAKARTI_BADAN : {}));
+    return lookup[key] || namaBadan;
+  };
+
+  if (typeof window !== 'undefined') {
+    window.hitungKarakterDasar = hitungKarakterDasar;
+    window.getPakartiBadanArtinya = getPakartiBadanArtinya;
+  }
 
   function parseAksaraFromWord(word) {
     if (!word || typeof word !== 'string') {
@@ -525,6 +631,8 @@
     if (!item) return null;
     const rejekiKey = (item.rejeki || '').toLowerCase().trim();
     const artiRejeki = MASTER_PAKARTI_REJEKI[rejekiKey] || '-';
+    const badanKey = (item.badan || '').toLowerCase().trim();
+    const artiBadan = MASTER_PAKARTI_BADAN[badanKey] || getPakartiBadanArtinya(item.badan) || '-';
 
     return {
       dino: item.dino,
@@ -532,7 +640,8 @@
       pakarti_rejeki: item.rejeki,
       pakarti_badan: item.badan,
       pakaryan: item.pakaryan,
-      arti_rejeki: artiRejeki
+      arti_rejeki: artiRejeki,
+      arti_badan: artiBadan
     };
   };
 
@@ -581,8 +690,10 @@
   root.MASTER_PALENGGAHAN = MASTER_PALENGGAHAN;
   root.MASTER_PEKERJAAN = MASTER_PEKERJAAN;
   root.MASTER_PAKARTI_REJEKI = MASTER_PAKARTI_REJEKI;
+  root.MASTER_PAKARTI_BADAN = MASTER_PAKARTI_BADAN;
 
   root.hitungKarakterDasar = hitungKarakterDasar;
+  root.getPakartiBadanArtinya = getPakartiBadanArtinya;
   root.getAksaraFromChar = getAksaraFromChar;
   root.parseAksaraFromWord = parseAksaraFromWord;
   root.analisisPalenggahan = analisisPalenggahan;
@@ -604,7 +715,9 @@
       MASTER_PALENGGAHAN,
       MASTER_PEKERJAAN,
       MASTER_PAKARTI_REJEKI,
+      MASTER_PAKARTI_BADAN,
       hitungKarakterDasar,
+      getPakartiBadanArtinya,
       getAksaraFromChar,
       parseAksaraFromWord,
       analisisPalenggahan,
