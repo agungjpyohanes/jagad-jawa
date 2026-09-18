@@ -190,6 +190,95 @@
   box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
 }
 
+/* ========================================================================= */
+/* NAVBAR DROPDOWN & ROYAL MENU GROUPING                                     */
+/* ========================================================================= */
+.nav-dropdown-group {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown-trigger {
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  min-width: 250px;
+  background: rgba(14, 18, 28, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 12px;
+  padding: 0.4rem;
+  box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.75), 0 0 18px rgba(212, 175, 55, 0.15);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* Hover support on desktop */
+@media (hover: hover) {
+  .nav-dropdown-group:hover .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Click/active toggle support */
+.nav-dropdown-menu.is-open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.nav-sublink {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.48rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #d6d3d1;
+  text-decoration: none;
+  transition: all 0.18s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.nav-sublink:hover {
+  background: rgba(212, 175, 55, 0.14);
+  color: #fef08a;
+  border-color: rgba(212, 175, 55, 0.25);
+  transform: translateX(2px);
+}
+
+.nav-sublink.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(146, 64, 14, 0.3) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  color: #fef08a !important;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.nav-dropdown-trigger.active {
+  color: #fef08a;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.25) 0%, rgba(146, 64, 14, 0.3) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+}
+
 /* Audio Player Button */
 .nav-audio-btn {
   display: inline-flex;
