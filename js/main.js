@@ -549,7 +549,7 @@ const DINO_IJO_LIST = [
   ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
   ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
   ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
-  ["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
+  ["Sabtu","Legi","Bala"],["Senin","Pon","Wugu"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
   ["Jumat","Pahing","Wugu"],["Senin","Kliwon","Wayang"],["Sabtu","Kliwon","Wayang"],
   ["Minggu","Legi","Kulawu"],["Selasa","Pon","Kulawu"],["Rabu","Wage","Kulawu"],
   ["Jumat","Legi","Kulawu"],["Sabtu","Pahing","Kulawu"],["Senin","Wage","Dukut"],
@@ -638,9 +638,17 @@ function isDinoIjo(a, b, c) {
 }
 
 function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '') {
-  const key = normDinoWukuKey(a, b, c);
-  const isIjo = DINO_IJO_SET.has(key);
-  const isGede = DINO_GEDE_SET.has(key);
+  let isIjo = false;
+  let isGede = false;
+  if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function') {
+    const evalRes = window.evaluateDino(a, b, c);
+    isIjo = evalRes.isIjo;
+    isGede = evalRes.isGede;
+  } else {
+    const key = normDinoWukuKey(a, b, c);
+    isIjo = DINO_IJO_SET.has(key);
+    isGede = DINO_GEDE_SET.has(key);
+  }
 
   const status = isIjo ? 'ijo' : 'abang';
   const bottomBg = isIjo ? '#16a34a' : '#dc2626'; // Hijau Solid vs Dino Abang
@@ -748,6 +756,21 @@ function getKeteranganKodeDetail(code) {
   return list;
 }
 
+function evaluateDino(wuku, dino, pasaran) {
+  if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function' && window.evaluateDino !== evaluateDino) {
+    return window.evaluateDino(wuku, dino, pasaran);
+  }
+  const key = normDinoWukuKey(wuku, dino, pasaran);
+  const isGede = DINO_GEDE_SET.has(key);
+  const isIjo = DINO_IJO_SET.has(key);
+  return {
+    isGede,
+    isIjo,
+    isAbang: !isIjo,
+    baseColor: isIjo ? 'green' : 'red'
+  };
+}
+
 window.LIBUR_NASIONAL = LIBUR_NASIONAL;
 window.getLiburNasional = getLiburNasional;
 window.checkDinoGede = checkDinoGede;
@@ -761,6 +784,7 @@ window.normDinoWukuKey = normDinoWukuKey;
 window.isDinoGede = isDinoGede;
 window.isDinoIjo = isDinoIjo;
 window.getDinoWarnaStatus = getDinoWarnaStatus;
+window.evaluateDino = evaluateDino;
 
 
 // ─── Data Kepribadian & Faalakiah ─────────────────────────────────────────

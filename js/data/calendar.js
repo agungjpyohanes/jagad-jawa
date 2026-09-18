@@ -310,7 +310,7 @@ export const DINO_IJO_LIST = [
   ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
   ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
   ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
-  ["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
+  ["Sabtu","Legi","Bala"],["Senin","Pon","Wugu"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
   ["Jumat","Pahing","Wugu"],["Senin","Kliwon","Wayang"],["Sabtu","Kliwon","Wayang"],
   ["Minggu","Legi","Kulawu"],["Selasa","Pon","Kulawu"],["Rabu","Wage","Kulawu"],
   ["Jumat","Legi","Kulawu"],["Sabtu","Pahing","Kulawu"],["Senin","Wage","Dukut"],
@@ -454,6 +454,18 @@ export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, c
   };
 }
 
+export function evaluateDino(wuku, dino, pasaran) {
+  const key = normDinoWukuKey(wuku, dino, pasaran);
+  const isGede = DINO_GEDE_SET.has(key);
+  const isIjo = DINO_IJO_SET.has(key);
+  return {
+    isGede,
+    isIjo,
+    isAbang: !isIjo,
+    baseColor: isIjo ? 'green' : 'red'
+  };
+}
+
 export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
   const cell = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
   const code = cell[0] || "";
@@ -538,6 +550,7 @@ if (typeof window !== 'undefined') {
   window.isDinoGede = isDinoGede;
   window.isDinoIjo = isDinoIjo;
   window.getDinoWarnaStatus = getDinoWarnaStatus;
+  window.evaluateDino = evaluateDino;
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports.HARI = HARI;
@@ -568,6 +581,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports.isDinoGede = isDinoGede;
   module.exports.isDinoIjo = isDinoIjo;
   module.exports.getDinoWarnaStatus = getDinoWarnaStatus;
+  module.exports.evaluateDino = evaluateDino;
 }
 
 

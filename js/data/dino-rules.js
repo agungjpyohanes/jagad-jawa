@@ -65,7 +65,7 @@ export const DINO_IJO_LIST = [
   ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
   ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
   ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
-  ["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
+  ["Sabtu","Legi","Bala"],["Senin","Pon","Wugu"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
   ["Jumat","Pahing","Wugu"],["Senin","Kliwon","Wayang"],["Sabtu","Kliwon","Wayang"],
   ["Minggu","Legi","Kulawu"],["Selasa","Pon","Kulawu"],["Rabu","Wage","Kulawu"],
   ["Jumat","Legi","Kulawu"],["Sabtu","Pahing","Kulawu"],["Senin","Wage","Dukut"],
@@ -244,6 +244,21 @@ export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, c
   };
 }
 
+export function evaluateDino(wuku, dino, pasaran) {
+  if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function' && window.evaluateDino !== evaluateDino) {
+    return window.evaluateDino(wuku, dino, pasaran);
+  }
+  const key = normDinoWukuKey(wuku, dino, pasaran);
+  const isGede = DINO_GEDE_SET.has(key);
+  const isIjo = DINO_IJO_SET.has(key);
+  return {
+    isGede,
+    isIjo,
+    isAbang: !isIjo,
+    baseColor: isIjo ? 'green' : 'red'
+  };
+}
+
 // 6. Global Browser & CommonJS Export
 if (typeof window !== 'undefined') {
   window.STANDARD_WUKU_LIST = STANDARD_WUKU_LIST;
@@ -256,6 +271,7 @@ if (typeof window !== 'undefined') {
   window.isDinoGede = isDinoGede;
   window.isDinoIjo = isDinoIjo;
   window.getDinoWarnaStatus = getDinoWarnaStatus;
+  window.evaluateDino = evaluateDino;
   window.DINO_RULES = {
     STANDARD_WUKU_LIST,
     DINO_GEDE_LIST,
@@ -266,7 +282,8 @@ if (typeof window !== 'undefined') {
     DINO_LOOKUP_MAP,
     isDinoGede,
     isDinoIjo,
-    getDinoWarnaStatus
+    getDinoWarnaStatus,
+    evaluateDino
   };
 }
 
@@ -281,6 +298,7 @@ if (typeof module !== 'undefined' && module.exports) {
     DINO_LOOKUP_MAP,
     isDinoGede,
     isDinoIjo,
-    getDinoWarnaStatus
+    getDinoWarnaStatus,
+    evaluateDino
   };
 }
