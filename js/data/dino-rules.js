@@ -8,15 +8,23 @@
  * - Primbon Pawukon Keraton Surakarta & Ngayogyakarta Hadiningrat
  */
 
+// 0. Daftar Baku 30 Wuku Jawa (Sinta ngantos Watugunung)
+export const STANDARD_WUKU_LIST = [
+  "Sinta","Landep","Wukir","Kurantil","Tolu","Gumbreg","Warigalit","Warigagung",
+  "Julungwangi","Sungsang","Galungan","Kuningan","Langkir","Mandasiya","Julungpujut","Pahang",
+  "Kuruwelut","Marakeh","Tambir","Medangkungan","Maktal","Wuye","Manahil","Prangbakat","Bala",
+  "Wugu","Wayang","Kulawu","Dukut","Watugunung"
+];
+
 // 1. Data Master Resmi Dino Gede (71 Pasangan Dino, Pasaran, Wuku)
 export const DINO_GEDE_LIST = [
-  ["Selasa","Wage","Sinto"],["Kamis","Legi","Sinto"],["Jumat","Pahing","Sinto"],
+  ["Selasa","Wage","Sinta"],["Kamis","Legi","Sinta"],["Jumat","Pahing","Sinta"],
   ["Rabu","Pahing","Landep"],["Sabtu","Kliwon","Landep"],["Selasa","Pon","Wukir"],
   ["Jumat","Legi","Wukir"],["Senin","Wage","Kurantil"],["Kamis","Pahing","Kurantil"],
   ["Minggu","Kliwon","Tolu"],["Rabu","Pon","Tolu"],["Sabtu","Legi","Tolu"],
   ["Selasa","Wage","Gumbreg"],["Kamis","Legi","Gumbreg"],["Jumat","Pahing","Gumbreg"],
-  ["Rabu","Pahing","Warigalit"],["Sabtu","Kliwon","Warigalit"],["Selasa","Pon","Wariagung"],
-  ["Jumat","Legi","Wariagung"],["Senin","Wage","Julungwangi"],["Kamis","Pahing","Julungwangi"],
+  ["Rabu","Pahing","Warigalit"],["Sabtu","Kliwon","Warigalit"],["Selasa","Pon","Warigagung"],
+  ["Jumat","Legi","Warigagung"],["Senin","Wage","Julungwangi"],["Kamis","Pahing","Julungwangi"],
   ["Minggu","Kliwon","Sungsang"],["Rabu","Pon","Sungsang"],["Sabtu","Legi","Sungsang"],
   ["Selasa","Wage","Galungan"],["Kamis","Legi","Galungan"],["Jumat","Pahing","Galungan"],
   ["Rabu","Pahing","Kuningan"],["Sabtu","Kliwon","Kuningan"],["Selasa","Pon","Langkir"],
@@ -25,7 +33,7 @@ export const DINO_GEDE_LIST = [
   ["Selasa","Wage","Pahang"],["Kamis","Legi","Pahang"],["Jumat","Pahing","Pahang"],
   ["Rabu","Pahing","Kuruwelut"],["Sabtu","Kliwon","Kuruwelut"],["Selasa","Pon","Marakeh"],
   ["Jumat","Legi","Marakeh"],["Senin","Wage","Tambir"],["Kamis","Pahing","Tambir"],
-  ["Minggu","Kliwon","Madangkungan"],["Rabu","Pon","Madangkungan"],["Sabtu","Legi","Madangkungan"],
+  ["Minggu","Kliwon","Medangkungan"],["Rabu","Pon","Medangkungan"],["Sabtu","Legi","Medangkungan"],
   ["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],["Jumat","Pahing","Maktal"],
   ["Rabu","Pahing","Wuye"],["Sabtu","Kliwon","Wuye"],["Selasa","Pon","Manahil"],
   ["Senin","Wage","Prangbakat"],["Kamis","Pahing","Prangbakat"],["Minggu","Kliwon","Bala"],
@@ -38,12 +46,12 @@ export const DINO_GEDE_LIST = [
 
 // 2. Data Master Resmi Dino Ijo (74 Pasangan Dino, Pasaran, Wuku)
 export const DINO_IJO_LIST = [
-  ["Kamis","Legi","Sinto"],["Jumat","Pahing","Sinto"],["Senin","Kliwon","Landep"],
+  ["Kamis","Legi","Sinta"],["Jumat","Pahing","Sinta"],["Senin","Kliwon","Landep"],
   ["Kamis","Pon","Landep"],["Minggu","Legi","Wukir"],["Selasa","Pon","Wukir"],
   ["Rabu","Wage","Wukir"],["Sabtu","Pahing","Wukir"],["Senin","Wage","Kurantil"],
   ["Jumat","Pon","Kurantil"],["Minggu","Kliwon","Tolu"],["Sabtu","Legi","Tolu"],
   ["Kamis","Legi","Gumbreg"],["Jumat","Pahing","Gumbreg"],["Sabtu","Kliwon","Warigalit"],
-  ["Selasa","Pon","Wariagung"],["Rabu","Wage","Wariagung"],["Senin","Wage","Julungwangi"],
+  ["Selasa","Pon","Warigagung"],["Rabu","Wage","Warigagung"],["Senin","Wage","Julungwangi"],
   ["Kamis","Pahing","Julungwangi"],["Minggu","Kliwon","Sungsang"],["Sabtu","Legi","Sungsang"],
   ["Kamis","Legi","Galungan"],["Jumat","Pahing","Galungan"],["Senin","Kliwon","Kuningan"],
   ["Kamis","Pon","Kuningan"],["Minggu","Legi","Langkir"],["Selasa","Pon","Langkir"],
@@ -53,7 +61,7 @@ export const DINO_IJO_LIST = [
   ["Selasa","Wage","Pahang"],["Jumat","Pahing","Pahang"],["Senin","Kliwon","Kuruwelut"],
   ["Kamis","Pon","Kuruwelut"],["Minggu","Legi","Marakeh"],["Jumat","Legi","Marakeh"],
   ["Sabtu","Pahing","Marakeh"],["Kamis","Pahing","Tambir"],["Jumat","Pon","Tambir"],
-  ["Rabu","Pon","Madangkungan"],["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],
+  ["Rabu","Pon","Medangkungan"],["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],
   ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
   ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
   ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
@@ -71,8 +79,12 @@ export function normDinoWukuKey(dino, pasaran, wuku) {
   const p = String(pasaran || '').trim().toLowerCase();
   const w = String(wuku || '').trim().toLowerCase()
     .replace(/[\s\-_]/g, '')
-    .replace(/^shinto$/, 'sinto')
+    .replace(/^shinto$/, 'sinta')
+    .replace(/^sinto$/, 'sinta')
     .replace(/^wariagung$/, 'warigagung')
+    .replace(/^madangkungan$/, 'medangkungan')
+    .replace(/^mendangkungan$/, 'medangkungan')
+    .replace(/^manail$/, 'manahil')
     .replace(/^watugunung$/, 'watugunung')
     .replace(/^julungwangi$/, 'julungwangi')
     .replace(/^julungpujut$/, 'julungpujut');
@@ -96,6 +108,8 @@ DINO_IJO_LIST.forEach(([d, p, w]) => {
   }
 });
 
+const HARI_NAMES = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
+
 /**
  * Fungsi pembantu pengecekan fleksibel:
  * Menerima (wuku, hari, pasaran) ATAU (hari, pasaran, wuku) ATAU objek
@@ -106,10 +120,9 @@ export function isDinoGede(a, b, c) {
     d = a.dino || a.hari;
     p = a.pasaran || a.pas;
     w = a.wuku || a.wukuName;
-  } else if (typeof c === 'string' && (c.toLowerCase().startsWith('wuk') || c.toLowerCase().startsWith('sin') || c.toLowerCase().startsWith('lan') || c.toLowerCase().startsWith('tol') || c.toLowerCase().startsWith('gum') || c.toLowerCase().startsWith('sung') || c.toLowerCase().startsWith('gal') || c.toLowerCase().startsWith('kun') || c.toLowerCase().startsWith('lang') || c.toLowerCase().startsWith('man') || c.toLowerCase().startsWith('pah') || c.toLowerCase().startsWith('kur') || c.toLowerCase().startsWith('mar') || c.toLowerCase().startsWith('tam') || c.toLowerCase().startsWith('mad') || c.toLowerCase().startsWith('mak') || c.toLowerCase().startsWith('wuy') || c.toLowerCase().startsWith('prang') || c.toLowerCase().startsWith('bal') || c.toLowerCase().startsWith('wug') || c.toLowerCase().startsWith('way') || c.toLowerCase().startsWith('kul') || c.toLowerCase().startsWith('duk') || c.toLowerCase().startsWith('wat'))) {
+  } else if (typeof a === 'string' && HARI_NAMES.has(a.trim().toLowerCase())) {
     d = a; p = b; w = c;
   } else {
-    // Diasumsikan (wuku, hari, pasaran)
     w = a; d = b; p = c;
   }
   return DINO_GEDE_SET.has(normDinoWukuKey(d, p, w));
@@ -121,10 +134,9 @@ export function isDinoIjo(a, b, c) {
     d = a.dino || a.hari;
     p = a.pasaran || a.pas;
     w = a.wuku || a.wukuName;
-  } else if (typeof c === 'string' && (c.toLowerCase().startsWith('wuk') || c.toLowerCase().startsWith('sin') || c.toLowerCase().startsWith('lan') || c.toLowerCase().startsWith('tol') || c.toLowerCase().startsWith('gum') || c.toLowerCase().startsWith('sung') || c.toLowerCase().startsWith('gal') || c.toLowerCase().startsWith('kun') || c.toLowerCase().startsWith('lang') || c.toLowerCase().startsWith('man') || c.toLowerCase().startsWith('pah') || c.toLowerCase().startsWith('kur') || c.toLowerCase().startsWith('mar') || c.toLowerCase().startsWith('tam') || c.toLowerCase().startsWith('mad') || c.toLowerCase().startsWith('mak') || c.toLowerCase().startsWith('wuy') || c.toLowerCase().startsWith('prang') || c.toLowerCase().startsWith('bal') || c.toLowerCase().startsWith('wug') || c.toLowerCase().startsWith('way') || c.toLowerCase().startsWith('kul') || c.toLowerCase().startsWith('duk') || c.toLowerCase().startsWith('wat'))) {
+  } else if (typeof a === 'string' && HARI_NAMES.has(a.trim().toLowerCase())) {
     d = a; p = b; w = c;
   } else {
-    // Diasumsikan (wuku, hari, pasaran)
     w = a; d = b; p = c;
   }
   return DINO_IJO_SET.has(normDinoWukuKey(d, p, w));
@@ -195,6 +207,7 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
 
 // 6. Global Browser & CommonJS Export
 if (typeof window !== 'undefined') {
+  window.STANDARD_WUKU_LIST = STANDARD_WUKU_LIST;
   window.DINO_GEDE_LIST = DINO_GEDE_LIST;
   window.DINO_IJO_LIST = DINO_IJO_LIST;
   window.normDinoWukuKey = normDinoWukuKey;
@@ -205,6 +218,7 @@ if (typeof window !== 'undefined') {
   window.isDinoIjo = isDinoIjo;
   window.getDinoWarnaStatus = getDinoWarnaStatus;
   window.DINO_RULES = {
+    STANDARD_WUKU_LIST,
     DINO_GEDE_LIST,
     DINO_IJO_LIST,
     normDinoWukuKey,
@@ -219,6 +233,7 @@ if (typeof window !== 'undefined') {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
+    STANDARD_WUKU_LIST,
     DINO_GEDE_LIST,
     DINO_IJO_LIST,
     normDinoWukuKey,

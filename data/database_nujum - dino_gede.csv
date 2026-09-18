@@ -1,7 +1,7 @@
 id,dino,pasaran,wuku
-,Selasa,Wage,Sinto
-,Kamis,Legi,Sinto
-,Jumat,Pahing,Sinto
+,Selasa,Wage,Sinta
+,Kamis,Legi,Sinta
+,Jumat,Pahing,Sinta
 ,Rabu,Pahing,Landep
 ,Sabtu,Kliwon,Landep
 ,Selasa,Pon,Wukir
@@ -16,8 +16,8 @@ id,dino,pasaran,wuku
 ,Jumat,Pahing,Gumbreg
 ,Rabu,Pahing,Warigalit
 ,Sabtu,Kliwon,Warigalit
-,Selasa,Pon,Wariagung
-,Jumat,Legi,Wariagung
+,Selasa,Pon,Warigagung
+,Jumat,Legi,Warigagung
 ,Senin,Wage,Julungwangi
 ,Kamis,Pahing,Julungwangi
 ,Minggu,Kliwon,Sungsang
@@ -44,9 +44,9 @@ id,dino,pasaran,wuku
 ,Jumat,Legi,Marakeh
 ,Senin,Wage,Tambir
 ,Kamis,Pahing,Tambir
-,Minggu,Kliwon,Madangkungan
-,Rabu,Pon,Madangkungan
-,Sabtu,Legi,Madangkungan
+,Minggu,Kliwon,Medangkungan
+,Rabu,Pon,Medangkungan
+,Sabtu,Legi,Medangkungan
 ,Selasa,Wage,Maktal
 ,Kamis,Legi,Maktal
 ,Jumat,Pahing,Maktal
