@@ -53,12 +53,46 @@ const MASTER_SASI_JAWA = {
   }
 };
 
+// Tabel lookup O(1) instan untuk semua alias dan nama Sasi Jawa
+const SASI_LOOKUP = {
+  "sura": MASTER_SASI_JAWA["sura"],
+  "suro": MASTER_SASI_JAWA["sura"],
+  "muharram": MASTER_SASI_JAWA["sura"],
+  "sapar": MASTER_SASI_JAWA["sapar"],
+  "shafar": MASTER_SASI_JAWA["sapar"],
+  "mulud": MASTER_SASI_JAWA["mulud"],
+  "maulud": MASTER_SASI_JAWA["mulud"],
+  "rabiulawal": MASTER_SASI_JAWA["mulud"],
+  "bakdamulud": MASTER_SASI_JAWA["bakda mulud"],
+  "bakdamulud": MASTER_SASI_JAWA["bakda mulud"],
+  "rabiulakhir": MASTER_SASI_JAWA["bakda mulud"],
+  "jumadilawal": MASTER_SASI_JAWA["jumadilawal"],
+  "jumadilakhir": MASTER_SASI_JAWA["jumadilakhir"],
+  "rejeb": MASTER_SASI_JAWA["rejeb"],
+  "rajab": MASTER_SASI_JAWA["rejeb"],
+  "ruwah": MASTER_SASI_JAWA["ruwah"],
+  "syaban": MASTER_SASI_JAWA["ruwah"],
+  "pasa": MASTER_SASI_JAWA["pasa"],
+  "poso": MASTER_SASI_JAWA["pasa"],
+  "ramadhan": MASTER_SASI_JAWA["pasa"],
+  "sawal": MASTER_SASI_JAWA["sawal"],
+  "syawal": MASTER_SASI_JAWA["sawal"],
+  "sela": MASTER_SASI_JAWA["sela"],
+  "dulkangidah": MASTER_SASI_JAWA["sela"],
+  "dzulqadah": MASTER_SASI_JAWA["sela"],
+  "besar": MASTER_SASI_JAWA["besar"],
+  "dzulhijjah": MASTER_SASI_JAWA["besar"]
+};
+
 const getWatakSasiJawa = function (sasiName) {
   if (!sasiName) return { sasi: "-", padanan: "-", watak: "-" };
-  let clean = sasiName.toLowerCase().replace(/[^a-z]/g, '');
+  const clean = sasiName.toLowerCase().replace(/[^a-z]/g, '');
+  const found = SASI_LOOKUP[clean];
+  if (found) return found;
+  // Fallback cepat jika ada substring
   for (let key in MASTER_SASI_JAWA) {
-    if (clean.includes(key) || key.includes(clean)) {
-      return MASTER_SASI_JAWA[key];
+    if (clean.includes(key)) {
+      return (SASI_LOOKUP[clean] = MASTER_SASI_JAWA[key]);
     }
   }
   return { sasi: sasiName, padanan: "-", watak: "-" };
@@ -71,3 +105,4 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { MASTER_SASI_JAWA, getWatakSasiJawa };
 }
+

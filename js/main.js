@@ -121,9 +121,8 @@ const PUSPAWARNA_SLENDRO_PATHE_MANYURA = [
 ];
 
 let puspawarnaAudio = null;
-let isPuspawarnaPlaying = false;
 
-function toggleKetawangPuspawarna(showToastFn = showToast) {
+window.toggleKetawangPuspawarna = function toggleKetawangPuspawarna(showToastFn = showToast) {
   const btn = document.getElementById('puspawarnaBtn') || document.getElementById('playPuspawarnaBtn');
   const icon = document.getElementById('puspawarnaIcon') || document.getElementById('audioBtnIcon');
   const label = document.getElementById('puspawarnaLabel') || document.getElementById('audioBtnLabel');
@@ -322,22 +321,29 @@ function jdnToIslamic(jdn) {
   return [y, m, d];
 }
 
-const JDN_LEGI_ANCHOR = toJDN(2022, 1, 10);
-const SUN_ANCHOR = new Date(Date.UTC(2022, 0, 9));
+const JDN_LEGI_ANCHOR = 2459590; // toJDN(2022, 1, 10) - Senin Legi
+const SUN_JDN_ANCHOR = 2459589;  // toJDN(2022, 1, 9)  - Minggu wuku Madangkungan (idx 19)
 const WUKU_ANCHOR_IDX = 19;
 
+// Cache O(1) instan untuk hasil perhitungan per tanggal
+const DAY_INFO_CACHE = Object.create(null);
+
 function getDayInfo(y, m, d) {
+  const key = (y << 9) | (m << 5) | d;
+  if (DAY_INFO_CACHE[key]) return DAY_INFO_CACHE[key];
+
   const jdn = toJDN(y, m, d);
-  const dt = new Date(Date.UTC(y, m - 1, d));
-  const weekdayId = dt.getUTCDay();
+  const weekdayId = (jdn + 1) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
   const pasaranId = ((jdn - JDN_LEGI_ANCHOR) % 5 + 5) % 5;
-  const sundayOfWeek = new Date(dt);
-  sundayOfWeek.setUTCDate(dt.getUTCDate() - weekdayId);
-  const weeksDiff = Math.round((sundayOfWeek - SUN_ANCHOR) / (7 * 86400000));
+  const sundayJDN = jdn - weekdayId;
+  const weeksDiff = Math.floor((sundayJDN - SUN_JDN_ANCHOR) / 7);
   const wukuId = ((WUKU_ANCHOR_IDX + weeksDiff) % 30 + 30) % 30;
   const [hy, hm, hd] = jdnToIslamic(jdn);
   const ajYear = hy + 512;
-  return { jdn, weekdayId, pasaranId, wukuId, hijri: [hd, hm, hy], ajYear };
+
+  const result = { jdn, weekdayId, pasaranId, wukuId, hijri: [hd, hm, hy], ajYear };
+  DAY_INFO_CACHE[key] = result;
+  return result;
 }
 
 function getTanggalJawaLengkap(y, m, d) {
@@ -378,6 +384,167 @@ function getTanggalJawaLengkap(y, m, d) {
   };
 }
 window.getTanggalJawaLengkap = getTanggalJawaLengkap;
+window.getDayInfo = getDayInfo;
+
+const LIBUR_NASIONAL = {
+  fixed: {
+    "1-1": "Tahun Baru Masehi",
+    "5-1": "Hari Buruh Internasional",
+    "6-1": "Hari Lahir Pancasila",
+    "8-17": "Hari Proklamasi Kemerdekaan RI",
+    "12-25": "Hari Raya Natal"
+  },
+  custom: {
+    // 2024
+    "2024-1-1": "Tahun Baru 2024 Masehi",
+    "2024-2-8": "Isra Mi'raj Nabi Muhammad SAW",
+    "2024-2-10": "Tahun Baru Imlek 2575 Kongzili",
+    "2024-3-11": "Hari Suci Nyepi Tahun Baru Saka 1946",
+    "2024-3-29": "Wafat Yesus Kristus (Jumat Agung)",
+    "2024-3-31": "Hari Paskah",
+    "2024-4-10": "Hari Raya Idul Fitri 1445 H",
+    "2024-4-11": "Hari Raya Idul Fitri 1445 H",
+    "2024-5-1": "Hari Buruh Internasional",
+    "2024-5-9": "Kenaikan Yesus Kristus",
+    "2024-5-23": "Hari Raya Waisak 2568 BE",
+    "2024-6-1": "Hari Lahir Pancasila",
+    "2024-6-17": "Hari Raya Idul Adha 1445 H",
+    "2024-7-7": "Tahun Baru Islam 1446 H (1 Sura)",
+    "2024-8-17": "Hari Kemerdekaan RI Ke-79",
+    "2024-9-16": "Maulid Nabi Muhammad SAW",
+    "2024-12-25": "Hari Raya Natal",
+
+    // 2025
+    "2025-1-1": "Tahun Baru 2025 Masehi",
+    "2025-1-27": "Isra Mi'raj Nabi Muhammad SAW",
+    "2025-1-29": "Tahun Baru Imlek 2576 Kongzili",
+    "2025-3-29": "Hari Suci Nyepi Tahun Baru Saka 1947",
+    "2025-3-31": "Hari Raya Idul Fitri 1446 H",
+    "2025-4-1": "Hari Raya Idul Fitri 1446 H",
+    "2025-4-18": "Wafat Yesus Kristus",
+    "2025-4-20": "Hari Paskah",
+    "2025-5-1": "Hari Buruh Internasional",
+    "2025-5-12": "Hari Raya Waisak 2569 BE",
+    "2025-5-29": "Kenaikan Yesus Kristus",
+    "2025-6-1": "Hari Lahir Pancasila",
+    "2025-6-7": "Hari Raya Idul Adha 1446 H",
+    "2025-6-27": "Tahun Baru Islam 1447 H (1 Sura)",
+    "2025-8-17": "Hari Kemerdekaan RI Ke-80",
+    "2025-9-5": "Maulid Nabi Muhammad SAW",
+    "2025-12-25": "Hari Raya Natal",
+
+    // 2026
+    "2026-1-1": "Tahun Baru 2026 Masehi",
+    "2026-1-16": "Isra Mi'raj Nabi Muhammad SAW",
+    "2026-2-17": "Tahun Baru Imlek 2577 Kongzili",
+    "2026-3-19": "Hari Suci Nyepi Tahun Baru Saka 1948",
+    "2026-3-20": "Hari Raya Idul Fitri 1447 H",
+    "2026-3-21": "Hari Raya Idul Fitri 1447 H",
+    "2026-4-3": "Wafat Yesus Kristus",
+    "2026-4-5": "Hari Paskah",
+    "2026-5-1": "Hari Buruh Internasional",
+    "2026-5-14": "Kenaikan Yesus Kristus",
+    "2026-5-27": "Hari Raya Idul Adha 1447 H",
+    "2026-5-31": "Hari Raya Waisak 2570 BE",
+    "2026-6-1": "Hari Lahir Pancasila",
+    "2026-6-16": "Tahun Baru Islam 1448 H (1 Sura)",
+    "2026-8-17": "Hari Kemerdekaan RI Ke-81",
+    "2026-8-25": "Maulid Nabi Muhammad SAW",
+    "2026-12-25": "Hari Raya Natal",
+
+    // 2027
+    "2027-1-1": "Tahun Baru 2027 Masehi",
+    "2027-1-6": "Isra Mi'raj Nabi Muhammad SAW",
+    "2027-2-6": "Tahun Baru Imlek 2578 Kongzili",
+    "2027-3-9": "Hari Raya Idul Fitri 1448 H",
+    "2027-3-10": "Hari Raya Idul Fitri 1448 H",
+    "2027-3-26": "Wafat Yesus Kristus",
+    "2027-3-28": "Hari Paskah",
+    "2027-4-8": "Hari Suci Nyepi Tahun Baru Saka 1949",
+    "2027-5-1": "Hari Buruh Internasional",
+    "2027-5-6": "Kenaikan Yesus Kristus",
+    "2027-5-16": "Hari Raya Idul Adha 1448 H",
+    "2027-5-20": "Hari Raya Waisak 2571 BE",
+    "2027-6-1": "Hari Lahir Pancasila",
+    "2027-6-6": "Tahun Baru Islam 1449 H (1 Sura)",
+    "2027-8-15": "Maulid Nabi Muhammad SAW",
+    "2027-8-17": "Hari Kemerdekaan RI Ke-82",
+    "2027-12-25": "Hari Raya Natal",
+
+    // 2028
+    "2028-1-1": "Tahun Baru 2028 Masehi",
+    "2028-1-26": "Tahun Baru Imlek 2579 Kongzili",
+    "2028-2-24": "Isra Mi'raj Nabi Muhammad SAW",
+    "2028-2-27": "Hari Raya Idul Fitri 1449 H",
+    "2028-2-28": "Hari Raya Idul Fitri 1449 H",
+    "2028-3-26": "Hari Suci Nyepi Tahun Baru Saka 1950",
+    "2028-4-14": "Wafat Yesus Kristus",
+    "2028-4-16": "Hari Paskah",
+    "2028-5-1": "Hari Buruh Internasional",
+    "2028-5-5": "Hari Raya Idul Adha 1449 H",
+    "2028-5-9": "Hari Raya Waisak 2572 BE",
+    "2028-5-25": "Kenaikan Yesus Kristus",
+    "2028-5-26": "Tahun Baru Islam 1450 H (1 Sura)",
+    "2028-6-1": "Hari Lahir Pancasila",
+    "2028-8-4": "Maulid Nabi Muhammad SAW",
+    "2028-8-17": "Hari Kemerdekaan RI Ke-83",
+    "2028-12-25": "Hari Raya Natal"
+  }
+};
+
+const LIBUR_FLAT = Object.assign(Object.create(null), LIBUR_NASIONAL.custom, LIBUR_NASIONAL.fixed);
+
+function getLiburNasional(y, m, d) {
+  return LIBUR_FLAT[`${y}-${m}-${d}`] || LIBUR_FLAT[`${m}-${d}`] || null;
+}
+
+function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
+  const isGridGede = Boolean(GRID[wukuId] && GRID[wukuId][d] && GRID[wukuId][d][2] === 1);
+  const isAnggaraKasih = (d === 2 && pasaranId === 4); // Selasa Kliwon
+  const isJumatKliwon = (d === 5 && pasaranId === 4); // Jumat Kliwon
+  const isSatuSura = (hd === 1 && hm === 1); // 1 Sura
+
+  const isGede = isGridGede || isAnggaraKasih || isJumatKliwon || isSatuSura;
+  let label = "";
+  if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
+  else if (isAnggaraKasih) label = "Anggara Kasih (Selasa Kliwon)";
+  else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
+  else if (isGridGede) label = "Dino Gede Pawukon";
+
+  return { isGede, label, isGridGede, isAnggaraKasih, isJumatKliwon, isSatuSura };
+}
+
+const KETERANGAN_MAP = {
+  "S": { nama: "Tangise Dewi Sinto", arti: "Dina tangise dewi, prayogi ngati-ati anggone mbudidaya utawa lelungan." },
+  "O": { nama: "Anggoro Kasih", arti: "Selasa Kliwon, dina pangasihaning Gusti lan pasucen batin." },
+  "W": { nama: "Tali Wangke", arti: "Sirikan ageng; awon kanggé wiwit adeg griya, mantu, utawa lelungan tebih." },
+  "N": { nama: "Nuju Padu", arti: "Potensi congkrah / pasulayan; prayogi sabar lan ngedohi pradondi." },
+  "Q": { nama: "Dino ora kanggonan tanggal", arti: "Dina lowong/wancak; prayogi boten kanggé hajat ageng." },
+  "R": { nama: "Ringkel Jalma", arti: "Sirikan jalma manungsa; prayogi njagi kaselamatan raga." },
+  "K": { nama: "Kala Dite", arti: "Kala ing dina Ngahad; prayogi ngati-ati tumrap godha." },
+  "T": { nama: "Kala Tinantang", arti: "Kala nantang; watak wanton, prayogi mengker hawa nepsu." },
+  "P": { nama: "Nuju Pati", arti: "Sirikan ageng tumrap lelakon anyar utawa bebadan usaha." },
+  "D": { nama: "Dungulan", arti: "Watak unggul nanging prayogi ngatos-atos ing tindak-tanduk." },
+  "A": { nama: "Sampar Wangke", arti: "Sirikan ageng; prayogi boten kanggé pawiwahan utawa pindah griya." },
+  "X": { nama: "Sarik Agung", arti: "Sarik / larangan ageng; prayogi ngedohi hajat wigati." }
+};
+
+function getKeteranganKodeDetail(code) {
+  if (!code) return [];
+  const list = [];
+  for (let ch of code) {
+    if (KETERANGAN_MAP[ch]) {
+      list.push(KETERANGAN_MAP[ch]);
+    }
+  }
+  return list;
+}
+
+window.LIBUR_NASIONAL = LIBUR_NASIONAL;
+window.getLiburNasional = getLiburNasional;
+window.checkDinoGede = checkDinoGede;
+window.KETERANGAN_MAP = KETERANGAN_MAP;
+window.getKeteranganKodeDetail = getKeteranganKodeDetail;
 
 
 // ─── Data Kepribadian & Faalakiah ─────────────────────────────────────────
@@ -986,16 +1153,16 @@ const JENIS_SELAMETAN = [
 
 
 // ─── Expose globals for inline HTML handlers ───────────────────────────────
-window.switchTab = switchTab;
-window.toggleMobileMenu = toggleMobileMenu;
+window.switchTab = (typeof switchTab === 'function') ? switchTab : window.switchTab;
+window.toggleMobileMenu = (typeof toggleMobileMenu === 'function') ? toggleMobileMenu : window.toggleMobileMenu;
 window.navigasiKembali = (typeof navigasiKembali === 'function') ? navigasiKembali : window.navigasiKembali;
 window.printLaporan = (typeof printLaporan === 'function') ? printLaporan : window.printLaporan;
-window.printSection = printSection;
+window.printSection = (typeof printSection === 'function') ? printSection : window.printSection;
 window.showToast = showToast;
 window.getNujumData = (typeof getNujumData === 'function') ? getNujumData : null;
 window.getPawukonData = (typeof getPawukonData === 'function') ? getPawukonData : null;
 window.playGamelanTone = playGamelanTone;
-window.toggleKetawangPuspawarna = toggleKetawangPuspawarna;
+window.toggleKetawangPuspawarna = (typeof toggleKetawangPuspawarna === 'function') ? toggleKetawangPuspawarna : window.toggleKetawangPuspawarna;
 window.playDalangFX = playDalangFX;
 window.playGamelanFX = function (typeOrFreq, optType = 'saron') {
   if (typeof typeOrFreq === 'string') {
@@ -1035,17 +1202,28 @@ function initKalenderSelects() {
   }
 }
 
+// ─── KALENDER ──────────────────────────────────────────────────────────────
+function initKalenderSelects() {
+  const sel = document.getElementById('bulanSel');
+  if (!sel) return;
+  sel.innerHTML = BULAN_MASEHI.map((b, i) => `<option value="${i + 1}">${b}</option>`).join('');
+  const now = new Date();
+  sel.value = now.getMonth() + 1;
+  const tahunInput = document.getElementById('tahunInput');
+  if (tahunInput) tahunInput.value = now.getFullYear();
+
+  const kbox = document.getElementById('keteranganKodeBox');
+  if (kbox && kbox.children.length === 0) {
+    kbox.innerHTML = KETERANGAN.map(([k, v]) => `<div><b class="text-prada font-mono">${k}</b>: ${v}</div>`).join('');
+  }
+}
+
 function buildWatermarkKalender() {
   const layer = document.getElementById('calWatermark');
-  if (!layer) return;
-  layer.innerHTML = '';
-  const card = document.getElementById('kalenderCard');
-  const w = Math.max(card.scrollWidth, 900);
-  const h = Math.max(card.scrollHeight, 600);
-  const stepX = 140, stepY = 70;
-  const cols = Math.ceil(w / stepX) + 4;
-  const rows = Math.ceil(h / stepY) + 4;
+  if (!layer || layer.children.length > 0) return; // Prevent layout thrashing on every render
   const frag = document.createDocumentFragment();
+  const cols = 10, rows = 12;
+  const stepX = 140, stepY = 70;
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const s = document.createElement('span');
@@ -1058,99 +1236,595 @@ function buildWatermarkKalender() {
   layer.appendChild(frag);
 }
 
+// Days in Gregorian month (pure O(1) integer arithmetic, no Date object)
+function getDaysInMonth(y, m) {
+  if (m === 2) {
+    return (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) ? 29 : 28;
+  }
+  return (m === 4 || m === 6 || m === 9 || m === 11) ? 30 : 31;
+}
+
 window.renderKalender = function () {
-  const bulan = parseInt(document.getElementById('bulanSel').value);
-  const tahun = parseInt(document.getElementById('tahunInput').value);
-  const daysInMonth = new Date(Date.UTC(tahun, bulan, 0)).getUTCDate();
+  const selBulan = document.getElementById('bulanSel');
+  const inpTahun = document.getElementById('tahunInput');
+  const bulan = parseInt(selBulan?.value || (new Date().getMonth() + 1));
+  const tahun = parseInt(inpTahun?.value || new Date().getFullYear());
 
-  const first = new Date(Date.UTC(tahun, bulan - 1, 1));
-  const firstWeekday = first.getUTCDay();
-  const gridStart = new Date(first);
-  gridStart.setUTCDate(1 - firstWeekday);
-
-  const last = new Date(Date.UTC(tahun, bulan - 1, daysInMonth));
-  const lastWeekday = last.getUTCDay();
-  const gridEnd = new Date(last);
-  gridEnd.setUTCDate(daysInMonth + (6 - lastWeekday));
-
-  const totalDays = Math.round((gridEnd - gridStart) / 86400000) + 1;
-  const totalWeeks = totalDays / 7;
+  const daysInMonth = getDaysInMonth(tahun, bulan);
+  const firstJDN = toJDN(tahun, bulan, 1);
+  const firstWeekday = (firstJDN + 1) % 7; // 0 = Minggu ... 6 = Sabtu
+  const gridStartJDN = firstJDN - firstWeekday;
+  const totalDays = firstWeekday + daysInMonth;
+  const totalWeeks = Math.ceil(totalDays / 7);
 
   const janInfo = getDayInfo(tahun, 1, 1);
   const cornerHijriYear = janInfo.hijri[2];
 
-  document.getElementById('printTitleKalender').textContent =
-    BULAN_MASEHI[bulan - 1].toUpperCase() + ' ' + tahun + '  ·  ' + cornerHijriYear + ' H — Jagad Jawa';
-
-  let html = `<tr class="bg-gradient-to-r from-[#2a3660] to-[#1b2540] text-paper text-white text-center font-bold">
-    <td class="p-3 text-prada font-mono text-sm">${tahun}</td>
-    <td colspan="7" class="p-3 font-marcellus text-xl tracking-wider text-prada">${BULAN_MASEHI[bulan - 1].toUpperCase()}</td>
-    <td class="p-3 text-prada font-mono text-sm">${cornerHijriYear} H</td>
-  </tr>`;
-
-  html += `<tr class="bg-[#dfd1ac] font-bold text-center text-[11px] border-b-2 border-prada"><td></td>`;
-  HARI.forEach((h, i) => {
-    html += `<td class="p-2 ${i === 0 ? 'text-ala' : ''}">${h.toUpperCase()} <span class="bg-black/10 px-1 py-0.5 rounded font-mono text-[10px] ml-1">${NEPTU_HARI[i]}</span></td>`;
-  });
-  html += `<td></td></tr>`;
-
-  for (let w = 0; w < totalWeeks; w++) {
-    const weekStart = new Date(gridStart);
-    weekStart.setUTCDate(gridStart.getUTCDate() + w * 7);
-
-    const wInfo = getDayInfo(weekStart.getUTCFullYear(), weekStart.getUTCMonth() + 1, weekStart.getUTCDate());
-    const wukuId = wInfo.wukuId;
-    const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
-
-    let repMonthLabel = '', repYearLabel = '';
-    let cellsHtml = '';
-    for (let d = 0; d < 7; d++) {
-      const cur = new Date(weekStart);
-      cur.setUTCDate(weekStart.getUTCDate() + d);
-      const inMonth = (cur.getUTCMonth() + 1 === bulan && cur.getUTCFullYear() === tahun);
-      if (!inMonth) {
-        cellsHtml += '<td class="p-2 bg-black/5 border border-black/10 h-16"></td>';
-        continue;
-      }
-      const info = getDayInfo(cur.getUTCFullYear(), cur.getUTCMonth() + 1, cur.getUTCDate());
-      const [code, color, gede] = GRID[wukuId][d];
-      const bgCls = color === 'R' ? 'bg-[#a8402f] text-white' : 'bg-[#3c7350] text-white';
-      const neptuC = NEPTU_HARI[d] + NEPTU_PASARAN[info.pasaranId];
-      if (!repMonthLabel) {
-        repMonthLabel = BULAN_JAWA[info.hijri[1] - 1];
-        repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
-      }
-      cellsHtml += `<td class="p-1.5 sm:p-2.5 ${bgCls} border border-black/10 h-16 sm:h-20 align-top">
-        <div class="flex justify-between items-baseline font-bold font-marcellus text-base sm:text-lg">
-          <span>${cur.getUTCDate()}</span>
-          <span class="font-mono text-[10px] opacity-80 border-b border-current">${neptuC}</span>
-        </div>
-        <div class="font-bold text-[11px] sm:text-xs tracking-wide ${gede ? 'text-prada-light font-black drop-shadow' : ''}">${PASARAN[info.pasaranId].toUpperCase()}</div>
-        <div class="flex justify-between text-[10px] opacity-85 mt-1 font-mono">
-          <span>${info.hijri[0]}</span>
-          <span class="font-bold">${code}</span>
-        </div>
-      </td>`;
-    }
-
-    html += `<tr>
-      <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
-        <b class="font-marcellus text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
-        <div class="text-[10px] italic opacity-80">${DUNUNGE[wukuId]}</div>
-        ${isNgisor ? '<div class="text-[9px] text-ala font-bold">⚠ ngisor</div>' : ''}
-      </td>
-      ${cellsHtml}
-      <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
-        <b class="font-marcellus text-[13px] block">${WUKU[wukuId].toUpperCase()}</b>
-        <div class="text-[10px] italic opacity-80">${DUNUNGE[wukuId]}</div>
-        <div class="text-[9px] font-mono opacity-80 mt-1">${repMonthLabel} ${repYearLabel}</div>
-      </td>
-    </tr>`;
+  const printTitleEl = document.getElementById('printTitleKalender');
+  if (printTitleEl) {
+    printTitleEl.textContent =
+      BULAN_MASEHI[bulan - 1].toUpperCase() + ' ' + tahun + '  ·  ' + cornerHijriYear + ' H — Jagad Jawa';
   }
 
-  document.getElementById('calTable').innerHTML = html;
+  // Single HTML Array Buffer for maximum performance (0 DOM reflow during loop)
+  const htmlBuffer = [];
+
+  htmlBuffer.push(`
+    <tr class="bg-gradient-to-r from-[#2a3660] via-[#1b2540] to-[#12192c] text-paper text-white text-center font-bold">
+      <td class="p-3 text-prada font-mono text-sm">${tahun}</td>
+      <td colspan="7" class="p-3 font-marcellus text-xl tracking-wider text-prada">${BULAN_MASEHI[bulan - 1].toUpperCase()}</td>
+      <td class="p-3 text-prada font-mono text-sm">${cornerHijriYear} H</td>
+    </tr>
+    <tr class="bg-[#dfd1ac] font-bold text-center text-[11px] border-b-2 border-prada">
+      <td class="p-2 text-sogan-900 font-serif">WUKU</td>
+  `);
+
+  for (let i = 0; i < 7; i++) {
+    const isMinggu = (i === 0);
+    htmlBuffer.push(`
+      <td class="p-2 ${isMinggu ? 'text-[#dc2626] font-black' : 'text-sogan-900'}">
+        ${HARI[i].toUpperCase()} <span class="bg-black/10 px-1 py-0.5 rounded font-mono text-[10px] ml-1 text-sogan-900">${NEPTU_HARI[i]}</span>
+      </td>
+    `);
+  }
+
+  htmlBuffer.push(`<td class="p-2 text-sogan-900 font-serif">WUKU &amp; SASI</td></tr>`);
+
+  for (let w = 0; w < totalWeeks; w++) {
+    const weekStartJDN = gridStartJDN + w * 7;
+    const weeksDiff = Math.floor((weekStartJDN - 2459589) / 7);
+    const wukuId = ((19 + weeksDiff) % 30 + 30) % 30;
+    const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
+    const wukuName = WUKU[wukuId].toUpperCase();
+    const dununge = DUNUNGE[wukuId];
+
+    let repMonthLabel = '', repYearLabel = '';
+    const cellsBuffer = [];
+
+    for (let d = 0; d < 7; d++) {
+      const currentJDN = weekStartJDN + d;
+      const dayNum = currentJDN - firstJDN + 1;
+
+      if (dayNum < 1 || dayNum > daysInMonth) {
+        cellsBuffer.push('<td class="p-2 bg-black/5 border border-black/10 h-20 sm:h-24"></td>');
+        continue;
+      }
+
+      const info = getDayInfo(tahun, bulan, dayNum);
+      const [code, color] = GRID[wukuId][d];
+      const neptuC = NEPTU_HARI[d] + NEPTU_PASARAN[info.pasaranId];
+
+      const liburName = getLiburNasional(tahun, bulan, dayNum);
+      const isLibur = Boolean(liburName);
+      const isMinggu = (d === 0);
+      const isDateRed = isMinggu || isLibur;
+
+      const dinoGedeObj = checkDinoGede(wukuId, d, info.pasaranId, info.hijri[0], info.hijri[1]);
+      const isGede = dinoGedeObj.isGede;
+
+      if (!repMonthLabel) {
+        repMonthLabel = BULAN_JAWA[info.hijri[1] - 1] || '';
+        repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
+      }
+
+      // Standarisasi Kode Warna:
+      // Dino Gede: Kuning / Emas Menyala (#d4af37 / #fef08a)
+      // Becik: Hijau (#16a34a / soft green)
+      // Ala: Merah Bata (#dc2626 / soft rose)
+      let cellStyle = '';
+      let cellTextCls = '';
+      if (isGede) {
+        cellStyle = 'background: linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%); border: 1.5px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.35);';
+        cellTextCls = 'text-[#422006]';
+      } else if (color === 'G') {
+        cellStyle = 'background-color: #f0fdf4; border: 1px solid #86efac;';
+        cellTextCls = 'text-[#14532d]';
+      } else {
+        cellStyle = 'background-color: #fef2f2; border: 1px solid #fca5a5;';
+        cellTextCls = 'text-[#7f1d1d]';
+      }
+
+      const dateNumStyle = isDateRed ? 'color: #dc2626; font-weight: 800;' : 'color: #0f172a; font-weight: 700;';
+
+      const statusBadge = (color === 'G')
+        ? `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Becik / Rahayu">✓ ${code ? code + ' ' : ''}Becik</span>`
+        : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Nahas">⚠ ${code ? code + ' ' : ''}Ala</span>`;
+
+      const gedeBadge = isGede
+        ? `<span class="inline-block px-1 py-0.2 rounded bg-amber-600 text-white font-extrabold text-[8px] tracking-wide shadow-xs" title="${dinoGedeObj.label}">★ GEDE</span>`
+        : '';
+
+      const holidayBanner = isLibur
+        ? `<div class="text-[8.5px] font-bold text-[#dc2626] leading-tight truncate mt-0.5 max-w-full" title="${liburName}">🎌 ${liburName}</div>`
+        : '';
+
+      cellsBuffer.push(`
+        <td onclick="showDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum})"
+            style="${cellStyle}"
+            class="p-1.5 sm:p-2.5 ${cellTextCls} h-20 sm:h-24 align-top cursor-pointer transition-all duration-150 hover:brightness-95 hover:scale-[1.02] hover:shadow-xl hover:z-20 relative group select-none border"
+            title="Klik untuk rincian ${dayNum} ${BULAN_MASEHI[bulan - 1]} ${tahun}">
+          <div class="flex justify-between items-baseline">
+            <span class="font-marcellus text-lg sm:text-xl" style="${dateNumStyle}">${dayNum}</span>
+            <span class="font-mono text-[10px] px-1 py-0.2 rounded bg-black/5 font-semibold text-slate-700" title="Neptu">${neptuC}</span>
+          </div>
+          <div class="flex items-center gap-1 mt-0.5">
+            <span class="font-bold text-[11px] sm:text-xs tracking-wide ${isGede ? 'text-amber-950 font-black' : 'text-slate-800'}">${PASARAN[info.pasaranId].toUpperCase()}</span>
+            ${gedeBadge}
+          </div>
+          ${holidayBanner}
+          <div class="flex justify-between items-center text-[10px] mt-1.5 pt-1 border-t border-black/10 font-mono">
+            <span class="opacity-80 text-slate-700 font-semibold">${info.hijri[0]}</span>
+            ${statusBadge}
+          </div>
+        </td>
+      `);
+    }
+
+    htmlBuffer.push(`
+      <tr>
+        <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
+          <b class="font-marcellus text-[13px] block text-sogan-900">${wukuName}</b>
+          <div class="text-[10px] italic text-sogan-700">${dununge}</div>
+          ${isNgisor ? '<div class="text-[9px] text-ala font-bold">⚠ ngisor</div>' : ''}
+        </td>
+        ${cellsBuffer.join('')}
+        <td class="p-2 text-center align-middle font-bold text-xs bg-[#e8dfc4] border border-black/10 ${isNgisor ? 'bg-[#e8b98f]' : ''}">
+          <b class="font-marcellus text-[13px] block text-sogan-900">${wukuName}</b>
+          <div class="text-[10px] italic text-sogan-700">${dununge}</div>
+          <div class="text-[9px] font-mono text-sogan-800 mt-1">${repMonthLabel} ${repYearLabel}</div>
+        </td>
+      </tr>
+    `);
+  }
+
+  // Single DOM Assignment (Zero Layout Thrashing)
+  const calTable = document.getElementById('calTable');
+  if (calTable) calTable.innerHTML = htmlBuffer.join('');
+
   buildWatermarkKalender();
 };
+
+window.showDetailTanggalJawa = function(y, m, d) {
+  const modal = document.getElementById('modalDetailKalender');
+  if (!modal) return;
+
+  const info = getDayInfo(y, m, d);
+  const tglJawa = getTanggalJawaLengkap(y, m, d);
+
+  // Tanggal Masehi & Hari Libur
+  const elTglMasehi = document.getElementById('modalTanggalMasehi');
+  if (elTglMasehi) elTglMasehi.textContent = `${d} ${BULAN_MASEHI[m - 1]} ${y} Masehi`;
+
+  const liburName = getLiburNasional(y, m, d);
+  const elBadgeLibur = document.getElementById('modalBadgeLibur');
+  const elKetLibur = document.getElementById('modalKeteranganLibur');
+  if (liburName) {
+    if (elBadgeLibur) {
+      elBadgeLibur.textContent = 'HARI LIBUR NASIONAL';
+      elBadgeLibur.classList.remove('hidden');
+    }
+    if (elKetLibur) {
+      elKetLibur.textContent = `🎌 ${liburName}`;
+      elKetLibur.classList.remove('hidden');
+    }
+  } else {
+    if (elBadgeLibur) elBadgeLibur.classList.add('hidden');
+    if (elKetLibur) elKetLibur.classList.add('hidden');
+  }
+
+  // Weton & Neptu
+  const elWetonText = document.getElementById('modalWetonText');
+  if (elWetonText) elWetonText.textContent = `${tglJawa.dino} ${tglJawa.pas}`;
+
+  const elNeptuBadge = document.getElementById('modalNeptuBadge');
+  if (elNeptuBadge) {
+    elNeptuBadge.textContent = `${tglJawa.dino} (${NEPTU_HARI[info.weekdayId]}) + ${tglJawa.pas} (${NEPTU_PASARAN[info.pasaranId]}) = Neptu ${tglJawa.neptu}`;
+  }
+
+  // Dino Gede
+  const dinoGedeObj = checkDinoGede(info.wukuId, info.weekdayId, info.pasaranId, info.hijri[0], info.hijri[1]);
+  const elBoxDinoGede = document.getElementById('modalBoxDinoGede');
+  const elIconDinoGede = document.getElementById('modalIconDinoGede');
+  const elTitleDinoGede = document.getElementById('modalTitleDinoGede');
+  const elDescDinoGede = document.getElementById('modalDescDinoGede');
+
+  if (dinoGedeObj.isGede) {
+    if (elBoxDinoGede) elBoxDinoGede.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-amber-500/20 border-amber-400 text-amber-200 shadow-md shadow-amber-500/10';
+    if (elIconDinoGede) elIconDinoGede.textContent = '★';
+    if (elTitleDinoGede) elTitleDinoGede.textContent = `DINO GEDE: ${dinoGedeObj.label.toUpperCase()}`;
+    if (elDescDinoGede) elDescDinoGede.textContent = 'Dina wigati lan sakral ing petungan pawukon & penanggalan Jawa.';
+  } else {
+    if (elBoxDinoGede) elBoxDinoGede.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-sogan-950/60 border-sogan-800 text-sogan-400';
+    if (elIconDinoGede) elIconDinoGede.textContent = '✧';
+    if (elTitleDinoGede) elTitleDinoGede.textContent = 'DINA LUMRAH';
+    if (elDescDinoGede) elDescDinoGede.textContent = 'Boten klebet pengetan Dino Gede khusus.';
+  }
+
+  // Ala / Becik Status
+  const [code, color] = GRID[info.wukuId][info.weekdayId];
+  const isAla = (color === 'R');
+  const elBoxAlaBecik = document.getElementById('modalBoxAlaBecik');
+  const elIconAlaBecik = document.getElementById('modalIconAlaBecik');
+  const elTitleAlaBecik = document.getElementById('modalTitleAlaBecik');
+  const elDescAlaBecik = document.getElementById('modalDescAlaBecik');
+
+  if (isAla) {
+    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-rose-950/40 border-rose-500/60 text-rose-200 shadow-md shadow-rose-950/20';
+    if (elIconAlaBecik) elIconAlaBecik.textContent = '⚠';
+    if (elTitleAlaBecik) elTitleAlaBecik.textContent = `STATUS: ALA / NAHAS (${code || 'Sirikan'})`;
+    if (elDescAlaBecik) elDescAlaBecik.textContent = 'Dina awon tumrap adeg griya, mantu, utawi lelungan tebih.';
+  } else {
+    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-md shadow-emerald-950/20';
+    if (elIconAlaBecik) elIconAlaBecik.textContent = '✓';
+    if (elTitleAlaBecik) elTitleAlaBecik.textContent = `STATUS: BECIK / RAHAYU (${code || 'Rahayu'})`;
+    if (elDescAlaBecik) elDescAlaBecik.textContent = 'Dina becik kanggé maneka warni hajat, lelungan, lan pakaryan.';
+  }
+
+  // Sultan Agungan Details
+  const elTglSasiJawa = document.getElementById('modalTglSasiJawa');
+  if (elTglSasiJawa) elTglSasiJawa.textContent = `${tglJawa.tglJawa} ${tglJawa.bulanJawa}`;
+
+  const elTahunJawa = document.getElementById('modalTahunJawa');
+  if (elTahunJawa) elTahunJawa.textContent = `${tglJawa.tahunAJ} AJ (Tahun ${tglJawa.tahunSiklus})`;
+
+  const elWindu = document.getElementById('modalWindu');
+  if (elWindu) elWindu.textContent = `Windu ${tglJawa.namaWindu}`;
+
+  const elHijriah = document.getElementById('modalHijriah');
+  if (elHijriah) elHijriah.textContent = `${info.hijri[0]} ${BULAN_JAWA[info.hijri[1] - 1] || ''} ${info.hijri[2]} H`;
+
+  // Pawukon
+  const elNamaWuku = document.getElementById('modalNamaWuku');
+  if (elNamaWuku) elNamaWuku.textContent = `Wuku ${tglJawa.wukuName} (No. ${tglJawa.wukuNo})`;
+
+  const elDunungeWuku = document.getElementById('modalDunungeWuku');
+  if (elDunungeWuku) elDunungeWuku.textContent = `${DUNUNGE[info.wukuId]}`;
+
+  const isNgisor = (info.wukuId === 3 || info.wukuId === 13 || info.wukuId === 23);
+  const elRingkelWuku = document.getElementById('modalRingkelWuku');
+  if (elRingkelWuku) {
+    elRingkelWuku.innerHTML = isNgisor ? '<span class="text-rose-400 font-bold">⚠ Ringkel Ngisor (Sirikan)</span>' : 'Lumrah';
+  }
+
+  const pwkData = (typeof window !== 'undefined' && window.MASTER_PAWUKON) ? (window.MASTER_PAWUKON[tglJawa.wukuName] || window.MASTER_PAWUKON[tglJawa.wukuNo]) : null;
+  const elDewaWuku = document.getElementById('modalDewaWuku');
+  if (elDewaWuku) {
+    elDewaWuku.textContent = pwkData?.dewa ? `Bathara ${pwkData.dewa}` : (pwkData?.dewanama || '-');
+  }
+
+  // Keterangan Kode Pawukon
+  const elListKode = document.getElementById('modalListKodeDetail');
+  if (elListKode) {
+    const kodeList = getKeteranganKodeDetail(code);
+    if (kodeList.length > 0) {
+      elListKode.innerHTML = kodeList.map(item => `
+        <div class="p-2 rounded bg-sogan-900/80 border border-sogan-700/80">
+          <strong class="text-amber-300 font-serif">${item.nama}:</strong>
+          <span class="text-sogan-200 ml-1">${item.arti}</span>
+        </div>
+      `).join('');
+    } else {
+      elListKode.innerHTML = `
+        <div class="p-2 rounded bg-emerald-950/30 border border-emerald-800/40 text-emerald-300 italic">
+          Dina punika boten nandhang kode sirikan tartamtu (Lega &amp; Rahayu).
+        </div>
+      `;
+    }
+  }
+
+  // Kosmologi Pranata Mangsa & Zodiak
+  const fnPM = (typeof getPranataMangsaByDate === 'function') ? getPranataMangsaByDate : (window.getPranataMangsaByDate || null);
+  const pm = fnPM ? fnPM(d, m) : null;
+  const elPM = document.getElementById('modalPranataMangsa');
+  if (elPM) {
+    elPM.textContent = pm ? `${pm.nama} (${pm.rentang}) · "${pm.candrasangkala}"` : '-';
+  }
+
+  const fnZod = (typeof getZodiakByDate === 'function') ? getZodiakByDate : (window.getZodiakByDate || null);
+  const zod = fnZod ? fnZod(d, m) : null;
+  const elZod = document.getElementById('modalZodiak');
+  if (elZod) {
+    elZod.textContent = zod ? `${zod.nama} (${zod.lambang})` : '-';
+  }
+
+  // Tombol Nujum Pribadi
+  const btnNujum = document.getElementById('modalBtnHitungNujum');
+  if (btnNujum) {
+    btnNujum.onclick = function() {
+      tutupDetailTanggalJawa();
+      const dtStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      if (typeof hitungNujumDariTanggalJawa === 'function') {
+        hitungNujumDariTanggalJawa(dtStr);
+      } else if (typeof window.hitungNujumDariTanggalJawa === 'function') {
+        window.hitungNujumDariTanggalJawa(dtStr);
+      } else if (typeof bukaTab === 'function') {
+        bukaTab('tab-kepribadian');
+      }
+    };
+  }
+
+  modal.onclick = function(e) {
+    if (e.target === modal) {
+      window.tutupDetailTanggalJawa();
+    }
+  };
+
+  modal.classList.remove('hidden');
+};
+
+window.tutupDetailTanggalJawa = function() {
+  const modal = document.getElementById('modalDetailKalender');
+  if (modal) modal.classList.add('hidden');
+};
+
+if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      window.tutupDetailTanggalJawa();
+    }
+  });
+}
+
+// ─── KALENDER CETAK / PDF EKSPOR ───────────────────────────────────────────
+function renderLaporanKalenderPrintHtml(bulan, tahun) {
+  const daysInMonth = getDaysInMonth(tahun, bulan);
+  const firstJDN = toJDN(tahun, bulan, 1);
+  const firstWeekday = (firstJDN + 1) % 7;
+  const gridStartJDN = firstJDN - firstWeekday;
+  const totalDays = firstWeekday + daysInMonth;
+  const totalWeeks = Math.ceil(totalDays / 7);
+
+  const janInfo = getDayInfo(tahun, 1, 1);
+  const midInfo = getDayInfo(tahun, bulan, Math.min(15, daysInMonth));
+  const cornerHijriYear = midInfo?.hijri ? midInfo.hijri[2] : (janInfo?.hijri ? janInfo.hijri[2] : '-');
+
+  let repMonthLabel = '', repYearLabel = '', repWindu = '';
+  const wukusInMonth = [];
+
+  const calRowsHtml = [];
+  for (let w = 0; w < totalWeeks; w++) {
+    const weekStartJDN = gridStartJDN + w * 7;
+    const weeksDiff = Math.floor((weekStartJDN - 2459589) / 7);
+    const wukuId = ((19 + weeksDiff) % 30 + 30) % 30;
+    const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
+
+    if (!wukusInMonth.some(item => item.id === wukuId)) {
+      wukusInMonth.push({ id: wukuId, nama: WUKU[wukuId], dununge: DUNUNGE[wukuId], isNgisor });
+    }
+
+    let rowMonthLabel = '', rowYearLabel = '';
+    const cellsHtml = [];
+
+    for (let d = 0; d < 7; d++) {
+      const currentJDN = weekStartJDN + d;
+      const dayNum = currentJDN - firstJDN + 1;
+
+      if (dayNum < 1 || dayNum > daysInMonth) {
+        cellsHtml.push('<td style="background-color: #f3f4f6; border: 0.5pt solid #d1d5db; height: 36pt;"></td>');
+        continue;
+      }
+
+      const info = getDayInfo(tahun, bulan, dayNum);
+      const [code, color, gede] = GRID[wukuId][d];
+      const neptuC = NEPTU_HARI[d] + NEPTU_PASARAN[info.pasaranId];
+
+      const liburName = getLiburNasional(tahun, bulan, dayNum);
+      const isLibur = Boolean(liburName);
+      const isMinggu = (d === 0);
+      const isDateRed = isMinggu || isLibur;
+
+      const dinoGedeObj = checkDinoGede(wukuId, d, info.pasaranId, info.hijri[0], info.hijri[1]);
+      const isGede = dinoGedeObj.isGede;
+
+      if (!repMonthLabel && info?.hijri) {
+        repMonthLabel = BULAN_JAWA[info.hijri[1] - 1] || '';
+        repYearLabel = info.ajYear;
+        repWindu = WINDU[((info.ajYear - 1955) % 8 + 8) % 8];
+      }
+      if (info?.hijri) {
+        rowMonthLabel = BULAN_JAWA[info.hijri[1] - 1] || '';
+        rowYearLabel = info.ajYear;
+      }
+
+      const isAla = color === 'R';
+      const statusKet = isAla ? 'Ala' : 'Becik';
+
+      let printCellBg = '#ffffff';
+      if (isGede) printCellBg = '#fef9c3';
+      else if (isAla) printCellBg = '#fff1f2';
+      else printCellBg = '#f0fdf4';
+
+      const dateNumColor = isDateRed ? '#dc2626' : '#111827';
+
+      cellsHtml.push(`
+        <td style="border: 0.5pt solid ${isGede ? '#d4af37' : '#d1d5db'}; padding: 3pt 3.5pt; vertical-align: top; height: 36pt; background-color: ${printCellBg};">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5pt;">
+            <strong style="font-size: 9.5pt; color: ${dateNumColor};">${dayNum}</strong>
+            <span style="font-size: 7pt; font-family: monospace; opacity: 0.85;">N.${neptuC}</span>
+          </div>
+          <div style="font-size: 7.5pt; font-weight: bold; ${isGede ? 'text-decoration: underline; color: #78350f;' : ''}">
+            ${PASARAN[info.pasaranId].toUpperCase()}${isGede ? ' ★' : ''}
+          </div>
+          ${isLibur ? `<div style="font-size: 6pt; color: #dc2626; font-weight: bold; line-height: 1.1; margin-top: 1pt;">${liburName}</div>` : ''}
+          <div style="display: flex; justify-content: space-between; font-size: 6.5pt; margin-top: 1.5pt; opacity: 0.85;">
+            <span>${info.hijri ? info.hijri[0] : ''}</span>
+            <span style="font-weight: bold; color: ${isAla ? '#b91c1c' : '#15803d'};">${code ? code + ' ' : ''}(${statusKet})</span>
+          </div>
+        </td>
+      `);
+    }
+
+    calRowsHtml.push(`
+      <tr>
+        <td style="border: 0.5pt solid #d1d5db; background-color: #f9fafb; text-align: center; vertical-align: middle; padding: 3pt 2pt; width: 13%;">
+          <strong style="font-size: 8pt; display: block;">${WUKU[wukuId].toUpperCase()}</strong>
+          <div style="font-size: 6.5pt; font-style: italic;">${DUNUNGE[wukuId]}</div>
+          ${isNgisor ? '<div style="font-size: 6.5pt; font-weight: bold; color: #b91c1c;">(Ngisor)</div>' : ''}
+        </td>
+        ${cellsHtml.join('')}
+        <td style="border: 0.5pt solid #d1d5db; background-color: #f9fafb; text-align: center; vertical-align: middle; padding: 3pt 2pt; width: 13%;">
+          <strong style="font-size: 8pt; display: block;">${WUKU[wukuId].toUpperCase()}</strong>
+          <div style="font-size: 6.5pt;">${rowMonthLabel} ${rowYearLabel}</div>
+        </td>
+      </tr>
+    `);
+  }
+
+  const fnPM = (typeof getPranataMangsaByDate === 'function') ? getPranataMangsaByDate : (window.getPranataMangsaByDate || null);
+  const pm1 = fnPM ? fnPM(5, bulan) : null;
+  const pm2 = fnPM ? fnPM(25, bulan) : null;
+  let pmStr = pm1 ? `${pm1.nama} (${pm1.rentang}) &middot; Candrasangkala: &ldquo;${pm1.candrasangkala}&rdquo;` : '-';
+  if (pm2 && pm1 && pm2.nama !== pm1.nama) {
+    pmStr += ` & dilanjutkan ${pm2.nama} (${pm2.rentang})`;
+  }
+
+  const wukuListStr = wukusInMonth.map(w => `<strong>${w.nama}</strong> (${w.dununge}${w.isNgisor ? ', Ringkel Ngisor' : ''})`).join(' &middot; ');
+
+  return `
+    <div class="print-report-wrapper">
+      <div class="print-watermark print-doc-watermark watermark-print">Aether Code</div>
+
+      <div class="laporan-page">
+        <span class="corner-tr" aria-hidden="true">❖</span>
+        <span class="corner-bl" aria-hidden="true">❖</span>
+
+        <!-- KOP DOKUMEN RESMI -->
+        <div class="doc-header-kop mb-2 border-b-2 border-black pb-1.5">
+          <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <div style="font-size: 14pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 2px 0; letter-spacing: 0.15em;">JAGAD JAWA</div>
+              <div style="font-size: 11pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 2px 0;">ALMANAK &amp; KALENDER JAWA ISLAM</div>
+              <div style="font-size: 7.5pt; font-style: italic;">Pawukon, Pasaran, Pranata Mangsa &amp; Petungan Dina Kasultanan Ngayogyakarta - Karaton Surakarta</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 8pt; font-weight: bold;">ARSIP KALENDER</div>
+              <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Archival</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 1: RINCIAN PENANGGALAN BULAN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 1: RINCIAN PENANGGALAN BULAN</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Bulan &amp; Tahun Masehi</td>
+                <td style="width: 28%;"><strong>${BULAN_MASEHI[bulan - 1].toUpperCase()} ${tahun}</strong></td>
+                <td class="doc-label-cell">Tahun Hijriah</td>
+                <td style="width: 28%;">${cornerHijriYear} Hijriah</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Sasi Jawa &amp; Windu</td>
+                <td><strong>${repMonthLabel} ${repYearLabel}</strong> (Windu ${repWindu || '-'})</td>
+                <td class="doc-label-cell">Kurup Sultan Agungan</td>
+                <td>Asapon / Salasiyah (Alip Selasa Pon)</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Pranata Mangsa</td>
+                <td colspan="3">${pmStr}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 2: MATRIKS KALENDER & DINA PASARAN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 2: MATRIKS KALENDER &amp; DINA PASARAN</div>
+          <table class="doc-table" style="font-size: 7.5pt; text-align: center;">
+            <thead>
+              <tr>
+                <th style="width: 13%;">Wuku</th>
+                <th style="width: 10.5%; color: #dc2626;">Ngahad</th>
+                <th style="width: 10.5%;">Senen</th>
+                <th style="width: 10.5%;">Selasa</th>
+                <th style="width: 10.5%;">Rebo</th>
+                <th style="width: 10.5%;">Kemis</th>
+                <th style="width: 10.5%;">Jumuah</th>
+                <th style="width: 10.5%;">Setu</th>
+                <th style="width: 13%;">Wuku &amp; Sasi</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${calRowsHtml.join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 3: ENSIKLOPEDIA WUKU & PETUNJUK DINA -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 3: ENSIKLOPEDIA WUKU &amp; PETUNJUK DINA BULAN INI</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell" style="width: 24%;">Wuku Lumampah</td>
+                <td>${wukuListStr}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Pedoman &amp; Paugeran</td>
+                <td style="font-size: 7.5pt; line-height: 1.4;">
+                  Angka ing nginggil nunjukaken tanggal Masehi lan neptu dina (N). Teks tengah nunjukaken pasaran Jawa. Angka ing ngandhap nunjukaken tanggal Jawa/Hijriah sarta status petung (Becik utawi Ala kanggé adeg griya, lelungan, utawi hajat). Gantos dina Jawa kawiwitan nalika surup (jam 18.00 sore).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE FOOTER -->
+        <div class="page-inner-footer" style="position: absolute; bottom: 8mm; left: 14mm; right: 14mm; display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 0.5pt solid currentColor; padding-top: 1.5mm;">
+          <span>Kalender Jawa ${BULAN_MASEHI[bulan - 1]} ${tahun} &middot; Karaton Surakarta &amp; Kasultanan Ngayogyakarta</span>
+          <span>Halaman 1 dari 1 &middot; Aether Code Archival</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function printLaporanKalender(theme = 'parchment') {
+  const bulan = parseInt(document.getElementById('bulanSel')?.value || 1);
+  const tahun = parseInt(document.getElementById('tahunInput')?.value || 2026);
+  const printDocHtml = renderLaporanKalenderPrintHtml(bulan, tahun);
+
+  let printContainer = document.getElementById('laporan-cetak-pdf');
+  if (!printContainer) {
+    printContainer = document.createElement('div');
+    printContainer.id = 'laporan-cetak-pdf';
+    printContainer.className = 'print-only-document';
+    document.body.appendChild(printContainer);
+  }
+  printContainer.innerHTML = printDocHtml;
+
+  const customTitle = `Jagad Jawa — Kalender ${BULAN_MASEHI[bulan - 1]} ${tahun}`;
+  if (typeof printLaporan === 'function') {
+    printLaporan(theme, customTitle);
+  } else if (typeof window.printLaporan === 'function') {
+    window.printLaporan(theme, customTitle);
+  } else {
+    window.print();
+  }
+}
+window.renderLaporanKalenderPrintHtml = renderLaporanKalenderPrintHtml;
+window.printLaporanKalender = printLaporanKalender;
 
 // ─── KEPRIBADIAN ───────────────────────────────────────────────────────────
 function initTahunHitungSelect() {
@@ -1165,7 +1839,7 @@ function initTahunHitungSelect() {
   }
 }
 
-function updateKepribadianQuickInfo() {
+window.updateKepribadianQuickInfo = function updateKepribadianQuickInfo() {
   const tglVal = document.getElementById('tglLahirKepribadian')?.value;
   const elTglJawa = document.getElementById('outTanggalJawaPribadi');
   const elHP = document.getElementById('outHariPasaranPribadi');
@@ -1240,7 +1914,7 @@ function updateKepribadianQuickInfo() {
     }
   }
 }
-window.updateKepribadianQuickInfo = updateKepribadianQuickInfo;
+window.updateKepribadianQuickInfo = (typeof updateKepribadianQuickInfo === 'function') ? updateKepribadianQuickInfo : window.updateKepribadianQuickInfo;
 
 function renderKonversiTanggalJawa(dateVal) {
   let val = dateVal;
@@ -2954,7 +3628,7 @@ function renderLaporanResmiPetungPrintHtml(dObj) {
 window.renderPranataZodiakCardHtml = renderPranataZodiakCardHtml;
 window.renderLaporanResmiPetungPrintHtml = renderLaporanResmiPetungPrintHtml;
 
-function hitungKepribadianLengkap() {
+window.hitungKepribadianLengkap = function hitungKepribadianLengkap() {
   const tglVal = document.getElementById('tglLahirKepribadian').value;
   if (!tglVal) { showToast('Pilih tanggal lahir terlebih dahulu.'); return; }
 
@@ -3279,7 +3953,7 @@ function hitungKepribadianLengkap() {
   }
   showToast('Nujum kepribadian kasil kapetung!');
 }
-window.hitungKepribadianLengkap = hitungKepribadianLengkap;
+window.hitungKepribadianLengkap = (typeof hitungKepribadianLengkap === 'function') ? hitungKepribadianLengkap : window.hitungKepribadianLengkap;
 
 // ─── PERJODOHAN ────────────────────────────────────────────────────────────
 function initPerjodohanSelects() {
