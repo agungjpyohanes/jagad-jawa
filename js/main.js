@@ -499,19 +499,22 @@ function getLiburNasional(y, m, d) {
 }
 
 function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
-  const isGridGede = Boolean(GRID[wukuId] && GRID[wukuId][d] && GRID[wukuId][d][2] === 1);
-  const isAnggaraKasih = (d === 2 && pasaranId === 4); // Selasa Kliwon
-  const isJumatKliwon = (d === 5 && pasaranId === 4); // Jumat Kliwon
-  const isSatuSura = (hd === 1 && hm === 1); // 1 Sura
+  const cell = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
+  const code = cell[0] || "";
+  const isGridGede = Boolean(cell[2] === 1);
+  const isTandaO = code.includes('O');
+  const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
+  const isJumatKliwon = (d === 5 && pasaranId === 4);
+  const isSatuSura = (hd === 1 && hm === 1);
 
-  const isGede = isGridGede || isAnggaraKasih || isJumatKliwon || isSatuSura;
+  const isGede = isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
   let label = "";
   if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
-  else if (isAnggaraKasih) label = "Anggara Kasih (Selasa Kliwon)";
+  else if (isAnggaraKasih || isTandaO) label = "Anggara Kasih (Selasa Kliwon)";
   else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
   else if (isGridGede) label = "Dino Gede Pawukon";
 
-  return { isGede, label, isGridGede, isAnggaraKasih, isJumatKliwon, isSatuSura };
+  return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura };
 }
 
 const KETERANGAN_MAP = {
@@ -1327,20 +1330,26 @@ window.renderKalender = function () {
         repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
       }
 
-      // Standarisasi Kode Warna:
-      // Dino Gede: Kuning / Emas Menyala (#d4af37 / #fef08a)
-      // Becik: Hijau (#16a34a / soft green)
-      // Ala: Merah Bata (#dc2626 / soft rose)
+      // Standarisasi Kode Warna & Penanda Sesuai Tabel "Dununge Dino Lan Wuku Kang Olo":
+      // 1. Kesesuaian Warna Hijau & Merah:
+      //    Setiap sel kalender mempertahankan warna hijau (G / Becik) dan merah (R / Kang Olo)
+      //    persis seperti pola matriks wuku terhadap hari (Minggu s.d. Sabtu) di tabel referensi.
+      // 2. Pewarnaan Dino Gede (Kuning / Emas):
+      //    Memberikan sorotan warna latar kuning/emas pada pasaran/hari yang dikategorikan Dino Gede
+      //    (Anggoro Kasih, ber-tanda 'O', penanda khusus pawukon wuku 1-30, dsb.) disertai bingkai emas.
+      // 3. Ketentuan Hari Minggu & Libur Nasional:
+      //    Angka tanggal pada hari Minggu serta hari Libur Nasional wajib berwarna Merah (#dc2626).
       let cellStyle = '';
       let cellTextCls = '';
-      if (isGede) {
-        cellStyle = 'background: linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%); border: 1.5px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.35);';
-        cellTextCls = 'text-[#422006]';
-      } else if (color === 'G') {
-        cellStyle = 'background-color: #f0fdf4; border: 1px solid #86efac;';
+      if (color === 'G') {
+        cellStyle = isGede
+          ? 'background-color: #f0fdf4; border: 1.5px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45);'
+          : 'background-color: #f0fdf4; border: 1px solid #86efac;';
         cellTextCls = 'text-[#14532d]';
       } else {
-        cellStyle = 'background-color: #fef2f2; border: 1px solid #fca5a5;';
+        cellStyle = isGede
+          ? 'background-color: #fef2f2; border: 1.5px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45);'
+          : 'background-color: #fef2f2; border: 1px solid #fca5a5;';
         cellTextCls = 'text-[#7f1d1d]';
       }
 
@@ -1348,11 +1357,12 @@ window.renderKalender = function () {
 
       const statusBadge = (color === 'G')
         ? `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Becik / Rahayu">✓ ${code ? code + ' ' : ''}Becik</span>`
-        : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Nahas">⚠ ${code ? code + ' ' : ''}Ala</span>`;
+        : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">⚠ ${code ? code + ' ' : ''}Ala</span>`;
 
-      const gedeBadge = isGede
-        ? `<span class="inline-block px-1 py-0.2 rounded bg-amber-600 text-white font-extrabold text-[8px] tracking-wide shadow-xs" title="${dinoGedeObj.label}">★ GEDE</span>`
-        : '';
+      // Sorotan warna latar kuning/emas pada pasaran/hari Dino Gede
+      const pasaranDisplay = isGede
+        ? `<div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-black text-[11px] sm:text-xs tracking-wide text-[#451a03] border border-[#d4af37] shadow-xs" style="background: linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%);" title="${dinoGedeObj.label}">★ ${PASARAN[info.pasaranId].toUpperCase()}<span class="text-[7.5px] bg-[#9a3412] text-white px-1 py-0.2 rounded font-extrabold ml-0.5 tracking-wider">GEDE</span></div>`
+        : `<span class="font-bold text-[11px] sm:text-xs tracking-wide ${color === 'G' ? 'text-[#14532d]' : 'text-[#7f1d1d]'}">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
 
       const holidayBanner = isLibur
         ? `<div class="text-[8.5px] font-bold text-[#dc2626] leading-tight truncate mt-0.5 max-w-full" title="${liburName}">🎌 ${liburName}</div>`
@@ -1368,8 +1378,7 @@ window.renderKalender = function () {
             <span class="font-mono text-[10px] px-1 py-0.2 rounded bg-black/5 font-semibold text-slate-700" title="Neptu">${neptuC}</span>
           </div>
           <div class="flex items-center gap-1 mt-0.5">
-            <span class="font-bold text-[11px] sm:text-xs tracking-wide ${isGede ? 'text-amber-950 font-black' : 'text-slate-800'}">${PASARAN[info.pasaranId].toUpperCase()}</span>
-            ${gedeBadge}
+            ${pasaranDisplay}
           </div>
           ${holidayBanner}
           <div class="flex justify-between items-center text-[10px] mt-1.5 pt-1 border-t border-black/10 font-mono">
@@ -1649,22 +1658,23 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
       const isAla = color === 'R';
       const statusKet = isAla ? 'Ala' : 'Becik';
 
-      let printCellBg = '#ffffff';
-      if (isGede) printCellBg = '#fef9c3';
-      else if (isAla) printCellBg = '#fff1f2';
-      else printCellBg = '#f0fdf4';
-
+      // 1. Kesesuaian Warna Hijau & Merah: Mempertahankan warna hijau (Becik) atau merah (Ala) sesuai matriks wuku
+      const printCellBg = isAla ? '#fff1f2' : '#f0fdf4';
+      const printCellBorder = isGede ? '#d4af37' : (isAla ? '#fca5a5' : '#86efac');
       const dateNumColor = isDateRed ? '#dc2626' : '#111827';
 
+      // 2. Sorotan warna latar kuning/emas pada pasaran/hari yang dikategorikan Dino Gede
+      const printPasaranHtml = isGede
+        ? `<div style="font-size: 7.5pt; font-weight: bold; background-color: #fef08a; color: #78350f; border: 0.5pt solid #d4af37; padding: 1pt 3pt; border-radius: 2pt; display: inline-block;">★ ${PASARAN[info.pasaranId].toUpperCase()} (GEDE)</div>`
+        : `<div style="font-size: 7.5pt; font-weight: bold; color: ${isAla ? '#991b1b' : '#166534'};">${PASARAN[info.pasaranId].toUpperCase()}</div>`;
+
       cellsHtml.push(`
-        <td style="border: 0.5pt solid ${isGede ? '#d4af37' : '#d1d5db'}; padding: 3pt 3.5pt; vertical-align: top; height: 36pt; background-color: ${printCellBg};">
+        <td style="border: ${isGede ? '1.5pt solid #d4af37' : '0.5pt solid ' + printCellBorder}; padding: 3pt 3.5pt; vertical-align: top; height: 36pt; background-color: ${printCellBg};">
           <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5pt;">
             <strong style="font-size: 9.5pt; color: ${dateNumColor};">${dayNum}</strong>
             <span style="font-size: 7pt; font-family: monospace; opacity: 0.85;">N.${neptuC}</span>
           </div>
-          <div style="font-size: 7.5pt; font-weight: bold; ${isGede ? 'text-decoration: underline; color: #78350f;' : ''}">
-            ${PASARAN[info.pasaranId].toUpperCase()}${isGede ? ' ★' : ''}
-          </div>
+          ${printPasaranHtml}
           ${isLibur ? `<div style="font-size: 6pt; color: #dc2626; font-weight: bold; line-height: 1.1; margin-top: 1pt;">${liburName}</div>` : ''}
           <div style="display: flex; justify-content: space-between; font-size: 6.5pt; margin-top: 1.5pt; opacity: 0.85;">
             <span>${info.hijri ? info.hijri[0] : ''}</span>

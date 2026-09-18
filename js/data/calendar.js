@@ -260,19 +260,22 @@ export function getLiburNasional(y, m, d) {
 }
 
 export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
-  const isGridGede = Boolean(GRID[wukuId] && GRID[wukuId][d] && GRID[wukuId][d][2] === 1);
-  const isAnggaraKasih = (d === 2 && pasaranId === 4); // Selasa Kliwon
-  const isJumatKliwon = (d === 5 && pasaranId === 4); // Jumat Kliwon
-  const isSatuSura = (hd === 1 && hm === 1); // 1 Sura
+  const cell = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
+  const code = cell[0] || "";
+  const isGridGede = Boolean(cell[2] === 1);
+  const isTandaO = code.includes('O');
+  const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
+  const isJumatKliwon = (d === 5 && pasaranId === 4);
+  const isSatuSura = (hd === 1 && hm === 1);
 
-  const isGede = isGridGede || isAnggaraKasih || isJumatKliwon || isSatuSura;
+  const isGede = isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
   let label = "";
   if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
-  else if (isAnggaraKasih) label = "Anggara Kasih (Selasa Kliwon)";
+  else if (isAnggaraKasih || isTandaO) label = "Anggara Kasih (Selasa Kliwon)";
   else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
   else if (isGridGede) label = "Dino Gede Pawukon";
 
-  return { isGede, label, isGridGede, isAnggaraKasih, isJumatKliwon, isSatuSura };
+  return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura };
 }
 
 export const KETERANGAN_MAP = {
