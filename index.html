@@ -236,6 +236,15 @@
                   <div class="text-[10px] text-sogan-400">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
                 </div>
               </button>
+              <button onclick="switchTab('tumpeng')" class="nav-sublink group/item" data-tab="tumpeng">
+                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
+                  <i class="fa-solid fa-bowl-rice"></i>
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Tumpeng Tombak Rojo</div>
+                  <div class="text-[10px] text-sogan-400">Filosofi 5 Warna &amp; Sesaji Tolak Bala</div>
+                </div>
+              </button>
             </div>
           </div>
         </nav>
@@ -320,6 +329,9 @@
           </button>
           <button onclick="switchTab('pitutur'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="pitutur">
             <i class="fa-solid fa-quote-left w-4 text-prada"></i> Pitutur Luhur &amp; Kuis
+          </button>
+          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tumpeng">
+            <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> Tumpeng Tombak Rojo
           </button>
         </div>
       </div>
@@ -606,6 +618,14 @@
           </div>
           <h3 class="font-marcellus font-bold text-base text-prada mt-3 group-hover:text-prada-light">Pitutur & Kuis Kawruh</h3>
           <p class="font-sans font-light text-xs text-sogan-300 mt-1">Falsafah hidup dan kuis wawasan budaya bergelar.</p>
+        </div>
+
+        <div onclick="switchTab('tumpeng')" class="cursor-pointer group p-5 rounded-2xl amber-glow-card transition hover:-translate-y-2">
+          <div class="w-10 h-10 rounded-xl bg-sogan-900 border border-prada/40 flex items-center justify-center text-prada text-lg group-hover:bg-prada group-hover:text-keraton transition">
+            <i class="fa-solid fa-bowl-rice"></i>
+          </div>
+          <h3 class="font-marcellus font-bold text-base text-prada mt-3 group-hover:text-prada-light">Tumpeng Tombak Rojo</h3>
+          <p class="font-sans font-light text-xs text-sogan-300 mt-1">Filosofi 5 warna, peta ubarampe sesaji tolak bala, dan donga ujub.</p>
         </div>
 
       </div>
@@ -1524,6 +1544,330 @@
 
     </section>
 
+    <!-- ========================================================================= -->
+    <!-- TAB 11: TUMPENG TOMBAK ROJO -->
+    <!-- ========================================================================= -->
+    <section id="tab-tumpeng" class="tab-content hidden space-y-8">
+      
+      <!-- Top Navigation & Title Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold" title="Kembali">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Kembali</span>
+          </button>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+              <i class="fa-solid fa-bowl-rice"></i> Seni, Tradisi, &amp; Filosofi Jawa
+            </span>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
+              Tumpeng Tombak Rojo
+            </h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-full bg-prada/15 border border-prada/40 text-prada text-xs font-bold font-serif flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-shield-halved text-amber-400"></i>
+            <span>Sesaji Sakral Tolak Bala Ageng</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Hero Introduction Banner -->
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-[#141A28] via-[#1A1F30] to-[#0E131E] border border-prada/30 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-prada/10 blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-4xl space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
+            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Karaton
+          </div>
+          <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100 leading-snug">
+            Keseimbangan Kiblat Papat Limo Pancer &amp; Ketajaman Spiritual Manungsa
+          </h3>
+          <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed">
+            <strong>Tumpeng Tombak Rojo</strong> (utawi <em>Tumpeng Tumbak Rojo</em>) minangka puncak pralambang sesaji tolak bala ageng wonten ing kabudayan Jawa. Wujudipun wujud lima tumpeng alit panca warna ingkang manunggal ngiteri punjer, kajangkepi pasak <em>Tombak Rojo</em> ing pucuk tumpeng tengah minangka tameng panulak rubeda, panutup sawan, sarta panyuwunan wilujeng lahir batin marang Gusti Kang Maha Kawasa.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Callout Layout: Image with Hotspot Overlays & Detail Card -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Left: Interactive Image Canvas (7 cols) -->
+        <div class="lg:col-span-7 bg-[#0E131E] p-4 sm:p-5 rounded-3xl border border-prada/40 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-sogan-800/80">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-prada animate-ping"></span>
+              <h4 class="font-marcellus text-sm sm:text-base font-bold text-prada">
+                Peta Ubarampe &amp; Sesaji Tumpeng Tombak Rojo
+              </h4>
+            </div>
+            <span class="text-[10px] text-sogan-400 italic">Klik angka 1–7 ing ngandhap</span>
+          </div>
+
+          <!-- Image Container with Relative Positioning for Hotspots -->
+          <div class="relative w-full rounded-2xl overflow-hidden border border-sogan-700/80 bg-black/60 shadow-inner group">
+            <img src="assets/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
+
+            <!-- Hotspot 1: Tumpeng Panca Warna (Tengah) -->
+            <button type="button" onclick="selectTumpengHotspot(1)" data-hotspot="1" class="tumpeng-hotspot-btn active bg-prada text-keraton border-2 border-amber-200" style="top: 22%; left: 50%;" title="1. Tumpeng Panca Warna (Kiblat Papat Limo Pancer)">
+              1
+            </button>
+
+            <!-- Hotspot 2: Kembang Setaman & Bawang Putih -->
+            <button type="button" onclick="selectTumpengHotspot(2)" data-hotspot="2" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 41%; left: 10%;" title="2. Kembang Setaman & Bawang Putih Tunggal">
+              2
+            </button>
+
+            <!-- Hotspot 3: Kembang Panca Warna / 7 Rupa -->
+            <button type="button" onclick="selectTumpengHotspot(3)" data-hotspot="3" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 12.5%; left: 74%;" title="3. Kembang Panca Warna / Tujuh Rupa">
+              3
+            </button>
+
+            <!-- Hotspot 4: Telur Bebek, Koin Gobog, Pala -->
+            <button type="button" onclick="selectTumpengHotspot(4)" data-hotspot="4" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 34%; left: 74%;" title="4. Telur Bebek, Koin Gobog Kuno, & Pala Kependem">
+              4
+            </button>
+
+            <!-- Hotspot 5: Rempah Dlingo Bengle & Bubur Putih -->
+            <button type="button" onclick="selectTumpengHotspot(5)" data-hotspot="5" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 54.5%; left: 74%;" title="5. Rempah Dlingo Bengle & Bubur Putih (Tajin)">
+              5
+            </button>
+
+            <!-- Hotspot 6: Wedang Kopi Pahit -->
+            <button type="button" onclick="selectTumpengHotspot(6)" data-hotspot="6" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 70.5%; left: 10.5%;" title="6. Wedang Kopi Pahit (Wedang Cemeng)">
+              6
+            </button>
+
+            <!-- Hotspot 7: Wedang Teh Manis / Bening -->
+            <button type="button" onclick="selectTumpengHotspot(7)" data-hotspot="7" class="tumpeng-hotspot-btn bg-sogan-900 text-amber-200 border-2 border-prada" style="top: 12.5%; left: 10%;" title="7. Wedang Teh Manis / Wedang Bening">
+              7
+            </button>
+          </div>
+
+          <!-- Horizontal Button Strip for Easy Tap on Touchscreens -->
+          <div class="grid grid-cols-7 gap-1.5 pt-1">
+            <button onclick="selectTumpengHotspot(1)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">1</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Tumpeng</span>
+            </button>
+            <button onclick="selectTumpengHotspot(2)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">2</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Setaman</span>
+            </button>
+            <button onclick="selectTumpengHotspot(3)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">3</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">7 Rupa</span>
+            </button>
+            <button onclick="selectTumpengHotspot(4)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">4</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Gobog</span>
+            </button>
+            <button onclick="selectTumpengHotspot(5)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">5</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Dlingo</span>
+            </button>
+            <button onclick="selectTumpengHotspot(6)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">6</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Kopi Pait</span>
+            </button>
+            <button onclick="selectTumpengHotspot(7)" class="p-2 rounded-xl bg-sogan-950 border border-prada/30 hover:border-prada text-center transition flex flex-col items-center gap-1 group">
+              <span class="w-6 h-6 rounded-full bg-prada/20 text-prada group-hover:bg-prada group-hover:text-keraton font-bold text-xs flex items-center justify-center">7</span>
+              <span class="text-[9px] text-sogan-300 truncate w-full hidden sm:block">Teh Manis</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Reactive Detail Card (5 cols) -->
+        <div id="tumpengDetailCard" class="lg:col-span-5 bg-gradient-to-b from-[#141A28] to-[#0B0F19] p-6 rounded-3xl border border-prada/40 shadow-2xl space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-sogan-800">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-prada text-keraton font-mono font-black text-lg flex items-center justify-center shadow-lg shadow-prada/20">
+                <span id="tumpengDetailNum">1</span>
+              </div>
+              <div>
+                <span class="text-[10px] uppercase font-bold tracking-wider text-prada">Rincian Ubarampe Sesaji</span>
+                <h4 id="tumpengDetailTitle" class="font-marcellus text-lg font-bold gold-gradient-text">
+                  Tumpeng Panca Warna (Kiblat Papat Limo Pancer)
+                </h4>
+              </div>
+            </div>
+            <i id="tumpengDetailIcon" class="fa-solid fa-bowl-rice text-prada text-xl"></i>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/80 flex items-center justify-between">
+              <span class="text-sogan-400">Posisi &amp; Sajian:</span>
+              <strong id="tumpengDetailPos" class="text-amber-200">Piring Utama / Tengah · 5 Warna</strong>
+            </div>
+
+            <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/80 flex items-center justify-between">
+              <span class="text-sogan-400">Simbol &amp; Pralambang:</span>
+              <strong id="tumpengDetailSimbol" class="text-prada">Keseimbangan Jagad Gede &amp; Jagad Cilik</strong>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <span class="text-[11px] font-bold text-prada flex items-center gap-1.5 uppercase tracking-wide">
+                <i class="fa-solid fa-circle-info"></i> Deskripsi Ubarampe
+              </span>
+              <p id="tumpengDetailDesc" class="text-sogan-200 leading-relaxed text-xs p-3 rounded-xl bg-sogan-900/40 border border-sogan-800/60">
+                Lima tumpeng mini yang disusun mengelilingi pusat. Di puncak tumpeng tengah (hijau) ditancapkan pasak 'Tombak Rojo' berupa bilah lidi dengan cabai merah dan bawang putih tunggal sebagai senjata spiritual penolak bala ageng.
+              </p>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <span class="text-[11px] font-bold text-prada flex items-center gap-1.5 uppercase tracking-wide">
+                <i class="fa-solid fa-scroll"></i> Makna Filosofis &amp; Spiritual Jawa
+              </span>
+              <p id="tumpengDetailMakna" class="text-sogan-200 leading-relaxed text-xs p-3 rounded-xl bg-sogan-900/40 border border-sogan-800/60">
+                Melambangkan penyelarasan empat anasir semesta (tanah, api, air, udara) dan empat nafsu manusia (mutmainnah, amarah, supiyah, aluamah) yang dipimpin oleh sang Pancer (kesadaran jiwa raga).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section: Filosofi 5 Warna (Kiblat Papat Limo Pancer) -->
+      <div class="space-y-4 pt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-sogan-800/80">
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada">Kawruh Kasampurnan</span>
+            <h3 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">
+              Makna Filosofis 5 Warna (Panca Warna)
+            </h3>
+          </div>
+          <span class="text-xs text-sogan-300">Pilih salah satu warna untuk membedah maknanya</span>
+        </div>
+
+        <!-- 5 Color Selectors -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+          <button onclick="selectTumpengWarna('ijo')" data-warna="ijo" class="tumpeng-warna-btn p-3 rounded-2xl bg-sogan-950 border border-prada/40 hover:border-prada transition text-left flex items-center gap-2.5 group">
+            <span class="w-6 h-6 rounded-full bg-emerald-500 shadow-sm border border-emerald-300"></span>
+            <div>
+              <div class="font-bold text-xs text-amber-100 group-hover:text-prada">Hijau (Pancer)</div>
+              <div class="text-[10px] text-sogan-400">Tombak Rojo</div>
+            </div>
+          </button>
+          <button onclick="selectTumpengWarna('putih')" data-warna="putih" class="tumpeng-warna-btn p-3 rounded-2xl bg-sogan-950 border border-sogan-800 hover:border-prada transition text-left flex items-center gap-2.5 group">
+            <span class="w-6 h-6 rounded-full bg-slate-100 shadow-sm border border-slate-300"></span>
+            <div>
+              <div class="font-bold text-xs text-amber-100 group-hover:text-prada">Putih (Timur)</div>
+              <div class="text-[10px] text-sogan-400">Mutmainnah</div>
+            </div>
+          </button>
+          <button onclick="selectTumpengWarna('abang')" data-warna="abang" class="tumpeng-warna-btn p-3 rounded-2xl bg-sogan-950 border border-sogan-800 hover:border-prada transition text-left flex items-center gap-2.5 group">
+            <span class="w-6 h-6 rounded-full bg-rose-500 shadow-sm border border-rose-300"></span>
+            <div>
+              <div class="font-bold text-xs text-amber-100 group-hover:text-prada">Merah (Selatan)</div>
+              <div class="text-[10px] text-sogan-400">Amarah</div>
+            </div>
+          </button>
+          <button onclick="selectTumpengWarna('kuning')" data-warna="kuning" class="tumpeng-warna-btn p-3 rounded-2xl bg-sogan-950 border border-sogan-800 hover:border-prada transition text-left flex items-center gap-2.5 group">
+            <span class="w-6 h-6 rounded-full bg-amber-400 shadow-sm border border-amber-200"></span>
+            <div>
+              <div class="font-bold text-xs text-amber-100 group-hover:text-prada">Kuning (Barat)</div>
+              <div class="text-[10px] text-sogan-400">Supiyah</div>
+            </div>
+          </button>
+          <button onclick="selectTumpengWarna('cemeng')" data-warna="cemeng" class="tumpeng-warna-btn p-3 rounded-2xl bg-sogan-950 border border-sogan-800 hover:border-prada transition text-left flex items-center gap-2.5 group col-span-2 sm:col-span-1">
+            <span class="w-6 h-6 rounded-full bg-zinc-800 shadow-sm border border-zinc-600"></span>
+            <div>
+              <div class="font-bold text-xs text-amber-100 group-hover:text-prada">Hitam (Utara)</div>
+              <div class="text-[10px] text-sogan-400">Aluamah</div>
+            </div>
+          </button>
+        </div>
+
+        <!-- Color Details Card -->
+        <div id="tumpengWarnaCard" class="p-6 rounded-3xl border bg-gradient-to-br from-emerald-500/20 via-emerald-600/5 to-transparent border-emerald-400/60 transition-all duration-300 shadow-2xl space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10">
+            <div>
+              <span class="text-[10px] uppercase font-bold tracking-widest text-prada">Penjuru &amp; Hawa Nafsu</span>
+              <h4 id="tumpengWarnaTitle" class="font-marcellus text-xl font-bold text-white">
+                Nasi Hijau — Tombak Rojo (Tengah / Pancer)
+              </h4>
+            </div>
+            <span id="tumpengWarnaBadge" class="px-3 py-1 rounded-full text-[11px] font-bold border bg-emerald-600 text-white border-emerald-400">
+              Pancer (Pusat Semesta)
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1">
+              <span class="text-sogan-400 text-[10px] uppercase tracking-wider block">Kiblat &amp; Unsur Alam</span>
+              <p class="font-semibold text-amber-100" id="tumpengWarnaUnsur">Hayat / Keseimbangan Kosmik</p>
+            </div>
+            <div class="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1">
+              <span class="text-sogan-400 text-[10px] uppercase tracking-wider block">Nafsu &amp; Sedulur Papat</span>
+              <p class="font-semibold text-amber-100" id="tumpengWarnaSedulur">Raga &amp; Sukma Pribadi</p>
+            </div>
+            <div class="p-3 rounded-xl bg-black/40 border border-white/10 space-y-1">
+              <span class="text-sogan-400 text-[10px] uppercase tracking-wider block">Bahan Olahan Alami</span>
+              <p class="font-semibold text-amber-100" id="tumpengWarnaBahan">Beras pulen beraroma perasan daun suji dan daun pandan wangi alami.</p>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 pt-2">
+            <span class="text-[11px] font-bold text-prada flex items-center gap-1.5 uppercase tracking-wide">
+              <i class="fa-solid fa-gem"></i> Watak, Karakter, &amp; Pesan Moral
+            </span>
+            <p id="tumpengWarnaWatak" class="text-sogan-200 text-xs leading-relaxed p-3.5 rounded-xl bg-black/30 border border-white/10">
+              Penyelarasan segenap daya rohani, ketajaman mata batin, penolak bala ageng, lan katentreman sejati.
+            </p>
+          </div>
+
+          <div class="space-y-1.5 pt-1">
+            <span class="text-[11px] font-bold text-prada flex items-center gap-1.5 uppercase tracking-wide">
+              <i class="fa-solid fa-book-open"></i> Filosofi Luhur Kejawen
+            </span>
+            <p id="tumpengWarnaFilosofi" class="text-sogan-200 text-xs leading-relaxed p-3.5 rounded-xl bg-black/30 border border-white/10">
+              Nasi hijau berdiri megah di pusat keempat penjuru. Di puncaknya ditancapkan pasak 'Tombak Rojo' (cabai merah dan bawang putih tunggal). Inilah mahkota pusaka yang mengikat keempat arah agar manunggal dalam lindungan Gusti.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Tata Laksana & Doa Ujub Slametan -->
+      <div class="p-6 rounded-3xl bg-sogan-950/60 border border-prada/30 shadow-xl space-y-4">
+        <div class="flex items-center gap-2 pb-2 border-b border-sogan-800">
+          <div class="w-8 h-8 rounded-full bg-prada/20 border border-prada/50 flex items-center justify-center text-prada text-sm">
+            <i class="fa-solid fa-hands-praying"></i>
+          </div>
+          <h3 class="font-marcellus text-lg font-bold gold-gradient-text">
+            Tata Laksana Wilujengan &amp; Donga Ujub Tolak Bala
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="p-4 rounded-2xl bg-[#0E131E] border border-sogan-800 space-y-2">
+            <h4 class="font-bold text-prada text-sm flex items-center gap-2">
+              <i class="fa-solid fa-scroll"></i> Donga Ujub Basa Jawa (Krama)
+            </h4>
+            <p class="text-sogan-300 italic leading-relaxed font-serif">
+              "Niat ingsun ngaturaken sesaji Tumpeng Tombak Rojo, kagem nyuwun pangaksama dhumateng Gusti Kang Akarya Jagad, sarta nyuwun donga pangestu para leluhur cikal bakal. Mugi-mugi sedaya rubeda, sarik, sawan, lan memala saged sirna kasapu dening landhepe Tombak Rojo, kasalira ing katentreman, bagas waras, sarta rahayu wilujeng ing salaminya."
+            </p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#0E131E] border border-sogan-800 space-y-2">
+            <h4 class="font-bold text-prada text-sm flex items-center gap-2">
+              <i class="fa-solid fa-language"></i> Terjemahan &amp; Makna Indonesia
+            </h4>
+            <p class="text-sogan-300 leading-relaxed">
+              "Dengan niat tulus menyajikan Tumpeng Tombak Rojo, memohon ampunan ke hadirat Tuhan Yang Maha Kuasa dan doa restu para leluhur perintis kehidupan. Semoga segala marabahaya, petaka, dan energi negatif terhalau oleh ketajaman Tombak Rojo, berganti dengan kedamaian, kesehatan lahir-batin, serta keselamatan yang kekal."
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap justify-between items-center gap-3 text-xs text-sogan-400">
+          <span class="italic">Dipetik saking Serat Centhini &amp; Wewarah Sesaji Ageng Karaton Surakarta / Ngayogyakarta</span>
+          <button onclick="navigasiKembali()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/40 text-prada hover:bg-prada/20 transition font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
+          </button>
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ==================== MODAL DETAIL TOKOH WAYANG (DARK VELVET & ROYAL GOLD) ==================== -->
@@ -1775,6 +2119,7 @@
   <script src="js/data/sasi-jawa-master-data.js"></script>
   <script src="js/ui/navigation.js"></script>
   <script src="js/data/dino-rules.js"></script>
+  <script src="js/data/tumpeng.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
