@@ -50,16 +50,23 @@ function switchTab(tabId, pushState = true) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function toggleNavDropdown(btn) {
+function toggleNavDropdown(btn, event) {
+  if (event) {
+    if (typeof event.stopPropagation === 'function') event.stopPropagation();
+  }
   const group = btn.closest('.nav-dropdown-group');
   if (!group) return;
   const menu = group.querySelector('.nav-dropdown-menu');
   if (!menu) return;
   const isOpen = menu.classList.contains('is-open');
+
+  // Tutup dropdown lain terlebih dahulu
   closeAllNavDropdowns();
+
   if (!isOpen) {
     menu.classList.add('is-open');
     btn.setAttribute('aria-expanded', 'true');
+    btn.classList.add('dropdown-open');
   }
 }
 
@@ -69,6 +76,7 @@ function closeAllNavDropdowns() {
   });
   document.querySelectorAll('.nav-dropdown-trigger').forEach(btn => {
     btn.setAttribute('aria-expanded', 'false');
+    btn.classList.remove('dropdown-open');
   });
 }
 
@@ -76,6 +84,13 @@ function closeAllNavDropdowns() {
 if (typeof document !== 'undefined') {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-dropdown-group')) {
+      closeAllNavDropdowns();
+    }
+  });
+
+  // Tombol Esc menutup semua dropdown
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
       closeAllNavDropdowns();
     }
   });

@@ -118,8 +118,8 @@
 
       <!-- Navigation Links (Tengah - Scrollable Halus di Layar Tablet/Sedang & Desktop) -->
       <!-- Navigation Links (Tengah - Dropdown Kategori Keraton) -->
-      <div class="nav-center-scroll flex-1 overflow-x-auto no-scrollbar py-1 min-w-0 hidden md:flex justify-center">
-        <nav class="nav-menu">
+      <div class="nav-center-scroll nav-center-desktop flex-1 py-1 min-w-0 hidden md:flex justify-center overflow-visible">
+        <nav class="nav-menu overflow-visible">
           <!-- 1. Beranda -->
           <button onclick="switchTab('beranda')" class="nav-btn nav-link active" data-tab="beranda">
             <i class="fa-solid fa-house"></i> <span>Beranda</span>
@@ -127,7 +127,7 @@
 
           <!-- 2. Wektu & Penanggalan (Dropdown) -->
           <div class="nav-dropdown-group relative group">
-            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none" data-group="wektu" aria-expanded="false" onclick="toggleNavDropdown(this)">
+            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="wektu" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
               <i class="fa-solid fa-calendar-days text-prada"></i>
               <span>Wektu &amp; Penanggalan</span>
               <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
@@ -156,7 +156,7 @@
 
           <!-- 3. Nujum & Primbon (Dropdown) -->
           <div class="nav-dropdown-group relative group">
-            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none" data-group="nujum" aria-expanded="false" onclick="toggleNavDropdown(this)">
+            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="nujum" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
               <i class="fa-solid fa-wand-magic-sparkles text-prada"></i>
               <span>Nujum &amp; Primbon</span>
               <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
@@ -194,7 +194,7 @@
 
           <!-- 4. Seni & Budaya (Dropdown) -->
           <div class="nav-dropdown-group relative group">
-            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none" data-group="budaya" aria-expanded="false" onclick="toggleNavDropdown(this)">
+            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="budaya" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
               <i class="fa-solid fa-masks-theater text-prada"></i>
               <span>Seni &amp; Budaya</span>
               <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>

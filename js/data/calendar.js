@@ -259,23 +259,135 @@ export function getLiburNasional(y, m, d) {
   return LIBUR_FLAT[`${y}-${m}-${d}`] || LIBUR_FLAT[`${m}-${d}`] || null;
 }
 
+// Basis Data Resmi Dino Gede & Dino Ijo dari database_nujum CSV
+export const DINO_GEDE_LIST = [
+  ["Selasa","Wage","Sinto"],["Kamis","Legi","Sinto"],["Jumat","Pahing","Sinto"],
+  ["Rabu","Pahing","Landep"],["Sabtu","Kliwon","Landep"],["Selasa","Pon","Wukir"],
+  ["Jumat","Legi","Wukir"],["Senin","Wage","Kurantil"],["Kamis","Pahing","Kurantil"],
+  ["Minggu","Kliwon","Tolu"],["Rabu","Pon","Tolu"],["Sabtu","Legi","Tolu"],
+  ["Selasa","Wage","Gumbreg"],["Kamis","Legi","Gumbreg"],["Jumat","Pahing","Gumbreg"],
+  ["Rabu","Pahing","Warigalit"],["Sabtu","Kliwon","Warigalit"],["Selasa","Pon","Wariagung"],
+  ["Jumat","Legi","Wariagung"],["Senin","Wage","Julungwangi"],["Kamis","Pahing","Julungwangi"],
+  ["Minggu","Kliwon","Sungsang"],["Rabu","Pon","Sungsang"],["Sabtu","Legi","Sungsang"],
+  ["Selasa","Wage","Galungan"],["Kamis","Legi","Galungan"],["Jumat","Pahing","Galungan"],
+  ["Rabu","Pahing","Kuningan"],["Sabtu","Kliwon","Kuningan"],["Selasa","Pon","Langkir"],
+  ["Jumat","Legi","Langkir"],["Senin","Wage","Mandasiya"],["Kamis","Pahing","Mandasiya"],
+  ["Minggu","Kliwon","Julungpujut"],["Rabu","Pon","Julungpujut"],["Sabtu","Legi","Julungpujut"],
+  ["Selasa","Wage","Pahang"],["Kamis","Legi","Pahang"],["Jumat","Pahing","Pahang"],
+  ["Rabu","Pahing","Kuruwelut"],["Sabtu","Kliwon","Kuruwelut"],["Selasa","Pon","Marakeh"],
+  ["Jumat","Legi","Marakeh"],["Senin","Wage","Tambir"],["Kamis","Pahing","Tambir"],
+  ["Minggu","Kliwon","Madangkungan"],["Rabu","Pon","Madangkungan"],["Sabtu","Legi","Madangkungan"],
+  ["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],["Jumat","Pahing","Maktal"],
+  ["Rabu","Pahing","Wuye"],["Sabtu","Kliwon","Wuye"],["Selasa","Pon","Manahil"],
+  ["Senin","Wage","Prangbakat"],["Kamis","Pahing","Prangbakat"],["Minggu","Kliwon","Bala"],
+  ["Rabu","Pon","Bala"],["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],
+  ["Kamis","Legi","Wugu"],["Jumat","Pahing","Wugu"],["Rabu","Pahing","Wayang"],
+  ["Sabtu","Kliwon","Wayang"],["Selasa","Pon","Kulawu"],["Jumat","Legi","Kulawu"],
+  ["Senin","Wage","Dukut"],["Kamis","Pahing","Dukut"],["Minggu","Kliwon","Watugunung"],
+  ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
+];
+
+export const DINO_IJO_LIST = [
+  ["Kamis","Legi","Sinto"],["Jumat","Pahing","Sinto"],["Senin","Kliwon","Landep"],
+  ["Kamis","Pon","Landep"],["Minggu","Legi","Wukir"],["Selasa","Pon","Wukir"],
+  ["Rabu","Wage","Wukir"],["Sabtu","Pahing","Wukir"],["Senin","Wage","Kurantil"],
+  ["Jumat","Pon","Kurantil"],["Minggu","Kliwon","Tolu"],["Sabtu","Legi","Tolu"],
+  ["Kamis","Legi","Gumbreg"],["Jumat","Pahing","Gumbreg"],["Sabtu","Kliwon","Warigalit"],
+  ["Selasa","Pon","Wariagung"],["Rabu","Wage","Wariagung"],["Senin","Wage","Julungwangi"],
+  ["Kamis","Pahing","Julungwangi"],["Minggu","Kliwon","Sungsang"],["Sabtu","Legi","Sungsang"],
+  ["Kamis","Legi","Galungan"],["Jumat","Pahing","Galungan"],["Senin","Kliwon","Kuningan"],
+  ["Kamis","Pon","Kuningan"],["Minggu","Legi","Langkir"],["Selasa","Pon","Langkir"],
+  ["Rabu","Wage","Langkir"],["Jumat","Legi","Langkir"],["Sabtu","Pahing","Langkir"],
+  ["Senin","Wage","Mandasiya"],["Kamis","Pahing","Mandasiya"],["Jumat","Pon","Mandasiya"],
+  ["Minggu","Kliwon","Julungpujut"],["Rabu","Pon","Julungpujut"],["Sabtu","Legi","Julungpujut"],
+  ["Selasa","Wage","Pahang"],["Jumat","Pahing","Pahang"],["Senin","Kliwon","Kuruwelut"],
+  ["Kamis","Pon","Kuruwelut"],["Minggu","Legi","Marakeh"],["Jumat","Legi","Marakeh"],
+  ["Sabtu","Pahing","Marakeh"],["Kamis","Pahing","Tambir"],["Jumat","Pon","Tambir"],
+  ["Rabu","Pon","Madangkungan"],["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],
+  ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
+  ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
+  ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
+  ["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
+  ["Jumat","Pahing","Wugu"],["Senin","Kliwon","Wayang"],["Sabtu","Kliwon","Wayang"],
+  ["Minggu","Legi","Kulawu"],["Selasa","Pon","Kulawu"],["Rabu","Wage","Kulawu"],
+  ["Jumat","Legi","Kulawu"],["Sabtu","Pahing","Kulawu"],["Senin","Wage","Dukut"],
+  ["Kamis","Pahing","Dukut"],["Jumat","Pon","Dukut"],["Minggu","Kliwon","Watugunung"],
+  ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
+];
+
+export function normDinoWukuKey(dino, pasaran, wuku) {
+  const d = String(dino).trim().toLowerCase();
+  const p = String(pasaran).trim().toLowerCase();
+  const w = String(wuku).trim().toLowerCase()
+    .replace(/[\s\-_]/g, '')
+    .replace(/^shinto$/, 'sinto')
+    .replace(/^wariagung$/, 'warigagung');
+  return `${d}_${p}_${w}`;
+}
+
+export const DINO_GEDE_SET = new Set(DINO_GEDE_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
+export const DINO_IJO_SET = new Set(DINO_IJO_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
+
+export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false) {
+  const key = normDinoWukuKey(dino, pasaran, wuku);
+  const isGede = DINO_GEDE_SET.has(key);
+  const isIjo = !isGede && DINO_IJO_SET.has(key);
+
+  let status = 'abang';
+  let label = 'Dina Ala / Kang Olo';
+  let cellBg = '#fef2f2';
+  let cellBorder = '#fca5a5';
+  let cellText = '#7f1d1d';
+  let badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">⚠ Ala</span>';
+
+  if (isGede) {
+    status = 'gede';
+    label = 'Dino Gede';
+    cellBg = 'linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%)';
+    cellBorder = '#d4af37';
+    cellText = '#451a03';
+    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="Dino Gede">★ GEDE</span>';
+  } else if (isIjo && !isMinggu && !isLibur) {
+    status = 'ijo';
+    label = 'Dino Ijo / Becik';
+    cellBg = '#f0fdf4';
+    cellBorder = '#86efac';
+    cellText = '#14532d';
+    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>';
+  } else {
+    status = 'abang';
+    label = isLibur ? 'Libur Nasional' : (isMinggu ? 'Hari Minggu' : 'Dina Ala / Kang Olo');
+    cellBg = '#fef2f2';
+    cellBorder = '#fca5a5';
+    cellText = '#7f1d1d';
+  }
+
+  return { isGede, isIjo, status, label, cellBg, cellBorder, cellText, badgeHtml };
+}
+
 export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
   const cell = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
   const code = cell[0] || "";
+  const dinoName = HARI[d];
+  const pasaranName = PASARAN[pasaranId];
+  const wukuName = WUKU[wukuId];
+
+  const isCsvGede = DINO_GEDE_SET.has(normDinoWukuKey(dinoName, pasaranName, wukuName));
   const isGridGede = Boolean(cell[2] === 1);
   const isTandaO = code.includes('O');
   const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
   const isJumatKliwon = (d === 5 && pasaranId === 4);
   const isSatuSura = (hd === 1 && hm === 1);
 
-  const isGede = isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
+  const isGede = isCsvGede || isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
   let label = "";
   if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
   else if (isAnggaraKasih || isTandaO) label = "Anggara Kasih (Selasa Kliwon)";
   else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
+  else if (isCsvGede) label = "Dino Gede";
   else if (isGridGede) label = "Dino Gede Pawukon";
 
-  return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura };
+  return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura, isCsvGede };
 }
 
 export const KETERANGAN_MAP = {
