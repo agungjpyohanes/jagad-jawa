@@ -976,3 +976,88 @@
     filter: none !important;
   }
 }
+
+/* ========================================================================= */
+/* KALENDER JAWA — SPLIT LAYOUT 2 TINGKAT (SESUAI TABEL ASLI)               */
+/* ========================================================================= */
+
+.cal-split-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 82px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #ffffff;
+  position: relative;
+}
+
+@media (min-width: 640px) {
+  .cal-split-card {
+    min-height: 94px;
+  }
+}
+
+.cal-split-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  z-index: 20;
+}
+
+/* Tingkat Atas: Latar Putih / Bersih */
+.cal-split-top {
+  background-color: #ffffff;
+  padding: 5px 6px 4px 6px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 640px) {
+  .cal-split-top {
+    padding: 6px 8px 5px 8px;
+  }
+}
+
+/* Tingkat Bawah: Warna Solid Hijau (#16a34a) atau Merah (#dc2626) */
+.cal-split-bottom {
+  padding: 4px 6px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .cal-split-bottom {
+    padding: 5px 8px;
+  }
+}
+
+.cal-split-bottom.bg-dino-ijo {
+  background-color: #16a34a !important; /* Hijau Solid Becik */
+}
+
+.cal-split-bottom.bg-dino-abang {
+  background-color: #dc2626 !important; /* Merah Solid Ala */
+}
+
+/* Status Dino Gede: Border Emas Bercahaya (2px solid #eab308) */
+.cal-split-card.is-dino-gede {
+  border: 2px solid #eab308 !important;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.45) !important;
+}
+
+.cal-split-card.is-dino-gede:hover {
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.7), 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+.cal-split-card.not-dino-gede {
+  border: 1px solid #cbd5e1;
+}
+

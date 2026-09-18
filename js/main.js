@@ -321,6 +321,9 @@ function jdnToIslamic(jdn) {
   return [y, m, d];
 }
 
+// Epoch Patokan Abadi Kalender Jawa & Pawukon:
+// JDN 2459456 = 29 Agustus 2021 (Minggu Pahing, Wuku Sinta - Hari ke-0 dari Siklus Pawukon 210 Hari)
+const EPOCH_JDN = 2459456;
 const JDN_LEGI_ANCHOR = 2459590; // toJDN(2022, 1, 10) - Senin Legi
 const SUN_JDN_ANCHOR = 2459589;  // toJDN(2022, 1, 9)  - Minggu wuku Madangkungan (idx 19)
 const WUKU_ANCHOR_IDX = 19;
@@ -329,15 +332,15 @@ const WUKU_ANCHOR_IDX = 19;
 const DAY_INFO_CACHE = Object.create(null);
 
 function getDayInfo(y, m, d) {
-  const key = (y << 9) | (m << 5) | d;
+  const key = y * 10000 + m * 100 + d;
   if (DAY_INFO_CACHE[key]) return DAY_INFO_CACHE[key];
 
   const jdn = toJDN(y, m, d);
-  const weekdayId = (jdn + 1) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
-  const pasaranId = ((jdn - JDN_LEGI_ANCHOR) % 5 + 5) % 5;
-  const sundayJDN = jdn - weekdayId;
-  const weeksDiff = Math.floor((sundayJDN - SUN_JDN_ANCHOR) / 7);
-  const wukuId = ((WUKU_ANCHOR_IDX + weeksDiff) % 30 + 30) % 30;
+  const diffDays = jdn - EPOCH_JDN;
+  const weekdayId = ((diffDays % 7) + 7) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
+  const pasaranId = (((diffDays + 1) % 5) + 5) % 5; // 0 = Legi, 1 = Pahing, 2 = Pon, 3 = Wage, 4 = Kliwon
+  const pDay = ((diffDays % 210) + 210) % 210;
+  const wukuId = Math.floor(pDay / 7); // 0 = Sinta ... 29 = Watugunung
   const [hy, hm, hd] = jdnToIslamic(jdn);
   const ajYear = hy + 512;
 
@@ -554,11 +557,48 @@ const DINO_IJO_LIST = [
   ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
 ];
 
-function normDinoWukuKey(dino, pasaran, wuku) {
-  const d = String(dino || '').trim().toLowerCase();
-  const p = String(pasaran || '').trim().toLowerCase();
-  const w = String(wuku || '').trim().toLowerCase()
-    .replace(/[\s\-_]/g, '')
+const HARI_NAMES_MAIN = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
+const PASARAN_NAMES_MAIN = new Set(['legi', 'pahing', 'pon', 'wage', 'kliwon']);
+
+function parseDinoWukuArgs(a, b, c) {
+  let dino = '', pasaran = '', wuku = '';
+  if (typeof a === 'object' && a !== null) {
+    dino = a.dino || a.hari || '';
+    pasaran = a.pasaran || a.pas || '';
+    wuku = a.wuku || a.wukuName || '';
+  } else if (typeof a === 'string' && (b === undefined || b === null || b === '')) {
+    const parts = a.split(/[\s_\-]+/);
+    if (parts.length === 3) {
+      return parseDinoWukuArgs(parts[0], parts[1], parts[2]);
+    }
+  } else {
+    const args = [String(a || '').trim(), String(b || '').trim(), String(c || '').trim()];
+    for (const arg of args) {
+      const lower = arg.toLowerCase();
+      if (!dino && HARI_NAMES_MAIN.has(lower)) {
+        dino = arg;
+      } else if (!pasaran && PASARAN_NAMES_MAIN.has(lower)) {
+        pasaran = arg;
+      } else if (!wuku) {
+        wuku = arg;
+      }
+    }
+    if (!wuku && args[2]) wuku = args[2];
+    if (!dino && args[0]) dino = args[0];
+    if (!pasaran && args[1]) pasaran = args[1];
+  }
+  return {
+    dino: dino.trim(),
+    pasaran: pasaran.trim(),
+    wuku: wuku.trim().replace(/[\s\-_]/g, '')
+  };
+}
+
+function normDinoWukuKey(a, b, c) {
+  const { dino, pasaran, wuku } = parseDinoWukuArgs(a, b, c);
+  const d = dino.toLowerCase();
+  const p = pasaran.toLowerCase();
+  const w = wuku.toLowerCase()
     .replace(/^shinto$/, 'sinta')
     .replace(/^sinto$/, 'sinta')
     .replace(/^wariagung$/, 'warigagung')
@@ -568,84 +608,89 @@ function normDinoWukuKey(dino, pasaran, wuku) {
     .replace(/^watugunung$/, 'watugunung')
     .replace(/^julungwangi$/, 'julungwangi')
     .replace(/^julungpujut$/, 'julungpujut');
-  return `${d}_${p}_${w}`;
+  return `${w}_${d}_${p}`;
 }
 
-const DINO_GEDE_SET = new Set(DINO_GEDE_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
-const DINO_IJO_SET = new Set(DINO_IJO_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
+const DINO_GEDE_SET = new Set();
+DINO_GEDE_LIST.forEach(([d, p, w]) => {
+  DINO_GEDE_SET.add(normDinoWukuKey(w, d, p));
+  DINO_GEDE_SET.add(normDinoWukuKey(d, p, w));
+  DINO_GEDE_SET.add(`${String(d).toLowerCase()}_${String(p).toLowerCase()}_${String(w).toLowerCase().replace(/[\s\-_]/g, '')}`);
+  DINO_GEDE_SET.add(`${String(w).toLowerCase().replace(/[\s\-_]/g, '')}_${String(d).toLowerCase()}_${String(p).toLowerCase()}`);
+});
 
-const HARI_NAMES_MAIN = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
+const DINO_IJO_SET = new Set();
+DINO_IJO_LIST.forEach(([d, p, w]) => {
+  DINO_IJO_SET.add(normDinoWukuKey(w, d, p));
+  DINO_IJO_SET.add(normDinoWukuKey(d, p, w));
+  DINO_IJO_SET.add(`${String(d).toLowerCase()}_${String(p).toLowerCase()}_${String(w).toLowerCase().replace(/[\s\-_]/g, '')}`);
+  DINO_IJO_SET.add(`${String(w).toLowerCase().replace(/[\s\-_]/g, '')}_${String(d).toLowerCase()}_${String(p).toLowerCase()}`);
+});
 
 function isDinoGede(a, b, c) {
-  let d, p, w;
-  if (typeof a === 'object' && a !== null) {
-    d = a.dino || a.hari;
-    p = a.pasaran || a.pas;
-    w = a.wuku || a.wukuName;
-  } else if (typeof a === 'string' && HARI_NAMES_MAIN.has(a.trim().toLowerCase())) {
-    d = a; p = b; w = c;
-  } else {
-    w = a; d = b; p = c;
-  }
-  return DINO_GEDE_SET.has(normDinoWukuKey(d, p, w));
+  const key = normDinoWukuKey(a, b, c);
+  return DINO_GEDE_SET.has(key);
 }
 
 function isDinoIjo(a, b, c) {
-  let d, p, w;
-  if (typeof a === 'object' && a !== null) {
-    d = a.dino || a.hari;
-    p = a.pasaran || a.pas;
-    w = a.wuku || a.wukuName;
-  } else if (typeof a === 'string' && HARI_NAMES_MAIN.has(a.trim().toLowerCase())) {
-    d = a; p = b; w = c;
-  } else {
-    w = a; d = b; p = c;
-  }
-  return DINO_IJO_SET.has(normDinoWukuKey(d, p, w));
+  const key = normDinoWukuKey(a, b, c);
+  return DINO_IJO_SET.has(key);
 }
 
-function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false, code = '') {
-  const key = normDinoWukuKey(dino, pasaran, wuku);
+function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '') {
+  const key = normDinoWukuKey(a, b, c);
+  const isIjo = DINO_IJO_SET.has(key);
   const isGede = DINO_GEDE_SET.has(key);
-  const isIjo = !isGede && DINO_IJO_SET.has(key);
 
-  let status = 'abang';
-  let label = 'Dina Ala / Kang Olo';
-  let cellBg = '#fef2f2';
-  let cellBorder = '#fca5a5';
-  let cellText = '#7f1d1d';
-  
+  const status = isIjo ? 'ijo' : 'abang';
+  const bottomBg = isIjo ? '#16a34a' : '#dc2626'; // Hijau Solid vs Dino Abang
+  const bottomBgClass = isIjo ? 'bg-dino-ijo' : 'bg-dino-abang';
+  const bottomTextColor = '#ffffff';
+
+  const baseLabel = isIjo ? 'Dino Ijo / Becik' : 'Dina Ala / Kang Olo';
+  const label = isGede ? `${baseLabel} · Dino Gede` : baseLabel;
+
+  const cellBorder = isGede ? '#eab308' : (isIjo ? '#86efac' : '#fca5a5');
+  const cellBorderStyle = isGede
+    ? 'border: 2px solid #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);'
+    : 'border: 1px solid #cbd5e1;';
+
   const alaSuffix = code ? `${code} Ala` : 'Ala';
-  let badgeText = `▲ ${alaSuffix}`;
-  let badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">▲ ${alaSuffix}</span>`;
+  const baseBadgeText = isIjo ? '✓ Becik' : `▲ ${alaSuffix}`;
+  const baseBadgeHtml = isIjo
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>'
+    : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${baseLabel}">▲ ${alaSuffix}</span>`;
 
-  if (isGede) {
-    status = 'gede';
-    label = 'Dino Gede';
-    cellBg = 'linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%)';
-    cellBorder = '#d4af37';
-    cellText = '#451a03';
-    badgeText = '★ GEDE';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="Dino Gede">★ GEDE</span>';
-  } else if (isIjo && !isMinggu && !isLibur) {
-    status = 'ijo';
-    label = 'Dino Ijo / Becik';
-    cellBg = '#f0fdf4';
-    cellBorder = '#86efac';
-    cellText = '#14532d';
-    badgeText = '✓ Becik';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>';
-  } else {
-    status = 'abang';
-    label = isLibur ? 'Libur Nasional' : (isMinggu ? 'Hari Minggu' : 'Dina Ala / Kang Olo');
-    cellBg = '#fef2f2';
-    cellBorder = '#fca5a5';
-    cellText = '#7f1d1d';
-    badgeText = `▲ ${alaSuffix}`;
-    badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${label}">▲ ${alaSuffix}</span>`;
-  }
+  const gedeBadgeText = isGede ? '★ GEDE' : '';
+  const gedeBadgeHtml = isGede
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#eab308] text-amber-950 border border-[#ca8a04] shadow-xs" title="Dino Gede">★ GEDE</span>'
+    : '';
 
-  return { isGede, isIjo, status, label, cellBg, cellBorder, cellText, badgeText, badgeHtml };
+  const badgeText = isGede ? `${isIjo ? '✓ Becik' : `▲ ${alaSuffix}`} · ★ GEDE` : baseBadgeText;
+  const badgeHtml = isGede ? `${gedeBadgeHtml} ${baseBadgeHtml}` : baseBadgeHtml;
+
+  const cellBg = isIjo ? '#f0fdf4' : '#fef2f2';
+  const cellText = isIjo ? '#14532d' : '#7f1d1d';
+
+  return {
+    isGede,
+    isIjo,
+    status,
+    bottomBg,
+    bottomBgClass,
+    bottomTextColor,
+    label,
+    cellBg,
+    cellBorder,
+    cellBorderStyle,
+    cellText,
+    badgeText,
+    badgeHtml,
+    baseBadgeText,
+    baseBadgeHtml,
+    gedeBadgeText,
+    gedeBadgeHtml
+  };
 }
 
 function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
@@ -1466,8 +1511,8 @@ window.renderKalender = function () {
 
   for (let w = 0; w < totalWeeks; w++) {
     const weekStartJDN = gridStartJDN + w * 7;
-    const weeksDiff = Math.floor((weekStartJDN - 2459589) / 7);
-    const wukuId = ((19 + weeksDiff) % 30 + 30) % 30;
+    const weekDiff = weekStartJDN - EPOCH_JDN;
+    const wukuId = ((Math.floor(weekDiff / 7) % 30) + 30) % 30;
     const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
     const wukuName = WUKU[wukuId].toUpperCase();
     const dununge = DUNUNGE[wukuId];
@@ -1480,12 +1525,12 @@ window.renderKalender = function () {
       const dayNum = currentJDN - firstJDN + 1;
 
       if (dayNum < 1 || dayNum > daysInMonth) {
-        cellsBuffer.push('<td class="p-2 bg-black/5 border border-black/10 h-20 sm:h-24"></td>');
+        cellsBuffer.push('<td class="p-0.5 sm:p-1 align-top"><div class="h-20 sm:h-24 rounded-lg bg-black/5 border border-black/5"></div></td>');
         continue;
       }
 
       const info = getDayInfo(tahun, bulan, dayNum);
-      const [code, color] = GRID[wukuId][d];
+      const [code, color] = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
       const neptuC = NEPTU_HARI[d] + NEPTU_PASARAN[info.pasaranId];
 
       const liburName = getLiburNasional(tahun, bulan, dayNum);
@@ -1496,81 +1541,74 @@ window.renderKalender = function () {
       const dinoGedeObj = checkDinoGede(wukuId, d, info.pasaranId, info.hijri[0], info.hijri[1]);
       const dinoWarna = getDinoWarnaStatus(HARI[d], PASARAN[info.pasaranId], WUKU[wukuId], isMinggu, isLibur, code);
       const isGede = dinoGedeObj.isGede || dinoWarna.isGede;
+      const isIjo = dinoWarna.isIjo;
 
       if (!repMonthLabel) {
         repMonthLabel = BULAN_JAWA[info.hijri[1] - 1] || '';
         repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
       }
 
-      // Dua Tahap / Two-Layer Logic (Pewarnaan & Penandaan Presisi):
-      // Tahap 1: Penentuan Warna Dasar (Dino Ijo vs Dino Abang)
-      //   - Dino Ijo: tercantum di database_nujum - dino_ijo.csv -> Warna dasar Hijau (#f0fdf4), border (#86efac), badge '✓ Becik'
-      //   - Dino Abang: di luar daftar Dino Ijo -> Warna dasar Merah (#fef2f2), border (#fca5a5), badge '▲ Ala'
-      //   - Tanggal Merah: Angka tanggal pada hari Minggu dan Libur Nasional otomatis berwarna merah (#dc2626)
-      // Tahap 2: Pemberian Penanda Khusus Dino Gede (Overlay / Badge Tambahan)
-      //   - Pengecekan independen ke database_nujum - dino_gede.csv -> Tambahkan penanda/badge '★ GEDE' (kuning emas)
-      //   - Dino Gede menempel baik pada Dino Ijo maupun Dino Abang tanpa merusak warna dasarnya.
-
-      const isIjo = dinoWarna.isIjo;
-      let cellStyle = '';
-      let cellTextCls = '';
-      let pasaranDisplay = '';
-      let statusBadge = '';
-
-      if (isIjo) {
-        // Warna Dasar Hijau
-        cellTextCls = 'text-[#14532d]';
-        if (isGede) {
-          // Dino Ijo + Dino Gede (Overlay Emas Menyala)
-          cellStyle = 'background: linear-gradient(135deg, #f0fdf4 70%, #fef08a 100%); border: 2px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45); outline: 1px solid #ca8a04; outline-offset: -2px;';
-          pasaranDisplay = `<div class="inline-flex items-center gap-1"><span class="font-black text-[11px] sm:text-xs tracking-wide text-[#78350f] bg-amber-200/90 px-1.5 py-0.5 rounded border border-[#d4af37] shadow-xs" title="Dino Gede">★ ${PASARAN[info.pasaranId].toUpperCase()}</span></div>`;
-          statusBadge = `<div class="inline-flex items-center gap-1"><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#d97706] text-white shadow-xs" title="Dino Gede">★ GEDE</span><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span></div>`;
-        } else {
-          // Dino Ijo Murni
-          cellStyle = 'background-color: #f0fdf4; border: 1px solid #86efac;';
-          pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#14532d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
-          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>`;
-        }
-      } else {
-        // Warna Dasar Merah (Dino Abang)
-        cellTextCls = 'text-[#7f1d1d]';
-        if (isGede) {
-          // Dino Abang + Dino Gede (Overlay Emas Menyala)
-          cellStyle = 'background: linear-gradient(135deg, #fef2f2 70%, #fef08a 100%); border: 2px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45); outline: 1px solid #ca8a04; outline-offset: -2px;';
-          pasaranDisplay = `<div class="inline-flex items-center gap-1"><span class="font-black text-[11px] sm:text-xs tracking-wide text-[#78350f] bg-amber-200/90 px-1.5 py-0.5 rounded border border-[#d4af37] shadow-xs" title="Dino Gede">★ ${PASARAN[info.pasaranId].toUpperCase()}</span></div>`;
-          statusBadge = `<div class="inline-flex items-center gap-1"><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#d97706] text-white shadow-xs" title="Dino Gede">★ GEDE</span><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala">▲ ${code ? code + ' Ala' : 'Ala'}</span></div>`;
-        } else {
-          // Dino Abang Murni
-          cellStyle = 'background-color: #fef2f2; border: 1px solid #fca5a5;';
-          pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#7f1d1d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
-          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala">▲ ${code ? code + ' Ala' : 'Ala'}</span>`;
-        }
-      }
-
       const dateNumStyle = isDateRed
         ? 'color: #dc2626; font-weight: 800;'
-        : (isIjo ? 'color: #14532d; font-weight: 700;' : 'color: #7f1d1d; font-weight: 700;');
+        : 'color: #0f172a; font-weight: 700;';
 
       const holidayBanner = isLibur
-        ? `<div class="text-[8.5px] font-bold text-[#dc2626] leading-tight truncate mt-0.5 max-w-full" title="${liburName}">🎌 ${liburName}</div>`
+        ? `<div class="text-[8px] sm:text-[8.5px] font-bold text-[#dc2626] leading-tight truncate mt-0.5 max-w-full" title="${liburName}">🎌 ${liburName}</div>`
         : '';
+
+      const pasaranUpper = PASARAN[info.pasaranId].toUpperCase();
+      const neptuPas = NEPTU_PASARAN[info.pasaranId];
+      const bulanJawaName = BULAN_JAWA[info.hijri[1] - 1] || '';
+
+      let codeTooltip = '';
+      if (code) {
+        const details = getKeteranganKodeDetail(code);
+        codeTooltip = details.map(item => `${item.nama}: ${item.arti}`).join(' | ');
+      }
+
+      const cellOutlineStyle = isGede
+        ? 'border: 2px solid #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);'
+        : 'border: 1px solid #cbd5e1;';
 
       cellsBuffer.push(`
         <td onclick="showDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum})"
-            style="${cellStyle}"
-            class="p-1.5 sm:p-2.5 ${cellTextCls} h-20 sm:h-24 align-top cursor-pointer transition-all duration-150 hover:brightness-95 hover:scale-[1.02] hover:shadow-xl hover:z-20 relative group select-none border"
-            title="Klik untuk rincian ${dayNum} ${BULAN_MASEHI[bulan - 1]} ${tahun}">
-          <div class="flex justify-between items-baseline">
-            <span class="font-marcellus text-lg sm:text-xl" style="${dateNumStyle}">${dayNum}</span>
-            <span class="font-mono text-[10px] px-1 py-0.2 rounded bg-black/5 font-semibold text-slate-700" title="Neptu">${neptuC}</span>
-          </div>
-          <div class="flex items-center gap-1 mt-0.5">
-            ${pasaranDisplay}
-          </div>
-          ${holidayBanner}
-          <div class="flex justify-between items-center text-[10px] mt-1.5 pt-1 border-t border-black/10 font-mono">
-            <span class="opacity-80 text-slate-700 font-semibold">${info.hijri[0]}</span>
-            ${statusBadge}
+            class="p-0.5 sm:p-1 align-top cursor-pointer select-none transition-all"
+            title="Klik untuk rincian ${dayNum} ${BULAN_MASEHI[bulan - 1]} ${tahun} (${HARI[d]} ${PASARAN[info.pasaranId]})">
+          <div class="cal-split-card rounded-lg overflow-hidden flex flex-col justify-between h-20 sm:h-24 shadow-sm ${isGede ? 'is-dino-gede' : 'not-dino-gede'}"
+               style="${cellOutlineStyle}">
+            
+            <!-- Tingkat Atas (Latar Putih / Bersih) -->
+            <div class="cal-split-top bg-white p-1 sm:p-1.5 flex flex-col justify-between flex-1 border-b border-slate-200/80">
+              <div class="flex justify-between items-start">
+                <div class="flex items-baseline gap-0.5">
+                  <span class="font-marcellus text-lg sm:text-2xl leading-none" style="${dateNumStyle}">${dayNum}</span>
+                  ${isGede ? '<span class="text-[#eab308] font-black text-xs sm:text-sm drop-shadow-xs ml-0.5" title="Dino Gede">★</span>' : ''}
+                </div>
+                <span class="font-mono text-[9px] sm:text-[10.5px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 shadow-xs" title="Neptu Dina (${NEPTU_HARI[d]}) + Pasaran (${neptuPas}) = ${neptuC}">
+                  ${neptuC}
+                </span>
+              </div>
+              ${holidayBanner}
+            </div>
+
+            <!-- Tingkat Bawah (Latar Warna Solid Hijau atau Merah) -->
+            <div class="cal-split-bottom p-1 sm:p-1.5 text-white flex flex-col justify-between gap-0.5 ${dinoWarna.bottomBgClass}"
+                 style="background-color: ${dinoWarna.bottomBg};">
+              <div class="flex justify-between items-center text-[9.5px] sm:text-[11px] leading-none">
+                <div class="font-bold tracking-wide flex items-center gap-0.5 truncate">
+                  <span>${pasaranUpper}</span>
+                  <span class="opacity-90 font-mono text-[8.5px] sm:text-[9.5px] font-normal">(${neptuPas})</span>
+                </div>
+                ${code ? `<span class="px-1 py-0.2 rounded bg-black/25 text-white font-mono font-bold text-[8px] sm:text-[9px] tracking-wider flex-shrink-0" title="${codeTooltip}">${code}</span>` : ''}
+              </div>
+              <div class="flex justify-between items-center text-[8.5px] sm:text-[10px] leading-none opacity-95">
+                <span class="truncate font-medium">${info.hijri[0]} ${bulanJawaName}</span>
+                ${isGede
+                  ? '<span class="px-1 py-0.2 rounded bg-amber-300 text-amber-950 font-extrabold text-[7.5px] sm:text-[8.5px] shadow-xs flex-shrink-0">★ GEDE</span>'
+                  : `<span class="text-[7.5px] sm:text-[8.5px] opacity-90 font-semibold flex-shrink-0">${isIjo ? '✓ Becik' : '▲ Ala'}</span>`}
+              </div>
+            </div>
+
           </div>
         </td>
       `);
@@ -1802,8 +1840,8 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
   const calRowsHtml = [];
   for (let w = 0; w < totalWeeks; w++) {
     const weekStartJDN = gridStartJDN + w * 7;
-    const weeksDiff = Math.floor((weekStartJDN - 2459589) / 7);
-    const wukuId = ((19 + weeksDiff) % 30 + 30) % 30;
+    const weekDiff = weekStartJDN - EPOCH_JDN;
+    const wukuId = ((Math.floor(weekDiff / 7) % 30) + 30) % 30;
     const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
 
     if (!wukusInMonth.some(item => item.id === wukuId)) {
@@ -1823,7 +1861,7 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
       }
 
       const info = getDayInfo(tahun, bulan, dayNum);
-      const [code, color, gede] = GRID[wukuId][d];
+      const [code, color, gede] = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ["", "G", 0];
       const neptuC = NEPTU_HARI[d] + NEPTU_PASARAN[info.pasaranId];
 
       const liburName = getLiburNasional(tahun, bulan, dayNum);
@@ -1834,7 +1872,8 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
       const dinoGedeObj = checkDinoGede(wukuId, d, info.pasaranId, info.hijri[0], info.hijri[1]);
       const dinoWarna = getDinoWarnaStatus(HARI[d], PASARAN[info.pasaranId], WUKU[wukuId], isMinggu, isLibur, code);
       const isGede = dinoGedeObj.isGede || dinoWarna.isGede;
-      const isCsvIjo = dinoWarna.isIjo;
+      const isIjo = dinoWarna.isIjo;
+      const isAla = !isIjo;
 
       if (!repMonthLabel && info?.hijri) {
         repMonthLabel = BULAN_JAWA[info.hijri[1] - 1] || '';
@@ -1846,40 +1885,38 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
         rowYearLabel = info.ajYear;
       }
 
-      // Dua Tahap / Two-Layer Logic Cetak PDF:
-      // Tahap 1: Warna dasar sel murni Dino Ijo vs Dino Abang
-      // Tahap 2: Overlay Dino Gede (Border emas #d4af37 & badge emas ★) tanpa merusak warna dasar
-      const isIjo = dinoWarna.isIjo;
-      const statusKet = isIjo
-        ? (isGede ? '★ GEDE · ✓ Becik' : '✓ Becik')
-        : (isGede ? (code ? `★ GEDE · ▲ ${code} Ala` : '★ GEDE · ▲ Ala') : (code ? `▲ ${code} Ala` : '▲ Ala'));
-
-      let printCellBg = isIjo ? '#f0fdf4' : '#fff1f2';
-      let printCellBorder = isIjo ? '#86efac' : '#fca5a5';
-      let printPasaranHtml = '';
-
-      if (isGede) {
-        printCellBorder = '#d4af37';
-        printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; background-color: #fef08a; color: #78350f; border: 0.5pt solid #d4af37; padding: 1pt 3pt; border-radius: 2pt; display: inline-block;">★ ${PASARAN[info.pasaranId].toUpperCase()} (GEDE)</div>`;
-      } else if (isIjo) {
-        printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; color: #166534;">${PASARAN[info.pasaranId].toUpperCase()}</div>`;
-      } else {
-        printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; color: #991b1b;">${PASARAN[info.pasaranId].toUpperCase()}</div>`;
-      }
-
-      const dateNumColor = isDateRed ? '#dc2626' : (isIjo ? '#166534' : '#991b1b');
+      const dateNumColor = isDateRed ? '#dc2626' : '#0f172a';
+      const cellBorder = isGede ? '1.5pt solid #eab308' : '0.5pt solid #cbd5e1';
+      const bottomBg = dinoWarna.bottomBg; // #16a34a (Hijau Solid) or #dc2626 (Dino Abang)
+      const pasaranUpper = PASARAN[info.pasaranId].toUpperCase();
+      const neptuPas = NEPTU_PASARAN[info.pasaranId];
+      const bulanJawaName = BULAN_JAWA[info.hijri[1] - 1] || '';
 
       cellsHtml.push(`
-        <td style="border: ${isGede ? '1.5pt solid #d4af37' : '0.5pt solid ' + printCellBorder}; padding: 3pt 3.5pt; vertical-align: top; height: 36pt; background-color: ${printCellBg};">
-          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5pt;">
-            <strong style="font-size: 9.5pt; color: ${dateNumColor};">${dayNum}</strong>
-            <span style="font-size: 7pt; font-family: monospace; opacity: 0.85;">N.${neptuC}</span>
-          </div>
-          ${printPasaranHtml}
-          ${isLibur ? `<div style="font-size: 6pt; color: #dc2626; font-weight: bold; line-height: 1.1; margin-top: 1pt;">${liburName}</div>` : ''}
-          <div style="display: flex; justify-content: space-between; font-size: 6.5pt; margin-top: 1.5pt; opacity: 0.85;">
-            <span>${info.hijri ? info.hijri[0] : ''}</span>
-            <span style="font-weight: bold; color: ${isAla ? '#b91c1c' : '#15803d'};">${statusKet}</span>
+        <td style="border: ${cellBorder}; padding: 0; vertical-align: top; height: 38pt; background-color: #ffffff;">
+          <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
+            <!-- Tingkat Atas (Putih) -->
+            <div style="background-color: #ffffff; padding: 2.5pt 3pt 1.5pt 3pt; border-bottom: 0.5pt solid #e2e8f0;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <div>
+                  <strong style="font-size: 9.5pt; color: ${dateNumColor}; line-height: 1;">${dayNum}</strong>
+                  ${isGede ? '<span style="color: #eab308; font-size: 7.5pt; font-weight: bold; margin-left: 1pt;">★</span>' : ''}
+                </div>
+                <span style="font-size: 6.5pt; font-family: monospace; font-weight: bold; background-color: #f1f5f9; padding: 0.5pt 2pt; border-radius: 2pt; border: 0.5pt solid #cbd5e1;">${neptuC}</span>
+              </div>
+              ${isLibur ? `<div style="font-size: 5.5pt; color: #dc2626; font-weight: bold; line-height: 1.1; margin-top: 1pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${liburName}</div>` : ''}
+            </div>
+            <!-- Tingkat Bawah (Hijau Solid atau Merah Solid) -->
+            <div style="background-color: ${bottomBg}; color: #ffffff; padding: 2pt 3pt; font-size: 6.5pt; display: flex; flex-direction: column; gap: 1pt;">
+              <div style="display: flex; justify-content: space-between; align-items: center; line-height: 1;">
+                <span style="font-weight: bold;">${pasaranUpper} (${neptuPas})</span>
+                ${code ? `<span style="font-family: monospace; font-weight: bold; background-color: rgba(0,0,0,0.25); padding: 0.5pt 1.5pt; border-radius: 1.5pt;">${code}</span>` : ''}
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; line-height: 1; opacity: 0.95;">
+                <span>${info.hijri ? info.hijri[0] : ''} ${bulanJawaName}</span>
+                <span style="font-size: 5.5pt; font-weight: bold;">${isGede ? '★ GEDE' : (isIjo ? '✓ Becik' : '▲ Ala')}</span>
+              </div>
+            </div>
           </div>
         </td>
       `);

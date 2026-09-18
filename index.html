@@ -698,46 +698,49 @@
           Nomor 4, 14, 24 — kala ono ngisor, ojo marani dununge wuku!
         </div>
 
-        <!-- Standarisasi Kode Warna (Color Coding) -->
+        <!-- Standarisasi Kode Warna (Color Coding Sesuai Tabel Asli) -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-          <div class="p-2.5 rounded-xl bg-red-950/40 border border-red-500/40 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-red-600 flex-shrink-0 shadow-[0_0_8px_rgba(220,38,38,0.6)]"></span>
+          <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-sm bg-[#16a34a] flex-shrink-0 shadow-[0_0_8px_rgba(22,163,74,0.6)]"></span>
             <div>
-              <strong class="text-red-300 block text-[11px]">Merah: (#dc2626)</strong>
-              <span class="text-[10px] text-sogan-300">Hari Minggu &amp; Libur Nasional</span>
+              <strong class="text-emerald-300 block text-[11px]">Blok Hijau Solid (#16a34a)</strong>
+              <span class="text-[10px] text-sogan-300">Dino Ijo / Rahayu (74 Dino)</span>
+            </div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-red-950/40 border border-red-500/40 flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-sm bg-[#dc2626] flex-shrink-0 shadow-[0_0_8px_rgba(220,38,38,0.6)]"></span>
+            <div>
+              <strong class="text-red-300 block text-[11px]">Blok Merah Solid (#dc2626)</strong>
+              <span class="text-[10px] text-sogan-300">Dino Abang / Ala (136 Dino)</span>
             </div>
           </div>
           <div class="p-2.5 rounded-xl bg-amber-950/40 border border-amber-400/50 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-amber-400 flex-shrink-0 shadow-[0_0_8px_rgba(212,175,55,0.6)]"></span>
+            <span class="w-3.5 h-3.5 rounded-sm border-2 border-[#eab308] bg-transparent flex items-center justify-center flex-shrink-0 shadow-[0_0_8px_rgba(234,179,8,0.6)] text-[#eab308] text-[9px] font-bold">★</span>
             <div>
-              <strong class="text-amber-300 block text-[11px]">Emas / Kuning:</strong>
-              <span class="text-[10px] text-sogan-300">Dino Gede &amp; Pasaran Sakral</span>
+              <strong class="text-amber-300 block text-[11px]">Border Emas &amp; Bintang ★</strong>
+              <span class="text-[10px] text-sogan-300">Dino Gede (71 Pasangan Sakral)</span>
             </div>
           </div>
-          <div class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-500/40 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-emerald-500 flex-shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-sm bg-white border border-slate-300 flex items-center justify-center flex-shrink-0 text-red-600 font-bold text-[10px]">1</span>
             <div>
-              <strong class="text-emerald-300 block text-[11px]">Hijau: (#15803d)</strong>
-              <span class="text-[10px] text-sogan-300">Dina Becik / Rahayu</span>
-            </div>
-          </div>
-          <div class="p-2.5 rounded-xl bg-rose-950/40 border border-rose-500/40 flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-rose-600 flex-shrink-0 shadow-[0_0_8px_rgba(225,29,72,0.6)]"></span>
-            <div>
-              <strong class="text-rose-300 block text-[11px]">Merah Bata: (Rose)</strong>
-              <span class="text-[10px] text-sogan-300">Dina Ala / Nahas (Sirikan)</span>
+              <strong class="text-red-400 block text-[11px]">Tinta Merah Angka Masehi</strong>
+              <span class="text-[10px] text-sogan-300">Hari Minggu &amp; Libur Nasional</span>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           <div>
-            <h4 class="font-marcellus text-sm font-bold text-prada mb-2">Cara Membaca Kalender &amp; Interaktivitas</h4>
+            <h4 class="font-marcellus text-sm font-bold text-prada mb-2">Struktur Sel 2 Tingkat &amp; Interaktivitas</h4>
             <p class="text-sogan-300 leading-relaxed">
-              Tiap sel mencakup: <strong>Angka Tanggal</strong> = Tanggal Masehi (Merah untuk Hari Minggu &amp; Libur Nasional), <strong>Warna Latar Sel</strong> = Kuning/Emas (Dino Gede), Hijau (Dina Becik), atau Merah (Dina Ala), <strong>Bawah Kiri</strong> = Tanggal Jawa/Hijriyah, <strong>Atas Kanan</strong> = Neptu Hari + Pasaran, <strong>Pasaran</strong> = Pancawara Legi s.d. Kliwon, <strong>Kanan Bawah</strong> = Kode Primbon.
+              Tiap sel menggunakan <strong>Split Layout 2 Tingkat</strong> sesuai kalender asli:
+              <br>&bull; <strong>Tingkat Atas (Latar Putih):</strong> Angka Masehi besar di kiri (tinta merah untuk Hari Minggu &amp; Libur Nasional, hitam untuk hari biasa) dan Neptu Total di kanan atas.
+              <br>&bull; <strong>Tingkat Bawah (Warna Solid):</strong> Latar Hijau Solid (#16a34a) untuk Dino Ijo atau Merah Solid (#dc2626) untuk Dino Abang, memuat Pasaran + Neptu Pasaran, Tanggal Bulan Jawa, dan Singkatan Watak/Kala.
+              <br>&bull; <strong>Aksen Dino Gede:</strong> Border emas bercahaya (2px solid #eab308) dan ikon bintang emas &starf; tanpa mengubah warna dasar blok bawah.
             </p>
             <p class="text-sogan-300 leading-relaxed mt-2 text-[11px]">
-              <i class="fa-solid fa-hand-pointer text-amber-400 mr-1"></i> <strong>Interaktif:</strong> Klik pada salah satu kotak tanggal kalender untuk membuka popup rincian lengkap weton, neptu, pawukon, dewa, arti kode, serta pranata mangsa &amp; zodiak.
+              <i class="fa-solid fa-hand-pointer text-amber-400 mr-1"></i> <strong>Interaktif:</strong> Klik pada kartu tanggal kalender untuk membuka rincian lengkap weton, neptu, pawukon, dewa, arti kode watak, serta pranata mangsa &amp; zodiak.
             </p>
           </div>
           <div>

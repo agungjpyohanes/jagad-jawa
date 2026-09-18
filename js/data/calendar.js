@@ -83,6 +83,9 @@ export function jdnToIslamic(jdn) {
   return [y, m, d];
 }
 
+// Epoch Patokan Abadi Kalender Jawa & Pawukon:
+// JDN 2459456 = 29 Agustus 2021 (Minggu Pahing, Wuku Sinta - Hari ke-0 dari Siklus Pawukon 210 Hari)
+export const EPOCH_JDN = 2459456;
 const JDN_LEGI_ANCHOR = 2459590; // toJDN(2022, 1, 10) - Senin Legi
 const SUN_JDN_ANCHOR = 2459589;  // toJDN(2022, 1, 9)  - Minggu wuku Madangkungan (idx 19)
 const WUKU_ANCHOR_IDX = 19;
@@ -91,15 +94,15 @@ const WUKU_ANCHOR_IDX = 19;
 const DAY_INFO_CACHE = Object.create(null);
 
 export function getDayInfo(y, m, d) {
-  const key = (y << 9) | (m << 5) | d;
+  const key = y * 10000 + m * 100 + d;
   if (DAY_INFO_CACHE[key]) return DAY_INFO_CACHE[key];
 
   const jdn = toJDN(y, m, d);
-  const weekdayId = (jdn + 1) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
-  const pasaranId = ((jdn - JDN_LEGI_ANCHOR) % 5 + 5) % 5;
-  const sundayJDN = jdn - weekdayId;
-  const weeksDiff = Math.floor((sundayJDN - SUN_JDN_ANCHOR) / 7);
-  const wukuId = ((WUKU_ANCHOR_IDX + weeksDiff) % 30 + 30) % 30;
+  const diffDays = jdn - EPOCH_JDN;
+  const weekdayId = ((diffDays % 7) + 7) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
+  const pasaranId = (((diffDays + 1) % 5) + 5) % 5; // 0 = Legi, 1 = Pahing, 2 = Pon, 3 = Wage, 4 = Kliwon
+  const pDay = ((diffDays % 210) + 210) % 210;
+  const wukuId = Math.floor(pDay / 7); // 0 = Sinta ... 29 = Watugunung
   const [hy, hm, hd] = jdnToIslamic(jdn);
   const ajYear = hy + 512;
 
@@ -315,11 +318,48 @@ export const DINO_IJO_LIST = [
   ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
 ];
 
-export function normDinoWukuKey(dino, pasaran, wuku) {
-  const d = String(dino || '').trim().toLowerCase();
-  const p = String(pasaran || '').trim().toLowerCase();
-  const w = String(wuku || '').trim().toLowerCase()
-    .replace(/[\s\-_]/g, '')
+const HARI_NAMES_CAL = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
+const PASARAN_NAMES_CAL = new Set(['legi', 'pahing', 'pon', 'wage', 'kliwon']);
+
+export function parseDinoWukuArgs(a, b, c) {
+  let dino = '', pasaran = '', wuku = '';
+  if (typeof a === 'object' && a !== null) {
+    dino = a.dino || a.hari || '';
+    pasaran = a.pasaran || a.pas || '';
+    wuku = a.wuku || a.wukuName || '';
+  } else if (typeof a === 'string' && (b === undefined || b === null || b === '')) {
+    const parts = a.split(/[\s_\-]+/);
+    if (parts.length === 3) {
+      return parseDinoWukuArgs(parts[0], parts[1], parts[2]);
+    }
+  } else {
+    const args = [String(a || '').trim(), String(b || '').trim(), String(c || '').trim()];
+    for (const arg of args) {
+      const lower = arg.toLowerCase();
+      if (!dino && HARI_NAMES_CAL.has(lower)) {
+        dino = arg;
+      } else if (!pasaran && PASARAN_NAMES_CAL.has(lower)) {
+        pasaran = arg;
+      } else if (!wuku) {
+        wuku = arg;
+      }
+    }
+    if (!wuku && args[2]) wuku = args[2];
+    if (!dino && args[0]) dino = args[0];
+    if (!pasaran && args[1]) pasaran = args[1];
+  }
+  return {
+    dino: dino.trim(),
+    pasaran: pasaran.trim(),
+    wuku: wuku.trim().replace(/[\s\-_]/g, '')
+  };
+}
+
+export function normDinoWukuKey(a, b, c) {
+  const { dino, pasaran, wuku } = parseDinoWukuArgs(a, b, c);
+  const d = dino.toLowerCase();
+  const p = pasaran.toLowerCase();
+  const w = wuku.toLowerCase()
     .replace(/^shinto$/, 'sinta')
     .replace(/^sinto$/, 'sinta')
     .replace(/^wariagung$/, 'warigagung')
@@ -329,84 +369,89 @@ export function normDinoWukuKey(dino, pasaran, wuku) {
     .replace(/^watugunung$/, 'watugunung')
     .replace(/^julungwangi$/, 'julungwangi')
     .replace(/^julungpujut$/, 'julungpujut');
-  return `${d}_${p}_${w}`;
+  return `${w}_${d}_${p}`;
 }
 
-export const DINO_GEDE_SET = new Set(DINO_GEDE_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
-export const DINO_IJO_SET = new Set(DINO_IJO_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
+export const DINO_GEDE_SET = new Set();
+DINO_GEDE_LIST.forEach(([d, p, w]) => {
+  DINO_GEDE_SET.add(normDinoWukuKey(w, d, p));
+  DINO_GEDE_SET.add(normDinoWukuKey(d, p, w));
+  DINO_GEDE_SET.add(`${String(d).toLowerCase()}_${String(p).toLowerCase()}_${String(w).toLowerCase().replace(/[\s\-_]/g, '')}`);
+  DINO_GEDE_SET.add(`${String(w).toLowerCase().replace(/[\s\-_]/g, '')}_${String(d).toLowerCase()}_${String(p).toLowerCase()}`);
+});
 
-const HARI_NAMES_CAL = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
+export const DINO_IJO_SET = new Set();
+DINO_IJO_LIST.forEach(([d, p, w]) => {
+  DINO_IJO_SET.add(normDinoWukuKey(w, d, p));
+  DINO_IJO_SET.add(normDinoWukuKey(d, p, w));
+  DINO_IJO_SET.add(`${String(d).toLowerCase()}_${String(p).toLowerCase()}_${String(w).toLowerCase().replace(/[\s\-_]/g, '')}`);
+  DINO_IJO_SET.add(`${String(w).toLowerCase().replace(/[\s\-_]/g, '')}_${String(d).toLowerCase()}_${String(p).toLowerCase()}`);
+});
 
 export function isDinoGede(a, b, c) {
-  let d, p, w;
-  if (typeof a === 'object' && a !== null) {
-    d = a.dino || a.hari;
-    p = a.pasaran || a.pas;
-    w = a.wuku || a.wukuName;
-  } else if (typeof a === 'string' && HARI_NAMES_CAL.has(a.trim().toLowerCase())) {
-    d = a; p = b; w = c;
-  } else {
-    w = a; d = b; p = c;
-  }
-  return DINO_GEDE_SET.has(normDinoWukuKey(d, p, w));
+  const key = normDinoWukuKey(a, b, c);
+  return DINO_GEDE_SET.has(key);
 }
 
 export function isDinoIjo(a, b, c) {
-  let d, p, w;
-  if (typeof a === 'object' && a !== null) {
-    d = a.dino || a.hari;
-    p = a.pasaran || a.pas;
-    w = a.wuku || a.wukuName;
-  } else if (typeof a === 'string' && HARI_NAMES_CAL.has(a.trim().toLowerCase())) {
-    d = a; p = b; w = c;
-  } else {
-    w = a; d = b; p = c;
-  }
-  return DINO_IJO_SET.has(normDinoWukuKey(d, p, w));
+  const key = normDinoWukuKey(a, b, c);
+  return DINO_IJO_SET.has(key);
 }
 
-export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false, code = '') {
-  const key = normDinoWukuKey(dino, pasaran, wuku);
+export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '') {
+  const key = normDinoWukuKey(a, b, c);
+  const isIjo = DINO_IJO_SET.has(key);
   const isGede = DINO_GEDE_SET.has(key);
-  const isIjo = !isGede && DINO_IJO_SET.has(key);
 
-  let status = 'abang';
-  let label = 'Dina Ala / Kang Olo';
-  let cellBg = '#fef2f2';
-  let cellBorder = '#fca5a5';
-  let cellText = '#7f1d1d';
-  
+  const status = isIjo ? 'ijo' : 'abang';
+  const bottomBg = isIjo ? '#16a34a' : '#dc2626'; // Hijau Solid vs Dino Abang
+  const bottomBgClass = isIjo ? 'bg-dino-ijo' : 'bg-dino-abang';
+  const bottomTextColor = '#ffffff';
+
+  const baseLabel = isIjo ? 'Dino Ijo / Becik' : 'Dina Ala / Kang Olo';
+  const label = isGede ? `${baseLabel} · Dino Gede` : baseLabel;
+
+  const cellBorder = isGede ? '#eab308' : (isIjo ? '#86efac' : '#fca5a5');
+  const cellBorderStyle = isGede
+    ? 'border: 2px solid #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);'
+    : 'border: 1px solid #cbd5e1;';
+
   const alaSuffix = code ? `${code} Ala` : 'Ala';
-  let badgeText = `▲ ${alaSuffix}`;
-  let badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">▲ ${alaSuffix}</span>`;
+  const baseBadgeText = isIjo ? '✓ Becik' : `▲ ${alaSuffix}`;
+  const baseBadgeHtml = isIjo
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>'
+    : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${baseLabel}">▲ ${alaSuffix}</span>`;
 
-  if (isGede) {
-    status = 'gede';
-    label = 'Dino Gede';
-    cellBg = 'linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%)';
-    cellBorder = '#d4af37';
-    cellText = '#451a03';
-    badgeText = '★ GEDE';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="Dino Gede">★ GEDE</span>';
-  } else if (isIjo && !isMinggu && !isLibur) {
-    status = 'ijo';
-    label = 'Dino Ijo / Becik';
-    cellBg = '#f0fdf4';
-    cellBorder = '#86efac';
-    cellText = '#14532d';
-    badgeText = '✓ Becik';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>';
-  } else {
-    status = 'abang';
-    label = isLibur ? 'Libur Nasional' : (isMinggu ? 'Hari Minggu' : 'Dina Ala / Kang Olo');
-    cellBg = '#fef2f2';
-    cellBorder = '#fca5a5';
-    cellText = '#7f1d1d';
-    badgeText = `▲ ${alaSuffix}`;
-    badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${label}">▲ ${alaSuffix}</span>`;
-  }
+  const gedeBadgeText = isGede ? '★ GEDE' : '';
+  const gedeBadgeHtml = isGede
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#eab308] text-amber-950 border border-[#ca8a04] shadow-xs" title="Dino Gede">★ GEDE</span>'
+    : '';
 
-  return { isGede, isIjo, status, label, cellBg, cellBorder, cellText, badgeText, badgeHtml };
+  const badgeText = isGede ? `${isIjo ? '✓ Becik' : `▲ ${alaSuffix}`} · ★ GEDE` : baseBadgeText;
+  const badgeHtml = isGede ? `${gedeBadgeHtml} ${baseBadgeHtml}` : baseBadgeHtml;
+
+  const cellBg = isIjo ? '#f0fdf4' : '#fef2f2';
+  const cellText = isIjo ? '#14532d' : '#7f1d1d';
+
+  return {
+    isGede,
+    isIjo,
+    status,
+    bottomBg,
+    bottomBgClass,
+    bottomTextColor,
+    label,
+    cellBg,
+    cellBorder,
+    cellBorderStyle,
+    cellText,
+    badgeText,
+    badgeHtml,
+    baseBadgeText,
+    baseBadgeHtml,
+    gedeBadgeText,
+    gedeBadgeHtml
+  };
 }
 
 export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
