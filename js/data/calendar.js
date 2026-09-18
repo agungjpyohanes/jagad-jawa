@@ -316,19 +316,50 @@ export const DINO_IJO_LIST = [
 ];
 
 export function normDinoWukuKey(dino, pasaran, wuku) {
-  const d = String(dino).trim().toLowerCase();
-  const p = String(pasaran).trim().toLowerCase();
-  const w = String(wuku).trim().toLowerCase()
+  const d = String(dino || '').trim().toLowerCase();
+  const p = String(pasaran || '').trim().toLowerCase();
+  const w = String(wuku || '').trim().toLowerCase()
     .replace(/[\s\-_]/g, '')
     .replace(/^shinto$/, 'sinto')
-    .replace(/^wariagung$/, 'warigagung');
+    .replace(/^wariagung$/, 'warigagung')
+    .replace(/^watugunung$/, 'watugunung')
+    .replace(/^julungwangi$/, 'julungwangi')
+    .replace(/^julungpujut$/, 'julungpujut');
   return `${d}_${p}_${w}`;
 }
 
 export const DINO_GEDE_SET = new Set(DINO_GEDE_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
 export const DINO_IJO_SET = new Set(DINO_IJO_LIST.map(([d, p, w]) => normDinoWukuKey(d, p, w)));
 
-export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false) {
+export function isDinoGede(a, b, c) {
+  let d, p, w;
+  if (typeof a === 'object' && a !== null) {
+    d = a.dino || a.hari;
+    p = a.pasaran || a.pas;
+    w = a.wuku || a.wukuName;
+  } else if (typeof c === 'string' && (c.toLowerCase().startsWith('wuk') || c.toLowerCase().startsWith('sin') || c.toLowerCase().startsWith('lan') || c.toLowerCase().startsWith('tol') || c.toLowerCase().startsWith('gum') || c.toLowerCase().startsWith('sung') || c.toLowerCase().startsWith('gal') || c.toLowerCase().startsWith('kun') || c.toLowerCase().startsWith('lang') || c.toLowerCase().startsWith('man') || c.toLowerCase().startsWith('pah') || c.toLowerCase().startsWith('kur') || c.toLowerCase().startsWith('mar') || c.toLowerCase().startsWith('tam') || c.toLowerCase().startsWith('mad') || c.toLowerCase().startsWith('mak') || c.toLowerCase().startsWith('wuy') || c.toLowerCase().startsWith('prang') || c.toLowerCase().startsWith('bal') || c.toLowerCase().startsWith('wug') || c.toLowerCase().startsWith('way') || c.toLowerCase().startsWith('kul') || c.toLowerCase().startsWith('duk') || c.toLowerCase().startsWith('wat'))) {
+    d = a; p = b; w = c;
+  } else {
+    w = a; d = b; p = c;
+  }
+  return DINO_GEDE_SET.has(normDinoWukuKey(d, p, w));
+}
+
+export function isDinoIjo(a, b, c) {
+  let d, p, w;
+  if (typeof a === 'object' && a !== null) {
+    d = a.dino || a.hari;
+    p = a.pasaran || a.pas;
+    w = a.wuku || a.wukuName;
+  } else if (typeof c === 'string' && (c.toLowerCase().startsWith('wuk') || c.toLowerCase().startsWith('sin') || c.toLowerCase().startsWith('lan') || c.toLowerCase().startsWith('tol') || c.toLowerCase().startsWith('gum') || c.toLowerCase().startsWith('sung') || c.toLowerCase().startsWith('gal') || c.toLowerCase().startsWith('kun') || c.toLowerCase().startsWith('lang') || c.toLowerCase().startsWith('man') || c.toLowerCase().startsWith('pah') || c.toLowerCase().startsWith('kur') || c.toLowerCase().startsWith('mar') || c.toLowerCase().startsWith('tam') || c.toLowerCase().startsWith('mad') || c.toLowerCase().startsWith('mak') || c.toLowerCase().startsWith('wuy') || c.toLowerCase().startsWith('prang') || c.toLowerCase().startsWith('bal') || c.toLowerCase().startsWith('wug') || c.toLowerCase().startsWith('way') || c.toLowerCase().startsWith('kul') || c.toLowerCase().startsWith('duk') || c.toLowerCase().startsWith('wat'))) {
+    d = a; p = b; w = c;
+  } else {
+    w = a; d = b; p = c;
+  }
+  return DINO_IJO_SET.has(normDinoWukuKey(d, p, w));
+}
+
+export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false, code = '') {
   const key = normDinoWukuKey(dino, pasaran, wuku);
   const isGede = DINO_GEDE_SET.has(key);
   const isIjo = !isGede && DINO_IJO_SET.has(key);
@@ -338,7 +369,10 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
   let cellBg = '#fef2f2';
   let cellBorder = '#fca5a5';
   let cellText = '#7f1d1d';
-  let badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">⚠ Ala</span>';
+  
+  const alaSuffix = code ? `${code} Ala` : 'Ala';
+  let badgeText = `▲ ${alaSuffix}`;
+  let badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">▲ ${alaSuffix}</span>`;
 
   if (isGede) {
     status = 'gede';
@@ -346,6 +380,7 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
     cellBg = 'linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%)';
     cellBorder = '#d4af37';
     cellText = '#451a03';
+    badgeText = '★ GEDE';
     badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="Dino Gede">★ GEDE</span>';
   } else if (isIjo && !isMinggu && !isLibur) {
     status = 'ijo';
@@ -353,6 +388,7 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
     cellBg = '#f0fdf4';
     cellBorder = '#86efac';
     cellText = '#14532d';
+    badgeText = '✓ Becik';
     badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>';
   } else {
     status = 'abang';
@@ -360,9 +396,11 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
     cellBg = '#fef2f2';
     cellBorder = '#fca5a5';
     cellText = '#7f1d1d';
+    badgeText = `▲ ${alaSuffix}`;
+    badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${label}">▲ ${alaSuffix}</span>`;
   }
 
-  return { isGede, isIjo, status, label, cellBg, cellBorder, cellText, badgeHtml };
+  return { isGede, isIjo, status, label, cellBg, cellBorder, cellText, badgeText, badgeHtml };
 }
 
 export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
@@ -437,6 +475,14 @@ if (typeof window !== 'undefined') {
   window.checkDinoGede = checkDinoGede;
   window.KETERANGAN_MAP = KETERANGAN_MAP;
   window.getKeteranganKodeDetail = getKeteranganKodeDetail;
+  window.DINO_GEDE_LIST = DINO_GEDE_LIST;
+  window.DINO_IJO_LIST = DINO_IJO_LIST;
+  window.normDinoWukuKey = normDinoWukuKey;
+  window.DINO_GEDE_SET = DINO_GEDE_SET;
+  window.DINO_IJO_SET = DINO_IJO_SET;
+  window.isDinoGede = isDinoGede;
+  window.isDinoIjo = isDinoIjo;
+  window.getDinoWarnaStatus = getDinoWarnaStatus;
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports.HARI = HARI;
@@ -459,6 +505,14 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports.checkDinoGede = checkDinoGede;
   module.exports.KETERANGAN_MAP = KETERANGAN_MAP;
   module.exports.getKeteranganKodeDetail = getKeteranganKodeDetail;
+  module.exports.DINO_GEDE_LIST = DINO_GEDE_LIST;
+  module.exports.DINO_IJO_LIST = DINO_IJO_LIST;
+  module.exports.normDinoWukuKey = normDinoWukuKey;
+  module.exports.DINO_GEDE_SET = DINO_GEDE_SET;
+  module.exports.DINO_IJO_SET = DINO_IJO_SET;
+  module.exports.isDinoGede = isDinoGede;
+  module.exports.isDinoIjo = isDinoIjo;
+  module.exports.getDinoWarnaStatus = getDinoWarnaStatus;
 }
 
 
