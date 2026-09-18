@@ -143,54 +143,58 @@ export function isDinoIjo(a, b, c) {
 }
 
 /**
- * 5. Evaluasi Status Warna, Badge, dan Label Kalender Jawa
+ * 5. Evaluasi Status Warna, Badge, dan Label Kalender Jawa (Dua Tahap / Two-Layer Logic)
  * 
- * Aturan Penandaan Presisi:
- * - Dino Gede: Badge / Latar Kuning Emas Menyala bertuliskan '★ GEDE' (#d4af37 / #fef08a)
- * - Dino Ijo: Penanda warna Hijau bertuliskan '✓ Becik' (#f0fdf4 / #86efac) jika bukan Minggu/Libur
- * - Dino Abang / Lainnya: Penanda warna Merah ('▲ Ala', '▲ PRK Ala', dll.) serta Hari Minggu & Libur Nasional otomatis Merah
+ * Tahap 1: Penentuan Warna Dasar (Dino Ijo vs Dino Abang)
+ * - Dino Ijo: Pasangan (Wuku, Dino, Pasaran) tercantum ing database_nujum - dino_ijo.csv -> Warna dasar Hijau ('✓ Becik').
+ * - Dino Abang: Sedaya dina ing njawi daptar Dino Ijo kanthi otomatis dados Dino Abang ('▲ Ala').
+ * - Angka dinten Minggu lan Prei Nasional wajib abrit.
+ * 
+ * Tahap 2: Pemberian Penanda Khusus Dino Gede (Overlay / Badge Emas)
+ * - Pengecekan mandhiri dhateng database_nujum - dino_gede.csv.
+ * - Manawi wonten ing daptar Dino Gede, tambahi penanda khusus '★ GEDE' (aksen emas/kuning kontras).
+ * - Dino Gede nempel sae ing Dino Ijo utawi Dino Abang tanpa ngrisak warna dhasaripun.
  */
 export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibur = false, code = '') {
   const key = normDinoWukuKey(dino, pasaran, wuku);
+  const isIjo = DINO_IJO_SET.has(key);
   const isGede = DINO_GEDE_SET.has(key);
-  const isIjo = !isGede && DINO_IJO_SET.has(key);
 
-  let status = 'abang';
-  let label = 'Dina Ala / Kang Olo';
-  let cellBg = '#fef2f2';
-  let cellBorder = '#fca5a5';
-  let cellText = '#7f1d1d';
+  // Tahap 1: Penentuan Warna Dasar & Badge Dasar
+  const status = isIjo ? 'ijo' : 'abang';
+  const baseLabel = isIjo ? 'Dino Ijo / Becik' : 'Dina Ala / Kang Olo';
   
-  // Format badge merah: misal '▲ Ala' atau '▲ PRK Ala'
   const alaSuffix = code ? `${code} Ala` : 'Ala';
-  let badgeText = `▲ ${alaSuffix}`;
-  let badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala / Kang Olo">▲ ${alaSuffix}</span>`;
+  const baseBadgeText = isIjo ? '✓ Becik' : `▲ ${alaSuffix}`;
+  const baseBadgeHtml = isIjo
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>'
+    : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${baseLabel}">▲ ${alaSuffix}</span>`;
+
+  let cellBg = isIjo ? '#f0fdf4' : '#fef2f2';
+  let cellBorder = isIjo ? '#86efac' : '#fca5a5';
+  let cellText = isIjo ? '#14532d' : '#7f1d1d';
+  let label = baseLabel;
+
+  // Tahap 2: Penanda Khusus Dino Gede (Overlay / Aksen Emas)
+  const gedeBadgeText = isGede ? '★ GEDE' : '';
+  const gedeBadgeHtml = isGede
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#d97706] text-amber-100 border border-[#b45309] shadow-xs" title="Dino Gede">★ GEDE</span>'
+    : '';
 
   if (isGede) {
-    status = 'gede';
-    label = 'Dino Gede';
-    cellBg = 'linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%)';
+    label = `${baseLabel} · Dino Gede`;
     cellBorder = '#d4af37';
-    cellText = '#451a03';
-    badgeText = '★ GEDE';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="Dino Gede">★ GEDE</span>';
-  } else if (isIjo && !isMinggu && !isLibur) {
-    status = 'ijo';
-    label = 'Dino Ijo / Becik';
-    cellBg = '#f0fdf4';
-    cellBorder = '#86efac';
-    cellText = '#14532d';
-    badgeText = '✓ Becik';
-    badgeHtml = '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>';
-  } else {
-    status = 'abang';
-    label = isLibur ? 'Libur Nasional' : (isMinggu ? 'Hari Minggu' : 'Dina Ala / Kang Olo');
-    cellBg = '#fef2f2';
-    cellBorder = '#fca5a5';
-    cellText = '#7f1d1d';
-    badgeText = `▲ ${alaSuffix}`;
-    badgeHtml = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${label}">▲ ${alaSuffix}</span>`;
+    if (isIjo) {
+      // Warna dasar hijau tetap dominan, ditambah aksen kilau emas kontras
+      cellBg = 'linear-gradient(135deg, #f0fdf4 75%, #fef08a 100%)';
+    } else {
+      // Warna dasar merah tetap dominan, ditambah aksen kilau emas kontras
+      cellBg = 'linear-gradient(135deg, #fef2f2 75%, #fef08a 100%)';
+    }
   }
+
+  const badgeText = isGede ? (isIjo ? '★ GEDE · ✓ Becik' : `★ GEDE · ▲ ${alaSuffix}`) : baseBadgeText;
+  const badgeHtml = isGede ? `${gedeBadgeHtml} ${baseBadgeHtml}` : baseBadgeHtml;
 
   return {
     isGede,
@@ -201,7 +205,11 @@ export function getDinoWarnaStatus(dino, pasaran, wuku, isMinggu = false, isLibu
     cellBorder,
     cellText,
     badgeText,
-    badgeHtml
+    badgeHtml,
+    baseBadgeText,
+    baseBadgeHtml,
+    gedeBadgeText,
+    gedeBadgeHtml
   };
 }
 

@@ -416,20 +416,24 @@ export function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
   const pasaranName = PASARAN[pasaranId];
   const wukuName = WUKU[wukuId];
 
-  const isCsvGede = DINO_GEDE_SET.has(normDinoWukuKey(dinoName, pasaranName, wukuName));
+  const normKey = (typeof normDinoWukuKey === 'function') 
+    ? normDinoWukuKey(dinoName, pasaranName, wukuName)
+    : `${String(dinoName).toLowerCase()}_${String(pasaranName).toLowerCase()}_${String(wukuName).toLowerCase().replace(/[\s\-_]/g, '')}`;
+  
+  const isCsvGede = (typeof DINO_GEDE_SET !== 'undefined' && DINO_GEDE_SET) ? DINO_GEDE_SET.has(normKey) : false;
   const isGridGede = Boolean(cell[2] === 1);
   const isTandaO = code.includes('O');
   const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
   const isJumatKliwon = (d === 5 && pasaranId === 4);
   const isSatuSura = (hd === 1 && hm === 1);
 
-  const isGede = isCsvGede || isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
-  let label = "";
+  // Sesuai mandat Two-Layer Logic: Dino Gede murni ditentukan oleh database_nujum - dino_gede.csv
+  const isGede = isCsvGede;
+  let label = isGede ? "Dino Gede" : "";
   if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
   else if (isAnggaraKasih || isTandaO) label = "Anggara Kasih (Selasa Kliwon)";
   else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
   else if (isCsvGede) label = "Dino Gede";
-  else if (isGridGede) label = "Dino Gede Pawukon";
 
   return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura, isCsvGede };
 }

@@ -655,20 +655,24 @@ function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
   const pasaranName = PASARAN[pasaranId];
   const wukuName = WUKU[wukuId];
 
-  const isCsvGede = DINO_GEDE_SET.has(normDinoWukuKey(dinoName, pasaranName, wukuName));
+  const normKey = (typeof normDinoWukuKey === 'function') 
+    ? normDinoWukuKey(dinoName, pasaranName, wukuName)
+    : `${String(dinoName).toLowerCase()}_${String(pasaranName).toLowerCase()}_${String(wukuName).toLowerCase().replace(/[\s\-_]/g, '')}`;
+  
+  const isCsvGede = (typeof DINO_GEDE_SET !== 'undefined' && DINO_GEDE_SET) ? DINO_GEDE_SET.has(normKey) : false;
   const isGridGede = Boolean(cell[2] === 1);
   const isTandaO = code.includes('O');
   const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
   const isJumatKliwon = (d === 5 && pasaranId === 4);
   const isSatuSura = (hd === 1 && hm === 1);
 
-  const isGede = isCsvGede || isGridGede || isTandaO || isAnggaraKasih || isJumatKliwon || isSatuSura;
-  let label = "";
+  // Sesuai mandat Two-Layer Logic: Dino Gede murni ditentukan oleh database_nujum - dino_gede.csv
+  const isGede = isCsvGede;
+  let label = isGede ? "Dino Gede" : "";
   if (isSatuSura) label = "1 Sura (Tahun Baru Jawa)";
   else if (isAnggaraKasih || isTandaO) label = "Anggara Kasih (Selasa Kliwon)";
   else if (isJumatKliwon) label = "Jumat Kliwon (Dina Sakral)";
   else if (isCsvGede) label = "Dino Gede";
-  else if (isGridGede) label = "Dino Gede Pawukon";
 
   return { isGede, label, isGridGede, isTandaO, isAnggaraKasih, isJumatKliwon, isSatuSura, isCsvGede };
 }
@@ -1498,39 +1502,54 @@ window.renderKalender = function () {
         repYearLabel = WINDU[((info.ajYear - 1955) % 8 + 8) % 8] + ' ' + info.ajYear;
       }
 
-      // Standarisasi Kode Warna 3 Kategori Utama (Dino Gede, Dino Hijau, Dino Abang):
-      // 1. Dino Gede: Latar kuning/emas menyala (#fffbeb -> #fef08a -> #fde047) dengan border emas #d4af37 dan glow
-      // 2. Dino Hijau: Latar hijau muda (#f0fdf4) dengan border #86efac (Rahayu / Becik)
-      // 3. Dino Abang: Latar merah muda (#fef2f2) dengan border #fca5a5 (Kang Olo / Ala)
-      // 4. Tanggal Merah: Angka tanggal pada hari Minggu dan Libur Nasional otomatis berwarna merah (#dc2626)
+      // Dua Tahap / Two-Layer Logic (Pewarnaan & Penandaan Presisi):
+      // Tahap 1: Penentuan Warna Dasar (Dino Ijo vs Dino Abang)
+      //   - Dino Ijo: tercantum di database_nujum - dino_ijo.csv -> Warna dasar Hijau (#f0fdf4), border (#86efac), badge '✓ Becik'
+      //   - Dino Abang: di luar daftar Dino Ijo -> Warna dasar Merah (#fef2f2), border (#fca5a5), badge '▲ Ala'
+      //   - Tanggal Merah: Angka tanggal pada hari Minggu dan Libur Nasional otomatis berwarna merah (#dc2626)
+      // Tahap 2: Pemberian Penanda Khusus Dino Gede (Overlay / Badge Tambahan)
+      //   - Pengecekan independen ke database_nujum - dino_gede.csv -> Tambahkan penanda/badge '★ GEDE' (kuning emas)
+      //   - Dino Gede menempel baik pada Dino Ijo maupun Dino Abang tanpa merusak warna dasarnya.
+
+      const isIjo = dinoWarna.isIjo;
       let cellStyle = '';
       let cellTextCls = '';
       let pasaranDisplay = '';
       let statusBadge = '';
 
-      if (isGede) {
-        // 1. Dino Gede (Kuning / Emas Menyala)
-        cellStyle = 'background: linear-gradient(135deg, #fffbeb 0%, #fef08a 60%, #fde047 100%); border: 1.5px solid #d4af37; box-shadow: 0 0 12px rgba(212,175,55,0.45);';
-        cellTextCls = 'text-[#451a03]';
-        pasaranDisplay = `<div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-black text-[11px] sm:text-xs tracking-wide text-[#451a03] bg-amber-200/80 border border-[#d4af37] shadow-xs" title="${dinoGedeObj.label}">★ ${PASARAN[info.pasaranId].toUpperCase()}<span class="text-[7.5px] bg-[#9a3412] text-white px-1 py-0.2 rounded font-extrabold ml-0.5 tracking-wider">GEDE</span></div>`;
-        statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#9a3412] text-white shadow-xs" title="${dinoGedeObj.label}">★ GEDE</span>`;
-      } else if (dinoWarna.isIjo && !isMinggu && !isLibur) {
-        // 2. Dino Hijau (Rahayu / Becik)
-        cellStyle = 'background-color: #f0fdf4; border: 1px solid #86efac;';
+      if (isIjo) {
+        // Warna Dasar Hijau
         cellTextCls = 'text-[#14532d]';
-        pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#14532d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
-        statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>`;
+        if (isGede) {
+          // Dino Ijo + Dino Gede (Overlay Emas Menyala)
+          cellStyle = 'background: linear-gradient(135deg, #f0fdf4 70%, #fef08a 100%); border: 2px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45); outline: 1px solid #ca8a04; outline-offset: -2px;';
+          pasaranDisplay = `<div class="inline-flex items-center gap-1"><span class="font-black text-[11px] sm:text-xs tracking-wide text-[#78350f] bg-amber-200/90 px-1.5 py-0.5 rounded border border-[#d4af37] shadow-xs" title="Dino Gede">★ ${PASARAN[info.pasaranId].toUpperCase()}</span></div>`;
+          statusBadge = `<div class="inline-flex items-center gap-1"><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#d97706] text-white shadow-xs" title="Dino Gede">★ GEDE</span><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span></div>`;
+        } else {
+          // Dino Ijo Murni
+          cellStyle = 'background-color: #f0fdf4; border: 1px solid #86efac;';
+          pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#14532d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
+          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>`;
+        }
       } else {
-        // 3. Dino Abang (Ala / Kang Olo)
-        cellStyle = 'background-color: #fef2f2; border: 1px solid #fca5a5;';
+        // Warna Dasar Merah (Dino Abang)
         cellTextCls = 'text-[#7f1d1d]';
-        pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#7f1d1d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
-        statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${dinoWarna.label}">▲ ${code ? code + ' Ala' : 'Ala'}</span>`;
+        if (isGede) {
+          // Dino Abang + Dino Gede (Overlay Emas Menyala)
+          cellStyle = 'background: linear-gradient(135deg, #fef2f2 70%, #fef08a 100%); border: 2px solid #d4af37; box-shadow: 0 0 10px rgba(212,175,55,0.45); outline: 1px solid #ca8a04; outline-offset: -2px;';
+          pasaranDisplay = `<div class="inline-flex items-center gap-1"><span class="font-black text-[11px] sm:text-xs tracking-wide text-[#78350f] bg-amber-200/90 px-1.5 py-0.5 rounded border border-[#d4af37] shadow-xs" title="Dino Gede">★ ${PASARAN[info.pasaranId].toUpperCase()}</span></div>`;
+          statusBadge = `<div class="inline-flex items-center gap-1"><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-[#d97706] text-white shadow-xs" title="Dino Gede">★ GEDE</span><span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala">▲ ${code ? code + ' Ala' : 'Ala'}</span></div>`;
+        } else {
+          // Dino Abang Murni
+          cellStyle = 'background-color: #fef2f2; border: 1px solid #fca5a5;';
+          pasaranDisplay = `<span class="font-bold text-[11px] sm:text-xs tracking-wide text-[#7f1d1d]">${PASARAN[info.pasaranId].toUpperCase()}</span>`;
+          statusBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="Dina Ala">▲ ${code ? code + ' Ala' : 'Ala'}</span>`;
+        }
       }
 
       const dateNumStyle = isDateRed
         ? 'color: #dc2626; font-weight: 800;'
-        : (isGede ? 'color: #78350f; font-weight: 700;' : 'color: #0f172a; font-weight: 700;');
+        : (isIjo ? 'color: #14532d; font-weight: 700;' : 'color: #7f1d1d; font-weight: 700;');
 
       const holidayBanner = isLibur
         ? `<div class="text-[8.5px] font-bold text-[#dc2626] leading-tight truncate mt-0.5 max-w-full" title="${liburName}">🎌 ${liburName}</div>`
@@ -1637,10 +1656,10 @@ window.showDetailTanggalJawa = function(y, m, d) {
     if (elDescDinoGede) elDescDinoGede.textContent = 'Boten klebet pengetan Dino Gede khusus.';
   }
 
-  // Ala / Becik Status
+  // Ala / Becik Status (Murni merujuk database_nujum - dino_ijo.csv)
   const [code, color] = GRID[info.wukuId][info.weekdayId];
   const dinoWarna = getDinoWarnaStatus(tglJawa.dino, tglJawa.pas, tglJawa.wukuName, info.weekdayId === 0, Boolean(liburName), code);
-  const isBecik = dinoWarna.isIjo && info.weekdayId !== 0 && !liburName;
+  const isBecik = dinoWarna.isIjo;
   const isAla = !isBecik;
   const elBoxAlaBecik = document.getElementById('modalBoxAlaBecik');
   const elIconAlaBecik = document.getElementById('modalIconAlaBecik');
@@ -1827,32 +1846,28 @@ function renderLaporanKalenderPrintHtml(bulan, tahun) {
         rowYearLabel = info.ajYear;
       }
 
-      const isAla = !isCsvIjo || isMinggu || isLibur;
-      const statusKet = isAla ? (code ? `▲ ${code} Ala` : '▲ Ala') : '✓ Becik';
+      // Dua Tahap / Two-Layer Logic Cetak PDF:
+      // Tahap 1: Warna dasar sel murni Dino Ijo vs Dino Abang
+      // Tahap 2: Overlay Dino Gede (Border emas #d4af37 & badge emas ★) tanpa merusak warna dasar
+      const isIjo = dinoWarna.isIjo;
+      const statusKet = isIjo
+        ? (isGede ? '★ GEDE · ✓ Becik' : '✓ Becik')
+        : (isGede ? (code ? `★ GEDE · ▲ ${code} Ala` : '★ GEDE · ▲ Ala') : (code ? `▲ ${code} Ala` : '▲ Ala'));
 
-      // Standarisasi 3 Kategori Pewarnaan Cetak/PDF:
-      // 1. Dino Gede: Kuning muda (#fef9c3) & Border Emas (#d4af37)
-      // 2. Dino Hijau: Hijau muda (#f0fdf4) & Border Hijau (#86efac)
-      // 3. Dino Abang: Merah muda (#fff1f2) & Border Merah (#fca5a5)
-      let printCellBg = '#ffffff';
-      let printCellBorder = '#d1d5db';
+      let printCellBg = isIjo ? '#f0fdf4' : '#fff1f2';
+      let printCellBorder = isIjo ? '#86efac' : '#fca5a5';
       let printPasaranHtml = '';
 
       if (isGede) {
-        printCellBg = '#fef9c3';
         printCellBorder = '#d4af37';
         printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; background-color: #fef08a; color: #78350f; border: 0.5pt solid #d4af37; padding: 1pt 3pt; border-radius: 2pt; display: inline-block;">★ ${PASARAN[info.pasaranId].toUpperCase()} (GEDE)</div>`;
-      } else if (isCsvIjo && !isMinggu && !isLibur) {
-        printCellBg = '#f0fdf4';
-        printCellBorder = '#86efac';
+      } else if (isIjo) {
         printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; color: #166534;">${PASARAN[info.pasaranId].toUpperCase()}</div>`;
       } else {
-        printCellBg = '#fff1f2';
-        printCellBorder = '#fca5a5';
         printPasaranHtml = `<div style="font-size: 7.5pt; font-weight: bold; color: #991b1b;">${PASARAN[info.pasaranId].toUpperCase()}</div>`;
       }
 
-      const dateNumColor = isDateRed ? '#dc2626' : (isGede ? '#78350f' : '#111827');
+      const dateNumColor = isDateRed ? '#dc2626' : (isIjo ? '#166534' : '#991b1b');
 
       cellsHtml.push(`
         <td style="border: ${isGede ? '1.5pt solid #d4af37' : '0.5pt solid ' + printCellBorder}; padding: 3pt 3.5pt; vertical-align: top; height: 36pt; background-color: ${printCellBg};">
