@@ -519,14 +519,14 @@
 @media print {
   @page {
     size: A4 portrait;
-    margin: 0;
+    margin: 10mm 12mm 10mm 12mm;
   }
 
   body {
     background: #ffffff !important;
     color: #000000 !important;
-    font-size: 8.5pt !important;
-    line-height: 1.35 !important;
+    font-size: 8pt !important;
+    line-height: 1.3 !important;
     padding: 0 !important;
     margin: 0 !important;
     -webkit-print-color-adjust: exact !important;
@@ -573,6 +573,8 @@
     background-color: transparent !important;
     color: #000000 !important;
     font-family: 'Times New Roman', Times, 'Georgia', serif !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
   }
 
   #laporan-cetak-pdf * {
@@ -607,21 +609,24 @@
     user-select: none !important;
   }
 
-  /* Struktur Halaman Laporan Kumudowati A4 */
+  /* Struktur Halaman Laporan Kumudowati A4 (Mengalir Alami / Continuous Flow) */
   .laporan-page {
     position: relative !important;
     box-sizing: border-box !important;
-    width: 210mm !important;
-    min-height: 297mm !important;
-    padding: 12mm 14mm !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    padding: 6mm 8mm !important;
     margin: 0 auto !important;
     page-break-after: always !important;
     break-after: page !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
     
     /* Border dobel klasik motif Kumudowati */
     border: 3px double #000000 !important;
     outline: 1px solid #000000 !important;
-    outline-offset: -6px !important;
+    outline-offset: -5px !important;
   }
 
   /* Tambahkan aksen ornamen sudut batik Kumudowati di 4 sudut halaman */
@@ -665,19 +670,46 @@
   .laporan-page:last-child {
     page-break-after: auto !important;
     break-after: auto !important;
+    margin-bottom: 0 !important;
   }
 
-  /* Penataan Tabel Dokumen Resmi B&W (Clean Booktabs) */
+  /* Hentikan Pemenggalan Berlebihan pada Kontainer Seksi Besar (Continuous Flow) */
+  .doc-section-block,
+  .print-section,
+  .card,
+  .section,
+  .print-report-wrapper {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Penataan Tabel Dokumen Resmi B&W (Clean Booktabs) - Padat, Rapi & Mengalir Alami */
   .doc-table {
     width: 100% !important;
     border-collapse: collapse !important;
-    margin-bottom: 8px !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+    margin-top: 2px !important;
+    margin-bottom: 5px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
     border: none !important;
     border-left: none !important;
     border-right: none !important;
     background: transparent !important;
+  }
+
+  /* Terapkan break-inside: avoid HANYA pada baris tabel individual (tr) dan kartu sub-komponen kecil */
+  tr,
+  .doc-table tr,
+  .doc-table tbody tr,
+  .doc-table tr td,
+  .doc-table tr th,
+  .sub-card,
+  .card-item,
+  .badge-item,
+  .info-pill {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .doc-table th,
@@ -686,9 +718,9 @@
     border-right: none !important;
     border-top: none !important;
     border-bottom: 0.5pt solid #d1d5db !important;
-    padding: 5pt 8pt !important;
-    font-size: 8pt !important;
-    line-height: 1.35 !important;
+    padding: 3.5pt 5.5pt !important;
+    font-size: 7.5pt !important;
+    line-height: 1.3 !important;
     color: #111827 !important;
     vertical-align: top !important;
   }
@@ -703,7 +735,8 @@
     font-weight: bold !important;
     text-transform: uppercase !important;
     letter-spacing: 0.04em !important;
-    padding: 5pt 8pt !important;
+    padding: 3.5pt 5.5pt !important;
+    font-size: 7.5pt !important;
   }
 
   /* Aksen belang selang-seling baris yang sangat lembut (Clean Booktabs) */
@@ -721,16 +754,18 @@
     width: 22% !important;
     color: #111827 !important;
     background-color: transparent !important;
+    padding: 3.5pt 5.5pt !important;
   }
 
+  /* Cegah judul seksi terpisah sendirian di dasar halaman (Orphaned Heading Prevention) */
   .doc-section-title {
     font-family: 'Times New Roman', Times, serif !important;
-    font-size: 8.5pt !important;
+    font-size: 8pt !important;
     font-weight: bold !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
-    margin-top: 8px !important;
-    margin-bottom: 3px !important;
+    margin-top: 5px !important;
+    margin-bottom: 2px !important;
     border-bottom: 1px solid #000000 !important;
     padding-bottom: 1px !important;
     color: #000000 !important;
@@ -738,10 +773,25 @@
     break-after: avoid !important;
   }
 
-  .doc-section-block {
+  .doc-header-kop,
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .page-inner-footer {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: 3mm !important;
+    font-size: 7pt !important;
+    border-top: 0.5pt solid currentColor !important;
+    padding-top: 1mm !important;
+    display: flex !important;
+    justify-content: space-between !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
-    margin-bottom: 6px !important;
   }
 
   /* ========================================================================= */
