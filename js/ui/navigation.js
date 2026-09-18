@@ -144,19 +144,24 @@ if (typeof window !== 'undefined') {
 /**
  * Ekspor / Cetak Dokumen PDF Laporan Resmi
  * @param {'parchment'|'monochrome'} theme Estetika: 'parchment' (Kertas Kuno Keraton) atau 'monochrome'
+ * @param {string|null} customTitle Judul dokumen cetak kustom
  */
-function printLaporan(theme = 'parchment') {
+function printLaporan(theme = 'parchment', customTitle = null) {
   let target = document.getElementById('laporan-cetak-pdf');
   if (!target) {
     window.print();
     return;
   }
 
-  // Format Penamaan Dokumen PDF: Jagad Jawa — [Nama Subjek]
-  const namaInput = document.getElementById('namaKepribadian')?.value?.trim();
-  const namaSubjek = (namaInput && namaInput !== '-') ? namaInput.toUpperCase() : 'SUBJEK';
+  // Format Penamaan Dokumen PDF: Jagad Jawa — [Nama Subjek / Judul Kustom]
   const originalTitle = document.title;
-  document.title = `Jagad Jawa — ${namaSubjek}`;
+  if (customTitle) {
+    document.title = customTitle;
+  } else {
+    const namaInput = document.getElementById('namaKepribadian')?.value?.trim();
+    const namaSubjek = (namaInput && namaInput !== '-') ? namaInput.toUpperCase() : 'SUBJEK';
+    document.title = `Jagad Jawa — ${namaSubjek}`;
+  }
 
   // Bersihkan kelas cetak sebelumnya
   document.querySelectorAll('.print-target-active').forEach(el => el.classList.remove('print-target-active'));
@@ -190,6 +195,19 @@ function printLaporan(theme = 'parchment') {
 }
 
 function printSection(sectionId, theme = 'monochrome') {
+  if (sectionId === 'kalenderCard' && typeof window.printLaporanKalender === 'function') {
+    window.printLaporanKalender(theme);
+    return;
+  }
+  if (sectionId === 'hasilPerjodohanCard' && typeof window.printLaporanPerjodohan === 'function') {
+    window.printLaporanPerjodohan(theme);
+    return;
+  }
+  if (sectionId === 'hasilSelametanCard' && typeof window.printLaporanSelametan === 'function') {
+    window.printLaporanSelametan(theme);
+    return;
+  }
+
   let target = document.getElementById(sectionId);
   if ((sectionId === 'hasilKepribadianBox' || sectionId === 'laporan-cetak-pdf' || !target) && document.getElementById('laporan-cetak-pdf')) {
     printLaporan(theme || 'monochrome');
@@ -227,15 +245,132 @@ function printSection(sectionId, theme = 'monochrome') {
   window.addEventListener('afterprint', cleanup, { once: true });
 }
 
+/**
+ * Unduh elemen visual sebagai file gambar PNG beresolusi tinggi (Retina 2x)
+ * @param {string} elementId ID elemen target yang akan dirasterisasi
+ * @param {string} filename Nama file hasil unduhan (.png)
+ * @param {string} defaultBg Warna latar belakang kanvas (default: '#0b0f19')
+ */
+async function downloadElementAsPng(elementId, filename = 'unduhan-jagad-jawa.png', defaultBg = '#0b0f19') {
+  const element = document.getElementById(elementId);
+  if (!element) {
+    if (typeof showToast === 'function') {
+      showToast('Elemen kalender utawi tabel ora ditemokake.');
+    } else if (typeof alert === 'function') {
+      alert('Elemen tidak ditemukan.');
+    }
+    return;
+  }
+
+  if (typeof showToast === 'function') {
+    showToast('Nyiapaken gambar (PNG) kualitas dhuwur...');
+  }
+
+  // Jika html2canvas tersedia dari CDN
+  if (typeof html2canvas === 'function') {
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2, // 2x scale untuk ketajaman retina display
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: defaultBg,
+        logging: false,
+        scrollX: 0,
+        scrollY: (typeof window !== 'undefined' ? -window.scrollY : 0)
+      });
+
+      const dataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      if (typeof showToast === 'function') {
+        showToast('Gambar kasil ka-undhuh!');
+      }
+    } catch (err) {
+      console.error('Gagal mengunduh gambar via html2canvas:', err);
+      if (typeof showToast === 'function') {
+        showToast('Gagal ngundhuh gambar: ' + (err.message || 'Error'));
+      }
+    }
+    return;
+  }
+
+  // Fallback jika html2canvas offline/belum siap
+  try {
+    const clone = element.cloneNode(true);
+    const rect = element.getBoundingClientRect ? element.getBoundingClientRect() : { width: 800, height: 600 };
+    const width = Math.ceil(rect.width) || 800;
+    const height = Math.ceil(rect.height) || 600;
+
+    const svgString = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+        <foreignObject width="100%" height="100%">
+          <div xmlns="http://www.w3.org/1999/xhtml" style="background:${defaultBg};width:100%;height:100%;">
+            ${clone.outerHTML}
+          </div>
+        </foreignObject>
+      </svg>
+    `;
+
+    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const URLObj = (typeof window !== 'undefined' && (window.URL || window.webkitURL)) ? (window.URL || window.webkitURL) : null;
+    if (!URLObj) return;
+    const blobURL = URLObj.createObjectURL(svgBlob);
+    const image = new Image();
+    image.onload = function () {
+      const canvas = document.createElement('canvas');
+      canvas.width = width * 2;
+      canvas.height = height * 2;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2);
+      ctx.fillStyle = defaultBg;
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(image, 0, 0);
+      URLObj.revokeObjectURL(blobURL);
+
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      if (typeof showToast === 'function') {
+        showToast('Gambar kasil ka-undhuh!');
+      }
+    };
+    image.src = blobURL;
+  } catch (e) {
+    console.error('Fallback rasterization failed:', e);
+    if (typeof showToast === 'function') {
+      showToast('Pustaka html2canvas dereng cumawis.');
+    }
+  }
+}
+
 if (typeof window !== 'undefined') {
   window.switchTab = switchTab;
   window.toggleMobileMenu = toggleMobileMenu;
   window.navigasiKembali = navigasiKembali;
   window.printLaporan = printLaporan;
   window.printSection = printSection;
+  window.downloadElementAsPng = downloadElementAsPng;
   window.toggleNavDropdown = toggleNavDropdown;
   window.closeAllNavDropdowns = closeAllNavDropdowns;
 }
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { switchTab, toggleMobileMenu, navigasiKembali, printLaporan, printSection, toggleNavDropdown, closeAllNavDropdowns };
+  module.exports = {
+    switchTab,
+    toggleMobileMenu,
+    navigasiKembali,
+    printLaporan,
+    printSection,
+    downloadElementAsPng,
+    toggleNavDropdown,
+    closeAllNavDropdowns
+  };
 }

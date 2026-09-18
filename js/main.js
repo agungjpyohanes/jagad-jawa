@@ -4289,6 +4289,14 @@ window.hitungNujumPerjodohan = function () {
     </tr>`;
   });
 
+  // Simpan data perhitungan terakhir untuk cetak dan ekspor
+  window.LAST_PERJODOHAN_DATA = {
+    namaP, namaL, neptuP, neptuL, totalNeptu,
+    hariP, hariL,
+    akDP, akBP, akDL, akBL,
+    rows, baik, campur, buruk
+  };
+
   document.getElementById('hasilPerjodohanBody').innerHTML = tbody;
   document.getElementById('perjodohanPairInfo').innerHTML = `${namaP} (${neptuP}) · ${namaL} (${neptuL}) · Jumlah Neptu: <strong class="text-prada font-mono">${totalNeptu}</strong>`;
   document.getElementById('ringkasanPerjodohanBox').innerHTML = `
@@ -4299,9 +4307,175 @@ window.hitungNujumPerjodohan = function () {
   const emptyBox = document.getElementById('emptyPerjodohanBox');
   if (emptyBox) emptyBox.classList.add('hidden');
   document.getElementById('hasilPerjodohanCard').classList.remove('hidden');
-  document.getElementById('btnPrintPerjodohan').style.display = 'inline-block';
+
+  if (document.getElementById('btnPrintPerjodohan')) {
+    document.getElementById('btnPrintPerjodohan').style.display = 'inline-block';
+  }
+  if (document.getElementById('btnPrintPerjodohanParchment')) {
+    document.getElementById('btnPrintPerjodohanParchment').style.display = 'inline-flex';
+  }
+  if (document.getElementById('btnPrintPerjodohanMonochrome')) {
+    document.getElementById('btnPrintPerjodohanMonochrome').style.display = 'inline-flex';
+  }
+
   showToast('Pitung perjodohan kasil kapetung!');
 };
+
+function renderLaporanPerjodohanPrintHtml(data) {
+  if (!data) return '';
+
+  let rowsHtml = '';
+  data.rows.forEach(r => {
+    let badgeText = 'SEDANG';
+    let badgeStyle = 'background-color: #fef3c7; color: #92400e; border: 0.5pt solid #f59e0b;';
+    if (r.h.status === 'baik') {
+      badgeText = 'BECIK / BAIK';
+      badgeStyle = 'background-color: #d1fae5; color: #065f46; border: 0.5pt solid #10b981;';
+    } else if (r.h.status === 'buruk') {
+      badgeText = 'SAMBIKALA';
+      badgeStyle = 'background-color: #ffe4e6; color: #9f1239; border: 0.5pt solid #f43f5e;';
+    }
+
+    rowsHtml += `
+      <tr>
+        <td style="text-align: center; font-weight: bold;">${r.no}</td>
+        <td><strong>${r.rumus}</strong></td>
+        <td><strong>${r.h.nama}</strong></td>
+        <td style="line-height: 1.35;">${r.h.arti}</td>
+        <td style="text-align: center;">
+          <span style="display: inline-block; padding: 1.5px 5px; font-size: 6.5pt; font-weight: bold; border-radius: 3px; ${badgeStyle}">
+            ${badgeText}
+          </span>
+        </td>
+      </tr>
+    `;
+  });
+
+  return `
+    <div class="laporan-page">
+      <span class="corner-tr">❖</span>
+      <span class="corner-bl">❖</span>
+      <div class="print-watermark">AETHER CODE</div>
+
+      <div class="page-inner-wrap" style="min-height: 260mm; position: relative; padding-bottom: 12mm;">
+        <!-- KOP DOKUMEN -->
+        <div class="doc-header-kop">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2pt double currentColor; padding-bottom: 2.5mm; margin-bottom: 3.5mm;">
+            <div>
+              <div style="font-size: 13pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 2px 0; letter-spacing: 0.15em;">JAGAD JAWA</div>
+              <div style="font-size: 10.5pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 2px 0;">SERAT PETUNG SALAKI RABI (NUJUM PERJODOHAN)</div>
+              <div style="font-size: 7.5pt; font-style: italic;">Pitung Primbon 7 Metode Karaton Surakarta Hadiningrat &amp; Kasultanan Ngayogyakarta</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 8pt; font-weight: bold;">ARSIP PETUNG</div>
+              <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Archival</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 1: IDENTITAS & WETON CALON PENGANTIN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 1: IDENTITAS &amp; WETON CALON PENGANTIN</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell" style="width: 22%;">Calon Pengantin Putri</td>
+                <td style="width: 28%;"><strong>${data.namaP}</strong> (${data.hariP})</td>
+                <td class="doc-label-cell" style="width: 22%;">Neptu Putri</td>
+                <td style="width: 28%;"><strong>${data.neptuP}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Calon Pengantin Kakung</td>
+                <td><strong>${data.namaL}</strong> (${data.hariL})</td>
+                <td class="doc-label-cell">Neptu Kakung</td>
+                <td><strong>${data.neptuL}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Gunggung Neptu (Total)</td>
+                <td><strong style="font-size: 9pt;">${data.totalNeptu}</strong> (${data.neptuP} + ${data.neptuL})</td>
+                <td class="doc-label-cell">Aksara Sandi Pasangan</td>
+                <td>P: ${data.akDP || '-'}-${data.akBP || '-'} &middot; L: ${data.akDL || '-'}-${data.akBL || '-'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 2: MATRIKS PETUNGAN KECOCOKAN 7 METODE PRIMBON -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 2: MATRIKS ANALISIS 7 METODE PITUNG JAWA</div>
+          <table class="doc-table" style="font-size: 7.5pt;">
+            <thead>
+              <tr>
+                <th style="width: 5%; text-align: center;">No</th>
+                <th style="width: 23%;">Metode / Rumus Petung</th>
+                <th style="width: 20%;">Asil Petungan</th>
+                <th style="width: 37%;">Tafsiran / Makna Primbon Jawa</th>
+                <th style="width: 15%; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 3: RINGKASAN & WEJANGAN BUDI PEKERTI LUHUR -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 3: RINGKASAN &amp; WEJANGAN BUDI PEKERTI LUHUR</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell" style="width: 22%;">Ringkasan Analisis</td>
+                <td colspan="3" style="line-height: 1.4;">
+                  Saking 7 metode petungan primbon: <strong>${data.baik} Becik (Baik)</strong>, <strong>${data.campur} Sedang (Campuran)</strong>, lan <strong>${data.buruk} Sambikala (Kurang Baik)</strong>.
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Piwulang &amp; Paugeran</td>
+                <td colspan="3" style="font-size: 7.5pt; line-height: 1.4;">
+                  Petungan Jawa minangka sarana ikhtiar lan tepa slira kangge ngudi kaselarasan lair lan batin. Wontene petungan ingkang kirang sae saged kasembadan kanthi tansah nyenyuwun donga marang Gusti Kang Murbeng Dumadi, mranata solah bawa, sabar narima, tresna-tinresnan, sarta nindakaken sedhekah wilujengan.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE FOOTER -->
+        <div class="page-inner-footer" style="position: absolute; bottom: 4mm; left: 0; right: 0; display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 0.5pt solid currentColor; padding-top: 1.5mm;">
+          <span>Petung Salaki Rabi &middot; Serat Centhini &amp; Primbon Betaljemur Adammakna</span>
+          <span>Halaman 1 dari 1 &middot; Aether Code Archival</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function printLaporanPerjodohan(theme = 'parchment') {
+  if (!window.LAST_PERJODOHAN_DATA) {
+    if (typeof showToast === 'function') showToast('Petung perjodohan dereng kalampahan.');
+    return;
+  }
+  const printDocHtml = renderLaporanPerjodohanPrintHtml(window.LAST_PERJODOHAN_DATA);
+  let printContainer = document.getElementById('laporan-cetak-pdf');
+  if (!printContainer) {
+    printContainer = document.createElement('div');
+    printContainer.id = 'laporan-cetak-pdf';
+    printContainer.className = 'print-only-document';
+    document.body.appendChild(printContainer);
+  }
+  printContainer.innerHTML = printDocHtml;
+
+  const title = `Jagad Jawa — Petung Perjodohan ${window.LAST_PERJODOHAN_DATA.namaP} & ${window.LAST_PERJODOHAN_DATA.namaL}`;
+  if (typeof printLaporan === 'function') {
+    printLaporan(theme, title);
+  } else if (typeof window.printLaporan === 'function') {
+    window.printLaporan(theme, title);
+  } else {
+    window.print();
+  }
+}
+window.renderLaporanPerjodohanPrintHtml = renderLaporanPerjodohanPrintHtml;
+window.printLaporanPerjodohan = printLaporanPerjodohan;
 
 // ─── SELAMETAN ─────────────────────────────────────────────────────────────
 window.hitungSelametan = function () {
@@ -4325,6 +4499,8 @@ window.hitungSelametan = function () {
   const tbody = document.querySelector('#tabelHasilSelametan tbody');
   tbody.innerHTML = '';
 
+  const items = [];
+
   JENIS_SELAMETAN.forEach(j => {
     const targetH = TARGET_HARI_SELAMETAN[hariIdx][j.idx];
     const targetP = TARGET_PASARAN_SELAMETAN[pasaranWafat][j.idx];
@@ -4347,19 +4523,216 @@ window.hitungSelametan = function () {
     tr.className = 'border-b border-sogan-800/60 hover:bg-sogan-900/30';
     if (bestDate) {
       const diffDays = Math.round((bestDate - death) / 86400000);
+      const dateStr = `${bestDate.getUTCDate()} ${BULAN_MASEHI[bestDate.getUTCMonth()]} ${bestDate.getUTCFullYear()}`;
       tr.innerHTML = `
         <td class="p-2.5 font-bold text-sogan-100">${j.nama}<br><span class="text-[10px] text-sogan-400 font-normal">~${j.approx} dina</span></td>
         <td class="p-2.5 font-bold text-prada">${targetH} ${targetP}</td>
-        <td class="p-2.5 text-sogan-200">${bestDate.getUTCDate()} ${BULAN_MASEHI[bestDate.getUTCMonth()]} ${bestDate.getUTCFullYear()}<br><span class="text-[10px] text-sogan-400">wiwit jam 18.00 sore</span></td>
+        <td class="p-2.5 text-sogan-200">${dateStr}<br><span class="text-[10px] text-sogan-400">wiwit jam 18.00 sore</span></td>
         <td class="p-2.5 text-emerald-400 font-mono text-[11px]">${diffDays} dina saking geblak</td>
       `;
+      items.push({
+        nama: j.nama,
+        approx: j.approx,
+        targetH,
+        targetP,
+        bestDate,
+        dateStr,
+        diffDays
+      });
     }
     tbody.appendChild(tr);
   });
 
-  document.getElementById('btnPrintSelametan').style.display = 'inline-block';
+  // Simpan data perhitungan terakhir untuk cetak dan ekspor
+  window.LAST_SELAMETAN_DATA = {
+    death,
+    hariWafat,
+    pasaranWafat,
+    dd,
+    mm,
+    yy,
+    items
+  };
+
+  if (document.getElementById('btnPrintSelametan')) {
+    document.getElementById('btnPrintSelametan').style.display = 'inline-block';
+  }
+  if (document.getElementById('btnPrintSelametanParchment')) {
+    document.getElementById('btnPrintSelametanParchment').style.display = 'inline-flex';
+  }
+  if (document.getElementById('btnPrintSelametanMonochrome')) {
+    document.getElementById('btnPrintSelametanMonochrome').style.display = 'inline-flex';
+  }
+  if (document.getElementById('btnDownloadSelametanPng')) {
+    document.getElementById('btnDownloadSelametanPng').style.display = 'inline-flex';
+  }
+
   showToast('Selametan kasil kapetung!');
 };
+
+function renderLaporanSelametanPrintHtml(data) {
+  if (!data) return '';
+
+  let itemsHtml = '';
+  data.items.forEach(it => {
+    itemsHtml += `
+      <tr>
+        <td style="font-weight: bold; width: 25%;">
+          ${it.nama}<br>
+          <span style="font-size: 6.5pt; font-weight: normal; opacity: 0.8;">~${it.approx} dina</span>
+        </td>
+        <td style="text-align: center; font-weight: bold; width: 22%;">${it.targetH} ${it.targetP}</td>
+        <td style="width: 33%; line-height: 1.35;">
+          ${it.dateStr}<br>
+          <span style="font-size: 6.5pt; opacity: 0.8;">wiwit jam 18.00 sore (surup)</span>
+        </td>
+        <td style="text-align: center; font-family: monospace; font-size: 7pt; width: 20%;">${it.diffDays} dina</td>
+      </tr>
+    `;
+  });
+
+  return `
+    <div class="laporan-page">
+      <span class="corner-tr">❖</span>
+      <span class="corner-bl">❖</span>
+      <div class="print-watermark">AETHER CODE</div>
+
+      <div class="page-inner-wrap" style="min-height: 260mm; position: relative; padding-bottom: 12mm;">
+        <!-- KOP DOKUMEN -->
+        <div class="doc-header-kop">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2pt double currentColor; padding-bottom: 2.5mm; margin-bottom: 3.5mm;">
+            <div>
+              <div style="font-size: 13pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 2px 0; letter-spacing: 0.15em;">JAGAD JAWA</div>
+              <div style="font-size: 10.5pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 2px 0;">SERAT PENGETAN TILAR DONYO (SELAMETAN)</div>
+              <div style="font-size: 7.5pt; font-style: italic;">Paugeran Wilujengan Surut Karaton Surakarta Hadiningrat &amp; Kasultanan Ngayogyakarta</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 8pt; font-weight: bold;">ARSIP SELAMETAN</div>
+              <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Archival</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN 1: RINCIAN GEBLAK / SURUT -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 1: DINA WAFAT / GEBLAK</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell" style="width: 22%;">Dina &amp; Pasaran Wafat</td>
+                <td style="width: 28%;"><strong style="font-size: 9pt;">${data.hariWafat} ${data.pasaranWafat}</strong></td>
+                <td class="doc-label-cell" style="width: 22%;">Tanggal Masehi</td>
+                <td style="width: 28%;"><strong>${data.dd} ${BULAN_MASEHI[data.mm - 1]} ${data.yy}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Paugeran Gantos Dina</td>
+                <td colspan="3" style="font-size: 7.5pt; line-height: 1.4;">
+                  Wiwitan dinten Jawa katetepaken nalika <strong>surup srengenge (jam 18.00 WIB)</strong>. Menawi seda sasampunipun jam 18.00, dipunétang dinten candhakipun. Upacara pengetan wilujengan katindakaken ing wanci dalu sedalu sadurunge utawi pas surup dina kasebat.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 2: JADWAL PENGETAN DINA SELAMETAN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 2: JADWAL TINGKATAN PENGETAN WILUJENGAN DINA</div>
+          <table class="doc-table" style="font-size: 7.5pt;">
+            <thead>
+              <tr>
+                <th style="width: 25%;">Tingkatan Pengetan</th>
+                <th style="width: 22%; text-align: center;">Dina &amp; Pasaran Jawa</th>
+                <th style="width: 33%;">Tanggal Masehi &amp; Wanci</th>
+                <th style="width: 20%; text-align: center;">Jarak saking Geblak</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 3: MAKNA FILOSOFIS & TUNTUNAN DOA -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 3: MAKNA FILOSOFIS &amp; TUNTUNAN DOA</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell" style="width: 22%;">Makna Tradisi</td>
+                <td colspan="3" style="font-size: 7.5pt; line-height: 1.4;">
+                  Pengetan wilujengan surut minangka wujud bekti luhur, kirim donga tahlil, sarta sedhekah saking para ahli waris supados arwah pinaringan jembar kubure, kaapunten sadaya kalepatanipun, lan pikantuk katentreman swarga ing ngarsanipun Gusti Ingkang Maha Kuwaos.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE FOOTER -->
+        <div class="page-inner-footer" style="position: absolute; bottom: 4mm; left: 0; right: 0; display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 0.5pt solid currentColor; padding-top: 1.5mm;">
+          <span>Pengetan Tilar Donyo &middot; Tradisi Luhur Karaton &amp; Kasultanan Tanah Jawa</span>
+          <span>Halaman 1 dari 1 &middot; Aether Code Archival</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function printLaporanSelametan(theme = 'parchment') {
+  if (!window.LAST_SELAMETAN_DATA) {
+    if (typeof showToast === 'function') showToast('Petung selametan dereng kalampahan.');
+    return;
+  }
+  const printDocHtml = renderLaporanSelametanPrintHtml(window.LAST_SELAMETAN_DATA);
+  let printContainer = document.getElementById('laporan-cetak-pdf');
+  if (!printContainer) {
+    printContainer = document.createElement('div');
+    printContainer.id = 'laporan-cetak-pdf';
+    printContainer.className = 'print-only-document';
+    document.body.appendChild(printContainer);
+  }
+  printContainer.innerHTML = printDocHtml;
+
+  const title = `Jagad Jawa — Pengetan Tilar Donyo Geblak ${window.LAST_SELAMETAN_DATA.hariWafat} ${window.LAST_SELAMETAN_DATA.pasaranWafat}`;
+  if (typeof printLaporan === 'function') {
+    printLaporan(theme, title);
+  } else if (typeof window.printLaporan === 'function') {
+    window.printLaporan(theme, title);
+  } else {
+    window.print();
+  }
+}
+
+function downloadKalenderPng() {
+  const bulanSel = document.getElementById('bulanSel');
+  const tahunInput = document.getElementById('tahunInput');
+  const bulan = parseInt(bulanSel?.value || 1);
+  const tahun = parseInt(tahunInput?.value || 2026);
+  const namaBulan = (typeof BULAN_MASEHI !== 'undefined' && BULAN_MASEHI[bulan - 1]) ? BULAN_MASEHI[bulan - 1] : `Bulan-${bulan}`;
+  const filename = `Kalender-Jawa-${namaBulan}-${tahun}.png`;
+  if (typeof downloadElementAsPng === 'function') {
+    downloadElementAsPng('kalenderCard', filename, '#f4ecd8');
+  } else if (typeof window.downloadElementAsPng === 'function') {
+    window.downloadElementAsPng('kalenderCard', filename, '#f4ecd8');
+  }
+}
+
+function downloadSelametanPng() {
+  const data = window.LAST_SELAMETAN_DATA;
+  let filename = 'Pengetan-Tilar-Donyo.png';
+  if (data) {
+    filename = `Pengetan-Tilar-Donyo-Geblak-${data.hariWafat}-${data.pasaranWafat}.png`;
+  }
+  if (typeof downloadElementAsPng === 'function') {
+    downloadElementAsPng('hasilSelametanCard', filename, '#0F141D');
+  } else if (typeof window.downloadElementAsPng === 'function') {
+    window.downloadElementAsPng('hasilSelametanCard', filename, '#0F141D');
+  }
+}
+
+window.renderLaporanSelametanPrintHtml = renderLaporanSelametanPrintHtml;
+window.printLaporanSelametan = printLaporanSelametan;
+window.downloadKalenderPng = downloadKalenderPng;
+window.downloadSelametanPng = downloadSelametanPng;
 
 // ─── GAMELAN ───────────────────────────────────────────────────────────────
 const saronScales = {

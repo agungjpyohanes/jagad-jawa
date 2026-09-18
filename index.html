@@ -19,6 +19,9 @@
   <!-- Modular Styles -->
   <link rel="stylesheet" href="css/styles.css">
 
+  <!-- html2canvas for High-Res PNG Exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -671,6 +674,9 @@
           <button onclick="printLaporanKalender('monochrome')" id="btnPrintKalenderMonochrome" class="mt-4 px-4 py-2 rounded-lg bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition flex items-center gap-1.5" title="Cetak Monokrom / Hitam Putih Standar">
             <i class="fa-solid fa-print"></i> <span>Cetak Monokrom</span>
           </button>
+          <button onclick="downloadKalenderPng()" id="btnDownloadKalenderPng" class="mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition shadow flex items-center gap-1.5" title="Unduh Kalender Format Gambar PNG (Resolusi Tinggi)">
+            <i class="fa-solid fa-image"></i> <span>Unduh Gambar (PNG)</span>
+          </button>
         </div>
       </div>
 
@@ -998,13 +1004,18 @@
 
       </div>
 
-      <div class="flex justify-center gap-3">
+      <div class="flex flex-wrap justify-center items-center gap-2.5">
         <button onclick="hitungNujumPerjodohan()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
           <i class="fa-solid fa-heart mr-1"></i> Hitung Nujum Perjodohan
         </button>
-        <button onclick="printSection('hasilPerjodohanCard')" id="btnPrintPerjodohan" class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition text-xs" style="display:none;">
-          <i class="fa-solid fa-print mr-1"></i> Cetak / PDF
+        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+          <i class="fa-solid fa-scroll"></i> Ekspor PDF (Kertas Kuno)
         </button>
+        <button onclick="printLaporanPerjodohan('monochrome')" id="btnPrintPerjodohanMonochrome" class="px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Dokumen Monokrom / Hitam Putih Standar">
+          <i class="fa-solid fa-print"></i> Cetak Monokrom
+        </button>
+        <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
+        <button onclick="printSection('hasilPerjodohanCard')" id="btnPrintPerjodohan" style="display:none;" aria-hidden="true"></button>
       </div>
 
       <!-- Panduan Empty State Perjodohan -->
@@ -1080,13 +1091,21 @@
             </p>
           </div>
 
-          <div class="flex gap-2">
-            <button onclick="hitungSelametan()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
+          <div class="flex flex-col sm:flex-row flex-wrap gap-2">
+            <button onclick="hitungSelametan()" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
               Hitung Selametan
             </button>
-            <button onclick="printSection('hasilSelametanCard')" id="btnPrintSelametan" class="px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs" style="display:none;">
-              <i class="fa-solid fa-print"></i> Cetak / PDF
+            <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+              <i class="fa-solid fa-scroll"></i> Ekspor PDF
             </button>
+            <button onclick="printLaporanSelametan('monochrome')" id="btnPrintSelametanMonochrome" class="px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Cetak Monokrom / Hitam Putih Standar">
+              <i class="fa-solid fa-print"></i> Cetak Monokrom
+            </button>
+            <button onclick="downloadSelametanPng()" id="btnDownloadSelametanPng" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Unduh Tabel Pengetan Format Gambar PNG">
+              <i class="fa-solid fa-image"></i> Unduh PNG
+            </button>
+            <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
+            <button onclick="printSection('hasilSelametanCard')" id="btnPrintSelametan" style="display:none;" aria-hidden="true"></button>
           </div>
 
           <div id="geblakInfoBox" class="p-3 bg-keraton rounded-xl border border-sogan-900 text-xs" style="display:none;"></div>
