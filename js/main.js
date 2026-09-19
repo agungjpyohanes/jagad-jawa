@@ -712,7 +712,14 @@ function checkDinoGede(wukuId, d, pasaranId, hd, hm) {
     ? normDinoWukuKey(dinoName, pasaranName, wukuName)
     : `${String(dinoName).toLowerCase()}_${String(pasaranName).toLowerCase()}_${String(wukuName).toLowerCase().replace(/[\s\-_]/g, '')}`;
   
-  const isCsvGede = (typeof DINO_GEDE_SET !== 'undefined' && DINO_GEDE_SET) ? DINO_GEDE_SET.has(normKey) : false;
+  let isCsvGede = false;
+  if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function') {
+    isCsvGede = window.evaluateDino(wukuName, dinoName, pasaranName).isGede;
+  } else if (typeof evaluateDino === 'function') {
+    isCsvGede = evaluateDino(wukuName, dinoName, pasaranName).isGede;
+  } else if (typeof DINO_GEDE_SET !== 'undefined' && DINO_GEDE_SET) {
+    isCsvGede = DINO_GEDE_SET.has(normKey);
+  }
   const isGridGede = Boolean(cell[2] === 1);
   const isTandaO = code.includes('O');
   const isAnggaraKasih = (d === 2 && pasaranId === 4) || isTandaO;
@@ -784,7 +791,9 @@ window.normDinoWukuKey = normDinoWukuKey;
 window.isDinoGede = isDinoGede;
 window.isDinoIjo = isDinoIjo;
 window.getDinoWarnaStatus = getDinoWarnaStatus;
-window.evaluateDino = evaluateDino;
+if (!window.evaluateDino) {
+  window.evaluateDino = evaluateDino;
+}
 
 
 // ─── Data Kepribadian & Faalakiah ─────────────────────────────────────────
