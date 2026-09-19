@@ -165,7 +165,7 @@ export const PANCASUDA_ARTI = {
   "Satriya Wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
   "Bumi Kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar , harus rajin belajar",
   "Lebu Ketiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
-  "Lebu Katiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
+  "Lebu Ketiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
 };
 
 // 6. BINCIL KAMAROKAN (6 Watak)

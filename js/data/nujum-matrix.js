@@ -1,228 +1,147 @@
 // =========================================================================
-// BASIS DATA MATRIKS LOOKUP TABEL BAKU PRIMBON & BINCIL (210 HARI PAWUKON JAWA)
-// Sumber: draft_database_nujum - bincil.csv & draft_database_nujum - ket_bincil.csv
-// Sistem 100% Deterministic Exact Lookup - Tanpa Rumus Modulo Sisa Bagi Palsu
+// BASIS DATA MATRIKS LOOKUP TABEL BAKU PRIMBON & BINCIL (210 HARI PAWUKON)
+// DIBERSIHKAN otomatis oleh clean_nujum_db.py
+// ---------------------------------------------------------------------------
+// Kanon nama wuku  = calendar.js (Sinta, Warigagung, Medangkungan, ...)
+// Kanon pancasuda  = "Lebu Ketiyup Angin"
+// Key database     = {wuku}_{hari}_{pasaran}  (lowercase, tanpa spasi)
+//                    {no}_{hari}_{pasaran}    (fallback)
+// Kamus arti       = key lowercase saja
+// Sistem           = 100% Exact Lookup — tanpa rumus modulo
 // =========================================================================
 (function (root) {
+
+const CANON_WUKU_LIST = ["Sinta", "Landep", "Wukir", "Kurantil", "Tolu", "Gumbreg", "Warigalit", "Warigagung", "Julungwangi", "Sungsang", "Galungan", "Kuningan", "Langkir", "Mandasiya", "Julungpujut", "Pahang", "Kuruwelut", "Marakeh", "Tambir", "Medangkungan", "Maktal", "Wuye", "Manahil", "Prangbakat", "Bala", "Wugu", "Wayang", "Kulawu", "Dukut", "Watugunung"];
+
 const KET_BINCIL = {
   "padewan": {
-    "sri": "Welas asih",
-    "indra": "Teliti, angkuh",
-    "guru": "Memberi percobaan, lelemeran",
-    "yamadipati": "Pengertian, malas",
-    "rudra": "Berbudi luhur",
     "brama": "Brangasan",
+    "guru": "Memberi percobaan, lelemeran",
+    "indra": "Teliti, angkuh",
     "kala": "Serakah, bohong",
-    "uma": "Welas asih"
+    "rudra": "Berbudi luhur",
+    "sri": "Welas asih",
+    "uma": "Welas asih",
+    "yamadipati": "Pengertian, malas"
   },
   "paringkelan": {
-    "tungle": "Tidak tepat janji",
     "aryang": "Pelupa",
-    "wurukung": "Lengah",
+    "mawulu": "Sering sakit",
     "paningron": "Takabur",
+    "tungle": "Tidak tepat janji",
     "uwas": "Melikan",
-    "mawulu": "Sering sakit"
+    "wurukung": "Lengah"
   },
   "pandangon": {
+    "dadi": "Tidak mau disaingi",
     "dangu": "Pendiam, bodoh, kerashati",
-    "jagur": "Luwes, kuat, irihati",
     "gigis": "Kuat dapat menerima keadaan",
+    "jagur": "Luwes, kuat, irihati",
     "kerangan": "Teliti, berpendirian",
     "nohan": "Welasasih",
-    "wogan": "Tekun, hemat dan kuat pendiriannya",
     "tulus": "Jujur, banyak kemauannya",
-    "wurung": "Berangasan dan tidak sabaran",
-    "dadi": "Tidak mau disaingi"
+    "wogan": "Tekun, hemat dan kuat pendiriannya",
+    "wurung": "Berangasan dan tidak sabaran"
   },
   "paarasan": {
-    "aras tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
     "aras kembang": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
-    "lakuning lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
-    "lakuning rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
-    "lakuning srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
+    "aras pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya",
+    "aras tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
+    "lakuning angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
     "lakuning banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
     "lakuning bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
     "lakuning geni": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
-    "lakuning angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
-    "aras pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya"
+    "lakuning lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
+    "lakuning rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
+    "lakuning srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan"
   },
   "pancasuda": {
-    "wasesa segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
-    "tunggak semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
-    "satriya wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
-    "sumur sinaba": "Menjadi tempat menimba ilmu",
-    "satriya wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
     "bumi kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar",
-    "lebu katiyup angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
+    "lebu ketiyup angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
+    "satriya wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
+    "satriya wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
+    "sumur sinaba": "Menjadi tempat menimba ilmu",
+    "tunggak semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
+    "wasesa segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa"
   },
   "kamarokan": {
-    "nuju padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
-    "kala tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya",
-    "sanggar waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung",
-    "mantri sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
+    "kala tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya",
     "macan ketawan": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek",
-    "nuju pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana"
+    "mantri sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
+    "nuju padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
+    "nuju pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana",
+    "sanggar waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung"
   }
 };
 
 const PADEWAN_ARTI = {
-  "sri": "Welas asih",
-  "SRI": "Welas asih",
-  "Sri": "Welas asih",
-  "indra": "Teliti, angkuh",
-  "INDRA": "Teliti, angkuh",
-  "Indra": "Teliti, angkuh",
-  "guru": "Memberi percobaan, lelemeran",
-  "GURU": "Memberi percobaan, lelemeran",
-  "Guru": "Memberi percobaan, lelemeran",
-  "yamadipati": "Pengertian, malas",
-  "YAMADIPATI": "Pengertian, malas",
-  "Yamadipati": "Pengertian, malas",
-  "rudra": "Berbudi luhur",
-  "RUDRA": "Berbudi luhur",
-  "Rudra": "Berbudi luhur",
   "brama": "Brangasan",
-  "BRAMA": "Brangasan",
-  "Brama": "Brangasan",
+  "guru": "Memberi percobaan, lelemeran",
+  "indra": "Teliti, angkuh",
   "kala": "Serakah, bohong",
-  "KALA": "Serakah, bohong",
-  "Kala": "Serakah, bohong",
+  "rudra": "Berbudi luhur",
+  "sri": "Welas asih",
   "uma": "Welas asih",
-  "UMA": "Welas asih",
-  "Uma": "Welas asih"
+  "yamadipati": "Pengertian, malas"
 };
+
 const PARINGKELAN_ARTI = {
-  "tungle": "Tidak tepat janji",
-  "TUNGLE": "Tidak tepat janji",
-  "Tungle": "Tidak tepat janji",
   "aryang": "Pelupa",
-  "ARYANG": "Pelupa",
-  "Aryang": "Pelupa",
-  "wurukung": "Lengah",
-  "WURUKUNG": "Lengah",
-  "Wurukung": "Lengah",
-  "paningron": "Takabur",
-  "PANINGRON": "Takabur",
-  "Paningron": "Takabur",
-  "uwas": "Melikan",
-  "UWAS": "Melikan",
-  "Uwas": "Melikan",
   "mawulu": "Sering sakit",
-  "MAWULU": "Sering sakit",
-  "Mawulu": "Sering sakit"
+  "paningron": "Takabur",
+  "tungle": "Tidak tepat janji",
+  "uwas": "Melikan",
+  "wurukung": "Lengah"
 };
+
 const PANDANGON_ARTI = {
-  "dangu": "Pendiam, bodoh, kerashati",
-  "DANGU": "Pendiam, bodoh, kerashati",
-  "Dangu": "Pendiam, bodoh, kerashati",
-  "jagur": "Luwes, kuat, irihati",
-  "JAGUR": "Luwes, kuat, irihati",
-  "Jagur": "Luwes, kuat, irihati",
-  "gigis": "Kuat dapat menerima keadaan",
-  "GIGIS": "Kuat dapat menerima keadaan",
-  "Gigis": "Kuat dapat menerima keadaan",
-  "kerangan": "Teliti, berpendirian",
-  "KERANGAN": "Teliti, berpendirian",
-  "Kerangan": "Teliti, berpendirian",
-  "nohan": "Welasasih",
-  "NOHAN": "Welasasih",
-  "Nohan": "Welasasih",
-  "wogan": "Tekun, hemat dan kuat pendiriannya",
-  "WOGAN": "Tekun, hemat dan kuat pendiriannya",
-  "Wogan": "Tekun, hemat dan kuat pendiriannya",
-  "tulus": "Jujur, banyak kemauannya",
-  "TULUS": "Jujur, banyak kemauannya",
-  "Tulus": "Jujur, banyak kemauannya",
-  "wurung": "Berangasan dan tidak sabaran",
-  "WURUNG": "Berangasan dan tidak sabaran",
-  "Wurung": "Berangasan dan tidak sabaran",
   "dadi": "Tidak mau disaingi",
-  "DADI": "Tidak mau disaingi",
-  "Dadi": "Tidak mau disaingi"
+  "dangu": "Pendiam, bodoh, kerashati",
+  "gigis": "Kuat dapat menerima keadaan",
+  "jagur": "Luwes, kuat, irihati",
+  "kerangan": "Teliti, berpendirian",
+  "nohan": "Welasasih",
+  "tulus": "Jujur, banyak kemauannya",
+  "wogan": "Tekun, hemat dan kuat pendiriannya",
+  "wurung": "Berangasan dan tidak sabaran"
 };
+
 const PAARASAN_ARTI = {
-  "aras tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
-  "ARAS TUDING": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
-  "Aras Tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
   "aras kembang": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
-  "ARAS KEMBANG": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
-  "Aras Kembang": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang",
-  "lakuning lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
-  "LAKUNING LINTANG": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
-  "Lakuning Lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
-  "lakuning rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
-  "LAKUNING REMBULAN": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
-  "Lakuning Rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
-  "lakuning srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
-  "LAKUNING SRENGENGE": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
-  "Lakuning Srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan",
-  "lakuning banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
-  "LAKUNING BANYU": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
-  "Lakuning Banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
-  "lakuning bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
-  "LAKUNING BUMI": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
-  "Lakuning Bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
-  "lakuning geni": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
-  "LAKUNING GENI": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
-  "Lakuning Geni": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
-  "lakuning angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
-  "LAKUNING ANGIN": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
-  "Lakuning Angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
   "aras pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya",
-  "ARAS PEPET": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya",
-  "Aras Pepet": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita - citanya"
+  "aras tuding": "Pemberani dan terpakai kinerjanya tapi sering mejual perabotnya dan suka mencuri (climut)",
+  "lakuning angin": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang",
+  "lakuning banyu": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar",
+  "lakuning bumi": "Pendiam, pamarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara",
+  "lakuning geni": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya",
+  "lakuning lintang": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah",
+  "lakuning rembulan": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan - sungkan",
+  "lakuning srengenge": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan"
 };
+
 const PANCASUDA_ARTI = {
-  "wasesa segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
-  "WASESA SEGARA": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
-  "Wasesa Segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa",
-  "tunggak semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
-  "TUNGGAK SEMI": "Banyak rejeki, walau dipotong tetap ada rejekinya",
-  "Tunggak Semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
-  "satriya wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
-  "SATRIYA WIBAWA": "Dimanapun selalu berwibawa dan dihormati orang",
-  "Satriya Wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
-  "sumur sinaba": "Menjadi tempat menimba ilmu",
-  "SUMUR SINABA": "Menjadi tempat menimba ilmu",
-  "Sumur Sinaba": "Menjadi tempat menimba ilmu",
-  "satriya wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
-  "SATRIYA WIRANG": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
-  "Satriya Wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
   "bumi kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar",
-  "BUMI KAPETAK": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar",
-  "Bumi Kapetak": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar",
-  "lebu katiyup angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
-  "LEBU KATIYUP ANGIN": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
-  "Lebu Katiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
-  "Lebu Ketiyup Angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
   "lebu ketiyup angin": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu",
-  "LEBU KETIYUP ANGIN": "Melarat, tidak kerasanan sering pindah rumah dan berkayal, baik untuk berburu"
+  "satriya wibawa": "Dimanapun selalu berwibawa dan dihormati orang",
+  "satriya wirang": "Dimanapun selalu dipermalukan walau beritikat baikpun dan banyak halangan",
+  "sumur sinaba": "Menjadi tempat menimba ilmu",
+  "tunggak semi": "Banyak rejeki, walau dipotong tetap ada rejekinya",
+  "wasesa segara": "Berjiwa besar, pemaaf, dapat menerima masukan baik / jelek dan berwibawa"
 };
+
 const KAMAROKAN_ARTI = {
-  "nuju padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
-  "NUJU PADU": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
-  "Nuju Padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
-  "kala tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya",
-  "KALA TINANTANG": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya",
-  "Kala Tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarnya",
-  "sanggar waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung",
-  "SANGGAR WARINGIN": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung",
-  "Sanggar Waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung",
-  "mantri sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
-  "MANTRI SINAROJO": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
-  "Mantri Sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
+  "kala tinantang": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar ammarahnya",
   "macan ketawan": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek",
-  "MACAN KETAWAN": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek",
-  "Macan Ketawan": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek",
+  "mantri sinarojo": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak",
+  "nuju padu": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan",
   "nuju pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana",
-  "NUJU PATI": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana",
-  "Nuju Pati": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana"
+  "sanggar waringin": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung"
 };
 
 const BINCIL_LIST = [
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Minggu",
     "pasaran": "Pahing",
     "padewan": "Sri",
@@ -234,7 +153,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Senin",
     "pasaran": "Pon",
     "padewan": "Indra",
@@ -246,31 +165,31 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Selasa",
     "pasaran": "Wage",
     "padewan": "Guru",
     "paringkelan": "Wurukung",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Rabu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Kamis",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -282,7 +201,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Jumat",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -294,7 +213,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Sabtu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -529,7 +448,7 @@ const BINCIL_LIST = [
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -541,7 +460,7 @@ const BINCIL_LIST = [
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -565,7 +484,7 @@ const BINCIL_LIST = [
     "paringkelan": "Uwas",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -673,7 +592,7 @@ const BINCIL_LIST = [
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -685,7 +604,7 @@ const BINCIL_LIST = [
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
@@ -810,7 +729,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Minggu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -822,7 +741,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Senin",
     "pasaran": "Pahing",
     "padewan": "Guru",
@@ -834,7 +753,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Selasa",
     "pasaran": "Pon",
     "padewan": "Yamadipati",
@@ -846,7 +765,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Rabu",
     "pasaran": "Wage",
     "padewan": "Rudra",
@@ -858,7 +777,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Kamis",
     "pasaran": "Kliwon",
     "padewan": "Brama",
@@ -870,7 +789,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Jumat",
     "pasaran": "Legi",
     "padewan": "Kala",
@@ -882,7 +801,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Sabtu",
     "pasaran": "Pahing",
     "padewan": "Uma",
@@ -949,7 +868,7 @@ const BINCIL_LIST = [
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -961,7 +880,7 @@ const BINCIL_LIST = [
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -985,7 +904,7 @@ const BINCIL_LIST = [
     "paringkelan": "Paningron",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1093,7 +1012,7 @@ const BINCIL_LIST = [
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1105,7 +1024,7 @@ const BINCIL_LIST = [
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
@@ -1369,7 +1288,7 @@ const BINCIL_LIST = [
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1381,7 +1300,7 @@ const BINCIL_LIST = [
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -1405,7 +1324,7 @@ const BINCIL_LIST = [
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1513,7 +1432,7 @@ const BINCIL_LIST = [
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1525,7 +1444,7 @@ const BINCIL_LIST = [
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
@@ -1789,7 +1708,7 @@ const BINCIL_LIST = [
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1801,7 +1720,7 @@ const BINCIL_LIST = [
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -1818,19 +1737,19 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Minggu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Senin",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -1842,7 +1761,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Selasa",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -1854,7 +1773,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Rabu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -1866,7 +1785,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Kamis",
     "pasaran": "Wage",
     "padewan": "Uma",
@@ -1878,7 +1797,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Jumat",
     "pasaran": "Kliwon",
     "padewan": "Sri",
@@ -1890,7 +1809,7 @@ const BINCIL_LIST = [
   },
   {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Sabtu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -1933,7 +1852,7 @@ const BINCIL_LIST = [
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -1945,7 +1864,7 @@ const BINCIL_LIST = [
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
@@ -2209,7 +2128,7 @@ const BINCIL_LIST = [
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -2221,7 +2140,7 @@ const BINCIL_LIST = [
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -2245,7 +2164,7 @@ const BINCIL_LIST = [
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -2353,7 +2272,7 @@ const BINCIL_LIST = [
     "paringkelan": "Paningron",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -2365,7 +2284,7 @@ const BINCIL_LIST = [
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   {
@@ -2629,7 +2548,7 @@ const BINCIL_LIST = [
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -2641,7 +2560,7 @@ const BINCIL_LIST = [
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   {
@@ -2665,7 +2584,7 @@ const BINCIL_LIST = [
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   {
@@ -2742,58 +2661,11 @@ const BINCIL_LIST = [
   }
 ];
 
+
 const bincilDatabase = {
-  "Shinto_Minggu_Pahing": {
+  "sinta_minggu_pahing": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "shinto_minggu_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "1_Minggu_Pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Minggu",
     "pasaran": "Pahing",
     "padewan": "Sri",
@@ -2805,7 +2677,7 @@ const bincilDatabase = {
   },
   "1_minggu_pahing": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Minggu",
     "pasaran": "Pahing",
     "padewan": "Sri",
@@ -2815,153 +2687,9 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Sinta_Minggu_Pahing": {
+  "sinta_senin_pon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sinta_minggu_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "Sinto_Minggu_Pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sinto_minggu_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "Shinto_Senin_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "shinto_senin_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "1_Senin_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Senin",
     "pasaran": "Pon",
     "padewan": "Indra",
@@ -2973,7 +2701,7 @@ const bincilDatabase = {
   },
   "1_senin_pon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Senin",
     "pasaran": "Pon",
     "padewan": "Indra",
@@ -2983,489 +2711,57 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Sinta_Senin_Pon": {
+  "sinta_selasa_wage": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "sinta_senin_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Sinto_Senin_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "sinto_senin_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Shinto_Selasa_Wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Selasa",
     "pasaran": "Wage",
     "padewan": "Guru",
     "paringkelan": "Wurukung",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "shinto_selasa_wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "1_Selasa_Wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "1_selasa_wage": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Selasa",
     "pasaran": "Wage",
     "padewan": "Guru",
     "paringkelan": "Wurukung",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Sinta_Selasa_Wage": {
+  "sinta_rabu_kliwon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sinta_selasa_wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Sinto_Selasa_Wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sinto_selasa_wage": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Shinto_Rabu_Kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Rabu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "shinto_rabu_kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "1_Rabu_Kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "1_rabu_kliwon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Rabu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Sinta_Rabu_Kliwon": {
+  "sinta_kamis_legi": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "sinta_rabu_kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "Sinto_Rabu_Kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "sinto_rabu_kliwon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "Shinto_Kamis_Legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "shinto_kamis_legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "1_Kamis_Legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Kamis",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -3477,7 +2773,7 @@ const bincilDatabase = {
   },
   "1_kamis_legi": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Kamis",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -3487,153 +2783,9 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Sinta_Kamis_Legi": {
+  "sinta_jumat_pahing": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sinta_kamis_legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Sinto_Kamis_Legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sinto_kamis_legi": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Shinto_Jumat_Pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "shinto_jumat_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "1_Jumat_Pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Jumat",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -3645,7 +2797,7 @@ const bincilDatabase = {
   },
   "1_jumat_pahing": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Jumat",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -3655,153 +2807,9 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Sinta_Jumat_Pahing": {
+  "sinta_sabtu_pon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sinta_jumat_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Sinto_Jumat_Pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sinto_jumat_pahing": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Shinto_Sabtu_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "shinto_sabtu_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_shinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "1_Sabtu_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Sabtu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -3813,7 +2821,7 @@ const bincilDatabase = {
   },
   "1_sabtu_pon": {
     "no_wuku": 1,
-    "wuku": "Shinto",
+    "wuku": "Sinta",
     "dino": "Sabtu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -3822,152 +2830,8 @@ const bincilDatabase = {
     "paarasan": "Lakuning Banyu",
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
-  },
-  "Sinta_Sabtu_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sinta_sabtu_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_sinta": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "Sinto_Sabtu_Pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sinto_sabtu_pon": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_sinto": {
-    "no_wuku": 1,
-    "wuku": "Shinto",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "Landep_Minggu_Wage": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
   },
   "landep_minggu_wage": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "2_Minggu_Wage": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Minggu",
@@ -3991,55 +2855,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Landep_Senin_Kliwon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "landep_senin_kliwon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "2_Senin_Kliwon": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Senin",
@@ -4063,55 +2879,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Landep_Selasa_Legi": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
   "landep_selasa_legi": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "SelasaLegi_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "selasalegi_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "2_Selasa_Legi": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Selasa",
@@ -4135,55 +2903,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Padu"
   },
-  "Landep_Rabu_Pahing": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "landep_rabu_pahing": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "2_Rabu_Pahing": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Rabu",
@@ -4207,55 +2927,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Landep_Kamis_Pon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "landep_kamis_pon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "2_Kamis_Pon": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Kamis",
@@ -4279,55 +2951,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Landep_Jumat_Wage": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "landep_jumat_wage": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "2_Jumat_Wage": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Jumat",
@@ -4351,55 +2975,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Landep_Sabtu_Kliwon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "landep_sabtu_kliwon": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_landep": {
-    "no_wuku": 2,
-    "wuku": "Landep",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "2_Sabtu_Kliwon": {
     "no_wuku": 2,
     "wuku": "Landep",
     "dino": "Sabtu",
@@ -4423,55 +2999,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wukir_Minggu_Legi": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
   "wukir_minggu_legi": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "3_Minggu_Legi": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Minggu",
@@ -4495,55 +3023,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Wukir_Senin_Pahing": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "wukir_senin_pahing": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "3_Senin_Pahing": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Senin",
@@ -4567,55 +3047,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Wukir_Selasa_Pon": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wukir_selasa_pon": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "3_Selasa_Pon": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Selasa",
@@ -4639,55 +3071,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wukir_Rabu_Wage": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "wukir_rabu_wage": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "3_Rabu_Wage": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Rabu",
@@ -4711,55 +3095,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Wukir_Kamis_Kliwon": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
   "wukir_kamis_kliwon": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "3_Kamis_Kliwon": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Kamis",
@@ -4783,55 +3119,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Wukir_Jumat_Legi": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wukir_jumat_legi": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "3_Jumat_Legi": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Jumat",
@@ -4855,55 +3143,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wukir_Sabtu_Pahing": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "wukir_sabtu_pahing": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_wukir": {
-    "no_wuku": 3,
-    "wuku": "Wukir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "3_Sabtu_Pahing": {
     "no_wuku": 3,
     "wuku": "Wukir",
     "dino": "Sabtu",
@@ -4927,55 +3167,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Kurantil_Minggu_Pon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "kurantil_minggu_pon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "4_Minggu_Pon": {
     "no_wuku": 4,
     "wuku": "Kurantil",
     "dino": "Minggu",
@@ -4999,55 +3191,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Kurantil_Senin_Wage": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kurantil_senin_wage": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "4_Senin_Wage": {
     "no_wuku": 4,
     "wuku": "Kurantil",
     "dino": "Senin",
@@ -5071,55 +3215,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kurantil_Selasa_Kliwon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "kurantil_selasa_kliwon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "4_Selasa_Kliwon": {
     "no_wuku": 4,
     "wuku": "Kurantil",
     "dino": "Selasa",
@@ -5143,55 +3239,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Kurantil_Rabu_Legi": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "kurantil_rabu_legi": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "4_Rabu_Legi": {
     "no_wuku": 4,
     "wuku": "Kurantil",
     "dino": "Rabu",
@@ -5215,18 +3263,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Kurantil_Kamis_Pahing": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "kurantil_kamis_pahing": {
     "no_wuku": 4,
     "wuku": "Kurantil",
@@ -5236,43 +3272,7 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "4_Kamis_Pahing": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "4_kamis_pahing": {
@@ -5284,20 +3284,8 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Kurantil_Jumat_Pon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "kurantil_jumat_pon": {
     "no_wuku": 4,
@@ -5308,43 +3296,7 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "4_Jumat_Pon": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "4_jumat_pon": {
@@ -5356,58 +3308,10 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
-  "Kurantil_Sabtu_Wage": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
   "kurantil_sabtu_wage": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_kurantil": {
-    "no_wuku": 4,
-    "wuku": "Kurantil",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "4_Sabtu_Wage": {
     "no_wuku": 4,
     "wuku": "Kurantil",
     "dino": "Sabtu",
@@ -5431,18 +3335,6 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Tolu_Minggu_Kliwon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "tolu_minggu_kliwon": {
     "no_wuku": 5,
     "wuku": "Tolu",
@@ -5452,43 +3344,7 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "5_Minggu_Kliwon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "5_minggu_kliwon": {
@@ -5500,58 +3356,10 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Tolu_Senin_Legi": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "tolu_senin_legi": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "5_Senin_Legi": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Senin",
@@ -5575,55 +3383,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Tolu_Selasa_Pahing": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "tolu_selasa_pahing": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "5_Selasa_Pahing": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Selasa",
@@ -5647,55 +3407,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Tolu_Rabu_Pon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "tolu_rabu_pon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "5_Rabu_Pon": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Rabu",
@@ -5719,55 +3431,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Tolu_Kamis_Wage": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "tolu_kamis_wage": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "5_Kamis_Wage": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Kamis",
@@ -5791,55 +3455,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Tolu_Jumat_Kliwon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
   "tolu_jumat_kliwon": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "5_Jumat_Kliwon": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Jumat",
@@ -5863,55 +3479,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Tolu_Sabtu_Legi": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "tolu_sabtu_legi": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_tolu": {
-    "no_wuku": 5,
-    "wuku": "Tolu",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "5_Sabtu_Legi": {
     "no_wuku": 5,
     "wuku": "Tolu",
     "dino": "Sabtu",
@@ -5935,55 +3503,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Gumbreg_Minggu_Pahing": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "gumbreg_minggu_pahing": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "6_Minggu_Pahing": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
     "dino": "Minggu",
@@ -6007,55 +3527,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Gumbreg_Senin_Pon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "gumbreg_senin_pon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "6_Senin_Pon": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
     "dino": "Senin",
@@ -6079,18 +3551,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Gumbreg_Selasa_Wage": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "gumbreg_selasa_wage": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
@@ -6100,43 +3560,7 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "6_Selasa_Wage": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "6_selasa_wage": {
@@ -6148,20 +3572,8 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Gumbreg_Rabu_Kliwon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
   },
   "gumbreg_rabu_kliwon": {
     "no_wuku": 6,
@@ -6172,43 +3584,7 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "6_Rabu_Kliwon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "6_rabu_kliwon": {
@@ -6220,58 +3596,10 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Gumbreg_Kamis_Legi": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "gumbreg_kamis_legi": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "6_Kamis_Legi": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
     "dino": "Kamis",
@@ -6295,55 +3623,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Gumbreg_Jumat_Pahing": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "gumbreg_jumat_pahing": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "6_Jumat_Pahing": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
     "dino": "Jumat",
@@ -6367,55 +3647,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Gumbreg_Sabtu_Pon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "gumbreg_sabtu_pon": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_gumbreg": {
-    "no_wuku": 6,
-    "wuku": "Gumbreg",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "6_Sabtu_Pon": {
     "no_wuku": 6,
     "wuku": "Gumbreg",
     "dino": "Sabtu",
@@ -6439,55 +3671,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Warigalit_Minggu_Wage": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "warigalit_minggu_wage": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "7_Minggu_Wage": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Minggu",
@@ -6511,55 +3695,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Warigalit_Senin_Kliwon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "warigalit_senin_kliwon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "7_Senin_Kliwon": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Senin",
@@ -6583,55 +3719,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Warigalit_Selasa_Legi": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "warigalit_selasa_legi": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaLegi_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasalegi_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "7_Selasa_Legi": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Selasa",
@@ -6655,55 +3743,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Warigalit_Rabu_Pahing": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "warigalit_rabu_pahing": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "7_Rabu_Pahing": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Rabu",
@@ -6727,55 +3767,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Warigalit_Kamis_Pon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "warigalit_kamis_pon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "7_Kamis_Pon": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Kamis",
@@ -6799,55 +3791,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Warigalit_Jumat_Wage": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "warigalit_jumat_wage": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "7_Jumat_Wage": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Jumat",
@@ -6871,55 +3815,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Warigalit_Sabtu_Kliwon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "warigalit_sabtu_kliwon": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_warigalit": {
-    "no_wuku": 7,
-    "wuku": "Warigalit",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "7_Sabtu_Kliwon": {
     "no_wuku": 7,
     "wuku": "Warigalit",
     "dino": "Sabtu",
@@ -6943,57 +3839,9 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wariagung_Minggu_Legi": {
+  "warigagung_minggu_legi": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "wariagung_minggu_legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "8_Minggu_Legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Minggu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -7005,7 +3853,7 @@ const bincilDatabase = {
   },
   "8_minggu_legi": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Minggu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -7015,105 +3863,9 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Warigagung_Minggu_Legi": {
+  "warigagung_senin_pahing": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "warigagung_minggu_legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Wariagung_Senin_Pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "wariagung_senin_pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "8_Senin_Pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Senin",
     "pasaran": "Pahing",
     "padewan": "Guru",
@@ -7125,7 +3877,7 @@ const bincilDatabase = {
   },
   "8_senin_pahing": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Senin",
     "pasaran": "Pahing",
     "padewan": "Guru",
@@ -7135,105 +3887,9 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Warigagung_Senin_Pahing": {
+  "warigagung_selasa_pon": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "warigagung_senin_pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "Wariagung_Selasa_Pon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "wariagung_selasa_pon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "8_Selasa_Pon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Selasa",
     "pasaran": "Pon",
     "padewan": "Yamadipati",
@@ -7245,7 +3901,7 @@ const bincilDatabase = {
   },
   "8_selasa_pon": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Selasa",
     "pasaran": "Pon",
     "padewan": "Yamadipati",
@@ -7255,105 +3911,9 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Warigagung_Selasa_Pon": {
+  "warigagung_rabu_wage": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "warigagung_selasa_pon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Wariagung_Rabu_Wage": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "wariagung_rabu_wage": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "8_Rabu_Wage": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Rabu",
     "pasaran": "Wage",
     "padewan": "Rudra",
@@ -7365,7 +3925,7 @@ const bincilDatabase = {
   },
   "8_rabu_wage": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Rabu",
     "pasaran": "Wage",
     "padewan": "Rudra",
@@ -7375,105 +3935,9 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Warigagung_Rabu_Wage": {
+  "warigagung_kamis_kliwon": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "warigagung_rabu_wage": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Wariagung_Kamis_Kliwon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "wariagung_kamis_kliwon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "8_Kamis_Kliwon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Kamis",
     "pasaran": "Kliwon",
     "padewan": "Brama",
@@ -7485,7 +3949,7 @@ const bincilDatabase = {
   },
   "8_kamis_kliwon": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Kamis",
     "pasaran": "Kliwon",
     "padewan": "Brama",
@@ -7495,105 +3959,9 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Warigagung_Kamis_Kliwon": {
+  "warigagung_jumat_legi": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "warigagung_kamis_kliwon": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Wariagung_Jumat_Legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "wariagung_jumat_legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "8_Jumat_Legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Jumat",
     "pasaran": "Legi",
     "padewan": "Kala",
@@ -7605,7 +3973,7 @@ const bincilDatabase = {
   },
   "8_jumat_legi": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Jumat",
     "pasaran": "Legi",
     "padewan": "Kala",
@@ -7615,105 +3983,9 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Warigagung_Jumat_Legi": {
+  "warigagung_sabtu_pahing": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "warigagung_jumat_legi": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Wariagung_Sabtu_Pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "wariagung_sabtu_pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_wariagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "8_Sabtu_Pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Sabtu",
     "pasaran": "Pahing",
     "padewan": "Uma",
@@ -7725,7 +3997,7 @@ const bincilDatabase = {
   },
   "8_sabtu_pahing": {
     "no_wuku": 8,
-    "wuku": "Wariagung",
+    "wuku": "Warigagung",
     "dino": "Sabtu",
     "pasaran": "Pahing",
     "padewan": "Uma",
@@ -7734,104 +4006,8 @@ const bincilDatabase = {
     "paarasan": "Lakuning Geni",
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
-  },
-  "Warigagung_Sabtu_Pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "warigagung_sabtu_pahing": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_warigagung": {
-    "no_wuku": 8,
-    "wuku": "Wariagung",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Julungwangi_Minggu_Pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
   },
   "julungwangi_minggu_pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "9_Minggu_Pon": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
     "dino": "Minggu",
@@ -7855,103 +4031,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Julung Wangi_Minggu_Pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "julung wangi_minggu_pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "Julungwangi_Senin_Wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "julungwangi_senin_wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "9_Senin_Wage": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
     "dino": "Senin",
@@ -7975,103 +4055,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Julung Wangi_Senin_Wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "julung wangi_senin_wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Julungwangi_Selasa_Kliwon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "julungwangi_selasa_kliwon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "9_Selasa_Kliwon": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
     "dino": "Selasa",
@@ -8095,103 +4079,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Julung Wangi_Selasa_Kliwon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "julung wangi_selasa_kliwon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "Julungwangi_Rabu_Legi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "julungwangi_rabu_legi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "9_Rabu_Legi": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
     "dino": "Rabu",
@@ -8215,66 +4103,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Julung Wangi_Rabu_Legi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "julung wangi_rabu_legi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Julungwangi_Kamis_Pahing": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "julungwangi_kamis_pahing": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
@@ -8284,43 +4112,7 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "9_Kamis_Pahing": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "9_kamis_pahing": {
@@ -8332,68 +4124,8 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Julung Wangi_Kamis_Pahing": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "julung wangi_kamis_pahing": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Julungwangi_Jumat_Pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "julungwangi_jumat_pon": {
     "no_wuku": 9,
@@ -8404,43 +4136,7 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "9_Jumat_Pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "9_jumat_pon": {
@@ -8452,106 +4148,10 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
-  },
-  "Julung Wangi_Jumat_Pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "julung wangi_jumat_pon": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Julungwangi_Sabtu_Wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
   },
   "julungwangi_sabtu_wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_julungwangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "9_Sabtu_Wage": {
     "no_wuku": 9,
     "wuku": "Julungwangi",
     "dino": "Sabtu",
@@ -8575,66 +4175,6 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Julung Wangi_Sabtu_Wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "julung wangi_sabtu_wage": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Julung Wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_julung wangi": {
-    "no_wuku": 9,
-    "wuku": "Julungwangi",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "Sungsang_Minggu_Kliwon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "sungsang_minggu_kliwon": {
     "no_wuku": 10,
     "wuku": "Sungsang",
@@ -8644,43 +4184,7 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "10_Minggu_Kliwon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "10_minggu_kliwon": {
@@ -8692,58 +4196,10 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Sungsang_Senin_Legi": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "sungsang_senin_legi": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "10_Senin_Legi": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Senin",
@@ -8767,55 +4223,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Sungsang_Selasa_Pahing": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
   "sungsang_selasa_pahing": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "10_Selasa_Pahing": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Selasa",
@@ -8839,55 +4247,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Kala Tinantang"
   },
-  "Sungsang_Rabu_Pon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "sungsang_rabu_pon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "10_Rabu_Pon": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Rabu",
@@ -8911,55 +4271,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Sungsang_Kamis_Wage": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Pati"
-  },
   "sungsang_kamis_wage": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Pati"
-  },
-  "10_Kamis_Wage": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Kamis",
@@ -8983,55 +4295,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Pati"
   },
-  "Sungsang_Jumat_Kliwon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
   "sungsang_jumat_kliwon": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "10_Jumat_Kliwon": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Jumat",
@@ -9055,55 +4319,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Sungsang_Sabtu_Legi": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "sungsang_sabtu_legi": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_sungsang": {
-    "no_wuku": 10,
-    "wuku": "Sungsang",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "10_Sabtu_Legi": {
     "no_wuku": 10,
     "wuku": "Sungsang",
     "dino": "Sabtu",
@@ -9127,55 +4343,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Galungan_Minggu_Pahing": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "galungan_minggu_pahing": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "11_Minggu_Pahing": {
     "no_wuku": 11,
     "wuku": "Galungan",
     "dino": "Minggu",
@@ -9199,55 +4367,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Galungan_Senin_Pon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "galungan_senin_pon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "11_Senin_Pon": {
     "no_wuku": 11,
     "wuku": "Galungan",
     "dino": "Senin",
@@ -9271,18 +4391,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Galungan_Selasa_Wage": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "galungan_selasa_wage": {
     "no_wuku": 11,
     "wuku": "Galungan",
@@ -9292,43 +4400,7 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "11_Selasa_Wage": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "11_selasa_wage": {
@@ -9340,20 +4412,8 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Galungan_Rabu_Kliwon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
   },
   "galungan_rabu_kliwon": {
     "no_wuku": 11,
@@ -9364,43 +4424,7 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "11_Rabu_Kliwon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "11_rabu_kliwon": {
@@ -9412,58 +4436,10 @@ const bincilDatabase = {
     "paringkelan": "Aryang",
     "pandangon": "Wurung",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Galungan_Kamis_Legi": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "galungan_kamis_legi": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "11_Kamis_Legi": {
     "no_wuku": 11,
     "wuku": "Galungan",
     "dino": "Kamis",
@@ -9487,55 +4463,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Galungan_Jumat_Pahing": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "galungan_jumat_pahing": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "11_Jumat_Pahing": {
     "no_wuku": 11,
     "wuku": "Galungan",
     "dino": "Jumat",
@@ -9559,55 +4487,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Galungan_Sabtu_Pon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "galungan_sabtu_pon": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_galungan": {
-    "no_wuku": 11,
-    "wuku": "Galungan",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "11_Sabtu_Pon": {
     "no_wuku": 11,
     "wuku": "Galungan",
     "dino": "Sabtu",
@@ -9631,55 +4511,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Kuningan_Minggu_Wage": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "kuningan_minggu_wage": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "12_Minggu_Wage": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Minggu",
@@ -9703,55 +4535,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Kuningan_Senin_Kliwon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "kuningan_senin_kliwon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "12_Senin_Kliwon": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Senin",
@@ -9775,55 +4559,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Kuningan_Selasa_Legi": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kuningan_selasa_legi": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaLegi_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasalegi_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "12_Selasa_Legi": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Selasa",
@@ -9847,55 +4583,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kuningan_Rabu_Pahing": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kuningan_rabu_pahing": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "12_Rabu_Pahing": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Rabu",
@@ -9919,55 +4607,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kuningan_Kamis_Pon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "kuningan_kamis_pon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "12_Kamis_Pon": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Kamis",
@@ -9991,55 +4631,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Kuningan_Jumat_Wage": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "kuningan_jumat_wage": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "12_Jumat_Wage": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Jumat",
@@ -10063,55 +4655,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Kuningan_Sabtu_Kliwon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kuningan_sabtu_kliwon": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_kuningan": {
-    "no_wuku": 12,
-    "wuku": "Kuningan",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "12_Sabtu_Kliwon": {
     "no_wuku": 12,
     "wuku": "Kuningan",
     "dino": "Sabtu",
@@ -10135,55 +4679,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Langkir_Minggu_Legi": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
   "langkir_minggu_legi": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "13_Minggu_Legi": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Minggu",
@@ -10207,55 +4703,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Langkir_Senin_Pahing": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "langkir_senin_pahing": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "13_Senin_Pahing": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Senin",
@@ -10279,55 +4727,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Langkir_Selasa_Pon": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "langkir_selasa_pon": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "13_Selasa_Pon": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Selasa",
@@ -10351,55 +4751,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Langkir_Rabu_Wage": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "langkir_rabu_wage": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "13_Rabu_Wage": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Rabu",
@@ -10423,55 +4775,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Langkir_Kamis_Kliwon": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
   "langkir_kamis_kliwon": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "13_Kamis_Kliwon": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Kamis",
@@ -10495,55 +4799,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Langkir_Jumat_Legi": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "langkir_jumat_legi": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "13_Jumat_Legi": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Jumat",
@@ -10567,55 +4823,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Langkir_Sabtu_Pahing": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "langkir_sabtu_pahing": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_langkir": {
-    "no_wuku": 13,
-    "wuku": "Langkir",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "13_Sabtu_Pahing": {
     "no_wuku": 13,
     "wuku": "Langkir",
     "dino": "Sabtu",
@@ -10639,55 +4847,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Mandasiya_Minggu_Pon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "mandasiya_minggu_pon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "14_Minggu_Pon": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
     "dino": "Minggu",
@@ -10711,55 +4871,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Mandasiya_Senin_Wage": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "mandasiya_senin_wage": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "14_Senin_Wage": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
     "dino": "Senin",
@@ -10783,55 +4895,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Mandasiya_Selasa_Kliwon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "mandasiya_selasa_kliwon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "14_Selasa_Kliwon": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
     "dino": "Selasa",
@@ -10855,55 +4919,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Mandasiya_Rabu_Legi": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "mandasiya_rabu_legi": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "14_Rabu_Legi": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
     "dino": "Rabu",
@@ -10927,18 +4943,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Mandasiya_Kamis_Pahing": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "mandasiya_kamis_pahing": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
@@ -10948,43 +4952,7 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "14_Kamis_Pahing": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "14_kamis_pahing": {
@@ -10996,20 +4964,8 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Mandasiya_Jumat_Pon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "mandasiya_jumat_pon": {
     "no_wuku": 14,
@@ -11020,43 +4976,7 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "14_Jumat_Pon": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "14_jumat_pon": {
@@ -11068,58 +4988,10 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
-  "Mandasiya_Sabtu_Wage": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
   "mandasiya_sabtu_wage": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_mandasiya": {
-    "no_wuku": 14,
-    "wuku": "Mandasiya",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "14_Sabtu_Wage": {
     "no_wuku": 14,
     "wuku": "Mandasiya",
     "dino": "Sabtu",
@@ -11143,18 +5015,6 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Julungpujut_Minggu_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "julungpujut_minggu_kliwon": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
@@ -11164,43 +5024,7 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "15_Minggu_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "15_minggu_kliwon": {
@@ -11212,154 +5036,10 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Julung Pujut_Minggu_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "julung pujut_minggu_kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Pujut_Minggu_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "pujut_minggu_kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Julungpujut_Senin_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
   },
   "julungpujut_senin_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "15_Senin_Legi": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Senin",
@@ -11383,151 +5063,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Julung Pujut_Senin_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "julung pujut_senin_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Pujut_Senin_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "pujut_senin_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Julungpujut_Selasa_Pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "julungpujut_selasa_pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "15_Selasa_Pahing": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Selasa",
@@ -11551,151 +5087,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Julung Pujut_Selasa_Pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "julung pujut_selasa_pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Pujut_Selasa_Pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "pujut_selasa_pahing": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Julungpujut_Rabu_Pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "julungpujut_rabu_pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "15_Rabu_Pon": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Rabu",
@@ -11719,151 +5111,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Julung Pujut_Rabu_Pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "julung pujut_rabu_pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Pujut_Rabu_Pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "pujut_rabu_pon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Julungpujut_Kamis_Wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "julungpujut_kamis_wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "15_Kamis_Wage": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Kamis",
@@ -11887,151 +5135,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Julung Pujut_Kamis_Wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "julung pujut_kamis_wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Pujut_Kamis_Wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "pujut_kamis_wage": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Julungpujut_Jumat_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
   "julungpujut_jumat_kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "15_Jumat_Kliwon": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Jumat",
@@ -12055,151 +5159,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Julung Pujut_Jumat_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "julung pujut_jumat_kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Pujut_Jumat_Kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "pujut_jumat_kliwon": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Julungpujut_Sabtu_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "julungpujut_sabtu_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_julungpujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "15_Sabtu_Legi": {
     "no_wuku": 15,
     "wuku": "Julungpujut",
     "dino": "Sabtu",
@@ -12223,151 +5183,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Julung Pujut_Sabtu_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "julung pujut_sabtu_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Julung Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_julung pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Pujut_Sabtu_Legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "pujut_sabtu_legi": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_pujut": {
-    "no_wuku": 15,
-    "wuku": "Julungpujut",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Pahang_Minggu_Pahing": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "pahang_minggu_pahing": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "16_Minggu_Pahing": {
     "no_wuku": 16,
     "wuku": "Pahang",
     "dino": "Minggu",
@@ -12391,55 +5207,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Pahang_Senin_Pon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "pahang_senin_pon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "16_Senin_Pon": {
     "no_wuku": 16,
     "wuku": "Pahang",
     "dino": "Senin",
@@ -12463,18 +5231,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Pahang_Selasa_Wage": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "pahang_selasa_wage": {
     "no_wuku": 16,
     "wuku": "Pahang",
@@ -12484,43 +5240,7 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "16_Selasa_Wage": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "16_selasa_wage": {
@@ -12532,20 +5252,8 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Pahang_Rabu_Kliwon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
   },
   "pahang_rabu_kliwon": {
     "no_wuku": 16,
@@ -12556,43 +5264,7 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "16_Rabu_Kliwon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "16_rabu_kliwon": {
@@ -12604,58 +5276,10 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Tulus",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Pahang_Kamis_Legi": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "pahang_kamis_legi": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "16_Kamis_Legi": {
     "no_wuku": 16,
     "wuku": "Pahang",
     "dino": "Kamis",
@@ -12679,55 +5303,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Pahang_Jumat_Pahing": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "pahang_jumat_pahing": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "16_Jumat_Pahing": {
     "no_wuku": 16,
     "wuku": "Pahang",
     "dino": "Jumat",
@@ -12751,55 +5327,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Pahang_Sabtu_Pon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "pahang_sabtu_pon": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_pahang": {
-    "no_wuku": 16,
-    "wuku": "Pahang",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "16_Sabtu_Pon": {
     "no_wuku": 16,
     "wuku": "Pahang",
     "dino": "Sabtu",
@@ -12823,55 +5351,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Kuruwelut_Minggu_Wage": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "kuruwelut_minggu_wage": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "17_Minggu_Wage": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Minggu",
@@ -12895,55 +5375,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Kuruwelut_Senin_Kliwon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "kuruwelut_senin_kliwon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "17_Senin_Kliwon": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Senin",
@@ -12967,55 +5399,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Kuruwelut_Selasa_Legi": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
   "kuruwelut_selasa_legi": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "SelasaLegi_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "selasalegi_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "17_Selasa_Legi": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Selasa",
@@ -13039,55 +5423,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Padu"
   },
-  "Kuruwelut_Rabu_Pahing": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kuruwelut_rabu_pahing": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "17_Rabu_Pahing": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Rabu",
@@ -13111,55 +5447,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kuruwelut_Kamis_Pon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "kuruwelut_kamis_pon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "17_Kamis_Pon": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Kamis",
@@ -13183,55 +5471,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Kuruwelut_Jumat_Wage": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "kuruwelut_jumat_wage": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "17_Jumat_Wage": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Jumat",
@@ -13255,55 +5495,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Kuruwelut_Sabtu_Kliwon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kuruwelut_sabtu_kliwon": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_kuruwelut": {
-    "no_wuku": 17,
-    "wuku": "Kuruwelut",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "17_Sabtu_Kliwon": {
     "no_wuku": 17,
     "wuku": "Kuruwelut",
     "dino": "Sabtu",
@@ -13327,55 +5519,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Marakeh_Minggu_Legi": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
   "marakeh_minggu_legi": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "18_Minggu_Legi": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Minggu",
@@ -13399,55 +5543,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Marakeh_Senin_Pahing": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "marakeh_senin_pahing": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "18_Senin_Pahing": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Senin",
@@ -13471,55 +5567,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Marakeh_Selasa_Pon": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "marakeh_selasa_pon": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "18_Selasa_Pon": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Selasa",
@@ -13543,55 +5591,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Marakeh_Rabu_Wage": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "marakeh_rabu_wage": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "18_Rabu_Wage": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Rabu",
@@ -13615,55 +5615,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Marakeh_Kamis_Kliwon": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
   "marakeh_kamis_kliwon": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "18_Kamis_Kliwon": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Kamis",
@@ -13687,55 +5639,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Marakeh_Jumat_Legi": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "marakeh_jumat_legi": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "18_Jumat_Legi": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Jumat",
@@ -13759,55 +5663,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Marakeh_Sabtu_Pahing": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "marakeh_sabtu_pahing": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_marakeh": {
-    "no_wuku": 18,
-    "wuku": "Marakeh",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "18_Sabtu_Pahing": {
     "no_wuku": 18,
     "wuku": "Marakeh",
     "dino": "Sabtu",
@@ -13831,55 +5687,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Tambir_Minggu_Pon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "tambir_minggu_pon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "19_Minggu_Pon": {
     "no_wuku": 19,
     "wuku": "Tambir",
     "dino": "Minggu",
@@ -13903,55 +5711,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Tambir_Senin_Wage": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "tambir_senin_wage": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "19_Senin_Wage": {
     "no_wuku": 19,
     "wuku": "Tambir",
     "dino": "Senin",
@@ -13975,55 +5735,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Tambir_Selasa_Kliwon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "tambir_selasa_kliwon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "19_Selasa_Kliwon": {
     "no_wuku": 19,
     "wuku": "Tambir",
     "dino": "Selasa",
@@ -14047,55 +5759,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Tambir_Rabu_Legi": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "tambir_rabu_legi": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "19_Rabu_Legi": {
     "no_wuku": 19,
     "wuku": "Tambir",
     "dino": "Rabu",
@@ -14119,18 +5783,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Tambir_Kamis_Pahing": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "tambir_kamis_pahing": {
     "no_wuku": 19,
     "wuku": "Tambir",
@@ -14140,43 +5792,7 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "19_Kamis_Pahing": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "19_kamis_pahing": {
@@ -14188,20 +5804,8 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Tambir_Jumat_Pon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "tambir_jumat_pon": {
     "no_wuku": 19,
@@ -14212,43 +5816,7 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "19_Jumat_Pon": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "19_jumat_pon": {
@@ -14260,58 +5828,10 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
-  "Tambir_Sabtu_Wage": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
   "tambir_sabtu_wage": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_tambir": {
-    "no_wuku": 19,
-    "wuku": "Tambir",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "19_Sabtu_Wage": {
     "no_wuku": 19,
     "wuku": "Tambir",
     "dino": "Sabtu",
@@ -14335,225 +5855,33 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Madangkungan_Minggu_Kliwon": {
+  "medangkungan_minggu_kliwon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Minggu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "madangkungan_minggu_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "20_Minggu_Kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "20_minggu_kliwon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Minggu",
     "pasaran": "Kliwon",
     "padewan": "Yamadipati",
     "paringkelan": "Aryang",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Mendangkungan_Minggu_Kliwon": {
+  "medangkungan_senin_legi": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "mendangkungan_minggu_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Medangkungan_Minggu_Kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "medangkungan_minggu_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Madangkungan_Senin_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "madangkungan_senin_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "20_Senin_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Senin",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -14565,7 +5893,7 @@ const bincilDatabase = {
   },
   "20_senin_legi": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Senin",
     "pasaran": "Legi",
     "padewan": "Rudra",
@@ -14575,153 +5903,9 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Mendangkungan_Senin_Legi": {
+  "medangkungan_selasa_pahing": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "mendangkungan_senin_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Medangkungan_Senin_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "medangkungan_senin_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Madangkungan_Selasa_Pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "madangkungan_selasa_pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "20_Selasa_Pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Selasa",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -14733,7 +5917,7 @@ const bincilDatabase = {
   },
   "20_selasa_pahing": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Selasa",
     "pasaran": "Pahing",
     "padewan": "Brama",
@@ -14743,153 +5927,9 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Kala Tinantang"
   },
-  "Mendangkungan_Selasa_Pahing": {
+  "medangkungan_rabu_pon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mendangkungan_selasa_pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Medangkungan_Selasa_Pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "medangkungan_selasa_pahing": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Madangkungan_Rabu_Pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "madangkungan_rabu_pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "20_Rabu_Pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Rabu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -14901,7 +5941,7 @@ const bincilDatabase = {
   },
   "20_rabu_pon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Rabu",
     "pasaran": "Pon",
     "padewan": "Kala",
@@ -14911,153 +5951,9 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Mendangkungan_Rabu_Pon": {
+  "medangkungan_kamis_wage": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "mendangkungan_rabu_pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Medangkungan_Rabu_Pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "medangkungan_rabu_pon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Madangkungan_Kamis_Wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "madangkungan_kamis_wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "20_Kamis_Wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Kamis",
     "pasaran": "Wage",
     "padewan": "Uma",
@@ -15069,7 +5965,7 @@ const bincilDatabase = {
   },
   "20_kamis_wage": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Kamis",
     "pasaran": "Wage",
     "padewan": "Uma",
@@ -15079,153 +5975,9 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Mendangkungan_Kamis_Wage": {
+  "medangkungan_jumat_kliwon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "mendangkungan_kamis_wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Medangkungan_Kamis_Wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "medangkungan_kamis_wage": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Madangkungan_Jumat_Kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "madangkungan_jumat_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "20_Jumat_Kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Jumat",
     "pasaran": "Kliwon",
     "padewan": "Sri",
@@ -15237,7 +5989,7 @@ const bincilDatabase = {
   },
   "20_jumat_kliwon": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Jumat",
     "pasaran": "Kliwon",
     "padewan": "Sri",
@@ -15247,153 +5999,9 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Mendangkungan_Jumat_Kliwon": {
+  "medangkungan_sabtu_legi": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mendangkungan_jumat_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Medangkungan_Jumat_Kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "medangkungan_jumat_kliwon": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Madangkungan_Sabtu_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "madangkungan_sabtu_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_madangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "20_Sabtu_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Sabtu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -15405,7 +6013,7 @@ const bincilDatabase = {
   },
   "20_sabtu_legi": {
     "no_wuku": 20,
-    "wuku": "Madangkungan",
+    "wuku": "Medangkungan",
     "dino": "Sabtu",
     "pasaran": "Legi",
     "padewan": "Indra",
@@ -15414,152 +6022,8 @@ const bincilDatabase = {
     "paarasan": "Lakuning Rembulan",
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Mendangkungan_Sabtu_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "mendangkungan_sabtu_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_mendangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Medangkungan_Sabtu_Legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "medangkungan_sabtu_legi": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_medangkungan": {
-    "no_wuku": 20,
-    "wuku": "Madangkungan",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Maktal_Minggu_Pahing": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
   },
   "maktal_minggu_pahing": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "21_Minggu_Pahing": {
     "no_wuku": 21,
     "wuku": "Maktal",
     "dino": "Minggu",
@@ -15583,55 +6047,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Maktal_Senin_Pon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "maktal_senin_pon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "21_Senin_Pon": {
     "no_wuku": 21,
     "wuku": "Maktal",
     "dino": "Senin",
@@ -15655,18 +6071,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Maktal_Selasa_Wage": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "maktal_selasa_wage": {
     "no_wuku": 21,
     "wuku": "Maktal",
@@ -15676,43 +6080,7 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "21_Selasa_Wage": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "21_selasa_wage": {
@@ -15724,20 +6092,8 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Maktal_Rabu_Kliwon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
   },
   "maktal_rabu_kliwon": {
     "no_wuku": 21,
@@ -15748,43 +6104,7 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "21_Rabu_Kliwon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "21_rabu_kliwon": {
@@ -15796,58 +6116,10 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Wogan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Maktal_Kamis_Legi": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "maktal_kamis_legi": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "21_Kamis_Legi": {
     "no_wuku": 21,
     "wuku": "Maktal",
     "dino": "Kamis",
@@ -15871,55 +6143,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Maktal_Jumat_Pahing": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "maktal_jumat_pahing": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "21_Jumat_Pahing": {
     "no_wuku": 21,
     "wuku": "Maktal",
     "dino": "Jumat",
@@ -15943,55 +6167,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Maktal_Sabtu_Pon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "maktal_sabtu_pon": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_maktal": {
-    "no_wuku": 21,
-    "wuku": "Maktal",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "21_Sabtu_Pon": {
     "no_wuku": 21,
     "wuku": "Maktal",
     "dino": "Sabtu",
@@ -16015,55 +6191,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Wuye_Minggu_Wage": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "wuye_minggu_wage": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "22_Minggu_Wage": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Minggu",
@@ -16087,55 +6215,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Wuye_Senin_Kliwon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "wuye_senin_kliwon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "22_Senin_Kliwon": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Senin",
@@ -16159,55 +6239,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Wuye_Selasa_Legi": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
   "wuye_selasa_legi": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "SelasaLegi_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "selasalegi_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "22_Selasa_Legi": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Selasa",
@@ -16231,55 +6263,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Padu"
   },
-  "Wuye_Rabu_Pahing": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wuye_rabu_pahing": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "22_Rabu_Pahing": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Rabu",
@@ -16303,55 +6287,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wuye_Kamis_Pon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "wuye_kamis_pon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "22_Kamis_Pon": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Kamis",
@@ -16375,55 +6311,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Wuye_Jumat_Wage": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "wuye_jumat_wage": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "22_Jumat_Wage": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Jumat",
@@ -16447,55 +6335,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Wuye_Sabtu_Kliwon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wuye_sabtu_kliwon": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_wuye": {
-    "no_wuku": 22,
-    "wuku": "Wuye",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "22_Sabtu_Kliwon": {
     "no_wuku": 22,
     "wuku": "Wuye",
     "dino": "Sabtu",
@@ -16519,55 +6359,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Manahil_Minggu_Legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
   "manahil_minggu_legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "23_Minggu_Legi": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Minggu",
@@ -16591,103 +6383,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Menail_Minggu_Legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "menail_minggu_legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Manahil_Senin_Pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "manahil_senin_pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "23_Senin_Pahing": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Senin",
@@ -16711,103 +6407,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Menail_Senin_Pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "menail_senin_pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "Manahil_Selasa_Pon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "manahil_selasa_pon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "23_Selasa_Pon": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Selasa",
@@ -16831,103 +6431,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Menail_Selasa_Pon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "menail_selasa_pon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Manahil_Rabu_Wage": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "manahil_rabu_wage": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "23_Rabu_Wage": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Rabu",
@@ -16951,103 +6455,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Menail_Rabu_Wage": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "menail_rabu_wage": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Manahil_Kamis_Kliwon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
   "manahil_kamis_kliwon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "23_Kamis_Kliwon": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Kamis",
@@ -17071,103 +6479,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Menail_Kamis_Kliwon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "menail_kamis_kliwon": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Manahil_Jumat_Legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "manahil_jumat_legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "23_Jumat_Legi": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Jumat",
@@ -17191,103 +6503,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Menail_Jumat_Legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "menail_jumat_legi": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "Manahil_Sabtu_Pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
   "manahil_sabtu_pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_manahil": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "23_Sabtu_Pahing": {
     "no_wuku": 23,
     "wuku": "Manahil",
     "dino": "Sabtu",
@@ -17311,103 +6527,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Macan Ketawan"
   },
-  "Menail_Sabtu_Pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "menail_sabtu_pahing": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_menail": {
-    "no_wuku": 23,
-    "wuku": "Manahil",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Macan Ketawan"
-  },
-  "Prangbakat_Minggu_Pon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "prangbakat_minggu_pon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "24_Minggu_Pon": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
     "dino": "Minggu",
@@ -17431,55 +6551,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Prangbakat_Senin_Wage": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "prangbakat_senin_wage": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "24_Senin_Wage": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
     "dino": "Senin",
@@ -17503,55 +6575,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Prangbakat_Selasa_Kliwon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "prangbakat_selasa_kliwon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "24_Selasa_Kliwon": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
     "dino": "Selasa",
@@ -17575,55 +6599,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Prangbakat_Rabu_Legi": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "prangbakat_rabu_legi": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "24_Rabu_Legi": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
     "dino": "Rabu",
@@ -17647,18 +6623,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Prangbakat_Kamis_Pahing": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "prangbakat_kamis_pahing": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
@@ -17668,43 +6632,7 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "24_Kamis_Pahing": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "24_kamis_pahing": {
@@ -17716,20 +6644,8 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Prangbakat_Jumat_Pon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "prangbakat_jumat_pon": {
     "no_wuku": 24,
@@ -17740,43 +6656,7 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "24_Jumat_Pon": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "24_jumat_pon": {
@@ -17788,58 +6668,10 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Jagur",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
-  "Prangbakat_Sabtu_Wage": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
   "prangbakat_sabtu_wage": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_prangbakat": {
-    "no_wuku": 24,
-    "wuku": "Prangbakat",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "24_Sabtu_Wage": {
     "no_wuku": 24,
     "wuku": "Prangbakat",
     "dino": "Sabtu",
@@ -17863,18 +6695,6 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Bala_Minggu_Kliwon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "bala_minggu_kliwon": {
     "no_wuku": 25,
     "wuku": "Bala",
@@ -17884,43 +6704,7 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "25_Minggu_Kliwon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "25_minggu_kliwon": {
@@ -17932,58 +6716,10 @@ const bincilDatabase = {
     "paringkelan": "Tungle",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Bala_Senin_Legi": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "bala_senin_legi": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "25_Senin_Legi": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Senin",
@@ -18007,55 +6743,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Bala_Selasa_Pahing": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
   "bala_selasa_pahing": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "25_Selasa_Pahing": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Selasa",
@@ -18079,55 +6767,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Kala Tinantang"
   },
-  "Bala_Rabu_Pon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "bala_rabu_pon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "25_Rabu_Pon": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Rabu",
@@ -18151,55 +6791,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Bala_Kamis_Wage": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "bala_kamis_wage": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "25_Kamis_Wage": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Kamis",
@@ -18223,55 +6815,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Bala_Jumat_Kliwon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
   "bala_jumat_kliwon": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "25_Jumat_Kliwon": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Jumat",
@@ -18295,55 +6839,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Bala_Sabtu_Legi": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "bala_sabtu_legi": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_bala": {
-    "no_wuku": 25,
-    "wuku": "Bala",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "25_Sabtu_Legi": {
     "no_wuku": 25,
     "wuku": "Bala",
     "dino": "Sabtu",
@@ -18367,55 +6863,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Wugu_Minggu_Pahing": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "wugu_minggu_pahing": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "MingguPahing_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "minggupahing_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Minggu",
-    "pasaran": "Pahing",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "26_Minggu_Pahing": {
     "no_wuku": 26,
     "wuku": "Wugu",
     "dino": "Minggu",
@@ -18439,55 +6887,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Wugu_Senin_Pon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "wugu_senin_pon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SeninPon_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "seninpon_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Senin",
-    "pasaran": "Pon",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "26_Senin_Pon": {
     "no_wuku": 26,
     "wuku": "Wugu",
     "dino": "Senin",
@@ -18511,18 +6911,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Wugu_Selasa_Wage": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "wugu_selasa_wage": {
     "no_wuku": 26,
     "wuku": "Wugu",
@@ -18532,43 +6920,7 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SelasaWage_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "selasawage_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "26_Selasa_Wage": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Selasa",
-    "pasaran": "Wage",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "26_selasa_wage": {
@@ -18580,20 +6932,8 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Kerangan",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Wugu_Rabu_Kliwon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
   },
   "wugu_rabu_kliwon": {
     "no_wuku": 26,
@@ -18604,43 +6944,7 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "RabuKliwon_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "rabukliwon_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Nuju Padu"
-  },
-  "26_Rabu_Kliwon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Rabu",
-    "pasaran": "Kliwon",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
   "26_rabu_kliwon": {
@@ -18652,58 +6956,10 @@ const bincilDatabase = {
     "paringkelan": "Uwas",
     "pandangon": "Nohan",
     "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Nuju Padu"
   },
-  "Wugu_Kamis_Legi": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wugu_kamis_legi": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "KamisLegi_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "kamislegi_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Kamis",
-    "pasaran": "Legi",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "26_Kamis_Legi": {
     "no_wuku": 26,
     "wuku": "Wugu",
     "dino": "Kamis",
@@ -18727,55 +6983,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wugu_Jumat_Pahing": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "wugu_jumat_pahing": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "JumatPahing_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "jumatpahing_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Jumat",
-    "pasaran": "Pahing",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "26_Jumat_Pahing": {
     "no_wuku": 26,
     "wuku": "Wugu",
     "dino": "Jumat",
@@ -18799,55 +7007,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Wugu_Sabtu_Pon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
   "wugu_sabtu_pon": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "SabtuPon_Wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "sabtupon_wugu": {
-    "no_wuku": 26,
-    "wuku": "Wugu",
-    "dino": "Sabtu",
-    "pasaran": "Pon",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Pati"
-  },
-  "26_Sabtu_Pon": {
     "no_wuku": 26,
     "wuku": "Wugu",
     "dino": "Sabtu",
@@ -18871,55 +7031,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Pati"
   },
-  "Wayang_Minggu_Wage": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
   "wayang_minggu_wage": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "MingguWage_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "mingguwage_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Minggu",
-    "pasaran": "Wage",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Kala Tinantang"
-  },
-  "27_Minggu_Wage": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Minggu",
@@ -18943,55 +7055,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Kala Tinantang"
   },
-  "Wayang_Senin_Kliwon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "wayang_senin_kliwon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SeninKliwon_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "seninkliwon_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Senin",
-    "pasaran": "Kliwon",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "27_Senin_Kliwon": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Senin",
@@ -19015,55 +7079,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Wayang_Selasa_Legi": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
   "wayang_selasa_legi": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "SelasaLegi_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "selasalegi_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Selasa",
-    "pasaran": "Legi",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Nuju Padu"
-  },
-  "27_Selasa_Legi": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Selasa",
@@ -19087,55 +7103,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Nuju Padu"
   },
-  "Wayang_Rabu_Pahing": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wayang_rabu_pahing": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "RabuPahing_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "rabupahing_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Rabu",
-    "pasaran": "Pahing",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "27_Rabu_Pahing": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Rabu",
@@ -19159,55 +7127,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Wayang_Kamis_Pon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
   "wayang_kamis_pon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "KamisPon_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "kamispon_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Kamis",
-    "pasaran": "Pon",
-    "padewan": "Sri",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Srengenge",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Macan Ketawan"
-  },
-  "27_Kamis_Pon": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Kamis",
@@ -19231,55 +7151,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Macan Ketawan"
   },
-  "Wayang_Jumat_Wage": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "wayang_jumat_wage": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "JumatWage_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "jumatwage_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Jumat",
-    "pasaran": "Wage",
-    "padewan": "Indra",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "27_Jumat_Wage": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Jumat",
@@ -19303,55 +7175,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Wayang_Sabtu_Kliwon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
   "wayang_sabtu_kliwon": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SabtuKliwon_Wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "sabtukliwon_wayang": {
-    "no_wuku": 27,
-    "wuku": "Wayang",
-    "dino": "Sabtu",
-    "pasaran": "Kliwon",
-    "padewan": "Guru",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "27_Sabtu_Kliwon": {
     "no_wuku": 27,
     "wuku": "Wayang",
     "dino": "Sabtu",
@@ -19375,55 +7199,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kulawu_Minggu_Legi": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
   "kulawu_minggu_legi": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "MingguLegi_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "minggulegi_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Minggu",
-    "pasaran": "Legi",
-    "padewan": "Yamadipati",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Macan Ketawan"
-  },
-  "28_Minggu_Legi": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Minggu",
@@ -19447,55 +7223,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Macan Ketawan"
   },
-  "Kulawu_Senin_Pahing": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "kulawu_senin_pahing": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "SeninPahing_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "seninpahing_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Senin",
-    "pasaran": "Pahing",
-    "padewan": "Rudra",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "28_Senin_Pahing": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Senin",
@@ -19519,55 +7247,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Kulawu_Selasa_Pon": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kulawu_selasa_pon": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SelasaPon_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "selasapon_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Selasa",
-    "pasaran": "Pon",
-    "padewan": "Brama",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Aras Pepet",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "28_Selasa_Pon": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Selasa",
@@ -19591,55 +7271,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kulawu_Rabu_Wage": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "kulawu_rabu_wage": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "RabuWage_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "rabuwage_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Rabu",
-    "pasaran": "Wage",
-    "padewan": "Kala",
-    "paringkelan": "Tungle",
-    "pandangon": "Dangu",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "28_Rabu_Wage": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Rabu",
@@ -19663,55 +7295,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Kulawu_Kamis_Kliwon": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
   "kulawu_kamis_kliwon": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "KamisKliwon_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "kamiskliwon_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Kamis",
-    "pasaran": "Kliwon",
-    "padewan": "Uma",
-    "paringkelan": "Aryang",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Banyu",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Kala Tinantang"
-  },
-  "28_Kamis_Kliwon": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Kamis",
@@ -19735,55 +7319,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Kala Tinantang"
   },
-  "Kulawu_Jumat_Legi": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
   "kulawu_jumat_legi": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "JumatLegi_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "jumatlegi_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Jumat",
-    "pasaran": "Legi",
-    "padewan": "Sri",
-    "paringkelan": "Wurukung",
-    "pandangon": "Gigis",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "28_Jumat_Legi": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Jumat",
@@ -19807,55 +7343,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Sanggar Waringin"
   },
-  "Kulawu_Sabtu_Pahing": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
   "kulawu_sabtu_pahing": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "SabtuPahing_Kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "sabtupahing_kulawu": {
-    "no_wuku": 28,
-    "wuku": "Kulawu",
-    "dino": "Sabtu",
-    "pasaran": "Pahing",
-    "padewan": "Indra",
-    "paringkelan": "Paningron",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Satriya Wibawa",
-    "kamarokan": "Macan Ketawan"
-  },
-  "28_Sabtu_Pahing": {
     "no_wuku": 28,
     "wuku": "Kulawu",
     "dino": "Sabtu",
@@ -19879,55 +7367,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wibawa",
     "kamarokan": "Macan Ketawan"
   },
-  "Dukut_Minggu_Pon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
   "dukut_minggu_pon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "MingguPon_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "minggupon_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Minggu",
-    "pasaran": "Pon",
-    "padewan": "Guru",
-    "paringkelan": "Uwas",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Nuju Padu"
-  },
-  "29_Minggu_Pon": {
     "no_wuku": 29,
     "wuku": "Dukut",
     "dino": "Minggu",
@@ -19951,55 +7391,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Nuju Padu"
   },
-  "Dukut_Senin_Wage": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
   "dukut_senin_wage": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "SeninWage_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "seninwage_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Senin",
-    "pasaran": "Wage",
-    "padewan": "Yamadipati",
-    "paringkelan": "Mawulu",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Geni",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Sanggar Waringin"
-  },
-  "29_Senin_Wage": {
     "no_wuku": 29,
     "wuku": "Dukut",
     "dino": "Senin",
@@ -20023,55 +7415,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Sanggar Waringin"
   },
-  "Dukut_Selasa_Kliwon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
   "dukut_selasa_kliwon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "SelasaKliwon_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "selasakliwon_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Selasa",
-    "pasaran": "Kliwon",
-    "padewan": "Rudra",
-    "paringkelan": "Tungle",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Tuding",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Nuju Pati"
-  },
-  "29_Selasa_Kliwon": {
     "no_wuku": 29,
     "wuku": "Dukut",
     "dino": "Selasa",
@@ -20095,55 +7439,7 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Nuju Pati"
   },
-  "Dukut_Rabu_Legi": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
   "dukut_rabu_legi": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "RabuLegi_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "rabulegi_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Rabu",
-    "pasaran": "Legi",
-    "padewan": "Brama",
-    "paringkelan": "Aryang",
-    "pandangon": "Wurung",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Sumur Sinaba",
-    "kamarokan": "Kala Tinantang"
-  },
-  "29_Rabu_Legi": {
     "no_wuku": 29,
     "wuku": "Dukut",
     "dino": "Rabu",
@@ -20167,18 +7463,6 @@ const bincilDatabase = {
     "pancasuda": "Sumur Sinaba",
     "kamarokan": "Kala Tinantang"
   },
-  "Dukut_Kamis_Pahing": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "dukut_kamis_pahing": {
     "no_wuku": 29,
     "wuku": "Dukut",
@@ -20188,43 +7472,7 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "KamisPahing_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "kamispahing_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "29_Kamis_Pahing": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Kamis",
-    "pasaran": "Pahing",
-    "padewan": "Kala",
-    "paringkelan": "Wurukung",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "29_kamis_pahing": {
@@ -20236,20 +7484,8 @@ const bincilDatabase = {
     "paringkelan": "Wurukung",
     "pandangon": "Dadi",
     "paarasan": "Lakuning Bumi",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Dukut_Jumat_Pon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
   },
   "dukut_jumat_pon": {
     "no_wuku": 29,
@@ -20260,43 +7496,7 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "JumatPon_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "jumatpon_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Macan Ketawan"
-  },
-  "29_Jumat_Pon": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Jumat",
-    "pasaran": "Pon",
-    "padewan": "Uma",
-    "paringkelan": "Paningron",
-    "pandangon": "Dangu",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
   "29_jumat_pon": {
@@ -20308,58 +7508,10 @@ const bincilDatabase = {
     "paringkelan": "Paningron",
     "pandangon": "Dangu",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Macan Ketawan"
   },
-  "Dukut_Sabtu_Wage": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
   "dukut_sabtu_wage": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "SabtuWage_Dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "sabtuwage_dukut": {
-    "no_wuku": 29,
-    "wuku": "Dukut",
-    "dino": "Sabtu",
-    "pasaran": "Wage",
-    "padewan": "Sri",
-    "paringkelan": "Uwas",
-    "pandangon": "Jagur",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Nuju Padu"
-  },
-  "29_Sabtu_Wage": {
     "no_wuku": 29,
     "wuku": "Dukut",
     "dino": "Sabtu",
@@ -20383,18 +7535,6 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Nuju Padu"
   },
-  "Watugunung_Minggu_Kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "watugunung_minggu_kliwon": {
     "no_wuku": 30,
     "wuku": "Watugunung",
@@ -20404,43 +7544,7 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "30_Minggu_Kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
   },
   "30_minggu_kliwon": {
@@ -20452,106 +7556,10 @@ const bincilDatabase = {
     "paringkelan": "Mawulu",
     "pandangon": "Gigis",
     "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
+    "pancasuda": "Lebu Ketiyup Angin",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Watu Gunung_Minggu_Kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "watu gunung_minggu_kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "MingguKliwon_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "minggukliwon_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Minggu",
-    "pasaran": "Kliwon",
-    "padewan": "Indra",
-    "paringkelan": "Mawulu",
-    "pandangon": "Gigis",
-    "paarasan": "Lakuning Lintang",
-    "pancasuda": "Lebu Katiyup Angin",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Watugunung_Senin_Legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
   },
   "watugunung_senin_legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "30_Senin_Legi": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Senin",
@@ -20575,103 +7583,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Watu Gunung_Senin_Legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "watu gunung_senin_legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "SeninLegi_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "seninlegi_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Senin",
-    "pasaran": "Legi",
-    "padewan": "Guru",
-    "paringkelan": "Tungle",
-    "pandangon": "Kerangan",
-    "paarasan": "Lakuning Angin",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Watugunung_Selasa_Pahing": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
   "watugunung_selasa_pahing": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "30_Selasa_Pahing": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Selasa",
@@ -20695,103 +7607,7 @@ const bincilDatabase = {
     "pancasuda": "Satriya Wirang",
     "kamarokan": "Kala Tinantang"
   },
-  "Watu Gunung_Selasa_Pahing": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "watu gunung_selasa_pahing": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "SelasaPahing_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "selasapahing_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Selasa",
-    "pasaran": "Pahing",
-    "padewan": "Yamadipati",
-    "paringkelan": "Aryang",
-    "pandangon": "Nohan",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Satriya Wirang",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Watugunung_Rabu_Pon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "watugunung_rabu_pon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "30_Rabu_Pon": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Rabu",
@@ -20815,103 +7631,7 @@ const bincilDatabase = {
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
   },
-  "Watu Gunung_Rabu_Pon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "watu gunung_rabu_pon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "RabuPon_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "rabupon_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Rabu",
-    "pasaran": "Pon",
-    "padewan": "Rudra",
-    "paringkelan": "Wurukung",
-    "pandangon": "Wogan",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "Watugunung_Kamis_Wage": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
   "watugunung_kamis_wage": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "30_Kamis_Wage": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Kamis",
@@ -20935,103 +7655,7 @@ const bincilDatabase = {
     "pancasuda": "Tunggak Semi",
     "kamarokan": "Nuju Pati"
   },
-  "Watu Gunung_Kamis_Wage": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "watu gunung_kamis_wage": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "KamisWage_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "kamiswage_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Kamis",
-    "pasaran": "Wage",
-    "padewan": "Brama",
-    "paringkelan": "Paningron",
-    "pandangon": "Tulus",
-    "paarasan": "Aras Kembang",
-    "pancasuda": "Tunggak Semi",
-    "kamarokan": "Nuju Pati"
-  },
-  "Watugunung_Jumat_Kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
   "watugunung_jumat_kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "30_Jumat_Kliwon": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Jumat",
@@ -21055,103 +7679,7 @@ const bincilDatabase = {
     "pancasuda": "Wasesa Segara",
     "kamarokan": "Kala Tinantang"
   },
-  "Watu Gunung_Jumat_Kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "watu gunung_jumat_kliwon": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "JumatKliwon_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "jumatkliwon_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Jumat",
-    "pasaran": "Kliwon",
-    "padewan": "Kala",
-    "paringkelan": "Uwas",
-    "pandangon": "Wurung",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Wasesa Segara",
-    "kamarokan": "Kala Tinantang"
-  },
-  "Watugunung_Sabtu_Legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
   "watugunung_sabtu_legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_watugunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "30_Sabtu_Legi": {
     "no_wuku": 30,
     "wuku": "Watugunung",
     "dino": "Sabtu",
@@ -21174,88 +7702,68 @@ const bincilDatabase = {
     "paarasan": "Lakuning Rembulan",
     "pancasuda": "Bumi Kapetak",
     "kamarokan": "Mantri Sinarojo"
-  },
-  "Watu Gunung_Sabtu_Legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "watu gunung_sabtu_legi": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "SabtuLegi_Watu Gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
-  },
-  "sabtulegi_watu gunung": {
-    "no_wuku": 30,
-    "wuku": "Watugunung",
-    "dino": "Sabtu",
-    "pasaran": "Legi",
-    "padewan": "Uma",
-    "paringkelan": "Mawulu",
-    "pandangon": "Dadi",
-    "paarasan": "Lakuning Rembulan",
-    "pancasuda": "Bumi Kapetak",
-    "kamarokan": "Mantri Sinarojo"
   }
 };
 
-// Alias database untuk kompatibilitas
+
 const primbonMatrix = bincilDatabase;
+
 const nujumMatrix = bincilDatabase;
+
 const nujumDatabase = bincilDatabase;
 
-/**
- * Normalisasi nama wuku untuk lookup
- */
+
 function normalizeWukuName(w) {
   if (w === undefined || w === null) return '';
   const s = String(w).trim();
   const clean = s.toLowerCase().replace(/\s+/g, '');
-  if (clean === 'sinta' || clean === 'sinto') return 'Shinto';
-  if (clean === 'wariagung') return 'Warigagung';
-  if (clean === 'julungpujut' || clean === 'pujut') return 'Julungpujut';
-  if (clean === 'mendangkungan' || clean === 'medangkungan') return 'Madangkungan';
-  if (clean === 'menail') return 'Manahil';
-  if (clean === 'watugunung') return 'Watugunung';
-  return s;
+  if (clean === "shinto" || clean === "sinta" || clean === "sinto") return "Sinta";
+  if (clean === "landep") return "Landep";
+  if (clean === "wukir") return "Wukir";
+  if (clean === "kurantil") return "Kurantil";
+  if (clean === "tolu") return "Tolu";
+  if (clean === "gumbreg") return "Gumbreg";
+  if (clean === "warigalit") return "Warigalit";
+  if (clean === "wari agung" || clean === "wariagung" || clean === "warig agung" || clean === "warigagung") return "Warigagung";
+  if (clean === "julungwangi") return "Julungwangi";
+  if (clean === "sungsang") return "Sungsang";
+  if (clean === "galungan") return "Galungan";
+  if (clean === "kuningan") return "Kuningan";
+  if (clean === "langkir") return "Langkir";
+  if (clean === "mandasiya") return "Mandasiya";
+  if (clean === "julungpujut" || clean === "pujut") return "Julungpujut";
+  if (clean === "pahang") return "Pahang";
+  if (clean === "kuruwelut") return "Kuruwelut";
+  if (clean === "marakeh") return "Marakeh";
+  if (clean === "tambir") return "Tambir";
+  if (clean === "madangkungan" || clean === "medangkungan" || clean === "mendangkungan") return "Medangkungan";
+  if (clean === "maktal") return "Maktal";
+  if (clean === "wuye") return "Wuye";
+  if (clean === "manahil" || clean === "manail" || clean === "menail") return "Manahil";
+  if (clean === "prangbakat") return "Prangbakat";
+  if (clean === "bala") return "Bala";
+  if (clean === "wugu") return "Wugu";
+  if (clean === "wayang") return "Wayang";
+  if (clean === "kulawu") return "Kulawu";
+  if (clean === "dukut") return "Dukut";
+  if (clean === "watu gunung" || clean === "watugunung") return "Watugunung";
+  // fallback: Title-case tanpa spasi
+  return s.replace(/\s+/g, '').replace(/^\w/, c => c.toUpperCase());
 }
 
+
 /**
- * Mencari data 6 Dimensi Bincil secara langsung (Exact Lookup)
- * Signature fleksibel:
- *   getNujumData(weton, wuku) -> misal ("Minggu Pahing", "Shinto")
- *   getNujumData(hari, pasaran, wuku) -> misal ("Minggu", "Pahing", "Shinto")
+ * Exact lookup 6 dimensi bincil.
+ * Signature:
+ *   getNujumData(hari, pasaran, wuku)
+ *   getNujumData("Minggu Pahing", wuku)
+ *   getNujumData({ dino, pasaran, wuku })
+ *
+ * Key kanonis: {wukuLower}_{hariLower}_{pasaranLower}
+ * Fallback:    {noWuku}_{hariLower}_{pasaranLower}
  */
 function getNujumData(arg1, arg2, arg3) {
-  let dino = '';
-  let pasaran = '';
-  let wuku = '';
+  let dino = '', pasaran = '', wuku = '';
 
   if (typeof arg1 === 'object' && arg1 !== null) {
     dino = arg1.dino || arg1.hari || '';
@@ -21270,81 +7778,73 @@ function getNujumData(arg1, arg2, arg3) {
     wuku = String(arg3).trim();
   } else if (typeof arg1 === 'string' && typeof arg2 === 'string') {
     const parts = arg1.trim().split(/\s+/);
-    if (parts.length >= 2) {
-      dino = parts[0];
-      pasaran = parts[1];
-    } else {
-      dino = parts[0];
-    }
+    if (parts.length >= 2) { dino = parts[0]; pasaran = parts[1]; }
+    else { dino = parts[0]; }
     wuku = arg2.trim();
   }
 
   const normWuku = normalizeWukuName(wuku);
-  const cleanWuku = normWuku.replace(/\s+/g, '');
-  const cleanDino = dino.replace(/\s+/g, '');
-  const cleanPasaran = pasaran.replace(/\s+/g, '');
+  const w = normWuku.toLowerCase().replace(/\s+/g, '');
+  const h = String(dino).toLowerCase().replace(/\s+/g, '');
+  const p = String(pasaran).toLowerCase().replace(/\s+/g, '');
 
-  const keysToTry = [
-    `${cleanWuku}_${cleanDino}_${cleanPasaran}`,
-    `${cleanDino}${cleanPasaran}_${cleanWuku}`,
-    `${cleanWuku.toLowerCase()}_${cleanDino.toLowerCase()}_${cleanPasaran.toLowerCase()}`,
-    `${cleanDino.toLowerCase()}${cleanPasaran.toLowerCase()}_${cleanWuku.toLowerCase()}`,
-    `${cleanDino}${cleanPasaran}_${normWuku}`,
-    `${normWuku}_${cleanDino}_${cleanPasaran}`,
-    `${cleanDino}${cleanPasaran}_${wuku}`
-  ];
+  const canonKey = `${w}_${h}_${p}`;
+  let raw = bincilDatabase[canonKey] || null;
 
-  let raw = null;
-  for (const k of keysToTry) {
-    if (bincilDatabase[k]) {
-      raw = bincilDatabase[k];
-      break;
-    }
-  }
-
-  // Jika belum ditemukan dan wuku berupa angka atau bisa dipetakan
+  // Fallback nomor wuku
   if (!raw && typeof getPawukonData === 'function') {
-    const pInfo = getPawukonData(wuku);
+    const pInfo = getPawukonData(wuku) || getPawukonData(normWuku);
     if (pInfo && pInfo.no_wuku) {
-      const kNo = `${pInfo.no_wuku}_${cleanDino}_${cleanPasaran}`;
-      if (bincilDatabase[kNo]) raw = bincilDatabase[kNo];
+      raw = bincilDatabase[`${pInfo.no_wuku}_${h}_${p}`] || null;
+    }
+  }
+  // Fallback: coba no dari CANON index
+  if (!raw) {
+    const idx = CANON_WUKU_LIST.indexOf(normWuku);
+    if (idx >= 0) {
+      raw = bincilDatabase[`${idx + 1}_${h}_${p}`] || null;
     }
   }
 
-  const result = {
+  const arti = (dict, val) => {
+    if (!val || val === '-') return '-';
+    return dict[String(val).trim().toLowerCase()] || '-';
+  };
+
+  return {
     found: !!raw,
-    wuku: raw ? raw.wuku : wuku,
+    wuku: raw ? raw.wuku : normWuku,
     dino: raw ? raw.dino : dino,
     pasaran: raw ? raw.pasaran : pasaran,
     no_wuku: raw ? raw.no_wuku : null,
     padewan: {
-      nama: raw ? raw.padewan : "-",
-      arti: raw ? (PADEWAN_ARTI[raw.padewan] || "-") : "-"
+      nama: raw ? raw.padewan : '-',
+      arti: raw ? arti(PADEWAN_ARTI, raw.padewan) : '-'
     },
     paringkelan: {
-      nama: raw ? raw.paringkelan : "-",
-      arti: raw ? (PARINGKELAN_ARTI[raw.paringkelan] || "-") : "-"
+      nama: raw ? raw.paringkelan : '-',
+      arti: raw ? arti(PARINGKELAN_ARTI, raw.paringkelan) : '-'
     },
     pandangon: {
-      nama: raw ? raw.pandangon : "-",
-      arti: raw ? (PANDANGON_ARTI[raw.pandangon] || "-") : "-"
+      nama: raw ? raw.pandangon : '-',
+      arti: raw ? arti(PANDANGON_ARTI, raw.pandangon) : '-'
     },
     paarasan: {
-      nama: raw ? raw.paarasan : "-",
-      arti: raw ? (PAARASAN_ARTI[raw.paarasan] || "-") : "-"
+      nama: raw ? raw.paarasan : '-',
+      arti: raw ? arti(PAARASAN_ARTI, raw.paarasan) : '-'
     },
     pancasuda: {
-      nama: raw ? raw.pancasuda : "-",
-      arti: raw ? (PANCASUDA_ARTI[raw.pancasuda] || "-") : "-"
+      nama: raw ? raw.pancasuda : '-',
+      arti: raw ? arti(PANCASUDA_ARTI, raw.pancasuda) : '-'
     },
     kamarokan: {
-      nama: raw ? raw.kamarokan : "-",
-      arti: raw ? (KAMAROKAN_ARTI[raw.kamarokan] || "-") : "-"
+      nama: raw ? raw.kamarokan : '-',
+      arti: raw ? arti(KAMAROKAN_ARTI, raw.kamarokan) : '-'
     },
-    pawukon: (typeof getPawukonData === 'function') ? getPawukonData(wuku || (raw ? raw.wuku : null)) : null
+    pawukon: (typeof getPawukonData === 'function')
+      ? getPawukonData(normWuku || wuku)
+      : null
   };
-
-  return result;
 }
 
 function getNujumFromMatrix(hari, pasaran, wuku) {
@@ -21365,6 +7865,8 @@ function getNujumFromMatrix(hari, pasaran, wuku) {
 
 const getNujumFromDatabase = getNujumFromMatrix;
 
+
+  // Exports
   root.KET_BINCIL = KET_BINCIL;
   root.PADEWAN_ARTI = PADEWAN_ARTI;
   root.PARINGKELAN_ARTI = PARINGKELAN_ARTI;
@@ -21377,6 +7879,8 @@ const getNujumFromDatabase = getNujumFromMatrix;
   root.primbonMatrix = bincilDatabase;
   root.nujumMatrix = bincilDatabase;
   root.nujumDatabase = bincilDatabase;
+  root.CANON_WUKU_LIST = CANON_WUKU_LIST;
+  root.normalizeWukuName = normalizeWukuName;
   root.getNujumData = getNujumData;
   root.getNujumFromMatrix = getNujumFromMatrix;
   root.getNujumFromDatabase = getNujumFromDatabase;
@@ -21384,20 +7888,12 @@ const getNujumFromDatabase = getNujumFromMatrix;
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
       KET_BINCIL,
-      PADEWAN_ARTI,
-      PARINGKELAN_ARTI,
-      PANDANGON_ARTI,
-      PAARASAN_ARTI,
-      PANCASUDA_ARTI,
-      KAMAROKAN_ARTI,
-      BINCIL_LIST,
-      bincilDatabase,
-      primbonMatrix,
-      nujumMatrix,
-      nujumDatabase,
-      getNujumData,
-      getNujumFromMatrix,
-      getNujumFromDatabase
+      PADEWAN_ARTI, PARINGKELAN_ARTI, PANDANGON_ARTI,
+      PAARASAN_ARTI, PANCASUDA_ARTI, KAMAROKAN_ARTI,
+      BINCIL_LIST, bincilDatabase,
+      primbonMatrix, nujumMatrix, nujumDatabase,
+      CANON_WUKU_LIST, normalizeWukuName,
+      getNujumData, getNujumFromMatrix, getNujumFromDatabase
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
