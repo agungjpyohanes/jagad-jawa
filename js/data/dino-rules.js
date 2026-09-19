@@ -8,8 +8,9 @@
  * - Primbon Pawukon Keraton Surakarta & Ngayogyakarta Hadiningrat
  */
 
+(function (root) {
 // 0. Daftar Baku 30 Wuku Jawa (Sinta ngantos Watugunung)
-export const STANDARD_WUKU_LIST = [
+const STANDARD_WUKU_LIST = [
   "Sinta","Landep","Wukir","Kurantil","Tolu","Gumbreg","Warigalit","Warigagung",
   "Julungwangi","Sungsang","Galungan","Kuningan","Langkir","Mandasiya","Julungpujut","Pahang",
   "Kuruwelut","Marakeh","Tambir","Medangkungan","Maktal","Wuye","Manahil","Prangbakat","Bala",
@@ -17,7 +18,7 @@ export const STANDARD_WUKU_LIST = [
 ];
 
 // 1. Data Master Resmi Dino Gede (71 Pasangan Dino, Pasaran, Wuku)
-export const DINO_GEDE_LIST = [
+const DINO_GEDE_LIST = [
   ["Selasa","Wage","Sinta"],["Kamis","Legi","Sinta"],["Jumat","Pahing","Sinta"],
   ["Rabu","Pahing","Landep"],["Sabtu","Kliwon","Landep"],["Selasa","Pon","Wukir"],
   ["Jumat","Legi","Wukir"],["Senin","Wage","Kurantil"],["Kamis","Pahing","Kurantil"],
@@ -45,7 +46,7 @@ export const DINO_GEDE_LIST = [
 ];
 
 // 2. Data Master Resmi Dino Ijo (74 Pasangan Dino, Pasaran, Wuku)
-export const DINO_IJO_LIST = [
+const DINO_IJO_LIST = [
   ["Kamis","Legi","Sinta"],["Jumat","Pahing","Sinta"],["Senin","Kliwon","Landep"],
   ["Kamis","Pon","Landep"],["Minggu","Legi","Wukir"],["Selasa","Pon","Wukir"],
   ["Rabu","Wage","Wukir"],["Sabtu","Pahing","Wukir"],["Senin","Wage","Kurantil"],
@@ -73,11 +74,11 @@ export const DINO_IJO_LIST = [
   ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
 ];
 
-// 3. Normalisasi Kunci Pencarian Fleksibel (Dina, Pasaran, Wuku / Wuku, Dina, Pasaran)
+/// 3. Normalisasi Kunci Pencarian Fleksibel (Dina, Pasaran, Wuku / Wuku, Dina, Pasaran)
 const HARI_NAMES_SET = new Set(['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
 const PASARAN_NAMES_SET = new Set(['legi', 'pahing', 'pon', 'wage', 'kliwon']);
 
-export function parseDinoWukuArgs(a, b, c) {
+function parseDinoWukuArgs(a, b, c) {
   let dino = '', pasaran = '', wuku = '';
   if (typeof a === 'object' && a !== null) {
     dino = a.dino || a.hari || '';
@@ -111,7 +112,7 @@ export function parseDinoWukuArgs(a, b, c) {
   };
 }
 
-export function normDinoWukuKey(a, b, c) {
+function normDinoWukuKey(a, b, c) {
   const { dino, pasaran, wuku } = parseDinoWukuArgs(a, b, c);
   const d = dino.toLowerCase();
   const p = pasaran.toLowerCase();
@@ -129,7 +130,7 @@ export function normDinoWukuKey(a, b, c) {
 }
 
 // 4. Struktur Set & Lookup Table O(1) Abadi
-export const DINO_GEDE_SET = new Set();
+const DINO_GEDE_SET = new Set();
 DINO_GEDE_LIST.forEach(([d, p, w]) => {
   DINO_GEDE_SET.add(normDinoWukuKey(w, d, p));
   DINO_GEDE_SET.add(normDinoWukuKey(d, p, w));
@@ -137,7 +138,7 @@ DINO_GEDE_LIST.forEach(([d, p, w]) => {
   DINO_GEDE_SET.add(`${String(w).toLowerCase().replace(/[\s\-_]/g, '')}_${String(d).toLowerCase()}_${String(p).toLowerCase()}`);
 });
 
-export const DINO_IJO_SET = new Set();
+const DINO_IJO_SET = new Set();
 DINO_IJO_LIST.forEach(([d, p, w]) => {
   DINO_IJO_SET.add(normDinoWukuKey(w, d, p));
   DINO_IJO_SET.add(normDinoWukuKey(d, p, w));
@@ -146,7 +147,7 @@ DINO_IJO_LIST.forEach(([d, p, w]) => {
 });
 
 // Map kamus terpadu
-export const DINO_LOOKUP_MAP = Object.create(null);
+const DINO_LOOKUP_MAP = Object.create(null);
 DINO_GEDE_LIST.forEach(([d, p, w]) => {
   const key = normDinoWukuKey(w, d, p);
   DINO_LOOKUP_MAP[key] = { isGede: true, isIjo: DINO_IJO_SET.has(key) };
@@ -162,12 +163,12 @@ DINO_IJO_LIST.forEach(([d, p, w]) => {
  * Fungsi pembantu pengecekan fleksibel:
  * Menerima (wuku, hari, pasaran) ATAU (hari, pasaran, wuku) ATAU objek ATAU string tunggal
  */
-export function isDinoGede(a, b, c) {
+function isDinoGede(a, b, c) {
   const key = normDinoWukuKey(a, b, c);
   return DINO_GEDE_SET.has(key);
 }
 
-export function isDinoIjo(a, b, c) {
+function isDinoIjo(a, b, c) {
   const key = normDinoWukuKey(a, b, c);
   return DINO_IJO_SET.has(key);
 }
@@ -185,10 +186,18 @@ export function isDinoIjo(a, b, c) {
  * - Manawi wonten ing daptar Dino Gede, tambahi penanda khusus border emas (border: 2px solid #eab308;) lan bintang ★.
  * - PENTING: Dino Gede TIDAK BOLEH mengubah warna blok bawah menjadi kuning. Blok bawah tetap wajib mempertahankan warna aslinya (Hijau atau Merah).
  */
-export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '') {
-  const key = normDinoWukuKey(a, b, c);
-  const isIjo = DINO_IJO_SET.has(key);
-  const isGede = DINO_GEDE_SET.has(key);
+function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '') {
+  let isIjo = false;
+  let isGede = false;
+  if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function') {
+    const evalRes = window.evaluateDino(a, b, c);
+    isIjo = evalRes.isIjo;
+    isGede = evalRes.isGede;
+  } else {
+    const key = normDinoWukuKey(a, b, c);
+    isIjo = DINO_IJO_SET.has(key);
+    isGede = DINO_GEDE_SET.has(key);
+  }
 
   // Tahap 1: Penentuan Warna Dasar Blok Bawah
   const status = isIjo ? 'ijo' : 'abang';
@@ -199,7 +208,7 @@ export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, c
   const baseLabel = isIjo ? 'Dino Ijo / Becik' : 'Dina Ala / Kang Olo';
   const label = isGede ? `${baseLabel} · Dino Gede` : baseLabel;
 
-  // Tahap 2: Penanda Khusus Dino Gede (Border / Outline Emas Bercahaya 2px solid #eab308)
+  // Tahap 2: Penandaan Aksen Dino Gede (Border Emas Ethereal & Badge Bintang)
   const cellBorder = isGede ? '#eab308' : (isIjo ? '#86efac' : '#fca5a5');
   const cellBorderStyle = isGede
     ? 'border: 2px solid #eab308; box-shadow: 0 0 10px rgba(234, 179, 8, 0.45);'
@@ -219,7 +228,6 @@ export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, c
   const badgeText = isGede ? `${isIjo ? '✓ Becik' : `▲ ${alaSuffix}`} · ★ GEDE` : baseBadgeText;
   const badgeHtml = isGede ? `${gedeBadgeHtml} ${baseBadgeHtml}` : baseBadgeHtml;
 
-  // Latar sel untuk kompatibilitas tampilan lama
   const cellBg = isIjo ? '#f0fdf4' : '#fef2f2';
   const cellText = isIjo ? '#14532d' : '#7f1d1d';
 
@@ -244,7 +252,7 @@ export function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, c
   };
 }
 
-export function evaluateDino(wuku, dino, pasaran) {
+function evaluateDino(wuku, dino, pasaran) {
   if (typeof window !== 'undefined' && typeof window.evaluateDino === 'function' && window.evaluateDino !== evaluateDino) {
     return window.evaluateDino(wuku, dino, pasaran);
   }
@@ -260,32 +268,32 @@ export function evaluateDino(wuku, dino, pasaran) {
 }
 
 // 6. Global Browser & CommonJS Export
-if (typeof window !== 'undefined') {
-  window.STANDARD_WUKU_LIST = STANDARD_WUKU_LIST;
-  window.DINO_GEDE_LIST = DINO_GEDE_LIST;
-  window.DINO_IJO_LIST = DINO_IJO_LIST;
-  window.normDinoWukuKey = normDinoWukuKey;
-  window.DINO_GEDE_SET = DINO_GEDE_SET;
-  window.DINO_IJO_SET = DINO_IJO_SET;
-  window.DINO_LOOKUP_MAP = DINO_LOOKUP_MAP;
-  window.isDinoGede = isDinoGede;
-  window.isDinoIjo = isDinoIjo;
-  window.getDinoWarnaStatus = getDinoWarnaStatus;
-  window.evaluateDino = evaluateDino;
-  window.DINO_RULES = {
-    STANDARD_WUKU_LIST,
-    DINO_GEDE_LIST,
-    DINO_IJO_LIST,
-    normDinoWukuKey,
-    DINO_GEDE_SET,
-    DINO_IJO_SET,
-    DINO_LOOKUP_MAP,
-    isDinoGede,
-    isDinoIjo,
-    getDinoWarnaStatus,
-    evaluateDino
-  };
+root.STANDARD_WUKU_LIST = STANDARD_WUKU_LIST;
+root.DINO_GEDE_LIST = DINO_GEDE_LIST;
+root.DINO_IJO_LIST = DINO_IJO_LIST;
+root.normDinoWukuKey = normDinoWukuKey;
+root.DINO_GEDE_SET = DINO_GEDE_SET;
+root.DINO_IJO_SET = DINO_IJO_SET;
+root.DINO_LOOKUP_MAP = DINO_LOOKUP_MAP;
+root.isDinoGede = isDinoGede;
+root.isDinoIjo = isDinoIjo;
+root.getDinoWarnaStatus = getDinoWarnaStatus;
+if (!root.evaluateDino) {
+  root.evaluateDino = evaluateDino;
 }
+root.DINO_RULES = {
+  STANDARD_WUKU_LIST,
+  DINO_GEDE_LIST,
+  DINO_IJO_LIST,
+  normDinoWukuKey,
+  DINO_GEDE_SET,
+  DINO_IJO_SET,
+  DINO_LOOKUP_MAP,
+  isDinoGede,
+  isDinoIjo,
+  getDinoWarnaStatus,
+  evaluateDino
+};
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -302,3 +310,4 @@ if (typeof module !== 'undefined' && module.exports) {
     evaluateDino
   };
 }
+})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

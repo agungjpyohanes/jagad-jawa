@@ -3,7 +3,8 @@
  * Filosofi 5 Warna & Sesaji Panca Warna Tolak Bala
  */
 
-export const TUMPENG_UBARAMPE = [
+(function (root) {
+const TUMPENG_UBARAMPE = [
   {
     id: 1,
     nama: "Tumpeng Panca Warna (Kiblat Papat Limo Pancer)",
@@ -76,7 +77,7 @@ export const TUMPENG_UBARAMPE = [
   }
 ];
 
-export const TUMPENG_WARNA = {
+const TUMPENG_WARNA = {
   putih: {
     nama: "Nasi Putih (Wetan / Timur)",
     warnaBadge: "bg-slate-100 text-slate-900 border-slate-300",
@@ -139,7 +140,7 @@ export const TUMPENG_WARNA = {
   }
 };
 
-export function selectTumpengHotspot(index) {
+function selectTumpengHotspot(index) {
   const item = TUMPENG_UBARAMPE.find(x => x.id === Number(index));
   if (!item) return;
 
@@ -159,26 +160,25 @@ export function selectTumpengHotspot(index) {
   const elSimbol = document.getElementById('tumpengDetailSimbol');
   const elDesc = document.getElementById('tumpengDetailDesc');
   const elMakna = document.getElementById('tumpengDetailMakna');
-  const elIcon = document.getElementById('tumpengDetailIcon');
+  const elWarna = document.getElementById('tumpengDetailWarna');
 
-  if (elNum) elNum.textContent = item.id;
+  if (elNum) elNum.textContent = `0${item.id}`;
   if (elTitle) elTitle.textContent = item.nama;
-  if (elPos) elPos.textContent = `${item.posisi} · ${item.warna}`;
+  if (elPos) elPos.textContent = item.posisi;
   if (elSimbol) elSimbol.textContent = item.simbol;
   if (elDesc) elDesc.textContent = item.deskripsi;
   if (elMakna) elMakna.textContent = item.makna;
-  if (elIcon) elIcon.className = `fa-solid ${item.icon} text-prada text-lg`;
+  if (elWarna) elWarna.textContent = item.warna;
 
-  // Animation pulse
+  // Flash highlight effect
   const card = document.getElementById('tumpengDetailCard');
   if (card) {
-    card.classList.remove('animate-fadeIn');
-    void card.offsetWidth; // trigger reflow
-    card.classList.add('animate-fadeIn');
+    card.classList.add('ring-2', 'ring-prada');
+    setTimeout(() => card.classList.remove('ring-2', 'ring-prada'), 400);
   }
 }
 
-export function selectTumpengWarna(key) {
+function selectTumpengWarna(key) {
   const data = TUMPENG_WARNA[key];
   if (!data) return;
 
@@ -219,14 +219,14 @@ export function selectTumpengWarna(key) {
   }
 }
 
-// Global Browser Window Exports
-if (typeof window !== 'undefined') {
-  window.TUMPENG_UBARAMPE = TUMPENG_UBARAMPE;
-  window.TUMPENG_WARNA = TUMPENG_WARNA;
-  window.selectTumpengHotspot = selectTumpengHotspot;
-  window.selectTumpengWarna = selectTumpengWarna;
+// Global Browser Window & CommonJS Exports
+root.TUMPENG_UBARAMPE = TUMPENG_UBARAMPE;
+root.TUMPENG_WARNA = TUMPENG_WARNA;
+root.selectTumpengHotspot = selectTumpengHotspot;
+root.selectTumpengWarna = selectTumpengWarna;
 
-  // Auto-init when tab switches to tumpeng
+// Auto-init when tab switches to tumpeng
+if (typeof window !== 'undefined') {
   window.addEventListener('tab-switched', (e) => {
     if (e.detail && e.detail.tabId === 'tumpeng') {
       selectTumpengHotspot(1);
@@ -243,3 +243,5 @@ if (typeof module !== 'undefined' && module.exports) {
     selectTumpengWarna
   };
 }
+})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
