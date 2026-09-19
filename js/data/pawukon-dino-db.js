@@ -144,8 +144,7 @@
     // 25. Bala
     { no: 25, wuku: "Bala", dino: "Minggu", pasaran: "Kliwon" },
     { no: 25, wuku: "Bala", dino: "Sabtu", pasaran: "Legi" },
-    // 26. Wugu (Termasuk Senin Pon sesuai kolom hijau tabel master nomor 26)
-    { no: 26, wuku: "Wugu", dino: "Senin", pasaran: "Pon" },
+    // 26. Wugu
     { no: 26, wuku: "Wugu", dino: "Selasa", pasaran: "Wage" },
     { no: 26, wuku: "Wugu", dino: "Kamis", pasaran: "Legi" },
     { no: 26, wuku: "Wugu", dino: "Jumat", pasaran: "Pahing" },
@@ -168,7 +167,7 @@
     { no: 30, wuku: "Watugunung", dino: "Sabtu", pasaran: "Legi" }
   ];
 
-  // 2. DATA DINO GEDE (71 Kombinasi Sakral Resmi)
+  // 2. DATA DINO GEDE (72 Kombinasi Sakral Resmi)
   const DINO_GEDE_DATA = [
     { no: 1, wuku: "Sinta", dino: "Selasa", pasaran: "Wage" },
     { no: 1, wuku: "Sinta", dino: "Kamis", pasaran: "Legi" },
@@ -224,6 +223,7 @@
     { no: 22, wuku: "Wuye", dino: "Rabu", pasaran: "Pahing" },
     { no: 22, wuku: "Wuye", dino: "Sabtu", pasaran: "Kliwon" },
     { no: 23, wuku: "Manahil", dino: "Selasa", pasaran: "Pon" },
+    { no: 23, wuku: "Manahil", dino: "Jumat", pasaran: "Legi" },
     { no: 24, wuku: "Prangbakat", dino: "Senin", pasaran: "Wage" },
     { no: 24, wuku: "Prangbakat", dino: "Kamis", pasaran: "Pahing" },
     { no: 25, wuku: "Bala", dino: "Minggu", pasaran: "Kliwon" },

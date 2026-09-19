@@ -36,7 +36,7 @@ const DINO_GEDE_LIST = [
   ["Jumat","Legi","Marakeh"],["Senin","Wage","Tambir"],["Kamis","Pahing","Tambir"],
   ["Minggu","Kliwon","Medangkungan"],["Rabu","Pon","Medangkungan"],["Sabtu","Legi","Medangkungan"],
   ["Selasa","Wage","Maktal"],["Kamis","Legi","Maktal"],["Jumat","Pahing","Maktal"],
-  ["Rabu","Pahing","Wuye"],["Sabtu","Kliwon","Wuye"],["Selasa","Pon","Manahil"],
+  ["Rabu","Pahing","Wuye"],["Sabtu","Kliwon","Wuye"],["Selasa","Pon","Manahil"],["Jumat","Legi","Manahil"],
   ["Senin","Wage","Prangbakat"],["Kamis","Pahing","Prangbakat"],["Minggu","Kliwon","Bala"],
   ["Rabu","Pon","Bala"],["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],
   ["Kamis","Legi","Wugu"],["Jumat","Pahing","Wugu"],["Rabu","Pahing","Wayang"],
@@ -45,7 +45,7 @@ const DINO_GEDE_LIST = [
   ["Rabu","Pon","Watugunung"],["Sabtu","Legi","Watugunung"]
 ];
 
-// 2. Data Master Resmi Dino Ijo (74 Pasangan Dino, Pasaran, Wuku)
+// 2. Data Master Resmi Dino Ijo (73 Pasangan Dino, Pasaran, Wuku)
 const DINO_IJO_LIST = [
   ["Kamis","Legi","Sinta"],["Jumat","Pahing","Sinta"],["Senin","Kliwon","Landep"],
   ["Kamis","Pon","Landep"],["Minggu","Legi","Wukir"],["Selasa","Pon","Wukir"],
@@ -66,7 +66,7 @@ const DINO_IJO_LIST = [
   ["Sabtu","Kliwon","Wuye"],["Minggu","Legi","Manahil"],["Selasa","Pon","Manahil"],
   ["Jumat","Legi","Manahil"],["Sabtu","Pahing","Manahil"],["Senin","Wage","Prangbakat"],
   ["Kamis","Pahing","Prangbakat"],["Jumat","Pon","Prangbakat"],["Minggu","Kliwon","Bala"],
-  ["Sabtu","Legi","Bala"],["Senin","Pon","Wugu"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
+  ["Sabtu","Legi","Bala"],["Selasa","Wage","Wugu"],["Kamis","Legi","Wugu"],
   ["Jumat","Pahing","Wugu"],["Senin","Kliwon","Wayang"],["Sabtu","Kliwon","Wayang"],
   ["Minggu","Legi","Kulawu"],["Selasa","Pon","Kulawu"],["Rabu","Wage","Kulawu"],
   ["Jumat","Legi","Kulawu"],["Sabtu","Pahing","Kulawu"],["Senin","Wage","Dukut"],
