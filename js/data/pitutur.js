@@ -443,3 +443,6 @@ rootScope.QUIZ_QUESTIONS = QUIZ_QUESTIONS;
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PITUTUR_LIST, QUIZ_QUESTIONS };
 }
+
+export { PITUTUR_LIST, QUIZ_QUESTIONS };
+export default { PITUTUR_LIST, QUIZ_QUESTIONS };

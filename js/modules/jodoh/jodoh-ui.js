@@ -567,7 +567,7 @@ export function clearAllRiwayatPerjodohan() {
  * Cetak Laporan Perjodohan Kasultanan Resmi (Tahap 4.4).
  * @param {'parchment'|'monochrome'} theme 
  */
-export function printLaporanPerjodohan(theme = 'parchment') {
+export function printLaporanPerjodohan(theme = 'monochrome') {
   if (!window.LAST_PERJODOHAN_DATA) {
     showToast('Hitung pitung perjodohan terlebih dahulu sebelum mencetak.');
     return;
@@ -577,11 +577,16 @@ export function printLaporanPerjodohan(theme = 'parchment') {
   const mantuList = window.LAST_MANTU_DATA || cariRekomendasiTanggalMantu(hasil.totalNeptu);
   const keharmonisan = hasil.summary.keharmonisan || getTingkatKeharmonisan(hasil.summary.skorKeselarasan);
 
-  const container = document.getElementById('laporan-cetak-pdf');
-  if (!container) return;
+  let container = document.getElementById('laporan-cetak-pdf');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'laporan-cetak-pdf';
+    container.className = 'print-only-document';
+    document.body.appendChild(container);
+  }
 
   const isParchment = theme === 'parchment';
-  container.className = `print-only-document ${isParchment ? 'parchment-theme' : 'monochrome-theme'}`;
+  container.className = `print-only-document ${isParchment ? 'theme-parchment parchment-theme' : 'theme-monochrome monochrome-theme'}`;
 
   container.innerHTML = `
     <div class="sheet a4-page space-y-4">
@@ -699,5 +704,13 @@ export function printLaporanPerjodohan(theme = 'parchment') {
     </div>
   `;
 
-  window.print();
+  const namaPria = hasil.pria?.nama ? hasil.pria.nama.toUpperCase() : 'CALON KELUARGA';
+  const namaWanita = hasil.wanita?.nama ? hasil.wanita.nama.toUpperCase() : '';
+  const customTitle = `Jagad Jawa — Petung Salaki Rabi ${namaPria}${namaWanita ? ' & ' + namaWanita : ''}`;
+
+  if (typeof window.printLaporan === 'function') {
+    window.printLaporan(theme, customTitle);
+  } else {
+    window.print();
+  }
 }

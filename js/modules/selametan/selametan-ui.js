@@ -218,7 +218,7 @@ export function simpanSelametanKeBookmark(dateStr, namaTahap, weton, namaAlmarhu
  * Ekspor / Cetak Dokumen Serat Pengetan Tilar Donyo (PDF Resmi).
  * @param {'parchment' | 'monochrome'} theme 
  */
-export function printLaporanSelametan(theme = 'parchment') {
+export function printLaporanSelametan(theme = 'monochrome') {
   const data = window.LAST_SELAMETAN_DATA;
   if (!data || !data.items || data.items.length === 0) {
     showToast('Hitung pengetan selametan rumiyin sakderengipun nyithak.');
@@ -228,12 +228,14 @@ export function printLaporanSelametan(theme = 'parchment') {
   const { geblak, items, namaAlmarhum, waktuWafat } = data;
   const isParchment = theme === 'parchment';
 
-  const printArea = document.getElementById('printArea') || (function () {
-    const el = document.createElement('div');
-    el.id = 'printArea';
-    document.body.appendChild(el);
-    return el;
-  })();
+  let printContainer = document.getElementById('laporan-cetak-pdf');
+  if (!printContainer) {
+    printContainer = document.createElement('div');
+    printContainer.id = 'laporan-cetak-pdf';
+    printContainer.className = 'print-only-document';
+    document.body.appendChild(printContainer);
+  }
+  const printArea = printContainer;
 
   const bgStyle = isParchment
     ? 'background-color: #fcf8f0; color: #3c1f11; border: 4px double #b87c24;'
@@ -327,7 +329,12 @@ export function printLaporanSelametan(theme = 'parchment') {
     </div>
   `;
 
-  window.print();
+  const customTitle = `Jagad Jawa — Pengetan Tilar Donyo ${namaAlmarhum ? namaAlmarhum.toUpperCase() : ''}`.trim();
+  if (typeof window.printLaporan === 'function') {
+    window.printLaporan(theme, customTitle);
+  } else {
+    window.print();
+  }
 }
 
 /**

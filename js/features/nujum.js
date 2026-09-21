@@ -46,6 +46,7 @@ export async function ensureNujumLoaded() {
 
     if (typeof window !== 'undefined') {
       window.initTahunHitungSelect = nujumUI.initTahunHitungSelect;
+      window.onTahunHitungChange = nujumUI.onTahunHitungChange;
       window.updateKepribadianQuickInfo = nujumUI.updateKepribadianQuickInfo;
       window.hitungKepribadianLengkap = nujumUI.hitungKepribadianLengkap;
       window.switchNujumViewMode = nujumUI.switchNujumViewMode;
@@ -56,7 +57,6 @@ export async function ensureNujumLoaded() {
       window.hitungKomparasiNonJodoh = nujumUI.hitungKomparasiNonJodoh;
       window.renderKomparasiNonJodoh = nujumUI.renderKomparasiNonJodoh;
       window.printLaporanNujum = nujumUI.printLaporanNujum;
-      window.printLaporan = nujumUI.printLaporanNujum;
       window.compareNonJodoh = nujumEngine.compareNonJodoh;
       window.getNujumSummaryRingkas = nujumEngine.getNujumSummaryRingkas;
       window.getNujumGlossary = nujumEngine.getNujumGlossary;
@@ -214,6 +214,12 @@ export function wireNujumFeature() {
       window.updateKepribadianQuickInfo();
     }
   };
+  window.onTahunHitungChange = async function () {
+    await ensureNujumLoaded();
+    if (window.onTahunHitungChange && window.onTahunHitungChange !== this) {
+      window.onTahunHitungChange();
+    }
+  };
   window.switchNujumViewMode = async function (mode) {
     await ensureNujumLoaded();
     if (window.switchNujumViewMode && window.switchNujumViewMode !== this) {
@@ -248,12 +254,6 @@ export function wireNujumFeature() {
     await ensureNujumLoaded();
     if (window.hitungKomparasiNonJodoh && window.hitungKomparasiNonJodoh !== this) {
       window.hitungKomparasiNonJodoh();
-    }
-  };
-  window.printLaporan = async function (theme) {
-    await ensureNujumLoaded();
-    if (window.printLaporanNujum) {
-      window.printLaporanNujum(theme);
     }
   };
   window.printLaporanNujum = async function (theme) {

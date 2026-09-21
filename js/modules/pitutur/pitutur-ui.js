@@ -5,15 +5,7 @@
  */
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
-
-// Pastikan dataset pitutur dimuat jika berjalan di Node.js test environment
-if (typeof window === 'undefined' && typeof globalThis.PITUTUR_LIST === 'undefined') {
-  try {
-    await import('../../data/pitutur.js');
-  } catch (e) {
-    // Diabaikan jika sudah dimuat
-  }
-}
+import { PITUTUR_LIST, QUIZ_QUESTIONS } from '../../data/pitutur.js';
 
 let currentPitutur = null;
 let quizQuestionsList = [];
@@ -26,7 +18,7 @@ let quizAnswered = false;
  * @returns {Array<Object>}
  */
 export function getPituturList() {
-  return (typeof window !== 'undefined' && window.PITUTUR_LIST) || 
+  return PITUTUR_LIST || (typeof window !== 'undefined' && window.PITUTUR_LIST) || 
          (typeof globalThis !== 'undefined' && globalThis.PITUTUR_LIST) || [];
 }
 
@@ -35,7 +27,7 @@ export function getPituturList() {
  * @returns {Array<Object>}
  */
 export function getQuizQuestions() {
-  return (typeof window !== 'undefined' && window.QUIZ_QUESTIONS) || 
+  return QUIZ_QUESTIONS || (typeof window !== 'undefined' && window.QUIZ_QUESTIONS) || 
          (typeof globalThis !== 'undefined' && globalThis.QUIZ_QUESTIONS) || [];
 }
 

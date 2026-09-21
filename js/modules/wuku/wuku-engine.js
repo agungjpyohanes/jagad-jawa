@@ -4,21 +4,14 @@
  * Bebas dari ketergantungan DOM.
  */
 
-// Pastikan dataset pawukon dimuat jika berjalan di Node.js test environment
-if (typeof window === 'undefined' && typeof globalThis.PAWUKON_LIST === 'undefined') {
-  try {
-    await import('../../data/pawukon.js');
-  } catch (e) {
-    // Diabaikan jika sudah dimuat
-  }
-}
+import { PAWUKON_LIST, getPawukonData } from '../../data/pawukon.js';
 
 /**
  * Mendapatkan daftar seluruh 30 wuku.
  * @returns {Array<Object>}
  */
 export function getAllWuku() {
-  const list = (typeof window !== 'undefined' && window.PAWUKON_LIST) || 
+  const list = PAWUKON_LIST || (typeof window !== 'undefined' && window.PAWUKON_LIST) || 
                (typeof globalThis !== 'undefined' && globalThis.PAWUKON_LIST) || [];
   return list;
 }

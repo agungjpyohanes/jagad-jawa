@@ -795,7 +795,7 @@ export function renderLaporanKalenderPrintHtml(bulan, tahun) {
   `;
 }
 
-export function printLaporanKalender(theme = 'parchment') {
+export function printLaporanKalender(theme = 'monochrome') {
   const bulan = parseInt(document.getElementById('bulanSel')?.value || (new Date().getMonth() + 1));
   const tahun = parseInt(document.getElementById('tahunInput')?.value || new Date().getFullYear());
   const printDocHtml = renderLaporanKalenderPrintHtml(bulan, tahun);

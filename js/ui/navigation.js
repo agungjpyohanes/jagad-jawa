@@ -46,6 +46,14 @@ function switchTab(tabId, pushState = true) {
     window.dispatchEvent(new CustomEvent('init-aksara-canvas'));
   }
 
+  if (tabId === 'tripurusa' && typeof window.renderTripurusaModule === 'function') {
+    window.renderTripurusaModule();
+  }
+
+  if (tabId === 'ensiklopedia-budaya' && typeof window.renderEnsiklopediaBudayaPage === 'function') {
+    window.renderEnsiklopediaBudayaPage();
+  }
+
   window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -160,11 +168,23 @@ if (typeof window !== 'undefined') {
  * @param {'parchment'|'monochrome'} theme Estetika: 'parchment' (Kertas Kuno Keraton) atau 'monochrome'
  * @param {string|null} customTitle Judul dokumen cetak kustom
  */
-function printLaporan(theme = 'parchment', customTitle = null) {
+function printLaporan(theme = 'monochrome', customTitle = null) {
   let target = document.getElementById('laporan-cetak-pdf');
+  
+  // Jika target belum ada di DOM, buat elemen penampung cetak
   if (!target) {
-    window.print();
-    return;
+    target = document.createElement('div');
+    target.id = 'laporan-cetak-pdf';
+    target.className = 'print-only-document';
+    document.body.appendChild(target);
+  }
+
+  // Pastikan isi laporan sudah terisi; jika belum, coba trigger cetak nujum
+  if (!target.innerHTML || target.innerHTML.trim() === '') {
+    if (typeof window.printLaporanNujum === 'function') {
+      window.printLaporanNujum(theme);
+      return;
+    }
   }
 
   // Format Penamaan Dokumen PDF: Jagad Jawa — [Nama Subjek / Judul Kustom]
@@ -173,7 +193,7 @@ function printLaporan(theme = 'parchment', customTitle = null) {
     document.title = customTitle;
   } else {
     const namaInput = document.getElementById('namaKepribadian')?.value?.trim();
-    const namaSubjek = (namaInput && namaInput !== '-') ? namaInput.toUpperCase() : 'SUBJEK';
+    const namaSubjek = (namaInput && namaInput !== '-') ? namaInput.toUpperCase() : 'SERAT PRIMBON';
     document.title = `Jagad Jawa — ${namaSubjek}`;
   }
 
@@ -196,7 +216,7 @@ function printLaporan(theme = 'parchment', customTitle = null) {
   // Berikan sedikit jeda render style sebelum print dialog terbuka
   setTimeout(() => {
     window.print();
-  }, 60);
+  }, 75);
 
   // Kembalikan judul halaman dan bersihkan state setelah dialog cetak ditutup
   const cleanup = () => {
@@ -390,3 +410,27 @@ if (typeof module !== 'undefined' && module.exports) {
     closeAllNavDropdowns
   };
 }
+
+export {
+  switchTab,
+  toggleMobileMenu,
+  closeMobileMenu,
+  navigasiKembali,
+  printLaporan,
+  printSection,
+  downloadElementAsPng,
+  toggleNavDropdown,
+  closeAllNavDropdowns
+};
+
+export default {
+  switchTab,
+  toggleMobileMenu,
+  closeMobileMenu,
+  navigasiKembali,
+  printLaporan,
+  printSection,
+  downloadElementAsPng,
+  toggleNavDropdown,
+  closeAllNavDropdowns
+};

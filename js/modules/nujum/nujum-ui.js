@@ -42,13 +42,36 @@ let lastCalculatedData = null;
 export function initTahunHitungSelect() {
   const sel = document.getElementById('tahunHitungKepribadian');
   if (!sel) return;
+  const currentVal = sel.value ? parseInt(sel.value) : null;
+  const currentYear = new Date().getFullYear();
   sel.innerHTML = '';
-  for (let y = 1950; y <= 2040; y++) {
+  for (let y = 1940; y <= 2050; y++) {
     const opt = document.createElement('option');
     opt.value = y;
-    opt.textContent = y;
-    if (y === 2026) opt.selected = true;
+    opt.textContent = `${y} M`;
+    if (currentVal ? (currentVal === y) : (y === currentYear)) {
+      opt.selected = true;
+    }
     sel.appendChild(opt);
+  }
+}
+
+export function onTahunHitungChange() {
+  updateKepribadianQuickInfo();
+  if (lastCalculatedData) {
+    const defaultYear = new Date().getFullYear();
+    const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
+    const umur = Math.max(0, tahunHitung - lastCalculatedData.y);
+    lastCalculatedData.tahunHitung = tahunHitung;
+    lastCalculatedData.umur = umur;
+    lastCalculatedData.summaryRingkas = getNujumSummaryRingkas({
+      nama: lastCalculatedData.nama,
+      d: lastCalculatedData.d,
+      m: lastCalculatedData.m,
+      y: lastCalculatedData.y,
+      tahunHitung
+    });
+    renderHasilNujumContent();
   }
 }
 
@@ -82,7 +105,8 @@ export function updateKepribadianQuickInfo() {
   const sasiFn = (typeof window !== 'undefined' && window.getWatakSasiJawa) ? window.getWatakSasiJawa : null;
   const sasiJawaRes = (sasiFn && tglJawaRes?.bulanJawa) ? sasiFn(tglJawaRes.bulanJawa) : null;
 
-  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || '2026') || 2026;
+  const defaultYear = new Date().getFullYear();
+  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
   const umur = Math.max(0, tahunHitung - y);
   const siklusFn = (typeof window !== 'undefined' && window.hitungSiklusTahunan) ? window.hitungSiklusTahunan : null;
   const siklusRes = siklusFn ? siklusFn(umur) : null;
@@ -143,7 +167,8 @@ export function hitungKepribadianLengkap() {
   }
 
   const nama = document.getElementById('namaKepribadian')?.value.trim() || 'Raden / Diajeng';
-  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || '2026') || 2026;
+  const defaultYear = new Date().getFullYear();
+  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
   const alamatTinggal = document.getElementById('alamatTinggal')?.value.trim() || '-';
   const alamatKerja = document.getElementById('alamatKerja')?.value.trim() || '-';
   const [y, m, d] = tglVal.split('-').map(Number);
@@ -203,6 +228,9 @@ export function hitungKepribadianLengkap() {
     aksaraJawa = (faal.aksaraStr && faal.aksaraStr !== '-') ? faal.aksaraStr : '';
   }
 
+  const fnSiklus = (typeof hitungSiklusTahunan === 'function') ? hitungSiklusTahunan : (typeof window !== 'undefined' && window.hitungSiklusTahunan ? window.hitungSiklusTahunan : null);
+  const siklusTahunanRes = fnSiklus ? fnSiklus(umur) : null;
+
   lastCalculatedData = {
     nama, tglVal, d, m, y, tahunHitung, umur,
     dino, pas, neptu, wukuName, wukuNo: info.wukuId + 1,
@@ -210,21 +238,33 @@ export function hitungKepribadianLengkap() {
     nujumRes, faal, aseso, kd, summaryRingkas, tglJawaRes,
     shioLahirRes, zodiakRes, mangsaRes, karakterRes,
     watakDinaRes, watakPasaranRes, sasiJawaRes,
-    sirikanRes, palenggahanRes, pedamelanRes, pekerjaanRes, pwk, aksaraJawa
+    sirikanRes, palenggahanRes, pedamelanRes, pekerjaanRes, pwk, aksaraJawa,
+    siklusTahunanRes
   };
 
   renderHasilNujumContent();
 
-  // Tampilkan tombol cetak laporan
+  // Tampilkan tombol cetak laporan untuk Mode Lengkap & Mode Ringkas
+  const btnLengkap = document.getElementById('btnPrintKepribadianLengkap');
+  const btnRingkas = document.getElementById('btnPrintKepribadianRingkas');
   const btnParchment = document.getElementById('btnPrintKepribadianParchment');
   const btnMono = document.getElementById('btnPrintKepribadian');
+
+  if (btnLengkap) {
+    btnLengkap.style.display = 'inline-flex';
+    btnLengkap.onclick = () => printLaporanNujum('monochrome', 'lengkap');
+  }
+  if (btnRingkas) {
+    btnRingkas.style.display = 'inline-flex';
+    btnRingkas.onclick = () => printLaporanNujum('monochrome', 'ringkas');
+  }
   if (btnParchment) {
     btnParchment.style.display = 'inline-flex';
-    btnParchment.onclick = () => printLaporanNujum('parchment');
+    btnParchment.onclick = () => printLaporanNujum('parchment', currentNujumMode === 'ringkas' ? 'ringkas' : 'lengkap');
   }
   if (btnMono) {
     btnMono.style.display = 'inline-flex';
-    btnMono.onclick = () => printLaporanNujum('monochrome');
+    btnMono.onclick = () => printLaporanNujum('monochrome', currentNujumMode === 'ringkas' ? 'ringkas' : 'lengkap');
   }
 
   showToast('Nujum kepribadian kasil kapetung kanthi jangkep!');
@@ -245,20 +285,30 @@ function renderHasilNujumContent() {
     <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-keraton border border-sogan-800">
       <div class="flex items-center gap-2">
         <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
-          <i class="fa-solid fa-sliders"></i> Mode Tampilan:
+          <i class="fa-solid fa-sliders"></i> Mode:
         </span>
         <div class="inline-flex p-1 rounded-lg bg-sogan-950 border border-sogan-800 text-xs">
           <button onclick="window.switchNujumViewMode('ringkas')" class="px-3 py-1.5 rounded-md font-semibold transition ${isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
-            <i class="fa-solid fa-list-check mr-1"></i> Mode Ringkas (Ikhtisar)
+            <i class="fa-solid fa-list-check mr-1"></i> Ringkas
           </button>
           <button onclick="window.switchNujumViewMode('mendalam')" class="px-3 py-1.5 rounded-md font-semibold transition ${!isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
-            <i class="fa-solid fa-book-open mr-1"></i> Mode Mendalam (Primbon)
+            <i class="fa-solid fa-book-open mr-1"></i> Mendalam (Primbon)
           </button>
         </div>
       </div>
-      <button onclick="window.openGlosariumNujumModal()" class="px-3 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center gap-1.5 transition">
-        <i class="fa-solid fa-circle-question text-amber-400"></i> Glosarium Filosofi
-      </button>
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="inline-flex p-0.5 rounded-lg bg-sogan-950 border border-sogan-800 text-xs">
+          <button onclick="window.printLaporanNujum('monochrome', 'lengkap')" class="px-2.5 py-1 rounded text-prada hover:bg-sogan-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer" title="Cetak Dokumen Arsip Lengkap 9 Bagian">
+            <i class="fa-solid fa-file-lines text-prada"></i> <span class="hidden sm:inline">Cetak Lengkap</span>
+          </button>
+          <button onclick="window.printLaporanNujum('monochrome', 'ringkas')" class="px-2.5 py-1 rounded text-sogan-200 hover:text-prada hover:bg-sogan-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer" title="Cetak Dokumen Ringkas Transkripsi">
+            <i class="fa-solid fa-file-contract text-amber-400"></i> <span class="hidden sm:inline">Cetak Ringkas</span>
+          </button>
+        </div>
+        <button onclick="window.openGlosariumNujumModal()" class="px-3 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <i class="fa-solid fa-circle-question text-amber-400"></i> Glosarium
+        </button>
+      </div>
     </div>
   `;
 
@@ -1266,6 +1316,184 @@ export function buildAksaraSelectOptions(selectedKode) {
   }).join('');
 }
 
+export function renderPalenggahanPedamelanCardHtml(palenggahanRes, pedamelanRes) {
+  const pTinggal = palenggahanRes || {
+    namaTempat: '-', namaOrang: '-',
+    firstCharTempat: '-', lastCharTempat: '-',
+    aksaraFirstTempat: 'HA', aksaraLastTempat: 'HA',
+    neptuFirstTempat: 1, neptuLastTempat: 1,
+    firstCharOrang: '-', lastCharOrang: '-',
+    aksaraFirstOrang: 'HA', aksaraLastOrang: 'HA',
+    neptuFirstOrang: 1, neptuLastOrang: 1,
+    totalNeptu: 4, noPalenggahan: 4,
+    palenggahan: { surasa: 'PANDHITA', tegese: 'Kajen kelingan (Watak mandita, linuhung)' }
+  };
+  const pKerja = pedamelanRes || {
+    namaTempat: '-', namaOrang: '-',
+    firstCharTempat: '-', lastCharTempat: '-',
+    aksaraFirstTempat: 'HA', aksaraLastTempat: 'HA',
+    neptuFirstTempat: 1, neptuLastTempat: 1,
+    firstCharOrang: '-', lastCharOrang: '-',
+    aksaraFirstOrang: 'HA', aksaraLastOrang: 'HA',
+    neptuFirstOrang: 1, neptuLastOrang: 1,
+    totalNeptu: 4, noPalenggahan: 4,
+    palenggahan: { surasa: 'PANDHITA', tegese: 'Kajen kelingan (Watak mandita, linuhung)' }
+  };
+
+  const isTinggalBecik = (pTinggal.noPalenggahan >= 3);
+  const isKerjaBecik = (pKerja.noPalenggahan >= 3);
+
+  return `
+    <div class="space-y-4 bg-wulung p-4 sm:p-5 rounded-2xl border border-prada/30 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between border-b border-sogan-700/80 pb-2.5 gap-2">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-[10px] text-emerald-300 font-bold uppercase tracking-wider">
+            Analisis Palenggahan &amp; Pedamelan
+          </span>
+          <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
+            <i class="fa-solid fa-map-location-dot text-emerald-400"></i> Keselarasan Papan Palenggahan &amp; Pedamelan
+          </h4>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span id="metaPalenggahanSurasa" class="${isTinggalBecik ? 'text-emerald-400' : 'text-amber-400'} font-semibold font-mono">(${pTinggal.palenggahan?.surasa || '-'})</span>
+          <span class="text-sogan-500">&bull;</span>
+          <span id="metaPedamelanSurasa" class="${isKerjaBecik ? 'text-blue-400' : 'text-amber-400'} font-semibold font-mono">(${pKerja.palenggahan?.surasa || '-'})</span>
+        </div>
+      </div>
+
+      <p class="text-xs text-sogan-300 leading-relaxed">
+        Kalkulasi keselarasan getaran nama orang kaliyan nama wewengkon (kelurahan/desa) panggénan dedunung sarta pedamelan kanthi formula 4 aksara (aksara ngajeng &amp; pungkasan) modulo 5.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- 1. Palenggahan (Alamat Tinggal) -->
+        <div class="p-4 rounded-xl bg-keraton/90 border border-sogan-800 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
+              <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-house-chimney text-amber-400"></i> Papan Palenggahan (Griya)
+              </span>
+              <span class="text-[10px] text-sogan-400 font-mono">${pTinggal.namaTempat || '-'}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Ngajeng Desa:</label>
+                <select id="pal_tinggal_depan_desa" onchange="window.updatePalenggahanInteractive('tinggal')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pTinggal.aksaraFirstTempat)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Pungkasan Desa:</label>
+                <select id="pal_tinggal_belakang_desa" onchange="window.updatePalenggahanInteractive('tinggal')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pTinggal.aksaraLastTempat)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Ngajeng Nama:</label>
+                <select id="pal_tinggal_depan_orang" onchange="window.updatePalenggahanInteractive('tinggal')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pTinggal.aksaraFirstOrang)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Pungkasan Nama:</label>
+                <select id="pal_tinggal_belakang_orang" onchange="window.updatePalenggahanInteractive('tinggal')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pTinggal.aksaraLastOrang)}
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] p-2 rounded-lg bg-sogan-950/80 border border-sogan-800 font-mono text-sogan-300">
+              <span id="pal_tinggal_formula">Total: <strong>${pTinggal.totalNeptu}</strong></span>
+              <span id="pal_tinggal_modulo" class="text-prada">Modulo 5 &rarr; Sisa ${pTinggal.noPalenggahan}</span>
+            </div>
+          </div>
+
+          <div id="pal_tinggal_surasa_card" class="p-3 rounded-lg ${isTinggalBecik ? 'bg-emerald-950/30 border border-emerald-800/60' : 'bg-amber-950/30 border border-amber-800/60'} space-y-1 transition-all duration-300">
+            <div class="flex items-center justify-between">
+              <span id="pal_tinggal_surasa_title" class="text-[10px] uppercase font-bold ${isTinggalBecik ? 'text-emerald-300' : 'text-amber-300'}">
+                Surasa #${pTinggal.noPalenggahan}: ${pTinggal.palenggahan?.surasa || '-'}
+              </span>
+              <span id="pal_tinggal_surasa_badge" class="px-2 py-0.5 rounded text-[9px] font-bold ${isTinggalBecik ? 'bg-emerald-900/50 text-emerald-200' : 'bg-amber-900/50 text-amber-200'}">
+                ${isTinggalBecik ? 'Kajen Kelingan' : 'Prihatin'}
+              </span>
+            </div>
+            <p id="pal_tinggal_surasa_desc" class="text-[11px] text-sogan-200 leading-relaxed">${pTinggal.palenggahan?.tegese || '-'}</p>
+          </div>
+        </div>
+
+        <!-- 2. Pedamelan (Alamat Tempat Kerja) -->
+        <div class="p-4 rounded-xl bg-keraton/90 border border-sogan-800 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
+              <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-briefcase text-blue-400"></i> Papan Pedamelan (Pakaryan)
+              </span>
+              <span class="text-[10px] text-sogan-400 font-mono">${pKerja.namaTempat || '-'}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Ngajeng Kantor:</label>
+                <select id="pal_kerja_depan_desa" onchange="window.updatePalenggahanInteractive('kerja')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pKerja.aksaraFirstTempat)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Pungkasan Kantor:</label>
+                <select id="pal_kerja_belakang_desa" onchange="window.updatePalenggahanInteractive('kerja')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pKerja.aksaraLastTempat)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Ngajeng Nama:</label>
+                <select id="pal_kerja_depan_orang" onchange="window.updatePalenggahanInteractive('kerja')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pKerja.aksaraFirstOrang)}
+                </select>
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-medium mb-1">Aksara Pungkasan Nama:</label>
+                <select id="pal_kerja_belakang_orang" onchange="window.updatePalenggahanInteractive('kerja')" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-1.5 text-sogan-100 text-xs focus:border-prada outline-none">
+                  ${buildAksaraSelectOptions(pKerja.aksaraLastOrang)}
+                </select>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[11px] p-2 rounded-lg bg-sogan-950/80 border border-sogan-800 font-mono text-sogan-300">
+              <span id="pal_kerja_formula">Total: <strong>${pKerja.totalNeptu}</strong></span>
+              <span id="pal_kerja_modulo" class="text-prada">Modulo 5 &rarr; Sisa ${pKerja.noPalenggahan}</span>
+            </div>
+          </div>
+
+          <div id="pal_kerja_surasa_card" class="p-3 rounded-lg ${isKerjaBecik ? 'bg-blue-950/30 border border-blue-800/60' : 'bg-amber-950/30 border border-amber-800/60'} space-y-1 transition-all duration-300">
+            <div class="flex items-center justify-between">
+              <span id="pal_kerja_surasa_title" class="text-[10px] uppercase font-bold ${isKerjaBecik ? 'text-blue-300' : 'text-amber-300'}">
+                Surasa #${pKerja.noPalenggahan}: ${pKerja.palenggahan?.surasa || '-'}
+              </span>
+              <span id="pal_kerja_surasa_badge" class="px-2 py-0.5 rounded text-[9px] font-bold ${isKerjaBecik ? 'bg-blue-900/50 text-blue-200' : 'bg-amber-900/50 text-amber-200'}">
+                ${isKerjaBecik ? 'Kajen Kelingan' : 'Prihatin'}
+              </span>
+            </div>
+            <p id="pal_kerja_surasa_desc" class="text-[11px] text-sogan-200 leading-relaxed">${pKerja.palenggahan?.tegese || '-'}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panduan 5 Surasa Palenggahan -->
+      <div class="p-3 bg-sogan-950/60 rounded-xl border border-sogan-800/80 text-[11px] text-sogan-300">
+        <strong class="text-prada block mb-1 uppercase text-[10px]">Paugeran 5 Surasa Palenggahan:</strong>
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-[10.5px]">
+          <div class="p-1.5 rounded bg-keraton border border-sogan-900"><strong class="text-amber-300">1. Sonya:</strong> Sepi, prihatin, butuh ketenangan batin.</div>
+          <div class="p-1.5 rounded bg-keraton border border-sogan-900"><strong class="text-amber-300">2. Agotho:</strong> Asring owah gingsir, perlu adaptasi ageng.</div>
+          <div class="p-1.5 rounded bg-keraton border border-emerald-900/40"><strong class="text-emerald-300">3. Gedhong:</strong> Kajen kelingan, rezeki kumpul, becik.</div>
+          <div class="p-1.5 rounded bg-keraton border border-emerald-900/40"><strong class="text-emerald-300">4. Pandhita:</strong> Diurmati dening masyarakat, dados panutan.</div>
+          <div class="p-1.5 rounded bg-keraton border border-emerald-900/40"><strong class="text-emerald-300">5. Ratu:</strong> Kawibawan luhur, kamulyan, tentrem rahayu.</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 export function updatePalenggahanInteractive(type) {
   const prefix = (type === 'kerja') ? 'pal_kerja_' : 'pal_tinggal_';
   const el1 = document.getElementById(prefix + 'depan_desa');
@@ -1586,158 +1814,780 @@ export function renderKomparasiNonJodoh(res) {
   `;
 }
 
-// ─── TAHAP 3.3: EKSPOR LAPORAN NUJUM LENGKAP (PDF CETAK) ───────────────────
-export function renderLaporanNujumPrintHtml(d) {
-  const neptuVal = (typeof d.sirikanRes?.neptu === 'object' && d.sirikanRes?.neptu !== null)
-    ? (d.sirikanRes.neptu.neptu ?? d.sirikanRes.neptu.toString())
-    : (d.sirikanRes?.neptu || d.neptu);
+// ─── TAHAP 3.3: EKSPOR LAPORAN NUJUM LENGKAP & RINGKAS (PDF / CETAK) ────────
+
+/**
+ * 1. MODE LENGKAP (Arsip Formal 9 Bagian — Standar Rado Aditya Sejati)
+ * Memuat 9 bagian utuh: Identitas, Ensiklopedia Pawukon, 6 Dimensi Bincil,
+ * Pranata Mangsa & Zodiak/Shio, Ageman, Karakter Kelahiran, Sirikan Adhep & Palenggahan,
+ * Faalakiah Asma, serta Siklus Tahunan.
+ */
+export function renderLaporanNujumLengkapPrintHtml(d) {
+  const nama = (d.nama && d.nama !== '-') ? d.nama.toUpperCase() : 'SUBJEK PETUNGAN';
+  const tglFormatted = `${d.d} ${BULAN_MASEHI[d.m - 1] || ''} ${d.y} M`;
+  const dino = d.dino || '-';
+  const pas = d.pas || '-';
+  const neptu = d.neptu || 0;
+  const wukuName = d.wukuName || '-';
+  const wukuNo = d.wukuNo || '-';
+  const umur = d.umur ?? 0;
+  const tahunHitung = d.tahunHitung || new Date().getFullYear();
+  const alamatTinggal = d.alamatTinggal || '-';
+  const alamatKerja = d.alamatKerja || '-';
+  const tglJawa = d.tglJawaRes || {};
+  const sasiJawa = d.sasiJawaRes || {};
+  const pwk = d.pwk || {};
+  const aseso = d.aseso || {};
+  const pad = d.nujumRes?.padewan || { sisa: '-', nama: '-', arti: '-' };
+  const prk = d.nujumRes?.paringkelan || { sisa: '-', nama: '-', arti: '-' };
+  const pan = d.nujumRes?.pandangon || { sisa: '-', nama: '-', arti: '-' };
+  const paa = d.nujumRes?.paarasan || { sisa: '-', nama: '-', arti: '-' };
+  const pcs = d.nujumRes?.pancasuda || { sisa: '-', nama: '-', arti: '-' };
+  const kam = d.nujumRes?.kamarokan || { sisa: '-', nama: '-', arti: '-' };
+  const mangsaRes = d.mangsaRes || {};
+  const zodiakRes = d.zodiakRes || {};
+  const shioLahir = d.shioLahirRes || {};
+  const karakterRes = d.karakterRes || {};
+  const watakDinaRes = d.watakDinaRes || {};
+  const watakPasaranRes = d.watakPasaranRes || {};
+  const sirikanRes = d.sirikanRes || {};
+  const palenggahanRes = d.palenggahanRes || {};
+  const pedamelanRes = d.pedamelanRes || {};
+  const faal = d.faal || { nabi: '-', sum: 0, kode: 0, desc: '-', aksaraStr: '-' };
+  const aksaraJawa = d.aksaraJawa || faal.aksaraStr || '-';
+  const fnSiklus = (typeof hitungSiklusTahunan === 'function') ? hitungSiklusTahunan : (typeof window !== 'undefined' && window.hitungSiklusTahunan ? window.hitungSiklusTahunan : null);
+  const siklusTahunanRes = d.siklusTahunanRes || (fnSiklus ? fnSiklus(umur) : null);
+  const isPalTinggalBecik = (palenggahanRes?.noPalenggahan || 0) >= 3;
+  const isPalKerjaBecik = (pedamelanRes?.noPalenggahan || 0) >= 3;
 
   return `
-    <div style="padding: 24pt; font-family: 'Times New Roman', serif; color: #0f172a; max-width: 700pt; margin: 0 auto; line-height: 1.4;">
-      <!-- KOP RESMI KERATON -->
-      <div style="text-align: center; border-bottom: 2pt solid #0f172a; padding-bottom: 8pt; margin-bottom: 14pt;">
-        <div style="font-size: 14pt; font-weight: bold; letter-spacing: 1.5pt;">JAGAD JAWA &middot; SERAT PRIMBON RESMI</div>
-        <div style="font-size: 11pt; font-style: italic; margin-top: 2pt;">Laporan Nujum Kepribadian, 6 Dimensi Bincil &amp; Kosmologi Jawa</div>
-        <div style="font-size: 7.5pt; color: #475569; margin-top: 2pt;">Kasultanan Ngayogyakarta Hadiningrat &middot; Karaton Surakarta Hadiningrat</div>
-      </div>
+    <div class="print-report-wrapper">
+      <div class="print-watermark print-doc-watermark watermark-print">Aether Code</div>
 
-      <!-- BIODATA -->
-      <table style="width: 100%; font-size: 9pt; margin-bottom: 12pt; border-collapse: collapse;">
-        <tr>
-          <td style="width: 25%; font-weight: bold; padding: 2pt 0;">Nama Lengkap</td>
-          <td style="width: 2%;">:</td>
-          <td style="width: 73%;">${d.nama}</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold; padding: 2pt 0;">Tanggal Lahir</td>
-          <td>:</td>
-          <td>${d.d} ${BULAN_MASEHI[d.m - 1]} ${d.y} M (${d.tglJawaRes.fullStr})</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold; padding: 2pt 0;">Weton &amp; Neptu</td>
-          <td>:</td>
-          <td><strong>${d.dino} ${d.pas}</strong> (Neptu: ${d.neptu}) &middot; Wuku: ${d.wukuName} (${d.wukuNo}/30)</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold; padding: 2pt 0;">Tipe Karakter</td>
-          <td>:</td>
-          <td><strong>${d.kd.tipe}</strong> &mdash; ${d.kd.ringkasan}</td>
-        </tr>
-      </table>
+      <div class="laporan-page">
+        <span class="corner-tr" aria-hidden="true">❖</span>
+        <span class="corner-bl" aria-hidden="true">❖</span>
 
-      <!-- 6 DIMENSI BINCIL -->
-      <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4pt; border-bottom: 1pt solid #94a3b8; padding-bottom: 2pt;">
-        Enem Dimensi Bincil Jawa
-      </div>
-      <table style="width: 100%; font-size: 8.5pt; border-collapse: collapse; margin-bottom: 12pt;">
-        <thead>
-          <tr style="background-color: #f1f5f9; text-align: left;">
-            <th style="padding: 3pt; border: 0.5pt solid #cbd5e1; width: 25%;">Dimensi</th>
-            <th style="padding: 3pt; border: 0.5pt solid #cbd5e1; width: 25%;">Nama Lambang</th>
-            <th style="padding: 3pt; border: 0.5pt solid #cbd5e1; width: 50%;">Makna &amp; Keterangan</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">1. Padewan</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.padewan?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.padewan?.arti || '-'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">2. Paringkelan</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.paringkelan?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.paringkelan?.arti || '-'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">3. Pandangon</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.pandangon?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.pandangon?.arti || '-'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">4. Paarasan</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.paarasan?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.paarasan?.arti || '-'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">5. Pancasuda</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.pancasuda?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.pancasuda?.arti || '-'}</td>
-          </tr>
-          <tr>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1; font-weight: bold;">6. Kamarokan</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.kamarokan?.nama || '-'}</td>
-            <td style="padding: 3pt; border: 0.5pt solid #cbd5e1;">${d.nujumRes?.kamarokan?.arti || '-'}</td>
-          </tr>
-        </tbody>
-      </table>
+        <!-- KOP DOKUMEN RESMI (ARSIP FORMAL GAYA RADO ADITYA SEJATI) -->
+        <div class="doc-header-kop mb-2 border-b-2 border-black pb-1.5 flex justify-between items-end">
+          <div>
+            <div style="font-size: 14pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 2px 0; letter-spacing: 0.15em;">JAGAD JAWA</div>
+            <div style="font-size: 11pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 2px 0;">LAPORAN PETUNG NUJUM KEPRIBADIAN (MODE LENGKAP)</div>
+            <div style="font-size: 7.5pt; font-style: italic;">Transkripsi Petungan Pawukon, 6 Dimensi Bincil, Faalakiah, Palenggahan &amp; Karakter Kelahiran Kasultanan &amp; Karaton</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 8pt; font-weight: bold;">ARSIP FORMAL PENELITIAN</div>
+            <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Archival Standard</div>
+          </div>
+        </div>
 
-      <!-- FAALAKIAH ASMA -->
-      <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4pt; border-bottom: 1pt solid #94a3b8; padding-bottom: 2pt;">
-        Faalakiah Asma 12 Nabi &amp; Tolak Balak
-      </div>
-      <div style="font-size: 8.5pt; margin-bottom: 12pt; background-color: #f8fafc; padding: 6pt; border: 0.5pt solid #cbd5e1; border-radius: 4pt;">
-        <div><strong>Teladan Nabi:</strong> ${d.faal.nabi} (Nilai Aksara: ${d.faal.sum} &middot; Aksara: ${d.faal.aksaraStr})</div>
-        <div style="margin-top: 3pt; color: #334155;"><strong>Petunjuk &amp; Nasihat:</strong> ${d.faal.desc}</div>
-      </div>
+        <!-- BAGIAN 1: PERANGAN PETUNG & IDENTITAS -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 1: PERANGAN PETUNG &amp; IDENTITAS</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Nama Subjek</td>
+                <td style="width: 28%;"><strong>${nama}</strong></td>
+                <td class="doc-label-cell">Tanggal Lahir (Masehi)</td>
+                <td style="width: 28%;">${tglFormatted}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Weton (Dina &amp; Pasaran)</td>
+                <td><strong>${dino} ${pas}</strong> (Neptu: ${neptu})</td>
+                <td class="doc-label-cell">Tanggal Jawa &amp; Sasi</td>
+                <td><strong>${tglJawa?.shortStr || tglJawa?.fullStr || '-'}</strong> (${sasiJawa?.sasi && sasiJawa.sasi !== '-' ? sasiJawa.sasi + ' / ' + sasiJawa.padanan : (tglJawa?.namaWindu ? 'Windu ' + tglJawa.namaWindu : '-')})</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Wuku Kelahiran</td>
+                <td>${wukuName} (Wuku Ke-${wukuNo})</td>
+                <td class="doc-label-cell">Usia &amp; Tahun Hitung</td>
+                <td>${umur} Tahun (Tahun Hitung: ${tahunHitung} M)</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Alamat Tinggal (Kelurahan)</td>
+                <td>${alamatTinggal}</td>
+                <td class="doc-label-cell">Alamat Tempat Kerja (Kelurahan)</td>
+                <td>${alamatKerja}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- SIRIKAN ADHEP OMAH -->
-      ${d.sirikanRes ? `
-      <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4pt; border-bottom: 1pt solid #94a3b8; padding-bottom: 2pt;">
-        Paugeran Griya: Sirikan Adhep Omah
-      </div>
-      <table style="width: 100%; font-size: 8.5pt; border-collapse: collapse; margin-bottom: 12pt;">
-        <tr>
-          <td style="width: 50%; padding: 4pt; border: 0.5pt solid #cbd5e1; background-color: #fff1f2;">
-            <div style="font-weight: bold; color: #9f1239; font-size: 8pt;">SIRIKAN NEPTU (${neptuVal}):</div>
-            <div style="font-size: 9pt; font-weight: bold;">${d.sirikanRes.sirikanNeptu || '-'}</div>
-          </td>
-          <td style="width: 50%; padding: 4pt; border: 0.5pt solid #cbd5e1; background-color: #fffbeb;">
-            <div style="font-weight: bold; color: #92400e; font-size: 8pt;">SIRIKAN DINA (${d.dino}):</div>
-            <div style="font-size: 9pt; font-weight: bold;">${d.sirikanRes.sirikanDina || '-'}</div>
-          </td>
-        </tr>
-      </table>
-      ` : ''}
+        <!-- BAGIAN 2: ENSIKLOPEDIA PAWUKON -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 2: ENSIKLOPEDIA PAWUKON</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Wuku &amp; Dewa</td>
+                <td colspan="3"><strong>Wuku ${pwk?.nama_wuku || wukuName} (${pwk?.no_wuku || wukuNo})</strong> &mdash; Dewane: <strong>${pwk?.dewane || '-'}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak Budi Pangerti</td>
+                <td colspan="3">${pwk?.watek_budi_pangerti || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Bilahi &amp; Bebaya (Pantangan)</td>
+                <td colspan="3">${pwk?.bilahi_bebaya || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Pangupaya Jiwa (Kiprah Usaha)</td>
+                <td colspan="3">${pwk?.pangupaya_jiwa || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Potensi Lelaran &amp; Usada</td>
+                <td colspan="3">
+                  <strong>Potensi Lelaran:</strong> ${aseso?.lelara || '-'}<br/>
+                  <strong>Tamba Yen Lara (Usada Wuku):</strong> <em>${pwk?.tamba_yen_lara || '-'}</em>
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Ruwatan &amp; Donga Slamet</td>
+                <td colspan="3">
+                  <strong>Donga:</strong> ${pwk?.donga_slamet || '-'} &middot; 
+                  <strong>Sesaji:</strong> ${pwk?.sesaji_ruwat || '-'} &middot; 
+                  <strong>Tindih:</strong> ${pwk?.tindih_ruwat || '-'}<br/>
+                  <strong>Sega &amp; Iwak Selamatan:</strong> ${(pwk?.selamatan_sega && pwk?.selamatan_iwak) ? pwk.selamatan_sega + ' & ' + pwk.selamatan_iwak : (pwk?.selamatan_sega || '-')} &middot; 
+                  <strong>Salawat:</strong> ${pwk?.salawat || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- PAKARTI & PEKERJAAN -->
-      ${d.pekerjaanRes ? `
-      <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4pt; border-bottom: 1pt solid #94a3b8; padding-bottom: 2pt;">
-        Rekomendasi Pakarti Rejeki &amp; Pakaryan
-      </div>
-      <div style="font-size: 8.5pt; margin-bottom: 12pt; background-color: #f8fafc; padding: 6pt; border: 0.5pt solid #cbd5e1; border-radius: 4pt;">
-        <div><strong>Pakarti Rejeki:</strong> ${d.pekerjaanRes.pakarti_rejeki} &mdash; <em>"${d.pekerjaanRes.arti_rejeki || '-'}"</em></div>
-        <div style="margin-top: 2pt;"><strong>Pakaryan (Bidang Usaha):</strong> ${d.pekerjaanRes.pakaryan || '-'}</div>
-      </div>
-      ` : ''}
+        <!-- BAGIAN 3: BINCIL & PETUNGAN 6 DIMENSI -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 3: BINCIL &amp; PETUNGAN 6 DIMENSI</div>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Dimensi Bincil</th>
+                <th style="width: 14%;">Siklus</th>
+                <th style="width: 24%;">Hasil &amp; Simbol</th>
+                <th>Makna &amp; Surasa Petungan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Padewan</strong></td>
+                <td>Siklus 8</td>
+                <td>Dewa ${pad.sisa}: <strong>${pad.nama}</strong></td>
+                <td>${pad.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>Paringkelan</strong></td>
+                <td>Siklus 6</td>
+                <td>Ringkel ${prk.sisa}: <strong>${prk.nama}</strong></td>
+                <td>${prk.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>Pandangon</strong></td>
+                <td>Siklus 9</td>
+                <td>Dina ${pan.sisa}: <strong>${pan.nama}</strong></td>
+                <td>${pan.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>Paarasan</strong></td>
+                <td>Siklus 8</td>
+                <td>Laku ${paa.sisa}: <strong>${paa.nama}</strong></td>
+                <td>${paa.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>Pancasuda</strong></td>
+                <td>Siklus 7</td>
+                <td>Suda ${pcs.sisa}: <strong>${pcs.nama}</strong></td>
+                <td>${pcs.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>Kamarokan</strong></td>
+                <td>Siklus 2</td>
+                <td>Rupa ${kam.sisa}: <strong>${kam.nama}</strong></td>
+                <td>${kam.arti}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <!-- SIKLUS TAHUNAN -->
-      <div style="font-size: 10pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4pt; border-bottom: 1pt solid #94a3b8; padding-bottom: 2pt;">
-        Siklus Tahunan (Usia ${d.umur} Tahun)
-      </div>
-      <div style="font-size: 8.5pt; margin-bottom: 12pt; background-color: #f8fafc; padding: 6pt; border: 0.5pt solid #cbd5e1; border-radius: 4pt;">
-        <div><strong>Siklus Usia:</strong> ${d.umur} Tahun (Siklus Ke-${d.umur % 12 === 0 ? 12 : (d.umur % 12)} / 12)</div>
-        ${d.shioLahirRes ? `<div style="margin-top: 2pt;"><strong>Shio Kelahiran:</strong> ${d.shioLahirRes.shio} &middot; Elemen ${d.shioLahirRes.elemenTahun}</div>` : ''}
-        ${d.mangsaRes ? `<div style="margin-top: 2pt;"><strong>Pranata Mangsa:</strong> ${d.mangsaRes.nama} (${d.mangsaRes.rentang}) &middot; Candra: <em>&ldquo;${d.mangsaRes.candrasangkala}&rdquo;</em></div>` : ''}
-      </div>
+        <!-- BAGIAN 4: PRANATA MANGSA & ZODIAK SURYA -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 4: PRANATA MANGSA &amp; ZODIAK SURYA</div>
+          <table class="doc-table mb-1">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">A. Pranata Mangsa (Kosmologi Iklim &amp; Karakter Jawa)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Nama Mangsa &amp; Rentang</td>
+                <td style="width: 28%;"><strong>${mangsaRes?.nama || '-'}</strong></td>
+                <td class="doc-label-cell">Rentang Waktu</td>
+                <td style="width: 28%;">${mangsaRes?.rentang || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Candrasangkala</td>
+                <td colspan="3"><em>&ldquo;${mangsaRes?.candrasangkala || '-'}&rdquo;</em></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak &amp; Candra Mangsa</td>
+                <td colspan="3">${mangsaRes?.watak || '-'}</td>
+              </tr>
+            </tbody>
+          </table>
 
-      <!-- DISCLAIMER RESMI -->
-      <div style="margin-top: 14pt; font-size: 7.5pt; color: #475569; border-top: 0.5pt solid #94a3b8; padding-top: 6pt; text-align: justify; font-style: italic;">
-        <strong>Paweling Budaya &amp; Literasi:</strong> ${DISCLAIMER_ETIS_KULTURAL}
-      </div>
-      <div style="text-align: right; font-size: 7pt; color: #64748b; margin-top: 4pt;">
-        Kadhudhah otomatis lumantar Platform Budaya Luhur Jagad Jawa &middot; jagad-jawa.web.app
+          <table class="doc-table mb-1">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">B. Zodiak Surya (Horoskop Falakiah Barat/Global)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Nama Zodiak &amp; Elemen</td>
+                <td style="width: 28%;"><strong>${zodiakRes?.nama || '-'}</strong> (${zodiakRes?.elemen || '-'})</td>
+                <td class="doc-label-cell">Rentang Bintang</td>
+                <td style="width: 28%;">${zodiakRes?.rentang || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak Dasar</td>
+                <td colspan="3">${zodiakRes?.watak || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Peruntungan &amp; Resiko</td>
+                <td colspan="3">
+                  <strong>Peruntungan:</strong> ${zodiakRes?.peruntungan || '-'} &nbsp;|&nbsp; 
+                  <strong>Resiko:</strong> ${zodiakRes?.resiko || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Jodoh &amp; Karir Cocok</td>
+                <td colspan="3">
+                  <strong>Jodoh Serasi:</strong> ${zodiakRes?.jodoh || '-'} &nbsp;|&nbsp; 
+                  <strong>Rekomendasi Karir:</strong> ${zodiakRes?.karir || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">C. Shio Kelahiran &amp; Teori 5 Elemen (Wu Xing)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Shio &amp; Elemen Tahun Lahir</td>
+                <td style="width: 28%;"><strong>Shio ${shioLahir?.shio || '-'}</strong> (${shioLahir?.elemenTahun || '-'})</td>
+                <td class="doc-label-cell">Elemen Tetap Shio</td>
+                <td style="width: 28%;">${shioLahir?.elemenTetap || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Karakteristik Elemen</td>
+                <td colspan="3">${shioLahir?.sifatElemen || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Sifat Dasar &amp; Karir</td>
+                <td colspan="3">
+                  <strong>Sifat Dasar:</strong> ${shioLahir?.detail?.sifatDasar || '-'} &nbsp;|&nbsp; 
+                  <strong>Karir:</strong> ${shioLahir?.detail?.karir || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Jodoh &amp; Pantangan</td>
+                <td colspan="3">
+                  <strong>Jodoh Selaras:</strong> ${shioLahir?.detail?.jodoh || '-'} &nbsp;|&nbsp; 
+                  <strong>Pantangan:</strong> ${shioLahir?.detail?.pantangan || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 5: ASESORIS & AGEMAN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 5: ASESORIS &amp; AGEMAN</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Dino Becik (Hari Baik)</td>
+                <td style="width: 28%;">${aseso?.dino || '-'}</td>
+                <td class="doc-label-cell">Watu Mulia (Batu Permata)</td>
+                <td style="width: 28%;">${aseso?.watu || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Warna Ageman (Pakaian)</td>
+                <td>${aseso?.warna || '-'}</td>
+                <td class="doc-label-cell">Kembang Pengasihan</td>
+                <td>${aseso?.kembang || '-'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 6: KARAKTER DASAR & WATAK LAHIR -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 6: KARAKTER DASAR &amp; WATAK LAHIR</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Karakter Dasar (Tgl Masehi)</td>
+                <td colspan="3">
+                  <strong>${karakterRes?.data ? 'Tipe #' + karakterRes.noKarakter + ': ' + (karakterRes.data.tipe || karakterRes.data.tipe_karakter || '-') : (d.kd?.tipe ? d.kd.tipe : '-')}</strong><br/>
+                  <strong>Ringkasan Karakter:</strong> ${karakterRes?.data ? (karakterRes.data.ringkasan || karakterRes.data.deskripsi_karakter || '-') : (d.kd?.ringkasan || '-')}<br/>
+                  ${karakterRes?.data?.kekuatan ? `<strong>Kekuatan &amp; Potensi:</strong> ${karakterRes.data.kekuatan}<br/>` : ''}
+                  ${karakterRes?.data?.kelemahan ? `<strong>Kelemahan &amp; Titik Kritis:</strong> ${karakterRes.data.kelemahan} &nbsp;|&nbsp; <strong>Kunci Pendekatan:</strong> ${karakterRes.data.negosiasi || '-'}<br/>` : ''}
+                  ${karakterRes?.data?.sikap ? `<strong>Sikap yang Harus Dibangun:</strong> ${karakterRes.data.sikap} &nbsp;|&nbsp; <strong>Motto:</strong> <em>&ldquo;${karakterRes.data.motto || '-'}&rdquo;</em><br/>` : ''}
+                  <strong>Profesi Cocok:</strong> ${karakterRes?.data ? (karakterRes.data.profesi || karakterRes.data.rekomendasi_profesi || '-') : (d.kd?.profesi || '-')}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak Dina (${dino})</td>
+                <td colspan="3">
+                  <strong>Lambang:</strong> ${watakDinaRes?.lambang || '-'} &middot; 
+                  <strong>Watak Utama:</strong> ${watakDinaRes?.watak_utama || '-'}<br/>
+                  <strong>Deskripsi:</strong> ${watakDinaRes?.deskripsi || '-'}<br/>
+                  <strong>Rekomendasi Profesi:</strong> ${watakDinaRes?.rekomendasi_profesi || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak Pasaran (${pas})</td>
+                <td colspan="3">
+                  <strong>Lambang:</strong> ${watakPasaranRes?.lambang || '-'} &middot; 
+                  <strong>Watak Utama:</strong> ${watakPasaranRes?.watak_utama || '-'}<br/>
+                  <strong>Deskripsi:</strong> ${watakPasaranRes?.deskripsi || '-'}<br/>
+                  <strong>Rekomendasi Profesi:</strong> ${watakPasaranRes?.rekomendasi_profesi || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 7: SIRIKAN ADHEP & KEDUDUKAN TEMPAT (PALENGGAHAN & PEDAMELAN) -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 7: SIRIKAN ADHEP &amp; KEDUDUKAN TEMPAT (PALENGGAHAN &amp; PEDAMELAN)</div>
+          <table class="doc-table mb-1">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">A. Analisis Sirikan Adhep Omah (Pantangan Arah Hadap Rumah)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Berdasarkan Neptu (${sirikanRes?.neptu?.neptu || neptu})</td>
+                <td colspan="3">
+                  <strong>Pantangan:</strong> ${sirikanRes?.neptu?.pantangan || '-'} &middot; 
+                  <strong>Anjuran:</strong> ${sirikanRes?.neptu?.anjuran || '-'} &middot; 
+                  <em>${sirikanRes?.neptu?.keterangan || '-'}</em>
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Berdasarkan Hari (${sirikanRes?.dina?.hari || dino})</td>
+                <td colspan="3">
+                  <strong>Pantangan:</strong> ${sirikanRes?.dina?.pantangan || '-'} &middot; 
+                  <strong>Anjuran:</strong> ${sirikanRes?.dina?.anjuran || '-'} &middot; 
+                  <em>${sirikanRes?.dina?.keterangan || '-'}</em>
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Kesimpulan Arah</td>
+                <td colspan="3">
+                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : '-')} &nbsp;|&nbsp; 
+                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : '-')}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th colspan="4" style="text-align: left;">B. Analisis Kedudukan Tempat (Palenggahan &amp; Pedamelan)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Palenggahan (Tinggal)</td>
+                <td colspan="3">
+                  <strong>Alamat:</strong> ${palenggahanRes?.namaTempat || alamatTinggal}<br/>
+                  <strong>Perhitungan:</strong> Total ${palenggahanRes?.totalNeptu || 0} % 5 = Sisa ${palenggahanRes?.noPalenggahan || 0} &nbsp;|&nbsp; 
+                  <strong>Surasa:</strong> <strong>${palenggahanRes?.palenggahan?.surasa || '-'}</strong> (${isPalTinggalBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
+                  <strong>Makna:</strong> ${palenggahanRes?.palenggahan?.tegese || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Pedamelan (Kerja)</td>
+                <td colspan="3">
+                  <strong>Alamat:</strong> ${pedamelanRes?.namaTempat || alamatKerja}<br/>
+                  <strong>Perhitungan:</strong> Total ${pedamelanRes?.totalNeptu || 0} % 5 = Sisa ${pedamelanRes?.noPalenggahan || 0} &nbsp;|&nbsp; 
+                  <strong>Surasa:</strong> <strong>${pedamelanRes?.palenggahan?.surasa || '-'}</strong> (${isPalKerjaBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
+                  <strong>Makna:</strong> ${pedamelanRes?.palenggahan?.tegese || '-'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 8: FAALAKIAH ASMA -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 8: FAALAKIAH ASMA</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Nama Latin</td>
+                <td style="width: 28%;"><strong>${nama}</strong></td>
+                <td class="doc-label-cell">Aksara Jawa</td>
+                <td style="width: 28%; font-family: 'Noto Sans Javanese', serif; font-size: 11pt;"><span>${aksaraJawa}</span></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Nilai &amp; Sisa Kode</td>
+                <td>Jumlah: ${faal?.sum || 0} &rarr; Sisa (Kode): ${faal?.kode || 0}</td>
+                <td class="doc-label-cell">Tokoh Perlindungan (Nabi)</td>
+                <td><strong>${faal?.nabi || '-'}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Katerangan, Pitutur &amp; Dzikir</td>
+                <td colspan="3"><span>${faal?.desc || '-'}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BAGIAN 9: SIKLUS TAHUNAN (PADEWAN & SHIO BERDASARKAN USIA) -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">BAGIAN 9: SIKLUS TAHUNAN (PADEWAN &amp; SHIO BERDASARKAN USIA)</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Parameter Usia</td>
+                <td style="width: 28%;">${umur} Tahun (Tahun Hitung: ${tahunHitung} M)</td>
+                <td class="doc-label-cell">Modulo 12</td>
+                <td style="width: 28%;">${umur} % 12 = Sisa ${siklusTahunanRes ? siklusTahunanRes.siklusNo : (umur % 12 === 0 ? 12 : umur % 12)} (Siklus Ke-${siklusTahunanRes ? siklusTahunanRes.siklusNo : (umur % 12 === 0 ? 12 : umur % 12)})</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Siklus Shio Tahunan</td>
+                <td colspan="3">
+                  <strong>Shio ${siklusTahunanRes?.shio?.shio || '-'}</strong>: ${siklusTahunanRes?.shio?.tegese || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Dewa Pelindung Siklus</td>
+                <td colspan="3"><strong>${siklusTahunanRes?.padewan?.dewa || '-'} (${siklusTahunanRes?.padewan?.nama || '-'})</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Watak Siklus Usia</td>
+                <td colspan="3">${siklusTahunanRes?.padewan?.watak || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Karier &amp; Wiraswasta</td>
+                <td colspan="3">${siklusTahunanRes?.padewan?.karier || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Kelemahan &amp; Bahaya</td>
+                <td colspan="3">
+                  <strong>Kelemahan:</strong> ${siklusTahunanRes?.padewan?.kelemahan || '-'} &nbsp;|&nbsp; 
+                  <strong>Bahaya:</strong> ${siklusTahunanRes?.padewan?.bahaya || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Kesehatan &amp; Rumah Tangga</td>
+                <td colspan="3">
+                  <strong>Kesehatan:</strong> ${siklusTahunanRes?.padewan?.kesehatan || '-'} &nbsp;|&nbsp; 
+                  <strong>Rumah Tangga:</strong> ${siklusTahunanRes?.padewan?.keluarga || '-'}
+                </td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Ikhtiar &amp; Solusi</td>
+                <td colspan="3"><em>${siklusTahunanRes?.padewan?.solusi || '-'}</em></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- KOLOFON & PENGESAHAN DOKUMEN -->
+        <div class="doc-colophon" style="margin-top: 14px; page-break-inside: avoid; break-inside: avoid;">
+          <table style="width: 100%; border: none; border-collapse: collapse; font-size: 8pt;">
+            <tbody>
+              <tr>
+                <td style="width: 55%; border: none; vertical-align: top; padding: 4px 6px;">
+                  <p style="margin: 0; font-weight: bold;">Catatan Panaliten:</p>
+                  <p style="margin: 2px 0 0 0; font-style: italic; font-size: 7.5pt; line-height: 1.35;">
+                    Laporan petung punika minangka piwulang luhur kanggé tepa slira, nuntun mawas dhiri, saha mbudidaya ikhtiar lahir batin nggayuh karaharjaning gesang. Kaarsipaken adhedhasar paugeran Primbon Kasultanan Ngayogyakarta saha Karaton Surakarta Hadiningrat.
+                  </p>
+                </td>
+                <td style="width: 45%; border: none; vertical-align: top; text-align: right; padding: 4px 6px;">
+                  <p style="margin: 0;">Surakarta &middot; Ngayogyakarta Hadiningrat</p>
+                  <p style="margin: 2px 0 0 0; font-weight: bold;">Peneliti Petung Jawa &middot; Jagad Jawa</p>
+                  <div style="height: 36px;"></div>
+                  <p style="margin: 0; text-decoration: underline; font-weight: bold;">JAGAD JAWA ARCHIVAL RESEARCH</p>
+                  <p style="margin: 1px 0 0 0; font-size: 7pt; font-family: monospace;">Aether Code Certified Standard</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE FOOTER -->
+        <div class="page-inner-footer" style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 0.5pt solid currentColor; padding-top: 1.5mm;">
+          <span>${nama} &middot; Dokumen Penelitian Petungan Jawa (Mode Lengkap)</span>
+          <span>Serat Primbon Kasultanan &middot; Aether Code Archival</span>
+        </div>
       </div>
     </div>
   `;
 }
 
-export function printLaporanNujum(theme = 'parchment') {
+/**
+ * 2. MODE RINGKAS (Ikhtisar Transkripsi Cepat — Standar Karolus Yohanes)
+ * Memuat ringkasan padat weton, 6 dimensi bincil, faalakiah, sirikan, pakarti & siklus.
+ */
+export function renderLaporanNujumRingkasPrintHtml(d) {
+  const nama = (d.nama && d.nama !== '-') ? d.nama.toUpperCase() : 'SUBJEK PETUNGAN';
+  const tglFormatted = `${d.d} ${BULAN_MASEHI[d.m - 1] || ''} ${d.y} M`;
+  const dino = d.dino || '-';
+  const pas = d.pas || '-';
+  const neptu = d.neptu || 0;
+  const wukuName = d.wukuName || '-';
+  const wukuNo = d.wukuNo || '-';
+  const umur = d.umur ?? 0;
+  const tahunHitung = d.tahunHitung || new Date().getFullYear();
+  const tglJawa = d.tglJawaRes || {};
+  const faal = d.faal || { nabi: '-', sum: 0, kode: 0, desc: '-', aksaraStr: '-' };
+  const kd = d.kd || {};
+  const pad = d.nujumRes?.padewan || { sisa: '-', nama: '-', arti: '-' };
+  const prk = d.nujumRes?.paringkelan || { sisa: '-', nama: '-', arti: '-' };
+  const pan = d.nujumRes?.pandangon || { sisa: '-', nama: '-', arti: '-' };
+  const paa = d.nujumRes?.paarasan || { sisa: '-', nama: '-', arti: '-' };
+  const pcs = d.nujumRes?.pancasuda || { sisa: '-', nama: '-', arti: '-' };
+  const kam = d.nujumRes?.kamarokan || { sisa: '-', nama: '-', arti: '-' };
+  const sirikanRes = d.sirikanRes || {};
+  const pekerjaanRes = d.pekerjaanRes || {};
+  const mangsaRes = d.mangsaRes || {};
+  const shioLahirRes = d.shioLahirRes || {};
+  const neptuVal = (typeof sirikanRes?.neptu === 'object' && sirikanRes?.neptu !== null)
+    ? (sirikanRes.neptu.neptu ?? sirikanRes.neptu.toString())
+    : (sirikanRes?.neptu || neptu);
+
+  return `
+    <div class="print-report-wrapper">
+      <div class="laporan-page">
+        <span class="corner-tr" aria-hidden="true">❖</span>
+        <span class="corner-bl" aria-hidden="true">❖</span>
+
+        <!-- KOP DOKUMEN RINGKAS (GAYA TRANSKRIPSI KAROLUS YOHANES) -->
+        <div class="doc-header-kop mb-2 border-b-2 border-black pb-1.5 flex justify-between items-end">
+          <div>
+            <div style="font-size: 13pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 1px 0; letter-spacing: 0.12em;">JAGAD JAWA</div>
+            <div style="font-size: 10pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 1px 0;">TRANSKRIPSI IKHTISAR PRIMBON &amp; NUJUM PRIBADI</div>
+            <div style="font-size: 7.5pt; font-style: italic;">Ringkasan Inti Weton, 6 Dimensi Bincil, Faalakiah Asma &amp; Karakter Kelahiran</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 8pt; font-weight: bold;">TRANSKRIPSI CEPAT</div>
+            <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Certified</div>
+          </div>
+        </div>
+
+        <!-- BIODATA UTAMA & WETON -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">1. IDENTITAS &amp; WEKTU LAHIR</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Nama Subjek</td>
+                <td style="width: 28%;"><strong>${nama}</strong></td>
+                <td class="doc-label-cell">Tanggal Lahir (Masehi)</td>
+                <td style="width: 28%;">${tglFormatted}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Weton &amp; Neptu</td>
+                <td><strong>${dino} ${pas}</strong> (Neptu: ${neptu})</td>
+                <td class="doc-label-cell">Tanggal Jawa &amp; Wuku</td>
+                <td><strong>${tglJawa?.shortStr || '-'}</strong> &middot; Wuku: ${wukuName} (${wukuNo}/30)</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Tipe Karakter Masehi</td>
+                <td colspan="3"><strong>${kd?.tipe || '-'}</strong> &mdash; ${kd?.ringkasan || '-'}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 6 DIMENSI BINCIL JAWA -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">2. ENEM DIMENSI BINCIL JAWA</div>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Dimensi</th>
+                <th style="width: 28%;">Nama Lambang</th>
+                <th>Makna &amp; Keterangan Surasa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Padewan</strong> (Siklus 8)</td>
+                <td>Dewa ${pad.sisa}: <strong>${pad.nama}</strong></td>
+                <td>${pad.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>2. Paringkelan</strong> (Siklus 6)</td>
+                <td>Ringkel ${prk.sisa}: <strong>${prk.nama}</strong></td>
+                <td>${prk.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>3. Pandangon</strong> (Siklus 9)</td>
+                <td>Dina ${pan.sisa}: <strong>${pan.nama}</strong></td>
+                <td>${pan.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>4. Paarasan</strong> (Siklus 8)</td>
+                <td>Laku ${paa.sisa}: <strong>${paa.nama}</strong></td>
+                <td>${paa.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>5. Pancasuda</strong> (Siklus 7)</td>
+                <td>Suda ${pcs.sisa}: <strong>${pcs.nama}</strong></td>
+                <td>${pcs.arti}</td>
+              </tr>
+              <tr>
+                <td><strong>6. Kamarokan</strong> (Siklus 2)</td>
+                <td>Rupa ${kam.sisa}: <strong>${kam.nama}</strong></td>
+                <td>${kam.arti}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FAALAKIAH ASMA & NABI -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">3. FAALAKIAH ASMA 12 NABI &amp; TOLAK BALAK</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Teladan Nabi &amp; Aksara</td>
+                <td style="width: 35%;"><strong>${faal.nabi}</strong> (Nilai: ${faal.sum} &rarr; Sisa: ${faal.kode})</td>
+                <td class="doc-label-cell">Aksara Jawa</td>
+                <td><span style="font-family: 'Noto Sans Javanese', serif; font-size: 10pt;">${faal.aksaraStr || '-'}</span></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Petunjuk &amp; Nasihat Dzikir</td>
+                <td colspan="3">${faal.desc}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- SIRIKAN ADHEP OMAH -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">4. PAUGERAN GRIYA: SIRIKAN ADHEP OMAH</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Sirikan Neptu (${neptuVal})</td>
+                <td style="width: 30%;"><strong>${sirikanRes?.neptu?.pantangan || sirikanRes?.sirikanNeptu || '-'}</strong></td>
+                <td class="doc-label-cell">Sirikan Dina (${dino})</td>
+                <td><strong>${sirikanRes?.dina?.pantangan || sirikanRes?.sirikanDina || '-'}</strong></td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Kesimpulan Arah</td>
+                <td colspan="3">
+                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : '-')} &nbsp;|&nbsp; 
+                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : '-')}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAKARTI REJEKI & SIKLUS TAHUNAN -->
+        <div class="doc-section-block">
+          <div class="doc-section-title">5. PAKARTI REJEKI &amp; SIKLUS TAHUNAN</div>
+          <table class="doc-table">
+            <tbody>
+              <tr>
+                <td class="doc-label-cell">Pakarti Rejeki</td>
+                <td style="width: 35%;"><strong>${pekerjaanRes?.pakarti_rejeki || '-'}</strong> (${pekerjaanRes?.arti_rejeki || '-'})</td>
+                <td class="doc-label-cell">Pakaryan (Bidang Usaha)</td>
+                <td>${pekerjaanRes?.pakaryan || '-'}</td>
+              </tr>
+              <tr>
+                <td class="doc-label-cell">Siklus Usia ${umur} Th</td>
+                <td colspan="3">
+                  Siklus Ke-${umur % 12 === 0 ? 12 : (umur % 12)} / 12 (Tahun Hitung: ${tahunHitung} M)
+                  ${shioLahirRes?.shio ? `&middot; <strong>Shio:</strong> ${shioLahirRes.shio} (${shioLahirRes.elemenTahun})` : ''}
+                  ${mangsaRes?.nama ? `&middot; <strong>Pranata Mangsa:</strong> ${mangsaRes.nama} (<em>&ldquo;${mangsaRes.candrasangkala}&rdquo;</em>)` : ''}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- DISCLAIMER ETIS & PENGESAHAN RINGKAS -->
+        <div class="doc-colophon" style="margin-top: 10px; page-break-inside: avoid; break-inside: avoid;">
+          <table style="width: 100%; border: none; border-collapse: collapse; font-size: 7.5pt;">
+            <tbody>
+              <tr>
+                <td style="width: 60%; border: none; vertical-align: top; padding: 2px 4px;">
+                  <p style="margin: 0; font-style: italic; line-height: 1.35;">
+                    <strong>Paweling Budaya:</strong> ${DISCLAIMER_ETIS_KULTURAL}
+                  </p>
+                </td>
+                <td style="width: 40%; border: none; vertical-align: top; text-align: right; padding: 2px 4px;">
+                  <p style="margin: 0; font-weight: bold;">JAGAD JAWA &middot; TRANSKRIPSI RESMI</p>
+                  <div style="height: 20px;"></div>
+                  <p style="margin: 0; font-family: monospace; font-size: 7pt;">Aether Code Certified &bull; Ikhtisar Cepat</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PAGE FOOTER -->
+        <div class="page-inner-footer" style="margin-top: 8px; display: flex; justify-content: space-between; font-size: 7pt; border-top: 0.5pt solid currentColor; padding-top: 1mm;">
+          <span>${nama} &middot; Transkripsi Ringkas Primbon Nujum Pribadi</span>
+          <span>Jagad Jawa Archival &middot; www.jagad-jawa.web.app</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Universal print HTML renderer (mendukung mode 'lengkap' atau 'ringkas')
+ */
+export function renderLaporanNujumPrintHtml(d, mode = 'lengkap') {
+  return (mode === 'ringkas')
+    ? renderLaporanNujumRingkasPrintHtml(d)
+    : renderLaporanNujumLengkapPrintHtml(d);
+}
+
+/**
+ * Eksekutor Cetak Laporan Nujum Pribadi
+ * @param {'monochrome'|'parchment'} theme 
+ * @param {'lengkap'|'ringkas'} mode 
+ */
+export function printLaporanNujum(theme = 'monochrome', mode = 'lengkap') {
+  if (!lastCalculatedData) {
+    let tglVal = document.getElementById('tglLahirKepribadian')?.value;
+    if (!tglVal) {
+      const today = new Date();
+      tglVal = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const inp = document.getElementById('tglLahirKepribadian');
+      if (inp) inp.value = tglVal;
+    }
+    hitungKepribadianLengkap();
+  }
+
   if (!lastCalculatedData) {
     showToast('Hitung nujum terlebih dahulu sebelum mencetak.');
     return;
   }
 
-  const printDocHtml = renderLaporanNujumPrintHtml(lastCalculatedData);
+  const printDocHtml = (mode === 'ringkas')
+    ? renderLaporanNujumRingkasPrintHtml(lastCalculatedData)
+    : renderLaporanNujumLengkapPrintHtml(lastCalculatedData);
+
   let printContainer = document.getElementById('laporan-cetak-pdf');
   if (!printContainer) {
     printContainer = document.createElement('div');
@@ -1747,17 +2597,27 @@ export function printLaporanNujum(theme = 'parchment') {
   }
   printContainer.innerHTML = printDocHtml;
 
-  const customTitle = `Jagad Jawa — Nujum ${lastCalculatedData.nama}`;
-  if (typeof window.printLaporan === 'function') {
+  const modeLabel = (mode === 'ringkas') ? 'Ikhtisar Ringkas' : 'Lengkap 9 Bagian';
+  const customTitle = `Jagad Jawa — Nujum ${lastCalculatedData.nama || 'Pribadi'} (${modeLabel})`;
+  if (typeof window.printLaporan === 'function' && window.printLaporan !== printLaporanNujum) {
     window.printLaporan(theme, customTitle);
   } else {
     window.print();
   }
 }
 
+export function printLaporanNujumLengkap(theme = 'monochrome') {
+  return printLaporanNujum(theme, 'lengkap');
+}
+
+export function printLaporanNujumRingkas(theme = 'monochrome') {
+  return printLaporanNujum(theme, 'ringkas');
+}
+
 // ─── WINDOW EXPOSURE UNTUK INLINE ONCLICK & LEGACY HANDLERS ─────────────────
 if (typeof window !== 'undefined') {
   window.initTahunHitungSelect = initTahunHitungSelect;
+  window.onTahunHitungChange = onTahunHitungChange;
   window.updateKepribadianQuickInfo = updateKepribadianQuickInfo;
   window.hitungKepribadianLengkap = hitungKepribadianLengkap;
   window.switchNujumViewMode = switchNujumViewMode;

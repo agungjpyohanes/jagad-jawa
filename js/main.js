@@ -9,6 +9,7 @@
  */
 
 // ─── UI CORE & MODAL CONTROLLER ───────────────────────────────────────────
+import './ui/navigation.js';
 import { showToast, copyToClipboard } from './ui/toast.js';
 import { closeAnyActiveModal, initModalListeners } from './ui/modal.js';
 
@@ -105,6 +106,24 @@ if (typeof window !== 'undefined') {
       case 'tumpeng':
         await ensureTumpengLoaded();
         break;
+
+      case 'tripurusa':
+        {
+          const tripurusaModule = await import('./modules/budaya/tripurusa.js');
+          if (tripurusaModule && typeof tripurusaModule.renderTripurusaModule === 'function') {
+            tripurusaModule.renderTripurusaModule('tripurusaContentContainer');
+          }
+        }
+        break;
+
+      case 'ensiklopedia-budaya':
+        {
+          const ensikloModule = await import('./modules/budaya/ensiklopedia-budaya.js');
+          if (ensikloModule && typeof ensikloModule.renderEnsiklopediaBudayaPage === 'function') {
+            ensikloModule.renderEnsiklopediaBudayaPage('ensiklopediaBudayaContainer');
+          }
+        }
+        break;
     }
   });
 }
@@ -116,6 +135,20 @@ export function bootstrap() {
   initQuickTodayBadge();
 
   if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects();
+
+  // Inisialisasi dropdown Tahun Hitung Nujum agar selalu terisi sejak awal
+  const selTahun = document.getElementById('tahunHitungKepribadian');
+  if (selTahun && selTahun.children.length === 0) {
+    const curY = new Date().getFullYear();
+    for (let y = 1940; y <= 2050; y++) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = `${y} M`;
+      if (y === curY) opt.selected = true;
+      selTahun.appendChild(opt);
+    }
+  }
+
   initModalListeners();
 }
 

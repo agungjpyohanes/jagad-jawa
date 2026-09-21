@@ -68,7 +68,7 @@ export function shareWetonViaWhatsApp(y, m, d) {
  * @param {number} m 
  * @param {number} d 
  */
-export function drawWetonCardToCanvas(canvas, y, m, d) {
+export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
@@ -103,17 +103,18 @@ export function drawWetonCardToCanvas(canvas, y, m, d) {
   ctx.fillStyle = '#fdf0cd';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';
-  ctx.fillText('PAWIYATAN KASULTANAN · JAGAD JAWA', width / 2, 60);
+  ctx.fillText('PAWIYATAN KASULTANAN · JAGAD JAWA', width / 2, 58);
 
   ctx.fillStyle = '#d4af37';
-  ctx.font = 'bold 24px serif';
-  ctx.fillText('KARTU WETON NUSANTARA', width / 2, 92);
+  ctx.font = 'bold 22px serif';
+  const cardTitle = (customNama && customNama.trim() !== '') ? `WETON · ${customNama.trim().toUpperCase()}` : 'KARTU WETON NUSANTARA';
+  ctx.fillText(cardTitle.length > 28 ? cardTitle.substring(0, 26) + '...' : cardTitle, width / 2, 88);
 
   ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(120, 106);
-  ctx.lineTo(width - 120, 106);
+  ctx.moveTo(120, 102);
+  ctx.lineTo(width - 120, 102);
   ctx.stroke();
 
   // 4. Tanggal Masehi
@@ -208,30 +209,61 @@ export function drawWetonCardToCanvas(canvas, y, m, d) {
  * @param {number} m 
  * @param {number} d 
  */
-export function openWetonShareModal(y, m, d) {
+export function openWetonShareModal(y, m, d, customNama = '') {
+  if (!y || !m || !d) {
+    const now = new Date();
+    y = y || now.getFullYear();
+    m = m || (now.getMonth() + 1);
+    d = d || now.getDate();
+  }
+
   const modal = document.getElementById('modalShareCardWeton');
   const canvas = document.getElementById('shareCardCanvas');
   if (!modal || !canvas) return;
 
-  drawWetonCardToCanvas(canvas, y, m, d);
-
-  const btnWa = document.getElementById('btnShareWetonWA');
-  if (btnWa) {
-    btnWa.onclick = () => shareWetonViaWhatsApp(y, m, d);
+  const dateInput = document.getElementById('shareCardDateInput');
+  if (dateInput) {
+    dateInput.value = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+  const namaInput = document.getElementById('shareCardNamaInput');
+  if (namaInput && customNama) {
+    namaInput.value = customNama;
   }
 
-  const btnDownload = document.getElementById('btnDownloadShareCardPng');
-  if (btnDownload) {
-    btnDownload.onclick = () => downloadShareCardPng(y, m, d);
-  }
+  const rerender = () => {
+    let curY = y, curM = m, curD = d;
+    if (dateInput && dateInput.value) {
+      const parts = dateInput.value.split('-').map(Number);
+      if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+        curY = parts[0]; curM = parts[1]; curD = parts[2];
+      }
+    }
+    const curNama = namaInput ? namaInput.value.trim() : '';
+    drawWetonCardToCanvas(canvas, curY, curM, curD, curNama);
 
-  const btnCopy = document.getElementById('btnCopyShareText');
-  if (btnCopy) {
-    btnCopy.onclick = () => {
-      const text = buildWhatsAppShareText(y, m, d);
-      copyToClipboard(text, 'Teks weton kasil disalin kanggé WhatsApp!');
-    };
-  }
+    const btnWa = document.getElementById('btnShareWetonWA');
+    if (btnWa) {
+      btnWa.onclick = () => shareWetonViaWhatsApp(curY, curM, curD);
+    }
+
+    const btnDownload = document.getElementById('btnDownloadShareCardPng');
+    if (btnDownload) {
+      btnDownload.onclick = () => downloadShareCardPng(curY, curM, curD, curNama);
+    }
+
+    const btnCopy = document.getElementById('btnCopyShareText');
+    if (btnCopy) {
+      btnCopy.onclick = () => {
+        const text = buildWhatsAppShareText(curY, curM, curD);
+        copyToClipboard(text, 'Teks weton kasil disalin kanggé WhatsApp!');
+      };
+    }
+  };
+
+  if (dateInput) dateInput.onchange = rerender;
+  if (namaInput) namaInput.oninput = rerender;
+
+  rerender();
 
   modal.classList.remove('hidden');
   modal.classList.add('flex');
@@ -251,13 +283,14 @@ export function closeWetonShareModal() {
   }
 }
 
-export function downloadShareCardPng(y, m, d) {
+export function downloadShareCardPng(y, m, d, customNama = '') {
   const canvas = document.getElementById('shareCardCanvas');
   if (!canvas) return;
 
   const tglJawa = getTanggalJawaLengkap(y, m, d);
+  const cleanNama = customNama ? `-${customNama.replace(/[^a-zA-Z0-9]/g, '_')}` : '';
   const link = document.createElement('a');
-  link.download = `Weton-${tglJawa.dino}-${tglJawa.pas}-${d}-${m}-${y}.png`;
+  link.download = `Weton${cleanNama}-${tglJawa.dino}-${tglJawa.pas}-${d}-${m}-${y}.png`;
   link.href = canvas.toDataURL('image/png');
   document.body.appendChild(link);
   link.click();

@@ -4,9 +4,15 @@
   "description": "Jagad Jawa — Portal Budaya Luhur Nusantara & Penanggalan Jawa",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "node --test tests/*.test.js",
     "test:watch": "node --test --watch tests/*.test.js",
     "check-types": "npx tsc --noEmit"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0"
   },
   "keywords": [
     "jawa",
