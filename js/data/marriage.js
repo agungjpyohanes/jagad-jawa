@@ -82,3 +82,14 @@ if (typeof module !== 'undefined' && module.exports) {
     HASIL_IV_JODOH, HASIL_V_JODOH, HASIL_VI_JODOH
   };
 }
+
+export {
+  AKSARA_PERJODOHAN,
+  HASIL_I_JODOH,
+  HASIL_II_JODOH,
+  HASIL_III_JODOH,
+  HASIL_IV_JODOH,
+  HASIL_V_JODOH,
+  HASIL_VI_JODOH
+};
+

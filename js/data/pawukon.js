@@ -560,12 +560,32 @@ function getPawukonData(wukuNameOrNo) {
   root.PAWUKON_LIST = PAWUKON_LIST;
   root.pawukonDatabase = pawukonDatabase;
   root.getPawukonData = getPawukonData;
+  root.getPawukonDetail = getPawukonData;
+  root.MASTER_PAWUKON = pawukonDatabase;
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
       PAWUKON_LIST,
       pawukonDatabase,
-      getPawukonData
+      MASTER_PAWUKON: pawukonDatabase,
+      getPawukonData,
+      getPawukonDetail: getPawukonData
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
+const _gPwk = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {});
+export const PAWUKON_LIST = _gPwk.PAWUKON_LIST;
+export const pawukonDatabase = _gPwk.pawukonDatabase;
+export const MASTER_PAWUKON = _gPwk.pawukonDatabase;
+export const getPawukonData = _gPwk.getPawukonData;
+export const getPawukonDetail = _gPwk.getPawukonData;
+
+export default {
+  PAWUKON_LIST: _gPwk.PAWUKON_LIST,
+  pawukonDatabase: _gPwk.pawukonDatabase,
+  MASTER_PAWUKON: _gPwk.pawukonDatabase,
+  getPawukonData: _gPwk.getPawukonData,
+  getPawukonDetail: _gPwk.getPawukonData
+};
+

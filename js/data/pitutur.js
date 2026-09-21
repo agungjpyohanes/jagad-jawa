@@ -436,10 +436,10 @@ const QUIZ_QUESTIONS = [
   }
 ];
 
-if (typeof window !== 'undefined') {
-  window.PITUTUR_LIST = PITUTUR_LIST;
-  window.QUIZ_QUESTIONS = QUIZ_QUESTIONS;
-}
+const rootScope = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this);
+rootScope.PITUTUR_LIST = PITUTUR_LIST;
+rootScope.QUIZ_QUESTIONS = QUIZ_QUESTIONS;
+
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { PITUTUR_LIST, QUIZ_QUESTIONS };
 }

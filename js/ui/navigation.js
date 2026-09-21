@@ -33,8 +33,9 @@ function switchTab(tabId, pushState = true) {
     }
   });
 
-  // Close any open desktop dropdowns upon selection
+  // Close any open desktop dropdowns upon selection & close mobile menu
   closeAllNavDropdowns();
+  closeMobileMenu();
 
   if (pushState !== false && typeof history !== 'undefined' && history.pushState) {
     history.pushState({ tab: tabId }, '', '#' + tabId);
@@ -80,25 +81,38 @@ function closeAllNavDropdowns() {
   });
 }
 
-// Global click handler to close dropdowns when clicking outside
-if (typeof document !== 'undefined') {
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-dropdown-group')) {
-      closeAllNavDropdowns();
-    }
-  });
-
-  // Tombol Esc menutup semua dropdown
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeAllNavDropdowns();
-    }
-  });
+function closeMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  if (menu && !menu.classList.contains('hidden')) {
+    menu.classList.add('hidden');
+  }
 }
 
 function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
   if (menu) menu.classList.toggle('hidden');
+}
+
+// Global click handler to close dropdowns and mobile menu when clicking outside
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown-group')) {
+      closeAllNavDropdowns();
+    }
+    const mobileMenu = document.getElementById('mobileMenu');
+    const toggleBtn = e.target.closest('[onclick*="toggleMobileMenu"]');
+    if (mobileMenu && !mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !toggleBtn) {
+      closeMobileMenu();
+    }
+  });
+
+  // Tombol Esc menutup semua dropdown & drawer mobile
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeAllNavDropdowns();
+      closeMobileMenu();
+    }
+  });
 }
 
 // Global Navigasi Kembali & Browser History Sync
@@ -355,6 +369,7 @@ async function downloadElementAsPng(elementId, filename = 'unduhan-jagad-jawa.pn
 if (typeof window !== 'undefined') {
   window.switchTab = switchTab;
   window.toggleMobileMenu = toggleMobileMenu;
+  window.closeMobileMenu = closeMobileMenu;
   window.navigasiKembali = navigasiKembali;
   window.printLaporan = printLaporan;
   window.printSection = printSection;
@@ -366,6 +381,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     switchTab,
     toggleMobileMenu,
+    closeMobileMenu,
     navigasiKembali,
     printLaporan,
     printSection,

@@ -1,4 +1,5 @@
 // =========================================================================
+// jawa-v2 – single source nujum, exact lookup
 // BASIS DATA MATRIKS LOOKUP TABEL BAKU PRIMBON & BINCIL (210 HARI PAWUKON)
 // DIBERSIHKAN otomatis oleh clean_nujum_db.py
 // ---------------------------------------------------------------------------
@@ -7773,14 +7774,34 @@ function getNujumData(arg1, arg2, arg3) {
     if (arg1.pasaranId !== undefined && typeof PASARAN !== 'undefined') pasaran = PASARAN[arg1.pasaranId];
     if (arg1.wukuId !== undefined && typeof WUKU !== 'undefined') wuku = WUKU[arg1.wukuId];
   } else if (arg3 !== undefined) {
-    dino = String(arg1).trim();
-    pasaran = String(arg2).trim();
-    wuku = String(arg3).trim();
+    const arg1Lower = String(arg1).trim().toLowerCase();
+    const hariList = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', "jum'at", 'sabtu', 'ahad', 'dite', 'soma', 'anggara', 'buda', 'respati', 'sukra', 'tumpak'];
+    if (hariList.includes(arg1Lower)) {
+      dino = String(arg1).trim();
+      pasaran = String(arg2).trim();
+      wuku = String(arg3).trim();
+    } else {
+      wuku = String(arg1).trim();
+      dino = String(arg2).trim();
+      pasaran = String(arg3).trim();
+    }
   } else if (typeof arg1 === 'string' && typeof arg2 === 'string') {
     const parts = arg1.trim().split(/\s+/);
-    if (parts.length >= 2) { dino = parts[0]; pasaran = parts[1]; }
-    else { dino = parts[0]; }
-    wuku = arg2.trim();
+    if (parts.length >= 2) {
+      dino = parts[0];
+      pasaran = parts[1];
+      wuku = arg2.trim();
+    } else {
+      const arg1Lower = parts[0].toLowerCase();
+      const hariList = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', "jum'at", 'sabtu', 'ahad'];
+      if (hariList.includes(arg1Lower)) {
+        dino = parts[0];
+        wuku = arg2.trim();
+      } else {
+        wuku = parts[0];
+        dino = arg2.trim();
+      }
+    }
   }
 
   const normWuku = normalizeWukuName(wuku);
@@ -7897,3 +7918,43 @@ const getNujumFromDatabase = getNujumFromMatrix;
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
+const _g = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {});
+export const KET_BINCIL = _g.KET_BINCIL;
+export const PADEWAN_ARTI = _g.PADEWAN_ARTI;
+export const PARINGKELAN_ARTI = _g.PARINGKELAN_ARTI;
+export const PANDANGON_ARTI = _g.PANDANGON_ARTI;
+export const PAARASAN_ARTI = _g.PAARASAN_ARTI;
+export const PANCASUDA_ARTI = _g.PANCASUDA_ARTI;
+export const KAMAROKAN_ARTI = _g.KAMAROKAN_ARTI;
+export const BINCIL_LIST = _g.BINCIL_LIST;
+export const bincilDatabase = _g.bincilDatabase;
+export const primbonMatrix = _g.primbonMatrix;
+export const nujumMatrix = _g.nujumMatrix;
+export const nujumDatabase = _g.nujumDatabase;
+export const CANON_WUKU_LIST = _g.CANON_WUKU_LIST;
+export const normalizeWukuName = _g.normalizeWukuName;
+export const getNujumData = _g.getNujumData;
+export const getNujumFromMatrix = _g.getNujumFromMatrix;
+export const getNujumFromDatabase = _g.getNujumFromDatabase;
+
+export default {
+  KET_BINCIL: _g.KET_BINCIL,
+  PADEWAN_ARTI: _g.PADEWAN_ARTI,
+  PARINGKELAN_ARTI: _g.PARINGKELAN_ARTI,
+  PANDANGON_ARTI: _g.PANDANGON_ARTI,
+  PAARASAN_ARTI: _g.PAARASAN_ARTI,
+  PANCASUDA_ARTI: _g.PANCASUDA_ARTI,
+  KAMAROKAN_ARTI: _g.KAMAROKAN_ARTI,
+  BINCIL_LIST: _g.BINCIL_LIST,
+  bincilDatabase: _g.bincilDatabase,
+  primbonMatrix: _g.primbonMatrix,
+  nujumMatrix: _g.nujumMatrix,
+  nujumDatabase: _g.nujumDatabase,
+  CANON_WUKU_LIST: _g.CANON_WUKU_LIST,
+  normalizeWukuName: _g.normalizeWukuName,
+  getNujumData: _g.getNujumData,
+  getNujumFromMatrix: _g.getNujumFromMatrix,
+  getNujumFromDatabase: _g.getNujumFromDatabase
+};
+

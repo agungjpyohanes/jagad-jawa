@@ -305,3 +305,17 @@ if (typeof module !== 'undefined' && module.exports) {
   };
 }
 
+export {
+  AKSARA_NGLEGENA,
+  PASANGAN_MAP,
+  SANDHANGAN_SWARA,
+  SANDHANGAN_PANYIGEG,
+  SANDHANGAN_WYANJANA,
+  AKSARA_MURDA,
+  AKSARA_SWARA,
+  ANGKA_JAWA,
+  PADA_JAWA,
+  transliterateLatinToJawa
+};
+
+

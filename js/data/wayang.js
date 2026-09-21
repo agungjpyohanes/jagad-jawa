@@ -331,11 +331,23 @@ const WAYANG_CHARACTERS = WAYANG_LIST.reduce((acc, item) => {
   return acc;
 }, {});
 
-if (typeof window !== 'undefined') {
-  window.WAYANG_LIST = WAYANG_LIST;
-  window.WAYANG_CHARACTERS = WAYANG_CHARACTERS;
-}
+const WAYANG_MAP = WAYANG_CHARACTERS;
+const KATEGORI_LIST = ['Pandawa', 'Punakawan', 'Anak Pandawa', 'Dewa', 'Pelengkap'];
+
+const root = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this);
+root.WAYANG_LIST = WAYANG_LIST;
+root.WAYANG_CHARACTERS = WAYANG_CHARACTERS;
+root.WAYANG_MAP = WAYANG_MAP;
+root.KATEGORI_LIST = KATEGORI_LIST;
+
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WAYANG_LIST, WAYANG_CHARACTERS };
+  module.exports = { WAYANG_LIST, WAYANG_CHARACTERS, WAYANG_MAP, KATEGORI_LIST };
 }
+
+export {
+  WAYANG_LIST,
+  WAYANG_CHARACTERS,
+  WAYANG_MAP,
+  KATEGORI_LIST
+};
 

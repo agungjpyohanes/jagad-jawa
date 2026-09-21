@@ -1,0 +1,22 @@
+{
+  "name": "jagad-jawa",
+  "version": "1.0.0",
+  "description": "Jagad Jawa — Portal Budaya Luhur Nusantara & Penanggalan Jawa",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:watch": "node --test --watch tests/*.test.js",
+    "check-types": "npx tsc --noEmit"
+  },
+  "keywords": [
+    "jawa",
+    "kalender-jawa",
+    "weton",
+    "pawukon",
+    "nujum",
+    "petung",
+    "aksara-jawa"
+  ],
+  "author": "Jagad Jawa Team",
+  "license": "MIT"
+}

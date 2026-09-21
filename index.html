@@ -119,8 +119,7 @@
         </div>
       </a>
 
-      <!-- Navigation Links (Tengah - Scrollable Halus di Layar Tablet/Sedang & Desktop) -->
-      <!-- Navigation Links (Tengah - Dropdown Kategori Keraton) -->
+      <!-- Navigation Links (Tengah - Menu Keraton Konsisten & Scrollable di Tablet/Desktop) -->
       <div class="nav-center-scroll nav-center-desktop flex-1 py-1 min-w-0 hidden md:flex justify-center overflow-visible">
         <nav class="nav-menu overflow-visible">
           <!-- 1. Beranda -->
@@ -128,11 +127,11 @@
             <i class="fa-solid fa-house"></i> <span>Beranda</span>
           </button>
 
-          <!-- 2. Wektu & Penanggalan (Dropdown) -->
+          <!-- 2. Kalender (Dropdown) -->
           <div class="nav-dropdown-group relative group">
-            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="wektu" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
+            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="kalender" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
               <i class="fa-solid fa-calendar-days text-prada"></i>
-              <span>Wektu &amp; Penanggalan</span>
+              <span>Kalender</span>
               <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
             </button>
             <div class="nav-dropdown-menu">
@@ -142,7 +141,7 @@
                 </div>
                 <div class="text-left">
                   <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Kalender Jawa</div>
-                  <div class="text-[10px] text-sogan-400">Pasaran, Wuku, &amp; Primbon Hari</div>
+                  <div class="text-[10px] text-sogan-400">Pasaran, Dino Ala/Becik &amp; Weton</div>
                 </div>
               </button>
               <button onclick="switchTab('tanggal-jawa')" class="nav-sublink group/item" data-tab="tanggal-jawa">
@@ -150,59 +149,45 @@
                   <i class="fa-solid fa-moon"></i>
                 </div>
                 <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Tanggal Jawa</div>
-                  <div class="text-[10px] text-sogan-400">Konversi Kalender &amp; Pranata Mangsa</div>
+                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Konversi Tanggal</div>
+                  <div class="text-[10px] text-sogan-400">Masehi ke Jawa &amp; Pranata Mangsa</div>
                 </div>
               </button>
             </div>
           </div>
 
-          <!-- 3. Nujum & Primbon (Dropdown) -->
-          <div class="nav-dropdown-group relative group">
-            <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="nujum" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
-              <i class="fa-solid fa-wand-magic-sparkles text-prada"></i>
-              <span>Nujum &amp; Primbon</span>
-              <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
-            </button>
-            <div class="nav-dropdown-menu">
-              <button onclick="switchTab('kepribadian')" class="nav-sublink group/item" data-tab="kepribadian">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-user-astronaut"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Nujum Pribadi</div>
-                  <div class="text-[10px] text-sogan-400">Watak Bincil, Faalakiah, &amp; Shio</div>
-                </div>
-              </button>
-              <button onclick="switchTab('perjodohan')" class="nav-sublink group/item" data-tab="perjodohan">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-heart"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Perjodohan</div>
-                  <div class="text-[10px] text-sogan-400">Petung Jodoh Salaki Rabi &amp; Neptu</div>
-                </div>
-              </button>
-              <button onclick="switchTab('selametan')" class="nav-sublink group/item" data-tab="selametan">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-hourglass-half"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pengetan Tilar Donyo</div>
-                  <div class="text-[10px] text-sogan-400">Haul, Mendhak, Nyatus, &amp; Nyewu</div>
-                </div>
-              </button>
-            </div>
-          </div>
+          <!-- 3. Nujum -->
+          <button onclick="switchTab('kepribadian')" class="nav-btn nav-link" data-tab="kepribadian">
+            <i class="fa-solid fa-wand-magic-sparkles text-prada"></i> <span>Nujum</span>
+          </button>
 
-          <!-- 4. Seni & Budaya (Dropdown) -->
+          <!-- 4. Perjodohan -->
+          <button onclick="switchTab('perjodohan')" class="nav-btn nav-link" data-tab="perjodohan">
+            <i class="fa-solid fa-heart text-prada"></i> <span>Perjodohan</span>
+          </button>
+
+          <!-- 5. Selametan -->
+          <button onclick="switchTab('selametan')" class="nav-btn nav-link" data-tab="selametan">
+            <i class="fa-solid fa-hourglass-half text-prada"></i> <span>Selametan</span>
+          </button>
+
+          <!-- 6. Budaya / Pawukon (Dropdown) -->
           <div class="nav-dropdown-group relative group">
             <button type="button" class="nav-dropdown-trigger nav-link flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="budaya" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
-              <i class="fa-solid fa-masks-theater text-prada"></i>
-              <span>Seni &amp; Budaya</span>
+              <i class="fa-solid fa-compass text-prada"></i>
+              <span>Budaya / Pawukon</span>
               <i class="fa-solid fa-chevron-down text-[9px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
             </button>
             <div class="nav-dropdown-menu">
+              <button onclick="switchTab('wuku')" class="nav-sublink group/item" data-tab="wuku">
+                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
+                  <i class="fa-solid fa-compass"></i>
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Ensiklopedia 30 Wuku</div>
+                  <div class="text-[10px] text-sogan-400">Pawukon Jawi: Sinta dumugi Watugunung</div>
+                </div>
+              </button>
               <button onclick="switchTab('gamelan')" class="nav-sublink group/item" data-tab="gamelan">
                 <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                   <i class="fa-solid fa-drum"></i>
@@ -212,44 +197,37 @@
                   <div class="text-[10px] text-sogan-400">Gamelan Maya Pelog &amp; Slendro</div>
                 </div>
               </button>
-              <button onclick="switchTab('aksara')" class="nav-sublink group/item" data-tab="aksara">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-feather-pointed"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Studio Aksara Jawa</div>
-                  <div class="text-[10px] text-sogan-400">Papan Ketik &amp; Transliterasi Aksara</div>
-                </div>
-              </button>
-              <button onclick="switchTab('wayang')" class="nav-sublink group/item" data-tab="wayang">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-masks-theater"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Panggung Kelir Wayang</div>
-                  <div class="text-[10px] text-sogan-400">Simulasi Wayang Kulit Interaktif</div>
-                </div>
-              </button>
-              <button onclick="switchTab('pitutur')" class="nav-sublink group/item" data-tab="pitutur">
-                <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                  <i class="fa-solid fa-quote-left"></i>
-                </div>
-                <div class="text-left">
-                  <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pitutur Luhur &amp; Kuis</div>
-                  <div class="text-[10px] text-sogan-400">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
-                </div>
-              </button>
               <button onclick="switchTab('tumpeng')" class="nav-sublink group/item" data-tab="tumpeng">
                 <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                   <i class="fa-solid fa-bowl-rice"></i>
                 </div>
                 <div class="text-left">
                   <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Tumpeng Tombak Rojo</div>
-                  <div class="text-[10px] text-sogan-400">Filosofi 5 Warna &amp; Sesaji Tolak Bala</div>
+                  <div class="text-[10px] text-sogan-400">Filosofi Panca Warna &amp; Tolak Bala</div>
                 </div>
               </button>
             </div>
           </div>
+
+          <!-- 7. Aksara -->
+          <button onclick="switchTab('aksara')" class="nav-btn nav-link" data-tab="aksara">
+            <i class="fa-solid fa-feather-pointed text-prada"></i> <span>Aksara</span>
+          </button>
+
+          <!-- 8. Wayang -->
+          <button onclick="switchTab('wayang')" class="nav-btn nav-link" data-tab="wayang">
+            <i class="fa-solid fa-masks-theater text-prada"></i> <span>Wayang</span>
+          </button>
+
+          <!-- 9. Pitutur -->
+          <button onclick="switchTab('pitutur')" class="nav-btn nav-link" data-tab="pitutur">
+            <i class="fa-solid fa-quote-left text-prada"></i> <span>Pitutur</span>
+          </button>
+
+          <!-- 10. Laporan (Cetak & Ekspor) -->
+          <button onclick="switchTab('laporan')" class="nav-btn nav-link" data-tab="laporan">
+            <i class="fa-solid fa-file-pdf text-prada"></i> <span>Laporan</span>
+          </button>
         </nav>
       </div>
 
@@ -268,7 +246,7 @@
         <audio id="puspawarnaAudioElement" src="assets/audio/puspowarno.mp3" preload="auto" loop></audio>
 
         <!-- Mobile Toggle Button -->
-        <button onclick="toggleMobileMenu()" aria-label="Buka Menu" class="md:hidden p-2 rounded-lg bg-sogan-900 border border-prada/30 text-sogan-200 hover:text-prada focus:outline-none transition">
+        <button onclick="toggleMobileMenu()" aria-label="Buka Menu" class="md:hidden p-2 rounded-lg bg-sogan-900 border border-prada/30 text-sogan-200 hover:text-prada focus:outline-none transition cursor-pointer">
           <i class="fa-solid fa-bars text-base"></i>
         </button>
       </div>
@@ -276,16 +254,16 @@
     </div>
 
     <!-- Mobile Drawer -->
-    <div id="mobileMenu" class="hidden md:hidden bg-keraton border-t border-sogan-800/80 px-4 pt-2 pb-5 mt-2 space-y-3 shadow-2xl max-h-[80vh] overflow-y-auto">
+    <div id="mobileMenu" class="hidden md:hidden bg-keraton border-t border-sogan-800/80 px-4 pt-2 pb-6 mt-2 space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
       <!-- Beranda -->
-      <button onclick="switchTab('beranda'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-2 rounded-lg text-sm text-sogan-200 hover:bg-sogan-900 flex items-center gap-3 font-semibold" data-tab="beranda">
+      <button onclick="switchTab('beranda'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-2 rounded-xl text-sm text-sogan-200 hover:bg-sogan-900 flex items-center gap-3 font-semibold" data-tab="beranda">
         <i class="fa-solid fa-house w-5 text-prada"></i> Beranda Utama
       </button>
 
-      <!-- Kategori: Wektu & Penanggalan -->
+      <!-- Kalender & Waktu -->
       <div class="pt-1">
         <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-          <i class="fa-solid fa-calendar-days text-[10px]"></i> Wektu &amp; Penanggalan
+          <i class="fa-solid fa-calendar-days text-[10px]"></i> Kalender &amp; Waktu
         </div>
         <div class="space-y-1 pl-2">
           <button onclick="switchTab('kalender'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kalender">
@@ -297,33 +275,48 @@
         </div>
       </div>
 
-      <!-- Kategori: Nujum & Primbon -->
+      <!-- Nujum, Perjodohan & Selametan -->
       <div class="pt-1">
         <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-          <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> Nujum &amp; Primbon
+          <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> Nujum, Jodoh &amp; Selametan
         </div>
         <div class="space-y-1 pl-2">
           <button onclick="switchTab('kepribadian'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kepribadian">
-            <i class="fa-solid fa-user-astronaut w-4 text-prada"></i> Nujum Pribadi
+            <i class="fa-solid fa-wand-magic-sparkles w-4 text-prada"></i> Nujum Pribadi
           </button>
           <button onclick="switchTab('perjodohan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="perjodohan">
             <i class="fa-solid fa-heart w-4 text-prada"></i> Perjodohan (Pitung Jawa)
           </button>
           <button onclick="switchTab('selametan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="selametan">
-            <i class="fa-solid fa-hourglass-half w-4 text-prada"></i> Pengeten Tilar Donyo
+            <i class="fa-solid fa-hourglass-half w-4 text-prada"></i> Selametan (Pengetan Tilar Donyo)
           </button>
         </div>
       </div>
 
-      <!-- Kategori: Seni & Budaya -->
+      <!-- Budaya & Pawukon -->
       <div class="pt-1">
         <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-          <i class="fa-solid fa-masks-theater text-[10px]"></i> Seni &amp; Budaya
+          <i class="fa-solid fa-compass text-[10px]"></i> Budaya &amp; Pawukon
         </div>
         <div class="space-y-1 pl-2">
+          <button onclick="switchTab('wuku'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wuku">
+            <i class="fa-solid fa-compass w-4 text-prada"></i> Ensiklopedia 30 Wuku
+          </button>
           <button onclick="switchTab('gamelan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="gamelan">
             <i class="fa-solid fa-drum w-4 text-prada"></i> Gamelan Jawa
           </button>
+          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tumpeng">
+            <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> Tumpeng Tombak Rojo
+          </button>
+        </div>
+      </div>
+
+      <!-- Seni, Aksara & Sastra -->
+      <div class="pt-1">
+        <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
+          <i class="fa-solid fa-masks-theater text-[10px]"></i> Seni &amp; Sastra
+        </div>
+        <div class="space-y-1 pl-2">
           <button onclick="switchTab('aksara'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="aksara">
             <i class="fa-solid fa-feather-pointed w-4 text-prada"></i> Studio Aksara Jawa
           </button>
@@ -333,8 +326,17 @@
           <button onclick="switchTab('pitutur'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="pitutur">
             <i class="fa-solid fa-quote-left w-4 text-prada"></i> Pitutur Luhur &amp; Kuis
           </button>
-          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tumpeng">
-            <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> Tumpeng Tombak Rojo
+        </div>
+      </div>
+
+      <!-- Laporan & Ekspor Dokumen -->
+      <div class="pt-1">
+        <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
+          <i class="fa-solid fa-file-pdf text-[10px]"></i> Laporan &amp; Ekspor Dokumen
+        </div>
+        <div class="space-y-1 pl-2">
+          <button onclick="switchTab('laporan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="laporan">
+            <i class="fa-solid fa-file-pdf w-4 text-prada"></i> Pusat Laporan Keraton
           </button>
         </div>
       </div>
@@ -680,6 +682,32 @@
         </div>
       </div>
 
+      <!-- Saring / Filter Kalender Cerdas (2.2) -->
+      <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-wulung border border-sogan-800 text-xs">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-prada font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-filter text-amber-400"></i> Saring Dina:
+          </span>
+          <div class="flex flex-wrap items-center gap-1.5" id="calFilterGroup">
+            <button onclick="filterKalender('all')" data-filter="all" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition">
+              Sedaya Dina
+            </button>
+            <button onclick="filterKalender('ijo')" data-filter="ijo" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-sm bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.6)]"></span> Dino Ijo (Becik)
+            </button>
+            <button onclick="filterKalender('gede')" data-filter="gede" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
+              <span class="text-[#eab308] font-bold">★</span> Dino Gede
+            </button>
+            <button onclick="filterKalender('bookmark')" data-filter="bookmark" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
+              <span>🔖</span> Ditandhai (Bookmark)
+            </button>
+          </div>
+        </div>
+        <div class="text-[11px] text-sogan-400 italic">
+          *Klik kotak tanggal kanggé rincian lengkap, tandha wigati, &amp; bagikan weton
+        </div>
+      </div>
+
       <!-- Kalender Card Container -->
       <div id="kalenderCard" class="relative bg-[#f4ecd8] text-[#221b10] rounded-2xl overflow-hidden shadow-2xl p-4 sm:p-6 border border-sogan-700">
         <!-- Watermark Jagad Jawa -->
@@ -688,7 +716,9 @@
         <div id="printTitleKalender" class="text-center font-marcellus font-bold text-xl mb-3 hidden"></div>
 
         <div class="overflow-x-auto relative z-10">
-          <table class="w-full border-collapse text-xs sm:text-sm font-sans" id="calTable"></table>
+          <table class="w-full border-collapse text-xs sm:text-sm font-sans" id="calTable">
+            <tbody id="kalenderTableBody"></tbody>
+          </table>
         </div>
       </div>
 
@@ -750,6 +780,17 @@
         </div>
       </div>
 
+      <!-- Panel Tanggal Ditandhai & Catatan Lokal (2.3) -->
+      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sogan-800 pb-2.5">
+          <h4 class="font-marcellus text-base font-bold text-prada flex items-center gap-2">
+            <i class="fa-solid fa-bookmark text-amber-400"></i> Tanggal Wigati &amp; Catatan Lokal Panjenengan
+          </h4>
+          <span class="text-[11px] text-sogan-400 font-mono">Tersimpan lokal di peramban (LocalStorage: jagad_jawa_bookmarks)</span>
+        </div>
+        <div id="bookmarkListContainer" class="min-h-[50px]"></div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -804,95 +845,175 @@
         </button>
       </div>
 
-      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Kepribadian & Primbon Lengkap</h2>
-        <p class="text-xs text-sogan-300 mt-0.5">Analisis 6 Dimensi Bincil Jawa, Siklus Tahunan (Padewan & Shio), Karakter Dasar 9 Tipe, Watak Dina & Pasaran, Sirikan Adhep Omah, Palenggahan & Pedamelan, Pakarti Pekerjaan & Rejeki, Faalakiah 12 Nabi, Pawukon, dan Asesoris Ageman.</p>
+      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Kepribadian &amp; Literasi Budaya</h2>
+          <p class="text-xs text-sogan-300 mt-0.5">Analisis 6 Dimensi Bincil Jawa, Siklus Tahunan, Karakter Dasar 9 Tipe, Faalakiah 12 Nabi, serta Komparasi Sinergi Relasi Non-Jodoh.</p>
+        </div>
+        <button onclick="openGlosariumNujumModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada text-xs font-semibold flex items-center gap-2 transition shadow-sm">
+          <i class="fa-solid fa-book-bookmark text-amber-400"></i>
+          <span>Glosarium &amp; Panduan Filosofi</span>
+        </button>
       </div>
 
-      <!-- Formulir Input (Top Card - Full Width) -->
-      <div class="w-full bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-4 text-xs">
-        
-        <!-- Baris 1: Tanggal Lahir | Nama Lengkap | Tahun Hitung -->
-        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
-          <div class="sm:col-span-4">
-            <label class="block font-semibold text-prada mb-1.5">Tanggal Lahir (Masehi)</label>
-            <input type="date" id="tglLahirKepribadian" value="" onchange="updateKepribadianQuickInfo()" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
-          </div>
-          <div class="sm:col-span-5">
-            <label class="block font-semibold text-prada mb-1.5">Nama Lengkap (Untuk Faalakiah)</label>
-            <input type="text" id="namaKepribadian" value="" placeholder="Contoh: Raden Mas Dananjaya" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
-          </div>
-          <div class="sm:col-span-3">
-            <label class="block font-semibold text-prada mb-1.5">Tahun Hitung</label>
-            <select id="tahunHitungKepribadian" onchange="updateKepribadianQuickInfo()" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner"></select>
-          </div>
-        </div>
-
-        <!-- Baris 2: Alamat Tinggal (Nama Kelurahan) | Alamat Tempat Kerja (Nama Kelurahan) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          <div>
-            <label class="block font-semibold text-prada mb-1.5">Alamat Tinggal (Nama Kelurahan)</label>
-            <input type="text" id="alamatTinggal" value="" placeholder="Contoh: Delanggu" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
-          </div>
-          <div>
-            <label class="block font-semibold text-prada mb-1.5">Alamat Tempat Kerja (Nama Kelurahan)</label>
-            <input type="text" id="alamatKerja" value="" placeholder="Contoh: Gatak" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
-          </div>
-        </div>
-
-        <!-- Baris 3: Tombol Aksi Berjajar -->
-        <div class="flex flex-wrap items-center gap-2.5 pt-1">
-          <button onclick="hitungKepribadianLengkap()" class="flex-1 min-w-[170px] py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-calculator"></i> <span>Hitung Nujum Lengkap</span>
-          </button>
-          <button onclick="printLaporan('parchment')" id="btnPrintKepribadianParchment" class="px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
-            <i class="fa-solid fa-scroll"></i> <span>Ekspor PDF (Kertas Kuno)</span>
-          </button>
-          <button onclick="printLaporan('monochrome')" id="btnPrintKepribadian" class="px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Dokumen Monokrom / Hitam Putih Standar">
-            <i class="fa-solid fa-print"></i> <span>Cetak Monokrom</span>
-          </button>
-        </div>
-
-        <!-- Baris 4: Quick Info Banner (Horizontal Badges) -->
-        <div class="pt-2 border-t border-sogan-800/80">
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Tanggal Jawa</span>
-              <span id="outTanggalJawaPribadi" class="font-bold text-amber-300 text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Hari &amp; Pasaran</span>
-              <span id="outHariPasaranPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Neptu &amp; Wuku</span>
-              <span id="outNeptuWukuPribadi" class="font-bold text-sogan-200 text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Siklus Tahunan</span>
-              <span id="outSiklusTahunanPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Karakter Dasar</span>
-              <span id="outKarakterDasarPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-            <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
-              <span class="text-[10px] text-rose-400 block font-medium uppercase tracking-wider mb-1">Sirikan Hadap Omah</span>
-              <span id="outSirikanAdhepOmahPribadi" class="font-bold text-rose-400 text-xs sm:text-[13px] leading-tight break-words">-</span>
-            </div>
-          </div>
-        </div>
-
+      <!-- Bilah Navigasi Sub-Tab Nujum (3.4) -->
+      <div class="flex items-center gap-2 p-1.5 rounded-xl bg-keraton border border-sogan-800 text-xs">
+        <button id="btnSubTabNujumPribadi" onclick="switchNujumSubTab('pribadi')" class="flex-1 py-2 px-3 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow text-center transition">
+          <i class="fa-solid fa-user-gear mr-1"></i> Nujum Kepribadian Pribadi
+        </button>
+        <button id="btnSubTabNujumNonJodoh" onclick="switchNujumSubTab('nonjodoh')" class="flex-1 py-2 px-3 rounded-lg text-sogan-300 hover:text-prada font-semibold text-center transition">
+          <i class="fa-solid fa-user-group mr-1"></i> Komparasi Relasi (Non-Jodoh)
+        </button>
       </div>
 
-      <!-- Container Hasil Lengkap (Bottom Card - Full Width) -->
-      <div class="w-full bg-keraton p-5 sm:p-6 rounded-2xl border border-sogan-700 shadow-2xl relative min-h-[400px]">
-        <div id="hasilKepribadianBox" class="space-y-6 text-xs sm:text-sm">
-          <div class="text-center py-16 text-sogan-400">
-            <i class="fa-solid fa-scroll text-4xl text-prada/40 mb-3"></i>
-            <p>Klik tombol <strong>"Hitung Nujum Lengkap"</strong> untuk menampilkan analisis lengkap kepribadian, bincil, faalakiah nabi, asesoris ageman, dan watak wuku.</p>
+      <!-- SUB-TAB 1: NUJUM KEPRIBADIAN PRIBADI -->
+      <div id="subTabNujumPribadi" class="space-y-6">
+        <!-- Formulir Input (Top Card - Full Width) -->
+        <div class="w-full bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-4 text-xs">
+          
+          <!-- Baris 1: Tanggal Lahir | Nama Lengkap | Tahun Hitung -->
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3.5">
+            <div class="sm:col-span-4">
+              <label class="block font-semibold text-prada mb-1.5">Tanggal Lahir (Masehi)</label>
+              <input type="date" id="tglLahirKepribadian" value="" onchange="updateKepribadianQuickInfo()" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
+            </div>
+            <div class="sm:col-span-5">
+              <label class="block font-semibold text-prada mb-1.5">Nama Lengkap (Untuk Faalakiah)</label>
+              <input type="text" id="namaKepribadian" value="" placeholder="Contoh: Raden Mas Dananjaya" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
+            </div>
+            <div class="sm:col-span-3">
+              <label class="block font-semibold text-prada mb-1.5">Tahun Hitung</label>
+              <select id="tahunHitungKepribadian" onchange="updateKepribadianQuickInfo()" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner"></select>
+            </div>
+          </div>
+
+          <!-- Baris 2: Alamat Tinggal (Nama Kelurahan) | Alamat Tempat Kerja (Nama Kelurahan) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block font-semibold text-prada mb-1.5">Alamat Tinggal (Nama Kelurahan)</label>
+              <input type="text" id="alamatTinggal" value="" placeholder="Contoh: Delanggu" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
+            </div>
+            <div>
+              <label class="block font-semibold text-prada mb-1.5">Alamat Tempat Kerja (Nama Kelurahan)</label>
+              <input type="text" id="alamatKerja" value="" placeholder="Contoh: Gatak" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
+            </div>
+          </div>
+
+          <!-- Baris 3: Tombol Aksi Berjajar -->
+          <div class="flex flex-wrap items-center gap-2.5 pt-1">
+            <button onclick="hitungKepribadianLengkap()" class="flex-1 min-w-[170px] py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-calculator"></i> <span>Hitung Nujum Lengkap</span>
+            </button>
+            <button onclick="printLaporan('parchment')" id="btnPrintKepribadianParchment" class="px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+              <i class="fa-solid fa-scroll"></i> <span>Ekspor PDF (Kertas Kuno)</span>
+            </button>
+            <button onclick="printLaporan('monochrome')" id="btnPrintKepribadian" class="px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Dokumen Monokrom / Hitam Putih Standar">
+              <i class="fa-solid fa-print"></i> <span>Cetak Monokrom</span>
+            </button>
+          </div>
+
+          <!-- Baris 4: Quick Info Banner (Horizontal Badges) -->
+          <div class="pt-2 border-t border-sogan-800/80">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Tanggal Jawa</span>
+                <span id="outTanggalJawaPribadi" class="font-bold text-amber-300 text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Hari &amp; Pasaran</span>
+                <span id="outHariPasaranPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Neptu &amp; Wuku</span>
+                <span id="outNeptuWukuPribadi" class="font-bold text-sogan-200 text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Siklus Tahunan</span>
+                <span id="outSiklusTahunanPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-sogan-400 block font-medium uppercase tracking-wider mb-1">Karakter Dasar</span>
+                <span id="outKarakterDasarPribadi" class="font-bold text-prada text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+              <div class="p-2.5 bg-keraton rounded-xl border border-sogan-900 flex flex-col justify-between">
+                <span class="text-[10px] text-rose-400 block font-medium uppercase tracking-wider mb-1">Sirikan Hadap Omah</span>
+                <span id="outSirikanAdhepOmahPribadi" class="font-bold text-rose-400 text-xs sm:text-[13px] leading-tight break-words">-</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Container Hasil Lengkap (Bottom Card - Full Width) -->
+        <div class="w-full bg-keraton p-5 sm:p-6 rounded-2xl border border-sogan-700 shadow-2xl relative min-h-[400px]">
+          <div id="hasilKepribadianBox" class="space-y-6 text-xs sm:text-sm">
+            <div class="text-center py-16 text-sogan-400">
+              <i class="fa-solid fa-scroll text-4xl text-prada/40 mb-3"></i>
+              <p>Klik tombol <strong>"Hitung Nujum Lengkap"</strong> untuk menampilkan analisis lengkap kepribadian, bincil, faalakiah nabi, asesoris ageman, dan watak wuku.</p>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- SUB-TAB 2: KOMPARASI RELASI & KERJA SAMA (NON-JODOH) (3.4) -->
+      <div id="subTabNujumNonJodoh" class="hidden space-y-6">
+        <div class="w-full bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-4 text-xs">
+          <div class="border-b border-sogan-800/80 pb-3">
+            <h3 class="font-marcellus text-lg font-bold text-prada">Komparasi Sinergi Relasi &amp; Kerja Sama (Non-Jodoh)</h3>
+            <p class="text-sogan-300 text-xs mt-0.5">Analisis keselarasan watak, titik temu komunikasi, potensi friksi, dan etika kerja sama (tepa slira) untuk rekan kerja, mitra usaha, sahabat, maupun keluarga tanpa perhitungan pernikahan.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Pihak 1 -->
+            <div class="p-4 rounded-xl bg-keraton border border-sogan-800 space-y-3">
+              <span class="text-prada font-bold uppercase text-[11px] block tracking-wider">
+                <i class="fa-solid fa-user mr-1"></i> Pihak Kapisan (Orang 1)
+              </span>
+              <div>
+                <label class="block text-sogan-400 font-semibold mb-1 text-[11px]">Nama Lengkap / Panggilan:</label>
+                <input type="text" id="nonJodohP1Nama" placeholder="Contoh: Dananjaya" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-2.5 text-sogan-100 text-xs focus:border-prada outline-none">
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-semibold mb-1 text-[11px]">Tanggal Lahir (Masehi):</label>
+                <input type="date" id="nonJodohP1Tgl" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-2.5 text-sogan-100 text-xs focus:border-prada outline-none">
+              </div>
+            </div>
+
+            <!-- Pihak 2 -->
+            <div class="p-4 rounded-xl bg-keraton border border-sogan-800 space-y-3">
+              <span class="text-prada font-bold uppercase text-[11px] block tracking-wider">
+                <i class="fa-solid fa-user-plus mr-1"></i> Pihak Kaping Kalih (Orang 2)
+              </span>
+              <div>
+                <label class="block text-sogan-400 font-semibold mb-1 text-[11px]">Nama Lengkap / Panggilan:</label>
+                <input type="text" id="nonJodohP2Nama" placeholder="Contoh: Bimasena" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-2.5 text-sogan-100 text-xs focus:border-prada outline-none">
+              </div>
+              <div>
+                <label class="block text-sogan-400 font-semibold mb-1 text-[11px]">Tanggal Lahir (Masehi):</label>
+                <input type="date" id="nonJodohP2Tgl" class="w-full bg-sogan-950 border border-sogan-700 rounded-lg p-2.5 text-sogan-100 text-xs focus:border-prada outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Jenis Relasi & Tombol Aksi -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-sogan-800">
+            <div class="flex items-center gap-2">
+              <label class="font-semibold text-prada text-xs">Konteks Relasi:</label>
+              <select id="nonJodohRelasiSel" class="bg-keraton border border-sogan-700 rounded-lg px-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none">
+                <option value="rekan_kerja">Rekan Kerja &amp; Kolaborasi Tim</option>
+                <option value="mitra_bisnis">Mitra Usaha &amp; Rekan Bisnis</option>
+                <option value="sahabat">Persahabatan &amp; Pergaulan Sosial</option>
+                <option value="keluarga">Hubungan Persaudaraan / Keluarga</option>
+              </select>
+            </div>
+            <button onclick="hitungKomparasiNonJodoh()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-600 hover:brightness-110 text-white font-bold text-xs flex items-center gap-2 transition shadow">
+              <i class="fa-solid fa-scale-balanced"></i> Bandingkan Karakter &amp; Sinergi
+            </button>
+          </div>
+        </div>
+
+        <!-- Container Hasil Komparasi Non-Jodoh -->
+        <div id="hasilKomparasiNonJodohBox" class="min-h-[100px]"></div>
       </div>
 
     </section>
@@ -913,6 +1034,30 @@
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
         <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Perjodohan Jawa &middot; Pitung Jawa</h2>
         <p class="text-xs text-sogan-300 mt-0.5">Perhitungan kecocokan pasangan berdasarkan 7 metode (Neptu I/II/III, Aksara IV/V/VI, dan Kombinasi Hari VII).</p>
+      </div>
+
+      <!-- Pemilih Status Hubungan (Belum Menikah vs Sudah Menikah) -->
+      <div class="bg-wulung p-4 rounded-2xl border border-sogan-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
+        <div class="space-y-0.5">
+          <label class="block text-xs font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-user-group text-amber-400"></i> Status Hubungan Pasangan:
+          </label>
+          <p class="text-[11px] text-sogan-400">Pilih status kanggé nyelarasaken asil pitung kaliyan rekomendasi tanggal utawa panduan keharmonisan.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap" id="groupStatusHubunganPerjodohan">
+          <label class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada">
+            <input type="radio" name="statusHubunganPerjodohan" id="statusBelumMenikah" value="belum_menikah" checked class="accent-amber-500">
+            <span class="font-medium flex items-center gap-1.5">
+              <i class="fa-solid fa-ring text-[11px] text-amber-400"></i> Belum Menikah (Calon Penganten)
+            </span>
+          </label>
+          <label class="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada">
+            <input type="radio" name="statusHubunganPerjodohan" id="statusSudahMenikah" value="sudah_menikah" class="accent-amber-500">
+            <span class="font-medium flex items-center gap-1.5">
+              <i class="fa-solid fa-house-chimney-window text-[11px] text-emerald-400"></i> Sudah Menikah (Pasutri)
+            </span>
+          </label>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1039,6 +1184,10 @@
           <div id="perjodohanPairInfo" class="text-xs sm:text-sm text-sogan-300 mt-1"></div>
         </div>
 
+        <!-- Ringkasan Visual Skor & Hero Badge (Tahap 4.1) -->
+        <div id="visualScorePerjodohanBox"></div>
+
+        <!-- Tabel Rincian 7 Metode Pitung -->
         <div class="overflow-x-auto">
           <table class="w-full text-xs sm:text-sm text-left">
             <thead>
@@ -1054,6 +1203,33 @@
         </div>
 
         <div id="ringkasanPerjodohanBox" class="p-4 rounded-xl bg-keraton border border-sogan-800 text-xs sm:text-sm space-y-2"></div>
+
+        <!-- Usulan 5 Tanggal Mantu Rahayu (Tahap 4.2) -->
+        <div id="rekomendasiMantuBox"></div>
+
+        <!-- Disclaimer Etis & Kultural Perjodohan (Tahap 4.4 / 3.5) -->
+        <div id="disclaimerPerjodohanBox"></div>
+      </div>
+
+      <!-- Panel Riwayat Hitungan Pasangan (Tahap 4.3) -->
+      <div id="riwayatPerjodohanPanel" class="bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-3">
+        <div class="flex items-center justify-between border-b border-sogan-800/80 pb-3">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-lg bg-sogan-900 border border-sogan-700 flex items-center justify-center text-prada text-xs">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div>
+              <h4 class="font-marcellus text-sm sm:text-base font-bold text-prada">Riwayat Hitungan Pasangan</h4>
+              <span class="text-[11px] text-sogan-400">Tersimpan secara lokal di peramban Anda (privasi terjamin)</span>
+            </div>
+          </div>
+          <button onclick="clearAllRiwayatPerjodohan()" class="px-2.5 py-1 rounded-lg bg-rose-950/60 hover:bg-rose-900 border border-rose-800 text-rose-300 text-[11px] font-semibold transition flex items-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-trash-can text-[10px]"></i> Bersihkan Semua
+          </button>
+        </div>
+        <div id="riwayatPerjodohanList">
+          <!-- Daftar riwayat dirender secara dinamis oleh renderRiwayatPerjodohan() -->
+        </div>
       </div>
 
     </section>
@@ -1071,9 +1247,21 @@
         </button>
       </div>
 
-      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Pengeten Tilar Donyo</h2>
-        <p class="text-xs text-sogan-300 mt-0.5">Kalkulator hari peringatan kematian (Geblak, 3, 7, 40, 100, Pendak Pisan, Pendak Pindho, Nyewu 1000 Hari).</p>
+      <div class="bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950 border border-prada/40 text-[11px] text-prada font-bold uppercase tracking-wider">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Selametan Wizard Sultan Agungan
+          </div>
+          <span class="px-3 py-1 rounded-xl bg-keraton border border-sogan-700 text-sogan-300 text-xs flex items-center gap-1.5">
+            <i class="fa-solid fa-clock text-prada"></i> Pergantian Dino Jam 18.00 (Surup)
+          </span>
+        </div>
+        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">
+          Pengetan Tilar Donyo &amp; Peringatan Arwah
+        </h2>
+        <p class="text-xs text-sogan-300">
+          Kalkulator dan panduan praktis 7 milestone haul leluhur: Dina Geblak, Nelung Dina (3), Mitung Dina (7), Matangpuluh (40), Nyatus (100), Pendhak Pisan (1 thn), Pendhak Pindho (2 thn), dumugi Nyewu (1000 dina).
+        </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1081,8 +1269,21 @@
         <!-- Input & Aturan Sore Jam 18.00 -->
         <div class="lg:col-span-5 bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-4 text-xs">
           <div>
+            <label class="block font-semibold text-prada mb-1.5">Jeneng Almarhum / Almarhumah (Opsional)</label>
+            <input type="text" id="namaAlmarhumInput" placeholder="Tuladha: Ki Ageng Suryo / Ibu Warsiti" class="w-full bg-keraton border border-sogan-700 rounded-xl p-3 text-sogan-100 text-sm focus:border-prada outline-none placeholder-sogan-600">
+          </div>
+
+          <div>
             <label class="block font-semibold text-prada mb-1.5">Tanggal Wafat / Geblak (Masehi)</label>
             <input type="date" id="tglWafatInput" value="2016-02-19" class="w-full bg-keraton border border-sogan-700 rounded-xl p-3 text-sogan-100 text-sm focus:border-prada outline-none">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-prada mb-1.5">Waktu Berpulang (Surup / Maghrib)</label>
+            <select id="waktuWafatSelect" class="w-full bg-keraton border border-sogan-700 rounded-xl p-3 text-sogan-100 text-sm focus:border-prada outline-none">
+              <option value="siang">Siang / Sadèrèngipun Maghrib (Tanggal Masehi = Dina Geblak)</option>
+              <option value="malam_maghrib">Malam / Bakda Maghrib (Surup - Dina Jawa Gantos Dinten Candhakipun)</option>
+            </select>
           </div>
 
           <div class="p-3.5 bg-amber-950/40 border border-amber-600/50 rounded-xl text-amber-200 text-xs space-y-1">
@@ -1135,6 +1336,9 @@
                 <tbody></tbody>
               </table>
             </div>
+
+            <!-- Visual Timeline 7 Tahapan Pengetan (Tahap 5.1) -->
+            <div id="timelineSelametanBox"></div>
 
             <p class="text-[11px] text-sogan-400 italic bg-wulung p-3 rounded-xl border border-sogan-800">
               *Selametan umumnya diselenggarakan pada sore/malam hari (setelah Maghrib / jam 18.00) sesuai adat istiadat setempat.
@@ -1379,6 +1583,71 @@
         </div>
       </div>
 
+      <!-- ==================== PANDUAN VISUAL MATERI SANDHANGAN (TAHAP 5.4) ==================== -->
+      <div class="bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sogan-800/80 pb-3">
+          <div>
+            <h3 class="font-marcellus text-base sm:text-lg font-bold text-prada flex items-center gap-2">
+              <i class="fa-solid fa-book-open text-amber-400"></i> Panduan Materi Sandhangan Aksara Jawa
+            </h3>
+            <p class="text-xs text-sogan-400 mt-0.5">Katrangan jangkep paugeran sandhangan swara, panyigeging wanda, wyanjana, sarta fonem mandiri.</p>
+          </div>
+          <div>
+            <span class="px-3 py-1 rounded-full bg-sogan-950 border border-prada/40 text-prada text-[10.5px] font-mono">
+              Paugeran Sriwedari 1926
+            </span>
+          </div>
+        </div>
+
+        <div id="sandhanganGuideContainer">
+          <!-- Diisi dinamis liwat renderSandhanganGuidePanel() -->
+        </div>
+      </div>
+
+      <!-- ==================== KUIS INTERAKTIF AKSARA JAWA (TAHAP 5.4) ==================== -->
+      <div class="bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-5 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-sogan-800 gap-2">
+          <div>
+            <h3 class="font-marcellus text-base sm:text-lg font-bold text-prada flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-amber-400"></i> Kuis Interaktif Sinau Aksara Jawa
+            </h3>
+            <p class="text-xs text-sogan-300">Uji kaprigelan maos, sandhangan, lan paugeran panyeratan Hanacaraka.</p>
+          </div>
+          
+          <div class="flex items-center gap-3 text-xs">
+            <span class="text-sogan-400">Soal: <strong id="aksaraQuizCounter" class="text-prada font-mono">1/5</strong></span>
+            <span class="text-sogan-400">Skor: <strong id="aksaraQuizScore" class="text-emerald-400 font-mono">0</strong></span>
+          </div>
+        </div>
+
+        <!-- Wadah Soal Kuis Aksara -->
+        <div id="aksaraQuizBox" class="space-y-4">
+          <div id="aksaraQuizQuestion" class="font-marcellus text-base text-sogan-100 font-semibold leading-relaxed">
+            Aksara Jawa "ꦲꦤꦕꦫꦏ" menawi dipunwaos mawi aksara Latin inggih punika...?
+          </div>
+
+          <div id="aksaraQuizOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+          <div id="aksaraQuizFeedback"></div>
+        </div>
+
+        <!-- Wadah Hasil Kuis Aksara -->
+        <div id="aksaraQuizResultBox" class="hidden text-center py-6 space-y-3">
+          <div class="w-14 h-14 rounded-full bg-prada/20 border-2 border-prada text-prada text-2xl flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-feather-pointed"></i>
+          </div>
+          <h4 class="font-marcellus text-xl font-bold text-prada">Pasinaon Aksara Rampung!</h4>
+          <p id="aksaraQuizFinalText" class="text-xs text-sogan-200">Skor Panjenengan: 100 / 100</p>
+          <div id="aksaraQuizRankBadge" class="inline-block px-4 py-1.5 rounded-full bg-sogan-900 border border-prada text-xs font-bold text-prada">
+            Gelar: Carik Keraton Linuwih
+          </div>
+          <div class="pt-2">
+            <button onclick="restartAksaraQuiz()" class="px-5 py-2 rounded-xl bg-prada text-keraton font-bold text-xs hover:bg-prada-light transition cursor-pointer">
+              <i class="fa-solid fa-rotate-right mr-1"></i> Baleni Kuis Aksara
+            </button>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -1409,6 +1678,9 @@
           </button>
         </div>
       </div>
+
+      <!-- Spanduk Penegasan Etika Kultural Wayang (Tahap 5.5) -->
+      <div id="wayangEthicsBannerBox"></div>
 
       <!-- Panggung Kelir Wayang Interaktif -->
       <div class="relative w-full h-96 sm:h-[450px] bg-keraton rounded-3xl border-4 border-sogan-800 shadow-2xl overflow-hidden flex items-center justify-center select-none touch-none">
@@ -1511,12 +1783,18 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-center gap-3 pt-2">
-          <button onclick="generateRandomPitutur()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs hover:brightness-110 transition shadow">
-            <i class="fa-solid fa-shuffle mr-1"></i> Ganti Pitutur
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <button onclick="generatePituturHariIni()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs hover:brightness-110 transition shadow cursor-pointer flex items-center gap-1.5" title="Tampilkan Pitutur Luhur Selaras Hari Ini">
+            <i class="fa-solid fa-calendar-day"></i> <span>Pitutur Dina Iki</span>
           </button>
-          <button onclick="copyPituturText()" class="px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 text-sogan-200 text-xs hover:text-prada transition">
+          <button onclick="generateRandomPitutur()" class="px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 text-sogan-200 hover:text-prada text-xs font-semibold hover:border-prada transition shadow-sm cursor-pointer flex items-center gap-1.5" title="Acak Pitutur Luhur Lainnya">
+            <i class="fa-solid fa-shuffle"></i> <span>Ganti Pitutur (Acak)</span>
+          </button>
+          <button onclick="copyPituturText()" class="px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 text-sogan-200 text-xs hover:text-prada transition cursor-pointer">
             <i class="fa-regular fa-copy mr-1"></i> Salin Pitutur
+          </button>
+          <button onclick="sharePituturWhatsApp()" class="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs transition shadow flex items-center gap-1.5 cursor-pointer" title="Bagikan Pitutur dhateng WhatsApp">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan WhatsApp
           </button>
         </div>
       </div>
@@ -1890,6 +2168,266 @@
 
     </section>
 
+    <!-- ========================================================================= -->
+    <!-- TAB 12: ENSIKLOPEDIA 30 WUKU NUSANTARA -->
+    <!-- ========================================================================= -->
+    <section id="tab-wuku" class="tab-content hidden space-y-6">
+      
+      <!-- Top Navigation & Title Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Kembali</span>
+          </button>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+              <i class="fa-solid fa-compass"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
+            </span>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
+              Ensiklopedia 30 Wuku Nusantara
+            </h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openEnsiklopediaWukuModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada text-xs font-bold hover:bg-prada/20 transition flex items-center gap-2 shadow cursor-pointer">
+            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+            <span>Mode Dialog Modal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Banner Pawukon -->
+      <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#121722] via-[#1A2234] to-[#0E131E] border border-prada/30 shadow-2xl relative overflow-hidden">
+        <div class="max-w-3xl space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
+            <i class="fa-solid fa-book-bookmark text-amber-400"></i> Direktori Komplit Pawukon Jawi
+          </div>
+          <h3 class="font-marcellus text-lg sm:text-xl font-bold text-amber-100">
+            Siklus 30 Wuku: Sinta dumugi Watugunung
+          </h3>
+          <p class="text-xs text-sogan-300 leading-relaxed">
+            Saben wuku lumampah laminipun pitung dinten (7 dina). Saben wuku nggadhahi panguwasa Dewa, watak budi pakarti, larangan bilahi (sengkolo), sesaji ruwat pangupaya karahayon, sarta do'a tolak bala kangge njagi karukunan lair batin.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter & Search Bar -->
+      <div class="p-4 rounded-2xl bg-[#0E131E] border border-sogan-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="relative w-full sm:w-80">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-sogan-400 text-xs"></i>
+          <input type="text" id="tabCariWukuInput" oninput="filterWukuGrid(this)" placeholder="Pados wuku, dewa, profesi..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
+        </div>
+        <div class="text-[11px] text-sogan-400">
+          Klik salah satunggaling kartu wuku ing ngandhap kanggé mirsani rincian jangkep
+        </div>
+      </div>
+
+      <!-- Body: 2 Kolom (Kiri Grid 30 Wuku, Kanan Detail Wuku Terpilih) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- Kolom Kiri: Grid 30 Wuku (Scrollable) -->
+        <div class="lg:col-span-5 space-y-2 border border-sogan-800/80 rounded-2xl p-3 bg-keraton/60 max-h-[520px] overflow-y-auto">
+          <div class="flex items-center justify-between px-1 mb-1">
+            <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider">
+              Daftar 30 Wuku (Urut 1 - 30):
+            </span>
+            <span class="text-[10px] text-sogan-500">210 Dina Siklus</span>
+          </div>
+          <div id="tabWukuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5">
+            <!-- Diisi liwat renderWukuGrid() -->
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Rincian Mendalam Wuku Terpilih -->
+        <div class="lg:col-span-7 bg-wulung border border-sogan-800 rounded-2xl p-4 sm:p-6 min-h-[420px] shadow-xl">
+          <div id="tabWukuDetailBox">
+            <!-- Diisi liwat selectWukuDetail() -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 13: PUSAT LAPORAN & ARSIP KERATON -->
+    <!-- ========================================================================= -->
+    <section id="tab-laporan" class="tab-content hidden space-y-8">
+      
+      <!-- Top Navigation & Title Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Kembali</span>
+          </button>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+              <i class="fa-solid fa-scroll"></i> Arsip &amp; Penerbitan Resmi
+            </span>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
+              Pusat Laporan Keraton
+            </h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-full bg-prada/15 border border-prada/40 text-prada text-xs font-bold flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-certificate text-amber-400"></i>
+            <span>Format Cetak Kertas Kuno (Parchment) &amp; Monokrom</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Hero Banner Laporan -->
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-[#141A28] via-[#1A2032] to-[#0E131E] border border-prada/30 shadow-2xl space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
+          <i class="fa-solid fa-stamp text-amber-400"></i> Standar Arsip Kasultanan &amp; Kasunanan
+        </div>
+        <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100">
+          Penerbitan Dokumen Resmi, Piagam Budaya &amp; Laporan Analisis
+        </h3>
+        <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed max-w-4xl">
+          Pusat Laporan Jagad Jawa nyediakaken fasilitas cetak dokumen PDF kanthi tata letak kraton, kop piagam berornamen prada emas, stempel weton, sarta rincian etis pandom gesang. Saben laporan saged dipun-undhuh minangka PDF utawi gambar PNG resolusi inggil kanggé kaperluan arsip kulawarga.
+        </p>
+      </div>
+
+      <!-- Grid Fitur Dokumen Siap Cetak -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2 border-b border-sogan-800 pb-2">
+          <i class="fa-solid fa-print text-prada text-sm"></i>
+          <h4 class="font-marcellus text-base sm:text-lg font-bold text-prada">
+            Dokumen Siap Diterbitkan &amp; Dicetak
+          </h4>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Card 1: Laporan Nujum Pribadi -->
+          <div class="p-5 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition shadow-lg space-y-4 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="w-10 h-10 rounded-xl bg-prada/20 border border-prada/50 flex items-center justify-center text-prada text-lg shadow">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <h5 class="font-marcellus text-base font-bold text-amber-100">Laporan Primbon Nujum Pribadi</h5>
+              <p class="text-xs text-sogan-300 leading-relaxed">
+                Dokumen komplit memuat 6 dimensi Bincil, weton, neptu, Faalakiah 12 Nabi, Shio &amp; Elemen, sarta 8 kartu analisis watak luhur.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-sogan-800/80 space-y-2">
+              <button onclick="printLaporan('parchment')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs hover:brightness-110 transition shadow flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-scroll"></i> Cetak Tema Kertas Kuno
+              </button>
+              <button onclick="printLaporan('monochrome')" class="w-full py-2 px-3 rounded-xl bg-sogan-900 border border-prada/40 text-prada font-bold text-xs hover:bg-prada/20 transition flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-print"></i> Cetak Versi Monokrom
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 2: Laporan Perjodohan -->
+          <div class="p-5 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition shadow-lg space-y-4 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-300 text-lg shadow">
+                <i class="fa-solid fa-heart"></i>
+              </div>
+              <h5 class="font-marcellus text-base font-bold text-amber-100">Laporan Petung Jodoh Salaki Rabi</h5>
+              <p class="text-xs text-sogan-300 leading-relaxed">
+                Hasil petung 7 metode primbon, skor keselarasan pasangan, dan 5 rekomendasi tanggal pawiwahan mantu rahayu.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-sogan-800/80 space-y-2">
+              <button onclick="switchTab('perjodohan')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-rose-700 to-amber-600 text-white font-bold text-xs hover:brightness-110 transition shadow flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-calculator"></i> Buka Petung &amp; Cetak
+              </button>
+            </div>
+          </div>
+
+          <!-- Card 3: Laporan Selametan Haul -->
+          <div class="p-5 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition shadow-lg space-y-4 flex flex-col justify-between">
+            <div class="space-y-2.5">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-300 text-lg shadow">
+                <i class="fa-solid fa-hourglass-half"></i>
+              </div>
+              <h5 class="font-marcellus text-base font-bold text-amber-100">Buku Jadwal Pengetan Tilar Donyo</h5>
+              <p class="text-xs text-sogan-300 leading-relaxed">
+                Tabel resmi 7 milestone pengetan arwah (Geblak dumugi Nyewu 1000 dina) kanthi paugeran Sultan Agungan.
+              </p>
+            </div>
+            <div class="pt-3 border-t border-sogan-800/80 space-y-2">
+              <button onclick="switchTab('selametan')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold text-xs hover:brightness-110 transition shadow flex items-center justify-center gap-2 cursor-pointer">
+                <i class="fa-solid fa-calendar-check"></i> Buka Jadwal &amp; Cetak
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Placeholder Fitur Lanjutan (Sesuai Syarat C2/C3 - Judul + Deskripsi + Segera) -->
+      <div class="space-y-4 pt-2">
+        <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-sogan-400 text-sm"></i>
+            <h4 class="font-marcellus text-base sm:text-lg font-bold text-sogan-300">
+              Modul Penerbitan Lanjutan (Segera Hadir)
+            </h4>
+          </div>
+          <span class="text-[11px] text-prada/80 font-mono italic">Tahap Pengembangan Lanjutan</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          
+          <!-- Placeholder 1: Piagam Weton Berpigura -->
+          <div class="p-5 rounded-2xl bg-keraton/70 border border-dashed border-sogan-700/80 space-y-3 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div class="w-8 h-8 rounded-lg bg-sogan-950 border border-sogan-700 flex items-center justify-center text-prada text-sm">
+                <i class="fa-solid fa-award"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                Segera Hadir
+              </span>
+            </div>
+            <h5 class="font-marcellus text-sm font-bold text-amber-100">Piagam Weton Aksara Jawa Berpigura Emas</h5>
+            <p class="text-xs text-sogan-400 leading-relaxed">
+              Penerbitan sertifikat weton kelahiran berornamen prada emas kraton dengan transliterasi aksara Jawa kaligrafi untuk arsip keluarga &amp; cinderamata pigura.
+            </p>
+          </div>
+
+          <!-- Placeholder 2: Buku Pawiwahan Mantu -->
+          <div class="p-5 rounded-2xl bg-keraton/70 border border-dashed border-sogan-700/80 space-y-3 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div class="w-8 h-8 rounded-lg bg-sogan-950 border border-sogan-700 flex items-center justify-center text-rose-400 text-sm">
+                <i class="fa-solid fa-book-open-reader"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                Segera Hadir
+              </span>
+            </div>
+            <h5 class="font-marcellus text-sm font-bold text-amber-100">Buku Panduan Pawiwahan Mantu (E-Book PDF)</h5>
+            <p class="text-xs text-sogan-400 leading-relaxed">
+              Paket berkas panduan pranatacara mantu, tata cara pasang tarub bleketepe, rincian sesaji ubarampe ijab kabul, sarta donga tolak bala pawiwahan.
+            </p>
+          </div>
+
+          <!-- Placeholder 3: Tarikh & Silsilah Trah Leluhur -->
+          <div class="p-5 rounded-2xl bg-keraton/70 border border-dashed border-sogan-700/80 space-y-3 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div class="w-8 h-8 rounded-lg bg-sogan-950 border border-sogan-700 flex items-center justify-center text-teal-400 text-sm">
+                <i class="fa-solid fa-sitemap"></i>
+              </div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold uppercase tracking-wider">
+                Segera Hadir
+              </span>
+            </div>
+            <h5 class="font-marcellus text-sm font-bold text-amber-100">Bagan Silsilah &amp; Tarikh Trah Leluhur</h5>
+            <p class="text-xs text-sogan-400 leading-relaxed">
+              Pencatatan silsilah trah keluarga dengan pandom weton leluhur, pengingat haul otomatis, serta silsilah turun-temurun berstandar serat babad.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ==================== MODAL DETAIL TOKOH WAYANG (DARK VELVET & ROYAL GOLD) ==================== -->
@@ -1980,7 +2518,7 @@
           </div>
           <div>
             <h3 class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide">Rincian &amp; Petungan Penanggalan Jawa</h3>
-            <span id="modalTanggalMasehi" class="text-xs text-sogan-400">Tanggal Masehi</span>
+            <span id="modalTglMasehi" class="text-xs text-sogan-400">Tanggal Masehi</span>
           </div>
         </div>
         <button onclick="tutupDetailTanggalJawa()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center">
@@ -1991,8 +2529,10 @@
       <!-- Body Modal (Scrollable) -->
       <div class="p-6 overflow-y-auto space-y-4 text-xs text-sogan-200">
         <!-- Banner Hari Libur Nasional (Muncul bila libur) -->
-        <div id="modalBadgeLibur" class="hidden px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold text-[11px] inline-block tracking-wider"></div>
-        <div id="modalKeteranganLibur" class="hidden text-rose-300 font-semibold text-sm -mt-2"></div>
+        <div id="modalLiburBox" class="hidden space-y-1">
+          <div id="modalBadgeLibur" class="px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/50 text-rose-300 font-bold text-[11px] inline-block tracking-wider">HARI LIBUR NASIONAL</div>
+          <div id="modalLiburText" class="text-rose-300 font-semibold text-sm"></div>
+        </div>
 
         <!-- Banner Utama: Weton & Neptu -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-sogan-950/70 border border-sogan-800/80">
@@ -2092,17 +2632,203 @@
           </span>
           <div id="modalListKodeDetail" class="space-y-1.5 text-[11px]"></div>
         </div>
+
+        <!-- Seksi Pranata Mangsa Agraris Terpadu (2.1) -->
+        <div id="modalPranataMangsaAgrarisCard"></div>
+
+        <!-- Form & Status Bookmark Tanggal (2.3) -->
+        <div id="modalBookmarkSection"></div>
       </div>
 
       <!-- Footer Modal -->
       <div class="px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex flex-wrap items-center justify-between gap-3">
-        <button id="modalBtnHitungNujum" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition text-xs flex items-center gap-1.5 shadow">
-          <i class="fa-solid fa-compass"></i> Hitung Nujum Lengkap Tanggal Ini
-        </button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="modalBtnShareWeton" class="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-600 text-white font-bold hover:brightness-110 transition text-xs flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-share-nodes"></i> Bagikan Weton
+          </button>
+          <button id="modalBtnHitungNujum" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition text-xs flex items-center gap-1.5 shadow">
+            <i class="fa-solid fa-compass"></i> Hitung Nujum Lengkap
+          </button>
+        </div>
         <button onclick="tutupDetailTanggalJawa()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition">
           Tutup
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SHARE CARD WETON (VIRAL LOOP) ==================== -->
+  <div id="modalShareCardWeton" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div class="relative w-full max-w-lg bg-gradient-to-b from-[#121722] to-[#0B0F19] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.25)] overflow-hidden flex flex-col max-h-[95vh]">
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/60 flex items-center justify-center text-teal-300 text-sm">
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <div>
+            <h3 class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide">Bagikan Kartu Weton</h3>
+            <span class="text-xs text-sogan-400">Media Sosial &amp; WhatsApp Viral Card</span>
+          </div>
+        </div>
+        <button onclick="closeWetonShareModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      
+      <!-- Body Modal -->
+      <div class="p-4 sm:p-6 overflow-y-auto flex flex-col items-center justify-center space-y-4">
+        <!-- Canvas Preview Card -->
+        <div class="rounded-2xl overflow-hidden shadow-2xl border border-prada/30 max-w-[320px] sm:max-w-[360px] bg-keraton">
+          <canvas id="shareCardCanvas" class="w-full h-auto block"></canvas>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+          <button id="btnShareWetonWA" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow">
+            <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp
+          </button>
+          <button id="btnDownloadShareCardPng" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center justify-center gap-1.5 hover:brightness-110 transition shadow">
+            <i class="fa-solid fa-download text-sm"></i> Unduh PNG
+          </button>
+          <button id="btnCopyShareText" class="px-3.5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-sogan-800 transition">
+            <i class="fa-solid fa-copy text-sm"></i> Salin Teks
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL GLOSARIUM KONSEPTUAL NUJUM (TAHAP 3.1) ==================== -->
+  <div id="modalGlosariumNujum" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div class="relative w-full max-w-3xl bg-gradient-to-b from-[#121722] to-[#0B0F19] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.25)] overflow-hidden flex flex-col max-h-[90vh]">
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-prada/20 border border-prada/60 flex items-center justify-center text-prada text-sm">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <div>
+            <h3 class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide">Glosarium Konseptual Nujum &amp; Pawukon</h3>
+            <span class="text-xs text-sogan-400">Ensiklopedia Filosofi, Nilai Edukasi, &amp; Panduan Mawas Diri</span>
+          </div>
+        </div>
+        <button onclick="closeGlosariumNujumModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Filter Buttons & Sub-header -->
+      <div class="px-6 py-2.5 border-b border-sogan-800/80 bg-sogan-950/70 flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span class="text-sogan-400 font-mono text-[11px]">Pilih Kategori Konsep:</span>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="renderGlosariumContent(null)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Kabeh (9)
+          </button>
+          <button onclick="renderGlosariumContent('padewan')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Padewan
+          </button>
+          <button onclick="renderGlosariumContent('paringkelan')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Paringkelan
+          </button>
+          <button onclick="renderGlosariumContent('pandangon')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Pandangon
+          </button>
+          <button onclick="renderGlosariumContent('paarasan')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Paarasan
+          </button>
+          <button onclick="renderGlosariumContent('pancasuda')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Pancasuda
+          </button>
+          <button onclick="renderGlosariumContent('kamarokan')" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 text-sogan-200 text-[11px] font-semibold transition">
+            Kamarokan
+          </button>
+        </div>
+      </div>
+
+      <!-- Body Modal (Scrollable) -->
+      <div id="glosariumNujumContainer" class="p-6 overflow-y-auto space-y-3.5 text-xs text-sogan-200 flex-1">
+        <!-- Konten glosarium dirender secara dinamis oleh renderGlosariumContent() -->
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between">
+        <span class="text-[11px] text-sogan-400 italic">
+          <i class="fa-solid fa-seedling text-emerald-400 mr-1"></i> Ngelmu iku kalakone kanthi laku
+        </span>
+        <button onclick="closeGlosariumNujumModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL ENSIKLOPEDIA 30 WUKU NUSANTARA (TAHAP 5.2) ==================== -->
+  <div id="modalEnsiklopediaWuku" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-3 sm:p-5" aria-labelledby="modalWukuTitle" role="dialog" aria-modal="true">
+    <div class="bg-[#121722] border border-prada/60 w-full max-w-4xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+      
+      <!-- Header Modal -->
+      <div class="px-5 sm:px-6 py-4 border-b border-sogan-800 flex items-center justify-between bg-gradient-to-r from-sogan-950 via-wulung to-keraton">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-prada/20 border border-prada text-prada flex items-center justify-center text-sm shadow">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <div>
+            <h3 id="modalWukuTitle" class="font-marcellus text-lg sm:text-xl font-bold text-prada">
+              Ensiklopedia 30 Wuku Nusantara
+            </h3>
+            <p class="text-[11px] text-sogan-400">Direktori komplit Pawukon Jawi: Sinta dumugi Watugunung (Dewane, Watak, Bilahi, &amp; Ruwat)</p>
+          </div>
+        </div>
+
+        <button onclick="closeEnsiklopediaWukuModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center text-xs cursor-pointer" title="Tutup">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Filter & Search Bar -->
+      <div class="px-5 sm:px-6 py-3 border-b border-sogan-800/80 bg-[#0E131E] flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="relative w-full sm:w-72">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-sogan-400 text-xs"></i>
+          <input type="text" id="cariWukuInput" oninput="filterWukuGrid()" placeholder="Pados wuku, dewa, profesi..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
+        </div>
+        <div class="text-[11px] text-sogan-400 hidden sm:block">
+          Klik salah satunggaling wuku kanggé mirsani rincian jangkep
+        </div>
+      </div>
+
+      <!-- Body Modal: 2 Kolom (Kiri Grid 30 Wuku, Kanan Detail Wuku Terpilih) -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- Kolom Kiri: Grid 30 Wuku (Scrollable) -->
+        <div class="lg:col-span-5 space-y-2 border border-sogan-800/80 rounded-2xl p-3 bg-keraton/50 max-h-[380px] lg:max-h-[460px] overflow-y-auto">
+          <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block px-1 mb-1">
+            Daftar 30 Wuku (Urut 1 - 30):
+          </span>
+          <div id="gridEnsiklopediaWuku" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5">
+            <!-- Diisi liwat renderWukuGrid() -->
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Rincian Mendalam Wuku Terpilih -->
+        <div class="lg:col-span-7 bg-wulung border border-sogan-800 rounded-2xl p-4 sm:p-5 max-h-[460px] overflow-y-auto shadow-inner">
+          <div id="detailEnsiklopediaWukuBox">
+            <!-- Diisi liwat selectWukuDetail() -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between">
+        <span class="text-[11px] text-sogan-400 italic">
+          <i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
+        </span>
+        <button onclick="closeEnsiklopediaWukuModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer">
+          Tutup
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -2128,22 +2854,8 @@
     <span id="toastMessage">Pemberitahuan</span>
   </div>
 
-  <!-- ==================== LOGIKA & ENGINE JAVASCRIPT LENGKAP ==================== -->
-  <script src="js/data/aksara.js"></script>
-  <script src="js/data/marriage.js"></script>
-  <script src="js/data/pitutur.js"></script>
-  <script src="js/data/wayang.js"></script>
-  <script src="js/data/nujum-master-data.js"></script>
-  <script src="js/data/siklus-master-data.js"></script>
-  <script src="js/data/karakter-pekerjaan-master-data.js"></script>
-  <script src="js/data/shio-elemen-master-data.js"></script>
-  <script src="js/data/pranata-zodiak-data.js"></script>
-  <script src="js/data/sasi-jawa-master-data.js"></script>
+  <!-- ==================== LOGIKA & ENGINE JAVASCRIPT MODULAR (ES MODULES & LAZY-LOADED) ==================== -->
   <script src="js/ui/navigation.js"></script>
-  <script src="js/data/pawukon.js"></script>
-  <script src="js/data/pawukon-dino-db.js"></script>
-  <script src="js/data/dino-rules.js"></script>
-  <script src="js/data/tumpeng.js"></script>
-  <script src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

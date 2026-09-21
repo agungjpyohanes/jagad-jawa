@@ -1,19 +1,26 @@
 // Data Nujum Kepribadian, Faalakiah, Bincil, Asesoris
-import nujumMatrixPkg from './nujum-matrix.js';
-import pawukonPkg from './pawukon.js';
+// jawa-v2 – single source nujum, exact lookup
+import {
+  bincilDatabase,
+  getNujumData,
+  getNujumFromMatrix,
+  getNujumFromDatabase
+} from './nujum-matrix.js';
+import {
+  pawukonDatabase,
+  getPawukonData,
+  PAWUKON_LIST
+} from './pawukon.js';
 import { HARI, PASARAN, WUKU, NEPTU_HARI, NEPTU_PASARAN } from './calendar.js';
 
-export const primbonMatrix = nujumMatrixPkg.primbonMatrix || nujumMatrixPkg;
-export const bincilDatabase = nujumMatrixPkg.bincilDatabase || primbonMatrix;
-export const nujumMatrix = primbonMatrix;
-export const nujumDatabase = primbonMatrix;
-export const getNujumData = nujumMatrixPkg.getNujumData;
-export const getNujumFromMatrix = nujumMatrixPkg.getNujumFromMatrix || nujumMatrixPkg.getNujumFromDatabase;
-export const getNujumFromDatabase = getNujumFromMatrix;
+export const primbonMatrix = bincilDatabase;
+export { bincilDatabase };
+export const nujumMatrix = bincilDatabase;
+export const nujumDatabase = bincilDatabase;
+export { getNujumData, getNujumFromMatrix, getNujumFromDatabase };
 
-export const pawukonDatabase = pawukonPkg.pawukonDatabase;
-export const getPawukonData = pawukonPkg.getPawukonData;
-export const PAWUKON_LIST = pawukonPkg.PAWUKON_LIST;
+export { pawukonDatabase, getPawukonData, PAWUKON_LIST };
+
 
 export const KARAKTER = {
   1: "Leader", 2: "Diplomat", 3: "Analisis", 4: "Realis",
@@ -34,7 +41,7 @@ export const AKSARA_FAAL = {
 export const NABI_FAAL = {
   1: "Nabi Yusuf", 2: "Nabi Ahmad", 3: "Nabi Isa", 4: "Nabi Dawut", 5: "Nabi Soleman",
   6: "Nabi Adam", 7: "Nabi Ibrahim", 8: "Nabi Idris", 9: "Nabi Nuh", 10: "Nabi Musa",
-  11: "Nabi Ayub", 0: "Nabi Yunus"
+  11: "Nabi Ayub", 12: "Nabi Yunus", 0: "Nabi Yunus"
 };
 
 export const FAAL_DESC = {
@@ -49,6 +56,7 @@ export const FAAL_DESC = {
   9: "Agung rahmate, sugih banda untuk dagang/tani. Anak bakal murang sarak. Bilahi dari rabi atau anak. Tolak: sidekaha JARIK BATIK. Larangan: ojo dahar kewan mabur. Dzikir: YA KAFI, YA MUKNIYA 9x.",
   10: "Adoh banget lelakone/pacobane. Asring tapa lan perang nanging ora tahu kalah. Watake ora sabaran. Tolak: sidekaha JARIK PUTIH. Dzikir: YA ROBBI 8x.",
   11: "Tansah nandang lara-laranen. Kabejane tinemu ing buri. Bilahi dari lawan jenis. Tolak: sidekaha GANGSA bobot rong kati. Dzikir: YA MUKYI 8x.",
+  12: "Ora sugih banda donya nanging sugih anak. Harta dijaga Naga lan Singa. Tolak: sidekaha TIMAH bobot rong kati lan ALI-ALI SALOKA. Larangan: ojo dahar IWAK ATI. Dzikir: YA KADIRU 100x.",
   0: "Ora sugih banda donya nanging sugih anak. Harta dijaga Naga lan Singa. Tolak: sidekaha TIMAH bobot rong kati lan ALI-ALI SALOKA. Larangan: ojo dahar IWAK ATI. Dzikir: YA KADIRU 100x."
 };
 

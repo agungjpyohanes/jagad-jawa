@@ -10,24 +10,36 @@ jagad-jawa/
 ├── css/
 │   └── styles.css          # Custom CSS (batik, print, animations)
 ├── js/
-│   ├── main.js             # Bootstrap + feature wiring (entry module)
-│   ├── data/               # Pure data & pure functions (no DOM)
+│   ├── main.js             # Orchestrator & entry point (ES Modules)
+│   ├── features/           # Feature wiring modules (thin wrappers ke window)
+│   │   ├── kalender.js     # Wiring Kalender, bookmark & share card
+│   │   ├── jodoh.js        # Wiring Pitung perjodohan & mantu
+│   │   ├── selametan.js    # Wiring Pengetan tilar donyo
+│   │   ├── aksara.js       # Wiring Hanacaraka & kuis
+│   │   ├── wayang.js       # Wiring Wayang Purwa & etika kultural
+│   │   ├── audio.js        # Wiring Gamelan synthesizer & dalang FX
+│   │   └── nujum.js        # Wiring Nujum, ensiklopedia wuku & lazy loader
+│   ├── data/               # Pure data & pure functions (bebas DOM)
 │   │   ├── calendar.js     # Wuku, Pasaran, JDN, GRID, getDayInfo()
-│   │   ├── personality.js  # Faalakiah, Bincil, Asesoris, KARAKTER
+│   │   ├── nujum-matrix.js # Single source exact matrix bincil 6 dimensi
+│   │   ├── personality.js  # Faalakiah, Asesoris, Karakter
 │   │   ├── marriage.js     # Pitung Jawa 7 metode hasil
 │   │   ├── selametan.js    # Target hari & jenis selametan
-│   │   ├── aksara.js       # AKSARA_NGLEGENA mapping
+│   │   ├── aksara.js       # Mapping aksara nglegena & sandhangan
 │   │   ├── wayang.js       # Karakter + SVG wayang
 │   │   └── pitutur.js      # Pitutur list + quiz questions
-│   ├── modules/
-│   │   └── audio.js        # Web Audio API (gamelan + Puspawarna + dalang FX)
+│   ├── modules/            # Domain logic per domain (engine + UI)
 │   └── ui/
+│       ├── modal.js        # Modal controller, backdrop & Escape listener
 │       ├── toast.js        # Toast + clipboard helpers
 │       └── navigation.js   # Tab switch, mobile menu, print
+├── tests/                  # Unit test suite (Node.js test runner)
+│   ├── pure-functions.test.js # Tes toJDN, neptu, nujum exact, modulo pitung
+│   └── ...                 # Tes domain lengkap (59 passing tests)
 ├── vercel.json             # Config deploy Vercel
 ├── firebase.json           # Config deploy Firebase Hosting
-├── .gitignore
-└── assets/                 # (reserved)
+└── docs/                   # Dokumentasi teknis & regresi
+
 ```
 
 ## Prinsip Arsitektur
@@ -50,6 +62,26 @@ python3 -m http.server 8080
 ```
 
 Atau Live Server / VS Code / **Google Antigravity**.
+
+---
+
+## Menjalankan Unit Test
+
+Jagad Jawa menggunakan test runner bawaan Node.js (`node:test`) tanpa dependensi eksternal:
+
+```bash
+# Menjalankan seluruh test suite (59 unit tests)
+npm test
+
+# Atau menjalankan spesifik pure functions test
+node --test tests/pure-functions.test.js
+```
+
+Cakupan pengujian pure functions (`tests/pure-functions.test.js`):
+- **Julian Day Number (`toJDN`) & `getDayInfo`**: Pengujian tanggal referensi tetap (29 Agustus 2021 Epoch, 17 Agustus 1945, 1 Januari 2000, 1 Januari 2024) terhadap hasil baku `jawa-v1`.
+- **Perhitungan Neptu**: Verifikasi bobot 7 hari & 5 pasaran serta seluruh 35 kombinasi dino-pasaran (`NEPTU_HARI + NEPTU_PASARAN`).
+- **Nujum Bincil 6 Dimensi (`getNujumData`)**: Snapshot exact lookup matriks (Padewan, Paringkelan, Pandangon, Paarasan, Pancasuda, Kamarokan).
+- **Kaidah Pitung Perjodohan**: Verifikasi operasi modulo sisa bagi 4, 5, dan 7 tanpa mengubah tabel hasil pemetaan.
 
 ---
 

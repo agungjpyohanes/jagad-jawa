@@ -577,8 +577,23 @@
     let mapNeptu = (typeof MASTER_SIRIKAN_NEPTU !== 'undefined') ? MASTER_SIRIKAN_NEPTU : (root.MASTER_SIRIKAN_NEPTU || {});
     let mapDina = (typeof MASTER_SIRIKAN_DINA !== 'undefined') ? MASTER_SIRIKAN_DINA : (root.MASTER_SIRIKAN_DINA || {});
     
-    let sirikanNeptu = mapNeptu[neptuNum] || "-";
-    let cleanDino = (dino || "").trim().toLowerCase().replace(/['’]/g, '').replace('rebo', 'rabu');
+    let sirikanNeptu = mapNeptu[neptuNum];
+    if (!sirikanNeptu || sirikanNeptu === '-') {
+      const mod4 = neptuNum % 4;
+      if (mod4 === 3) sirikanNeptu = "KULON / BARAT";
+      else if (mod4 === 0) sirikanNeptu = "LOR / UTARA";
+      else if (mod4 === 1) sirikanNeptu = "WETAN / TIMUR";
+      else if (mod4 === 2) sirikanNeptu = "KIDUL / SELATAN";
+      else sirikanNeptu = "-";
+    }
+
+    let cleanDino = (dino || "").trim().toLowerCase().replace(/['’]/g, '');
+    if (cleanDino === 'rebo') cleanDino = 'rabu';
+    else if (cleanDino === 'kemis') cleanDino = 'kamis';
+    else if (cleanDino === 'ahad') cleanDino = 'minggu';
+    else if (cleanDino === 'setu') cleanDino = 'sabtu';
+    else if (cleanDino.startsWith('jum')) cleanDino = 'jumat';
+
     let sirikanDina = mapDina[cleanDino] || "-";
 
     const pantanganList = [];
@@ -592,20 +607,31 @@
     const pantanganText = pantanganList.length > 0 ? pantanganList.join(" & ") : "-";
     const arahAmanText = arahAmanList.length > 0 ? arahAmanList.join(" & ") : "Semua Arah Aman";
     
+    const neptuObj = {
+      neptu: neptuNum,
+      pantangan: sirikanNeptu,
+      anjuran: anjuranNeptuList.join(", "),
+      keterangan: `Neptu ${neptuNum} disirikan (dipantang) menghadap ${sirikanNeptu}`,
+      toString() { return String(neptuNum); },
+      valueOf() { return neptuNum; }
+    };
+
+    const dinaObj = {
+      hari: dino || "-",
+      dina: dino || "-",
+      pantangan: sirikanDina,
+      anjuran: anjuranDinaList.join(", "),
+      keterangan: `Hari ${dino} disirikan (dipantang) menghadap ${sirikanDina}`,
+      toString() { return String(dino || "-"); },
+      valueOf() { return String(dino || "-"); }
+    };
+
     return {
-      neptu: {
-        neptu: neptuNum,
-        pantangan: sirikanNeptu,
-        anjuran: anjuranNeptuList.join(", "),
-        keterangan: `Neptu ${neptuNum} disirikan (dipantang) menghadap ${sirikanNeptu}`
-      },
-      dina: {
-        hari: dino || "-",
-        dina: dino || "-",
-        pantangan: sirikanDina,
-        anjuran: anjuranDinaList.join(", "),
-        keterangan: `Hari ${dino} disirikan (dipantang) menghadap ${sirikanDina}`
-      },
+      neptu: neptuObj,
+      neptuVal: neptuNum,
+      neptuDetail: neptuObj,
+      dina: dinaObj,
+      dinaDetail: dinaObj,
       dino: dino || "-",
       sirikanNeptu: sirikanNeptu,
       sirikanDina: sirikanDina,
@@ -613,7 +639,7 @@
       pantanganText: pantanganText,
       arahAman: arahAmanList,
       arahAmanText: arahAmanText,
-      catatan: `Menurut petungan Jawa, pemilik weton ber-Neptu ${neptuNum} disirikan (dipantang) membangun atau menghadapkan pintu utama rumah ke arah ${sirikanNeptu}. Berdasarkan hari kelahiran ${dino}, pantangan arah hadap rumah adalah ke arah ${sirikanDina}. Arah utama yang aman dan dianjurkan: ${arahAmanText}.`
+      catatan: `Menurut petungan Jawa, pemilik weton ber-Neptu ${neptuNum} disirikan (dipantang) membangun atau menghadapkan pintu utama rumah ke arah ${sirikanNeptu}. Berdasarkan hari kelahiran ${dino}, pantangan arah hadap rumah (Naga Dina) adalah ke arah ${sirikanDina}. Arah utama yang aman dan dianjurkan: ${arahAmanText}.`
     };
   };
 

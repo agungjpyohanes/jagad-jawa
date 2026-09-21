@@ -29,5 +29,9 @@ npm-debug.log*
 firebase-debug.log
 firestore-debug.log
 
+# Legacy backups
+js/main.legacy.js
+
+
 # Vercel
 .vercel/
