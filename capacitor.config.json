@@ -1,0 +1,9 @@
+{
+  "appId": "com.jagadjawa.app",
+  "appName": "Jagad Jawa",
+  "webDir": "dist",
+  "server": {
+    "url": "https://jagad-jawa.vercel.app",
+    "cleartext": true
+  }
+}
