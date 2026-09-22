@@ -1253,11 +1253,11 @@
 }
 
 .cal-split-bottom.bg-dino-ijo {
-  background-color: #16a34a !important; /* Hijau Solid Becik */
+  background-color: #15803d !important; /* Hijau Solid Becik (WCAG AA Contrast) */
 }
 
 .cal-split-bottom.bg-dino-abang {
-  background-color: #dc2626 !important; /* Merah Solid Ala */
+  background-color: #b91c1c !important; /* Merah Solid Ala (WCAG AA Contrast) */
 }
 
 /* Status Dino Gede: Border Emas Bercahaya (2px solid #eab308) */
@@ -1273,4 +1273,49 @@
 .cal-split-card.not-dino-gede {
   border: 1px solid #cbd5e1;
 }
+
+/* ==========================================================================
+   KALENDER MOBILE & MODE LIST MINGGU (WEEKLY VIEW)
+   ========================================================================== */
+.cal-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: #d4af37 rgba(24, 32, 48, 0.6);
+}
+
+.cal-week-card {
+  background: rgba(24, 32, 48, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(8px);
+}
+
+.cal-week-card:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.cal-day-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cal-day-list-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.cal-day-list-item:active {
+  transform: scale(0.98);
+}
+
 

@@ -225,9 +225,174 @@ export function renderKalender() {
     tableBody.innerHTML = htmlBuffer.join('');
   }
 
+  // Render Mode List Minggu (Weekly View untuk Mobile & Tablet)
+  renderKalenderListView(tahun, bulan, daysInMonth, totalWeeks, gridStartJDN, firstJDN);
+
   buildWatermarkKalender();
+  setKalenderViewMode(currentViewMode);
   applyFilterKalenderUI(currentFilterType);
   renderBookmarkListPanel();
+}
+
+let currentViewMode = 'grid';
+
+/**
+ * Mengatur mode tampilan kalender: 'grid' (Tabel Bulanan) atau 'list' (List Minggu)
+ * @param {'grid'|'list'} mode 
+ */
+export function setKalenderViewMode(mode) {
+  currentViewMode = (mode === 'list') ? 'list' : 'grid';
+
+  const tableContainer = document.getElementById('kalenderTableContainer') || document.getElementById('calTable')?.parentElement;
+  const listView = document.getElementById('kalenderListView');
+  const btnGrid = document.getElementById('btnCalModeGrid');
+  const btnList = document.getElementById('btnCalModeList');
+
+  if (currentViewMode === 'list') {
+    if (tableContainer) tableContainer.classList.add('hidden');
+    if (listView) listView.classList.remove('hidden');
+    if (btnList) {
+      btnList.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer';
+    }
+    if (btnGrid) {
+      btnGrid.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5 cursor-pointer';
+    }
+  } else {
+    if (tableContainer) tableContainer.classList.remove('hidden');
+    if (listView) listView.classList.add('hidden');
+    if (btnGrid) {
+      btnGrid.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer';
+    }
+    if (btnList) {
+      btnList.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5 cursor-pointer';
+    }
+  }
+
+  applyFilterKalenderUI(currentFilterType);
+}
+
+/**
+ * Toggle antara Mode Tabel Grid dan Mode List Minggu
+ */
+export function toggleKalenderViewMode() {
+  setKalenderViewMode(currentViewMode === 'grid' ? 'list' : 'grid');
+}
+
+/**
+ * Render Kalender Sultan Agungan dalam Format List Minggu (Sangat nyaman untuk layar smartphone/mobile)
+ */
+export function renderKalenderListView(tahun, bulan, daysInMonth, totalWeeks, gridStartJDN, firstJDN) {
+  const container = document.getElementById('kalenderListView');
+  if (!container) return;
+
+  const listBuffer = [];
+
+  for (let w = 0; w < totalWeeks; w++) {
+    const weekStartJDN = gridStartJDN + w * 7;
+    const weekDiff = weekStartJDN - EPOCH_JDN;
+    const wukuId = ((Math.floor(weekDiff / 7) % 30) + 30) % 30;
+    const isNgisor = (wukuId === 3 || wukuId === 13 || wukuId === 23);
+    const wukuName = WUKU[wukuId].toUpperCase();
+
+    // Kumpulkan hari-hari yang valid dalam bulan ini
+    const validDaysInWeek = [];
+    for (let d = 0; d < 7; d++) {
+      const currentJDN = weekStartJDN + d;
+      const dayOffset = currentJDN - firstJDN;
+      const dayNum = dayOffset + 1;
+      if (dayNum >= 1 && dayNum <= daysInMonth) {
+        validDaysInWeek.push({ d, dayNum, currentJDN });
+      }
+    }
+
+    if (validDaysInWeek.length === 0) continue;
+
+    const firstValidDay = validDaysInWeek[0];
+    const firstDateObj = getTanggalJawaLengkap(tahun, bulan, firstValidDay.dayNum);
+    const sasiSpanText = `${firstDateObj.bulanJawa} ${firstDateObj.tahunAJ} AJ`;
+
+    listBuffer.push(`
+      <div class="cal-week-card">
+        <div class="flex flex-wrap items-center justify-between pb-2.5 mb-2.5 border-b border-sogan-800/80 gap-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="w-6 h-6 rounded-lg bg-sogan-900 border border-prada/40 flex items-center justify-center text-prada font-mono text-xs font-bold shadow-xs">
+              ${w + 1}
+            </span>
+            <div>
+              <span class="font-serif font-bold text-amber-200 text-sm tracking-wide">Wuku ${wukuName}</span>
+              <span class="text-[10px] text-sogan-400 font-mono ml-1.5">(${wukuId + 1}/30 · ${DUNUNGE[wukuId]})</span>
+            </div>
+            ${isNgisor ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-950 border border-rose-500 text-rose-300">⚠️ Sirikan Ngisor</span>' : ''}
+          </div>
+          <div class="text-[11px] font-mono text-prada font-semibold">
+            ${sasiSpanText}
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+    `);
+
+    for (const { d, dayNum, currentJDN } of validDaysInWeek) {
+      const curDiff = currentJDN - EPOCH_JDN;
+      const pasaranId = (((curDiff + 1) % 5) + 5) % 5;
+      const [code] = (GRID[wukuId] && GRID[wukuId][d]) ? GRID[wukuId][d] : ['', 'G', 0];
+      const liburName = getLiburNasional(tahun, bulan, dayNum);
+      const isMinggu = (d === 0);
+      const isLibur = Boolean(liburName) || isMinggu;
+      const dateObj = getTanggalJawaLengkap(tahun, bulan, dayNum);
+      const info = getDayInfo(tahun, bulan, dayNum);
+      const isDinoGedeRes = checkDinoGede(wukuId, d, pasaranId, info.hijri[0], info.hijri[1]);
+      const dinoWarna = getDinoWarnaStatus(HARI[d], PASARAN[pasaranId], WUKU[wukuId], isMinggu, isLibur, code);
+
+      const dateKey = `${tahun}-${String(bulan).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+      const bookmark = getBookmarkByDate(dateKey);
+      const isBookmarked = Boolean(bookmark);
+
+      const today = new Date();
+      const isToday = (today.getFullYear() === tahun && today.getMonth() + 1 === bulan && today.getDate() === dayNum);
+
+      listBuffer.push(`
+        <div class="cal-day-list-item bg-keraton/90 border ${isToday ? 'border-amber-400 ring-1 ring-amber-400/50' : 'border-sogan-800/70'} hover:border-prada/60"
+             onclick="window.bukaDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum})"
+             data-day="${dayNum}" data-is-ijo="${dinoWarna.isIjo}" data-is-gede="${dinoWarna.isGede}" data-is-bookmarked="${isBookmarked}">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 text-center flex-shrink-0">
+              <span class="font-mono text-base font-black ${isLibur ? 'text-rose-400' : 'text-amber-100'}">
+                ${dayNum}
+              </span>
+              <div class="text-[9px] font-mono uppercase ${isLibur ? 'text-rose-400' : 'text-sogan-400'}">
+                ${HARI[d].slice(0, 3)}
+              </div>
+            </div>
+
+            <div class="border-l border-sogan-800/80 pl-3 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-serif font-bold text-xs text-amber-200">${HARI[d]} ${PASARAN[pasaranId]}</span>
+                <span class="px-1.5 py-0.2 rounded font-mono text-[9.5px] bg-sogan-950 border border-sogan-800 text-sogan-300">Neptu ${NEPTU_HARI[d] + NEPTU_PASARAN[pasaranId]}</span>
+              </div>
+              <div class="text-[10px] text-sogan-400 flex items-center gap-2 mt-0.5">
+                <span>${dateObj.tglJawa} ${dateObj.bulanJawa}</span>
+                ${liburName ? `<span class="text-rose-300 font-bold truncate">★ ${liburName}</span>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 flex-shrink-0 ml-2">
+            ${dinoWarna.badgeHtml}
+            ${isBookmarked ? '<span class="px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-amber-600 text-white shadow-xs">🔖</span>' : ''}
+            <i class="fa-solid fa-chevron-right text-sogan-500 text-xs ml-1"></i>
+          </div>
+        </div>
+      `);
+    }
+
+    listBuffer.push(`
+        </div>
+      </div>
+    `);
+  }
+
+  container.innerHTML = listBuffer.join('');
 }
 
 /**
@@ -249,6 +414,7 @@ function applyFilterKalenderUI(filterType) {
     }
   });
 
+  // 1. Filter pada Mode Grid
   const cells = document.querySelectorAll('.cal-day-cell');
   cells.forEach(cell => {
     const isIjo = cell.getAttribute('data-is-ijo') === 'true';
@@ -272,6 +438,26 @@ function applyFilterKalenderUI(filterType) {
       cell.style.opacity = '0.22';
       cell.style.filter = 'grayscale(85%)';
       cell.classList.remove('ring-2', 'ring-amber-400/80');
+    }
+  });
+
+  // 2. Filter pada Mode List Minggu
+  const listItems = document.querySelectorAll('.cal-day-list-item');
+  listItems.forEach(item => {
+    const isIjo = item.getAttribute('data-is-ijo') === 'true';
+    const isGede = item.getAttribute('data-is-gede') === 'true';
+    const isBookmarked = item.getAttribute('data-is-bookmarked') === 'true';
+
+    let match = true;
+    if (filterType === 'ijo') match = isIjo;
+    else if (filterType === 'gede') match = isGede;
+    else if (filterType === 'bookmark') match = isBookmarked;
+
+    if (match) {
+      item.style.display = 'flex';
+      item.style.opacity = '1';
+    } else {
+      item.style.display = 'none';
     }
   });
 }
@@ -391,15 +577,27 @@ export function bukaDetailTanggalJawa(y, m, d) {
   const elDescAlaBecik = document.getElementById('modalDescAlaBecik');
 
   if (isAla) {
-    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-rose-950/40 border-rose-500/60 text-rose-200 shadow-md shadow-rose-950/20';
+    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3.5 rounded-xl border flex items-center gap-3 bg-red-950/90 border-red-500 text-red-50 shadow-lg shadow-red-950/30';
     if (elIconAlaBecik) elIconAlaBecik.textContent = '▲';
-    if (elTitleAlaBecik) elTitleAlaBecik.textContent = `STATUS: ALA / NAHAS (▲ ${code ? code + ' Ala' : 'Ala'})`;
-    if (elDescAlaBecik) elDescAlaBecik.textContent = 'Dina awon tumrap adeg griya, mantu, utawi lelungan tebih.';
+    if (elTitleAlaBecik) {
+      elTitleAlaBecik.className = 'font-bold text-xs uppercase tracking-wide text-red-100';
+      elTitleAlaBecik.textContent = `STATUS: ALA / NAHAS (▲ ${code ? code + ' Ala' : 'Ala'})`;
+    }
+    if (elDescAlaBecik) {
+      elDescAlaBecik.className = 'text-[11px] text-red-100 mt-0.5 leading-tight font-medium';
+      elDescAlaBecik.textContent = 'Dina awon tumrap adeg griya, mantu, utawi lelungan tebih.';
+    }
   } else {
-    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-md shadow-emerald-950/20';
+    if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3.5 rounded-xl border flex items-center gap-3 bg-emerald-950/90 border-emerald-500 text-emerald-50 shadow-lg shadow-emerald-950/30';
     if (elIconAlaBecik) elIconAlaBecik.textContent = '✓';
-    if (elTitleAlaBecik) elTitleAlaBecik.textContent = `STATUS: BECIK / RAHAYU (✓ Becik)`;
-    if (elDescAlaBecik) elDescAlaBecik.textContent = 'Dina becik kanggé maneka warni hajat, lelungan, lan pakaryan.';
+    if (elTitleAlaBecik) {
+      elTitleAlaBecik.className = 'font-bold text-xs uppercase tracking-wide text-emerald-100';
+      elTitleAlaBecik.textContent = `STATUS: BECIK / RAHAYU (✓ Becik)`;
+    }
+    if (elDescAlaBecik) {
+      elDescAlaBecik.className = 'text-[11px] text-emerald-100 mt-0.5 leading-tight font-medium';
+      elDescAlaBecik.textContent = 'Dina becik kanggé maneka warni hajat, lelungan, lan pakaryan.';
+    }
   }
 
   // 6. Sultan Agungan

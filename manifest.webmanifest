@@ -1,0 +1,27 @@
+{
+  "name": "Jagad Jawa — Portal Budaya Luhur Nusantara & Penanggalan Jawa",
+  "short_name": "Jagad Jawa",
+  "description": "Portal Budaya Luhur Nusantara: Kalender Sultan Agungan, Weton, Nujum Primbon 6 Dimensi Bincil, Pitung Perjodohan, dan Wayang",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B0F19",
+  "theme_color": "#0B0F19",
+  "lang": "id",
+  "categories": ["culture", "education", "lifestyle", "utilities"],
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

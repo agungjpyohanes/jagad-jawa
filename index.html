@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B0F19">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="apple-touch-icon" href="./assets/icon.svg">
   <title>Jagad Jawa — Menjelajahi Kebudayaan Luhur Nusantara</title>
 
   <!-- Tailwind CSS CDN -->
@@ -286,6 +290,12 @@
 
       <!-- Audio & Utility Cluster (Kanan) -->
       <div class="nav-utility-cluster flex items-center gap-2 flex-shrink-0">
+        <!-- Language Switcher (ID / JA) -->
+        <button onclick="toggleLanguage()" class="lang-toggle-btn px-2.5 py-1.5 rounded-lg bg-sogan-950/80 border border-prada/40 hover:border-prada text-xs font-mono font-bold text-prada flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Ganti Bahasa (Indonesia / Jawa)">
+          <i class="fa-solid fa-language text-amber-400"></i>
+          <span class="lang-toggle-short">ID</span>
+        </button>
+
         <button id="puspawarnaBtn" onclick="toggleKetawangPuspawarna()" class="nav-audio-btn" title="Ketawang Puspawarna — Gamelan Klenengan">
           <i id="puspawarnaIcon" class="fa-solid fa-circle-play text-sm text-prada"></i>
           <span id="puspawarnaLabel" class="hidden xl:inline">Ketawang Puspawarna</span>
@@ -308,6 +318,16 @@
 
     <!-- Mobile Drawer -->
     <div id="mobileMenu" class="hidden md:hidden bg-keraton border-t border-sogan-800/80 px-4 pt-2 pb-6 mt-2 space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
+      <!-- Language Switcher Mobile -->
+      <div class="flex items-center justify-between px-3 py-2 bg-sogan-950/60 rounded-xl border border-sogan-800 mb-2">
+        <span class="text-xs text-sogan-300 font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-language text-prada"></i> Bahasa / Basa
+        </span>
+        <button onclick="toggleLanguage()" class="lang-toggle-btn px-2.5 py-1 rounded-lg bg-sogan-900 border border-prada/40 text-xs font-mono font-bold text-prada cursor-pointer">
+          <span class="lang-toggle-text">ID (Bhs Indonesia)</span>
+        </button>
+      </div>
+
       <!-- Beranda -->
       <button onclick="switchTab('beranda'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-2 rounded-xl text-sm text-sogan-200 hover:bg-sogan-900 flex items-center gap-3 font-semibold" data-tab="beranda">
         <i class="fa-solid fa-house w-5 text-prada"></i> Beranda Utama
@@ -744,28 +764,39 @@
         </div>
       </div>
 
-      <!-- Saring / Filter Kalender Cerdas (2.2) -->
+      <!-- Saring / Filter Kalender Cerdas & Switcher Mode Tampilan (Grid / List) -->
       <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-wulung border border-sogan-800 text-xs">
         <div class="flex flex-wrap items-center gap-2">
-          <span class="text-prada font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+          <span class="text-prada font-bold text-[11px] uppercase tracking-wider flex items-center gap-1.5" data-i18n="cal_saring_label">
             <i class="fa-solid fa-filter text-amber-400"></i> Saring Dina:
           </span>
           <div class="flex flex-wrap items-center gap-1.5" id="calFilterGroup">
             <button onclick="filterKalender('all')" data-filter="all" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition">
-              Sedaya Dina
+              <span data-i18n="cal_filter_all">Sedaya Dina</span>
             </button>
             <button onclick="filterKalender('ijo')" data-filter="ijo" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-sm bg-[#16a34a] shadow-[0_0_6px_rgba(22,163,74,0.6)]"></span> Dino Ijo (Becik)
+              <span class="w-2.5 h-2.5 rounded-sm bg-[#15803d] shadow-[0_0_6px_rgba(21,128,61,0.6)]"></span> <span data-i18n="cal_filter_ijo">Dino Ijo (Becik)</span>
             </button>
             <button onclick="filterKalender('gede')" data-filter="gede" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
-              <span class="text-[#eab308] font-bold">★</span> Dino Gede
+              <span class="text-[#eab308] font-bold">★</span> <span data-i18n="cal_filter_gede">Dino Gede</span>
             </button>
             <button onclick="filterKalender('bookmark')" data-filter="bookmark" class="cal-filter-btn px-3.5 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5">
-              <span>🔖</span> Ditandhai (Bookmark)
+              <span>🔖</span> <span data-i18n="cal_filter_bookmark">Ditandhai (Bookmark)</span>
             </button>
           </div>
         </div>
-        <div class="text-[11px] text-sogan-400 italic">
+
+        <!-- Switcher Mode Tampilan (Grid vs List Minggu) -->
+        <div class="flex items-center gap-1.5 bg-sogan-950/80 p-1 rounded-xl border border-sogan-800">
+          <button id="btnCalModeGrid" onclick="setKalenderViewMode('grid')" class="cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer" title="Tampilan Tabel Grid">
+            <i class="fa-solid fa-table-cells"></i> <span data-i18n="cal_mode_grid">Mode Tabel (Grid)</span>
+          </button>
+          <button id="btnCalModeList" onclick="setKalenderViewMode('list')" class="cal-view-btn px-3 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5 cursor-pointer" title="Tampilan List per Pekan (Sangat Pas di Layar Smartphone)">
+            <i class="fa-solid fa-list-ul"></i> <span data-i18n="cal_mode_list">Mode List Minggu</span>
+          </button>
+        </div>
+
+        <div class="text-[11px] text-sogan-400 italic" data-i18n="cal_click_hint">
           *Klik kotak tanggal kanggé rincian lengkap, tandha wigati, &amp; bagikan weton
         </div>
       </div>
@@ -777,16 +808,19 @@
 
         <div id="printTitleKalender" class="text-center font-marcellus font-bold text-xl mb-3 hidden"></div>
 
-        <div class="overflow-x-auto relative z-10">
+        <div id="kalenderTableContainer" class="cal-table-container overflow-x-auto relative z-10">
           <table class="w-full border-collapse text-xs sm:text-sm font-sans" id="calTable">
             <tbody id="kalenderTableBody"></tbody>
           </table>
         </div>
+
+        <!-- Mode List Minggu (Weekly List View untuk Mobile/Responsif) -->
+        <div id="kalenderListView" class="space-y-3 relative z-10 hidden mt-2"></div>
       </div>
 
       <!-- Panduan Membaca, Standarisasi Kode Warna & Keterangan Hari Ala/Becik -->
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-4 text-xs">
-        <div class="bg-ala/20 border border-ala/50 text-ala-tx p-3 rounded-xl text-center italic font-semibold">
+        <div class="bg-red-950/40 border border-red-500/50 text-amber-200 p-3 rounded-xl text-center italic font-semibold shadow-xs" data-i18n="cal_wuku_ngisor_hint">
           Nomor 4, 14, 24 — kala ono ngisor, ojo marani dununge wuku!
         </div>
 

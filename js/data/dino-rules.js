@@ -201,7 +201,7 @@ function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '
 
   // Tahap 1: Penentuan Warna Dasar Blok Bawah
   const status = isIjo ? 'ijo' : 'abang';
-  const bottomBg = isIjo ? '#16a34a' : '#dc2626'; // Hijau Solid vs Dino Abang
+  const bottomBg = isIjo ? '#15803d' : '#b91c1c'; // Hijau Solid vs Merah Solid (Kontras Tinggi WCAG AA)
   const bottomBgClass = isIjo ? 'bg-dino-ijo' : 'bg-dino-abang';
   const bottomTextColor = '#ffffff';
 
@@ -217,8 +217,8 @@ function getDinoWarnaStatus(a, b, c, isMinggu = false, isLibur = false, code = '
   const alaSuffix = code ? `${code} Ala` : 'Ala';
   const baseBadgeText = isIjo ? '✓ Becik' : `▲ ${alaSuffix}`;
   const baseBadgeHtml = isIjo
-    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#16a34a] text-white shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>'
-    : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#dc2626] text-white shadow-xs" title="${baseLabel}">▲ ${alaSuffix}</span>`;
+    ? '<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#15803d] text-white border border-[#166534] shadow-xs" title="Dina Ijo / Becik">✓ Becik</span>'
+    : `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-[#b91c1c] text-white border border-[#991b1b] shadow-xs" title="${baseLabel}">▲ ${alaSuffix}</span>`;
 
   const gedeBadgeText = isGede ? '★ GEDE' : '';
   const gedeBadgeHtml = isGede

@@ -12,6 +12,7 @@
 import './ui/navigation.js';
 import { showToast, copyToClipboard } from './ui/toast.js';
 import { closeAnyActiveModal, initModalListeners } from './ui/modal.js';
+import { initI18n, toggleLanguage, setLanguage, getLanguage } from './ui/i18n.js';
 
 // ─── DOMAIN FEATURES & WIRING ─────────────────────────────────────────────
 import { wireKalenderFeature, initQuickTodayBadge } from './features/kalender.js';
@@ -33,6 +34,9 @@ import {
 if (typeof window !== 'undefined') {
   window.showToast = showToast;
   window.copyToClipboard = copyToClipboard;
+  window.toggleLanguage = toggleLanguage;
+  window.setLanguage = setLanguage;
+  window.getLanguage = getLanguage;
 }
 
 wireKalenderFeature();
@@ -128,8 +132,26 @@ if (typeof window !== 'undefined') {
   });
 }
 
+// ─── SERVICE WORKER REGISTRATION ──────────────────────────────────────────
+function registerServiceWorker() {
+  if (typeof window !== 'undefined' && 'serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then((reg) => {
+          console.log('[PWA] Service Worker terdaftar dengan scope:', reg.scope);
+        })
+        .catch((err) => {
+          console.warn('[PWA] Gagal meregistrasi Service Worker:', err);
+        });
+    });
+  }
+}
+
 // ─── BOOTSTRAP INITIAL APPLICATION STATE ──────────────────────────────────
 export function bootstrap() {
+  initI18n();
+  registerServiceWorker();
+
   if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects();
   if (typeof window.renderKalender === 'function') window.renderKalender();
   initQuickTodayBadge();
@@ -169,5 +191,10 @@ export {
   ensureTumpengLoaded,
   initQuickTodayBadge,
   closeAnyActiveModal,
-  initModalListeners
+  initModalListeners,
+  registerServiceWorker,
+  initI18n,
+  toggleLanguage,
+  setLanguage,
+  getLanguage
 };
