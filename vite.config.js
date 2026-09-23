@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: '.',
-  base: '/',
+  base: './', // Wajib relative path agar CSS/Tailwind & aset statis aman di Vercel
   server: {
     port: 3000,
     open: false,
