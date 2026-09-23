@@ -45,7 +45,7 @@
       gambar: "assets/wayang/surakarta/gunungan.png"
     },
     3: {
-      nama: "Batara Durga", dewa: "Batari Durga / Dewi Durga",
+      nama: "Batari Durga", dewa: "Batari Durga / Dewi Durga",
       watak: "Gampang bingung, sulit berkonsentrasi, seolah kehilangan gairah hidup, bangkit bila terdesak kebutuhan/keluarga, pekerja tak kenal lelah dan lupa waktu.",
       karier: "Karier terhambat/berhenti, karya tidak dihargai bahkan diakui sebagai gagasan atasan; berisiko mutasi atau dirumahkan. Dalam wiraswasta sering ribut dengan pelanggan nakal; hasil kerja sedikit dan sering hanya dijanjikan.",
       kelemahan: "Sering bingung, hilang fokus, mudah diperdaya/ditipu, hasil kerja keras sering diambil pihak lain.",
@@ -78,7 +78,7 @@
       gambar: "assets/wayang/surakarta/batara_guru.png"
     },
     6: {
-      nama: "Batari Nogogini", dewa: "Batari Nagagini & Batara Antaboga",
+      nama: "Batari Nagagini", dewa: "Batari Nagagini & Batara Antaboga",
       watak: "Suka mencampuri urusan orang lain, sombong (terbawa watak masa lalu), namun bertambah umur akan matang budi pekertinya, tegas, berwibawa, dan cepat tanggap akan kekeliruan.",
       karier: "Sering meninggalkan rumah karena tuntutan tugas dan pekerjaan dinas; rawan terseret masalah orang lain dalam perputaran keuangan.",
       kelemahan: "Suka menyombongkan diri, ikut campur masalah keuangan pihak lain sehingga ikut terseret kasus.",
@@ -89,7 +89,7 @@
       gambar: "assets/wayang/surakarta/gunungan.png"
     },
     7: {
-      nama: "Batara Komojoyo", dewa: "Batara Kamajaya & Batari Ratih (Kamaratih)",
+      nama: "Batara Kamajaya", dewa: "Batara Kamajaya & Batari Ratih (Kamaratih)",
       watak: "Ramah, disenangi pergaulan, penuh kasih sayang dan kesetiaan, bertanggung jawab penuh menjaga amanah, memiliki sifat cemburu tinggi.",
       karier: "Karier menanjak mulus; disayangi pimpinan bila berstatus pegawai/abdi negara; jaringan relasi bisnis luas dan kuat bila berwiraswasta.",
       kelemahan: "Rasa cemburu yang berlebihan, sangat protektif terhadap apa yang menjadi tanggung jawabnya.",
@@ -144,7 +144,7 @@
       gambar: "assets/wayang/surakarta/batara_indra.png"
     },
     12: {
-      nama: "Batara Yomodipati", dewa: "Sang Hyang Yamadipati / Batara Yomodipati",
+      nama: "Batara Yamadipati", dewa: "Sang Hyang Yamadipati / Batara Yamadipati",
       watak: "Disiplin tinggi, welas asih, sosial, pemurah, memiliki kepasrahan batin yang tinggi; namun keras hati dan pencemburu.",
       karier: "Rentan menunda-nunda pekerjaan sehingga tugas menumpuk dan menimbulkan kebingungan; menghadapi persimpangan batin antara ketaatan dan kesenangan semu.",
       kelemahan: "Mudah cemburu, suka menunda tugas pekerjaan jika lengah, bingung menghadapi godaan duniawi yang menyesatkan.",

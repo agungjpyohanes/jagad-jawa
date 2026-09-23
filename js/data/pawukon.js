@@ -8,7 +8,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 1,
     "nama_wuku": "Sinta",
-    "dewane": "Sang Hyang Nyamadipati",
+    "dewane": "Sang Hyang Yamadipati",
     "watek_budi_pangerti": "rebut arepan, gede kanepsone ora srantan kerep katiwasan, lembut budine enak wicarane lan cupet pangandele, nduweni kamukten, peritahe panas ing ngarep adem ing mburi, dadi pangaubane wong lara sangsara lan wong minggat, awet anom kebat sembarang gawene, weruh ing wangsit, ngatonake donyane, pradah ninging ora sarju, prihatinan, gede piyangkuhe tur mandita.",
     "bilahi_bebaya": "wayah Setengah Tuwuh Ora Dreman sarta Rada Akeh Laline",
     "sesaji_ruwat": "GEDANG MORO SEBO kang tuwuh saktundun lan ARESARESAN (pala kependem , kasampar lan gumantung) sarta DAGING karo WOHINGNDAMI",
@@ -168,7 +168,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 11,
     "nama_wuku": "Galungan",
-    "dewane": "Sang Hyang Kumajaya",
+    "dewane": "Sang Hyang Kamajaya",
     "watek_budi_pangerti": "bagus luruh ora lelemeran, bisa amrih ajering prihatin, tansah adedana ing badane, ora bisa gemi, satitik rejekine, gede kanepsone, karem marang darbeking liyan, anggali dik ora bisa nganggur, keras budine, anggone golek hasil sarana nenungkul waranane nganggo garagoda",
     "bilahi_bebaya": "amarga ATETUKARAN (padudon) sarta awit amarga LARANG ANAK lagi arep oleh Sih ing Gusti nuli kacanjekan ing bebaya",
     "sesaji_ruwat": "JERUK GEDE 4 glundung lan ARESAESRSAN",
@@ -184,7 +184,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 12,
     "nama_wuku": "Kuningan",
-    "dewane": "Sang Hyang Endra",
+    "dewane": "Sang Hyang Indra",
     "watek_budi_pangerti": "andarbeni kaluwihan, enak rinungu wicarane lan ambeg kumingsun, luwih adi ing warnane nanging sumingkir saka ing parameyan lan slamet penggalihane, anguh nanging nastiti Kebat trampil sembarang gawe, kumet, sugetan aten tur isinan rame wicarane lan akeh gorohing ati, yen ti nunjel ora bisa mungkasi karya.",
     "bilahi_bebaya": "amarga DIAMUK sarta sebab TININGGAL ING BATUR lan BUSANA",
     "sesaji_ruwat": "GEDANG EMAS satundun lan ARESARESAN",
@@ -232,7 +232,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 15,
     "nama_wuku": "Julungpujut",
-    "dewane": "Sang Hyang Guretna",
+    "dewane": "Sang Hyang Guritna",
     "watek_budi_pangerti": "kaduk meneng, yen nepsu kotbisu, becik pocapane lan ana kawisaya ne, bagus rupane tanpa ganda, saenggonenggon diupaya, gede karepe, aremit budine, tur lumuh kaung kulan sambarang karepe, ngalor ngidul anggone ngupaya pangan mulane ora kekurangan rejekine.",
     "bilahi_bebaya": "amarga KATELUH lan KATARAGNYANA sarta sebab saka KENA POCAPAN ALA amarga sok nyidrani janjine",
     "sesaji_ruwat": "GEDANG BECICI kang suluh satundun , lan ARESARESAN",
@@ -296,7 +296,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 19,
     "nama_wuku": "Tambir",
-    "dewane": "sang Hyang Siwah",
+    "dewane": "Sang Hyang Siwah",
     "watek_budi_pangerti": "ing tata lair seje karo batine, gegendungan bebudene kumalungkung lan demen gawe warta pangerameram tur weruh ing wewadi lan wangsit, ora kena ingauban, kumenjas bara ng wicarane, kumet sarta oneng asih ing Dewane, gede prabawan lan napsune, nanging akeh pepagere ing awake.",
     "bilahi_bebaya": "amarga kena ing PASANGAN sarta awit saka tininggal ing SANDANG PANGANE",
     "sesaji_ruwat": "sesa ji TIMUN 25 Iji lan ARESARESAN",
@@ -472,7 +472,7 @@ const PAWUKON_LIST = [
   {
     "no_wuku": 30,
     "nama_wuku": "Watugunung",
-    "dewane": "Sang Hyang Anantaboga lan Sang Hyang Batara Nagagini",
+    "dewane": "Sang Hyang Anantaboga lan Sang Hyang Batari Nagagini",
     "watek_budi_pangerti": "akeh kekarepane tansah prihatinan agung nantang catur, lumuh kaungkulan, kemaron sih lan angajab luputing wong, gugon tuhon tur manutan bagus warnane, sumingkir ing karameyan, wingit wicarane, gede butarepane, tambuh ing rame, karem saba ing asepi mungguh amandita ana darajate, demen mangun samadi nanging prihatinan, kasinungan cahya padang atine.",
     "bilahi_bebaya": "amarga KAPUSARA lan KINANIAYA sarta KENA WALAT amarga saka tekade dewe",
     "sesaji_ruwat": "GEDANG RAJA kang suluh satundun lan MUNDU kang kuning satampah sarta ARESARESAN kang pepak sakehing pala kapendem , kasempar lan gumantung",

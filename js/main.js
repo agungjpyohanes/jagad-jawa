@@ -30,6 +30,9 @@ import {
   ensureTumpengLoaded
 } from './features/nujum.js';
 
+// ─── SAPA DINA (PHASE II) ───────────────────────────────────────────────────
+import { wireSapaDinaFeature, initSapaDina } from './features/sapa-dina.js';
+
 // ─── INITIAL WIRING TO WINDOW (THIN WRAPPERS UNTUK INLINE HTML ONCLICK) ────
 if (typeof window !== 'undefined') {
   window.showToast = showToast;
@@ -46,6 +49,7 @@ wireAksaraFeature();
 wireWayangFeature();
 wireAudioFeature();
 wireNujumFeature();
+wireSapaDinaFeature(); // Phase II: Sapa Dina
 
 // ─── TAB SWITCHING & LAZY-LOAD ORCHESTRATOR ───────────────────────────────
 if (typeof window !== 'undefined') {
@@ -155,6 +159,9 @@ export function bootstrap() {
   if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects();
   if (typeof window.renderKalender === 'function') window.renderKalender();
   initQuickTodayBadge();
+
+  // Phase II: Sapa Dina — Ringkasan Harian (inisialisasi setelah kalender)
+  initSapaDina('sapa-dina-container');
 
   if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects();
 
