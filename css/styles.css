@@ -1318,4 +1318,49 @@
   transform: scale(0.98);
 }
 
+/* ========================================================================= */
+/* MODE PEMULA (RINGKAS) VS MODE AHLI (LENGKAP)                             */
+/* ========================================================================= */
+
+/* Elemen khusus Mode Ahli: disembunyikan saat Mode Pemula aktif */
+body.mode-pemula .ahli-only {
+  display: none !important;
+}
+
+/* Elemen khusus Mode Pemula: disembunyikan saat Mode Ahli aktif */
+body.mode-ahli .pemula-only {
+  display: none !important;
+}
+
+/* Default bila belum memilih: sembunyikan elemen khusus pemula */
+body:not(.mode-pemula) .pemula-only {
+  display: none !important;
+}
+
+/* Mode Switcher Button Styling */
+.mode-toggle-btn {
+  background: rgba(18, 23, 34, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #d4af37;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle-btn:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.12);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+}
+
+body.mode-pemula .mode-toggle-btn {
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #6ee7b7;
+}
+
+body.mode-pemula .mode-toggle-btn:hover {
+  border-color: #34d399;
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+
 

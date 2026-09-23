@@ -5,6 +5,12 @@
  * Zodiak Falakiah Surya, serta tabel primbon pendukung lainnya.
  */
 
+import {
+  SIKLUS12_SLUGS,
+  illustrationPath,
+  resolveSiklus12
+} from '../../data/dewa-kanon.js';
+
 export const PADEWAN_REF_DATA = [
   { nama: "Sri", neptu: 1, arti: "Welas asih, lumaku becik, murah rejeki, remen tetulung.", lambang: "Dewi Sri (Dewi Kemakmuran & Kesuburan)", dewa: "Bathara Sri", sifat: "Penyabar, penuh belas kasih, menyejukkan hati sesama." },
   { nama: "Indra", neptu: 2, arti: "Teliti, angkuh, luhur pangkate, remen pasinaon.", lambang: "Bathara Indra (Dewa Keindahan & Pengetahuan)", dewa: "Bathara Indra", sifat: "Cermat, berwawasan luas, berwibawa namun perlu menjaga kerendahan hati." },
@@ -81,7 +87,8 @@ export function renderEnsiklopediaBudayaPage(containerId = 'ensiklopediaBudayaCo
 
   const tabs = [
     { id: 'padewan', label: 'Padewan (Astawara)', icon: 'fa-sun' },
-    { id: 'paringkelan', label: 'Paringkelan (Sadwara)', icon: 'fa-shield-halved' },
+    { id: 'siklus12', label: '12 Batara-Batari (Siklus)', icon: 'fa-shield-halved' },
+    { id: 'paringkelan', label: 'Paringkelan (Sadwara)', icon: 'fa-ban' },
     { id: 'pandangon', label: 'Pandangon (Sangawara)', icon: 'fa-compass' },
     { id: 'paarasan', label: 'Paarasan (10 Watak)', icon: 'fa-user-tie' },
     { id: 'pancasuda', label: 'Pancasuda (7 Martabat)', icon: 'fa-crown' },
@@ -167,6 +174,56 @@ export function renderEnsiklopediaTabContent() {
                 </div>
               </div>
             `).join('')}
+          </div>
+        </div>
+      `;
+      break;
+
+    case 'siklus12':
+      body.innerHTML = `
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl bg-keraton border border-sogan-800 text-xs text-sogan-300 leading-relaxed">
+            <strong class="text-prada block font-marcellus text-sm mb-1">12 Padewan Siklus Kosmis (Batara &amp; Batari Kanon)</strong>
+            Siklus 12 Dewa kanon panguwasa penanggalan lan kepribadian siklus tahunan (umur % 12).
+            Kanon baku ngemot 3 Batari (Durga, Nagagini, Sri) lan 9 Batara (kalebu Batara Endro).
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 text-xs">
+            ${SIKLUS12_SLUGS.map((slug, idx) => {
+              const entry = resolveSiklus12(slug);
+              const label = entry ? entry.label : `Batara ${slug.charAt(0).toUpperCase() + slug.slice(1)}`;
+              const imgUrl = illustrationPath('siklus12', slug);
+              const isBatari = entry?.gender === 'batari';
+              const genderBadge = isBatari
+                ? '<span class="text-[9.5px] px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-800/60 font-semibold font-mono">Batari</span>'
+                : '<span class="text-[9.5px] px-2 py-0.5 rounded-full bg-sky-950/80 text-sky-300 border border-sky-800/60 font-semibold font-mono">Batara</span>';
+
+              return `
+                <div class="p-3 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition flex flex-col items-center text-center space-y-2 group shadow-md">
+                  <div class="relative w-full overflow-hidden rounded-xl border border-prada/30 bg-sogan-950/70 shadow">
+                    <img 
+                      src="${imgUrl}" 
+                      alt="${label}" 
+                      loading="lazy" 
+                      decoding="async" 
+                      class="w-full h-auto rounded-xl transition-transform duration-300 group-hover:scale-105" 
+                      style="aspect-ratio: 400/560; object-fit: cover;" 
+                      onerror="this.onerror=null; this.parentElement.classList.add('opacity-40');" 
+                    />
+                    <span class="absolute top-1.5 left-1.5 w-5 h-5 rounded-md bg-keraton/90 border border-prada/40 text-prada font-mono font-bold text-[10px] flex items-center justify-center shadow">
+                      ${idx + 1}
+                    </span>
+                  </div>
+                  <div class="w-full space-y-1">
+                    <div class="font-marcellus text-xs font-bold text-amber-200 group-hover:text-prada transition truncate" title="${label}">
+                      ${label}
+                    </div>
+                    <div class="flex items-center justify-center">
+                      ${genderBadge}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
       `;

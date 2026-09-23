@@ -617,6 +617,14 @@ export function bukaDetailTanggalJawa(y, m, d) {
   const elNamaWuku = document.getElementById('modalNamaWuku');
   if (elNamaWuku) elNamaWuku.textContent = `Wuku ${tglJawa.wukuName} (No. ${tglJawa.wukuNo})`;
 
+  const elWukuThumb = document.getElementById('modalWukuThumbImg');
+  const elWukuThumbWrap = document.getElementById('modalWukuThumbContainer');
+  if (elWukuThumb && tglJawa?.wukuName) {
+    elWukuThumb.src = `/assets/illustrations/wuku/${tglJawa.wukuName.toLowerCase().trim()}.jpg`;
+    elWukuThumb.alt = `Wuku ${tglJawa.wukuName}`;
+    if (elWukuThumbWrap) elWukuThumbWrap.classList.remove('hidden');
+  }
+
   const elDunungeWuku = document.getElementById('modalDunungeWuku');
   if (elDunungeWuku) elDunungeWuku.textContent = `${DUNUNGE[info.wukuId]}`;
 

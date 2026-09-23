@@ -36,6 +36,20 @@ import {
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { transliterateLatinToJawa } from '../aksara/aksara-engine.js';
 
+// ─── KANON RESOLVER — dewa-kanon.js ─────────────────────────────────────────
+// Digunakan untuk normalize label dewa/wuku di UI sebelum ditampilkan.
+// PENTING: resolveAstawara → label A1 (tanpa Batara/Batari)
+//          resolveSiklus12 → label A2 (dengan Batara/Batari)
+//          TIDAK BOLEH ditampilkan "Batari Sri" sebagai hasil astawara matrix.
+import {
+  normalizeDewaName,
+  resolveAstawara,
+  resolveSiklus12,
+  resolveWukuDewa,
+  dewaneLegacyImagePath,
+  wukuLegacyImagePath
+} from '../../data/dewa-kanon.js';
+
 let currentNujumMode = 'ringkas'; // 'ringkas' | 'mendalam'
 let lastCalculatedData = null;
 

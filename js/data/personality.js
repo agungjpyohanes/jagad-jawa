@@ -13,6 +13,23 @@ import {
 } from './pawukon.js';
 import { HARI, PASARAN, WUKU, NEPTU_HARI, NEPTU_PASARAN } from './calendar.js';
 
+// ─── KANON DEWA (Single Source of Truth) ────────────────────────────────────
+// Wire resolver dari dewa-kanon.js agar tersedia via personality.js
+export {
+  ASTAWARA_8,
+  SIKLUS_12,
+  WUKU_DEWA,
+  normalizeDewaName,
+  resolveAstawara,
+  resolveSiklus12,
+  resolveWukuDewa,
+  illustrationPath,
+  wukuIllustrationPath,
+  dewaneIllustrationPath,
+  siklus12IllustrationPath,
+  astawaraIllustrationPath
+} from './dewa-kanon.js';
+
 export const primbonMatrix = bincilDatabase;
 export { bincilDatabase };
 export const nujumMatrix = bincilDatabase;
@@ -28,9 +45,20 @@ export const KARAKTER = {
 };
 
 export const PADEWAN = [
-  "Batara Suryo", "Batara Bromo", "Batari Durgo", "Batara Asmoro",
-  "Batara Isworo", "Batari Nogogini", "Batara Komojoyo", "Batara Sri",
-  "Batara Bayu", "Batara Wisnu", "Batara Endro", "Batara Yamadipati"
+  // Siklus 12 Batara/Batari — kanon A2 (dewa-kanon.js)
+  // Index 0 = siklus ke-1, Index 11 = siklus ke-12
+  "Batara Suryo",    // 1
+  "Batara Bromo",    // 2
+  "Batari Durga",    // 3  ← bukan Durgo (gender: Batari)
+  "Batara Asmoro",   // 4
+  "Batara Isworo",   // 5
+  "Batari Nagagini", // 6  ← bukan Nogogini
+  "Batara Kamajaya", // 7  ← bukan Komojoyo
+  "Batari Sri",      // 8  ← bukan Batara Sri (gender: Batari)
+  "Batara Bayu",     // 9
+  "Batara Wisnu",    // 10
+  "Batara Endro",    // 11
+  "Batara Yamadipati"// 12
 ];
 
 export const AKSARA_FAAL = {

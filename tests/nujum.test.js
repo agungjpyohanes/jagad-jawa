@@ -11,7 +11,8 @@ test('Nujum Engine - getNujumData 6 Dimensi Bincil', () => {
   const data = getNujumData('Sinta', 'Minggu', 'Pahing');
   assert.ok(data, 'Data nujum harus ditemukan');
   assert.equal(data.found, true);
-  assert.ok(data.wuku === 'Shinto' || data.wuku === 'Sinta', 'Wuku harus Shinto/Sinta');
+  // 'Shinto' adalah alias lama — wuku kanon = 'Sinta'
+  assert.equal(data.wuku, 'Sinta', 'Wuku kanon harus Sinta (bukan Shinto)');
   assert.equal(data.dino, 'Minggu');
   assert.equal(data.pasaran, 'Pahing');
 

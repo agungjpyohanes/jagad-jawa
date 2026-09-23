@@ -233,6 +233,26 @@ export const SIKLUS_12 = [
   }
 ];
 
+/**
+ * Array slug kanon Siklus 12 berurutan:
+ * suryo, bromo, durga, asmoro, isworo, nagini, kamajaya, sri, bayu, wisnu, endro, yamadipati
+ * @type {string[]}
+ */
+export const SIKLUS12_SLUGS = [
+  'suryo',
+  'bromo',
+  'durga',
+  'asmoro',
+  'isworo',
+  'nagini',
+  'kamajaya',
+  'sri',
+  'bayu',
+  'wisnu',
+  'endro',
+  'yamadipati'
+];
+
 // ─── 3. WUKU_DEWA — 30 DEWANE WUKU ───────────────────────────────────────────
 // Format label: "Sang Hyang …"
 // Urutan wuku PERSIS sama dengan WUKU di calendar.js (1=Sinta … 30=Watugunung).
@@ -672,23 +692,52 @@ export function resolveWukuDewa(wukuOrDewa) {
 // ─── ILLUSTRATION PATH ────────────────────────────────────────────────────────
 
 /**
- * Kembalikan path aset ilustrasi terstandarisasi.
- * Belum wajib ada file gambar; hanya mendefinisikan konvensi path.
+ * Kembalikan path absolut aset ilustrasi .jpg kanon.
+ * Base URL: /assets/illustrations/
  *
- * @param {'wuku'|'dewane'|'siklus12'|'astawara'} kind - kategori ilustrasi
- * @param {string} slug - slug unik (dari dewaneSlug, wukuSlug, dll.)
- * @returns {string} path relatif: /assets/illustrations/{kind}/{slug}.webp
+ * Aturan:
+ * 1. wuku: /assets/illustrations/wuku/{slug}.jpg (slug = nama wuku lowercase)
+ * 2. dewane: /assets/illustrations/dewane/{slug}-dewane.jpg (slug = nama wuku lowercase)
+ * 3. siklus12: /assets/illustrations/siklus12/{slug}.jpg (slug kanon: suryo, bromo, durga, asmoro, isworo, nagini, kamajaya, sri, bayu, wisnu, endro, yamadipati)
+ *
+ * @param {'wuku'|'dewane'|'siklus12'|string} kind - kategori ilustrasi
+ * @param {string|number} slug - slug unik (nama wuku, slug dewane, atau slug siklus)
+ * @returns {string} path absolut file .jpg (contoh: '/assets/illustrations/dewane/sinta-dewane.jpg')
  *
  * @example
- * illustrationPath('wuku', 'sinta')        // '/assets/illustrations/wuku/sinta.webp'
- * illustrationPath('dewane', 'yamadipati') // '/assets/illustrations/dewane/yamadipati.webp'
- * illustrationPath('siklus12', 'durga')    // '/assets/illustrations/siklus12/durga.webp'
- * illustrationPath('astawara', 'brama')    // '/assets/illustrations/astawara/brama.webp'
+ * illustrationPath('wuku', 'sinta')        // '/assets/illustrations/wuku/sinta.jpg'
+ * illustrationPath('dewane', 'sinta')      // '/assets/illustrations/dewane/sinta-dewane.jpg'
+ * illustrationPath('siklus12', 'durga')    // '/assets/illustrations/siklus12/durga.jpg'
+ * illustrationPath('siklus12', 'endro')    // '/assets/illustrations/siklus12/endro.jpg'
  */
 export function illustrationPath(kind, slug) {
-  if (!kind || !slug) return '';
-  const safeSlug = String(slug).toLowerCase().replace(/[^a-z0-9_]/g, '_');
-  return `/assets/illustrations/${kind}/${safeSlug}.webp`;
+  if (!kind || slug == null) return '';
+  const raw = String(slug).trim().toLowerCase();
+
+  if (kind === 'wuku') {
+    const entry = resolveWukuDewa(slug);
+    const wSlug = entry ? entry.wukuSlug : raw.replace(/[^a-z0-9_]/g, '_');
+    return `/assets/illustrations/wuku/${wSlug}.jpg`;
+  }
+
+  if (kind === 'dewane') {
+    const entry = resolveWukuDewa(slug);
+    let dSlug = entry ? entry.wukuSlug : raw.replace(/[^a-z0-9_]/g, '_');
+    dSlug = dSlug.replace(/-dewane$/, '');
+    return `/assets/illustrations/dewane/${dSlug}-dewane.jpg`;
+  }
+
+  if (kind === 'siklus12') {
+    const entry = resolveSiklus12(slug);
+    let sSlug = entry ? entry.slug : raw.replace(/[^a-z0-9_]/g, '_');
+    // Normalisasi slug yang memiliki suffix 12 (seperti sri12 -> sri, yamadipati12 -> yamadipati)
+    sSlug = sSlug.replace(/12$/, '');
+    return `/assets/illustrations/siklus12/${sSlug}.jpg`;
+  }
+
+  // Fallback generik
+  const safeSlug = raw.replace(/[^a-z0-9_]/g, '_');
+  return `/assets/illustrations/${kind}/${safeSlug}.jpg`;
 }
 
 /**
@@ -710,7 +759,7 @@ export function wukuIllustrationPath(wukuOrNo) {
 export function dewaneIllustrationPath(wukuOrNo) {
   const entry = resolveWukuDewa(wukuOrNo);
   if (!entry) return '';
-  return illustrationPath('dewane', entry.dewaneSlug);
+  return illustrationPath('dewane', entry.wukuSlug);
 }
 
 /**
@@ -735,11 +784,63 @@ export function astawaraIllustrationPath(slugOrLabel) {
   return illustrationPath('astawara', entry.slug);
 }
 
+// ─── LEGACY PATH HELPERS ──────────────────────────────────────────────────────
+// Helper backward compat untuk path gambar lama (sebelum migrasi ke /assets/illustrations/).
+
+/**
+ * Ambil path gambar legacy .jpg wuku (sudah ada di assets/wuku/).
+ * @param {string|number} wukuOrNo — nama wuku atau no_wuku
+ * @returns {string} path relatif ke .jpg, atau '' jika tidak dikenali
+ */
+export function wukuLegacyImagePath(wukuOrNo) {
+  const entry = resolveWukuDewa(wukuOrNo);
+  if (!entry) return '';
+  return `assets/wuku/${entry.wuku}.jpg`;
+}
+
+/**
+ * Ambil path gambar legacy .jpg dewane (sudah ada di assets/dewa-wuku/).
+ * Menggunakan string dewane kanon sebagai nama file.
+ * @param {string|number} wukuOrNo — nama wuku atau no_wuku
+ * @returns {string} path relatif ke .jpg, atau '' jika tidak dikenali
+ */
+export function dewaneLegacyImagePath(wukuOrNo) {
+  const entry = resolveWukuDewa(wukuOrNo);
+  if (!entry) return '';
+  // Khusus Kulawu: file legacy bernama "Sadana" bukan "Sadhana"
+  if (entry.no_wuku === 28) return 'assets/dewa-wuku/Sang Hyang Sadana.jpg';
+  // Khusus Watugunung: file legacy masih pakai "Batara" bukan "Batari"
+  if (entry.no_wuku === 30) return 'assets/dewa-wuku/Sang Hyang Anantaboga lan Sang Hyang Batara Nagagini.jpg';
+  return `assets/dewa-wuku/${entry.dewane}.jpg`;
+}
+
+/**
+ * Resolve path gambar terbaik: .jpg kanon yang tersedia.
+ *
+ * @param {'wuku'|'dewane'|'siklus12'|'astawara'} kind
+ * @param {string|number} slugOrRef — slug, label, atau nomor
+ * @returns {{ webp: string, legacy: string|null, best: string, jpg: string }}
+ */
+export function resolvedImagePath(kind, slugOrRef) {
+  const path = illustrationPath(kind, slugOrRef);
+  let legacy = null;
+  if (kind === 'wuku') legacy = wukuLegacyImagePath(slugOrRef);
+  if (kind === 'dewane') legacy = dewaneLegacyImagePath(slugOrRef);
+
+  return {
+    jpg: path,
+    webp: path,
+    legacy,
+    best: path
+  };
+}
+
 // ─── GLOBAL EXPORT (backward compat untuk window/IIFE legacy code) ───────────
 if (typeof window !== 'undefined') {
   window.DEWA_KANON = {
     ASTAWARA_8,
     SIKLUS_12,
+    SIKLUS12_SLUGS,
     WUKU_DEWA,
     normalizeDewaName,
     resolveAstawara,
@@ -750,6 +851,11 @@ if (typeof window !== 'undefined') {
     dewaneIllustrationPath,
     siklus12IllustrationPath,
     astawaraIllustrationPath,
+    // Legacy path helpers
+    wukuLegacyImagePath,
+    dewaneLegacyImagePath,
+    resolvedImagePath,
+    // Lookup maps
     ASTAWARA_BY_SLUG,
     SIKLUS_BY_SLUG,
     WUKU_DEWA_BY_NO,
@@ -764,6 +870,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     ASTAWARA_8,
     SIKLUS_12,
+    SIKLUS12_SLUGS,
     WUKU_DEWA,
     ASTAWARA_BY_SLUG,
     SIKLUS_BY_SLUG,
@@ -780,6 +887,9 @@ if (typeof module !== 'undefined' && module.exports) {
     wukuIllustrationPath,
     dewaneIllustrationPath,
     siklus12IllustrationPath,
-    astawaraIllustrationPath
+    astawaraIllustrationPath,
+    wukuLegacyImagePath,
+    dewaneLegacyImagePath,
+    resolvedImagePath
   };
 }

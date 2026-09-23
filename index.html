@@ -215,7 +215,7 @@
                   <div class="text-[10px] text-sogan-400">Pawukon Jawi: Sinta dumugi Watugunung</div>
                 </div>
               </button>
-              <button onclick="switchTab('tripurusa')" class="nav-sublink group/item" data-tab="tripurusa">
+              <button onclick="switchTab('tripurusa')" class="nav-sublink group/item ahli-only" data-tab="tripurusa">
                 <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                   <i class="fa-solid fa-egg"></i>
                 </div>
@@ -224,7 +224,7 @@
                   <div class="text-[10px] text-sogan-400">Mitologi Antaga, Ismaya, Manikmaya</div>
                 </div>
               </button>
-              <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink group/item" data-tab="ensiklopedia-budaya">
+              <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink group/item ahli-only" data-tab="ensiklopedia-budaya">
                 <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                   <i class="fa-solid fa-book-journal-whills"></i>
                 </div>
@@ -269,7 +269,7 @@
                   <div class="text-[10px] text-sogan-400">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
                 </div>
               </button>
-              <button onclick="switchTab('tumpeng')" class="nav-sublink group/item" data-tab="tumpeng">
+              <button onclick="switchTab('tumpeng')" class="nav-sublink group/item ahli-only" data-tab="tumpeng">
                 <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                   <i class="fa-solid fa-bowl-rice"></i>
                 </div>
@@ -282,7 +282,7 @@
           </div>
 
           <!-- 5. Laporan (Cetak & Ekspor) -->
-          <button onclick="switchTab('laporan')" class="nav-btn nav-link" data-tab="laporan">
+          <button onclick="switchTab('laporan')" class="nav-btn nav-link ahli-only" data-tab="laporan">
             <i class="fa-solid fa-file-pdf text-prada"></i> <span>Laporan</span>
           </button>
         </nav>
@@ -290,9 +290,18 @@
 
       <!-- Audio & Utility Cluster (Kanan) -->
       <div class="nav-utility-cluster flex items-center gap-2 flex-shrink-0">
+        <!-- Mode Switcher (Pemula / Ahli) -->
+        <button id="modeToggleBtn" onclick="toggleMode()" class="mode-toggle-btn px-2.5 py-1.5 rounded-lg border text-xs font-mono font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Ganti Mode Tampilan (Ringkas / Lengkap)">
+          <i id="modeToggleIcon" class="fa-solid fa-sliders text-amber-400"></i>
+          <span id="modeToggleText" class="hidden sm:inline">Mode: Lengkap</span>
+          <span id="modeToggleTextShort" class="sm:hidden">Ahli</span>
+        </button>
+
         <!-- Language Switcher (ID / JA) -->
         <button onclick="toggleLanguage()" class="lang-toggle-btn px-2.5 py-1.5 rounded-lg bg-sogan-950/80 border border-prada/40 hover:border-prada text-xs font-mono font-bold text-prada flex items-center gap-1.5 transition cursor-pointer shadow-xs" title="Ganti Bahasa (Indonesia / Jawa)">
           <i class="fa-solid fa-language text-amber-400"></i>
+          <span class="lang-toggle-short">ID</span>
+        </button>
           <span class="lang-toggle-short">ID</span>
         </button>
 
@@ -318,6 +327,17 @@
 
     <!-- Mobile Drawer -->
     <div id="mobileMenu" class="hidden md:hidden bg-keraton border-t border-sogan-800/80 px-4 pt-2 pb-6 mt-2 space-y-3 shadow-2xl max-h-[85vh] overflow-y-auto">
+      <!-- Mode Switcher Mobile -->
+      <div class="flex items-center justify-between px-3 py-2 bg-sogan-950/60 rounded-xl border border-sogan-800 mb-2">
+        <span class="text-xs text-sogan-300 font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-prada"></i> Mode Tampilan
+        </span>
+        <button id="mobileModeToggleBtn" onclick="toggleMode()" class="px-2.5 py-1 rounded-lg bg-sogan-900 border border-prada/40 text-xs font-bold text-prada cursor-pointer flex items-center gap-1.5" title="Mode Lengkap">
+          <span id="mobileModeToggleText">Lengkap (Ahli)</span>
+          <i class="fa-solid fa-repeat text-[10px] text-amber-400"></i>
+        </button>
+      </div>
+
       <!-- Language Switcher Mobile -->
       <div class="flex items-center justify-between px-3 py-2 bg-sogan-950/60 rounded-xl border border-sogan-800 mb-2">
         <span class="text-xs text-sogan-300 font-semibold flex items-center gap-2">
@@ -375,16 +395,16 @@
           <button onclick="switchTab('wuku'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wuku">
             <i class="fa-solid fa-compass w-4 text-prada"></i> Ensiklopedia 30 Wuku
           </button>
-          <button onclick="switchTab('tripurusa'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tripurusa">
+          <button onclick="switchTab('tripurusa'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tripurusa">
             <i class="fa-solid fa-egg w-4 text-prada"></i> Telur Jagad (Tripurusa)
           </button>
-          <button onclick="switchTab('ensiklopedia-budaya'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="ensiklopedia-budaya">
+          <button onclick="switchTab('ensiklopedia-budaya'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="ensiklopedia-budaya">
             <i class="fa-solid fa-book-journal-whills w-4 text-prada"></i> Ensiklopedia Primbon &amp; Falakiah
           </button>
           <button onclick="switchTab('gamelan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="gamelan">
             <i class="fa-solid fa-drum w-4 text-prada"></i> Gamelan Jawa
           </button>
-          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tumpeng">
+          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tumpeng">
             <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> Tumpeng Tombak Rojo
           </button>
         </div>
@@ -409,7 +429,7 @@
       </div>
 
       <!-- Laporan & Ekspor Dokumen -->
-      <div class="pt-1">
+      <div class="pt-1 ahli-only">
         <div class="px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
           <i class="fa-solid fa-file-pdf text-[10px]"></i> Laporan &amp; Ekspor Dokumen
         </div>
@@ -758,16 +778,29 @@
           <button onclick="renderKalender()" class="mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow">
             Buat Kalender
           </button>
-          <button onclick="printLaporanKalender('parchment')" id="btnPrintKalenderParchment" class="mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition shadow flex items-center gap-1.5" title="Ekspor PDF Kertas Kuno Keraton">
+          <button onclick="printLaporanKalender('parchment')" id="btnPrintKalenderParchment" class="ahli-only mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition shadow flex items-center gap-1.5" title="Ekspor PDF Kertas Kuno Keraton">
             <i class="fa-solid fa-scroll"></i> <span>PDF (Kertas Kuno)</span>
           </button>
-          <button onclick="printLaporanKalender('monochrome')" id="btnPrintKalenderMonochrome" class="mt-4 px-4 py-2 rounded-lg bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition flex items-center gap-1.5" title="Cetak Monokrom / Hitam Putih Standar">
+          <button onclick="printLaporanKalender('monochrome')" id="btnPrintKalenderMonochrome" class="ahli-only mt-4 px-4 py-2 rounded-lg bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition flex items-center gap-1.5" title="Cetak Monokrom / Hitam Putih Standar">
             <i class="fa-solid fa-print"></i> <span>Cetak Monokrom</span>
           </button>
-          <button onclick="downloadKalenderPng()" id="btnDownloadKalenderPng" class="mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition shadow flex items-center gap-1.5" title="Unduh Kalender Format Gambar PNG (Resolusi Tinggi)">
+          <button onclick="downloadKalenderPng()" id="btnDownloadKalenderPng" class="ahli-only mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition shadow flex items-center gap-1.5" title="Unduh Kalender Format Gambar PNG (Resolusi Tinggi)">
             <i class="fa-solid fa-image"></i> <span>Unduh Gambar (PNG)</span>
           </button>
         </div>
+      </div>
+
+      <!-- Helper Banner Mode Pemula (Ringkas) -->
+      <div class="pemula-only p-3.5 rounded-2xl bg-sogan-950/70 border border-emerald-500/30 flex flex-wrap items-center justify-between gap-3 text-xs text-sogan-300">
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-6 rounded-lg bg-emerald-950 border border-emerald-500/50 flex items-center justify-center text-emerald-400 text-xs">
+            <i class="fa-solid fa-leaf"></i>
+          </span>
+          <span><strong>Mode Ringkas Aktif:</strong> Tampilan kalender fokus ing dinten lan pasaran harian. Opsi ekspor cetak lan paugeran kode dipunsinggahaken.</span>
+        </div>
+        <button type="button" onclick="setMode('ahli')" class="text-prada hover:underline font-bold text-xs flex items-center gap-1 cursor-pointer">
+          <span>Ngalih Mode Lengkap</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
       </div>
 
       <!-- Saring / Filter Kalender Cerdas & Switcher Mode Tampilan (Grid / List) -->
@@ -793,7 +826,7 @@
         </div>
 
         <!-- Switcher Mode Tampilan (Grid vs List Minggu) -->
-        <div class="flex items-center gap-1.5 bg-sogan-950/80 p-1 rounded-xl border border-sogan-800">
+        <div class="ahli-only flex items-center gap-1.5 bg-sogan-950/80 p-1 rounded-xl border border-sogan-800">
           <button id="btnCalModeGrid" onclick="setKalenderViewMode('grid')" class="cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer" title="Tampilan Tabel Grid">
             <i class="fa-solid fa-table-cells"></i> <span data-i18n="cal_mode_grid">Mode Tabel (Grid)</span>
           </button>
@@ -825,7 +858,7 @@
       </div>
 
       <!-- Panduan Membaca, Standarisasi Kode Warna & Keterangan Hari Ala/Becik -->
-      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-4 text-xs">
+      <div class="ahli-only bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-4 text-xs">
         <div class="bg-red-950/40 border border-red-500/50 text-amber-200 p-3 rounded-xl text-center italic font-semibold shadow-xs" data-i18n="cal_wuku_ngisor_hint">
           Nomor 4, 14, 24 — kala ono ngisor, ojo marani dununge wuku!
         </div>
@@ -883,14 +916,13 @@
       </div>
 
       <!-- Panel Tanggal Ditandhai & Catatan Lokal (2.3) -->
-      <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-3">
+      <div class="ahli-only bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sogan-800 pb-2.5">
           <h4 class="font-marcellus text-base font-bold text-prada flex items-center gap-2">
             <i class="fa-solid fa-bookmark text-amber-400"></i> Tanggal Wigati &amp; Catatan Lokal Panjenengan
           </h4>
           <span class="text-[11px] text-sogan-400 font-mono">Tersimpan lokal di peramban (LocalStorage: jagad_jawa_bookmarks)</span>
         </div>
-        <div id="bookmarkListContainer" class="min-h-[50px]"></div>
       </div>
 
     </section>
@@ -958,8 +990,21 @@
         </button>
       </div>
 
+      <!-- Helper Banner Mode Pemula (Ringkas) -->
+      <div class="pemula-only p-3.5 rounded-2xl bg-sogan-950/70 border border-emerald-500/30 flex flex-wrap items-center justify-between gap-3 text-xs text-sogan-300">
+        <div class="flex items-center gap-2.5">
+          <span class="w-6 h-6 rounded-lg bg-emerald-950 border border-emerald-500/50 flex items-center justify-center text-emerald-400 text-xs">
+            <i class="fa-solid fa-leaf"></i>
+          </span>
+          <span><strong>Mode Ringkas Aktif:</strong> Formulir disederhanakaken kanggé nujum kepribadian dhasar. Komparasi relasi lan opsi cetak kasimpen.</span>
+        </div>
+        <button type="button" onclick="setMode('ahli')" class="text-prada hover:underline font-bold text-xs flex items-center gap-1 cursor-pointer">
+          <span>Ngalih Mode Lengkap</span> <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
+      </div>
+
       <!-- Bilah Navigasi Sub-Tab Nujum (3.4) -->
-      <div class="flex items-center gap-2 p-1.5 rounded-xl bg-keraton border border-sogan-800 text-xs">
+      <div class="ahli-only flex items-center gap-2 p-1.5 rounded-xl bg-keraton border border-sogan-800 text-xs">
         <button id="btnSubTabNujumPribadi" onclick="switchNujumSubTab('pribadi')" class="flex-1 py-2 px-3 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow text-center transition">
           <i class="fa-solid fa-user-gear mr-1"></i> Nujum Kepribadian Pribadi
         </button>
@@ -990,7 +1035,7 @@
           </div>
 
           <!-- Baris 2: Alamat Tinggal (Nama Kelurahan) | Alamat Tempat Kerja (Nama Kelurahan) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="ahli-only grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div>
               <label class="block font-semibold text-prada mb-1.5">Alamat Tinggal (Nama Kelurahan)</label>
               <input type="text" id="alamatTinggal" value="" placeholder="Contoh: Delanggu" class="w-full bg-keraton border border-sogan-700 rounded-xl p-2.5 sm:p-3 text-sogan-100 text-xs sm:text-sm focus:border-prada outline-none transition shadow-inner">
@@ -1006,13 +1051,13 @@
             <button onclick="hitungKepribadianLengkap()" class="flex-1 min-w-[170px] py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-calculator"></i> <span>Hitung Nujum Lengkap</span>
             </button>
-            <button onclick="printLaporanNujum('monochrome', 'lengkap')" id="btnPrintKepribadianLengkap" class="px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/60 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Mode Lengkap (9 Bagian Dokumen Arsip Monokrom)">
+            <button onclick="printLaporanNujum('monochrome', 'lengkap')" id="btnPrintKepribadianLengkap" class="ahli-only px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/60 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Mode Lengkap (9 Bagian Dokumen Arsip Monokrom)">
               <i class="fa-solid fa-file-lines text-prada"></i> <span>Cetak Mode Lengkap (9 Bagian)</span>
             </button>
-            <button onclick="printLaporanNujum('monochrome', 'ringkas')" id="btnPrintKepribadianRingkas" class="px-3.5 py-3 rounded-xl bg-sogan-900 border border-sogan-600 text-sogan-200 hover:text-prada hover:border-prada/60 font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Mode Ringkas (Transkripsi Cepat Monokrom)">
+            <button onclick="printLaporanNujum('monochrome', 'ringkas')" id="btnPrintKepribadianRingkas" class="ahli-only px-3.5 py-3 rounded-xl bg-sogan-900 border border-sogan-600 text-sogan-200 hover:text-prada hover:border-prada/60 font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Mode Ringkas (Transkripsi Cepat Monokrom)">
               <i class="fa-solid fa-file-contract text-amber-400"></i> <span>Cetak Mode Ringkas</span>
             </button>
-            <button onclick="printLaporanNujum('parchment', 'lengkap')" id="btnPrintKepribadianParchment" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+            <button onclick="printLaporanNujum('parchment', 'lengkap')" id="btnPrintKepribadianParchment" class="ahli-only px-3.5 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
               <i class="fa-solid fa-scroll"></i> <span>Kertas Kuno</span>
             </button>
           </div>
@@ -1061,7 +1106,7 @@
       </div>
 
       <!-- SUB-TAB 2: KOMPARASI RELASI & KERJA SAMA (NON-JODOH) (3.4) -->
-      <div id="subTabNujumNonJodoh" class="hidden space-y-6">
+      <div id="subTabNujumNonJodoh" class="ahli-only hidden space-y-6">
         <div class="w-full bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-4 text-xs">
           <div class="border-b border-sogan-800/80 pb-3">
             <h3 class="font-marcellus text-lg font-bold text-prada">Komparasi Sinergi Relasi &amp; Kerja Sama (Non-Jodoh)</h3>
@@ -1261,10 +1306,10 @@
         <button onclick="hitungNujumPerjodohan()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
           <i class="fa-solid fa-heart mr-1"></i> Hitung Nujum Perjodohan
         </button>
-        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="ahli-only px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
           <i class="fa-solid fa-scroll"></i> Ekspor PDF (Kertas Kuno)
         </button>
-        <button onclick="printLaporanPerjodohan('monochrome')" id="btnPrintPerjodohanMonochrome" class="px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Dokumen Monokrom / Hitam Putih Standar">
+        <button onclick="printLaporanPerjodohan('monochrome')" id="btnPrintPerjodohanMonochrome" class="ahli-only px-4 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Dokumen Monokrom / Hitam Putih Standar">
           <i class="fa-solid fa-print"></i> Cetak Monokrom
         </button>
         <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -1404,13 +1449,13 @@
             <button onclick="hitungSelametan()" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
               Hitung Selametan
             </button>
-            <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
+            <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="ahli-only px-3.5 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Estetika Kertas Kuno Keraton">
               <i class="fa-solid fa-scroll"></i> Ekspor PDF
             </button>
-            <button onclick="printLaporanSelametan('monochrome')" id="btnPrintSelametanMonochrome" class="px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Cetak Monokrom / Hitam Putih Standar">
+            <button onclick="printLaporanSelametan('monochrome')" id="btnPrintSelametanMonochrome" class="ahli-only px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold hover:bg-sogan-800 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Cetak Monokrom / Hitam Putih Standar">
               <i class="fa-solid fa-print"></i> Cetak Monokrom
             </button>
-            <button onclick="downloadSelametanPng()" id="btnDownloadSelametanPng" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Unduh Tabel Pengetan Format Gambar PNG">
+            <button onclick="downloadSelametanPng()" id="btnDownloadSelametanPng" class="ahli-only px-3.5 py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-teal-600 text-white font-bold hover:brightness-110 transition text-xs flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Unduh Tabel Pengetan Format Gambar PNG">
               <i class="fa-solid fa-image"></i> Unduh PNG
             </button>
             <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -2353,6 +2398,25 @@
 
       </div>
 
+      <!-- Section: 12 Padewan Siklus Batara-Batari (Kanon) -->
+      <div class="mt-8 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-keraton via-wulung to-keraton border border-prada/30 shadow-2xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-sogan-800 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-prada/20 border border-prada/50 text-prada flex items-center justify-center text-sm shadow">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h3 class="font-marcellus text-lg sm:text-xl font-bold text-prada">12 Padewan Siklus Batara-Batari</h3>
+              <p class="text-[11px] text-sogan-400">Siklus 12 kanon panguwasa penanggalan &amp; sifat tahunan (suryo dumugi yamadipati)</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-mono px-3 py-1 rounded-full bg-sogan-950 border border-prada/40 text-prada font-semibold">
+            12 Entitas Kanon
+          </span>
+        </div>
+        <div id="tabWukuSiklus12Grid"></div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -2718,11 +2782,15 @@
             <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 tracking-wider">
               <i class="fa-solid fa-compass"></i> Pawukon &amp; Kosmologi
             </span>
-            <div class="space-y-1.5 text-[11px]">
-              <div class="flex justify-between">
-                <span class="text-sogan-400">Wuku Lumampah:</span>
-                <strong id="modalNamaWuku" class="text-sogan-100">-</strong>
+            <div class="flex items-center gap-3">
+              <div id="modalWukuThumbContainer" class="w-10 h-14 rounded-lg overflow-hidden border border-prada/40 bg-sogan-950 shrink-0 hidden sm:block shadow">
+                <img id="modalWukuThumbImg" src="" alt="" loading="lazy" decoding="async" class="w-full h-full" style="aspect-ratio: 400/560; object-fit: cover;" onerror="this.onerror=null; this.parentElement.classList.add('hidden');" />
               </div>
+              <div class="space-y-1.5 text-[11px] flex-1 min-w-0">
+                <div class="flex justify-between">
+                  <span class="text-sogan-400">Wuku Lumampah:</span>
+                  <strong id="modalNamaWuku" class="text-sogan-100">-</strong>
+                </div>
               <div class="flex justify-between">
                 <span class="text-sogan-400">Dununge Wuku (Arah):</span>
                 <span id="modalDunungeWuku" class="text-sogan-200">-</span>
@@ -2743,6 +2811,7 @@
                 <span class="text-sogan-400">Zodiak Surya:</span>
                 <span id="modalZodiak" class="text-sogan-200">-</span>
               </div>
+            </div>
             </div>
           </div>
         </div>
@@ -2965,6 +3034,83 @@
         <button onclick="closeEnsiklopediaWukuModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer">
           Tutup
         </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MODAL ONBOARDING PILIH MODE (PEMULA / AHLI) ==================== -->
+  <div id="modalPilihMode" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="modalPilihModeTitle">
+    <div class="bg-[#10141e] border-2 border-prada/50 w-full max-w-xl rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 text-center relative overflow-hidden animate-fade-in">
+      
+      <!-- Dekorasi Cahaya Emas / Glow Atas -->
+      <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-40 bg-prada/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Icon & Judul -->
+      <div class="relative space-y-2">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-prada/30 via-sogan-900 to-keraton border border-prada/60 flex items-center justify-center text-prada text-2xl shadow-lg shadow-prada/20">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <h2 id="modalPilihModeTitle" class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide pt-2">
+          Sugeng Rawuh ing Jagad Jawa
+        </h2>
+        <p class="font-sans text-xs sm:text-sm text-sogan-200/90 leading-relaxed max-w-md mx-auto">
+          Kersa milih corak tampilan ingkang trep kaliyan kaperluan panjenengan? Pilihan punika saged dipunowahi kapan kemawon.
+        </p>
+      </div>
+
+      <!-- Pilihan 2 Kartu Mode -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left relative">
+        
+        <!-- Opsi 1: Mode Ringkas (Pemula) -->
+        <div onclick="pilihModeAwal('pemula')" class="p-5 rounded-2xl bg-sogan-950/80 border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 transition-all duration-200 cursor-pointer group flex flex-col justify-between shadow-md">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-xl bg-emerald-950 border border-emerald-500/50 flex items-center justify-center text-emerald-400 text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-leaf"></i>
+              </span>
+              <span class="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 px-2 py-0.5 rounded border border-emerald-500/30 font-bold uppercase">Ringkas</span>
+            </div>
+            <h3 class="font-marcellus text-base font-bold text-emerald-200 group-hover:text-emerald-100 transition">
+              Mode Ringkas (Pemula)
+            </h3>
+            <p class="font-sans text-xs text-sogan-300 leading-relaxed">
+              Fokus ing fitur-fitur wigati (Kalender harian, weton, jodoh baku, aksara, wayang, gamelan). Opsi rumit kasimpen supados langkung gampil dipunginaaken.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-emerald-900/40 flex items-center justify-between text-xs text-emerald-300 font-bold">
+            <span>Pilih Mode Ringkas</span>
+            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+        <!-- Opsi 2: Mode Lengkap (Ahli) -->
+        <div onclick="pilihModeAwal('ahli')" class="p-5 rounded-2xl bg-sogan-950/80 border border-prada/40 hover:border-prada hover:bg-prada/10 transition-all duration-200 cursor-pointer group flex flex-col justify-between shadow-md">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="w-8 h-8 rounded-xl bg-sogan-900 border border-prada/50 flex items-center justify-center text-prada text-sm group-hover:scale-110 transition">
+                <i class="fa-solid fa-book-journal-whills"></i>
+              </span>
+              <span class="text-[10px] font-mono text-prada bg-sogan-900/90 px-2 py-0.5 rounded border border-prada/30 font-bold uppercase">Lengkap</span>
+            </div>
+            <h3 class="font-marcellus text-base font-bold text-prada group-hover:text-prada-light transition">
+              Mode Lengkap (Ahli)
+            </h3>
+            <p class="font-sans text-xs text-sogan-300 leading-relaxed">
+              Sadaya komputasi jangkep: analisis 6 dimensi bincil, faalakiah 12 nabi, komparasi relasi non-jodoh, paugeran kode ala/becik, lan ekspor dokumen resmi keraton.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-sogan-800/80 flex items-center justify-between text-xs text-prada font-bold">
+            <span>Pilih Mode Lengkap</span>
+            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Keterangan Bawah -->
+      <div class="text-[11px] text-sogan-400 italic">
+        *Panjenengan saged ngowahi mode kapan kemawon lumantar tombol mode ing sisih tengen nginggil (navbar).
       </div>
 
     </div>

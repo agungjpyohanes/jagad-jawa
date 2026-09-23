@@ -13,6 +13,19 @@ import './ui/navigation.js';
 import { showToast, copyToClipboard } from './ui/toast.js';
 import { closeAnyActiveModal, initModalListeners } from './ui/modal.js';
 import { initI18n, toggleLanguage, setLanguage, getLanguage } from './ui/i18n.js';
+import {
+  getMode,
+  setMode,
+  isPemula,
+  isAhli,
+  hasModePreference,
+  applyModeToUI,
+  toggleMode,
+  showOnboardingModal,
+  closeOnboardingModal,
+  pilihModeAwal,
+  initModeFeature
+} from './ui/mode.js';
 
 // ─── DOMAIN FEATURES & WIRING ─────────────────────────────────────────────
 import { wireKalenderFeature, initQuickTodayBadge } from './features/kalender.js';
@@ -40,6 +53,16 @@ if (typeof window !== 'undefined') {
   window.toggleLanguage = toggleLanguage;
   window.setLanguage = setLanguage;
   window.getLanguage = getLanguage;
+  window.getMode = getMode;
+  window.setMode = setMode;
+  window.isPemula = isPemula;
+  window.isAhli = isAhli;
+  window.hasModePreference = hasModePreference;
+  window.applyModeToUI = applyModeToUI;
+  window.toggleMode = toggleMode;
+  window.showOnboardingModal = showOnboardingModal;
+  window.closeOnboardingModal = closeOnboardingModal;
+  window.pilihModeAwal = pilihModeAwal;
 }
 
 wireKalenderFeature();
@@ -154,6 +177,7 @@ function registerServiceWorker() {
 // ─── BOOTSTRAP INITIAL APPLICATION STATE ──────────────────────────────────
 export function bootstrap() {
   initI18n();
+  initModeFeature();
   registerServiceWorker();
 
   if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects();
@@ -203,5 +227,12 @@ export {
   initI18n,
   toggleLanguage,
   setLanguage,
-  getLanguage
+  getLanguage,
+  getMode,
+  setMode,
+  isPemula,
+  isAhli,
+  hasModePreference,
+  applyModeToUI,
+  toggleMode
 };

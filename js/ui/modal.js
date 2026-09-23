@@ -9,7 +9,8 @@ export function closeAnyActiveModal() {
     { id: 'modalShareCardWeton', close: () => { if (typeof window.closeWetonShareModal === 'function') window.closeWetonShareModal(); } },
     { id: 'modalGlosariumNujum', close: () => { if (typeof window.closeGlosariumNujumModal === 'function') window.closeGlosariumNujumModal(); } },
     { id: 'modalEnsiklopediaWuku', close: () => { if (typeof window.closeEnsiklopediaWukuModal === 'function') window.closeEnsiklopediaWukuModal(); } },
-    { id: 'wayangDetailModal', close: () => { if (typeof window.closeWayangDetailModal === 'function') window.closeWayangDetailModal(); } }
+    { id: 'wayangDetailModal', close: () => { if (typeof window.closeWayangDetailModal === 'function') window.closeWayangDetailModal(); } },
+    { id: 'modalPilihMode', close: () => { if (typeof window.closeOnboardingModal === 'function') window.closeOnboardingModal(); } }
   ];
   modalConfigs.forEach(({ id, close }) => {
     const el = document.getElementById(id);
@@ -28,7 +29,8 @@ export function initModalListeners() {
     { id: 'modalShareCardWeton', close: () => { if (typeof window.closeWetonShareModal === 'function') window.closeWetonShareModal(); } },
     { id: 'modalGlosariumNujum', close: () => { if (typeof window.closeGlosariumNujumModal === 'function') window.closeGlosariumNujumModal(); } },
     { id: 'modalEnsiklopediaWuku', close: () => { if (typeof window.closeEnsiklopediaWukuModal === 'function') window.closeEnsiklopediaWukuModal(); } },
-    { id: 'wayangDetailModal', close: () => { if (typeof window.closeWayangDetailModal === 'function') window.closeWayangDetailModal(); } }
+    { id: 'wayangDetailModal', close: () => { if (typeof window.closeWayangDetailModal === 'function') window.closeWayangDetailModal(); } },
+    { id: 'modalPilihMode', close: () => { if (typeof window.closeOnboardingModal === 'function') window.closeOnboardingModal(); } }
   ];
 
   modalConfigs.forEach(({ id, close }) => {
