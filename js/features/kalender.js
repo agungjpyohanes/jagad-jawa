@@ -67,6 +67,9 @@ import {
   buildWhatsAppShareText
 } from '../modules/kalender/share-card.js';
 
+import { getPetungTetanen } from '../data/petung-tetanen-db.js';
+import { getWukuPetenget } from '../data/wuku-petenget-db.js';
+
 /**
  * Inisialisasi Badge Cepat Weton Hari Ini di Navbar/Header
  */
@@ -145,6 +148,10 @@ export function wireKalenderFeature() {
   window.shareWetonViaWhatsApp = shareWetonViaWhatsApp;
   window.downloadShareCardPng = downloadShareCardPng;
   window.buildWhatsAppShareText = buildWhatsAppShareText;
+
+  // Petung Tetanen & Petenget Wuku
+  window.getPetungTetanen = getPetungTetanen;
+  window.getWukuPetenget = getWukuPetenget;
 }
 
 export {
@@ -199,5 +206,7 @@ export {
   closeWetonShareModal,
   shareWetonViaWhatsApp,
   downloadShareCardPng,
-  buildWhatsAppShareText
+  buildWhatsAppShareText,
+  getPetungTetanen,
+  getWukuPetenget
 };

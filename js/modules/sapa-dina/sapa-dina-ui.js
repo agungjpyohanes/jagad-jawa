@@ -64,7 +64,7 @@ function clearDismissState() {
  * @returns {string}
  */
 export function buildSapaDinaShareText(data) {
-  const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr } = data;
+  const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr, petungTetanen } = data;
   return (
     `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
     `_Ringkasan Harian Kalender Jawa_\n\n` +
@@ -73,6 +73,7 @@ export function buildSapaDinaShareText(data) {
     `🔢 *Neptu:* ${neptu} (${data.neptuBreakdown})\n` +
     `🪐 *Wuku:* ${wukuDisplay} (${data.wukuNo}/30)\n` +
     `🌾 *Pranata Mangsa:* ${pranata.nama} — ${pranata.musimTani}\n` +
+    (petungTetanen ? `🌱 *Petung Tetanen:* ${petungTetanen.kategoriLabel} (${petungTetanen.kangBecik}) — ${petungTetanen.tegese}\n` : '') +
     `🪶 *Candrasangkala:* "${pranata.candrasangkala}"\n` +
     `${dinoStatus.isIjo ? '🟢' : '🔴'} *Status Dina:* ${dinoStatus.statusText}` +
     `${dinoStatus.specialLabel ? ' · ' + dinoStatus.specialLabel : ''}\n\n` +
@@ -403,6 +404,34 @@ function renderExpandedCard(containerId, data) {
               </div>` : ''}
             </div>
           </div>
+
+          ${data.petungTetanen ? `
+          <!-- Petung Tetanen Tradisional (CSV Baru) -->
+          <div class="space-y-2">
+            <div class="font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-400/80
+                        flex items-center gap-1.5">
+              <i class="fa-solid fa-wheat-awn text-[9px]"></i>
+              Petung Tetanen &amp; Palawija (Weton ${wetonDisplay})
+            </div>
+            <div class="px-4 py-3 rounded-xl bg-emerald-950/30 border border-emerald-700/25 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-200 flex items-center">
+                  <i class="${data.petungTetanen.icon} mr-1.5 text-emerald-300"></i>
+                  <span>Kang Becik: ${data.petungTetanen.kategoriLabel} (${data.petungTetanen.kangBecik})</span>
+                </span>
+                <span class="text-[9.5px] px-2 py-0.5 rounded ${data.petungTetanen.badgeClass} border font-semibold font-mono">
+                  Cocog Ditandur
+                </span>
+              </div>
+              <div class="text-[11px] text-sogan-200 leading-relaxed">
+                ${data.petungTetanen.tegese}
+              </div>
+              <div class="text-[10px] text-emerald-300/90 pt-1 border-t border-emerald-900/40">
+                <strong>Tuladha:</strong> ${data.petungTetanen.contone}
+              </div>
+            </div>
+          </div>
+          ` : ''}
 
           <!-- Divider -->
           <div class="border-t border-prada/10"></div>

@@ -40,6 +40,8 @@ import {
 import { openWetonShareModal } from './share-card.js';
 import { showToast } from '../../ui/toast.js';
 import { illustrationPath } from '../../data/dewa-kanon.js';
+import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
+import { getWukuPetenget } from '../../data/wuku-petenget-db.js';
 
 let currentFilterType = 'all';
 
@@ -179,34 +181,34 @@ export function renderKalender() {
         const isToday = (today.getFullYear() === tahun && today.getMonth() + 1 === bulan && today.getDate() === dayNum);
 
         htmlBuffer.push(`
-          <td class="cal-day-cell h-28 p-1.5 align-top border ${dinoWarna.cellBorder} relative cursor-pointer group transition-all duration-200"
+          <td class="cal-day-cell h-24 sm:h-28 p-1.5 align-top border ${dinoWarna.cellBorder} relative cursor-pointer group transition-all duration-200 hover:z-10 hover:shadow-[0_0_14px_rgba(212,175,55,0.35)] hover:border-prada"
               style="background-color: ${dinoWarna.cellBg}; ${dinoWarna.cellBorderStyle}"
               onclick="window.bukaDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum})"
               data-day="${dayNum}" data-is-ijo="${dinoWarna.isIjo}" data-is-gede="${dinoWarna.isGede}" data-is-bookmarked="${isBookmarked}">
             
             ${isToday ? '<div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-amber-400 via-prada to-amber-400 animate-pulse"></div>' : ''}
             
-            <div class="flex justify-between items-start mb-1">
-              <span class="font-mono text-sm font-bold ${isLibur ? 'text-rose-600 font-extrabold' : 'text-sogan-950'}">
-                ${dayNum}
-              </span>
+            <div class="flex justify-between items-start mb-0.5">
+              <div class="flex items-center gap-1">
+                <span class="font-mono text-sm font-bold ${isLibur ? 'text-rose-600 font-extrabold' : 'text-sogan-950'}">
+                  ${dayNum}
+                </span>
+                ${liburName ? `<span class="inline-block w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.6)]" title="${liburName}"></span>` : ''}
+              </div>
               <div class="flex flex-col items-end gap-0.5">
                 ${dinoWarna.badgeHtml}
-                ${isBookmarked ? `<span class="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-bold bg-amber-600 text-white shadow-xs" title="${bookmark.catatan || 'Tanggal Ditandhai'}">🔖 Catatan</span>` : ''}
+                ${isBookmarked ? `<span class="inline-flex items-center px-1 py-0.5 rounded text-[8px] font-bold bg-amber-600 text-white shadow-xs" title="${bookmark.catatan || 'Tanggal Ditandai'}">🔖</span>` : ''}
               </div>
             </div>
 
-            <div class="text-center my-1.5">
-              <div class="font-serif font-bold text-[11px] text-sogan-900 tracking-wide">${PASARAN[pasaranId]}</div>
-              <div class="text-[9.5px] font-mono text-sogan-700">N: ${NEPTU_HARI[d] + NEPTU_PASARAN[pasaranId]}</div>
+            <div class="text-center my-3 sm:my-4">
+              <span class="font-serif font-bold text-xs sm:text-sm text-sogan-950 tracking-wider block">${PASARAN[pasaranId]}</span>
             </div>
 
-            <div class="absolute inset-x-0 bottom-0 px-1.5 py-0.5 text-[9.5px] font-semibold text-center truncate ${dinoWarna.bottomBgClass}"
+            <div class="absolute inset-x-0 bottom-0 px-1 py-0.5 text-[9px] font-semibold text-center truncate ${dinoWarna.bottomBgClass}"
                  style="background-color: ${dinoWarna.bottomBg}; color: ${dinoWarna.bottomTextColor};">
               ${dateObj.tglJawa} ${dateObj.bulanJawa}
             </div>
-            
-            ${liburName ? `<div class="absolute top-6 left-1 right-1 text-[8px] leading-tight text-rose-700 font-bold bg-rose-100/90 rounded px-1 py-0.5 truncate border border-rose-300" title="${liburName}">★ ${liburName}</div>` : ''}
           </td>
         `);
       }
@@ -677,6 +679,149 @@ export function bukaDetailTanggalJawa(y, m, d) {
     `;
   }
 
+  // 8.1. Seksi Petung Tetanen Tradisional Berdasarkan Weton (CSV Baru)
+  const elTetanenCard = document.getElementById('modalPetungTetanenCard');
+  if (elTetanenCard) {
+    const petungTani = getPetungTetanen(tglJawa.dino, tglJawa.pas);
+    if (petungTani) {
+      elTetanenCard.innerHTML = `
+        <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-600/40 space-y-2">
+          <div class="flex items-center justify-between border-b border-emerald-800/60 pb-2">
+            <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
+              <i class="fa-solid fa-wheat-awn"></i> Petung Tetanen &amp; Palawija (Weton ${tglJawa.dino} ${tglJawa.pas})
+            </span>
+            <span class="text-[9.5px] px-2 py-0.5 rounded ${petungTani.badgeClass || 'bg-emerald-900/80 text-emerald-200 border-emerald-500/30'} border font-semibold font-mono flex items-center gap-1.5">
+              <i class="${petungTani.icon || 'fa-solid fa-wheat-awn'}"></i>
+              <span>Kang Becik: ${petungTani.kategoriLabel} (${petungTani.kangBecik})</span>
+            </span>
+          </div>
+          <div class="space-y-1.5 text-[11px]">
+            <div class="text-sogan-200 leading-relaxed text-[11.5px]">
+              <strong class="text-emerald-300">Makna &amp; Pituduh:</strong> ${petungTani.tegese}
+            </div>
+            <div class="pt-1 border-t border-emerald-900/60 text-[10.5px]">
+              <strong class="text-sogan-400 block text-[9.5px] uppercase">Tuladha Tetanduran Ingkang Cocog:</strong>
+              <p class="text-emerald-200 mt-0.5 leading-relaxed font-medium">${petungTani.contone}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      elTetanenCard.innerHTML = '';
+    }
+  }
+
+  // 8.2. Seksi 4 Pilar Petenget Wuku (CSV Baru: Ala-Becik, Nambani, Pangupajiwa, Tetanen)
+  const elWukuPetengetCard = document.getElementById('modalWukuPetengetCard');
+  if (elWukuPetengetCard) {
+    const wukuPetenget = getWukuPetenget(tglJawa.wukuNo);
+    if (wukuPetenget) {
+      elWukuPetengetCard.innerHTML = `
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-sogan-950/90 via-wulung/80 to-keraton/90 border border-prada/40 space-y-3 shadow-lg">
+          <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-prada/20 border border-prada/50 flex items-center justify-center text-prada text-xs font-mono font-bold shadow-xs">
+                ${tglJawa.wukuNo}
+              </span>
+              <span class="text-xs uppercase font-bold text-amber-300 tracking-wider">
+                Petenget &amp; Pranata Wuku ${tglJawa.wukuName} (4 Pilar Nujum)
+              </span>
+            </div>
+            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-sogan-900 text-prada border border-prada/30">
+              Pawukon 210
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            
+            <!-- 1. Ala & Becik Wuku (wuku_ala_becik.csv) -->
+            <div class="p-3 rounded-xl bg-sogan-950/80 border border-sky-800/40 space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-bold text-sky-300 flex items-center gap-1.5 tracking-wider">
+                  <i class="fa-solid fa-scale-balanced"></i> Ala &amp; Becik Wuku
+                </span>
+                <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-sky-950 border border-sky-700/50 text-sky-300 font-mono">Hajat Dina</span>
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div>
+                  <span class="text-emerald-400 font-medium font-mono text-[9.5px] block">✓ Kang Becik:</span>
+                  <p class="text-sogan-200 leading-relaxed">${wukuPetenget.alaBecik?.becik || '-'}</p>
+                </div>
+                <div class="pt-1 border-t border-sogan-900/60">
+                  <span class="text-rose-400 font-medium font-mono text-[9.5px] block">✗ Kang Ala (Sirikan):</span>
+                  <p class="text-sogan-300 leading-relaxed">${wukuPetenget.alaBecik?.ala || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Nambani / Usada (wuku_nambani.csv) -->
+            <div class="p-3 rounded-xl bg-sogan-950/80 border border-emerald-800/40 space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
+                  <i class="fa-solid fa-mortar-pestle"></i> Nambani (Usada &amp; Jamu)
+                </span>
+                <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700/50 text-emerald-300 font-mono">Tamba Lara</span>
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div>
+                  <span class="text-emerald-400 font-medium font-mono text-[9.5px] block">✓ Kang Becik:</span>
+                  <p class="text-sogan-200 leading-relaxed">${wukuPetenget.nambani?.becik || '-'}</p>
+                </div>
+                <div class="pt-1 border-t border-sogan-900/60">
+                  <span class="text-rose-400 font-medium font-mono text-[9.5px] block">✗ Kang Ala (Sirikan):</span>
+                  <p class="text-sogan-300 leading-relaxed">${wukuPetenget.nambani?.ala || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Pangupajiwa / Rejeki (wuku_pangupajiwa.csv) -->
+            <div class="p-3 rounded-xl bg-sogan-950/80 border border-amber-800/40 space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
+                  <i class="fa-solid fa-coins"></i> Pangupajiwa (Rejeki &amp; Usaha)
+                </span>
+                <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700/50 text-amber-300 font-mono">Panguripan</span>
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div>
+                  <span class="text-emerald-400 font-medium font-mono text-[9.5px] block">✓ Kang Becik:</span>
+                  <p class="text-sogan-200 leading-relaxed">${wukuPetenget.pangupajiwa?.becik || '-'}</p>
+                </div>
+                <div class="pt-1 border-t border-sogan-900/60">
+                  <span class="text-rose-400 font-medium font-mono text-[9.5px] block">✗ Kang Ala (Sirikan):</span>
+                  <p class="text-sogan-300 leading-relaxed">${wukuPetenget.pangupajiwa?.ala || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Tetanen Wuku (wuku_tetanen.csv) -->
+            <div class="p-3 rounded-xl bg-sogan-950/80 border border-teal-800/40 space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] uppercase font-bold text-teal-300 flex items-center gap-1.5 tracking-wider">
+                  <i class="fa-solid fa-wheat-awn"></i> Tetanen Wuku ${tglJawa.wukuName}
+                </span>
+                <span class="text-[8.5px] px-1.5 py-0.5 rounded bg-teal-950 border border-teal-700/50 text-teal-300 font-mono">Tetanduran</span>
+              </div>
+              <div class="space-y-1 text-[11px]">
+                <div>
+                  <span class="text-emerald-400 font-medium font-mono text-[9.5px] block">✓ Kang Becik Ditandur:</span>
+                  <p class="text-sogan-200 leading-relaxed">${wukuPetenget.tetanen?.becik || '-'}</p>
+                </div>
+                <div class="pt-1 border-t border-sogan-900/60">
+                  <span class="text-rose-400 font-medium font-mono text-[9.5px] block">✗ Kang Ala (Sirikan):</span>
+                  <p class="text-sogan-300 leading-relaxed">${wukuPetenget.tetanen?.ala || '-'}</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    } else {
+      elWukuPetengetCard.innerHTML = '';
+    }
+  }
+
   // 9. Kode Pawukon
   const elListKode = document.getElementById('modalListKodeDetail');
   if (elListKode) {
@@ -764,6 +909,14 @@ export function bukaDetailTanggalJawa(y, m, d) {
       tutupDetailTanggalJawa();
     }
   };
+
+  const onModalEsc = function(e) {
+    if (e.key === 'Escape') {
+      tutupDetailTanggalJawa();
+      document.removeEventListener('keydown', onModalEsc);
+    }
+  };
+  document.addEventListener('keydown', onModalEsc);
 
   modal.classList.remove('hidden');
   modal.classList.add('flex');

@@ -1,0 +1,1147 @@
+{
+  "00_README": [
+    {
+      "item": "modul",
+      "isi": "Sasmitha: gerahana, impen, kedut, lindu, tejo"
+    },
+    {
+      "item": "sasi_kanon",
+      "isi": "Sura, Sapar, Mulud, Bakda Mulud, Jumadilawal, Jumadilakir, Rejeb, Ruwah, Pasa (Siyam), Sawal, Sela (Dulkangidah), Besar"
+    },
+    {
+      "item": "alias",
+      "isi": "Suro&#8594;Sura, Bakdamulud&#8594;Bakda Mulud, Pasa&#8594;Pasa (Siyam), Dulkaidah&#8594;Sela (Dulkangidah)"
+    },
+    {
+      "item": "disclaimer",
+      "isi": "Petung/sasmitha tradisional untuk refleksi budaya &#8212; bukan prediksi ilmiah bencana, bukan diagnosis"
+    },
+    {
+      "item": "sumber",
+      "isi": "SASMITHA GERAHANA, IMPEN, KEDUT, LINDU-GEMPA, TEJO (pocket)"
+    }
+  ],
+  "gerahana_sasi": [
+    {
+      "id": 1,
+      "sasi_jawa": "Sura",
+      "alias_sumber": "Suro",
+      "ngalamat": "Akeh wong pitenah lan nandang kacilakan"
+    },
+    {
+      "id": 2,
+      "sasi_jawa": "Sapar",
+      "alias_sumber": "",
+      "ngalamat": "Segara surut lan kali akeh kang asat; larang udan nanging akhire akeh angin lan udan"
+    },
+    {
+      "id": 3,
+      "sasi_jawa": "Mulud",
+      "alias_sumber": "",
+      "ngalamat": "Akeh udan lan angin"
+    },
+    {
+      "id": 4,
+      "sasi_jawa": "Bakda Mulud",
+      "alias_sumber": "Bakda Mulud",
+      "ngalamat": "Akeh wong sugih ngalih panggonan lan wong cupet akeh kang pada kagelan"
+    },
+    {
+      "id": 5,
+      "sasi_jawa": "Jumadilawal",
+      "alias_sumber": "",
+      "ngalamat": "Akeh udan thathit lan bledeg sesamberan"
+    },
+    {
+      "id": 6,
+      "sasi_jawa": "Jumadilakir",
+      "alias_sumber": "",
+      "ngalamat": "Lana sakehing tetanduran; gaga gampang pikolehe; gampang golek pangan lan kanikmatan; murah kang sarwa tinuku"
+    },
+    {
+      "id": 7,
+      "sasi_jawa": "Rejeb",
+      "alias_sumber": "",
+      "ngalamat": "Akeh wong kacingkrangan, bilahi, padudon lan akeh bledek sesamberan"
+    },
+    {
+      "id": 8,
+      "sasi_jawa": "Ruwah",
+      "alias_sumber": "",
+      "ngalamat": "Akeh wong nandur kabecikan lan jurung pamuji"
+    },
+    {
+      "id": 9,
+      "sasi_jawa": "Pasa (Siyam)",
+      "alias_sumber": "Pasa",
+      "ngalamat": "Akeh wong pada bungah-bungah, nanging banjur ana pagebluk"
+    },
+    {
+      "id": 10,
+      "sasi_jawa": "Sawal",
+      "alias_sumber": "",
+      "ngalamat": "Akeh barat gede, lelara lan rajapati; panggede pada tukar padu"
+    },
+    {
+      "id": 11,
+      "sasi_jawa": "Sela (Dulkangidah)",
+      "alias_sumber": "Dulkaidah",
+      "ngalamat": "Akeh lesus; kekayon pada sol; owah bumine"
+    },
+    {
+      "id": 12,
+      "sasi_jawa": "Besar",
+      "alias_sumber": "",
+      "ngalamat": "Akeh wong pada bungah lan munggah kaji"
+    }
+  ],
+  "lindu_sasi": [
+    {
+      "id": 1,
+      "sasi_jawa": "Sura",
+      "ngalamat_awan": "Akeh wong pada susah lan prihatin",
+      "ngalamat_wengi": "Akeh wong mati; para tani ora ana untunge lan larang pangan"
+    },
+    {
+      "id": 2,
+      "sasi_jawa": "Sapar",
+      "ngalamat_awan": "Akeh wong tani pada keluwen lan kena lelara",
+      "ngalamat_wengi": "Akeh wong mukmin pada nikmat"
+    },
+    {
+      "id": 3,
+      "sasi_jawa": "Mulud",
+      "ngalamat_awan": "Akeh wong agawe pihala utawa kasusahan",
+      "ngalamat_wengi": "Akeh udan lan angin"
+    },
+    {
+      "id": 4,
+      "sasi_jawa": "Bakda Mulud",
+      "ngalamat_awan": "Akeh wong mati nanging rajakaya kanggo kaperluan tani lemu-lemu",
+      "ngalamat_wengi": "Akeh wong mukmin pada nikmat"
+    },
+    {
+      "id": 5,
+      "sasi_jawa": "Jumadilawal",
+      "ngalamat_awan": "Akeh mungsuh",
+      "ngalamat_wengi": "Keh panas; kekayon tanpa woh bisa kembang nanging tanpa woh"
+    },
+    {
+      "id": 6,
+      "sasi_jawa": "Jumadilakir",
+      "ngalamat_awan": "Reregan kebo lan sapi sarta pangan pada larang",
+      "ngalamat_wengi": "Akeh wong nom-noman pada mati"
+    },
+    {
+      "id": 7,
+      "sasi_jawa": "Rejeb",
+      "ngalamat_awan": "Akeh wong memungsuhan",
+      "ngalamat_wengi": "Akeh wong pada mati"
+    },
+    {
+      "id": 8,
+      "sasi_jawa": "Ruwah",
+      "ngalamat_awan": "Akeh wong pada mati",
+      "ngalamat_wengi": "Akeh lan murah beras pari"
+    },
+    {
+      "id": 9,
+      "sasi_jawa": "Pasa (Siyam)",
+      "ngalamat_awan": "Akeh wong pada mati",
+      "ngalamat_wengi": "Akeh wong pradesan pada memungsuhan"
+    },
+    {
+      "id": 10,
+      "sasi_jawa": "Sawal",
+      "ngalamat_awan": "Akeh wong nangis jalaran akeh lelara",
+      "ngalamat_wengi": "Akeh wong pradesan pada lelungan"
+    },
+    {
+      "id": 11,
+      "sasi_jawa": "Sela (Dulkangidah)",
+      "ngalamat_awan": "Akeh para pengulu pada memungsuhan",
+      "ngalamat_wengi": "Akeh wong pada padudon lan akeh wong nikmat"
+    },
+    {
+      "id": 12,
+      "sasi_jawa": "Besar",
+      "ngalamat_awan": "Akeh wong prihatin lan kebo sapi pada mati",
+      "ngalamat_wengi": "Akeh desa kang rusak lan murah udan sarta beras pari"
+    }
+  ],
+  "tejo_arah": [
+    {
+      "id": 1,
+      "arah_jawa": "Wetan",
+      "arah_id": "Timur",
+      "ngalamat": "Ratu akeh pada sesukan lan wong gede-cilik pada bungah"
+    },
+    {
+      "id": 2,
+      "arah_jawa": "Kidul-Wetan",
+      "arah_id": "Tenggara",
+      "ngalamat": "Wong gede-cilik nampa ayahane ratu ing paperangan"
+    },
+    {
+      "id": 3,
+      "arah_jawa": "Kidul",
+      "arah_id": "Selatan",
+      "ngalamat": "Larang beras lan pangan, sarta wong pada tindak pitenah"
+    },
+    {
+      "id": 4,
+      "arah_jawa": "Kidul-Kulon",
+      "arah_id": "Barat daya",
+      "ngalamat": "Akeh kasusahan, larang udan; kebo lan sapi pada mati"
+    },
+    {
+      "id": 5,
+      "arah_jawa": "Kulon",
+      "arah_id": "Barat",
+      "ngalamat": "Akeh lelara adem-panas; larang beras lan pari"
+    },
+    {
+      "id": 6,
+      "arah_jawa": "Lor-Kulon",
+      "arah_id": "Barat laut",
+      "ngalamat": "Akeh lelara lan rajapati, nanging murah sandang lan pangan"
+    },
+    {
+      "id": 7,
+      "arah_jawa": "Lor-Wetan",
+      "arah_id": "Timur laut",
+      "ngalamat": "Ana ratu prihatin; akeh wong gede-cilik pada karusakan"
+    }
+  ],
+  "kedut": [
+    {
+      "id": 1,
+      "bagian_badan": "Embun-embun",
+      "wahanane": "Antuk mudak drajate"
+    },
+    {
+      "id": 2,
+      "bagian_badan": "Bathuk",
+      "wahanane": "Antuk donya kang kalal"
+    },
+    {
+      "id": 3,
+      "bagian_badan": "Githok",
+      "wahanane": "Antuk kepetengan ati"
+    },
+    {
+      "id": 4,
+      "bagian_badan": "Alis tengen",
+      "wahanane": "Bakal antuk kabegjan"
+    },
+    {
+      "id": 5,
+      "bagian_badan": "Alis kiwa",
+      "wahanane": "Bakal ketemu kekasihe"
+    },
+    {
+      "id": 6,
+      "bagian_badan": "Telapukan mripat tengen",
+      "wahanane": "Bakal antuk rejeki"
+    },
+    {
+      "id": 7,
+      "bagian_badan": "Telapukan mripat kiwa",
+      "wahanane": "Bakal ketemu wong tuwane kang ana ing paran"
+    },
+    {
+      "id": 8,
+      "bagian_badan": "Tadah eluh tengen",
+      "wahanane": "Bakal prihatin"
+    },
+    {
+      "id": 9,
+      "bagian_badan": "Tadah eluh kiwa",
+      "wahanane": "Bakal nangis"
+    },
+    {
+      "id": 10,
+      "bagian_badan": "Papadoning mripat kiwa",
+      "wahanane": "Bakal lara"
+    },
+    {
+      "id": 11,
+      "bagian_badan": "Papadoning mripat tengen",
+      "wahanane": "Bakal ketemu kekasihe"
+    },
+    {
+      "id": 12,
+      "bagian_badan": "Kuping tengen",
+      "wahanane": "Bakal oleh rejeki"
+    },
+    {
+      "id": 13,
+      "bagian_badan": "Kuping kiwa",
+      "wahanane": "Bakal katekan sanak adoh"
+    },
+    {
+      "id": 14,
+      "bagian_badan": "Bolonganing kuping tengen",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 15,
+      "bagian_badan": "Bolonganing kuping kiwa",
+      "wahanane": "Bakal dimulyakake ing wong"
+    },
+    {
+      "id": 16,
+      "bagian_badan": "Pilingan kiwa",
+      "wahanane": "Bakal antuk murkaning liyan lan kelangan"
+    },
+    {
+      "id": 17,
+      "bagian_badan": "Pilingan tengen",
+      "wahanane": "Lara ngelu"
+    },
+    {
+      "id": 18,
+      "bagian_badan": "Irung tengen",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 19,
+      "bagian_badan": "Irung kiwa",
+      "wahanane": "Bakal ketemu kekasihe"
+    },
+    {
+      "id": 20,
+      "bagian_badan": "Uwang kiwa",
+      "wahanane": "Kanggep pasuwitane"
+    },
+    {
+      "id": 21,
+      "bagian_badan": "Uwang tengen",
+      "wahanane": "Ketemu wong agung"
+    },
+    {
+      "id": 22,
+      "bagian_badan": "Pipi tengen",
+      "wahanane": "Bakal angambar asmane"
+    },
+    {
+      "id": 23,
+      "bagian_badan": "Pipi kiwa",
+      "wahanane": "Bakal nangang lara nanging gelis waras"
+    },
+    {
+      "id": 24,
+      "bagian_badan": "Lambe duwur",
+      "wahanane": "Kanggo srana"
+    },
+    {
+      "id": 25,
+      "bagian_badan": "Lambe ngisor",
+      "wahanane": "Bakal padudon"
+    },
+    {
+      "id": 26,
+      "bagian_badan": "Ilat",
+      "wahanane": "Bakal nandang lara"
+    },
+    {
+      "id": 27,
+      "bagian_badan": "Sentil",
+      "wahanane": "Bakal ngaru biru sapadaning wong"
+    },
+    {
+      "id": 28,
+      "bagian_badan": "Gulu perangan tengen",
+      "wahanane": "Nandang lara nanging gelis mari"
+    },
+    {
+      "id": 29,
+      "bagian_badan": "Gulu perangan kiwa",
+      "wahanane": "Bakal antuk kesenengan"
+    },
+    {
+      "id": 30,
+      "bagian_badan": "Bau tengen",
+      "wahanane": "Bakal tukaran"
+    },
+    {
+      "id": 31,
+      "bagian_badan": "Bau kiwa",
+      "wahanane": "Bakal dipundi-pundi"
+    },
+    {
+      "id": 32,
+      "bagian_badan": "Sikut tengen",
+      "wahanane": "Bakal prihatin"
+    },
+    {
+      "id": 33,
+      "bagian_badan": "Sikut kiwa",
+      "wahanane": "Bakal aweh suka marang pamong mitra"
+    },
+    {
+      "id": 34,
+      "bagian_badan": "Longkanging tangan tengen",
+      "wahanane": "Bakal antuk arta rukmi sarta bakal ketemu mitra kinasih"
+    },
+    {
+      "id": 35,
+      "bagian_badan": "Longkanging tangan kiwa",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 36,
+      "bagian_badan": "Epek-epek tengen",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 37,
+      "bagian_badan": "Epek-epek kiwa",
+      "wahanane": "Bakal antuk arta lan wanodya"
+    },
+    {
+      "id": 38,
+      "bagian_badan": "Jempol tangan tengen",
+      "wahanane": "Bakal dadi pangulu utawa penggede"
+    },
+    {
+      "id": 39,
+      "bagian_badan": "Jempol tangan kiwa",
+      "wahanane": "Bakal antuk kalungguhan utawa punggawa samurwate"
+    },
+    {
+      "id": 40,
+      "bagian_badan": "Driji tangan panuduh tengen",
+      "wahanane": "Bakal kegelan atine"
+    },
+    {
+      "id": 41,
+      "bagian_badan": "Driji tangan panuduh kiwa",
+      "wahanane": "Bakal antuk kamulyan"
+    },
+    {
+      "id": 42,
+      "bagian_badan": "Driji tangan panunggul tengen",
+      "wahanane": "Bakal antuk pagaweyan"
+    },
+    {
+      "id": 43,
+      "bagian_badan": "Driji tangan panunggul kiwa",
+      "wahanane": "Bakal nandang lara"
+    },
+    {
+      "id": 44,
+      "bagian_badan": "Driji tangan manis tengen",
+      "wahanane": "Becik samubarang sediane pakoleh"
+    },
+    {
+      "id": 45,
+      "bagian_badan": "Driji tangan manis kiwa",
+      "wahanane": "Bakal antuk wanodya"
+    },
+    {
+      "id": 46,
+      "bagian_badan": "Driji tangan jentik tengen",
+      "wahanane": "Bakal kinasihan ing sapepadane"
+    },
+    {
+      "id": 47,
+      "bagian_badan": "Driji tangan jentik kiwa",
+      "wahanane": "Bakal ketengen ing wong agung"
+    },
+    {
+      "id": 48,
+      "bagian_badan": "Susu tengen",
+      "wahanane": "Bakal ketemu kekasihe"
+    },
+    {
+      "id": 49,
+      "bagian_badan": "Susu kiwa",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 50,
+      "bagian_badan": "Walikat tengen",
+      "wahanane": "Bakal katekan wong arep utang utawa nyenyilih"
+    },
+    {
+      "id": 51,
+      "bagian_badan": "Walikat kiwa",
+      "wahanane": "Bakal antuk kabegjan"
+    },
+    {
+      "id": 52,
+      "bagian_badan": "Singkap tengen",
+      "wahanane": "Bakal antuk srananing wong"
+    },
+    {
+      "id": 53,
+      "bagian_badan": "Singkap kiwa",
+      "wahanane": "Bakal prihatin"
+    },
+    {
+      "id": 54,
+      "bagian_badan": "Dada tengen",
+      "wahanane": "Bakal ketemu kekasihe"
+    },
+    {
+      "id": 55,
+      "bagian_badan": "Dada kiwa",
+      "wahanane": "Bakal antuk pepadang"
+    },
+    {
+      "id": 56,
+      "bagian_badan": "Lambung lan weteng perangan tengen",
+      "wahanane": "Bakal akeh rejekine"
+    },
+    {
+      "id": 57,
+      "bagian_badan": "Lambung lan weteng perangan kiwa",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 58,
+      "bagian_badan": "Weteng tengah",
+      "wahanane": "Bakal antuk ganjaran"
+    },
+    {
+      "id": 59,
+      "bagian_badan": "Puser",
+      "wahanane": "Bakal antuk nugrahaning hyang widdi"
+    },
+    {
+      "id": 60,
+      "bagian_badan": "Dakar",
+      "wahanane": "Bakal antuk drajad luhur"
+    },
+    {
+      "id": 61,
+      "bagian_badan": "Ilenging dakar",
+      "wahanane": "Bakal antuk kesenengan lan pitulungan ing hyang widdi"
+    },
+    {
+      "id": 62,
+      "bagian_badan": "Gegendu tengen",
+      "wahanane": "Bakal gawe kabecikan"
+    },
+    {
+      "id": 63,
+      "bagian_badan": "Gegendu kiwa",
+      "wahanane": "Bakal kasihan wong akeh"
+    },
+    {
+      "id": 64,
+      "bagian_badan": "Kempung",
+      "wahanane": "Bakal duwe anak lanang"
+    },
+    {
+      "id": 65,
+      "bagian_badan": "Bokong perangan tengen",
+      "wahanane": "Bakal katekan apa sedyane"
+    },
+    {
+      "id": 66,
+      "bagian_badan": "Bokong perangan kiwa",
+      "wahanane": "Bakal antuk sihing hyang widdi"
+    },
+    {
+      "id": 67,
+      "bagian_badan": "Pupu tengen",
+      "wahanane": "Bakal lumaku adoh"
+    },
+    {
+      "id": 68,
+      "bagian_badan": "Pupu kiwa",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 69,
+      "bagian_badan": "Jengku tengen",
+      "wahanane": "Bakal antuk pakurmatan"
+    },
+    {
+      "id": 70,
+      "bagian_badan": "Jengku kiwa",
+      "wahanane": "Bakal antuk arta"
+    },
+    {
+      "id": 71,
+      "bagian_badan": "Wentis tengen",
+      "wahanane": "Bakal pasulayan"
+    },
+    {
+      "id": 72,
+      "bagian_badan": "Wentis kiwa",
+      "wahanane": "Becik bakal ketemu gurune"
+    },
+    {
+      "id": 73,
+      "bagian_badan": "Tlapakan sikil tengen",
+      "wahanane": "Bakal nampa ganjaran lara"
+    },
+    {
+      "id": 74,
+      "bagian_badan": "Tlapakan sikil kiwa",
+      "wahanane": "Bakal lumaku adoh"
+    }
+  ],
+  "impen": [
+    {
+      "id": 1,
+      "yen_ngimpi": "Lunga perang utawa memungsuhan gede",
+      "pratanda": "Manawa menang iku bakal luput saka pancabaya, akeh begjane. Yen kalah akeh bilaine"
+    },
+    {
+      "id": 2,
+      "yen_ngimpi": "Mumbul ing awang-awang utawa munggah gunung kanti padaging-pandeleng",
+      "pratanda": "Akeh rejekine"
+    },
+    {
+      "id": 3,
+      "yen_ngimpi": "Sumurup srengenge tiba ing bumi utawa ing omah",
+      "pratanda": "Bakal ana pasedan gede"
+    },
+    {
+      "id": 4,
+      "yen_ngimpi": "Diuncalke utawa dibuwang ing wong",
+      "pratanda": "Bakal antuk kemenangan lan keringan"
+    },
+    {
+      "id": 5,
+      "yen_ngimpi": "Disamber bledeg",
+      "pratanda": "Becik bakal kadunungan karaharjan lan kinasihan ing wong gede, akeh rejekine"
+    },
+    {
+      "id": 6,
+      "yen_ngimpi": "Andulu mega",
+      "pratanda": "Bakal suda rejekine"
+    },
+    {
+      "id": 7,
+      "yen_ngimpi": "Andulu mega putih",
+      "pratanda": "Becik akeh rejekine"
+    },
+    {
+      "id": 8,
+      "yen_ngimpi": "Mlumpat kali ora bisa",
+      "pratanda": "Cepak ing patine"
+    },
+    {
+      "id": 9,
+      "yen_ngimpi": "Slulup ing banyu",
+      "pratanda": "Becik, oleh nugraha gede"
+    },
+    {
+      "id": 10,
+      "yen_ngimpi": "Andulu prau gede",
+      "pratanda": "Antuk kanugrahan"
+    },
+    {
+      "id": 11,
+      "yen_ngimpi": "Kacemplung ing sumur mati",
+      "pratanda": "Bakal antuk kawruh anyar"
+    },
+    {
+      "id": 12,
+      "yen_ngimpi": "Mangan iwak menjangan",
+      "pratanda": "Bakal antuk duwit"
+    },
+    {
+      "id": 13,
+      "yen_ngimpi": "Entuk jago utawa adu jago",
+      "pratanda": "Bakal duwe anak lanang bagus warnane"
+    },
+    {
+      "id": 14,
+      "yen_ngimpi": "Entuk pitik babon",
+      "pratanda": "Bakal duwe anak wedok"
+    },
+    {
+      "id": 15,
+      "yen_ngimpi": "Weru ing longane ana pitik akeh",
+      "pratanda": "Bakal sugih rewang"
+    },
+    {
+      "id": 16,
+      "yen_ngimpi": "Kaweruhan daging pitik utawa endase",
+      "pratanda": "Bakal antuk kabecikan"
+    },
+    {
+      "id": 17,
+      "yen_ngimpi": "Kaweruhan dakar wedus",
+      "pratanda": "Bakal ilang kasugihane; yen lara waras"
+    },
+    {
+      "id": 18,
+      "yen_ngimpi": "Nunggang unta utawa jaran",
+      "pratanda": "Bakal antuk kamulyan"
+    },
+    {
+      "id": 19,
+      "yen_ngimpi": "Wuda",
+      "pratanda": "Bakal kawirangan"
+    },
+    {
+      "id": 20,
+      "yen_ngimpi": "Kaweruhan gurune",
+      "pratanda": "Antuk sihing hyang widdi"
+    },
+    {
+      "id": 21,
+      "yen_ngimpi": "Kaweruhan gurune wuda utawa tanpa menganggo",
+      "pratanda": "Bakal resik budine"
+    },
+    {
+      "id": 22,
+      "yen_ngimpi": "Tetanduran kabeh pada rubuh",
+      "pratanda": "Suda rejekine"
+    },
+    {
+      "id": 23,
+      "yen_ngimpi": "Rabi",
+      "pratanda": "Bakal antuk gegaman tumbak utawa keris, bisa uga duraka"
+    },
+    {
+      "id": 24,
+      "yen_ngimpi": "Gempil warangkaning keris",
+      "pratanda": "Bakal kelangan bojo utawa ditinggal purik bojone"
+    },
+    {
+      "id": 25,
+      "yen_ngimpi": "Oleh manuk",
+      "pratanda": "Bakal antuk wanodya endah warnane"
+    },
+    {
+      "id": 26,
+      "yen_ngimpi": "Mangan daging gajah",
+      "pratanda": "Bakal akeh rejekine"
+    },
+    {
+      "id": 27,
+      "yen_ngimpi": "Kaweruhan gajah emas",
+      "pratanda": "Bakal agung begjane"
+    },
+    {
+      "id": 28,
+      "yen_ngimpi": "Kaweruhan ula mandi (welang) utawa macan gembong",
+      "pratanda": "Bakal ana wong nandukake pitedah"
+    },
+    {
+      "id": 29,
+      "yen_ngimpi": "Kacedakan macan",
+      "pratanda": "Yen nganti digondol adoh iku pratanda bakal kinasihan lurahe lan kinasihan ing wong agung"
+    },
+    {
+      "id": 30,
+      "yen_ngimpi": "Cinakot ing ula mandi",
+      "pratanda": "Bakal kinasihan ing wanita/priya"
+    },
+    {
+      "id": 31,
+      "yen_ngimpi": "Kaweruhan damar murup",
+      "pratanda": "Becik bakal katekan sedyane"
+    },
+    {
+      "id": 32,
+      "yen_ngimpi": "Andulu ing wong akeh",
+      "pratanda": "Bakal wurung sedyane"
+    },
+    {
+      "id": 33,
+      "yen_ngimpi": "Wong mabur ing awang-awang",
+      "pratanda": "Becik, jembar tebane"
+    },
+    {
+      "id": 34,
+      "yen_ngimpi": "Andulu gunung gede",
+      "pratanda": "Bakal tentrem atine"
+    },
+    {
+      "id": 35,
+      "yen_ngimpi": "Andulu segara",
+      "pratanda": "Bakal luput saka kabehing pakarti; yen duwe utang bakal kasauran"
+    },
+    {
+      "id": 36,
+      "yen_ngimpi": "Kaweruhan watu",
+      "pratanda": "Ilang prihatine"
+    },
+    {
+      "id": 37,
+      "yen_ngimpi": "Gawe omah nganti bisa dadi",
+      "pratanda": "Bakal katekan samubarang sedyane"
+    },
+    {
+      "id": 38,
+      "yen_ngimpi": "Rusak omahe utawa karubuhan omahe",
+      "pratanda": "Nemoni prihatin utawa kasripahan"
+    },
+    {
+      "id": 39,
+      "yen_ngimpi": "Ngombe banyu panas",
+      "pratanda": "Bakal susah"
+    },
+    {
+      "id": 40,
+      "yen_ngimpi": "Sikile metu banyune",
+      "pratanda": "Bakal dadi panghulu"
+    },
+    {
+      "id": 41,
+      "yen_ngimpi": "Kaweruhan rembulan jumedul ing sanduwuring omahe",
+      "pratanda": "Bakal ana wong ngarah ala"
+    },
+    {
+      "id": 42,
+      "yen_ngimpi": "Kaweruhan kukur lan kasturi sarta banyuwangi",
+      "pratanda": "Bakal nandang lara"
+    },
+    {
+      "id": 43,
+      "yen_ngimpi": "Katemu Kangjeng Nabi Muhammad",
+      "pratanda": "Jembar budine padang angen-angene, sugih ilmu linuwih kang gaib-gaib kabuka dewe sarta oleh nugrahaning Hyang Widdi"
+    },
+    {
+      "id": 44,
+      "yen_ngimpi": "Katemu Kangjeng Nabi Adam",
+      "pratanda": "Becik bakal oleh nugrahaning Pangeran"
+    },
+    {
+      "id": 45,
+      "yen_ngimpi": "Katemu Kangjeng Nabi Isha",
+      "pratanda": "Akeh alane"
+    },
+    {
+      "id": 46,
+      "yen_ngimpi": "Linggih ing kursi",
+      "pratanda": "Akeh kabegjane"
+    },
+    {
+      "id": 47,
+      "yen_ngimpi": "Andulu suwarga kang endah",
+      "pratanda": "Bakal katekan sedyane"
+    },
+    {
+      "id": 48,
+      "yen_ngimpi": "Kaweruhan widadari",
+      "pratanda": "Bakal munggah drajade"
+    },
+    {
+      "id": 49,
+      "yen_ngimpi": "Andulu malaekat",
+      "pratanda": "Bakal sugih banda"
+    },
+    {
+      "id": 50,
+      "yen_ngimpi": "Andulu naraka",
+      "pratanda": "Bakal antuk dosa gede"
+    },
+    {
+      "id": 51,
+      "yen_ngimpi": "Amemenek",
+      "pratanda": "Bakal oleh arta lan sandangan becik"
+    },
+    {
+      "id": 52,
+      "yen_ngimpi": "Ing omahe ana bebatange",
+      "pratanda": "Bakal akel rejekine"
+    },
+    {
+      "id": 53,
+      "yen_ngimpi": "Andulu pitik",
+      "pratanda": "Bakal seneng atine"
+    },
+    {
+      "id": 54,
+      "yen_ngimpi": "Andulu kilat thathit lan lintang",
+      "pratanda": "Bakal oleh kawruh"
+    },
+    {
+      "id": 55,
+      "yen_ngimpi": "Munggah marang langit",
+      "pratanda": "Antuk kaluhuran"
+    },
+    {
+      "id": 56,
+      "yen_ngimpi": "Maca Quran utawa andonga",
+      "pratanda": "Tambah raja darbeke, gede ngupangate"
+    },
+    {
+      "id": 57,
+      "yen_ngimpi": "Andulu rembulan lan srengenge",
+      "pratanda": "Bakal padang atine"
+    },
+    {
+      "id": 58,
+      "yen_ngimpi": "Andulu srengenge",
+      "pratanda": "Bakal padang atine"
+    },
+    {
+      "id": 59,
+      "yen_ngimpi": "Andulu rembulan",
+      "pratanda": "Bakal bisa angenaki atining liyan lan kinasihan wong agung"
+    },
+    {
+      "id": 60,
+      "yen_ngimpi": "Andulu udan",
+      "pratanda": "Bakal akeh rejekine"
+    },
+    {
+      "id": 61,
+      "yen_ngimpi": "Adus ing kali",
+      "pratanda": "Antuk kasucianing atine"
+    },
+    {
+      "id": 62,
+      "yen_ngimpi": "Andulu bengawan",
+      "pratanda": "Akeh kabegjane"
+    },
+    {
+      "id": 63,
+      "yen_ngimpi": "Ngombe banyu bengawan",
+      "pratanda": "Bakal katekan sedyane"
+    },
+    {
+      "id": 64,
+      "yen_ngimpi": "Lumaku ing banyu",
+      "pratanda": "Bakal nesu"
+    },
+    {
+      "id": 65,
+      "yen_ngimpi": "Andulu banyu bening",
+      "pratanda": "Bakal oleh arta"
+    },
+    {
+      "id": 66,
+      "yen_ngimpi": "Ngombe banyu bening",
+      "pratanda": "Antuk suka"
+    },
+    {
+      "id": 67,
+      "yen_ngimpi": "Slulup sarta ngombe banyu",
+      "pratanda": "Becik teguh agamane"
+    },
+    {
+      "id": 68,
+      "yen_ngimpi": "Ngombe banyu kendil",
+      "pratanda": "Bakal tambah dosane"
+    },
+    {
+      "id": 69,
+      "yen_ngimpi": "Nunggang prahu endah",
+      "pratanda": "Bakal ilang kasugihane"
+    },
+    {
+      "id": 70,
+      "yen_ngimpi": "Andulu srengenge lan mung katon separo",
+      "pratanda": "Bakal perang gede"
+    },
+    {
+      "id": 71,
+      "yen_ngimpi": "Andulu srengenge lan rembulan katone adoh",
+      "pratanda": "Bakal dawa umure"
+    },
+    {
+      "id": 72,
+      "yen_ngimpi": "Lintang tumurun ing omah",
+      "pratanda": "Bakal antuk kabegjan gede"
+    },
+    {
+      "id": 73,
+      "yen_ngimpi": "Mega angaubi",
+      "pratanda": "Bakal katekan sebarang karepe"
+    },
+    {
+      "id": 74,
+      "yen_ngimpi": "Andulu kilat lan krungu swarane gludug",
+      "pratanda": "Bakal suda rejekine"
+    },
+    {
+      "id": 75,
+      "yen_ngimpi": "Kodanan nganti suwe",
+      "pratanda": "Bakal asesuci"
+    },
+    {
+      "id": 76,
+      "yen_ngimpi": "Kodanan lan kanginan",
+      "pratanda": "Bakal regejegan"
+    },
+    {
+      "id": 77,
+      "yen_ngimpi": "Andulu udan tumiba ing kali",
+      "pratanda": "Bakal ilang prihatine"
+    },
+    {
+      "id": 78,
+      "yen_ngimpi": "Andulu udan tumiba ing tlaga",
+      "pratanda": "Bakal kinawulan ing wong"
+    },
+    {
+      "id": 79,
+      "yen_ngimpi": "Slulup ing banyu",
+      "pratanda": "Bakal oleh sandang pangan"
+    },
+    {
+      "id": 80,
+      "yen_ngimpi": "Anglangi ing bengawan utawa ing kali",
+      "pratanda": "Bakal luput lan adoh sabarang karepe"
+    },
+    {
+      "id": 81,
+      "yen_ngimpi": "Ngombe banyuning segara",
+      "pratanda": "Bakal luput ing panggawe ala"
+    },
+    {
+      "id": 82,
+      "yen_ngimpi": "Andulu wong gawe pager",
+      "pratanda": "Bakal antuk kabecikan marganing kasugihan"
+    },
+    {
+      "id": 83,
+      "yen_ngimpi": "Menehi sidekah utawa jakat",
+      "pratanda": "Bakal oleh rejeki"
+    },
+    {
+      "id": 84,
+      "yen_ngimpi": "Nangis",
+      "pratanda": "Bakal antuk kabegjan"
+    },
+    {
+      "id": 85,
+      "yen_ngimpi": "Kaweruhan getih pitik",
+      "pratanda": "Apa kang disedia bakal katurutan"
+    },
+    {
+      "id": 86,
+      "yen_ngimpi": "Entuk ali-ali emas utawa suwasa",
+      "pratanda": "Bakal antuk kanugrahan"
+    },
+    {
+      "id": 87,
+      "yen_ngimpi": "Payungan payung anyar",
+      "pratanda": "Bakal antuk rajabrana"
+    },
+    {
+      "id": 88,
+      "yen_ngimpi": "Kemulan putih utawa jarik putih",
+      "pratanda": "Bakal nampa ganjaran lara"
+    },
+    {
+      "id": 89,
+      "yen_ngimpi": "Anjala iwak",
+      "pratanda": "Bakal ana rejekine teka"
+    },
+    {
+      "id": 90,
+      "yen_ngimpi": "Ambung-ambungan",
+      "pratanda": "Bakal antuk pangalembana"
+    },
+    {
+      "id": 91,
+      "yen_ngimpi": "Andulu geni saka kadohan",
+      "pratanda": "Durung bener agamane"
+    },
+    {
+      "id": 92,
+      "yen_ngimpi": "Sahwat karo rabine",
+      "pratanda": "Bakal antuk kanugrahaning allah"
+    },
+    {
+      "id": 93,
+      "yen_ngimpi": "Mangan",
+      "pratanda": "Kalis ing prihatin"
+    },
+    {
+      "id": 94,
+      "yen_ngimpi": "Ditempab ing wong",
+      "pratanda": "Bakal antuk kanugrahan"
+    },
+    {
+      "id": 95,
+      "yen_ngimpi": "Ngombe banyu telaga",
+      "pratanda": "Bakal antuk kapenak uripe"
+    },
+    {
+      "id": 96,
+      "yen_ngimpi": "Salat madep ing keblat",
+      "pratanda": "Bakal antuk kasampurnaan sarta yen dagang antuk bathi"
+    },
+    {
+      "id": 97,
+      "yen_ngimpi": "Awake katon gede banjur cilik nuli gede meneh",
+      "pratanda": "Bakal antuk kagunan anyar"
+    },
+    {
+      "id": 98,
+      "yen_ngimpi": "Metu saka alas",
+      "pratanda": "Bakal nandang prihatin"
+    },
+    {
+      "id": 99,
+      "yen_ngimpi": "Manggon ing gunung",
+      "pratanda": "Bakal antuk drajat"
+    }
+  ],
+  "ref_sasi_jawa": [
+    {
+      "id": 1,
+      "sasi_jawa": "Sura",
+      "padanan_hijriah": "Muharram"
+    },
+    {
+      "id": 2,
+      "sasi_jawa": "Sapar",
+      "padanan_hijriah": "Safar"
+    },
+    {
+      "id": 3,
+      "sasi_jawa": "Mulud",
+      "padanan_hijriah": "Rabi'ul-Awwal"
+    },
+    {
+      "id": 4,
+      "sasi_jawa": "Bakda Mulud",
+      "padanan_hijriah": "Rabi'ul-Akhir"
+    },
+    {
+      "id": 5,
+      "sasi_jawa": "Jumadilawal",
+      "padanan_hijriah": "Jumadil-Awwal"
+    },
+    {
+      "id": 6,
+      "sasi_jawa": "Jumadilakir",
+      "padanan_hijriah": "Jumadil-Akhir"
+    },
+    {
+      "id": 7,
+      "sasi_jawa": "Rejeb",
+      "padanan_hijriah": "Rajab"
+    },
+    {
+      "id": 8,
+      "sasi_jawa": "Ruwah",
+      "padanan_hijriah": "Sya'ban"
+    },
+    {
+      "id": 9,
+      "sasi_jawa": "Pasa (Siyam)",
+      "padanan_hijriah": "Ramadan"
+    },
+    {
+      "id": 10,
+      "sasi_jawa": "Sawal",
+      "padanan_hijriah": "Syawwal"
+    },
+    {
+      "id": 11,
+      "sasi_jawa": "Sela (Dulkangidah)",
+      "padanan_hijriah": "Dzulqa'dah"
+    },
+    {
+      "id": 12,
+      "sasi_jawa": "Besar",
+      "padanan_hijriah": "Dzulhijjah"
+    }
+  ]
+}

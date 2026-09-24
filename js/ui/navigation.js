@@ -98,6 +98,9 @@ function closeMobileMenu() {
   if (btn) {
     btn.setAttribute('aria-expanded', 'false');
   }
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = '';
+  }
 }
 
 function toggleMobileMenu() {
@@ -107,6 +110,9 @@ function toggleMobileMenu() {
   const isHidden = menu.classList.toggle('hidden');
   if (btn) {
     btn.setAttribute('aria-expanded', String(!isHidden));
+  }
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = isHidden ? '' : 'hidden';
   }
 }
 

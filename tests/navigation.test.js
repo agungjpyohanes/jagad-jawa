@@ -21,6 +21,10 @@ test('Navigasi & Menu - Integritas Tab dan Section (C1 & C2)', () => {
     'kepribadian', // Nujum
     'perjodohan',
     'selametan',
+    'ijab',        // Petung Ijab (Palakrama)
+    'omah',        // Petung Omah & Cempuri
+    'ternak',      // Petung Kehidupan (Ternak, Loro, Geblak)
+    'sasmitha',    // Sasmitha (Tanda Alam & Tubuh)
     'wuku',        // Ensiklopedia 30 Wuku (C2)
     'gamelan',
     'aksara',
@@ -51,6 +55,10 @@ test('Navigasi & Menu - Konsistensi Tombol Navigasi Desktop & Mobile', () => {
     'kepribadian',
     'perjodohan',
     'selametan',
+    'ijab',
+    'omah',
+    'ternak',
+    'sasmitha',
     'wuku',
     'gamelan',
     'aksara',

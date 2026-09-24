@@ -33,6 +33,7 @@ import {
 } from '../kalender/kalender-engine.js';
 
 import { PITUTUR_LIST } from '../../data/pitutur.js';
+import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
 
 // ─── NAMA HARI LENGKAP (Bahasa Indonesia, display-friendly) ──────────────────
 const HARI_DISPLAY = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -213,6 +214,9 @@ export function getSapaDinaData(date = new Date()) {
       candrasangkala:  pranata.candrasangkala,
       pratandhaAlam:   pranata.pratandhaAlam
     },
+
+    // Petung Tetanen Tradisional (CSV Baru)
+    petungTetanen: getPetungTetanen(tglLengkap.dino, tglLengkap.pas),
 
     // Dino Status
     dinoStatus,

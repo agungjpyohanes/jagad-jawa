@@ -46,6 +46,31 @@ import {
 // ─── SAPA DINA (PHASE II) ───────────────────────────────────────────────────
 import { wireSapaDinaFeature, initSapaDina } from './features/sapa-dina.js';
 
+// ─── PETUNG IJAB & PETUNG OMAH (NEW MODULES) ──────────────────────────────
+import { initIjabUI, syncIjabDariTanggal, hitungIjabDariUI } from './modules/ijab/ijab-ui.js';
+import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI } from './modules/omah/omah-ui.js';
+
+// ─── PETUNG TERNAK, LORO, & GEBLAK (PETUNG KEHIDUPAN) ──────────────────────
+import {
+  initTernakUI,
+  syncTernakDariTanggal,
+  hitungTernakDariSelect,
+  switchTernakSubtab,
+  konfirmasiBukaGeblak
+} from './modules/petung-kehidupan/petung-kehidupan-ui.js';
+
+// ─── SASMITHA (TANDA ALAM & TUBUH) ────────────────────────────────────────
+import {
+  initSasmithaUI,
+  switchSasmithaSubtab,
+  onImpenSearchInput,
+  onKedutSearchInput,
+  onKedutCategorySelect,
+  onGerhanaSasiSelect,
+  onLinduSasiSelect,
+  onLinduWaktuToggle
+} from './modules/sasmitha/sasmitha-ui.js';
+
 // ─── INITIAL WIRING TO WINDOW (THIN WRAPPERS UNTUK INLINE HTML ONCLICK) ────
 if (typeof window !== 'undefined') {
   window.showToast = showToast;
@@ -63,6 +88,31 @@ if (typeof window !== 'undefined') {
   window.showOnboardingModal = showOnboardingModal;
   window.closeOnboardingModal = closeOnboardingModal;
   window.pilihModeAwal = pilihModeAwal;
+
+  // Ijab & Omah bindings
+  window.initIjabUI = initIjabUI;
+  window.syncIjabDariTanggal = syncIjabDariTanggal;
+  window.hitungIjabDariUI = hitungIjabDariUI;
+  window.initOmahUI = initOmahUI;
+  window.syncOmahDariTanggal = syncOmahDariTanggal;
+  window.hitungOmahDariUI = hitungOmahDariUI;
+
+  // Ternak, Loro, & Geblak bindings
+  window.initTernakUI = initTernakUI;
+  window.syncTernakDariTanggal = syncTernakDariTanggal;
+  window.hitungTernakDariSelect = hitungTernakDariSelect;
+  window.switchTernakSubtab = switchTernakSubtab;
+  window.konfirmasiBukaGeblak = konfirmasiBukaGeblak;
+
+  // Sasmitha bindings
+  window.initSasmithaUI = initSasmithaUI;
+  window.switchSasmithaSubtab = switchSasmithaSubtab;
+  window.onImpenSearchInput = onImpenSearchInput;
+  window.onKedutSearchInput = onKedutSearchInput;
+  window.onKedutCategorySelect = onKedutCategorySelect;
+  window.onGerhanaSasiSelect = onGerhanaSasiSelect;
+  window.onLinduSasiSelect = onLinduSasiSelect;
+  window.onLinduWaktuToggle = onLinduWaktuToggle;
 }
 
 wireKalenderFeature();
@@ -101,6 +151,30 @@ if (typeof window !== 'undefined') {
       case 'selametan':
         if (typeof window.hitungSelametan === 'function') {
           window.hitungSelametan();
+        }
+        break;
+
+      case 'ijab':
+        if (typeof window.initIjabUI === 'function') {
+          window.initIjabUI();
+        }
+        break;
+
+      case 'omah':
+        if (typeof window.initOmahUI === 'function') {
+          window.initOmahUI();
+        }
+        break;
+
+      case 'ternak':
+        if (typeof window.initTernakUI === 'function') {
+          window.initTernakUI();
+        }
+        break;
+
+      case 'sasmitha':
+        if (typeof window.initSasmithaUI === 'function') {
+          window.initSasmithaUI();
         }
         break;
 
@@ -188,6 +262,10 @@ export function bootstrap() {
   initSapaDina('sapa-dina-container');
 
   if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects();
+  if (typeof window.initIjabUI === 'function') window.initIjabUI();
+  if (typeof window.initOmahUI === 'function') window.initOmahUI();
+  if (typeof window.initTernakUI === 'function') window.initTernakUI();
+  if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI();
 
   // Inisialisasi dropdown Tahun Hitung Nujum agar selalu terisi sejak awal
   const selTahun = document.getElementById('tahunHitungKepribadian');

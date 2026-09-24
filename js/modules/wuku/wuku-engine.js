@@ -12,6 +12,10 @@ import {
   wukuIllustrationPath,
   normalizeDewaName
 } from '../../data/dewa-kanon.js';
+import {
+  getWukuPetenget,
+  WUKU_PETENGET_LIST
+} from '../../data/wuku-petenget-db.js';
 
 /**
  * Mendapatkan daftar seluruh 30 wuku.
@@ -48,25 +52,46 @@ export function getWukuByName(name) {
 }
 
 /**
- * Mencari wuku berdasarkan kata kunci pencarian (nama wuku, nama dewa, profesi, dll).
- * @param {string} query 
+ * Mencari wuku berdasarkan kata kunci pencarian dan filter kategori petenget.
+ * @param {string} [query=''] - Kata kunci pencarian
+ * @param {string} [category='all'] - 'all' | 'nambani' | 'pangupajiwa' | 'tetanen' | 'ala_becik'
  * @returns {Array<Object>}
  */
-export function searchWuku(query) {
+export function searchWukuWithCategory(query = '', category = 'all') {
+  let list = getAllWuku();
+
+  // Filter awal berdasarkan kategori petenget
+  if (category && category !== 'all') {
+    list = list.filter(w => {
+      const p = getWukuPetenget(w.no_wuku);
+      if (!p) return false;
+      if (category === 'nambani') return p.nambani && p.nambani.becik && p.nambani.becik !== '-';
+      if (category === 'pangupajiwa') return p.pangupajiwa && p.pangupajiwa.becik && p.pangupajiwa.becik !== '-';
+      if (category === 'tetanen') return p.tetanen && p.tetanen.becik && p.tetanen.becik !== '-';
+      if (category === 'ala_becik') return (p.alaBecik && (p.alaBecik.becik !== '-' || p.alaBecik.ala !== '-'));
+      return true;
+    });
+  }
+
   if (!query || typeof query !== 'string' || !query.trim()) {
-    return getAllWuku();
+    return list;
   }
   const q = query.trim().toLowerCase();
-  const list = getAllWuku();
 
-  // Resolve alias → term kanon untuk pencarian lebih luas.
-  // Contoh: user ketik "Nogogini" → normalizeDewaName → "Sang Hyang Kamajaya"
-  // sehingga ketemu Galungan meski dewane sudah dikoreksi ke kanon.
+  // Resolve alias → term kanon untuk pencarian lebih luas
   const canonicalized = normalizeDewaName(query.trim());
   const qCanon = canonicalized.toLowerCase();
 
   return list.filter(w => {
-    // Cari di nama wuku, dewane kanon, watak, bilahi, profesi, donga
+    const p = getWukuPetenget(w.no_wuku);
+    const petengetText = p ? (
+      (p.alaBecik?.becik || '') + ' ' + (p.alaBecik?.ala || '') + ' ' +
+      (p.nambani?.becik || '') + ' ' + (p.nambani?.ala || '') + ' ' +
+      (p.pangupajiwa?.becik || '') + ' ' + (p.pangupajiwa?.ala || '') + ' ' +
+      (p.tetanen?.becik || '') + ' ' + (p.tetanen?.ala || '')
+    ).toLowerCase() : '';
+
+    // Cari di nama wuku, dewane kanon, watak, bilahi, profesi, donga, dan seluruh teks petenget
     const baseMatch =
       (w.nama_wuku && w.nama_wuku.toLowerCase().includes(q)) ||
       (w.dewane    && w.dewane.toLowerCase().includes(q))    ||
@@ -74,6 +99,7 @@ export function searchWuku(query) {
       (w.bilahi_bebaya && w.bilahi_bebaya.toLowerCase().includes(q)) ||
       (w.pangupaya_jiwa && w.pangupaya_jiwa.toLowerCase().includes(q)) ||
       (w.donga_slamet && w.donga_slamet.toLowerCase().includes(q)) ||
+      petengetText.includes(q) ||
       (String(w.no_wuku) === q);
 
     if (baseMatch) return true;
@@ -94,6 +120,15 @@ export function searchWuku(query) {
 
     return false;
   });
+}
+
+/**
+ * Mencari wuku berdasarkan kata kunci pencarian (nama wuku, nama dewa, profesi, petenget, dll).
+ * @param {string} query 
+ * @returns {Array<Object>}
+ */
+export function searchWuku(query) {
+  return searchWukuWithCategory(query, 'all');
 }
 
 /**
@@ -119,17 +154,23 @@ export function getWukuDetailSummary(wukuInput) {
   const dewaneSlug    = dewaEntry?.dewaneSlug || null;
   const dewaneAliases = dewaEntry?.aliases || [];
 
-  // Path gambar (menggunakan file yang sudah ada di assets/)
-  // Konvensi lama: assets/wuku/{NamaWuku}.jpg & assets/dewa-wuku/{Sang Hyang XXX}.jpg
+  // Path gambar kanon (/assets/illustrations/)
+  const imageWuku   = illustrationPath('wuku', data.nama_wuku);
+  const imageDewane = illustrationPath('dewane', data.nama_wuku);
   const wukuImagePath   = `assets/wuku/${data.nama_wuku}.jpg`;
   const dewaneImagePath = dewaneKanon !== '-'
     ? `assets/dewa-wuku/${dewaneKanon}.jpg`
     : null;
-  // Path ilustrasi kanon (/assets/illustrations/)
-  const imageWuku   = illustrationPath('wuku', data.nama_wuku);
-  const imageDewane = illustrationPath('dewane', data.nama_wuku);
   const wukuIllPath   = imageWuku;
   const dewaneIllPath = imageDewane;
+
+  // ── Perkaya dengan data petenget wuku (Ala-Becik, Nambani, Pangupajiwa, Tetanen) ──
+  const petenget = getWukuPetenget(data.no_wuku) || {
+    alaBecik: { becik: '-', ala: '-' },
+    nambani: { becik: '-', ala: '-' },
+    pangupajiwa: { becik: '-', ala: '-' },
+    tetanen: { becik: '-', ala: '-' }
+  };
 
   return {
     no:       data.no_wuku,
@@ -157,12 +198,25 @@ export function getWukuDetailSummary(wukuInput) {
     salawat:  data.salawat || '-',
     donga:    data.donga_slamet || '-',
     pangupaya: data.pangupaya_jiwa || '-',
-    tamba:    data.tamba_yen_lara || '-'
+    tamba:    data.tamba_yen_lara || '-',
+    // Data Petenget 4 Pilar (CSV Baru)
+    petenget,
+    alaBecik:    petenget.alaBecik,
+    nambani:     petenget.nambani,
+    pangupajiwa: petenget.pangupajiwa,
+    tetanen:     petenget.tetanen
   };
 }
 
 /**
- * Re-export resolver dewa-kanon untuk konsumsi modul wuku lainnya.
- * Memungkinkan wuku-ui.js mengakses normalizeDewaName dan illustrationPath tanpa import langsung.
+ * Re-export resolver dewa-kanon dan petenget wuku.
  */
-export { resolveWukuDewa, illustrationPath, dewaneIllustrationPath, wukuIllustrationPath, normalizeDewaName };
+export {
+  resolveWukuDewa,
+  illustrationPath,
+  dewaneIllustrationPath,
+  wukuIllustrationPath,
+  normalizeDewaName,
+  getWukuPetenget,
+  WUKU_PETENGET_LIST
+};

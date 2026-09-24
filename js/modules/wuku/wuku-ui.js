@@ -9,7 +9,9 @@ import {
   getWukuByNumber,
   getWukuByName,
   searchWuku,
+  searchWukuWithCategory,
   getWukuDetailSummary,
+  getWukuPetenget,
   illustrationPath
 } from './wuku-engine.js';
 import {
@@ -19,6 +21,7 @@ import {
 import { showToast } from '../../ui/toast.js';
 
 let activeWukuNo = 1;
+let currentWukuCategory = 'all';
 
 /**
  * Membuka modal ensiklopedia 30 Wuku Nusantara.
@@ -120,12 +123,34 @@ export function renderWukuGrid(list) {
 }
 
 /**
- * Filter pencarian wuku saat pengguna mengetik.
+ * Mengatur filter kategori nujum (nambani, pangupajiwa, tetanen, ala_becik, all).
+ * @param {string} category 
+ */
+export function setWukuCategoryFilter(category) {
+  currentWukuCategory = category || 'all';
+
+  // Sinkronkan styling pill aktif di tab maupun modal
+  document.querySelectorAll('.wuku-cat-pill').forEach(btn => {
+    const cat = btn.getAttribute('data-cat') || 'all';
+    if (cat === currentWukuCategory) {
+      btn.classList.remove('bg-sogan-950/80', 'text-sogan-300', 'border-sogan-800');
+      btn.classList.add('bg-prada/20', 'text-prada', 'border-prada', 'shadow-[0_0_10px_rgba(212,175,55,0.25)]');
+    } else {
+      btn.classList.remove('bg-prada/20', 'text-prada', 'border-prada', 'shadow-[0_0_10px_rgba(212,175,55,0.25)]');
+      btn.classList.add('bg-sogan-950/80', 'text-sogan-300', 'border-sogan-800');
+    }
+  });
+
+  filterWukuGrid();
+}
+
+/**
+ * Filter pencarian wuku saat pengguna mengetik atau mengganti kategori.
  * @param {HTMLInputElement} [inputElem]
  */
 export function filterWukuGrid(inputElem) {
   const query = inputElem?.value ?? (document.getElementById('cariWukuInput')?.value || document.getElementById('tabCariWukuInput')?.value || '');
-  const filtered = searchWuku(query);
+  const filtered = searchWukuWithCategory(query, currentWukuCategory);
   renderWukuGrid(filtered);
 }
 
@@ -281,6 +306,102 @@ export function selectWukuDetail(noOrName) {
         </div>
       </div>
 
+      <!-- Seksi Petenget Nujum 4 Pilar (Ala-Becik, Nambani, Pangupajiwa, Tetanen) -->
+      <div class="space-y-3 pt-2 border-t border-sogan-800/80">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
+            <i class="fa-solid fa-scroll text-prada"></i> Petenget Nujum 4 Pilar Pawukon
+          </span>
+          <span class="text-[9.5px] font-mono px-2 py-0.5 rounded bg-sogan-900 text-prada border border-prada/30">
+            Pituduh Tradisional
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          
+          <!-- 1. Ala & Becik -->
+          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-sky-900/40 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-sky-300 flex items-center gap-1.5 tracking-wider">
+                <i class="fa-solid fa-scale-balanced"></i> Ala &amp; Becik Wuku
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-950 border border-sky-700/50 text-sky-300 font-mono">Pituduh Dina</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <p class="text-sogan-200 leading-relaxed">${summary.alaBecik?.becik || '-'}</p>
+              </div>
+              <div class="pt-1 border-t border-sogan-900/60">
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <p class="text-sogan-300 leading-relaxed">${summary.alaBecik?.ala || '-'}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Nambani / Usada -->
+          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-emerald-900/40 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
+                <i class="fa-solid fa-mortar-pestle"></i> Nambani (Usada &amp; Jamu)
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700/50 text-emerald-300 font-mono">Tamba Lara</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <p class="text-sogan-200 leading-relaxed">${summary.nambani?.becik || '-'}</p>
+              </div>
+              <div class="pt-1 border-t border-sogan-900/60">
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <p class="text-sogan-300 leading-relaxed">${summary.nambani?.ala || '-'}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Pangupajiwa -->
+          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-900/40 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
+                <i class="fa-solid fa-coins"></i> Pangupajiwa (Panguripan)
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700/50 text-amber-300 font-mono">Rejeki</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <p class="text-sogan-200 leading-relaxed">${summary.pangupajiwa?.becik || '-'}</p>
+              </div>
+              <div class="pt-1 border-t border-sogan-900/60">
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <p class="text-sogan-300 leading-relaxed">${summary.pangupajiwa?.ala || '-'}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Tetanen & Palawija -->
+          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-teal-900/40 space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-teal-300 flex items-center gap-1.5 tracking-wider">
+                <i class="fa-solid fa-wheat-awn"></i> Tetanen (Tetanduran)
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 border border-teal-700/50 text-teal-300 font-mono">Palawija</span>
+            </div>
+            <div class="space-y-1 text-[11px]">
+              <div>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik Ditandur:</span>
+                <p class="text-sogan-200 leading-relaxed">${summary.tetanen?.becik || '-'}</p>
+              </div>
+              <div class="pt-1 border-t border-sogan-900/60">
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <p class="text-sogan-300 leading-relaxed">${summary.tetanen?.ala || '-'}</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   `;
 
@@ -352,5 +473,10 @@ export function renderFullWukuPage() {
 if (typeof window !== 'undefined') {
   window.renderSiklus12Grid = renderSiklus12Grid;
   window.renderFullWukuPage = renderFullWukuPage;
+  window.selectWukuDetail = selectWukuDetail;
+  window.filterWukuGrid = filterWukuGrid;
+  window.setWukuCategoryFilter = setWukuCategoryFilter;
+  window.openEnsiklopediaWukuModal = openEnsiklopediaWukuModal;
+  window.closeEnsiklopediaWukuModal = closeEnsiklopediaWukuModal;
 }
 
