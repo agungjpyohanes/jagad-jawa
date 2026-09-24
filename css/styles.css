@@ -282,8 +282,8 @@
   background: transparent;
 }
 
-/* Hover support on desktop */
-@media (hover: hover) {
+/* Hover support on desktop with mouse pointer (prevents mobile/tablet sticky hover) */
+@media (hover: hover) and (pointer: fine) {
   .nav-dropdown-group:hover .nav-dropdown-menu {
     opacity: 1 !important;
     visibility: visible !important;

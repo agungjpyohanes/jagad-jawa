@@ -39,6 +39,7 @@ import {
 
 import { openWetonShareModal } from './share-card.js';
 import { showToast } from '../../ui/toast.js';
+import { illustrationPath } from '../../data/dewa-kanon.js';
 
 let currentFilterType = 'all';
 
@@ -620,7 +621,7 @@ export function bukaDetailTanggalJawa(y, m, d) {
   const elWukuThumb = document.getElementById('modalWukuThumbImg');
   const elWukuThumbWrap = document.getElementById('modalWukuThumbContainer');
   if (elWukuThumb && tglJawa?.wukuName) {
-    elWukuThumb.src = `/assets/illustrations/wuku/${tglJawa.wukuName.toLowerCase().trim()}.jpg`;
+    elWukuThumb.src = illustrationPath('wuku', tglJawa.wukuName);
     elWukuThumb.alt = `Wuku ${tglJawa.wukuName}`;
     if (elWukuThumbWrap) elWukuThumbWrap.classList.remove('hidden');
   }

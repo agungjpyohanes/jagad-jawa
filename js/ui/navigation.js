@@ -91,14 +91,23 @@ function closeAllNavDropdowns() {
 
 function closeMobileMenu() {
   const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('mobileMenuBtn') || document.querySelector('[onclick*="toggleMobileMenu"]');
   if (menu && !menu.classList.contains('hidden')) {
     menu.classList.add('hidden');
+  }
+  if (btn) {
+    btn.setAttribute('aria-expanded', 'false');
   }
 }
 
 function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
-  if (menu) menu.classList.toggle('hidden');
+  const btn = document.getElementById('mobileMenuBtn') || document.querySelector('[onclick*="toggleMobileMenu"]');
+  if (!menu) return;
+  const isHidden = menu.classList.toggle('hidden');
+  if (btn) {
+    btn.setAttribute('aria-expanded', String(!isHidden));
+  }
 }
 
 // Global click handler to close dropdowns and mobile menu when clicking outside
@@ -108,7 +117,7 @@ if (typeof document !== 'undefined') {
       closeAllNavDropdowns();
     }
     const mobileMenu = document.getElementById('mobileMenu');
-    const toggleBtn = e.target.closest('[onclick*="toggleMobileMenu"]');
+    const toggleBtn = e.target.closest('#mobileMenuBtn, [onclick*="toggleMobileMenu"]');
     if (mobileMenu && !mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !toggleBtn) {
       closeMobileMenu();
     }
@@ -133,34 +142,54 @@ function navigasiKembali() {
 }
 
 if (typeof window !== 'undefined') {
+  const resolveCurrentHashTab = () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(`tab-${hash}`)) {
+      return hash;
+    }
+    return 'beranda';
+  };
+
   // Listener popstate (tombol back/forward browser & UI)
   window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.tab) {
+    if (event.state && event.state.tab && document.getElementById(`tab-${event.state.tab}`)) {
       switchTab(event.state.tab, false);
     } else {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && document.getElementById(`tab-${hash}`)) {
-        switchTab(hash, false);
-      } else {
-        switchTab('beranda', false);
-      }
+      switchTab(resolveCurrentHashTab(), false);
     }
   });
 
-  // Inisialisasi awal saat dokumen dimuat
-  window.addEventListener('DOMContentLoaded', () => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash && document.getElementById(`tab-${hash}`)) {
-      if (typeof history !== 'undefined' && history.replaceState) {
-        history.replaceState({ tab: hash }, '', '#' + hash);
-      }
-      switchTab(hash, false);
-    } else {
-      if (typeof history !== 'undefined' && history.replaceState) {
-        history.replaceState({ tab: 'beranda' }, '', '#beranda');
-      }
-    }
+  // Listener hashchange (sinkronisasi langsung jika URL hash diubah / link routing)
+  window.addEventListener('hashchange', function() {
+    const tab = resolveCurrentHashTab();
+    switchTab(tab, false);
   });
+
+  // Inisialisasi awal saat dokumen dimuat
+  const initNavOnLoad = () => {
+    const initialTab = resolveCurrentHashTab();
+    if (typeof history !== 'undefined' && history.replaceState) {
+      history.replaceState({ tab: initialTab }, '', '#' + initialTab);
+    }
+    switchTab(initialTab, false);
+
+    // Event delegation fallback: tombol data-tab tanpa inline onclick tetap berpindah tab
+    document.addEventListener('click', (e) => {
+      const tabBtn = e.target.closest('[data-tab]');
+      if (tabBtn && !tabBtn.getAttribute('onclick')) {
+        const tabId = tabBtn.dataset.tab;
+        if (tabId && document.getElementById(`tab-${tabId}`)) {
+          switchTab(tabId);
+        }
+      }
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initNavOnLoad);
+  } else {
+    initNavOnLoad();
+  }
 }
 
 /**

@@ -14,12 +14,15 @@ const scriptCache = new Map();
 export function loadScript(url) {
   if (typeof document === 'undefined') return Promise.resolve();
   if (scriptCache.has(url)) return scriptCache.get(url);
-  const p = new Promise((resolve, reject) => {
+  const p = new Promise((resolve) => {
     const s = document.createElement('script');
     s.src = url;
     s.async = true;
     s.onload = () => resolve();
-    s.onerror = (e) => reject(e);
+    s.onerror = (e) => {
+      console.warn(`[loadScript] ${url} diabaikan untuk bundler ES module:`, e);
+      resolve();
+    };
     document.head.appendChild(s);
   });
   scriptCache.set(url, p);
@@ -30,19 +33,10 @@ let nujumLoaded = false;
 export async function ensureNujumLoaded() {
   if (nujumLoaded) return;
   try {
-    await Promise.all([
-      loadScript('js/data/nujum-matrix.js'),
-      loadScript('js/data/siklus-master-data.js'),
-      loadScript('js/data/karakter-pekerjaan-master-data.js'),
-      loadScript('js/data/shio-elemen-master-data.js'),
-      loadScript('js/data/pranata-zodiak-data.js'),
-      loadScript('js/data/sasi-jawa-master-data.js'),
-      loadScript('js/data/pawukon.js'),
-      loadScript('js/data/pawukon-dino-db.js'),
-      loadScript('js/data/dino-rules.js')
+    const [nujumUI, nujumEngine] = await Promise.all([
+      import('../modules/nujum/nujum-ui.js'),
+      import('../modules/nujum/nujum-engine.js')
     ]);
-    const nujumUI = await import('../modules/nujum/nujum-ui.js');
-    const nujumEngine = await import('../modules/nujum/nujum-engine.js');
 
     if (typeof window !== 'undefined') {
       window.initTahunHitungSelect = nujumUI.initTahunHitungSelect;
@@ -102,7 +96,6 @@ let pituturLoaded = false;
 export async function ensurePituturLoaded() {
   if (pituturLoaded) return;
   try {
-    await loadScript('js/data/pitutur.js');
     const pituturUI = await import('../modules/pitutur/pitutur-ui.js');
     if (typeof window !== 'undefined') {
       window.generateRandomPitutur = pituturUI.generateRandomPitutur;
@@ -128,9 +121,10 @@ let wukuLoaded = false;
 export async function ensureWukuLoaded() {
   if (wukuLoaded) return;
   try {
-    await loadScript('js/data/pawukon.js');
-    const wukuEngine = await import('../modules/wuku/wuku-engine.js');
-    const wukuUI = await import('../modules/wuku/wuku-ui.js');
+    const [wukuEngine, wukuUI] = await Promise.all([
+      import('../modules/wuku/wuku-engine.js'),
+      import('../modules/wuku/wuku-ui.js')
+    ]);
 
     if (typeof window !== 'undefined') {
       window.getAllWuku = wukuEngine.getAllWuku;
@@ -156,7 +150,7 @@ let tumpengLoaded = false;
 export async function ensureTumpengLoaded() {
   if (tumpengLoaded) return;
   try {
-    await loadScript('js/data/tumpeng.js');
+    await import('../data/tumpeng.js');
     tumpengLoaded = true;
   } catch (err) {
     console.error('Gagal memuat modul Tumpeng:', err);
@@ -170,18 +164,22 @@ export function wireNujumFeature() {
   if (typeof window === 'undefined') return;
 
   // Ensiklopedia 30 Wuku (with auto lazy load)
-  window.renderFullWukuPage = async function () {
+  const wrapperRenderFullWukuPage = async function () {
     await ensureWukuLoaded();
-    if (window.renderFullWukuPage && window.renderFullWukuPage !== this) {
+    if (typeof window.renderFullWukuPage === 'function' && window.renderFullWukuPage !== wrapperRenderFullWukuPage) {
       window.renderFullWukuPage();
     }
   };
-  window.openEnsiklopediaWukuModal = async function (initialWuku) {
+  window.renderFullWukuPage = wrapperRenderFullWukuPage;
+
+  const wrapperOpenEnsiklopediaWukuModal = async function (initialWuku) {
     await ensureWukuLoaded();
-    if (window.openEnsiklopediaWukuModal && window.openEnsiklopediaWukuModal !== this) {
+    if (typeof window.openEnsiklopediaWukuModal === 'function' && window.openEnsiklopediaWukuModal !== wrapperOpenEnsiklopediaWukuModal) {
       window.openEnsiklopediaWukuModal(initialWuku);
     }
   };
+  window.openEnsiklopediaWukuModal = wrapperOpenEnsiklopediaWukuModal;
+
   window.closeEnsiklopediaWukuModal = function () {
     const modal = document.getElementById('modalEnsiklopediaWuku');
     if (modal) {
@@ -189,77 +187,101 @@ export function wireNujumFeature() {
       modal.classList.remove('flex');
     }
   };
-  window.filterWukuGrid = function () {
-    if (window.filterWukuGrid && window.filterWukuGrid !== this) {
-      window.filterWukuGrid();
+
+  const wrapperFilterWukuGrid = async function (inputElem) {
+    await ensureWukuLoaded();
+    if (typeof window.filterWukuGrid === 'function' && window.filterWukuGrid !== wrapperFilterWukuGrid) {
+      window.filterWukuGrid(inputElem);
     }
   };
-  window.selectWukuDetail = async function (noOrName) {
+  window.filterWukuGrid = wrapperFilterWukuGrid;
+
+  const wrapperSelectWukuDetail = async function (noOrName) {
     await ensureWukuLoaded();
-    if (window.selectWukuDetail && window.selectWukuDetail !== this) {
+    if (typeof window.selectWukuDetail === 'function' && window.selectWukuDetail !== wrapperSelectWukuDetail) {
       window.selectWukuDetail(noOrName);
     }
   };
+  window.selectWukuDetail = wrapperSelectWukuDetail;
 
   // Nujum wrappers (dengan jaminan lazy load jika diklik langsung)
-  window.hitungKepribadianLengkap = async function () {
+  const wrapperHitungKepribadian = async function () {
     await ensureNujumLoaded();
-    if (window.hitungKepribadianLengkap && window.hitungKepribadianLengkap !== this) {
+    if (typeof window.hitungKepribadianLengkap === 'function' && window.hitungKepribadianLengkap !== wrapperHitungKepribadian) {
       window.hitungKepribadianLengkap();
     }
   };
-  window.updateKepribadianQuickInfo = async function () {
+  window.hitungKepribadianLengkap = wrapperHitungKepribadian;
+
+  const wrapperUpdateQuickInfo = async function () {
     await ensureNujumLoaded();
-    if (window.updateKepribadianQuickInfo && window.updateKepribadianQuickInfo !== this) {
+    if (typeof window.updateKepribadianQuickInfo === 'function' && window.updateKepribadianQuickInfo !== wrapperUpdateQuickInfo) {
       window.updateKepribadianQuickInfo();
     }
   };
-  window.onTahunHitungChange = async function () {
+  window.updateKepribadianQuickInfo = wrapperUpdateQuickInfo;
+
+  const wrapperOnTahunChange = async function () {
     await ensureNujumLoaded();
-    if (window.onTahunHitungChange && window.onTahunHitungChange !== this) {
+    if (typeof window.onTahunHitungChange === 'function' && window.onTahunHitungChange !== wrapperOnTahunChange) {
       window.onTahunHitungChange();
     }
   };
-  window.switchNujumViewMode = async function (mode) {
+  window.onTahunHitungChange = wrapperOnTahunChange;
+
+  const wrapperSwitchNujumView = async function (mode) {
     await ensureNujumLoaded();
-    if (window.switchNujumViewMode && window.switchNujumViewMode !== this) {
+    if (typeof window.switchNujumViewMode === 'function' && window.switchNujumViewMode !== wrapperSwitchNujumView) {
       window.switchNujumViewMode(mode);
     }
   };
-  window.switchNujumSubTab = async function (tab) {
+  window.switchNujumViewMode = wrapperSwitchNujumView;
+
+  const wrapperSwitchNujumSubTab = async function (tab) {
     await ensureNujumLoaded();
-    if (window.switchNujumSubTab && window.switchNujumSubTab !== this) {
+    if (typeof window.switchNujumSubTab === 'function' && window.switchNujumSubTab !== wrapperSwitchNujumSubTab) {
       window.switchNujumSubTab(tab);
     }
   };
-  window.openGlosariumNujumModal = async function (conceptId) {
+  window.switchNujumSubTab = wrapperSwitchNujumSubTab;
+
+  const wrapperOpenGlosarium = async function (conceptId) {
     await ensureNujumLoaded();
-    if (window.openGlosariumNujumModal && window.openGlosariumNujumModal !== this) {
+    if (typeof window.openGlosariumNujumModal === 'function' && window.openGlosariumNujumModal !== wrapperOpenGlosarium) {
       window.openGlosariumNujumModal(conceptId);
     }
   };
-  window.closeGlosariumNujumModal = async function () {
+  window.openGlosariumNujumModal = wrapperOpenGlosarium;
+
+  const wrapperCloseGlosarium = async function () {
     await ensureNujumLoaded();
-    if (window.closeGlosariumNujumModal && window.closeGlosariumNujumModal !== this) {
+    if (typeof window.closeGlosariumNujumModal === 'function' && window.closeGlosariumNujumModal !== wrapperCloseGlosarium) {
       window.closeGlosariumNujumModal();
     }
   };
-  window.renderGlosariumContent = async function (filterId) {
+  window.closeGlosariumNujumModal = wrapperCloseGlosarium;
+
+  const wrapperRenderGlosarium = async function (filterId) {
     await ensureNujumLoaded();
-    if (window.renderGlosariumContent && window.renderGlosariumContent !== this) {
+    if (typeof window.renderGlosariumContent === 'function' && window.renderGlosariumContent !== wrapperRenderGlosarium) {
       window.renderGlosariumContent(filterId);
     }
   };
-  window.hitungKomparasiNonJodoh = async function () {
+  window.renderGlosariumContent = wrapperRenderGlosarium;
+
+  const wrapperHitungKomparasi = async function () {
     await ensureNujumLoaded();
-    if (window.hitungKomparasiNonJodoh && window.hitungKomparasiNonJodoh !== this) {
+    if (typeof window.hitungKomparasiNonJodoh === 'function' && window.hitungKomparasiNonJodoh !== wrapperHitungKomparasi) {
       window.hitungKomparasiNonJodoh();
     }
   };
-  window.printLaporanNujum = async function (theme) {
+  window.hitungKomparasiNonJodoh = wrapperHitungKomparasi;
+
+  const wrapperPrintLaporan = async function (theme) {
     await ensureNujumLoaded();
-    if (window.printLaporanNujum && window.printLaporanNujum !== this) {
+    if (typeof window.printLaporanNujum === 'function' && window.printLaporanNujum !== wrapperPrintLaporan) {
       window.printLaporanNujum(theme);
     }
   };
+  window.printLaporanNujum = wrapperPrintLaporan;
 }

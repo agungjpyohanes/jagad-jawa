@@ -302,8 +302,6 @@
           <i class="fa-solid fa-language text-amber-400"></i>
           <span class="lang-toggle-short">ID</span>
         </button>
-          <span class="lang-toggle-short">ID</span>
-        </button>
 
         <button id="puspawarnaBtn" onclick="toggleKetawangPuspawarna()" class="nav-audio-btn" title="Ketawang Puspawarna — Gamelan Klenengan">
           <i id="puspawarnaIcon" class="fa-solid fa-circle-play text-sm text-prada"></i>
@@ -318,7 +316,7 @@
         <audio id="puspawarnaAudioElement" src="assets/audio/puspowarno.mp3" preload="auto" loop></audio>
 
         <!-- Mobile Toggle Button -->
-        <button onclick="toggleMobileMenu()" aria-label="Buka Menu" class="md:hidden p-2 rounded-lg bg-sogan-900 border border-prada/30 text-sogan-200 hover:text-prada focus:outline-none transition cursor-pointer">
+        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Buka Menu" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden p-2 rounded-lg bg-sogan-900 border border-prada/30 text-sogan-200 hover:text-prada focus:outline-none transition cursor-pointer">
           <i class="fa-solid fa-bars text-base"></i>
         </button>
       </div>
@@ -349,7 +347,7 @@
       </div>
 
       <!-- Beranda -->
-      <button onclick="switchTab('beranda'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-2 rounded-xl text-sm text-sogan-200 hover:bg-sogan-900 flex items-center gap-3 font-semibold" data-tab="beranda">
+      <button onclick="switchTab('beranda')" class="nav-sublink w-full text-left px-3 py-2 rounded-xl text-sm text-sogan-200 hover:bg-sogan-900 flex items-center gap-3 font-semibold" data-tab="beranda">
         <i class="fa-solid fa-house w-5 text-prada"></i> Beranda Utama
       </button>
 
@@ -359,10 +357,10 @@
           <i class="fa-solid fa-calendar-days text-[10px]"></i> Kalender &amp; Waktu
         </div>
         <div class="space-y-1 pl-2">
-          <button onclick="switchTab('kalender'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kalender">
+          <button onclick="switchTab('kalender')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kalender">
             <i class="fa-solid fa-calendar-days w-4 text-prada"></i> Kalender Jawa
           </button>
-          <button onclick="switchTab('tanggal-jawa'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tanggal-jawa">
+          <button onclick="switchTab('tanggal-jawa')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="tanggal-jawa">
             <i class="fa-solid fa-moon w-4 text-prada"></i> Konversi Tanggal Jawa
           </button>
         </div>
@@ -374,13 +372,13 @@
           <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> Nujum, Jodoh &amp; Selametan
         </div>
         <div class="space-y-1 pl-2">
-          <button onclick="switchTab('kepribadian'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kepribadian">
+          <button onclick="switchTab('kepribadian')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="kepribadian">
             <i class="fa-solid fa-wand-magic-sparkles w-4 text-prada"></i> Nujum Pribadi
           </button>
-          <button onclick="switchTab('perjodohan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="perjodohan">
+          <button onclick="switchTab('perjodohan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="perjodohan">
             <i class="fa-solid fa-heart w-4 text-prada"></i> Perjodohan (Pitung Jawa)
           </button>
-          <button onclick="switchTab('selametan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="selametan">
+          <button onclick="switchTab('selametan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="selametan">
             <i class="fa-solid fa-hourglass-half w-4 text-prada"></i> Selametan (Pengetan Tilar Donyo)
           </button>
         </div>
@@ -392,19 +390,19 @@
           <i class="fa-solid fa-compass text-[10px]"></i> Budaya &amp; Pawukon
         </div>
         <div class="space-y-1 pl-2">
-          <button onclick="switchTab('wuku'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wuku">
+          <button onclick="switchTab('wuku')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wuku">
             <i class="fa-solid fa-compass w-4 text-prada"></i> Ensiklopedia 30 Wuku
           </button>
-          <button onclick="switchTab('tripurusa'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tripurusa">
+          <button onclick="switchTab('tripurusa')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tripurusa">
             <i class="fa-solid fa-egg w-4 text-prada"></i> Telur Jagad (Tripurusa)
           </button>
-          <button onclick="switchTab('ensiklopedia-budaya'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="ensiklopedia-budaya">
+          <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="ensiklopedia-budaya">
             <i class="fa-solid fa-book-journal-whills w-4 text-prada"></i> Ensiklopedia Primbon &amp; Falakiah
           </button>
-          <button onclick="switchTab('gamelan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="gamelan">
+          <button onclick="switchTab('gamelan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="gamelan">
             <i class="fa-solid fa-drum w-4 text-prada"></i> Gamelan Jawa
           </button>
-          <button onclick="switchTab('tumpeng'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tumpeng">
+          <button onclick="switchTab('tumpeng')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5 ahli-only" data-tab="tumpeng">
             <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> Tumpeng Tombak Rojo
           </button>
         </div>
@@ -416,13 +414,13 @@
           <i class="fa-solid fa-masks-theater text-[10px]"></i> Seni &amp; Sastra
         </div>
         <div class="space-y-1 pl-2">
-          <button onclick="switchTab('aksara'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="aksara">
+          <button onclick="switchTab('aksara')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="aksara">
             <i class="fa-solid fa-feather-pointed w-4 text-prada"></i> Studio Aksara Jawa
           </button>
-          <button onclick="switchTab('wayang'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wayang">
+          <button onclick="switchTab('wayang')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="wayang">
             <i class="fa-solid fa-masks-theater w-4 text-prada"></i> Panggung Kelir Wayang
           </button>
-          <button onclick="switchTab('pitutur'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="pitutur">
+          <button onclick="switchTab('pitutur')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="pitutur">
             <i class="fa-solid fa-quote-left w-4 text-prada"></i> Pitutur Luhur &amp; Kuis
           </button>
         </div>
@@ -434,7 +432,7 @@
           <i class="fa-solid fa-file-pdf text-[10px]"></i> Laporan &amp; Ekspor Dokumen
         </div>
         <div class="space-y-1 pl-2">
-          <button onclick="switchTab('laporan'); toggleMobileMenu();" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="laporan">
+          <button onclick="switchTab('laporan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-xs text-sogan-200 hover:bg-sogan-900 flex items-center gap-2.5" data-tab="laporan">
             <i class="fa-solid fa-file-pdf w-4 text-prada"></i> Pusat Laporan Keraton
           </button>
         </div>

@@ -94,3 +94,30 @@ test('Navigasi & Menu - Placeholder Fitur Lanjutan Memuat Tanda Segera', () => {
     'Placeholder silsilah harus memuat judul dan deskripsi'
   );
 });
+
+test('Navigasi & Menu - Aksesibilitas Mobile Drawer, Hash Routing, & Vercel Asset Handling', () => {
+  const indexPath = path.resolve('index.html');
+  const html = fs.readFileSync(indexPath, 'utf-8');
+
+  // 1. Mobile button memiliki ID dan atribut aksesibilitas
+  assert.ok(html.includes('id="mobileMenuBtn"'), 'Tombol hamburger harus memiliki id="mobileMenuBtn"');
+  assert.ok(html.includes('aria-controls="mobileMenu"'), 'Tombol hamburger harus memiliki aria-controls="mobileMenu"');
+
+  // 2. Tombol di dalam drawer tidak memanggil toggleMobileMenu berulang (yang menyebabkan freeze)
+  const mobileMenuMatch = html.match(/<div id="mobileMenu"[\s\S]*?<\/header>/);
+  assert.ok(mobileMenuMatch, 'Elemen #mobileMenu harus ditemukan di index.html');
+  const drawerHtml = mobileMenuMatch[0];
+  assert.ok(!drawerHtml.includes("toggleMobileMenu();"), 'Tombol item dalam drawer tidak boleh memanggil toggleMobileMenu() berlebih');
+
+  // 3. Modul navigasi memuat listener hashchange untuk routing langsung
+  const navPath = path.resolve('js/ui/navigation.js');
+  const navJs = fs.readFileSync(navPath, 'utf-8');
+  assert.ok(navJs.includes("hashchange"), 'navigation.js harus memiliki listener hashchange');
+
+  // 4. vercel.json memuat handle: filesystem sebelum rewrite
+  const vercelPath = path.resolve('vercel.json');
+  const vercelConfig = JSON.parse(fs.readFileSync(vercelPath, 'utf-8'));
+  const hasFilesystemHandle = vercelConfig.routes?.some(r => r.handle === 'filesystem');
+  assert.ok(hasFilesystemHandle, 'vercel.json harus mendefinisikan { "handle": "filesystem" }');
+});
+
