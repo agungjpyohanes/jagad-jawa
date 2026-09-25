@@ -18,6 +18,7 @@ import {
   SIKLUS12_SLUGS,
   resolveSiklus12
 } from '../../data/dewa-kanon.js';
+import { MASTER_SIKLUS_PADEWAN } from '../../data/siklus-master-data.js';
 import { showToast } from '../../ui/toast.js';
 
 let activeWukuNo = 1;
@@ -225,9 +226,9 @@ export function selectWukuDetail(noOrName) {
           </div>
         </div>
 
-        <!-- Kartu Gambar Dewane -->
-        <div class="flex flex-col items-center space-y-2 text-center">
-          <div class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group">
+        <!-- Kartu Gambar Dewane (Interaktif Pop-up Detail Dewa) -->
+        <div class="flex flex-col items-center space-y-2 text-center cursor-pointer group" onclick="window.openPadewanDetailModal ? window.openPadewanDetailModal('${summary.dewane}') : (window.openPadewanModal && window.openPadewanModal('${summary.dewane}'))" title="Klik kagem mirsani rincian mendalam Batara Dewane Wuku">
+          <div class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group-hover:border-prada group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
             <img 
               src="${summary.imageDewane}" 
               alt="${summary.dewane}" 
@@ -237,12 +238,15 @@ export function selectWukuDetail(noOrName) {
               style="aspect-ratio: 400/560; object-fit: cover;" 
               onerror="this.onerror=null; this.parentElement.classList.add('hidden');" 
             />
+            <div class="absolute bottom-1.5 inset-x-1.5 py-1 px-2 rounded-lg bg-black/80 backdrop-blur-sm border border-prada/30 text-[9.5px] font-mono text-prada font-bold flex items-center justify-center gap-1 opacity-90 group-hover:opacity-100 transition">
+              <i class="fa-solid fa-eye text-amber-400"></i> Klik Pop-up 12 Dewa
+            </div>
           </div>
           <div class="space-y-0.5 max-w-full">
             <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1 truncate px-1" title="${summary.dewane}">
               <i class="fa-solid fa-shield-halved text-amber-400"></i> ${summary.dewane.replace('Sang Hyang ', 'SH ')}
             </span>
-            <span class="text-[10px] text-sogan-400">Dewa Pangayom Wuku</span>
+            <span class="text-[10px] text-sogan-400 group-hover:text-amber-200 transition">Dewa Pangayom (Klik Detail)</span>
           </div>
         </div>
       </div>
@@ -430,7 +434,10 @@ export function renderSiklus12Grid(containerId = 'tabWukuSiklus12Grid') {
           : '<span class="text-[9.5px] px-2 py-0.5 rounded-full bg-sky-950/80 text-sky-300 border border-sky-800/60 font-semibold font-mono">Batara</span>';
 
         return `
-          <div class="p-3 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition flex flex-col items-center text-center space-y-2 group shadow-md">
+          <div 
+            onclick="window.openPadewanDetailModal && window.openPadewanDetailModal(${idx + 1})"
+            class="p-3 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/80 hover:ring-2 hover:ring-prada/40 hover:scale-[1.03] transition flex flex-col items-center text-center space-y-2 group shadow-md cursor-pointer"
+            title="Klik kagem mirsani rincian ${label}">
             <div class="relative w-full overflow-hidden rounded-xl border border-prada/30 bg-sogan-950/70 shadow">
               <img 
                 src="${imgUrl}" 
@@ -461,13 +468,315 @@ export function renderSiklus12Grid(containerId = 'tabWukuSiklus12Grid') {
   container.innerHTML = html;
 }
 
+export function openPadewanModal(dewaHighlight = '') {
+  let modal = document.getElementById('modalPadewanSiklus12');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modalPadewanSiklus12';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/85 backdrop-blur-md transition-all duration-300';
+    document.body.appendChild(modal);
+  }
+
+  const highlightNorm = (dewaHighlight || '').toLowerCase().replace('sang hyang', '').trim();
+
+  modal.innerHTML = `
+    <div class="relative w-full max-w-4xl bg-gradient-to-b from-[#131826] to-[#0A0D15] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-2xl bg-prada/20 border border-prada/60 flex items-center justify-center text-prada text-base shadow">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="font-marcellus text-lg sm:text-xl font-bold gold-gradient-text">12 Padewan Siklus Batara-Batari Kanon</h3>
+            <p class="text-xs text-sogan-400">Panguwasa Siklus Penanggalan &amp; Watak Kosmis Jawa (Klik kartu kagem mirsani rincian)</p>
+          </div>
+        </div>
+        <button onclick="window.closePadewanModal && window.closePadewanModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada flex items-center justify-center cursor-pointer transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 overflow-y-auto max-h-[75vh] scrollbar-thin">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 text-xs">
+          ${SIKLUS12_SLUGS.map((slug, idx) => {
+            const entry = resolveSiklus12(slug);
+            const label = entry ? entry.label : `Batara ${slug.charAt(0).toUpperCase() + slug.slice(1)}`;
+            const imgUrl = illustrationPath('siklus12', slug);
+            const isBatari = entry?.gender === 'batari';
+            const isMatch = highlightNorm && label.toLowerCase().includes(highlightNorm);
+            const genderBadge = isBatari
+              ? '<span class="text-[9px] px-2 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-800/60 font-semibold font-mono">Batari</span>'
+              : '<span class="text-[9px] px-2 py-0.5 rounded-full bg-sky-950 text-sky-300 border border-sky-800/60 font-semibold font-mono">Batara</span>';
+
+            return `
+              <div 
+                onclick="window.openPadewanDetailModal && window.openPadewanDetailModal(${idx + 1})"
+                class="p-2.5 sm:p-3 rounded-2xl bg-[#0F1420] border ${isMatch ? 'border-prada ring-2 ring-prada/50 shadow-[0_0_15px_rgba(212,175,55,0.4)]' : 'border-sogan-800/80'} hover:border-prada transition-all duration-200 hover:scale-[1.03] flex flex-col items-center text-center space-y-2 group shadow cursor-pointer"
+                title="Klik kagem mirsani rincian ${label}">
+                <div class="relative w-full overflow-hidden rounded-xl border border-prada/30 bg-sogan-950/70 shadow">
+                  <img 
+                    src="${imgUrl}" 
+                    alt="${label}" 
+                    loading="lazy" 
+                    decoding="async" 
+                    class="w-full h-auto rounded-xl transition-transform duration-300 group-hover:scale-105" 
+                    style="aspect-ratio: 400/560; object-fit: cover;" 
+                    onerror="this.onerror=null; this.parentElement.classList.add('opacity-40');" 
+                  />
+                  <span class="absolute top-1 left-1 w-5 h-5 rounded-md bg-keraton/90 border border-prada/40 text-prada font-mono font-bold text-[9.5px] flex items-center justify-center shadow">
+                    ${idx + 1}
+                  </span>
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="px-2 py-1 rounded-lg bg-keraton/90 border border-prada/60 text-prada text-[10px] font-bold shadow flex items-center gap-1">
+                      <i class="fa-solid fa-eye text-[9px]"></i> Rincian
+                    </span>
+                  </div>
+                </div>
+                <div class="w-full space-y-1">
+                  <div class="font-marcellus text-xs font-bold text-amber-200 group-hover:text-prada transition truncate" title="${label}">
+                    ${label}
+                  </div>
+                  <div class="flex items-center justify-center">
+                    ${genderBadge}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between text-xs text-sogan-400">
+        <span>Kanon 12 Padewan Suryo dumugi Yamadipati</span>
+        <button onclick="window.closePadewanModal && window.closePadewanModal()" class="px-4 py-1.5 rounded-xl bg-sogan-900 border border-prada/40 text-prada font-semibold text-xs hover:bg-sogan-800 transition cursor-pointer">
+          Tutup
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+export function closePadewanModal() {
+  const modal = document.getElementById('modalPadewanSiklus12');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = 'auto';
+  }
+}
+
+/**
+ * Membuka pop-up modal rincian mendalam 1 dari 12 Dewa Siklus Padewan.
+ * @param {number|string} target - Nomor urut 1..12, slug, atau nama dewa
+ */
+export function openPadewanDetailModal(target) {
+  let order = 1;
+  let slug = 'suryo';
+
+  if (typeof target === 'number') {
+    order = Math.max(1, Math.min(12, target));
+    slug = SIKLUS12_SLUGS[order - 1] || 'suryo';
+  } else if (typeof target === 'string') {
+    const clean = target.toLowerCase().trim().replace(/^(sang hyang|batara|batari)\s+/, '');
+    const idx = SIKLUS12_SLUGS.findIndex(s => s === clean || s.includes(clean));
+    if (idx !== -1) {
+      order = idx + 1;
+      slug = SIKLUS12_SLUGS[idx];
+    } else {
+      const foundOrder = Object.keys(MASTER_SIKLUS_PADEWAN || {}).find(k => {
+        const item = MASTER_SIKLUS_PADEWAN[k];
+        return item.nama?.toLowerCase().includes(clean) || item.dewa?.toLowerCase().includes(clean);
+      });
+      if (foundOrder) {
+        order = parseInt(foundOrder, 10);
+        slug = SIKLUS12_SLUGS[order - 1] || 'suryo';
+      }
+    }
+  }
+
+  const dewaData = (MASTER_SIKLUS_PADEWAN && MASTER_SIKLUS_PADEWAN[order]) || {};
+  const kanonEntry = resolveSiklus12(slug);
+  const label = kanonEntry?.label || dewaData.nama || `Batara ${slug}`;
+  const dewaGelar = dewaData.dewa || label;
+  const isBatari = kanonEntry?.gender === 'batari' || label.startsWith('Batari');
+  const imgUrl = illustrationPath('siklus12', slug) || dewaData.gambar;
+
+  let detailModal = document.getElementById('modalPadewanDetail');
+  if (!detailModal) {
+    detailModal = document.createElement('div');
+    detailModal.id = 'modalPadewanDetail';
+    detailModal.className = 'fixed inset-0 z-[60] flex items-center justify-center p-3 sm:p-5 bg-black/90 backdrop-blur-md transition-all duration-300';
+    document.body.appendChild(detailModal);
+  }
+
+  detailModal.innerHTML = `
+    <div class="relative w-full max-w-4xl bg-gradient-to-b from-[#131826] via-[#0E131E] to-[#080B12] border-2 border-prada/60 rounded-3xl shadow-[0_0_60px_rgba(212,175,55,0.35)] overflow-hidden flex flex-col max-h-[94vh]">
+      <!-- Header Detail Modal -->
+      <div class="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            onclick="window.closePadewanDetailModal && window.closePadewanDetailModal(); window.openPadewanModal && window.openPadewanModal();"
+            class="px-3 py-1.5 rounded-xl bg-sogan-900 border border-prada/40 text-prada text-xs font-semibold hover:bg-sogan-800 transition flex items-center gap-1.5 cursor-pointer"
+            title="Wangsul dhateng galeri 12 Padewan">
+            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+            <span class="hidden sm:inline">Galeri 12</span>
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-keraton border border-prada/40 text-prada font-mono font-bold text-[10px]">
+                Siklus ${order} / 12
+              </span>
+              <span class="text-[9.5px] px-2 py-0.5 rounded-full ${isBatari ? 'bg-rose-950 text-rose-300 border border-rose-800/60' : 'bg-sky-950 text-sky-300 border border-sky-800/60'} font-semibold font-mono">
+                ${isBatari ? 'Batari' : 'Batara'}
+              </span>
+            </div>
+            <h3 class="font-marcellus text-lg sm:text-2xl font-bold gold-gradient-text tracking-wide mt-0.5">
+              ${label}
+            </h3>
+          </div>
+        </div>
+        <button
+          onclick="window.closePadewanDetailModal && window.closePadewanDetailModal()"
+          class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada flex items-center justify-center cursor-pointer transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal: 2 Kolom (Gambar Kiri, Rincian Komprehensif Kanan) -->
+      <div class="p-5 sm:p-6 overflow-y-auto max-h-[78vh] scrollbar-thin grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        
+        <!-- Kolom Kiri: Kartu Ilustrasi Wayang / Kanon (4 cols) -->
+        <div class="md:col-span-4 flex flex-col items-center space-y-3">
+          <div class="relative w-full max-w-[240px] overflow-hidden rounded-2xl border-2 border-prada/50 bg-gradient-to-b from-sogan-950 to-keraton p-2 shadow-2xl">
+            <img 
+              src="${imgUrl}" 
+              alt="${label}" 
+              class="w-full h-auto rounded-xl object-cover shadow-inner"
+              style="aspect-ratio: 400/560;"
+              onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';"
+            />
+            <div class="absolute bottom-3 left-3 right-3 text-center px-2 py-1 rounded-xl bg-keraton/90 backdrop-blur-sm border border-prada/40">
+              <span class="text-[11px] font-mono text-amber-200 font-bold block truncate">${dewaGelar}</span>
+            </div>
+          </div>
+          <span class="text-[11px] text-sogan-400 font-mono text-center">
+            Panguwasa Kanon Tahunan (Usia Modulo 12)
+          </span>
+        </div>
+
+        <!-- Kolom Kanan: Rincian Lengkap (8 cols) -->
+        <div class="md:col-span-8 space-y-3 text-xs leading-relaxed">
+          
+          <!-- Watak & Sifat Tahunan -->
+          <div class="p-4 rounded-2xl bg-[#0F1420] border border-amber-600/30 space-y-1.5 shadow">
+            <div class="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase font-mono tracking-wider">
+              <i class="fa-solid fa-feather-pointed text-amber-400"></i> Watak &amp; Karakter Jiwa:
+            </div>
+            <p class="text-sogan-100">${dewaData.watak || '-'}</p>
+          </div>
+
+          <!-- Karier & Rejeki -->
+          <div class="p-4 rounded-2xl bg-[#0F1420] border border-emerald-600/30 space-y-1.5 shadow">
+            <div class="flex items-center gap-2 text-emerald-300 font-bold text-xs uppercase font-mono tracking-wider">
+              <i class="fa-solid fa-coins text-emerald-400"></i> Karier, Pakaryan &amp; Rezeki:
+            </div>
+            <p class="text-sogan-100">${dewaData.karier || '-'}</p>
+          </div>
+
+          <!-- Kelemahan & Kerawanan Bahaya -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-2xl bg-amber-950/30 border border-amber-700/40 space-y-1">
+              <div class="flex items-center gap-1.5 text-amber-300 font-bold text-[11px] uppercase font-mono">
+                <i class="fa-solid fa-triangle-exclamation"></i> Titik Mawas Diri:
+              </div>
+              <p class="text-sogan-200 text-[11.5px]">${dewaData.kelemahan || '-'}</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-red-950/30 border border-red-700/40 space-y-1">
+              <div class="flex items-center gap-1.5 text-red-300 font-bold text-[11px] uppercase font-mono">
+                <i class="fa-solid fa-shield-halved"></i> Kerawanan / Bahaya:
+              </div>
+              <p class="text-sogan-200 text-[11.5px]">${dewaData.bahaya || '-'}</p>
+            </div>
+          </div>
+
+          <!-- Pasutri & Kasarasan -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-2xl bg-pink-950/20 border border-pink-700/30 space-y-1">
+              <div class="flex items-center gap-1.5 text-pink-300 font-bold text-[11px] uppercase font-mono">
+                <i class="fa-solid fa-heart"></i> Jodoh &amp; Rumah Tangga:
+              </div>
+              <p class="text-sogan-200 text-[11.5px]">${dewaData.keluarga || '-'}</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-teal-950/20 border border-teal-700/30 space-y-1">
+              <div class="flex items-center gap-1.5 text-teal-300 font-bold text-[11px] uppercase font-mono">
+                <i class="fa-solid fa-heart-pulse"></i> Kasarasan (Kesehatan):
+              </div>
+              <p class="text-sogan-200 text-[11.5px]">${dewaData.kesehatan || '-'}</p>
+            </div>
+          </div>
+
+          <!-- Piweling Rahayu / Solusi -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 to-sogan-950 border border-prada/40 space-y-1.5 shadow">
+            <div class="flex items-center gap-2 text-prada font-bold text-xs uppercase font-mono tracking-wider">
+              <i class="fa-solid fa-circle-check text-amber-400"></i> Piweling Rahayu &amp; Solusi Luhur:
+            </div>
+            <p class="text-amber-100 italic font-marcellus text-sm leading-relaxed">
+              "${dewaData.solusi || '-'}"
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Footer Detail Modal -->
+      <div class="px-6 py-3.5 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between text-xs text-sogan-400">
+        <span class="font-mono text-[11px]">Kanon Padewan Siklus Tahunan Jawa</span>
+        <button
+          onclick="window.closePadewanDetailModal && window.closePadewanDetailModal()"
+          class="px-5 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs hover:brightness-110 transition cursor-pointer">
+          Tutup Rincian
+        </button>
+      </div>
+    </div>
+  `;
+
+  detailModal.classList.remove('hidden');
+  detailModal.classList.add('flex');
+  detailModal.style.display = 'flex';
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+export function closePadewanDetailModal() {
+  const detailModal = document.getElementById('modalPadewanDetail');
+  if (detailModal) {
+    detailModal.classList.add('hidden');
+    detailModal.classList.remove('flex');
+    detailModal.style.display = 'none';
+  }
+  const modal12 = document.getElementById('modalPadewanSiklus12');
+  if ((!modal12 || modal12.classList.contains('hidden')) && typeof document !== 'undefined' && document.body) {
+    document.body.style.overflow = 'auto';
+  }
+}
+
 /**
  * Merender halaman Ensiklopedia Wuku secara penuh (untuk tab wuku mandiri).
  */
 export function renderFullWukuPage() {
   renderWukuGrid(getAllWuku());
   selectWukuDetail(activeWukuNo || 1);
-  renderSiklus12Grid('tabWukuSiklus12Grid');
 }
 
 if (typeof window !== 'undefined') {
@@ -478,5 +787,10 @@ if (typeof window !== 'undefined') {
   window.setWukuCategoryFilter = setWukuCategoryFilter;
   window.openEnsiklopediaWukuModal = openEnsiklopediaWukuModal;
   window.closeEnsiklopediaWukuModal = closeEnsiklopediaWukuModal;
+  window.openPadewanModal = openPadewanModal;
+  window.closePadewanModal = closePadewanModal;
+  window.openPadewanDetailModal = openPadewanDetailModal;
+  window.closePadewanDetailModal = closePadewanDetailModal;
 }
+
 

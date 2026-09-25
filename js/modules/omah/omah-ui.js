@@ -4,7 +4,7 @@
  * komparasi dual neptu, serta visualisasi 3 set rumus sisa.
  */
 
-import { hitungPetungOmah, getCempuriLawangan } from './omah-engine.js';
+import { hitungPetungOmah, getCempuriLawangan, cariHariBaikOmah } from './omah-engine.js';
 import {
   CEMPURI_ARAH,
   OMAH_MENURUT_SASI,
@@ -92,6 +92,30 @@ function populateSelects() {
   if (selLemah && selLemah.children.length <= 1) {
     selLemah.innerHTML = '<option value="">-- Boten Dipunpilih --</option>' +
       OMAH_PILIH_LEMAH.map(l => `<option value="${l.id}">${l.id}. ${l.ciri_lemah} (${l.aran})</option>`).join('');
+  }
+
+  // Search Bulan
+  const selSearchBulan = document.getElementById('omahSearchBulan');
+  if (selSearchBulan && selSearchBulan.children.length === 0) {
+    const curMonth = new Date().getMonth() + 1;
+    const BULAN_NAMES = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    selSearchBulan.innerHTML = BULAN_NAMES.map((name, i) =>
+      `<option value="${i + 1}" ${i + 1 === curMonth ? 'selected' : ''}>${i + 1}. ${name}</option>`
+    ).join('');
+  }
+
+  // Search Tahun
+  const selSearchTahun = document.getElementById('omahSearchTahun');
+  if (selSearchTahun && selSearchTahun.children.length === 0) {
+    const curYear = new Date().getFullYear();
+    let opts = '';
+    for (let y = 1950; y <= 2040; y++) {
+      opts += `<option value="${y}" ${y === curYear ? 'selected' : ''}>${y} M</option>`;
+    }
+    selSearchTahun.innerHTML = opts;
   }
 }
 
@@ -450,4 +474,119 @@ export function renderOmahResult(data) {
       </div>
     </div>
   `;
+}
+
+/**
+ * Eksekusi pencarian interaktif hari baik Petung Omah dari UI
+ */
+export function cariHariBaikOmahUI() {
+  const selTahun = document.getElementById('omahSearchTahun');
+  const selBulan = document.getElementById('omahSearchBulan');
+  const selKriteria = document.getElementById('omahSearchKriteria');
+  const container = document.getElementById('omahSearchResultsContainer');
+
+  const tahun = parseInt(selTahun?.value, 10) || new Date().getFullYear();
+  const bulan = parseInt(selBulan?.value, 10) || (new Date().getMonth() + 1);
+  const kriteria = selKriteria?.value || 'sedaya_becik';
+
+  const selArahPindah = document.getElementById('omahSelArahPindah');
+  const selArahLawang = document.getElementById('omahSelArahLawang');
+  const selNomorLawang = document.getElementById('omahSelNomorLawang');
+
+  const arahPindah = selArahPindah?.value || null;
+  const arahLawang = selArahLawang?.value || 'Timur';
+  const nomorLawang = selNomorLawang?.value ? parseInt(selNomorLawang.value, 10) : null;
+
+  try {
+    const res = cariHariBaikOmah({
+      tahun,
+      bulan,
+      kriteria,
+      arahPindah,
+      arahLawang,
+      nomorLawang
+    });
+
+    if (!container) return;
+
+    if (res.matches.length === 0) {
+      container.innerHTML = `
+        <div class="p-6 rounded-xl bg-sogan-950/60 border border-sogan-800 text-center space-y-2">
+          <i class="fa-solid fa-calendar-xmark text-amber-500/80 text-2xl"></i>
+          <p class="text-xs text-sogan-300">Boten kepanggih dinten ingkang trep kaliyan kriteria punika ing wulan punika.</p>
+          <p class="text-[11px] text-sogan-400">Coba pilih kriteria "Sedaya Dino Becik / Prayogi" utawi wulan sanesipun.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs text-sogan-300 border-b border-sogan-800/80 pb-2">
+          <span>Kasil Pados: <strong class="text-prada font-bold">${res.matches.length} dinten sae</strong> saking ${res.totalHari} dinten</span>
+          <span class="text-[10.5px] text-amber-400/90 font-mono">Wulan ${bulan}/${tahun}</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          ${res.matches.map(m => {
+            const isRahayu = m.simpulan.status === 'Rahayu Slamet';
+            const badgeColor = isRahayu ? 'border-emerald-600/50 bg-emerald-950/40 text-emerald-300' : 'border-amber-600/50 bg-amber-950/40 text-amber-300';
+            return `
+              <div class="p-3.5 rounded-xl bg-keraton/90 border border-sogan-800 hover:border-prada/50 transition shadow-sm space-y-2 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between gap-1 mb-1">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded ${badgeColor} font-bold">
+                      ${m.simpulan.status}
+                    </span>
+                    <span class="text-[11px] text-sogan-400 font-mono">Neptu ${m.neptu}</span>
+                  </div>
+                  <h5 class="text-xs sm:text-sm font-bold text-amber-100">
+                    ${m.dina} ${m.pasaran} · <span class="text-prada font-mono">${m.tanggal} ${res.bulan}/${res.tahun}</span>
+                  </h5>
+                  <div class="text-[10.5px] text-sogan-300 space-y-0.5 mt-1.5 bg-sogan-950/50 p-2 rounded-lg border border-sogan-800/60 font-mono">
+                    <div>Set A (Bumi/4): <strong class="${m.setA.status === 'Becik' ? 'text-emerald-400' : 'text-sogan-400'}">${m.setA.nama}</strong></div>
+                    <div>Set B (Kerta/5): <strong class="${m.setB.status === 'Becik' ? 'text-emerald-400' : 'text-sogan-400'}">${m.setB.nama}</strong></div>
+                    <div>Set C (Guru/4): <strong class="${m.setC.status === 'Becik' ? 'text-emerald-400' : 'text-sogan-400'}">${m.setC.nama}</strong></div>
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-sogan-800/80">
+                  <button onclick="window.pilihTanggalHasilCariOmah('${m.isoDate}')" class="w-full py-1.5 px-3 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Pilih Tanggal Iki
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    showToast(`Kepanggih ${res.matches.length} dinten sae.`);
+  } catch (err) {
+    console.error('Gagal mencari hari baik omah:', err);
+    showToast('Gagal pados dinten sae.');
+  }
+}
+
+/**
+ * Menerapkan tanggal hasil pencarian ke kalkulator utama Petung Omah
+ * @param {string} isoDate YYYY-MM-DD
+ */
+export function pilihTanggalHasilCariOmah(isoDate) {
+  const dateInput = document.getElementById('omahDatePicker');
+  if (dateInput) {
+    dateInput.value = isoDate;
+    syncOmahDariTanggal();
+    const resultCard = document.getElementById('omahResultContainer');
+    if (resultCard) {
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    showToast(`Tanggal ${isoDate} kasil kapilih kanggé Petung Omah.`);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.cariHariBaikOmahUI = cariHariBaikOmahUI;
+  window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
 }

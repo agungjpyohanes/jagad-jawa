@@ -5,7 +5,7 @@
  * serta adaptasi Mode Pemula (Ringkas) vs Mode Ahli (Lengkap).
  */
 
-import { getPetungKehidupanByDate, getPetungKehidupanByWeton } from './petung-kehidupan-engine.js';
+import { getPetungKehidupanByDate, getPetungKehidupanByWeton, cariHariPetungKehidupan } from './petung-kehidupan-engine.js';
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
@@ -45,6 +45,30 @@ function populateSelects() {
   const selPasaran = document.getElementById('ternakSelPasaran');
   if (selPasaran && selPasaran.children.length <= 1) {
     selPasaran.innerHTML = PASARAN_LIST.map(p => `<option value="${p}">${p}</option>`).join('');
+  }
+
+  // Search Bulan
+  const selSearchBulan = document.getElementById('ternakSearchBulan');
+  if (selSearchBulan && selSearchBulan.children.length === 0) {
+    const curMonth = new Date().getMonth() + 1;
+    const BULAN_NAMES = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+    selSearchBulan.innerHTML = BULAN_NAMES.map((name, i) =>
+      `<option value="${i + 1}" ${i + 1 === curMonth ? 'selected' : ''}>${i + 1}. ${name}</option>`
+    ).join('');
+  }
+
+  // Search Tahun
+  const selSearchTahun = document.getElementById('ternakSearchTahun');
+  if (selSearchTahun && selSearchTahun.children.length === 0) {
+    const curYear = new Date().getFullYear();
+    let opts = '';
+    for (let y = 1950; y <= 2040; y++) {
+      opts += `<option value="${y}" ${y === curYear ? 'selected' : ''}>${y} M</option>`;
+    }
+    selSearchTahun.innerHTML = opts;
   }
 }
 
@@ -373,4 +397,131 @@ function lookupNeptuDina(dina) {
 function lookupNeptuPasaran(pasaran) {
   const map = { 'Legi': 5, 'Pahing': 9, 'Pon': 7, 'Wage': 4, 'Kliwon': 8 };
   return map[pasaran] || '';
+}
+
+/**
+ * Eksekusi pencarian interaktif kecocokan hari Petung Kehidupan dari UI
+ */
+export function cariHariPetungKehidupanUI() {
+  const selTahun = document.getElementById('ternakSearchTahun');
+  const selBulan = document.getElementById('ternakSearchBulan');
+  const selJenis = document.getElementById('ternakSearchJenis');
+  const selKategori = document.getElementById('ternakSearchKategori');
+  const container = document.getElementById('ternakSearchResultsContainer');
+
+  const tahun = parseInt(selTahun?.value, 10) || new Date().getFullYear();
+  const bulan = parseInt(selBulan?.value, 10) || (new Date().getMonth() + 1);
+  const jenis = selJenis?.value || currentActiveSubtab || 'ternak';
+  const filterKategori = selKategori?.value || 'becik';
+
+  try {
+    const res = cariHariPetungKehidupan({
+      tahun,
+      bulan,
+      jenis,
+      filterKategori
+    });
+
+    if (!container) return;
+
+    if (res.matches.length === 0) {
+      container.innerHTML = `
+        <div class="p-6 rounded-xl bg-sogan-950/60 border border-sogan-800 text-center space-y-2">
+          <i class="fa-solid fa-calendar-xmark text-amber-500/80 text-2xl"></i>
+          <p class="text-xs text-sogan-300">Boten kepanggih dinten ingkang cocog kaliyan kriteria punika ing wulan punika.</p>
+          <p class="text-[11px] text-sogan-400">Coba pilih kriteria sanesipun utawi wulan salajengipun.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs text-sogan-300 border-b border-sogan-800/80 pb-2">
+          <span>Kasil Pados: <strong class="text-prada font-bold">${res.matches.length} dinten cocog</strong> saking ${res.totalHari} dinten</span>
+          <span class="text-[10.5px] text-amber-400/90 font-mono">Wulan ${bulan}/${tahun} (${jenis.toUpperCase()})</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          ${res.matches.map(m => {
+            let badge = '';
+            let detail = '';
+
+            if (jenis === 'ternak') {
+              const kat = m.ternak.kategori;
+              const isBecik = kat === 'Gajah' || kat === 'Suku';
+              const color = isBecik ? 'bg-emerald-950/40 border-emerald-600/50 text-emerald-300' : 'bg-amber-950/40 border-amber-600/50 text-amber-300';
+              badge = `<span class="text-[10px] font-mono px-2 py-0.5 rounded border ${color} font-bold">${kat}</span>`;
+              detail = `
+                <div class="text-[11px] text-amber-200/90 font-medium">${m.ternak.kewan}</div>
+                <div class="text-[10px] text-sogan-300">${m.ternak.makna}</div>
+              `;
+            } else if (jenis === 'loro') {
+              badge = `<span class="text-[10px] font-mono px-2 py-0.5 rounded border border-rose-600/50 bg-rose-950/40 text-rose-300 font-bold">${m.loro.kategori}</span>`;
+              detail = `
+                <div class="text-[11px] text-rose-200/90 font-medium">Jalaran: ${m.loro.jalaran}</div>
+                <div class="text-[10px] text-sogan-300">Tombo: ${m.loro.tombo_wiradat}</div>
+              `;
+            } else if (jenis === 'geblak') {
+              badge = `<span class="text-[10px] font-mono px-2 py-0.5 rounded border border-purple-600/50 bg-purple-950/40 text-purple-300 font-bold">${m.geblak.kategori}</span>`;
+              detail = `
+                <div class="text-[11px] text-purple-200/90 font-medium">Watak: ${m.geblak.kategori}</div>
+                <div class="text-[10px] text-sogan-300">${m.geblak.wiradat_40_dina}</div>
+              `;
+            }
+
+            return `
+              <div class="p-3.5 rounded-xl bg-keraton/90 border border-sogan-800 hover:border-prada/50 transition shadow-sm space-y-2 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between gap-1 mb-1">
+                    ${badge}
+                    <span class="text-[11px] text-sogan-400 font-mono">Neptu ${m.neptu}</span>
+                  </div>
+                  <h5 class="text-xs sm:text-sm font-bold text-amber-100">
+                    ${m.dina} ${m.pasaran} · <span class="text-prada font-mono">${m.tanggal} ${res.bulan}/${res.tahun}</span>
+                  </h5>
+                  <div class="mt-1.5 p-2 rounded-lg bg-sogan-950/60 border border-sogan-800/60 space-y-1">
+                    ${detail}
+                  </div>
+                </div>
+
+                <div class="pt-2 border-t border-sogan-800/80">
+                  <button onclick="window.pilihTanggalHasilCariTernak('${m.isoDate}')" class="w-full py-1.5 px-3 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Pilih Tanggal Iki
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+
+    showToast(`Kepanggih ${res.matches.length} dinten.`);
+  } catch (err) {
+    console.error('Gagal mencari hari petung kehidupan:', err);
+    showToast('Gagal pados dinten petung kehidupan.');
+  }
+}
+
+/**
+ * Menerapkan tanggal hasil pencarian ke kalkulator utama Petung Kehidupan
+ * @param {string} isoDate YYYY-MM-DD
+ */
+export function pilihTanggalHasilCariTernak(isoDate) {
+  const dateInput = document.getElementById('ternakDatePicker');
+  if (dateInput) {
+    dateInput.value = isoDate;
+    syncTernakDariTanggal();
+    const resultCard = document.getElementById('ternakResultContainer');
+    if (resultCard) {
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    showToast(`Tanggal ${isoDate} kasil kapilih kanggé Petung Kehidupan.`);
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.cariHariPetungKehidupanUI = cariHariPetungKehidupanUI;
+  window.pilihTanggalHasilCariTernak = pilihTanggalHasilCariTernak;
 }

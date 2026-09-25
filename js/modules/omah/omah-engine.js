@@ -27,6 +27,7 @@ import {
   OMAH_LARANGAN_ARAH_PINDAH,
   OMAH_PILIH_LEMAH
 } from '../../data/omah-db.js';
+import { getDaysInMonth, getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 
 function norm(str) {
   return String(str || '').trim().toLowerCase();
@@ -277,6 +278,101 @@ export function hitungPetungOmah({
       negatifCount
     },
     disclaimer: 'Pènget Luhur: Petung punika minangka piwulang kearifan lokal lan kabudayan tradisi Jawi warisan leluhur, sanès paugeran teknik sipil utawi konstruksi bangunan mutlak. Kanggé karahayon fisik wangunan, tansah utamèkaken pètungan struktur teknik ingkang kuwat lan trep.'
+  };
+}
+
+/**
+ * Mencari hari-hari baik untuk pembangunan, pindah rumah, atau lawangan
+ * pada bulan dan tahun tertentu berdasarkan kriteria yang dipilih.
+ * 
+ * @param {Object} options
+ * @param {number} options.tahun Tahun Masehi (misal 2024)
+ * @param {number} options.bulan Bulan Masehi (1 - 12)
+ * @param {string} [options.kriteria='sedaya_becik'] 'rahayu_slamet' | 'sedaya_becik' | 'set_a_bumi' | 'set_b_becik' | 'set_c_becik' | 'bebas_pantangan'
+ * @param {string} [options.arahPindah] Arah pindah/boyongan (Utara/Timur/Selatan/Barat)
+ * @param {string} [options.arahLawang='Timur'] Arah lawangan
+ * @param {number} [options.nomorLawang] Posisi lawangan (1-9)
+ * @returns {Object} { tahun, bulan, totalHari, matches: Array }
+ */
+export function cariHariBaikOmah({
+  tahun,
+  bulan,
+  kriteria = 'sedaya_becik',
+  arahPindah = null,
+  arahLawang = 'Timur',
+  nomorLawang = null
+} = {}) {
+  const y = parseInt(tahun, 10);
+  const m = parseInt(bulan, 10);
+  if (isNaN(y) || isNaN(m) || m < 1 || m > 12) {
+    throw new Error('Tahun lan wulan kedah dipunisi kanthi leres kanggé pados dinten sae omah.');
+  }
+
+  const daysCount = getDaysInMonth(y, m);
+  const matches = [];
+
+  for (let d = 1; d <= daysCount; d++) {
+    const tglJawa = getTanggalJawaLengkap(y, m, d);
+    if (!tglJawa) continue;
+
+    const res = hitungPetungOmah({
+      dina: tglJawa.dino,
+      pasaran: tglJawa.pas,
+      arahLawang,
+      nomorLawang,
+      arahPindah,
+      sasi: tglJawa.bulanJawa
+    });
+
+    let isMatch = false;
+    switch (kriteria) {
+      case 'rahayu_slamet':
+        isMatch = res.simpulan.status === 'Rahayu Slamet';
+        break;
+      case 'set_a_bumi':
+        isMatch = res.setA.status === 'Becik'; // Bumi
+        break;
+      case 'set_b_becik':
+        isMatch = res.setB.status === 'Becik'; // Kerta, Yasa, Candi
+        break;
+      case 'set_c_becik':
+        isMatch = res.setC.status === 'Becik'; // Guru, Ratu
+        break;
+      case 'bebas_pantangan':
+        isMatch = !res.laranganBoyongan.isProhibited;
+        break;
+      case 'sedaya_becik':
+      default:
+        isMatch = !res.laranganBoyongan.isProhibited && (res.simpulan.status === 'Rahayu Slamet' || res.simpulan.positifCount >= 1);
+        break;
+    }
+
+    if (isMatch) {
+      matches.push({
+        tanggal: d,
+        bulan: m,
+        tahun: y,
+        isoDate: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+        tglJawa,
+        dina: tglJawa.dino,
+        pasaran: tglJawa.pas,
+        neptu: res.neptuApp.neptuJumlah,
+        neptuNb: res.neptuNb.neptuJumlah,
+        setA: res.setA,
+        setB: res.setB,
+        setC: res.setC,
+        simpulan: res.simpulan,
+        laranganBoyongan: res.laranganBoyongan
+      });
+    }
+  }
+
+  return {
+    tahun: y,
+    bulan: m,
+    totalHari: daysCount,
+    kriteria,
+    matches
   };
 }
 

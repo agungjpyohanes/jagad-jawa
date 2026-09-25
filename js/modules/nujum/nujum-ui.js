@@ -50,6 +50,61 @@ import {
   wukuLegacyImagePath
 } from '../../data/dewa-kanon.js';
 
+import {
+  openNujumPokemonCardModal,
+  closeNujumPokemonCardModal,
+  downloadNujumPokemonCardPng,
+  shareNujumPokemonCard,
+  onNujumPokemonOptionChange,
+  onNujumPokemonNameInput,
+  drawNujumPokemonCard,
+  openKartuKarakterModal,
+  closeKartuKarakterModal,
+  downloadKartuKarakterPng,
+  shareKartuKarakter,
+  drawKartuKarakter,
+  generateDraftKartuKarakter,
+  generateDraftCard,
+  KARTU_KARAKTER_PRESETS
+} from './nujum-share-card.js';
+
+if (typeof window !== 'undefined') {
+  window.openNujumPokemonCardModal = openNujumPokemonCardModal;
+  window.closeNujumPokemonCardModal = closeNujumPokemonCardModal;
+  window.downloadNujumPokemonCardPng = downloadNujumPokemonCardPng;
+  window.shareNujumPokemonCard = shareNujumPokemonCard;
+  window.onNujumPokemonOptionChange = onNujumPokemonOptionChange;
+  window.onNujumPokemonNameInput = onNujumPokemonNameInput;
+  window.drawNujumPokemonCard = drawNujumPokemonCard;
+
+  window.openKartuKarakterModal = openKartuKarakterModal;
+  window.closeKartuKarakterModal = closeKartuKarakterModal;
+  window.downloadKartuKarakterPng = downloadKartuKarakterPng;
+  window.shareKartuKarakter = shareKartuKarakter;
+  window.drawKartuKarakter = drawKartuKarakter;
+  window.generateDraftKartuKarakter = generateDraftKartuKarakter;
+  window.generateDraftCard = generateDraftCard;
+  window.KARTU_KARAKTER_PRESETS = KARTU_KARAKTER_PRESETS;
+}
+
+export {
+  openNujumPokemonCardModal,
+  closeNujumPokemonCardModal,
+  downloadNujumPokemonCardPng,
+  shareNujumPokemonCard,
+  onNujumPokemonOptionChange,
+  onNujumPokemonNameInput,
+  drawNujumPokemonCard,
+  openKartuKarakterModal,
+  closeKartuKarakterModal,
+  downloadKartuKarakterPng,
+  shareKartuKarakter,
+  drawKartuKarakter,
+  generateDraftKartuKarakter,
+  generateDraftCard,
+  KARTU_KARAKTER_PRESETS
+};
+
 let currentNujumMode = 'ringkas'; // 'ringkas' | 'mendalam'
 let lastCalculatedData = null;
 
@@ -255,6 +310,9 @@ export function hitungKepribadianLengkap() {
     sirikanRes, palenggahanRes, pedamelanRes, pekerjaanRes, pwk, aksaraJawa,
     siklusTahunanRes
   };
+  if (typeof window !== 'undefined') {
+    window.lastCalculatedNujumData = lastCalculatedData;
+  }
 
   renderHasilNujumContent();
 
@@ -311,6 +369,9 @@ function renderHasilNujumContent() {
         </div>
       </div>
       <div class="flex flex-wrap items-center gap-2">
+        <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow transition cursor-pointer" title="Bagikan Kartu Karakter Pusaka Jawa">
+          <i class="fa-solid fa-id-card-clip"></i> Kartu Karakter
+        </button>
         <div class="inline-flex p-0.5 rounded-lg bg-sogan-950 border border-sogan-800 text-xs">
           <button onclick="window.printLaporanNujum('monochrome', 'lengkap')" class="px-2.5 py-1 rounded text-prada hover:bg-sogan-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer" title="Cetak Dokumen Arsip Lengkap 9 Bagian">
             <i class="fa-solid fa-file-lines text-prada"></i> <span class="hidden sm:inline">Cetak Lengkap</span>
@@ -346,6 +407,9 @@ function renderHasilNujumContent() {
                 ${data.dino} ${data.pas} · Neptu ${data.neptu}
               </span>
               <span class="block text-[10px] text-sogan-400 font-mono mt-1">Wuku ${data.wukuName} (${data.wukuNo}/30)</span>
+              <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="mt-2 px-3 py-1 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-[11px] inline-flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
+                <i class="fa-solid fa-id-card-clip text-[10px]"></i> Kartu Karakter
+              </button>
             </div>
           </div>
 
@@ -429,10 +493,14 @@ function renderHasilNujumContent() {
           <div>
             <h3 class="font-marcellus text-xl text-prada font-bold">${data.nama}</h3>
             <span class="text-xs text-sogan-300">${data.dino} ${data.pas} · Neptu ${data.neptu} · Wuku ${data.wukuName} (${data.wukuNo}/30)</span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
+              <i class="fa-solid fa-id-card-clip"></i> Kartu Karakter
+            </button>
+            <button onclick="window.openWetonShareModal(${data.y}, ${data.m}, ${data.d})" class="px-3.5 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:bg-sogan-800 text-prada text-xs font-semibold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-share-nodes"></i> Bagikan Weton
+            </button>
           </div>
-          <button onclick="window.openWetonShareModal(${data.y}, ${data.m}, ${data.d})" class="px-3.5 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:bg-sogan-800 text-prada text-xs font-semibold flex items-center gap-1.5 transition">
-            <i class="fa-solid fa-share-nodes"></i> Bagikan Weton
-          </button>
         </div>
 
         <!-- Ensiklopedia Pawukon -->

@@ -16,7 +16,7 @@ import {
   KAMUS_GEBLAK,
   lookupWetonTernakLoroGeblak
 } from '../../data/petung-ternak-loro-geblak.js';
-import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
+import { getTanggalJawaLengkap, getDaysInMonth } from '../kalender/kalender-engine.js';
 
 /**
  * Mengambil data petung kehidupan lengkap berdasarkan tanggal Masehi
@@ -101,6 +101,89 @@ export function getPetungKehidupanByWeton(dina, pasaran) {
     ternak: dataWeton.ternak,
     loro: dataWeton.loro,
     geblak: dataWeton.geblak
+  };
+}
+
+/**
+ * Mencari kecocokan hari pada tanggal, bulan, dan tahun tertentu
+ * untuk Petung Kehidupan (Wiwit Ternak, Jalaran Loro, atau Petung Geblak).
+ * 
+ * @param {Object} options
+ * @param {number} options.tahun Tahun Masehi
+ * @param {number} options.bulan Bulan Masehi (1 - 12)
+ * @param {'ternak' | 'loro' | 'geblak'} [options.jenis='ternak'] Sub-bidang petung kehidupan
+ * @param {string} [options.filterKategori='becik'] Filter kategori (misal: 'becik', 'gajah', 'suku', 'watu', 'buto', 'all')
+ * @returns {Object}
+ */
+export function cariHariPetungKehidupan({
+  tahun,
+  bulan,
+  jenis = 'ternak',
+  filterKategori = 'becik'
+} = {}) {
+  const y = parseInt(tahun, 10);
+  const m = parseInt(bulan, 10);
+  if (isNaN(y) || isNaN(m) || m < 1 || m > 12) {
+    throw new Error('Tahun lan wulan kedah dipunisi kanthi leres kanggé pados dinten petung kehidupan.');
+  }
+
+  const daysCount = getDaysInMonth(y, m);
+  const matches = [];
+
+  for (let d = 1; d <= daysCount; d++) {
+    const item = getPetungKehidupanByDate(y, m, d);
+    if (!item) continue;
+
+    let isMatch = false;
+    const f = String(filterKategori || '').toLowerCase().trim();
+
+    if (jenis === 'ternak') {
+      const kat = item.ternak.kode || item.ternak.kategori;
+      if (f === 'all' || !f) {
+        isMatch = true;
+      } else if (f === 'becik') {
+        isMatch = kat === 'Gajah' || kat === 'Suku';
+      } else if (f === 'gajah') {
+        isMatch = kat === 'Gajah';
+      } else if (f === 'suku') {
+        isMatch = kat === 'Suku';
+      } else if (f === 'watu') {
+        isMatch = kat === 'Watu';
+      } else if (f === 'buto') {
+        isMatch = kat === 'Buto';
+      }
+    } else if (jenis === 'loro') {
+      const kat = (item.loro.kode || item.loro.kategori || '').toLowerCase();
+      isMatch = (f === 'all' || !f) ? true : kat.includes(f);
+    } else if (jenis === 'geblak') {
+      const kat = (item.geblak.kode || item.geblak.kategori || '').toLowerCase();
+      isMatch = (f === 'all' || !f) ? true : kat.includes(f);
+    }
+
+    if (isMatch) {
+      matches.push({
+        tanggal: d,
+        bulan: m,
+        tahun: y,
+        isoDate: `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+        dina: item.dina,
+        pasaran: item.pasaran,
+        neptu: item.neptu,
+        tglJawa: item.tglJawa,
+        ternak: item.ternak,
+        loro: item.loro,
+        geblak: item.geblak
+      });
+    }
+  }
+
+  return {
+    tahun: y,
+    bulan: m,
+    jenis,
+    filterKategori,
+    totalHari: daysCount,
+    matches
   };
 }
 

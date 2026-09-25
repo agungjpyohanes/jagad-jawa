@@ -115,11 +115,30 @@ export function renderEnsiklopediaBudayaPage(containerId = 'ensiklopediaBudayaCo
         </div>
       </div>
 
-      <!-- Sub-Tab Navigation Bar -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-sogan-800/80 no-scrollbar">
+      <!-- Sub-Tab Navigation Bar (Responsive: Dropdown ing Mobile, Segmented Pills ing Desktop) -->
+      <div class="sm:hidden">
+        <label for="ensikloMobileSelect" class="sr-only">Pilih Bab Ensiklopedia Primbon</label>
+        <div class="relative">
+          <select 
+            id="ensikloMobileSelect" 
+            onchange="window.switchEnsiklopediaTab(this.value)"
+            class="w-full pl-4 pr-10 py-2.5 rounded-xl bg-sogan-950 border border-prada/50 text-xs font-bold text-prada focus:outline-none focus:border-prada shadow cursor-pointer appearance-none">
+            ${tabs.map(t => `
+              <option value="${t.id}" ${currentEnsiklopediaTab === t.id ? 'selected' : ''}>
+                ${t.label}
+              </option>
+            `).join('')}
+          </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-prada">
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden sm:flex flex-wrap items-center gap-2 pb-2 border-b border-sogan-800/80">
         ${tabs.map(t => `
-          <button onclick="window.switchEnsiklopediaTab('${t.id}')" id="btnEnsikloTab_${t.id}" class="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentEnsiklopediaTab === t.id ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'bg-sogan-950 border border-sogan-800 text-sogan-300 hover:text-prada hover:border-prada/40'}">
-            <i class="fa-solid ${t.icon}"></i> ${t.label}
+          <button onclick="window.switchEnsiklopediaTab('${t.id}')" id="btnEnsikloTab_${t.id}" class="px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer ${currentEnsiklopediaTab === t.id ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'bg-sogan-950 border border-sogan-800 text-sogan-300 hover:text-prada hover:border-prada/40'}">
+            <i class="fa-solid ${t.icon} text-[11px]"></i> <span>${t.label}</span>
           </button>
         `).join('')}
       </div>
@@ -136,11 +155,16 @@ export function renderEnsiklopediaBudayaPage(containerId = 'ensiklopediaBudayaCo
 
 export function switchEnsiklopediaTab(tabId) {
   currentEnsiklopediaTab = tabId;
+
+  // Sinkronkan mobile select
+  const sel = document.getElementById('ensikloMobileSelect');
+  if (sel) sel.value = tabId;
+
   document.querySelectorAll('[id^="btnEnsikloTab_"]').forEach(btn => {
     if (btn.id === `btnEnsikloTab_${tabId}`) {
-      btn.className = 'px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow';
+      btn.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow';
     } else {
-      btn.className = 'px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer bg-sogan-950 border border-sogan-800 text-sogan-300 hover:text-prada hover:border-prada/40';
+      btn.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer bg-sogan-950 border border-sogan-800 text-sogan-300 hover:text-prada hover:border-prada/40';
     }
   });
   renderEnsiklopediaTabContent();

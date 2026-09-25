@@ -5,8 +5,7 @@
 // Sistem: Perhitungan Berdasarkan Usia/Umur (umur % 12)
 // ==========================================
 
-(function (root) {
-  const MASTER_SIKLUS_SHIO = {
+export const MASTER_SIKLUS_SHIO = {
     1: { shio: "Kelinci", tegese: "Wiraswasta jangan main spekulasi karena kurang gigih dalam berjuang / bersaing, manja dan ketergantungan" },
     2: { shio: "Harimau", tegese: "Banyak yang memperalat, waspada, keras dan angkuh" },
     3: { shio: "Kerbau", tegese: "Gampang bingung dan tidak dapat berkosentrasi" },
@@ -21,7 +20,7 @@
     12: { shio: "Naga", tegese: "Cemburu, keras hati tetapi welas asih dan sosial" }
   };
 
-  const MASTER_SIKLUS_PADEWAN = {
+export const MASTER_SIKLUS_PADEWAN = {
     1: {
       nama: "Batara Suryo", dewa: "Sang Hyang Surya / Batara Suryo",
       watak: "Manja, sangat bergantung pada orang lain, kadang berani nekat, firasatnya tajam dan terang hatinya (walaupun matanya belum melihat).",
@@ -156,34 +155,35 @@
     }
   };
 
-  const hitungSiklusTahunan = function(umur) {
-    let u = parseInt(umur, 10);
-    if (isNaN(u) || u < 0) u = 0;
-    let sisa = u % 12;
-    let siklusNo = (sisa === 0) ? 12 : sisa;
-    return {
-      umur: u,
-      siklusNo: siklusNo,
-      shio: MASTER_SIKLUS_SHIO[siklusNo] || { shio: "-", tegese: "-" },
-      padewan: MASTER_SIKLUS_PADEWAN[siklusNo] || {
-        nama: "-", dewa: "-", watak: "-", karier: "-",
-        kelemahan: "-", kesehatan: "-", keluarga: "-",
-        bahaya: "-", solusi: "-", gambar: "assets/wayang/surakarta/gunungan.png"
-      }
-    };
+export function hitungSiklusTahunan(umur) {
+  let u = parseInt(umur, 10);
+  if (isNaN(u) || u < 0) u = 0;
+  let sisa = u % 12;
+  let siklusNo = (sisa === 0) ? 12 : sisa;
+  return {
+    umur: u,
+    siklusNo: siklusNo,
+    shio: MASTER_SIKLUS_SHIO[siklusNo] || { shio: "-", tegese: "-" },
+    padewan: MASTER_SIKLUS_PADEWAN[siklusNo] || {
+      nama: "-", dewa: "-", watak: "-", karier: "-",
+      kelemahan: "-", kesehatan: "-", keluarga: "-",
+      bahaya: "-", solusi: "-", gambar: "assets/wayang/surakarta/gunungan.png"
+    }
   };
+}
 
-  // Bind to global window/root
-  root.MASTER_SIKLUS_SHIO = MASTER_SIKLUS_SHIO;
-  root.MASTER_SIKLUS_PADEWAN = MASTER_SIKLUS_PADEWAN;
-  root.hitungSiklusTahunan = hitungSiklusTahunan;
+// Bind to global window/root
+if (typeof window !== 'undefined') {
+  window.MASTER_SIKLUS_SHIO = MASTER_SIKLUS_SHIO;
+  window.MASTER_SIKLUS_PADEWAN = MASTER_SIKLUS_PADEWAN;
+  window.hitungSiklusTahunan = hitungSiklusTahunan;
+}
 
-  // Node.js CommonJS export support
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      MASTER_SIKLUS_SHIO,
-      MASTER_SIKLUS_PADEWAN,
-      hitungSiklusTahunan
-    };
-  }
-})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+// Node.js CommonJS export support
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    MASTER_SIKLUS_SHIO,
+    MASTER_SIKLUS_PADEWAN,
+    hitungSiklusTahunan
+  };
+}

@@ -5,9 +5,36 @@
  * integrasi penandaan kalender (bookmark), dan ekspor PDF resmi.
  */
 
-import { hitungSelametanDates } from './selametan-engine.js';
+import { hitungSelametanDates, TEMPLAT_DONGA_KEYAKINAN } from './selametan-engine.js';
 import { saveBookmark } from '../kalender/bookmark-service.js';
 import { showToast } from '../../ui/toast.js';
+
+let currentSelametanKeyakinan = 'universal';
+
+/**
+ * Mengganti tradisi/keyakinan doa secara interaktif dari timeline
+ * @param {string} keyakinanKey 
+ */
+export function gantiKeyakinanSelametan(keyakinanKey) {
+  if (!TEMPLAT_DONGA_KEYAKINAN[keyakinanKey]) return;
+  currentSelametanKeyakinan = keyakinanKey;
+
+  const sel = document.getElementById('keyakinanSelametanSelect');
+  if (sel) sel.value = keyakinanKey;
+
+  const data = window.LAST_SELAMETAN_DATA;
+  if (data && data.items) {
+    data.keyakinan = keyakinanKey;
+    data.items.forEach(item => {
+      if (item.dongaKeyakinanMap && item.dongaKeyakinanMap[keyakinanKey]) {
+        item.donga = item.dongaKeyakinanMap[keyakinanKey];
+      }
+    });
+    renderTimelineSelametan(data.geblak, data.items, data.namaAlmarhum, keyakinanKey);
+    const label = TEMPLAT_DONGA_KEYAKINAN[keyakinanKey]?.nama;
+    showToast(`Donga kaleresaken dhateng panduan: ${label}`);
+  }
+}
 
 /**
  * Menghitung dan merender seluruh hasil selametan tilar donyo.
@@ -31,7 +58,12 @@ export function hitungSelametan() {
   const namaAlmarhumInput = document.getElementById('namaAlmarhumInput');
   const namaAlmarhum = namaAlmarhumInput ? namaAlmarhumInput.value.trim() : '';
 
-  const data = hitungSelametanDates(yy, mm, dd, waktuWafat, namaAlmarhum);
+  // Baca pilihan keyakinan / templat doa inklusif
+  const keyakinanSelect = document.getElementById('keyakinanSelametanSelect');
+  const keyakinan = keyakinanSelect ? keyakinanSelect.value : currentSelametanKeyakinan;
+  currentSelametanKeyakinan = keyakinan;
+
+  const data = hitungSelametanDates(yy, mm, dd, waktuWafat, namaAlmarhum, keyakinan);
   const { geblak, items } = data;
 
   // Render info Geblak
@@ -102,18 +134,50 @@ export function hitungSelametan() {
  * @param {Object} geblak 
  * @param {Array<Object>} items 
  * @param {string} namaAlmarhum 
+ * @param {string} keyakinan
  */
-export function renderTimelineSelametan(geblak, items, namaAlmarhum = '') {
+export function renderTimelineSelametan(geblak, items, namaAlmarhum = '', keyakinan = currentSelametanKeyakinan) {
   const container = document.getElementById('timelineSelametanBox');
   if (!container) return;
 
+  const activeKeyInfo = TEMPLAT_DONGA_KEYAKINAN[keyakinan] || TEMPLAT_DONGA_KEYAKINAN['universal'];
+
+  const pillsHtml = Object.keys(TEMPLAT_DONGA_KEYAKINAN).map(kKey => {
+    const kData = TEMPLAT_DONGA_KEYAKINAN[kKey];
+    const isSelected = kKey === keyakinan;
+    const btnCls = isSelected
+      ? 'bg-prada text-keraton font-bold shadow'
+      : 'bg-keraton/80 text-sogan-300 hover:text-amber-100 hover:bg-sogan-900 border border-sogan-800';
+    return `
+      <button onclick="window.gantiKeyakinanSelametan('${kKey}')" class="px-2.5 py-1 rounded-lg text-[10.5px] transition flex items-center gap-1 ${btnCls}">
+        <span>${kData.nama}</span>
+      </button>
+    `;
+  }).join('');
+
   container.innerHTML = `
     <div class="space-y-4 pt-2">
-      <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-sogan-800 pb-2 gap-2">
         <h4 class="font-marcellus text-base sm:text-lg font-bold text-prada flex items-center gap-2">
           <i class="fa-solid fa-timeline text-amber-400"></i> Visual Timeline 7 Tahapan Pengetan
         </h4>
         <span class="text-[11px] text-sogan-400">Geblak dumugi Nyewu (1000 Dina)</span>
+      </div>
+
+      <!-- PANDUAN KEYAKINAN & DOA LINTAS AGAMA -->
+      <div class="p-3 bg-gradient-to-r from-sogan-950 via-keraton to-wulung rounded-xl border border-prada/30 space-y-2">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <span class="text-[11px] font-bold text-amber-200 flex items-center gap-1.5">
+            <i class="fa-solid fa-hands-praying text-prada"></i> Panduan Refleksi &amp; Donga Keyakinan (Inklusif 6 Agama):
+          </span>
+          <span class="text-[10px] text-sogan-300 italic">${activeKeyInfo.nama}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5">
+          ${pillsHtml}
+        </div>
+        <p class="text-[10.5px] text-sogan-300 leading-relaxed border-t border-sogan-800/80 pt-1.5">
+          <i class="fa-solid fa-circle-info text-prada/80 mr-1"></i>${activeKeyInfo.deskripsi} Seluruh tahapan tetap menghormati tata nilai luhur tradisi Jawa yang universal.
+        </p>
       </div>
 
       <!-- Timeline Vertical Track -->
@@ -168,19 +232,30 @@ export function renderTimelineSelametan(geblak, items, namaAlmarhum = '') {
               </div>
             </div>
 
-            <!-- Rincian Kultural Ubarampe & Makna -->
+            <!-- Rincian Kultural Ubarampe & Makna Inklusif -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] pt-1">
-              <div class="p-2 rounded-lg bg-sogan-950/60 border border-sogan-800/50 space-y-0.5">
+              <div class="p-2.5 rounded-lg bg-sogan-950/60 border border-sogan-800/50 space-y-1">
                 <span class="text-[9.5px] uppercase font-bold text-prada flex items-center gap-1">
                   <i class="fa-solid fa-bowl-rice"></i> Ubarampe Sedekah:
                 </span>
                 <p class="text-sogan-300 leading-relaxed">${j.ubarampe}</p>
+                <div class="pt-1 border-t border-sogan-800/60 text-[10px] text-sogan-400">
+                  <span class="text-prada/90 font-semibold">Makna Budaya:</span> ${j.maknaKultural}
+                </div>
               </div>
-              <div class="p-2 rounded-lg bg-sogan-950/60 border border-sogan-800/50 space-y-0.5">
-                <span class="text-[9.5px] uppercase font-bold text-amber-300 flex items-center gap-1">
-                  <i class="fa-solid fa-hands-praying"></i> Donga &amp; Makna:
-                </span>
-                <p class="text-sogan-300 leading-relaxed">${j.maknaKultural} <span class="text-sogan-400 block mt-0.5">Donga: <em>${j.donga}</em></span></p>
+              <div class="p-2.5 rounded-lg bg-sogan-950/60 border border-sogan-800/50 space-y-1 flex flex-col justify-between">
+                <div>
+                  <span class="text-[9.5px] uppercase font-bold text-amber-300 flex items-center gap-1">
+                    <i class="fa-solid fa-hands-praying"></i> Donga &amp; Refleksi (${activeKeyInfo.nama}):
+                  </span>
+                  <p class="text-sogan-200 leading-relaxed font-serif text-[11.5px] mt-0.5">${j.donga}</p>
+                </div>
+                <div class="pt-1 border-t border-sogan-800/60 flex items-center justify-between text-[10px] text-sogan-400">
+                  <span>Opsi templat doa disesuaikan</span>
+                  <button onclick="window.gantiKeyakinanSelametan('${keyakinan === 'universal' ? 'islam' : 'universal'}')" class="text-prada hover:underline">
+                    Ganti Tradisi ↷
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -312,7 +387,7 @@ export function printLaporanSelametan(theme = 'monochrome') {
 
       <!-- Catatan Adat & Tanda Tangan -->
       <div style="font-size: 10.5px; color: ${isParchment ? '#724117' : '#4b5563'}; line-height: 1.5; margin-bottom: 24px; padding: 10px; background: ${isParchment ? '#f6ecd2' : '#f9fafb'}; border-radius: 4px;">
-        <strong>Pangeling-eling:</strong> Upacara pengetan tilar donyo lumrahipun kaleksanan ing wayah sonten / bakda Maghrib (jam 18.00) kanthi maos Surat Yasin, Tahlil, saha donga arwah. Mugi sedaya amal kesaenan almarhum/ah tinampi dening Gusti Kang Maha Luhur.
+        <strong>Pangeling-eling &amp; Refleksi:</strong> Upacara pengetan tilar donyo lumrahipun kaleksanan ing wayah sonten / bakda Maghrib (jam 18.00) minangka pangurmatan dhumateng arwah leluhur kanthi panduan doa/refleksi <em>${(TEMPLAT_DONGA_KEYAKINAN[data.keyakinan || currentSelametanKeyakinan] || TEMPLAT_DONGA_KEYAKINAN['universal']).nama}</em>. Mugi sedaya arwah pikantuk kasampurnan, pepadhang, saha katentreman langgeng ing Ngarsaning Gusti Kang Maha Agung, sarta kulawarga ingkang tinilar pinaringan katetepan manah lan karaharjan.
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; border-top: 1px solid ${isParchment ? '#b87c24' : '#d1d5db'}; pt-3;">
@@ -369,4 +444,8 @@ export async function downloadSelametanPng() {
     console.error('Gagal mengunduh PNG:', err);
     showToast('Gagal ngundhuh gambar pengetan.');
   }
+}
+
+if (typeof window !== 'undefined') {
+  window.gantiKeyakinanSelametan = gantiKeyakinanSelametan;
 }

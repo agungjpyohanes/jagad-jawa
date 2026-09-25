@@ -83,6 +83,24 @@ export async function ensureNujumLoaded() {
       window.buildAksaraSelectOptions = nujumUI.buildAksaraSelectOptions;
       window.LIST_20_AKSARA_CARAKAN = nujumUI.LIST_20_AKSARA_CARAKAN;
 
+      // Fitur Share Kartu Karakter Pokémon TCG & Pusaka Jawa
+      window.openNujumPokemonCardModal = nujumUI.openNujumPokemonCardModal;
+      window.closeNujumPokemonCardModal = nujumUI.closeNujumPokemonCardModal;
+      window.downloadNujumPokemonCardPng = nujumUI.downloadNujumPokemonCardPng;
+      window.shareNujumPokemonCard = nujumUI.shareNujumPokemonCard;
+      window.onNujumPokemonOptionChange = nujumUI.onNujumPokemonOptionChange;
+      window.onNujumPokemonNameInput = nujumUI.onNujumPokemonNameInput;
+      window.drawNujumPokemonCard = nujumUI.drawNujumPokemonCard;
+
+      window.openKartuKarakterModal = nujumUI.openKartuKarakterModal;
+      window.closeKartuKarakterModal = nujumUI.closeKartuKarakterModal;
+      window.downloadKartuKarakterPng = nujumUI.downloadKartuKarakterPng;
+      window.shareKartuKarakter = nujumUI.shareKartuKarakter;
+      window.drawKartuKarakter = nujumUI.drawKartuKarakter;
+      window.generateDraftKartuKarakter = nujumUI.generateDraftKartuKarakter;
+      window.generateDraftCard = nujumUI.generateDraftCard;
+      window.KARTU_KARAKTER_PRESETS = nujumUI.KARTU_KARAKTER_PRESETS;
+
       nujumUI.initTahunHitungSelect();
       nujumUI.updateKepribadianQuickInfo();
     }
@@ -139,6 +157,7 @@ export async function ensureWukuLoaded() {
       window.filterWukuGrid = wukuUI.filterWukuGrid;
       window.selectWukuDetail = wukuUI.selectWukuDetail;
       window.renderFullWukuPage = wukuUI.renderFullWukuPage;
+      window.setWukuCategoryFilter = wukuUI.setWukuCategoryFilter;
     }
     wukuLoaded = true;
   } catch (err) {
@@ -284,4 +303,22 @@ export function wireNujumFeature() {
     }
   };
   window.printLaporanNujum = wrapperPrintLaporan;
+
+  const wrapperOpenPokemonCard = async function (data) {
+    await ensureNujumLoaded();
+    if (typeof window.openNujumPokemonCardModal === 'function' && window.openNujumPokemonCardModal !== wrapperOpenPokemonCard) {
+      window.openNujumPokemonCardModal(data);
+    }
+  };
+  window.openNujumPokemonCardModal = wrapperOpenPokemonCard;
+  window.openKartuKarakterModal = wrapperOpenPokemonCard;
+
+  const wrapperGenerateDraft = async function (presetKey) {
+    await ensureNujumLoaded();
+    if (typeof window.generateDraftKartuKarakter === 'function' && window.generateDraftKartuKarakter !== wrapperGenerateDraft) {
+      return window.generateDraftKartuKarakter(presetKey);
+    }
+  };
+  window.generateDraftKartuKarakter = wrapperGenerateDraft;
+  window.generateDraftCard = wrapperGenerateDraft;
 }

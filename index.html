@@ -102,7 +102,7 @@
 
 
   <!-- ==================== HEADER & NAVIGASI ATAS (ANTIGRAVITY FLOATING CARD) ==================== -->
-  <header class="header-nav sticky top-2 sm:top-3 z-[1000] w-[calc(100%-1rem)] sm:w-[calc(100%-1.5rem)] max-w-7xl mx-auto">
+  <header class="header-nav relative my-2 sm:my-3 z-30 w-[calc(100%-1rem)] sm:w-[calc(100%-1.5rem)] max-w-7xl mx-auto">
     <div class="header-floating-bar rounded-2xl bg-[#0B0F19]/85 backdrop-blur-md border border-prada/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300">
       <div class="nav-container flex flex-nowrap items-center justify-between gap-1.5 sm:gap-3 px-2 sm:px-3.5 py-1.5">
         
@@ -282,6 +282,15 @@
                     <div class="text-[10px] text-sogan-400">6 Bincil, Shio, Zodiak &amp; Tabel Neptu</div>
                   </div>
                 </button>
+                <button onclick="switchTab('mitologi')" class="nav-sublink group/item" data-tab="mitologi">
+                  <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
+                    <i class="fa-solid fa-scroll"></i>
+                  </div>
+                  <div class="text-left">
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Mitologi Nusantara</div>
+                    <div class="text-[10px] text-sogan-400">Asal-Usul Wuku, Pasaran &amp; Cerita Kuno</div>
+                  </div>
+                </button>
                 <button onclick="switchTab('gamelan')" class="nav-sublink group/item" data-tab="gamelan">
                   <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
                     <i class="fa-solid fa-drum"></i>
@@ -316,15 +325,15 @@
                   <div class="text-left">
                     <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pitutur Luhur &amp; Kuis</div>
                     <div class="text-[10px] text-sogan-400">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
-                  </div>
-                </button>
-                <button onclick="switchTab('tumpeng')" class="nav-sublink group/item ahli-only" data-tab="tumpeng">
-                  <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
-                    <i class="fa-solid fa-bowl-rice"></i>
+                <button onclick="switchTab('sinengker')" class="nav-sublink group/item" data-tab="sinengker">
+                  <div class="w-6 h-6 rounded-md bg-red-950/80 border border-red-700/60 flex items-center justify-center text-amber-400 text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Tumpeng Tombak Rojo</div>
-                    <div class="text-[10px] text-sogan-400">Filosofi Panca Warna &amp; Tolak Bala</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light flex items-center gap-1.5">
+                      Pustaka Sinengker <i class="fa-solid fa-lock text-[9px] text-amber-400"></i>
+                    </div>
+                    <div class="text-[10px] text-red-300/80">Kompas Danyang &amp; Aji Wingit</div>
                   </div>
                 </button>
               </div>
@@ -493,11 +502,11 @@
               <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 ahli-only transition" data-tab="ensiklopedia-budaya">
                 <i class="fa-solid fa-book-journal-whills w-4 text-prada"></i> <span>Ensiklopedia Primbon &amp; Falakiah</span>
               </button>
+              <button onclick="switchTab('mitologi')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="mitologi">
+                <i class="fa-solid fa-scroll w-4 text-prada"></i> <span>Mitologi Nusantara</span>
+              </button>
               <button onclick="switchTab('gamelan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="gamelan">
                 <i class="fa-solid fa-drum w-4 text-prada"></i> <span>Gamelan Jawa</span>
-              </button>
-              <button onclick="switchTab('tumpeng')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 ahli-only transition" data-tab="tumpeng">
-                <i class="fa-solid fa-bowl-rice w-4 text-prada"></i> <span>Tumpeng Tombak Rojo</span>
               </button>
             </div>
           </div>
@@ -516,6 +525,9 @@
               </button>
               <button onclick="switchTab('pitutur')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="pitutur">
                 <i class="fa-solid fa-quote-left w-4 text-prada"></i> <span>Pitutur Luhur &amp; Kuis</span>
+              </button>
+              <button onclick="switchTab('sinengker')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-amber-200 hover:bg-red-950/70 flex items-center gap-2.5 transition" data-tab="sinengker">
+                <i class="fa-solid fa-shield-halved w-4 text-amber-400"></i> <span class="flex items-center gap-1.5">Pustaka Sinengker <i class="fa-solid fa-lock text-[9px] text-amber-400"></i></span>
               </button>
             </div>
           </div>
@@ -622,6 +634,11 @@
           </p>
         </div>
 
+        <!-- ==================== SAPA DINA: RINGKASAN HARIAN ==================== -->
+        <!-- Ditampilkan segera setelah teks pengantar sebelum 3 floating cards -->
+        <div id="sapa-dina-container" class="w-full max-w-5xl mx-auto mt-6 px-4" role="complementary" aria-label="Sapa Dina — Ringkasan Harian Kalender Jawa"></div>
+        <!-- ==================== END SAPA DINA ==================== -->
+
         <!-- ==================== THREE FLOATING ANTIGRAVITY UI CARDS ==================== -->
         <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mt-12 px-4">
           
@@ -692,12 +709,6 @@
         </div>
 
       </div>
-
-      <!-- ==================== SAPA DINA: RINGKASAN HARIAN ==================== -->
-      <!-- Container ini di-render secara dinamis oleh js/modules/sapa-dina/sapa-dina-ui.js -->
-      <!-- melalui initSapaDina() yang dipanggil di bootstrap() main.js               -->
-      <div id="sapa-dina-container" class="w-full" role="complementary" aria-label="Sapa Dina — Ringkasan Harian Kalender Jawa"></div>
-      <!-- ==================== END SAPA DINA ==================== -->
 
       <!-- Hero Banner & Ketawang Puspawarna Player -->
       <div class="relative rounded-3xl overflow-hidden border border-sogan-700 bg-gradient-to-br from-sogan-950/90 via-wulung/95 to-keraton/95 p-6 sm:p-10 shadow-2xl backdrop-blur-md">
@@ -1195,6 +1206,9 @@
             <button onclick="hitungKepribadianLengkap()" class="flex-1 min-w-[170px] py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow-md text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-calculator"></i> <span>Hitung Nujum Lengkap</span>
             </button>
+            <button onclick="window.openKartuKarakterModal ? window.openKartuKarakterModal() : (window.openNujumPokemonCardModal && window.openNujumPokemonCardModal())" class="px-3.5 py-3 rounded-xl bg-gradient-to-r from-amber-700/80 to-amber-500/80 border border-prada/60 text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" title="Buka & Generator Kartu Karakter Pusaka Koleksi">
+              <i class="fa-solid fa-id-card text-keraton"></i> <span>Kartu Karakter</span>
+            </button>
             <button onclick="printLaporanNujum('monochrome', 'lengkap')" id="btnPrintKepribadianLengkap" class="ahli-only px-3.5 py-3 rounded-xl bg-sogan-900 border border-prada/60 text-prada font-bold hover:bg-sogan-800 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Cetak Mode Lengkap (9 Bagian Dokumen Arsip Monokrom)">
               <i class="fa-solid fa-file-lines text-prada"></i> <span>Cetak Mode Lengkap (9 Bagian)</span>
             </button>
@@ -1580,6 +1594,22 @@
             </select>
           </div>
 
+          <div>
+            <label class="block font-semibold text-prada mb-1.5 flex items-center justify-between">
+              <span>Refleksi Doa &amp; Keyakinan (Inklusif 6 Agama)</span>
+              <span class="text-[10px] text-sogan-400 font-normal">Lintas Agama &amp; Budaya</span>
+            </label>
+            <select id="keyakinanSelametanSelect" class="w-full bg-keraton border border-sogan-700 rounded-xl p-3 text-sogan-100 text-sm focus:border-prada outline-none">
+              <option value="universal" selected>Universal &amp; Tradisi Luhur Jawa (Lintas Keyakinan)</option>
+              <option value="islam">Islam Nusantara (Yasin, Tahlil &amp; Istighotsah)</option>
+              <option value="kristen">Kristen Protestan (Doa Penghiburan &amp; Kidung Syukur)</option>
+              <option value="katolik">Katolik (Doa Arwah, Rosario &amp; Misa Requiem)</option>
+              <option value="hindu">Hindu Dharma (Pitra Puja &amp; Pitra Yadnya)</option>
+              <option value="buddha">Buddha (Pattidana &amp; Paritta Sutra)</option>
+              <option value="konghucu">Konghucu (Sembahyang Arwah &amp; Bakti Xiao)</option>
+            </select>
+          </div>
+
           <div class="p-3.5 bg-amber-950/40 border border-amber-600/50 rounded-xl text-amber-200 text-xs space-y-1">
             <div class="font-bold flex items-center gap-1.5 text-amber-300">
               <i class="fa-solid fa-triangle-exclamation"></i> Penting — Pergantian Hari Jawa:
@@ -1846,6 +1876,53 @@
       <!-- CONTAINER HASIL PETUNG OMAH -->
       <div id="omahResultContainer"></div>
 
+      <!-- PANEL PENCARIAN HARI BAIK OMAH (INTERAKTIF) -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-wulung/80 border border-prada/30 shadow-xl backdrop-blur-md space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-sogan-800 pb-3 gap-2">
+          <div>
+            <h3 class="font-cinzel text-base sm:text-lg font-bold text-amber-100 flex items-center gap-2">
+              <i class="fa-solid fa-magnifying-glass-location text-prada"></i> Pados Dinten Sae (Pencarian Hari Baik Interaktif)
+            </h3>
+            <p class="text-xs text-sogan-300">
+              Pados tanggal, wulan, lan warsa pundi kemawon kanggé ngedekake utawi boyongan adhedhasar formula Set A, B, lan C.
+            </p>
+          </div>
+          <span class="text-[10.5px] px-2.5 py-1 rounded-full bg-sogan-950 border border-prada/40 text-prada font-mono">
+            Filter Kalender &amp; Neptu
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Bulan Masehi</label>
+            <select id="omahSearchBulan" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Tahun Masehi</label>
+            <select id="omahSearchTahun" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Kriteria Petungan</label>
+            <select id="omahSearchKriteria" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition">
+              <option value="sedaya_becik" selected>Sedaya Dino Becik / Prayogi</option>
+              <option value="rahayu_slamet">Paling Utama (Rahayu Slamet)</option>
+              <option value="bebas_pantangan">Bebas Larangan Arah Boyongan</option>
+              <option value="set_a_bumi">Set A: Bumi (Sisa 1)</option>
+              <option value="set_b_becik">Set B: Kerta / Yasa / Candi</option>
+              <option value="set_c_becik">Set C: Guru / Ratu (Neptu NB)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button onclick="window.cariHariBaikOmahUI()" type="button" class="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-1.5 h-[38px]">
+              <i class="fa-solid fa-magnifying-glass"></i> Pados Dinten Sae
+            </button>
+          </div>
+        </div>
+
+        <!-- HASIL PENCARIAN OMAH -->
+        <div id="omahSearchResultsContainer" class="pt-2"></div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -1915,6 +1992,61 @@
       <!-- CONTAINER HASIL PETUNG TERNAK, LORO, & GEBLAK -->
       <div id="ternakResultContainer"></div>
 
+      <!-- PANEL PENCARIAN KECOCOKAN HARI PETUNG KEHIDUPAN (INTERAKTIF) -->
+      <div class="p-5 sm:p-6 rounded-2xl bg-wulung/80 border border-prada/30 shadow-xl backdrop-blur-md space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-sogan-800 pb-3 gap-2">
+          <div>
+            <h3 class="font-cinzel text-base sm:text-lg font-bold text-amber-100 flex items-center gap-2">
+              <i class="fa-solid fa-magnifying-glass-chart text-prada"></i> Pados Kecocokan Dinten (Pencarian Interaktif)
+            </h3>
+            <p class="text-xs text-sogan-300">
+              Pados tanggal, wulan, lan warsa ingkang trep kanggé Wiwit Ternak, Jalaran Loro, utawi Geblak adhedhasar formula weton 35.
+            </p>
+          </div>
+          <span class="text-[10.5px] px-2.5 py-1 rounded-full bg-sogan-950 border border-prada/40 text-prada font-mono">
+            Filter 35 Weton
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Bulan Masehi</label>
+            <select id="ternakSearchBulan" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Tahun Masehi</label>
+            <select id="ternakSearchTahun" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition"></select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Bidang Petung</label>
+            <select id="ternakSearchJenis" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition">
+              <option value="ternak" selected>Wiwit Ternak</option>
+              <option value="loro">Jalaran Loro</option>
+              <option value="geblak">Petung Geblak</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Kategori / Kriteria</label>
+            <select id="ternakSearchKategori" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition">
+              <option value="becik" selected>Dino Becik: Gajah &amp; Suku</option>
+              <option value="gajah">Kategori Gajah (Kraton / Luhur)</option>
+              <option value="suku">Kategori Suku (Sugih / Mulyo)</option>
+              <option value="watu">Kategori Watu (Netral / Prihatin)</option>
+              <option value="buto">Kategori Buto (Waspada)</option>
+              <option value="all">Sedaya Kategori (Kabeh)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button onclick="window.cariHariPetungKehidupanUI()" type="button" class="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-1.5 h-[38px]">
+              <i class="fa-solid fa-magnifying-glass"></i> Pados Dinten
+            </button>
+          </div>
+        </div>
+
+        <!-- HASIL PENCARIAN TERNAK -->
+        <div id="ternakSearchResultsContainer" class="pt-2"></div>
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -1964,6 +2096,207 @@
           <span>← Kembali</span>
         </button>
       </div>
+
+      <!-- ==================== PENGANTAR KARAWITAN & TEMBANG MACAPAT ==================== -->
+      <div class="space-y-6">
+        
+        <!-- Header Karawitan & Macapat -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sogan-950 via-wulung to-keraton border border-prada/40 p-6 sm:p-8 shadow-2xl">
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-prada/20 border border-prada/50 text-prada text-xs font-mono font-bold tracking-wider uppercase">
+                <i class="fa-solid fa-music"></i> Seni Karawitan &amp; Sastra Tembang
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-200 text-xs font-mono">
+                11 Tembang Macapat Jawa
+              </span>
+            </div>
+
+            <h2 class="font-marcellus text-2xl sm:text-4xl font-bold gold-gradient-text">
+              Pawiyatan Karawitan &amp; Tembang Macapat
+            </h2>
+            <p class="text-xs sm:text-sm text-sogan-200 max-w-3xl leading-relaxed">
+              Karawitan asalipun saking tembung <em>rawit</em> ingkang tegesipun alus, njeret, endah, lan rumit. Alunan gangsa gamelan Jawa karonce ing laras Slendro sarta Pelog minangka panyelarasing swasana jiwa manungsa kaliyan irama kosmis jagad raya.
+            </p>
+          </div>
+        </div>
+
+        <!-- Dua Kolom: Kawruh Karawitan & Paugeran Macapat -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Kolom Kiri: Wawasan Karawitan (Laras, Pathet, Ricikan) -->
+          <div class="lg:col-span-5 p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#131826] to-[#0A0D15] border border-sogan-800 space-y-4 shadow-xl">
+            <div class="flex items-center gap-2.5 border-b border-sogan-800 pb-3">
+              <div class="w-8 h-8 rounded-xl bg-prada/20 border border-prada/50 text-prada flex items-center justify-center text-sm">
+                <i class="fa-solid fa-bell"></i>
+              </div>
+              <h3 class="font-marcellus text-lg font-bold text-amber-100">Kawruh Dasar Karawitan</h3>
+            </div>
+
+            <div class="space-y-3 text-xs leading-relaxed text-sogan-300">
+              <!-- Laras Slendro & Pelog -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/70 border border-sogan-800 space-y-1.5">
+                <strong class="text-prada font-bold block text-[12px]">1. Laras Slendro &amp; Pelog</strong>
+                <p>
+                  <strong>Laras Slendro:</strong> Pentatonis 5 nada (1, 2, 3, 5, 6 / Ji, Ro, Lu, Ma, Nem) kanthi spasi nada ingkang meh sami rata. Watakipun: gumbira, gesit, gagah, lan tinarbuka.<br/>
+                  <strong>Laras Pelog:</strong> Septatonis 7 nada (1, 2, 3, 4, 5, 6, 7 / Ji, Ro, Lu, Pat, Ma, Nem, Pi). Watakipun: agung, wigati, wingit, lan ngresepake ati.
+                </p>
+              </div>
+
+              <!-- Pathet Gamelan -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/70 border border-sogan-800 space-y-1.5">
+                <strong class="text-amber-300 font-bold block text-[12px]">2. Pathet (Tingkat Swasana &amp; Wektu)</strong>
+                <p>
+                  <strong>Pathet Slendro:</strong> Nem (jam 21-24), Sanga (jam 00-03), Manyura (jam 03-06 esuk).<br/>
+                  <strong>Pathet Pelog:</strong> Lima (wiwitan), Nem (tengah), Barang (pungkasan/manis).
+                </p>
+              </div>
+
+              <!-- Golongan Ricikan -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/70 border border-sogan-800 space-y-1.5">
+                <strong class="text-emerald-300 font-bold block text-[12px]">3. Golongan Ricikan Gamelan</strong>
+                <p>
+                  <strong>Balungan:</strong> Saron Demung, Saron Barung, Saron Peking.<br/>
+                  <strong>Pencon:</strong> Bonang Barung, Bonang Penerus, Kethuk, Kempyang, Kenong, Kempul, Gong Ageng.<br/>
+                  <strong>Garap &amp; Pamurba:</strong> Kendhang (pamurba wirama), Rebab, Gender, Gambang, Suling, Siter.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: 11 Tembang Macapat Lengkap & Filosofi Gesang -->
+          <div class="lg:col-span-7 p-5 sm:p-6 rounded-3xl bg-gradient-to-b from-[#131826] to-[#0A0D15] border border-sogan-800 space-y-4 shadow-xl">
+            <div class="flex items-center justify-between border-b border-sogan-800 pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-400/50 text-amber-300 flex items-center justify-center text-sm">
+                  <i class="fa-solid fa-scroll"></i>
+                </div>
+                <div>
+                  <h3 class="font-marcellus text-lg font-bold text-amber-100">11 Tembang Macapat &amp; Paugeran</h3>
+                  <p class="text-[11px] text-sogan-400">Filosofi lumakuning urip manungsa wiwit wiji nganti puput (pati)</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grid 11 Tembang Macapat -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[460px] overflow-y-auto pr-1 scrollbar-thin">
+              
+              <!-- 1. Maskumambang -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">1. Maskumambang</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">4 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">12i, 6a, 8i, 8a</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Nelangsa, prihatin. <strong>Filosofi:</strong> Jabang bayi kumambang ing guwa garba ibu.</p>
+              </div>
+
+              <!-- 2. Mijil -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">2. Mijil</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">6 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">10i, 6o, 10e, 10i, 6i, 6u</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Tinarbuka, gandrung. <strong>Filosofi:</strong> Miyosing jabang bayi lair ing alam donya.</p>
+              </div>
+
+              <!-- 3. Sinom -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">3. Sinom</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">9 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">8a, 8i, 8a, 8i, 7i, 8u, 7a, 8i, 12a</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Grapyak, sumeh. <strong>Filosofi:</strong> Mangsa kanoman/enom, pados ngelmu lan kekancan.</p>
+              </div>
+
+              <!-- 4. Kinanthi -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">4. Kinanthi</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">6 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">8u, 8i, 8a, 8i, 8a, 8i</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Asih asuh, seneng. <strong>Filosofi:</strong> Tuntunan urip, dikanthi-kanthi pituduh luhur.</p>
+              </div>
+
+              <!-- 5. Asmaradana -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">5. Asmaradana</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">7 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">8i, 8a, 8e/o, 8a, 7a, 8u, 8a</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Sengsem, asmara. <strong>Filosofi:</strong> Manungsa wiwit kasengsem tresna asih marang lawan jenis.</p>
+              </div>
+
+              <!-- 6. Gambuh -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">6. Gambuh</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">5 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">7u, 10u, 12i, 8u, 8o</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Kulina, guyub. <strong>Filosofi:</strong> Jumbuh utawi manunggal ing palakrama (bebojoan/kulawarga).</p>
+              </div>
+
+              <!-- 7. Dhandhanggula -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">7. Dhandhanggula</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">10 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">10i, 10a, 8e, 7u, 9i, 7a, 6u, 8a, 12i, 7a</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Luwes, manis. <strong>Filosofi:</strong> Manising gesang, nggayuh gegayuhan lan kamulyan.</p>
+              </div>
+
+              <!-- 8. Durma -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">8. Durma</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">7 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">12a, 7i, 6a, 7a, 8i, 5a, 7i</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Galak, sereng, krodha. <strong>Filosofi:</strong> Perang nglawan hawa nepsu lan angkara murka.</p>
+              </div>
+
+              <!-- 9. Pangkur -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">9. Pangkur</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">7 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">8a, 11i, 8u, 7a, 12u, 8a, 8i</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Gagah, pitutur kenceng. <strong>Filosofi:</strong> Mungkur saking kadonyan, nyaketaken diri marang Gusti.</p>
+              </div>
+
+              <!-- 10. Megatruh -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">10. Megatruh</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">5 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">12u, 8i, 8u, 8i, 8o</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Sedhih, getun. <strong>Filosofi:</strong> Megat roh, pisahing raga kaliyan sukma/nyawa.</p>
+              </div>
+
+              <!-- 11. Pocung -->
+              <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-1 text-xs col-span-1 sm:col-span-2">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-prada text-sm font-marcellus">11. Pocung</span>
+                  <span class="text-[10px] font-mono text-sogan-400 px-2 py-0.5 rounded bg-black/40">4 Gatra</span>
+                </div>
+                <div class="text-[11px] font-mono text-amber-300">12u, 6a, 8i, 12a</div>
+                <p class="text-[11px] text-sogan-300 leading-relaxed"><strong>Watak:</strong> Kendho, sembrana nanging ngemu piweling jero. <strong>Filosofi:</strong> Manungsa dipocong (pejah), kondur marang Sang Hyang Widhi.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- ==================== END PENGANTAR KARAWITAN & TEMBANG MACAPAT ==================== -->
 
       <!-- Gamelan Bilah & Bonang -->
       <div class="bg-wulung p-6 rounded-2xl border border-sogan-800 space-y-6">
@@ -2046,6 +2379,86 @@
         <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Studio Aksara Jawa (Hanacaraka)</h2>
         <p class="text-xs text-sogan-300 mt-0.5">Transliterasi teks Latin ke Aksara Jawa otomatis, bagan sandhangan, serta kanvas interaktif belajar menulis aksara.</p>
       </div>
+
+      <!-- ==================== NARASI SEJARAH: LEGENDA AJI SAKA, DORA & SEMBADA ==================== -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#180f14] via-[#100a12] to-[#07050a] border border-amber-600/40 p-6 sm:p-8 shadow-2xl space-y-5">
+        <div class="space-y-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-prada/20 border border-prada/50 text-prada text-xs font-mono font-bold tracking-wider uppercase">
+              <i class="fa-solid fa-scroll"></i> Asal-Usul Carakan Jawa
+            </span>
+            <span class="text-xs font-mono text-amber-300 bg-amber-950/70 border border-amber-800/60 px-3 py-1 rounded-full">
+              Legenda Aji Saka, Dora &amp; Sembada
+            </span>
+          </div>
+
+          <h3 class="font-marcellus text-xl sm:text-3xl font-bold gold-gradient-text">
+            Sejarah Dumadine 20 Aksara Jawa (Hanacaraka)
+          </h3>
+          <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed max-w-4xl">
+            Aksara Jawa cacahipun 20 (carakan) sanes namung aksara panyerat basa, nanging ngemot cariyos kasetyan, amanah, sarta filosofi gesangipun manungsa ingkang dipunanggit dening <strong>Prabu Aji Saka</strong> nalika ngasoraken Prabu Dewatacengkar ing Krajan Medang Kamulan.
+          </p>
+        </div>
+
+        <!-- 4 Kotak Bait Carakan Berornamen -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          
+          <!-- Bait 1: Ha-Na-Ca-Ra-Ka -->
+          <div class="p-4 rounded-2xl bg-black/40 border border-prada/30 space-y-2">
+            <div class="font-jawa text-xl sm:text-2xl text-prada">ꦲ ꦤ ꦕ ꦫ ꦏ</div>
+            <div class="font-mono font-bold text-xs text-amber-200">HA - NA - CA - RA - KA</div>
+            <div class="text-[11px] font-semibold text-prada">"Hana Caraka"</div>
+            <p class="text-[11px] text-sogan-300 leading-relaxed">
+              Wonten utusan (abdi kalih ingkang setya tuhu: Dora lan Sembada).
+            </p>
+          </div>
+
+          <!-- Bait 2: Da-Ta-Sa-Wa-La -->
+          <div class="p-4 rounded-2xl bg-black/40 border border-prada/30 space-y-2">
+            <div class="font-jawa text-xl sm:text-2xl text-amber-300">ꦢ ꦠ ꦱ ꦮ ꦭ</div>
+            <div class="font-mono font-bold text-xs text-amber-200">DA - TA - SA - WA - LA</div>
+            <div class="text-[11px] font-semibold text-amber-300">"Data Sawala"</div>
+            <p class="text-[11px] text-sogan-300 leading-relaxed">
+              Padha pasulayan / pradondi (keduanya berselisih karena memegang teguh amanah sang prabu).
+            </p>
+          </div>
+
+          <!-- Bait 3: Pa-Dha-Ja-Ya-Nya -->
+          <div class="p-4 rounded-2xl bg-black/40 border border-prada/30 space-y-2">
+            <div class="font-jawa text-xl sm:text-2xl text-prada">ꦥ ꦝ ꦗ ꦪ ꦚ</div>
+            <div class="font-mono font-bold text-xs text-amber-200">PA - DHA - JA - YA - NYA</div>
+            <div class="text-[11px] font-semibold text-prada">"Padha Jayanya"</div>
+            <p class="text-[11px] text-sogan-300 leading-relaxed">
+              Padha digjayane (keduanya sama-sama sakti mandraguna tanpa ada yang terkalahkan).
+            </p>
+          </div>
+
+          <!-- Bait 4: Ma-Ga-Ba-Tha-Nga -->
+          <div class="p-4 rounded-2xl bg-black/40 border border-prada/30 space-y-2">
+            <div class="font-jawa text-xl sm:text-2xl text-amber-300">ꦩ ꦒ ꦧ ꦛ ꦔ</div>
+            <div class="font-mono font-bold text-xs text-amber-200">MA - GA - BA - THA - NGA</div>
+            <div class="text-[11px] font-semibold text-amber-300">"Maga Bathanga"</div>
+            <p class="text-[11px] text-sogan-300 leading-relaxed">
+              Padha dadi bathang (keduanya gugur bersama / sampyuh demi menjunjung tinggi sumpah satria).
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Rangkuman Kisah Naratif -->
+        <div class="p-4 rounded-2xl bg-sogan-950/60 border border-sogan-800 text-xs text-sogan-300 leading-relaxed space-y-2">
+          <span class="text-amber-300 font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-book-open text-amber-400"></i> Ringkasan Cariyos:
+          </span>
+          <p>
+            Nalika Aji Saka badhe jumeneng nata ing Medang Kamulan sasampunipun ngasoraken Dewatacengkar, piyambakipun ngutus <strong>Dora</strong> supados mendhet keris pusaka ingkang dipuntitipaken dhateng <strong>Sembada</strong> ing Pegunungan Kendeng. Nanging, sadèrèngipun tindak, Aji Saka nate weling dhateng Sembada supados mboten masrahaken pusaka wau dhateng sinten kemawon kejawi Aji Saka piyambak.
+          </p>
+          <p>
+            Dora nindakaken dhawuhing raja, dene Sembada ngugemi sumpah wekasaning gustine. Amargi kekalihipun sami-sami netepi kuwajiban lan sami digjayane, dumadi perang tandhing ngantos kekalihipun tilar donya sesarengan (sampyuh). Aji Saka ingkang rawuh keduwung sanget, lajeng ngripta 20 aksara Hanacaraka minangka monumen pralambang kasetyan lan piweling agung tumrap trahing manungsa.
+          </p>
+        </div>
+      </div>
+      <!-- ==================== END NARASI SEJARAH AJI SAKA ==================== -->
 
       <!-- Konverter Dua Kolom -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -2444,6 +2857,10 @@
         </div>
       </div>
 
+      <!-- ==================== SEKSI KAWRUH BASA JAWA ==================== -->
+      <div id="kawruhBosoContainer" class="p-5 sm:p-7 rounded-3xl bg-wulung border border-sogan-800 shadow-xl"></div>
+      <!-- ==================== END KAWRUH BASA JAWA ==================== -->
+
     </section>
 
     <!-- ========================================================================= -->
@@ -2792,6 +3209,10 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
+          <button onclick="window.openPadewanModal && window.openPadewanModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada text-xs font-bold hover:bg-prada/20 transition flex items-center gap-2 shadow cursor-pointer" title="Buka Galeri 12 Dewa Siklus Padewan">
+            <i class="fa-solid fa-users text-amber-400"></i>
+            <span>12 Batara-Batari</span>
+          </button>
           <button onclick="openEnsiklopediaWukuModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada text-xs font-bold hover:bg-prada/20 transition flex items-center gap-2 shadow cursor-pointer">
             <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
             <span>Mode Dialog Modal</span>
@@ -2873,25 +3294,6 @@
 
       </div>
 
-      <!-- Section: 12 Padewan Siklus Batara-Batari (Kanon) -->
-      <div class="mt-8 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-keraton via-wulung to-keraton border border-prada/30 shadow-2xl space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-sogan-800 pb-3">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-prada/20 border border-prada/50 text-prada flex items-center justify-center text-sm shadow">
-              <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <div>
-              <h3 class="font-marcellus text-lg sm:text-xl font-bold text-prada">12 Padewan Siklus Batara-Batari</h3>
-              <p class="text-[11px] text-sogan-400">Siklus 12 kanon panguwasa penanggalan &amp; sifat tahunan (suryo dumugi yamadipati)</p>
-            </div>
-          </div>
-          <span class="text-[10px] font-mono px-3 py-1 rounded-full bg-sogan-950 border border-prada/40 text-prada font-semibold">
-            12 Entitas Kanon
-          </span>
-        </div>
-        <div id="tabWukuSiklus12Grid"></div>
-      </div>
-
     </section>
 
     <!-- ========================================================================= -->
@@ -2906,6 +3308,386 @@
     <!-- ========================================================================= -->
     <section id="tab-ensiklopedia-budaya" class="tab-content hidden space-y-8">
       <div id="ensiklopediaBudayaContainer"></div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB: MITOLOGI NUSANTARA -->
+    <!-- ========================================================================= -->
+    <section id="tab-mitologi" class="tab-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+      
+      <!-- Top Navigation & Title Bar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
+        <div class="flex items-center gap-3">
+          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Kembali</span>
+          </button>
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+              <i class="fa-solid fa-scroll"></i> Sastra &amp; Mitologi Kuno
+            </span>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
+              Mitologi Nusantara
+            </h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-full bg-prada/15 border border-prada/40 text-prada text-xs font-bold font-serif flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-feather-pointed text-amber-400"></i>
+            <span>Carita Warisan Luhur</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Banner Pengantar -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sogan-950 via-keraton to-wulung border border-prada/40 p-6 sm:p-8 shadow-2xl">
+        <div class="space-y-3 max-w-3xl">
+          <span class="px-3 py-1 rounded-full bg-prada/20 border border-prada/50 text-prada text-xs font-mono font-bold uppercase tracking-wider">
+            Kosmologi &amp; Jagad Mistik Jawa
+          </span>
+          <h3 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text">
+            Sangkan Paraning Dongeng &amp; Sastra Budaya
+          </h3>
+          <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed">
+            Nusantara kasusun saking geguritan sejarah, kapitayan purba, lan mitologi adiluhung. Ing ngriki kacathet asal-usul 30 siklus wuku saking tragedi agung Prabu Watugunung, dumadine 5 pasaran Jawa, sarta pasrawungan gaib para danyang kaliyan para linuwih tanah Jawa.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Pilar Cerita Mitologi -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- 1. Asal Usul 30 Wuku (Watugunung) -->
+        <div class="p-6 rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 space-y-4 shadow-xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/50 text-amber-300 flex items-center justify-center text-xl shadow">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-prada font-bold block">Legenda Pawukon</span>
+            <h4 class="font-marcellus text-xl font-bold text-amber-100">Asal-Usul 30 Wuku (Prabu Watugunung)</h4>
+            <div class="text-xs text-sogan-300 leading-relaxed space-y-2">
+              <p>
+                Kacariyos ing Krajan Gilingwesi, Prabu Watugunung mandhegani kraton kanthi kasekten tanpa tanding. Piyambakipun kagungan garwa prameswari kalih: <strong>Dewi Sinta</strong> lan <strong>Dewi Landep</strong>, sarta 27 putra satria gagah prakosa.
+              </p>
+              <p>
+                Nalika Dewi Sinta mangertosi bilih Watugunung nyatanipun inggih punika putranipun piyambak ingkang nate kacingkrang nalika alit (katandha bekas tatu ing mustaka), Dewi Sinta nyuwun sarat ingkang mustahil: nglamar Dewi Sri saking kahyangan supados kersa dados madu.
+              </p>
+              <p>
+                Prabu Watugunung nekat nglurug kahyangan nglawan para dewa. Wusananipun, Watugunung kasor dening Raden Bambang Sakri (panitising Wisnu). Batara Guru ingkang welas asih lajeng ngruwat jiwa Watugunung, para garwa, lan 27 putrane, kaunggahake dados <strong>30 Siklus Wuku Pawukon</strong> ingkang dipunpengeti saben 7 dina (total 210 dina).
+              </p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sogan-800">
+            <button onclick="switchTab('wuku')" class="w-full py-2.5 px-4 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+              <span>Buka Ensiklopedia 30 Wuku</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Asal Usul Dina Pasaran (Pancawara) -->
+        <div class="p-6 rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 space-y-4 shadow-xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 flex items-center justify-center text-xl shadow">
+              <i class="fa-solid fa-compass"></i>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-prada font-bold block">Kosmologi Pancawara</span>
+            <h4 class="font-marcellus text-xl font-bold text-amber-100">Asal-Usul Dina Pasaran Jawa</h4>
+            <div class="text-xs text-sogan-300 leading-relaxed space-y-2">
+              <p>
+                Siklus 5 Pasaran Jawa (Pancawara) sanes namung etungan dina pekenan, nanging pandom kosmis <strong>Sedulur Papat Kalima Pancer</strong> ingkang nggambaraken kiblat papat lan unsur dumadine jagad:
+              </p>
+              <ul class="space-y-1.5 list-disc list-inside text-[11px] text-sogan-200">
+                <li><strong>Legi (Manis):</strong> Kiblat Wetan, unsur Banyu, Mutmainah, pepadhang budi suci.</li>
+                <li><strong>Pahing (Pait):</strong> Kiblat Kidul, unsur Geni, Amarah, kekiyatan lan greget urip.</li>
+                <li><strong>Pon (Petak):</strong> Kiblat Kulon, unsur Angin, Supiyah, kemakmuran lan tresna asih.</li>
+                <li><strong>Wage (Cemeng):</strong> Kiblat Lor, unsur Lemah/Bumi, Aluamah, kasantosan raga.</li>
+                <li><strong>Kliwon (Asih):</strong> Pancer Tengah, unsur Hayat, keseimbangan jiwa kaliyan Gusti.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sogan-800">
+            <button onclick="switchTab('kalender')" class="w-full py-2.5 px-4 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+              <span>Cek Kalender Dina &amp; Pasaran</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Mitologi Nusantara Adiluhung -->
+        <div class="p-6 rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 space-y-4 shadow-xl flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/50 text-purple-300 flex items-center justify-center text-xl shadow">
+              <i class="fa-solid fa-mountain-sun"></i>
+            </div>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-prada font-bold block">Kearifan Spiritual Nusantara</span>
+            <h4 class="font-marcellus text-xl font-bold text-amber-100">Kisah Dewi Sri, Semar &amp; Ratu Kidul</h4>
+            <div class="text-xs text-sogan-300 leading-relaxed space-y-2">
+              <p>
+                <strong>Dewi Sri &amp; Raden Sadana:</strong> Lambang kemakmuran pantun lan pangan. Nalika seda, jasad sucinipun nuwuhaken bibit pari pethak, ketan, lan palawija kangge ngayomi gesangipun manungsa ing bumi Nusantara.
+              </p>
+              <p>
+                <strong>Sang Hyang Ismaya (Semar):</strong> Panitising dewa pangayom tanah Jawa ingkang mandhap dados pamongipun para satria budi luhur, minangka pralambang 'Rakyat Cilik' ingkang nyimpen kesakten sejati.
+              </p>
+              <p>
+                <strong>Kanjeng Ratu Kidul:</strong> Panguwasa Samudra Kidul ingkang nate ngikat prajanjen batin kaliyan Panembahan Senopati, minangka wujud sumbu imajiner kosmis: Merapi – Tugu – Keraton – Segara Kidul.
+              </p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sogan-800">
+            <button onclick="switchTab('tripurusa')" class="w-full py-2.5 px-4 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+              <span>Buka Telur Jagad (Tripurusa)</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- SEKSI KHUSUS: RUWATAN BATARA KALA (LAKON MURWAKALA) -->
+      <!-- ========================================================================= -->
+      <div class="space-y-6 pt-4 border-t border-sogan-800/80">
+        
+        <!-- Banner Pengantar Filosofi Ki Dalang Mantep Soedharsono -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1c0d16] via-[#120815] to-[#07040a] border border-amber-600/50 p-6 sm:p-8 shadow-2xl">
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-950 border border-red-700/60 text-red-300 text-xs font-mono font-bold tracking-wider uppercase">
+                <i class="fa-solid fa-shield-cat text-amber-400"></i> Ruwatan Murwakala
+              </span>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-700/60 text-amber-300 text-xs font-mono font-semibold">
+                <i class="fa-solid fa-user-tie"></i> Narasumber: Ki Dalang Manteb Soedharsono
+              </span>
+            </div>
+
+            <h3 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text">
+              RUWATAN MURWAKALA (BATARA KALA)
+            </h3>
+            <p class="text-xs sm:text-sm text-sogan-200 max-w-3xl leading-relaxed">
+              Upacara sakral Ruwatan Murwakala minangka piwulang luhur panyucen sukma manungsa saking karma papa, bebaya hawa nafsu, sarta panguwasaning Batara Kala supados manggih kaslametan lahir lan batin.
+            </p>
+
+            <div class="p-4 rounded-2xl bg-black/40 border border-amber-900/60 text-xs text-sogan-200 leading-relaxed space-y-2">
+              <span class="text-amber-300 font-bold block flex items-center gap-1.5">
+                <i class="fa-solid fa-feather-pointed text-amber-400"></i> Piweling Luhur Filosofi:
+              </span>
+              <blockquote class="italic text-sogan-300 border-l-2 border-prada/60 pl-3 leading-relaxed">
+                "Ruwatan Murwakala miturut Ki Dalang Manteb Soedharsono sanes namung pagelaran magis utawi tolak balak tanpa teges, nanging minangka piweling agung kagem eling marang Gusti Kang Akarya Jagad. Batara Kala mujudaken pralambang wektu lan hawa nafsu angkara murka ingkang tansah ngincer manungsa ingkang lena. Lumantar laku ruwatan, manungsa kasuceni batinipun, karuwat sangkalanipun, sarta kawisudha dados titah ingkang waspada lan eling."
+              </blockquote>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header Patang Mantra Rajah -->
+        <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-hand-dots text-amber-400"></i>
+            <h4 class="font-marcellus text-lg font-bold text-amber-100">
+              Patang (4) Mantra &amp; Rajah Panyucen Sukma
+            </h4>
+          </div>
+          <span class="text-[11px] font-mono text-sogan-400">Bathuk · Tutuk · Dada · Gigir</span>
+        </div>
+
+        <!-- Grid 4 Rajah Sakral -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          
+          <!-- 1. Mantra Purwaning Dumadi -->
+          <div class="rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 hover:border-prada/60 transition shadow-xl p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2 border-b border-sogan-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-gradient-to-br from-red-900 to-amber-700 text-white font-mono font-bold text-xs flex items-center justify-center shadow">1</span>
+                  <span class="font-bold text-xs text-amber-300 uppercase tracking-wider font-mono">Kaserat ing Bathuk (Dahi)</span>
+                </div>
+                <span class="text-[10.5px] px-2.5 py-0.5 rounded-full bg-sogan-950 text-sogan-300 border border-sogan-800">
+                  Bathuk / Cakra Ajna (Pusat Cipta &amp; Nalar Budi)
+                </span>
+              </div>
+              <div>
+                <h4 class="font-marcellus text-lg font-bold text-amber-100">Mantra Purwaning Dumadi</h4>
+              </div>
+              <div class="p-3 rounded-2xl bg-keraton/90 border border-prada/30 text-center font-jawa text-lg sm:text-xl text-prada tracking-wider shadow-inner">
+                ꦲꦺꦴꦁꦲꦾꦁꦲꦩꦸꦂꦮꦨꦹꦩꦶꦥꦸꦂꦮꦤꦶꦁꦢꦸꦩꦢꦶ
+              </div>
+              <div class="p-4 rounded-2xl bg-black/60 border border-sogan-800/80 space-y-2">
+                <span class="text-[10px] font-mono uppercase text-prada font-bold block tracking-wider">
+                  <i class="fa-solid fa-scroll mr-1"></i> Rapalan / Rajah:
+                </span>
+                <p class="font-mono text-xs text-amber-100 leading-relaxed italic">
+                  "Hong Hyang Amurwa Bhumi, Purwaning Dumadi kang asipat langgeng, heh Kala sira sumingkira, ingsun sejatining manungsa kang kinemulan dening Hyang Suksma Kawekas."
+                </p>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-sogan-950/40 border border-sogan-800/60 text-xs text-sogan-300 leading-relaxed space-y-1">
+                <span class="font-bold text-prada text-[11px] block">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Werdi &amp; Daya Pangreksa:
+                </span>
+                <p>Kasrat ing bathuk minangka pancereng nalar budi lan pikiran wening. Ngemutaken purwaning dumadi bilih manungsa pinaringan pepadhang suci saking Gusti, saengga petenging hawa nepsu lan panggodhaning Batara Kala mboten saged nguwasani pikiran, nalar, sarta iman manungsa.</p>
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="button" onclick="window.copyRuwatanMantra && window.copyRuwatanMantra('purwaning_dumadi')" class="w-full py-2.5 px-3 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-copy"></i> Salin Rajah &amp; Makna
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Mantra Tinekak / Telak -->
+          <div class="rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 hover:border-prada/60 transition shadow-xl p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2 border-b border-sogan-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-gradient-to-br from-red-900 to-amber-700 text-white font-mono font-bold text-xs flex items-center justify-center shadow">2</span>
+                  <span class="font-bold text-xs text-amber-300 uppercase tracking-wider font-mono">Kaserat ing Tutuk (Mulut / Langit-langit)</span>
+                </div>
+                <span class="text-[10.5px] px-2.5 py-0.5 rounded-full bg-sogan-950 text-sogan-300 border border-sogan-800">
+                  Tutuk / Lesan / Telak (Pusat Sabda &amp; Pitedah)
+                </span>
+              </div>
+              <div>
+                <h4 class="font-marcellus text-lg font-bold text-amber-100">Mantra Tinekak / Telak</h4>
+              </div>
+              <div class="p-3 rounded-2xl bg-keraton/90 border border-prada/30 text-center font-jawa text-lg sm:text-xl text-prada tracking-wider shadow-inner">
+                ꦲꦺꦴꦁꦠꦶꦤꦼꦏꦏ꧀ꦠꦸꦠꦸꦏꦶꦁꦏꦭ
+              </div>
+              <div class="p-4 rounded-2xl bg-black/60 border border-sogan-800/80 space-y-2">
+                <span class="text-[10px] font-mono uppercase text-prada font-bold block tracking-wider">
+                  <i class="fa-solid fa-scroll mr-1"></i> Rapalan / Rajah:
+                </span>
+                <p class="font-mono text-xs text-amber-100 leading-relaxed italic">
+                  "Hong Tinekak tutuking Kala, tinitah bungkem dening Hyang Widhi, aja memangsa manungsa kang wus kasektenan iman lan kasucian, sirna dayaning wisa, teka tawa teka lara sirna dening asihing Hyang."
+                </p>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-sogan-950/40 border border-sogan-800/60 text-xs text-sogan-300 leading-relaxed space-y-1">
+                <span class="font-bold text-prada text-[11px] block">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Werdi &amp; Daya Pangreksa:
+                </span>
+                <p>Kasrat ing tutuk/telak minangka panyumpet cangkeme Batara Kala supados mboten wani memangsa bocah sukerta. Uga minangka pandom tumrap manungsa supados tansah njagi lesan/lathi saking dora caraka (ngapusi), fitnah, lan tembung ala ingkang saged ngundang sangkala.</p>
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="button" onclick="window.copyRuwatanMantra && window.copyRuwatanMantra('tinekak')" class="w-full py-2.5 px-3 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-copy"></i> Salin Rajah &amp; Makna
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Rajah Kala Cakra (8 Bait) -->
+          <div class="rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 hover:border-prada/60 transition shadow-xl p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2 border-b border-sogan-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-gradient-to-br from-red-900 to-amber-700 text-white font-mono font-bold text-xs flex items-center justify-center shadow">3</span>
+                  <span class="font-bold text-xs text-amber-300 uppercase tracking-wider font-mono">Kaserat ing Dada</span>
+                </div>
+                <span class="text-[10.5px] px-2.5 py-0.5 rounded-full bg-sogan-950 text-sogan-300 border border-sogan-800">
+                  Dada / Cakra Anahata (Pusat Kalbu &amp; Pangreksa)
+                </span>
+              </div>
+              <div>
+                <h4 class="font-marcellus text-lg font-bold text-amber-100">Aji Rajah Kala Cakra (8 Bait Palindhung)</h4>
+              </div>
+              <div class="p-3 rounded-2xl bg-keraton/90 border border-prada/30 text-center font-jawa text-lg sm:text-xl text-prada tracking-wider shadow-inner">
+                ꦪꦩꦫꦗꦗꦫꦩꦪꦪꦩꦫꦤꦶꦤꦶꦫꦩꦪ
+              </div>
+              <div class="p-4 rounded-2xl bg-black/60 border border-sogan-800/80 space-y-2">
+                <span class="text-[10px] font-mono uppercase text-prada font-bold block tracking-wider">
+                  <i class="fa-solid fa-scroll mr-1"></i> Rapalan 8 Bait &amp; Werdi:
+                </span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">1. Yamaraja jaramaya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa gawe ala, bakal sirna dening alane dhewe</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">2. Yamarani niramaya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa teka kanthi niyat ala, bakal sirna kuwasane</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">3. Yasilapa palasiya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa gawe luwe/ngendheg sandhang pangan, bakal maringi kamulyan</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">4. Yamiroda daromiya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa gawe papa cintraka, bakal asih tresna</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">5. Yamidica cadimiya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa culika/cidra, bakal sirna culikane</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">6. Yadayuda dayudaya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa ngajak perang/padudon, bakal nemu katentreman</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">7. Yasiyaca cayasiya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa gawe rusak, bakal gawe rahayu</span>
+                  </div>
+                  <div class="p-2 rounded-xl bg-sogan-950/70 border border-sogan-800">
+                    <strong class="text-amber-200 block text-[11px]">8. Yasiyaha hayasiya</strong>
+                    <span class="text-sogan-300 text-[10px] italic leading-tight block mt-0.5">Sing sapa nyawiji ing kasucian, bakal pinaringan urip langgeng tentrem</span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-sogan-950/40 border border-sogan-800/60 text-xs text-sogan-300 leading-relaxed space-y-1">
+                <span class="font-bold text-prada text-[11px] block">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Werdi &amp; Daya Pangreksa:
+                </span>
+                <p>Kasrat ing dhadha minangka beteng kalbu. Kalacakra gadhah daya pembalik (anadi) sedaya niat awon, sihir, teluh, braja, sarta sangkala dados kawelasan lan karahayon.</p>
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="button" onclick="window.copyRuwatanMantra && window.copyRuwatanMantra('rajah_kalacakra')" class="w-full py-2.5 px-3 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-copy"></i> Salin Rajah &amp; Makna
+              </button>
+            </div>
+          </div>
+
+          <!-- 4. Caraka Balik / Sungsang -->
+          <div class="rounded-3xl bg-gradient-to-b from-[#131724] to-[#0A0D15] border border-sogan-800 hover:border-prada/60 transition shadow-xl p-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between gap-2 border-b border-sogan-800/80 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-xl bg-gradient-to-br from-red-900 to-amber-700 text-white font-mono font-bold text-xs flex items-center justify-center shadow">4</span>
+                  <span class="font-bold text-xs text-amber-300 uppercase tracking-wider font-mono">Kaserat ing Gigir (Punggung)</span>
+                </div>
+                <span class="text-[10.5px] px-2.5 py-0.5 rounded-full bg-sogan-950 text-sogan-300 border border-sogan-800">
+                  Gigir / Punggung (Pangreksa Wingking &amp; Sangkan Paran)
+                </span>
+              </div>
+              <div>
+                <h4 class="font-marcellus text-lg font-bold text-amber-100">Caraka Balik (Aksara Sungsang)</h4>
+              </div>
+              <div class="p-3 rounded-2xl bg-keraton/90 border border-prada/30 text-center font-jawa text-lg sm:text-xl text-prada tracking-wider shadow-inner">
+                ꦔꦛꦧꦒꦩꦚꦪꦗꦝꦥꦭꦮꦱꦠꦢꦏꦫꦕꦤꦲ
+              </div>
+              <div class="p-4 rounded-2xl bg-black/60 border border-sogan-800/80 space-y-2">
+                <span class="text-[10px] font-mono uppercase text-prada font-bold block tracking-wider">
+                  <i class="fa-solid fa-scroll mr-1"></i> Urutan Aksara Sungsang:
+                </span>
+                <p class="font-mono text-xs text-amber-200 font-bold tracking-wider leading-relaxed">
+                  Nga - Tha - Ba - Ga - Ma - Nya - Ya - Ja - Dha - Pa - La - Wa - Sa - Ta - Da - Ka - Ra - Ca - Na - Ha
+                </p>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-sogan-950/40 border border-sogan-800/60 text-xs text-sogan-300 leading-relaxed space-y-1">
+                <span class="font-bold text-prada text-[11px] block">
+                  <i class="fa-solid fa-circle-question mr-1"></i> Werdi &amp; Daya Pangreksa:
+                </span>
+                <p>Kasrat ing gigir (mburi) supados manungsa mboten saged dipun-serang saking wingking dening memala lan teluh. Caraka Balik/Sungsang minangka simbol wangsuling sedaya godha lan bilahi dhateng asale (sangkan paraning dumadi), mbalekaken piala dados kasaenan, sarta pangeling bilih manungsa bakal wangsul marang Gusti Kang Akarya Jagad.</p>
+              </div>
+            </div>
+            <div class="pt-2">
+              <button type="button" onclick="window.copyRuwatanMantra && window.copyRuwatanMantra('caraka_balik')" class="w-full py-2.5 px-3 rounded-xl bg-sogan-950 hover:bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
+                <i class="fa-solid fa-copy"></i> Salin Rajah &amp; Makna
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
     </section>
 
     <!-- ========================================================================= -->
@@ -3087,6 +3869,20 @@
         </div>
       </div>
 
+    </section>
+
+    <!-- ==================== TAB PUSTAKA DONGO & USADA ==================== -->
+    <section id="tab-pustaka" class="tab-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div id="pustakaContainer">
+        <!-- Konten diinisialisasi oleh initPustakaUI() -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB PUSTAKA SINENGKER KHUSUS ==================== -->
+    <section id="tab-sinengker" class="tab-content hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div id="sinengkerContainer">
+        <!-- Konten diinisialisasi oleh initSinengkerUI() -->
+      </div>
     </section>
 
   </main>
@@ -3381,6 +4177,239 @@
           </button>
           <button id="btnCopyShareText" class="px-3.5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-sogan-800 transition">
             <i class="fa-solid fa-copy text-sm"></i> Salin Teks
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL SHARE SAPA DINA (VISUAL CARD) ==================== -->
+  <div id="modalShareSapaDina" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div class="relative w-full max-w-lg bg-gradient-to-b from-[#121722] to-[#0B0F19] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.25)] overflow-hidden flex flex-col max-h-[94vh]">
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-prada/20 border border-prada/60 flex items-center justify-center text-prada text-sm">
+            <i class="fa-solid fa-image"></i>
+          </div>
+          <div>
+            <h3 class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide">Bagikan Kartu Sapa Dina</h3>
+            <span class="text-xs text-sogan-400">Gambar Visual Siap Story &amp; WhatsApp Status</span>
+          </div>
+        </div>
+        <button onclick="closeSapaDinaShareModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal -->
+      <div class="p-4 sm:p-6 overflow-y-auto flex flex-col items-center justify-center space-y-4">
+        <!-- Canvas Preview Card -->
+        <div class="rounded-2xl overflow-hidden shadow-2xl border border-prada/40 max-w-[320px] sm:max-w-[360px] bg-keraton">
+          <canvas id="sapaDinaShareCardCanvas" class="w-full h-auto block"></canvas>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="w-full grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
+          <button onclick="downloadSapaDinaCardPng()" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center justify-center gap-1.5 hover:brightness-110 transition shadow cursor-pointer">
+            <i class="fa-solid fa-download text-sm"></i> Unduh PNG
+          </button>
+          <button onclick="shareSapaDinaVisual()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition shadow cursor-pointer">
+            <i class="fa-solid fa-share-nodes text-sm"></i> Bagikan Visual
+          </button>
+          <button onclick="shareSapaDinaToday()" class="px-3.5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 text-prada font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-sogan-800 transition cursor-pointer">
+            <i class="fa-solid fa-copy text-sm"></i> Salin Teks
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL KARTU POKÉMON NUJUM (COLLECTIBLE TRADING CARD) ==================== -->
+  <div id="modalNujumPokemonCard" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div class="relative w-full max-w-4xl bg-gradient-to-b from-[#121722] to-[#0B0F19] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.3)] overflow-hidden flex flex-col max-h-[95vh]">
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-prada text-keraton font-bold flex items-center justify-center text-sm shadow">
+            <i class="fa-solid fa-id-card-clip"></i>
+          </div>
+          <div>
+            <h3 class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide">Kartu Karakter Pusaka Jawa</h3>
+            <span class="text-xs text-sogan-400">Atur Atribut &amp; Bagikan Kartu Koleksi Karakter Panjenengan</span>
+          </div>
+        </div>
+        <button onclick="closeNujumPokemonCardModal()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal: 2 Columns (Controls on Left, Canvas Preview on Right) -->
+      <div class="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Kolom Kiri: Pengaturan & Checklist Atribut (5 cols) -->
+        <div class="lg:col-span-5 space-y-4">
+          <!-- Pemilihan Preset Arketipe & Generate Draf -->
+          <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-prada flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Preset Arketipe / Draf Karakter:
+              </label>
+              <span class="text-[10px] text-amber-400 font-mono">5 Pilihan Satria</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <select
+                id="pokemonCardPresetSelect"
+                onchange="window.generateDraftKartuKarakter && window.generateDraftKartuKarakter(this.value)"
+                class="flex-1 min-w-0 px-3 py-2 rounded-xl bg-keraton border border-sogan-700 focus:border-prada text-xs text-sogan-100 outline-none transition cursor-pointer"
+              >
+                <option value="harjuna">Raden Harjuna (Janaka) — Satria Pinandhita</option>
+                <option value="werkudara">Raden Werkudara (Bima) — Satria Perkasa</option>
+                <option value="gatotkaca">Raden Gatotkaca — Gagah Prawira</option>
+                <option value="srikandi">Dewi Srikandi — Wanita Tama</option>
+                <option value="kresna">Prabu Sri Kresna — Nata Wicaksana</option>
+              </select>
+              <button
+                type="button"
+                onclick="window.generateDraftKartuKarakter && window.generateDraftKartuKarakter()"
+                class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer shrink-0"
+                title="Generate draf baru secara instan"
+              >
+                <i class="fa-solid fa-bolt"></i> <span>Draf Anyar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Input Kustom Nama -->
+          <div class="p-3.5 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-2">
+            <label class="block text-xs font-bold text-prada flex items-center gap-1.5">
+              <i class="fa-solid fa-user-pen"></i> Nama ing Kartu:
+            </label>
+            <input
+              type="text"
+              id="pokemonCardNamaInput"
+              oninput="window.onNujumPokemonNameInput && window.onNujumPokemonNameInput(this.value)"
+              placeholder="Ganti asma panjenengan..."
+              class="w-full px-3 py-2 rounded-xl bg-keraton border border-sogan-700 focus:border-prada text-xs text-sogan-100 outline-none transition"
+            />
+          </div>
+
+          <!-- Checklist Atribut Kartu -->
+          <div class="p-4 rounded-2xl bg-sogan-950/80 border border-sogan-800 space-y-3">
+            <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2">
+              <span class="text-xs font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-sliders"></i> Pilih Atribut Kartu:
+              </span>
+              <span class="text-[10px] text-sogan-400 font-mono">Live Preview</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-2 text-xs text-sogan-200">
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokNama" checked onchange="window.onNujumPokemonOptionChange('nama', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Nama Pemilik</strong> &amp; Gelar</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokTglLahir" checked onchange="window.onNujumPokemonOptionChange('tglLahir', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Tanggal Lahir</strong> (Masehi)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokWetonNeptu" checked onchange="window.onNujumPokemonOptionChange('wetonNeptu', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Weton &amp; HP Level</strong> (Neptu Standar)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokWukuDewa" checked onchange="window.onNujumPokemonOptionChange('wukuDewa', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Wuku &amp; Dewane</strong> (Pawukon)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokTipeKarakter" checked onchange="window.onNujumPokemonOptionChange('tipeKarakter', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Kemampuan Pasif</strong> (Tipe Karakter)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokKekuatan" checked onchange="window.onNujumPokemonOptionChange('kekuatan', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Serangan &amp; Potensi</strong> (Kekuatan Utama)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokMawasDiri" checked onchange="window.onNujumPokemonOptionChange('mawasDiri', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Titik Lemah</strong> (Mawas Diri / Sirikan)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokArahHoki" checked onchange="window.onNujumPokemonOptionChange('arahHoki', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Arah Hoki &amp; Energi</strong> (Resistance)</span>
+              </label>
+
+              <label class="flex items-center gap-2.5 p-2 rounded-lg bg-keraton/60 border border-sogan-800 hover:border-prada/40 cursor-pointer transition">
+                <input type="checkbox" id="chkPokPitutur" checked onchange="window.onNujumPokemonOptionChange('pitutur', this.checked)" class="rounded text-amber-500 focus:ring-0 cursor-pointer accent-amber-500" />
+                <span><strong class="text-amber-300">Flavor Text</strong> (Wejangan Faalakiah)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Tombol Aksi -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+            <button onclick="window.generateDraftKartuKarakter && window.generateDraftKartuKarakter()" class="py-2.5 px-3 rounded-xl bg-amber-600 hover:bg-amber-500 text-keraton font-bold text-xs flex items-center justify-center gap-1.5 shadow transition cursor-pointer" title="Generate draf kartu baru">
+              <i class="fa-solid fa-bolt"></i> <span>Draf Anyar</span>
+            </button>
+            <button onclick="downloadNujumPokemonCardPng()" class="py-2.5 px-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center justify-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer" title="Unduh Kartu Gambar PNG">
+              <i class="fa-solid fa-download"></i> <span>Unduh PNG</span>
+            </button>
+            <button onclick="shareNujumPokemonCard()" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow transition cursor-pointer" title="Bagikan Kartu">
+              <i class="fa-solid fa-share-nodes"></i> <span>Bagikan</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Live Canvas Preview (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col items-center justify-center">
+          <div class="w-full max-w-[340px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(212,175,55,0.3)] border-2 border-prada/50 bg-black">
+            <canvas id="nujumPokemonCardCanvas" class="w-full h-auto block"></canvas>
+          </div>
+          <span class="text-[11px] text-sogan-400 mt-2 font-mono">Ukuran Asli: 750 × 1050 px (High Definition)</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL PUSTAKA READER (DOA & WIRID INTERAKTIF) ==================== -->
+  <div id="modalPustakaReader" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-all duration-300">
+    <div class="relative w-full max-w-3xl bg-gradient-to-b from-[#121722] to-[#0B0F19] border border-prada/60 rounded-3xl shadow-[0_0_50px_rgba(212,175,55,0.25)] overflow-hidden flex flex-col max-h-[92vh]">
+      <!-- Header Modal -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-sogan-800 bg-[#0E131E]">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-8 h-8 rounded-full bg-prada/20 border border-prada/60 flex items-center justify-center text-prada text-sm shrink-0">
+            <i class="fa-solid fa-book-open"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 id="pustakaReaderTitle" class="font-marcellus text-lg font-bold gold-gradient-text tracking-wide truncate">Waosan Donga</h3>
+            <span id="pustakaReaderSubtitle" class="text-xs text-sogan-400 block truncate">Kategori Donga</span>
+          </div>
+        </div>
+        <button onclick="closePustakaReader()" class="w-8 h-8 rounded-full bg-sogan-900 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition flex items-center justify-center shrink-0 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal (Scrollable Content) -->
+      <div id="pustakaReaderBody" class="p-5 sm:p-7 overflow-y-auto space-y-5 text-xs text-sogan-200">
+        <!-- Diisi oleh renderPustakaReaderContent() -->
+      </div>
+
+      <!-- Footer Modal -->
+      <div class="px-6 py-3.5 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between gap-2 flex-wrap">
+        <span class="text-[11px] text-sogan-400 font-mono hidden sm:inline">Pustaka Dongo, Wirid &amp; Ubarampe Jagad Jawa</span>
+        <div class="flex items-center gap-2 ml-auto">
+          <button onclick="copyPustakaCurrentDoa()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
+            <i class="fa-solid fa-copy"></i> Salin Doa Lengkap
+          </button>
+          <button onclick="closePustakaReader()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer">
+            Tutup
           </button>
         </div>
       </div>

@@ -48,7 +48,7 @@ import { wireSapaDinaFeature, initSapaDina } from './features/sapa-dina.js';
 
 // ─── PETUNG IJAB & PETUNG OMAH (NEW MODULES) ──────────────────────────────
 import { initIjabUI, syncIjabDariTanggal, hitungIjabDariUI } from './modules/ijab/ijab-ui.js';
-import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI } from './modules/omah/omah-ui.js';
+import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI, cariHariBaikOmahUI, pilihTanggalHasilCariOmah } from './modules/omah/omah-ui.js';
 
 // ─── PETUNG TERNAK, LORO, & GEBLAK (PETUNG KEHIDUPAN) ──────────────────────
 import {
@@ -56,7 +56,9 @@ import {
   syncTernakDariTanggal,
   hitungTernakDariSelect,
   switchTernakSubtab,
-  konfirmasiBukaGeblak
+  konfirmasiBukaGeblak,
+  cariHariPetungKehidupanUI,
+  pilihTanggalHasilCariTernak
 } from './modules/petung-kehidupan/petung-kehidupan-ui.js';
 
 // ─── SASMITHA (TANDA ALAM & TUBUH) ────────────────────────────────────────
@@ -68,8 +70,69 @@ import {
   onKedutCategorySelect,
   onGerhanaSasiSelect,
   onLinduSasiSelect,
-  onLinduWaktuToggle
+  onLinduWaktuToggle,
+  pilihTitikAnatomiKedut,
+  setKedutViewMode
 } from './modules/sasmitha/sasmitha-ui.js';
+
+// ─── PUSTAKA DONGO, USADA & KAUTAMAN ──────────────────────────────────────
+import {
+  initPustakaUI,
+  renderPustakaCards,
+  switchPustakaKategori,
+  onPustakaSearchInput,
+  clearPustakaSearch,
+  openPustakaReader,
+  closePustakaReader,
+  onPustakaNameChange,
+  copyPustakaCurrentDoa,
+  switchPustakaSubtab,
+  onKautamanSearch,
+  copyKautamanItem,
+  onUsadaSearch,
+  filterUsadaPenyakit,
+  copyUsadaItem,
+  copyKalacakraFull
+} from './modules/pustaka/pustaka-ui.js';
+
+// ─── PUSTAKA SINENGKER KHUSUS & KOMPAS DANYANG ─────────────────────────────
+import {
+  initSinengkerUI,
+  submitSinengkerPin,
+  lockSinengkerUI,
+  switchSinengkerSubtab,
+  onKompasDanyangSearch,
+  setKompasDanyangSample,
+  copyKompasDanyangResult,
+  copyMendhemAriAri,
+  copyUbarampePager,
+  copySastraJendra,
+  copyBodroSampir,
+  copyKasedanJati,
+  copyRosoSejati,
+  copyAjiMantra,
+  copyRuwatanMantra,
+  openKompasImageZoomModal,
+  closeKompasImageZoomModal,
+  switchKompasViewMode
+} from './modules/sinengker/sinengker-ui.js';
+
+// ─── SAPA DINA & NUJUM VISUAL SHARE CARDS ──────────────────────────────────
+import {
+  openSapaDinaShareModal,
+  closeSapaDinaShareModal,
+  downloadSapaDinaCardPng,
+  shareSapaDinaVisual
+} from './modules/sapa-dina/sapa-dina-ui.js';
+
+import {
+  openNujumPokemonCardModal,
+  closeNujumPokemonCardModal,
+  downloadNujumPokemonCardPng,
+  shareNujumPokemonCard,
+  onNujumPokemonOptionChange,
+  onNujumPokemonNameInput
+} from './modules/nujum/nujum-share-card.js';
 
 // ─── INITIAL WIRING TO WINDOW (THIN WRAPPERS UNTUK INLINE HTML ONCLICK) ────
 if (typeof window !== 'undefined') {
@@ -89,6 +152,67 @@ if (typeof window !== 'undefined') {
   window.closeOnboardingModal = closeOnboardingModal;
   window.pilihModeAwal = pilihModeAwal;
 
+  // Pustaka Dongo, Usada & Kautaman bindings
+  window.initPustakaUI = initPustakaUI;
+  window.renderPustakaCards = renderPustakaCards;
+  window.switchPustakaKategori = switchPustakaKategori;
+  window.onPustakaSearchInput = onPustakaSearchInput;
+  window.clearPustakaSearch = clearPustakaSearch;
+  window.openPustakaReader = openPustakaReader;
+  window.closePustakaReader = closePustakaReader;
+  window.onPustakaNameChange = onPustakaNameChange;
+  window.copyPustakaCurrentDoa = copyPustakaCurrentDoa;
+  window.switchPustakaSubtab = switchPustakaSubtab;
+  window.onKautamanSearch = onKautamanSearch;
+  window.copyKautamanItem = copyKautamanItem;
+  window.onUsadaSearch = onUsadaSearch;
+  window.filterUsadaPenyakit = filterUsadaPenyakit;
+  window.copyUsadaItem = copyUsadaItem;
+  window.copyKalacakraFull = copyKalacakraFull;
+
+  // Pustaka Sinengker bindings
+  window.initSinengkerUI = initSinengkerUI;
+  window.submitSinengkerPin = submitSinengkerPin;
+  window.lockSinengkerUI = lockSinengkerUI;
+  window.switchSinengkerSubtab = switchSinengkerSubtab;
+  window.onKompasDanyangSearch = onKompasDanyangSearch;
+  window.setKompasDanyangSample = setKompasDanyangSample;
+  window.copyKompasDanyangResult = copyKompasDanyangResult;
+  window.copyMendhemAriAri = copyMendhemAriAri;
+  window.copyUbarampePager = copyUbarampePager;
+  window.copySastraJendra = copySastraJendra;
+  window.copyBodroSampir = copyBodroSampir;
+  window.copyKasedanJati = copyKasedanJati;
+  window.copyRosoSejati = copyRosoSejati;
+  window.copyAjiMantra = copyAjiMantra;
+  window.copyRuwatanMantra = copyRuwatanMantra;
+  window.openKompasImageZoomModal = openKompasImageZoomModal;
+  window.closeKompasImageZoomModal = closeKompasImageZoomModal;
+  window.switchKompasViewMode = switchKompasViewMode;
+
+  // Wuku Category Filter dispatcher
+  window.setWukuCategoryFilter = async function(category) {
+    await ensureWukuLoaded();
+    const wukuUI = await import('./modules/wuku/wuku-ui.js');
+    if (wukuUI && typeof wukuUI.setWukuCategoryFilter === 'function') {
+      wukuUI.setWukuCategoryFilter(category);
+    }
+  };
+
+  // Sapa Dina Share bindings
+  window.openSapaDinaShareModal = openSapaDinaShareModal;
+  window.closeSapaDinaShareModal = closeSapaDinaShareModal;
+  window.downloadSapaDinaCardPng = downloadSapaDinaCardPng;
+  window.shareSapaDinaVisual = shareSapaDinaVisual;
+
+  // Nujum Pokémon Card bindings
+  window.openNujumPokemonCardModal = openNujumPokemonCardModal;
+  window.closeNujumPokemonCardModal = closeNujumPokemonCardModal;
+  window.downloadNujumPokemonCardPng = downloadNujumPokemonCardPng;
+  window.shareNujumPokemonCard = shareNujumPokemonCard;
+  window.onNujumPokemonOptionChange = onNujumPokemonOptionChange;
+  window.onNujumPokemonNameInput = onNujumPokemonNameInput;
+
   // Ijab & Omah bindings
   window.initIjabUI = initIjabUI;
   window.syncIjabDariTanggal = syncIjabDariTanggal;
@@ -96,6 +220,8 @@ if (typeof window !== 'undefined') {
   window.initOmahUI = initOmahUI;
   window.syncOmahDariTanggal = syncOmahDariTanggal;
   window.hitungOmahDariUI = hitungOmahDariUI;
+  window.cariHariBaikOmahUI = cariHariBaikOmahUI;
+  window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
 
   // Ternak, Loro, & Geblak bindings
   window.initTernakUI = initTernakUI;
@@ -103,6 +229,8 @@ if (typeof window !== 'undefined') {
   window.hitungTernakDariSelect = hitungTernakDariSelect;
   window.switchTernakSubtab = switchTernakSubtab;
   window.konfirmasiBukaGeblak = konfirmasiBukaGeblak;
+  window.cariHariPetungKehidupanUI = cariHariPetungKehidupanUI;
+  window.pilihTanggalHasilCariTernak = pilihTanggalHasilCariTernak;
 
   // Sasmitha bindings
   window.initSasmithaUI = initSasmithaUI;
@@ -113,6 +241,8 @@ if (typeof window !== 'undefined') {
   window.onGerhanaSasiSelect = onGerhanaSasiSelect;
   window.onLinduSasiSelect = onLinduSasiSelect;
   window.onLinduWaktuToggle = onLinduWaktuToggle;
+  window.pilihTitikAnatomiKedut = pilihTitikAnatomiKedut;
+  window.setKedutViewMode = setKedutViewMode;
 }
 
 wireKalenderFeature();
@@ -206,6 +336,14 @@ if (typeof window !== 'undefined') {
 
       case 'pitutur':
         await ensurePituturLoaded();
+        try {
+          const kawruhMod = await import('./data/kawruh-boso.js');
+          if (kawruhMod && typeof kawruhMod.renderKawruhBosoUI === 'function') {
+            kawruhMod.renderKawruhBosoUI('kawruhBosoContainer');
+          }
+        } catch (e) {
+          console.error('Gagal inisialisasi Kawruh Basa Jawa:', e);
+        }
         break;
 
       case 'tumpeng':
@@ -227,6 +365,18 @@ if (typeof window !== 'undefined') {
           if (ensikloModule && typeof ensikloModule.renderEnsiklopediaBudayaPage === 'function') {
             ensikloModule.renderEnsiklopediaBudayaPage('ensiklopediaBudayaContainer');
           }
+        }
+        break;
+
+      case 'pustaka':
+        if (typeof window.initPustakaUI === 'function') {
+          window.initPustakaUI('pustakaContainer');
+        }
+        break;
+
+      case 'sinengker':
+        if (typeof window.initSinengkerUI === 'function') {
+          window.initSinengkerUI('sinengkerContainer');
         }
         break;
     }
