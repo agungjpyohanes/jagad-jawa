@@ -32,8 +32,12 @@ import {
   PAARASAN_DATA,
   PANCASUDA_DATA,
   KAMAROKAN_DATA,
-  getAsesoris
+  getAsesoris,
+  namaKeAksaraList,
+  parseAksaraForFaalakiah
 } from '../../data/personality.js';
+
+export { namaKeAksaraList, parseAksaraForFaalakiah };
 
 import {
   getDayInfo,
@@ -47,65 +51,6 @@ import {
 } from '../kalender/kalender-engine.js';
 
 /**
- * Mengonversi nama Latin ke daftar aksara dasar untuk Faalakiah.
- * @param {string} nama 
- * @returns {string[]}
- */
-export function namaKeAksaraList(nama) {
-  if (!nama || typeof nama !== "string") return [];
-  const bersih = nama.toLowerCase().replace(/[^a-z\s]/g, "").trim();
-  if (!bersih) return [];
-  const kataArr = bersih.split(/\s+/);
-  const hasil = [];
-
-  for (const kata of kataArr) {
-    if (!kata) continue;
-    const sukuArr = kata.match(/(?:ng|ny|th|dh|[b-df-hj-np-tv-z])?[aeiouéè]?/g) || [];
-    for (const suku of sukuArr) {
-      if (!suku) continue;
-      const mKons = suku.match(/^(ng|ny|th|dh|[b-df-hj-np-tv-z])/);
-      const kons = mKons ? mKons[1] : "h";
-      const mapKons = {
-        "h": "HA", "n": "NA", "c": "CA", "r": "RA", "k": "KA",
-        "d": "DA", "t": "TA", "s": "SA", "w": "WA", "l": "LA",
-        "p": "PA", "j": "JA", "y": "YA", "m": "MA", "g": "GA", "b": "BA",
-        "ny": "NYA", "ng": "NGA", "th": "THA", "dh": "DHA"
-      };
-      hasil.push(mapKons[kons] || mapKons[kons[0]] || "HA");
-    }
-  }
-  return hasil;
-}
-
-const UNICODE_JAWA_TO_FAAL = {
-  'ꦲ': 'HA', 'ꦤ': 'NA', 'ꦕ': 'CA', 'ꦫ': 'RA', 'ꦏ': 'KA',
-  'ꦢ': 'DA', 'ꦠ': 'TA', 'ꦱ': 'SA', 'ꦮ': 'WA', 'ꦭ': 'LA',
-  'ꦥ': 'PA', 'ꦝ': 'DHA', 'ꦗ': 'JA', 'ꦪ': 'YA', 'ꦚ': 'NYA',
-  'ꦩ': 'MA', 'ꦒ': 'GA', 'ꦧ': 'BA', 'ꦛ': 'THA', 'ꦔ': 'NGA',
-  'ꦟ': 'NA', 'ꦑ': 'KA', 'ꦡ': 'TA', 'ꦰ': 'SA',
-  'ꦦ': 'PA', 'ꦘ': 'NYA', 'ꦓ': 'GA', 'ꦨ': 'BA',
-  'ꦄ': 'HA', 'ꦅ': 'HA', 'ꦈ': 'HA', 'ꦌ': 'HA', 'ꦎ': 'HA',
-  'ꦂ': 'RA', 'ꦁ': 'NGA', 'ꦃ': 'HA',
-  'ꦿ': 'RA', 'ꦽ': 'RA', 'ꦾ': 'YA'
-};
-
-export function parseAksaraForFaalakiah(text) {
-  if (!text || !text.trim()) return [];
-  const clean = text.trim();
-  const jawaChars = clean.match(/[\uA980-\uA9DF]/g);
-  if (jawaChars && jawaChars.length > 0) {
-    const list = [];
-    for (const ch of jawaChars) {
-      if (UNICODE_JAWA_TO_FAAL[ch]) {
-        list.push(UNICODE_JAWA_TO_FAAL[ch]);
-      }
-    }
-    if (list.length > 0) return list;
-  }
-  return namaKeAksaraList(clean);
-}
-
-/**
  * Menghitung ramalan Faalakiah dari nama.
  * @param {string} nama 
  * @returns {Object}
@@ -113,7 +58,7 @@ export function parseAksaraForFaalakiah(text) {
 export function getFaalakiah(nama) {
   const aksaraList = namaKeAksaraList(nama);
   if (aksaraList.length === 0) {
-    return { kode: 0, kodeNormalized: 12, nabi: NABI_FAAL[0], desc: FAAL_DESC[0], aksaraStr: "-", sum: 0 };
+    return { kode: 0, kodeNormalized: 12, nabi: NABI_FAAL[0], desc: FAAL_DESC[0], aksaraStr: "-", aksaraHyphenated: "-", sum: 0 };
   }
   let sum = 0;
   for (const ak of aksaraList) sum += (AKSARA_FAAL[ak] || 1);
@@ -125,6 +70,7 @@ export function getFaalakiah(nama) {
     nabi: NABI_FAAL[kode] || NABI_FAAL[kodeNormalized] || NABI_FAAL[0],
     desc: FAAL_DESC[kode] || FAAL_DESC[kodeNormalized] || FAAL_DESC[0],
     aksaraStr: aksaraList.join(" "),
+    aksaraHyphenated: aksaraList.map(a => a.toLowerCase()).join(" - "),
     sum
   };
 }

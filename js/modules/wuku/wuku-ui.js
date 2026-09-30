@@ -205,9 +205,9 @@ export function selectWukuDetail(noOrName) {
 
       <!-- Galeri Ilustrasi Wuku & Dewane Kanon (Bersandingan) -->
       <div class="grid grid-cols-2 gap-3 sm:gap-4 p-3.5 rounded-2xl bg-keraton/70 border border-sogan-800/80 shadow-md">
-        <!-- Kartu Gambar Wuku -->
+        <!-- Kartu Gambar Wuku (Interaktif Pop-up Ensiklopedia) -->
         <div class="flex flex-col items-center space-y-2 text-center">
-          <div class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group">
+          <div onclick="window.openEnsiklopediaWukuModal && window.openEnsiklopediaWukuModal('${summary.nama}')" role="button" class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group cursor-pointer hover:border-prada transition" title="Klik kagem mirsani rincian wuku ${summary.nama}">
             <img 
               src="${summary.imageWuku}" 
               alt="Wuku ${summary.nama}" 
@@ -217,6 +217,9 @@ export function selectWukuDetail(noOrName) {
               style="aspect-ratio: 400/560; object-fit: cover;" 
               onerror="this.onerror=null; this.parentElement.classList.add('hidden');" 
             />
+            <div class="absolute bottom-1.5 inset-x-1.5 py-1 px-2 rounded-lg bg-black/80 backdrop-blur-sm border border-prada/30 text-[9.5px] font-mono text-prada font-bold flex items-center justify-center gap-1 opacity-90 group-hover:opacity-100 transition">
+              <i class="fa-solid fa-eye text-amber-400"></i> Ensiklopedia Wuku
+            </div>
           </div>
           <div class="space-y-0.5">
             <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center justify-center gap-1">

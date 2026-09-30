@@ -54,6 +54,10 @@ function switchTab(tabId, pushState = true) {
     window.renderEnsiklopediaBudayaPage();
   }
 
+  if (tabId === 'mitologi' && typeof window.initMitologiUI === 'function') {
+    window.initMitologiUI();
+  }
+
   window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -203,7 +207,7 @@ if (typeof window !== 'undefined') {
  * @param {'parchment'|'monochrome'} theme Estetika: 'parchment' (Kertas Kuno Keraton) atau 'monochrome'
  * @param {string|null} customTitle Judul dokumen cetak kustom
  */
-function printLaporan(theme = 'monochrome', customTitle = null) {
+function printLaporan(theme = 'parchment', customTitle = null) {
   let target = document.getElementById('laporan-cetak-pdf');
   
   // Jika target belum ada di DOM, buat elemen penampung cetak
@@ -212,6 +216,19 @@ function printLaporan(theme = 'monochrome', customTitle = null) {
     target.id = 'laporan-cetak-pdf';
     target.className = 'print-only-document';
     document.body.appendChild(target);
+  } else if (target.parentElement !== document.body) {
+    // Pastikan target adalah anak langsung dari document.body
+    document.body.appendChild(target);
+  }
+
+  // Bersihkan kelas kalender agar cetak dokumen menggunakan layout dinamis
+  document.body.classList.remove('print-kalender-active');
+
+  // Sembunyikan area kalender secara eksplisit jika ada di DOM
+  const calArea = document.getElementById('printable-calendar-area');
+  const prevCalDisplay = calArea ? calArea.style.display : null;
+  if (calArea) {
+    calArea.style.display = 'none';
   }
 
   // Pastikan isi laporan sudah terisi; jika belum, coba trigger cetak nujum
@@ -234,15 +251,18 @@ function printLaporan(theme = 'monochrome', customTitle = null) {
 
   // Bersihkan kelas cetak sebelumnya
   document.querySelectorAll('.print-target-active').forEach(el => el.classList.remove('print-target-active'));
-  document.body.classList.remove('print-theme-parchment', 'print-theme-monochrome');
-  target.classList.remove('theme-parchment', 'theme-monochrome');
+  document.body.classList.remove('print-theme-parchment', 'print-theme-monochrome', 'print-theme-standard');
+  target.classList.remove('theme-parchment', 'theme-monochrome', 'theme-standard');
 
   if (theme === 'parchment') {
     document.body.classList.add('print-theme-parchment');
     target.classList.add('theme-parchment');
-  } else {
+  } else if (theme === 'monochrome') {
     document.body.classList.add('print-theme-monochrome');
     target.classList.add('theme-monochrome');
+  } else {
+    document.body.classList.add('print-theme-standard');
+    target.classList.add('theme-standard');
   }
 
   document.body.classList.add('print-mode-active');
@@ -256,8 +276,11 @@ function printLaporan(theme = 'monochrome', customTitle = null) {
   // Kembalikan judul halaman dan bersihkan state setelah dialog cetak ditutup
   const cleanup = () => {
     document.title = originalTitle;
-    document.body.classList.remove('print-mode-active', 'print-theme-parchment', 'print-theme-monochrome');
-    target.classList.remove('print-target-active', 'theme-parchment', 'theme-monochrome');
+    document.body.classList.remove('print-mode-active', 'print-theme-parchment', 'print-theme-monochrome', 'print-theme-standard');
+    target.classList.remove('print-target-active', 'theme-parchment', 'theme-monochrome', 'theme-standard');
+    if (calArea) {
+      calArea.style.display = prevCalDisplay !== null ? prevCalDisplay : '';
+    }
     window.removeEventListener('afterprint', cleanup);
   };
   window.addEventListener('afterprint', cleanup, { once: true });
@@ -321,6 +344,10 @@ function printSection(sectionId, theme = 'monochrome') {
  * @param {string} defaultBg Warna latar belakang kanvas (default: '#0b0f19')
  */
 async function downloadElementAsPng(elementId, filename = 'unduhan-jagad-jawa.png', defaultBg = '#0b0f19') {
+  if (elementId === 'kalenderCard' && typeof window.downloadKalenderPng === 'function') {
+    return window.downloadKalenderPng();
+  }
+
   const element = document.getElementById(elementId);
   if (!element) {
     if (typeof showToast === 'function') {

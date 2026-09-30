@@ -26,9 +26,12 @@ import {
   pilihModeAwal,
   initModeFeature
 } from './ui/mode.js';
+import { initThemeFeature } from './ui/theme.js';
+import { initKelirWayangFeature } from './ui/kelir-wayang.js';
 
 // ─── DOMAIN FEATURES & WIRING ─────────────────────────────────────────────
 import { wireKalenderFeature, initQuickTodayBadge } from './features/kalender.js';
+import { printLaporanKalender, downloadKalenderPdf, downloadKalenderPng, resetKalenderToday } from './modules/kalender/kalender-ui.js';
 import { wireJodohFeature } from './features/jodoh.js';
 import { wireSelametanFeature } from './features/selametan.js';
 import { wireAksaraFeature } from './features/aksara.js';
@@ -117,6 +120,15 @@ import {
   switchKompasViewMode
 } from './modules/sinengker/sinengker-ui.js';
 
+// ─── MITOLOGI NUSANTARA ───────────────────────────────────────────────────
+import {
+  initMitologiUI,
+  openMitologiModal,
+  closeMitologiModal,
+  copyMitologiStory,
+  toggleMitologiFontSize
+} from './modules/budaya/mitologi-ui.js';
+
 // ─── SAPA DINA & NUJUM VISUAL SHARE CARDS ──────────────────────────────────
 import {
   openSapaDinaShareModal,
@@ -131,11 +143,38 @@ import {
   downloadNujumPokemonCardPng,
   shareNujumPokemonCard,
   onNujumPokemonOptionChange,
-  onNujumPokemonNameInput
+  onNujumPokemonNameInput,
+  generateDraftKartuKarakter,
+  drawKartuKarakter,
+  openKartuKarakterModal,
+  closeKartuKarakterModal,
+  downloadKartuKarakterPng,
+  shareKartuKarakter
 } from './modules/nujum/nujum-share-card.js';
+
+// ─── 12 BATARA-BATARI (PADEWAN SIKLUS) ────────────────────────────────────
+import {
+  openPadewanModal,
+  closePadewanModal,
+  selectPadewanCard,
+  renderPadewanGrid,
+  renderPadewanDetail
+} from './modules/budaya/padewan-ui.js';
 
 // ─── INITIAL WIRING TO WINDOW (THIN WRAPPERS UNTUK INLINE HTML ONCLICK) ────
 if (typeof window !== 'undefined') {
+  window.openPadewanModal = openPadewanModal;
+  window.closePadewanModal = closePadewanModal;
+  window.selectPadewanCard = selectPadewanCard;
+  window.renderPadewanGrid = renderPadewanGrid;
+  window.renderPadewanDetail = renderPadewanDetail;
+
+  window.generateDraftKartuKarakter = generateDraftKartuKarakter;
+  window.drawKartuKarakter = drawKartuKarakter;
+  window.openKartuKarakterModal = openKartuKarakterModal;
+  window.closeKartuKarakterModal = closeKartuKarakterModal;
+  window.downloadKartuKarakterPng = downloadKartuKarakterPng;
+  window.shareKartuKarakter = shareKartuKarakter;
   window.showToast = showToast;
   window.copyToClipboard = copyToClipboard;
   window.toggleLanguage = toggleLanguage;
@@ -151,6 +190,12 @@ if (typeof window !== 'undefined') {
   window.showOnboardingModal = showOnboardingModal;
   window.closeOnboardingModal = closeOnboardingModal;
   window.pilihModeAwal = pilihModeAwal;
+
+  // Kalender Jawa Export Bindings
+  window.printLaporanKalender = printLaporanKalender;
+  window.downloadKalenderPdf = downloadKalenderPdf;
+  window.downloadKalenderPng = downloadKalenderPng;
+  window.resetKalenderToday = resetKalenderToday;
 
   // Pustaka Dongo, Usada & Kautaman bindings
   window.initPustakaUI = initPustakaUI;
@@ -189,6 +234,13 @@ if (typeof window !== 'undefined') {
   window.openKompasImageZoomModal = openKompasImageZoomModal;
   window.closeKompasImageZoomModal = closeKompasImageZoomModal;
   window.switchKompasViewMode = switchKompasViewMode;
+
+  // Mitologi Nusantara bindings
+  window.initMitologiUI = initMitologiUI;
+  window.openMitologiModal = openMitologiModal;
+  window.closeMitologiModal = closeMitologiModal;
+  window.copyMitologiStory = copyMitologiStory;
+  window.toggleMitologiFontSize = toggleMitologiFontSize;
 
   // Wuku Category Filter dispatcher
   window.setWukuCategoryFilter = async function(category) {
@@ -379,6 +431,12 @@ if (typeof window !== 'undefined') {
           window.initSinengkerUI('sinengkerContainer');
         }
         break;
+
+      case 'mitologi':
+        if (typeof window.initMitologiUI === 'function') {
+          window.initMitologiUI('mitologiPillarsGrid');
+        }
+        break;
     }
   });
 }
@@ -416,6 +474,17 @@ export function bootstrap() {
   if (typeof window.initOmahUI === 'function') window.initOmahUI();
   if (typeof window.initTernakUI === 'function') window.initTernakUI();
   if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI();
+  if (typeof window.initMitologiUI === 'function') window.initMitologiUI();
+
+  // Inisialisasi Fitur Tema & Kelir Wayang Panggung
+  initThemeFeature();
+  initKelirWayangFeature();
+
+  // Inisialisasi default tanggal wafat hari ini bila belum terisi
+  const tglWafatInput = document.getElementById('tglWafatInput');
+  if (tglWafatInput && !tglWafatInput.value) {
+    tglWafatInput.value = new Date().toISOString().slice(0, 10);
+  }
 
   // Inisialisasi dropdown Tahun Hitung Nujum agar selalu terisi sejak awal
   const selTahun = document.getElementById('tahunHitungKepribadian');

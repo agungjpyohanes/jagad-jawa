@@ -170,6 +170,6 @@ describe('Fitur Mode Pemula vs Mode Ahli (Ringkas vs Lengkap)', () => {
     assert.ok(html.includes('ahli-only'), 'index.html harus menggunakan class ahli-only');
     assert.ok(html.includes('subTabNujumNonJodoh') && html.includes('ahli-only'), 'subTabNujumNonJodoh harus berkelas ahli-only');
     assert.ok(html.includes('btnPrintKepribadianLengkap') && html.includes('ahli-only'), 'btnPrintKepribadianLengkap harus berkelas ahli-only');
-    assert.ok(html.includes('btnPrintKalenderParchment') && html.includes('ahli-only'), 'btnPrintKalenderParchment harus berkelas ahli-only');
+    assert.ok((html.includes('btnPrintKalenderPdf') || html.includes('btnPrintKalenderParchment')) && html.includes('ahli-only'), 'btnPrintKalenderPdf harus berkelas ahli-only');
   });
 });

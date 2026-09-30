@@ -11,6 +11,16 @@ import {
   resolveSiklus12
 } from '../../data/dewa-kanon.js';
 
+import {
+  getShioSvgIllustration,
+  getWuXingSvgIllustration
+} from '../../data/shio-wuxing-art.js';
+
+import {
+  MASTER_SHIO_DETAIL
+} from '../../data/shio-elemen-master-data.js';
+
+
 export const PADEWAN_REF_DATA = [
   { nama: "Sri", neptu: 1, arti: "Welas asih, lumaku becik, murah rejeki, remen tetulung.", lambang: "Dewi Sri (Dewi Kemakmuran & Kesuburan)", dewa: "Bathara Sri", sifat: "Penyabar, penuh belas kasih, menyejukkan hati sesama." },
   { nama: "Indra", neptu: 2, arti: "Teliti, angkuh, luhur pangkate, remen pasinaon.", lambang: "Bathara Indra (Dewa Keindahan & Pengetahuan)", dewa: "Bathara Indra", sifat: "Cermat, berwawasan luas, berwibawa namun perlu menjaga kerendahan hati." },
@@ -222,7 +232,7 @@ export function renderEnsiklopediaTabContent() {
                 : '<span class="text-[9.5px] px-2 py-0.5 rounded-full bg-sky-950/80 text-sky-300 border border-sky-800/60 font-semibold font-mono">Batara</span>';
 
               return `
-                <div class="p-3 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition flex flex-col items-center text-center space-y-2 group shadow-md">
+                <div onclick="window.openPadewanModal && window.openPadewanModal('${label}')" role="button" class="p-3 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada transition flex flex-col items-center text-center space-y-2 group shadow-md cursor-pointer hover:scale-102" title="Klik kagem mirsani rincian ${label}">
                   <div class="relative w-full overflow-hidden rounded-xl border border-prada/30 bg-sogan-950/70 shadow">
                     <img 
                       src="${imgUrl}" 
@@ -362,25 +372,83 @@ export function renderEnsiklopediaTabContent() {
       break;
 
     case 'shio':
+      const shioList = ['Tikus', 'Kerbau', 'Macan', 'Kelinci', 'Naga', 'Ular', 'Kuda', 'Kambing', 'Monyet', 'Ayam', 'Anjing', 'Babi'];
+      const wuXingList = [
+        { nama: 'Kayu (Wood)', key: 'Kayu', pancer: 'Wetan / Timur', watak: 'Idealis, kolaboratif, moril luhur, lan ngrembaka kados wit ageng.', sifat: 'Ngasilaken geni, diserep dening logam' },
+        { nama: 'Api (Fire)', key: 'Api', pancer: 'Kidul / Selatan', watak: 'Kharismatik, kebak semangat, dinamis, lan mrebawani minangka panuntun.', sifat: 'Ngasilaken lemah/awu, dipun padamaken banyu' },
+        { nama: 'Tanah (Earth)', key: 'Tanah', pancer: 'Pusat / Tengah', watak: 'Sentosa, sabar, saged dipun pitados, lan njagi katentreman.', sifat: 'Ngasilaken logam, dipun tembus oyod kayu' },
+        { nama: 'Logam (Metal)', key: 'Logam', pancer: 'Kulon / Barat', watak: 'Tegas, mandiri, disiplin waja, lan kukuh ing paugeran keadilan.', sifat: 'Ngasilaken banyu/embun, dipun lebur geni' },
+        { nama: 'Air (Water)', key: 'Air', pancer: 'Lor / Utara', watak: 'Wicaksana, luwes adaptif, cerdas ing rembagan, lan jero kawruhipun.', sifat: 'Ngasuh tetuwuhan kayu, dipun bendung lemah' }
+      ];
+
       body.innerHTML = `
-        <div class="space-y-4">
-          <div class="p-4 rounded-xl bg-keraton border border-sogan-800 text-xs text-sogan-300 leading-relaxed">
+        <div class="space-y-6">
+          <div class="p-4 rounded-xl bg-keraton border border-sogan-800 text-xs text-sogan-300 leading-relaxed shadow">
             <strong class="text-prada block font-marcellus text-sm mb-1">Zodiak Tionghoa (12 Shio) &amp; Teori 5 Elemen Wu Xing</strong>
-            Dinamika keselarasan shio kelahiran (Tikus dumugi Babi) sarta 5 Elemen Kosmis: Kayu (Mu), Geni (Huo), Lemah (Tu), Logam (Jin), lan Banyu (Shui).
+            Dinamika keselarasan shio kelahiran (Tikus dumugi Babi) sarta 5 Elemen Kosmis: Kayu (Mu), Geni (Huo), Lemah (Tu), Logam (Jin), lan Banyu (Shui). Rujukan akulturasi budaya pesisiran Jawa ingkang jumbuh kaliyan petungan primbon weton.
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
-            ${['Tikus', 'Kerbau', 'Macan', 'Kelinci', 'Naga', 'Ular', 'Kuda', 'Kambing', 'Monyet', 'Ayam', 'Anjing', 'Babi'].map((s, i) => `
-              <div class="p-4 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/50 transition space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <strong class="font-marcellus text-base text-amber-300">Shio ${s}</strong>
-                  <span class="text-[10px] font-mono text-sogan-400">#${i + 1}</span>
-                </div>
-                <p class="text-sogan-200 text-[11px] leading-relaxed">
-                  Siklus 12 tahunan zodiak Tionghoa kang asring dipadukan dening masyarakat pesisiran Jawa ing tradisi akulturasi peradaban Nusantara.
-                </p>
-              </div>
-            `).join('')}
+
+          <!-- Bagian 1: 12 Shio Kelahiran & Karakteristik -->
+          <div class="space-y-3">
+            <h4 class="font-marcellus text-sm font-bold text-prada flex items-center gap-2">
+              <i class="fa-solid fa-paw text-amber-400"></i> Ensiklopedia 12 Shio Kelahiran
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 text-xs">
+              ${shioList.map((s, i) => {
+                const dt = (typeof MASTER_SHIO_DETAIL !== 'undefined' && MASTER_SHIO_DETAIL[s]) ? MASTER_SHIO_DETAIL[s] : {};
+                const svg = getShioSvgIllustration(s);
+                return `
+                  <div class="p-4 rounded-2xl bg-wulung border border-sogan-800 hover:border-prada/60 transition flex flex-col justify-between space-y-3 group shadow">
+                    <div class="flex items-center gap-3">
+                      <div class="w-14 h-14 rounded-xl bg-sogan-950 border border-prada/40 p-1 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                        ${svg}
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="flex items-center justify-between">
+                          <strong class="font-marcellus text-base text-amber-300">Shio ${s}</strong>
+                          <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-1.5 py-0.5 rounded border border-sogan-700">#${i + 1}</span>
+                        </div>
+                        <span class="text-[10.5px] text-sogan-300 block mt-0.5">Elemen Tetap: <strong>${dt.elemenTetap || '-'}</strong></span>
+                      </div>
+                    </div>
+                    <div class="space-y-1.5 text-[11px] border-t border-sogan-800/80 pt-2.5">
+                      <p class="text-sogan-200"><strong>Watak:</strong> ${dt.sifatDasar || '-'}</p>
+                      <p class="text-emerald-300/90"><strong>Karier:</strong> ${dt.karir || '-'}</p>
+                      <p class="text-amber-200/90"><strong>Jodoh:</strong> ${dt.jodoh || '-'}</p>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
           </div>
+
+          <!-- Bagian 2: 5 Elemen Kosmis Wu Xing -->
+          <div class="space-y-3 pt-2">
+            <h4 class="font-marcellus text-sm font-bold text-prada flex items-center gap-2">
+              <i class="fa-solid fa-yin-yang text-amber-400"></i> Teori 5 Elemen Kosmis (Wu Xing)
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs">
+              ${wuXingList.map(el => {
+                const elSvg = getWuXingSvgIllustration(el.key);
+                return `
+                  <div class="p-3.5 rounded-2xl bg-wulung border border-sogan-800 hover:border-amber-400/60 transition flex flex-col items-center text-center space-y-2.5 shadow">
+                    <div class="w-12 h-12 rounded-xl bg-sogan-950 border border-prada/40 p-1 flex items-center justify-center shrink-0 shadow-inner">
+                      ${elSvg}
+                    </div>
+                    <div>
+                      <strong class="font-marcellus text-sm text-prada block">${el.nama}</strong>
+                      <span class="text-[10px] text-amber-300 font-mono">${el.pancer}</span>
+                    </div>
+                    <p class="text-sogan-200 text-[10.5px] leading-relaxed">${el.watak}</p>
+                    <div class="w-full pt-1.5 border-t border-sogan-800/60 text-[10px] text-sogan-400 italic">
+                      ${el.sifat}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+
         </div>
       `;
       break;

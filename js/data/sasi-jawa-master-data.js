@@ -105,4 +105,4 @@ if (typeof window !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { MASTER_SASI_JAWA, getWatakSasiJawa };
 }
-
+export { MASTER_SASI_JAWA, SASI_LOOKUP, getWatakSasiJawa };

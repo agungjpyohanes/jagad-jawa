@@ -336,13 +336,52 @@ export function namaKeAksaraList(nama) {
     while (i < kata.length) {
       const c = kata[i];
       if (VOKAL.includes(c)) { hasil.push("HA"); i++; continue; }
+
+      // Cek gugus konsonan dengan cakra ('r') atau pasangan dwihuruf ('ny', 'ng', 'dh', 'th')
+      let cluster = '';
+      if (i + 2 < kata.length && !VOKAL.includes(kata[i + 1]) && VOKAL.includes(kata[i + 2])) {
+        const twoKons = kata.substring(i, i + 2);
+        if (['ny', 'ng', 'dh', 'th'].includes(twoKons)) {
+          cluster = twoKons;
+        } else if (kata[i + 1] === 'r') {
+          // Sandhangan Cakra: pr-, kr-, jr-, tr-, br-, gr-, dr-, sr-, dst.
+          // Dalam Faalakiah kanon, gugus ber-cakra dihitung sebagai aksara 'RA'
+          cluster = 'cakra_r';
+        }
+      }
+
+      if (cluster === 'cakra_r') {
+        hasil.push('RA');
+        i += 2; // lewati konsonan awal dan 'r'
+        if (i < kata.length && VOKAL.includes(kata[i])) {
+          i++;
+          if (i < kata.length && VOKAL.includes(kata[i])) i++;
+        }
+        continue;
+      }
+
       let kons = c;
-      let next = kata[i + 1] || "";
-      if ((c === "n" && next === "y") || (c === "n" && next === "g") || (c === "d" && next === "h") || (c === "t" && next === "h")) {
-        kons = c + next; i += 2;
-      } else { i += 1; }
-      if (i < kata.length && VOKAL.includes(kata[i])) { i++; if (i < kata.length && VOKAL.includes(kata[i])) i++; }
-      else { continue; }
+      if (cluster) {
+        kons = cluster;
+        i += 2;
+      } else {
+        const next = kata[i + 1] || "";
+        if ((c === "n" && next === "y") || (c === "n" && next === "g") || (c === "d" && next === "h") || (c === "t" && next === "h")) {
+          kons = c + next;
+          i += 2;
+        } else {
+          i += 1;
+        }
+      }
+
+      if (i < kata.length && VOKAL.includes(kata[i])) {
+        i++;
+        if (i < kata.length && VOKAL.includes(kata[i])) i++;
+      } else {
+        // Konsonan mati di akhir suku kata / kata (sigegan / pasangan pangkon)
+        continue;
+      }
+
       const mapKons = {
         "h": "HA", "n": "NA", "c": "CA", "r": "RA", "k": "KA", "d": "DA", "t": "TA", "s": "SA",
         "w": "WA", "l": "LA", "p": "PA", "j": "JA", "y": "YA", "m": "MA", "g": "GA", "b": "BA",
@@ -356,7 +395,7 @@ export function namaKeAksaraList(nama) {
 
 export function getFaalakiah(nama) {
   const aksaraList = namaKeAksaraList(nama);
-  if (aksaraList.length === 0) return { kode: 0, nabi: NABI_FAAL[0], desc: FAAL_DESC[0], aksaraStr: "-", sum: 0 };
+  if (aksaraList.length === 0) return { kode: 0, nabi: NABI_FAAL[0], desc: FAAL_DESC[0], aksaraStr: "-", aksaraHyphenated: "-", sum: 0 };
   let sum = 0;
   for (const ak of aksaraList) sum += (AKSARA_FAAL[ak] || 1);
   const kode = sum % 12;
@@ -365,6 +404,7 @@ export function getFaalakiah(nama) {
     nabi: NABI_FAAL[kode] || NABI_FAAL[0],
     desc: FAAL_DESC[kode] || FAAL_DESC[0],
     aksaraStr: aksaraList.join(" "),
+    aksaraHyphenated: aksaraList.map(a => a.toLowerCase()).join(" - "),
     sum
   };
 }
@@ -376,9 +416,7 @@ export const UNICODE_JAWA_TO_FAAL = {
   'ꦩ': 'MA', 'ꦒ': 'GA', 'ꦧ': 'BA', 'ꦛ': 'THA', 'ꦔ': 'NGA',
   'ꦟ': 'NA', 'ꦑ': 'KA', 'ꦡ': 'TA', 'ꦰ': 'SA',
   'ꦦ': 'PA', 'ꦘ': 'NYA', 'ꦓ': 'GA', 'ꦨ': 'BA',
-  'ꦄ': 'HA', 'ꦅ': 'HA', 'ꦈ': 'HA', 'ꦌ': 'HA', 'ꦎ': 'HA',
-  'ꦂ': 'RA', 'ꦁ': 'NGA', 'ꦃ': 'HA',
-  'ꦿ': 'RA', 'ꦽ': 'RA', 'ꦾ': 'YA'
+  'ꦄ': 'HA', 'ꦅ': 'HA', 'ꦈ': 'HA', 'ꦌ': 'HA', 'ꦎ': 'HA'
 };
 
 export function parseAksaraForFaalakiah(text) {
@@ -387,8 +425,35 @@ export function parseAksaraForFaalakiah(text) {
   const jawaChars = clean.match(/[\uA980-\uA9DF]/g);
   if (jawaChars && jawaChars.length > 0) {
     const list = [];
-    for (const ch of jawaChars) {
+    for (let i = 0; i < clean.length; i++) {
+      const ch = clean[i];
       if (UNICODE_JAWA_TO_FAAL[ch]) {
+        let isDead = false;
+        let isCakraKeret = false;
+
+        // Periksa modifier setelah aksara ini hingga aksara berikutnya atau spasi
+        for (let j = i + 1; j < clean.length; j++) {
+          const nextCh = clean[j];
+          if (nextCh === '꧀') {
+            // Pangkon (konsonan mati / sigegan), jangan dihitung
+            isDead = true;
+            break;
+          } else if (nextCh === 'ꦿ' || nextCh === 'ꦽ') {
+            // Sandhangan Cakra atau Keret
+            isCakraKeret = true;
+            break;
+          } else if (UNICODE_JAWA_TO_FAAL[nextCh] || nextCh === ' ' || nextCh === '\n' || nextCh === '\t') {
+            break;
+          }
+        }
+
+        if (isDead) {
+          continue;
+        }
+        if (isCakraKeret) {
+          list.push('RA');
+          continue;
+        }
         list.push(UNICODE_JAWA_TO_FAAL[ch]);
       }
     }

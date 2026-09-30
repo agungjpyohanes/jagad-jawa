@@ -64,7 +64,7 @@ function clearDismissState() {
  * @returns {string}
  */
 export function buildSapaDinaShareText(data) {
-  const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr, petungTetanen } = data;
+  const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr, petungTetanen, arahKolo } = data;
   return (
     `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
     `_Ringkasan Harian Kalender Jawa_\n\n` +
@@ -72,6 +72,7 @@ export function buildSapaDinaShareText(data) {
     `⭐ *Weton:* ${wetonDisplay}\n` +
     `🔢 *Neptu:* ${neptu} (${data.neptuBreakdown})\n` +
     `🪐 *Wuku:* ${wukuDisplay} (${data.wukuNo}/30)\n` +
+    (arahKolo ? `🧭 *Arah Kala (Dununge Wuku):* ${arahKolo.arahJawa} (${arahKolo.arahIndonesia}) — ${arahKolo.pantangan}\n` : '') +
     `🌾 *Pranata Mangsa:* ${pranata.nama} — ${pranata.musimTani}\n` +
     (petungTetanen ? `🌱 *Petung Tetanen:* ${petungTetanen.kategoriLabel} (${petungTetanen.kangBecik}) — ${petungTetanen.tegese}\n` : '') +
     `🪶 *Candrasangkala:* "${pranata.candrasangkala}"\n` +
@@ -228,16 +229,17 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
 
   ctx.fillStyle = pillBg;
   ctx.beginPath();
-  ctx.roundRect(width / 2 - 170, 282, 340, 32, 16);
+  ctx.roundRect(width / 2 - 275, 280, 550, 32, 16);
   ctx.fill();
   ctx.strokeStyle = pillBorder;
   ctx.lineWidth = 1.5;
   ctx.stroke();
 
   ctx.fillStyle = pillText;
-  ctx.font = 'bold 13px sans-serif';
+  ctx.font = 'bold 12px sans-serif';
   const statusStr = `${data.dinoStatus?.icon || '★'} ${data.dinoStatus?.label || ''}${data.dinoStatus?.specialLabel ? ' · ' + data.dinoStatus.specialLabel : ''}`;
-  ctx.fillText(statusStr, width / 2, 303);
+  const arahStr = data.arahKolo ? `  |  🧭 Arah Kala: ${data.arahKolo.arahJawa} (${data.arahKolo.arahIndonesia})` : '';
+  ctx.fillText(`${statusStr}${arahStr}`, width / 2, 301);
 
   // 6. Pranata Mangsa Section
   let curY = 350;
@@ -713,6 +715,28 @@ function renderExpandedCard(containerId, data) {
               </div>
             </div>
           </div>
+
+          <!-- Arah Kolo (Dununge Kala Wuku Kosmologi) -->
+          ${data.arahKolo ? `
+          <div class="px-3.5 py-2.5 rounded-xl ${data.arahKolo.isNgisor ? 'bg-red-950/40 border-red-500/40' : 'bg-sogan-900/50 border-sogan-700/60'} border space-y-1.5 transition">
+            <div class="flex items-center justify-between">
+              <div class="font-mono text-[10px] font-bold uppercase tracking-wider ${data.arahKolo.isNgisor ? 'text-red-400' : 'text-amber-400'} flex items-center gap-1.5">
+                <i class="fa-solid fa-compass ${data.arahKolo.isNgisor ? 'text-red-400 animate-pulse' : 'text-amber-400'}"></i>
+                <span>Arah Kolo (Dununge Kala)</span>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${data.arahKolo.isNgisor ? 'bg-red-900/70 text-red-200 border border-red-600/60' : 'bg-sogan-950 text-prada border border-prada/40'} font-mono">
+                ${data.arahKolo.icon} ${data.arahKolo.arahJawa}
+              </span>
+            </div>
+            <div class="text-xs text-sogan-100 font-medium flex items-center gap-1.5">
+              <span class="text-sogan-400">Letak Kala:</span>
+              <strong class="${data.arahKolo.isNgisor ? 'text-red-200' : 'text-prada-light'}">${data.arahKolo.arahJawa}</strong>
+              <span class="text-sogan-400">(${data.arahKolo.arahIndonesia})</span>
+            </div>
+            <div class="text-[11px] ${data.arahKolo.isNgisor ? 'text-red-300 font-semibold' : 'text-sogan-300'} leading-relaxed">
+              ⚠️ ${data.arahKolo.pantangan}
+            </div>
+          </div>` : ''}
 
           <!-- Status Dino Ijo / Abang -->
           <div class="px-4 py-3 rounded-xl ${theme.statusBg} border ${theme.statusBorder}">

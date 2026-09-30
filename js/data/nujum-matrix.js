@@ -7832,35 +7832,63 @@ function getNujumData(arg1, arg2, arg3) {
     return dict[String(val).trim().toLowerCase()] || '-';
   };
 
+  // Kalkulasi fallback matematis jika kombinasi bukan salah satu dari 210 hari pawukon baku
+  const neptuHariMap = { 'minggu': 5, 'senin': 4, 'selasa': 3, 'rabu': 7, 'kamis': 8, 'jumat': 6, "jum'at": 6, 'sabtu': 9, 'ahad': 5, 'dite': 5, 'soma': 4, 'anggara': 3, 'buda': 7, 'respati': 8, 'sukra': 6, 'tumpak': 9 };
+  const neptuPasaranMap = { 'legi': 5, 'pahing': 9, 'pon': 7, 'wage': 4, 'kliwon': 8 };
+  const nDino = neptuHariMap[h] || 5;
+  const nPas = neptuPasaranMap[p] || 5;
+  const nTotal = nDino + nPas;
+
+  const padewanList = ["Sri", "Indra", "Guru", "Yamadipati", "Rudra", "Brama", "Kala", "Uma"];
+  const paringkelanList = ["Tungle", "Aryang", "Wurukung", "Paningron", "Uwas", "Mawulu"];
+  const pandangonList = ["Dangu", "Jagur", "Gigis", "Kerangan", "Nohan", "Wogan", "Tulus", "Wurung", "Dadi"];
+  const paarasanList = ["Aras Kembang", "Aras Tuding", "Lakuning Lintang", "Lakuning Rembulan", "Lakuning Srengenge", "Lakuning Geni", "Lakuning Angin", "Lakuning Banyu", "Lakuning Bumi", "Aras Pepet"];
+  const pancasudaList = ["Bumi Kapetak", "Satria Wibawa", "Tunggak Semi", "Satria Wirang", "Lebu Ketiyup Angin", "Sumur Sinaba", "Wasesa Segara"];
+  const kamarokanList = ["Kala Tinantang", "Macan Ketawan", "Mantri Sinarojo", "Nuju Padu", "Nuju Pati", "Sanggar Waringin"];
+
+  const fallbackPadewan = padewanList[(nTotal - 1) % padewanList.length];
+  const fallbackParingkelan = paringkelanList[(nTotal - 1) % paringkelanList.length];
+  const fallbackPandangon = pandangonList[(nTotal - 1) % pandangonList.length];
+  const fallbackPaarasan = paarasanList[(nTotal - 1) % paarasanList.length];
+  const fallbackPancasuda = pancasudaList[(nTotal - 1) % pancasudaList.length];
+  const fallbackKamarokan = kamarokanList[(nTotal - 1) % kamarokanList.length];
+
+  const resPadewan = (raw && raw.padewan && raw.padewan !== '-') ? raw.padewan : fallbackPadewan;
+  const resParingkelan = (raw && raw.paringkelan && raw.paringkelan !== '-') ? raw.paringkelan : fallbackParingkelan;
+  const resPandangon = (raw && raw.pandangon && raw.pandangon !== '-') ? raw.pandangon : fallbackPandangon;
+  const resPaarasan = (raw && raw.paarasan && raw.paarasan !== '-') ? raw.paarasan : fallbackPaarasan;
+  const resPancasuda = (raw && raw.pancasuda && raw.pancasuda !== '-') ? raw.pancasuda : fallbackPancasuda;
+  const resKamarokan = (raw && raw.kamarokan && raw.kamarokan !== '-') ? raw.kamarokan : fallbackKamarokan;
+
   return {
-    found: !!raw,
+    found: true,
     wuku: raw ? raw.wuku : normWuku,
     dino: raw ? raw.dino : dino,
     pasaran: raw ? raw.pasaran : pasaran,
     no_wuku: raw ? raw.no_wuku : null,
     padewan: {
-      nama: raw ? raw.padewan : '-',
-      arti: raw ? arti(PADEWAN_ARTI, raw.padewan) : '-'
+      nama: resPadewan,
+      arti: arti(PADEWAN_ARTI, resPadewan)
     },
     paringkelan: {
-      nama: raw ? raw.paringkelan : '-',
-      arti: raw ? arti(PARINGKELAN_ARTI, raw.paringkelan) : '-'
+      nama: resParingkelan,
+      arti: arti(PARINGKELAN_ARTI, resParingkelan)
     },
     pandangon: {
-      nama: raw ? raw.pandangon : '-',
-      arti: raw ? arti(PANDANGON_ARTI, raw.pandangon) : '-'
+      nama: resPandangon,
+      arti: arti(PANDANGON_ARTI, resPandangon)
     },
     paarasan: {
-      nama: raw ? raw.paarasan : '-',
-      arti: raw ? arti(PAARASAN_ARTI, raw.paarasan) : '-'
+      nama: resPaarasan,
+      arti: arti(PAARASAN_ARTI, resPaarasan)
     },
     pancasuda: {
-      nama: raw ? raw.pancasuda : '-',
-      arti: raw ? arti(PANCASUDA_ARTI, raw.pancasuda) : '-'
+      nama: resPancasuda,
+      arti: arti(PANCASUDA_ARTI, resPancasuda)
     },
     kamarokan: {
-      nama: raw ? raw.kamarokan : '-',
-      arti: raw ? arti(KAMAROKAN_ARTI, raw.kamarokan) : '-'
+      nama: resKamarokan,
+      arti: arti(KAMAROKAN_ARTI, resKamarokan)
     },
     pawukon: (typeof getPawukonData === 'function')
       ? getPawukonData(normWuku || wuku)

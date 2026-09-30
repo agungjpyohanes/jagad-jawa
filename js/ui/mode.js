@@ -105,18 +105,21 @@ export function applyModeToUI(targetMode) {
     const btnEl = document.getElementById('modeToggleBtn');
 
     if (textEl) {
-      textEl.textContent = currentMode === MODE_PEMULA ? 'Mode: Ringkas' : 'Mode: Lengkap';
+      textEl.textContent = currentMode === MODE_PEMULA ? 'Ringkas' : 'Lengkap';
     }
     if (textShortEl) {
       textShortEl.textContent = currentMode === MODE_PEMULA ? 'Ringkas' : 'Lengkap';
     }
-    if (iconEl) {
-      iconEl.className = currentMode === MODE_PEMULA ? 'fa-solid fa-leaf text-emerald-400' : 'fa-solid fa-sliders text-amber-400';
+    if (iconEl && !iconEl.classList.contains('fa-file-pdf')) {
+      iconEl.className = currentMode === MODE_PEMULA ? 'fa-solid fa-leaf text-emerald-400 text-xs' : 'fa-solid fa-sliders text-amber-400 text-xs';
     }
     if (btnEl) {
-      btnEl.setAttribute('aria-label', currentMode === MODE_PEMULA ? 'Mode Ringkas aktif. Klik untuk beralih ke Mode Lengkap' : 'Mode Lengkap aktif. Klik untuk beralih ke Mode Ringkas');
-      btnEl.setAttribute('title', currentMode === MODE_PEMULA ? 'Mode Ringkas (Klik kanggé ngalih Mode Lengkap)' : 'Mode Lengkap (Klik kanggé ngalih Mode Ringkas)');
+      btnEl.setAttribute('aria-label', currentMode === MODE_PEMULA ? 'Pusat Laporan & Mode: Ringkas' : 'Pusat Laporan & Mode: Lengkap');
+      btnEl.setAttribute('title', currentMode === MODE_PEMULA ? 'Pusat Laporan & Mode Ringkas (Klik kanggé mbikak menu)' : 'Pusat Laporan & Mode Lengkap (Klik kanggé mbikak menu)');
     }
+
+    // Perbarui status checkmark di dropdown menu Laporan & Mode
+    updateHeaderLaporanMenuUI();
 
     // Perbarui label tombol switcher di Mobile Menu jika ada
     const mobileTextEl = document.getElementById('mobileModeToggleText');
@@ -208,6 +211,98 @@ export function initModeFeature() {
   }
 }
 
+/**
+ * Buka / tutup dropdown menu terpadu Laporan & Mode di header
+ * @param {Event} [event]
+ */
+export function toggleHeaderLaporanMenu(event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  const menu = document.getElementById('headerLaporanMenu');
+  const btn = document.getElementById('modeToggleBtn');
+  if (!menu) return;
+
+  const isHidden = menu.classList.contains('hidden');
+  if (isHidden) {
+    menu.classList.remove('hidden');
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+    updateHeaderLaporanMenuUI();
+  } else {
+    menu.classList.add('hidden');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+/**
+ * Tutup dropdown menu terpadu Laporan & Mode di header
+ */
+export function closeHeaderLaporanMenu() {
+  const menu = document.getElementById('headerLaporanMenu');
+  const btn = document.getElementById('modeToggleBtn');
+  if (menu) {
+    menu.classList.add('hidden');
+  }
+  if (btn) {
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+/**
+ * Perbarui indikator visual checkmark pada dropdown menu Laporan & Mode
+ */
+export function updateHeaderLaporanMenuUI() {
+  const current = getMode() || MODE_AHLI;
+  const checkPemula = document.getElementById('modeCheckPemula');
+  const checkAhli = document.getElementById('modeCheckAhli');
+
+  if (checkPemula) {
+    if (current === MODE_PEMULA) {
+      checkPemula.classList.remove('hidden');
+    } else {
+      checkPemula.classList.add('hidden');
+    }
+  }
+
+  if (checkAhli) {
+    if (current === MODE_AHLI) {
+      checkAhli.classList.remove('hidden');
+    } else {
+      checkAhli.classList.add('hidden');
+    }
+  }
+}
+
+/**
+ * Aksi cepat cetak laporan dari header
+ */
+export function cetakLaporanDariHeader() {
+  if (typeof window !== 'undefined') {
+    if (typeof window.printLaporan === 'function') {
+      window.printLaporan('parchment', 'Jagad Jawa — Serat Dokumen Laporan');
+    } else if (typeof window.switchTab === 'function') {
+      window.switchTab('laporan');
+    }
+  }
+}
+
+// Event listener global untuk menutup dropdown saat klik di luar atau tekan Escape
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    const container = document.getElementById('headerLaporanContainer');
+    if (container && !container.contains(e.target)) {
+      closeHeaderLaporanMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeHeaderLaporanMenu();
+    }
+  });
+}
+
 // Hubungkan ke namespace global / window agar kompatibel dengan pemanggilan inline HTML
 if (typeof window !== 'undefined') {
   window.getMode = getMode;
@@ -221,4 +316,8 @@ if (typeof window !== 'undefined') {
   window.closeOnboardingModal = closeOnboardingModal;
   window.pilihModeAwal = pilihModeAwal;
   window.initModeFeature = initModeFeature;
+  window.toggleHeaderLaporanMenu = toggleHeaderLaporanMenu;
+  window.closeHeaderLaporanMenu = closeHeaderLaporanMenu;
+  window.updateHeaderLaporanMenuUI = updateHeaderLaporanMenuUI;
+  window.cetakLaporanDariHeader = cetakLaporanDariHeader;
 }

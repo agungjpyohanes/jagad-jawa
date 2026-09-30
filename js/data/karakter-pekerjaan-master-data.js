@@ -754,3 +754,26 @@
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
+const _rootKP = (typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {}));
+export const MASTER_KARAKTER_DASAR = _rootKP.MASTER_KARAKTER_DASAR;
+export const MASTER_DINA = _rootKP.MASTER_DINA;
+export const MASTER_PASARAN = _rootKP.MASTER_PASARAN;
+export const MASTER_SIRIKAN_NEPTU = _rootKP.MASTER_SIRIKAN_NEPTU;
+export const MASTER_SIRIKAN_DINA = _rootKP.MASTER_SIRIKAN_DINA;
+export const LIST_AKSARA_CARAKAN = _rootKP.LIST_AKSARA_CARAKAN;
+export const MASTER_AKSARA_FAAL = _rootKP.MASTER_AKSARA_FAAL;
+export const MASTER_PALENGGAHAN = _rootKP.MASTER_PALENGGAHAN;
+export const MASTER_PEKERJAAN = _rootKP.MASTER_PEKERJAAN;
+export const MASTER_PAKARTI_REJEKI = _rootKP.MASTER_PAKARTI_REJEKI;
+export const MASTER_PAKARTI_BADAN = _rootKP.MASTER_PAKARTI_BADAN;
+export const hitungKarakterDasar = _rootKP.hitungKarakterDasar;
+export const getPakartiBadanArtinya = _rootKP.getPakartiBadanArtinya;
+export const getAksaraFromChar = _rootKP.getAksaraFromChar;
+export const parseAksaraFromWord = _rootKP.parseAksaraFromWord;
+export const analisisPalenggahan = _rootKP.analisisPalenggahan;
+export const getSirikanAdhepOmah = _rootKP.getSirikanAdhepOmah;
+export const getPekerjaanPakarti = _rootKP.getPekerjaanPakarti;
+export const getWatakDina = _rootKP.getWatakDina;
+export const getWatakPasaran = _rootKP.getWatakPasaran;
+

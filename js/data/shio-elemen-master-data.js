@@ -141,6 +141,7 @@
     return {
       tahun: yNum,
       shio: namaShio,
+      namaShio: namaShio,
       elemenTetap: detail.elemenTetap || "-",
       elemenTahun: wuXing.elemen,
       sifatElemen: wuXing.sifat,
@@ -168,3 +169,9 @@
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
+const _rootShio = (typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {}));
+export const MASTER_SHIO_DETAIL = _rootShio.MASTER_SHIO_DETAIL;
+export const MASTER_WU_XING_TAHUN = _rootShio.MASTER_WU_XING_TAHUN;
+export const getShioByYear = _rootShio.getShioByYear;
+

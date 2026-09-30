@@ -51,6 +51,7 @@ export async function ensureNujumLoaded() {
       window.hitungKomparasiNonJodoh = nujumUI.hitungKomparasiNonJodoh;
       window.renderKomparasiNonJodoh = nujumUI.renderKomparasiNonJodoh;
       window.printLaporanNujum = nujumUI.printLaporanNujum;
+      window.printLaporanNujumAuto = nujumUI.printLaporanNujumAuto;
       window.compareNonJodoh = nujumEngine.compareNonJodoh;
       window.getNujumSummaryRingkas = nujumEngine.getNujumSummaryRingkas;
       window.getNujumGlossary = nujumEngine.getNujumGlossary;
@@ -296,13 +297,23 @@ export function wireNujumFeature() {
   };
   window.hitungKomparasiNonJodoh = wrapperHitungKomparasi;
 
-  const wrapperPrintLaporan = async function (theme) {
+  const wrapperPrintLaporan = async function (theme, mode) {
     await ensureNujumLoaded();
     if (typeof window.printLaporanNujum === 'function' && window.printLaporanNujum !== wrapperPrintLaporan) {
-      window.printLaporanNujum(theme);
+      window.printLaporanNujum(theme, mode);
     }
   };
   window.printLaporanNujum = wrapperPrintLaporan;
+
+  const wrapperPrintLaporanAuto = async function (theme) {
+    await ensureNujumLoaded();
+    if (typeof window.printLaporanNujumAuto === 'function' && window.printLaporanNujumAuto !== wrapperPrintLaporanAuto) {
+      window.printLaporanNujumAuto(theme);
+    } else if (typeof window.printLaporanNujum === 'function') {
+      window.printLaporanNujum(theme);
+    }
+  };
+  window.printLaporanNujumAuto = wrapperPrintLaporanAuto;
 
   const wrapperOpenPokemonCard = async function (data) {
     await ensureNujumLoaded();

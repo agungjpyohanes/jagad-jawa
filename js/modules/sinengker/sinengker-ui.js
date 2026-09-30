@@ -22,9 +22,16 @@ import {
   getRuwatanBataraKalaData
 } from './sinengker-engine.js';
 
+import {
+  renderPustakaDongoView,
+  renderPustakaKautamanView,
+  renderPustakaUsadaView,
+  renderPustakaKalacakraView
+} from '../pustaka/pustaka-ui.js';
+
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 
-let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'ubarampe' | 'kawruh' | 'mantra'
+let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
 let kompasViewMode = 'presisi'; // 'presisi' | 'arsip'
 let lastKompasResult = null;
@@ -229,33 +236,53 @@ function renderSinengkerUnlockedContent(container) {
       <!-- Subtab Navigation Bar Sinengker (Multi-Row Wrap) -->
       <div class="flex flex-wrap items-center gap-2 pb-2 border-b border-sogan-800/80">
         <button
+          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('dongo')"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'dongo' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          <i class="fa-solid fa-scroll"></i> Dongo &amp; Wirid (12)
+        </button>
+        <button
+          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('kautaman')"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'kautaman' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          <i class="fa-solid fa-feather-pointed"></i> Kautamaning Laku (12)
+        </button>
+        <button
+          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('usada')"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'usada' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          <i class="fa-solid fa-mortar-pestle"></i> Usada &amp; Tamba (10)
+        </button>
+        <button
+          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('kalacakra')"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'kalacakra' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          <i class="fa-solid fa-shield-halved"></i> Rajah Kalacakra
+        </button>
+        <button
+          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('ruwatan')"
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'ruwatan' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          <i class="fa-solid fa-shield-cat"></i> Ruwat Murwakala (Batara Kala)
+        </button>
+        <button
           onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('kompas')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'kompas' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'kompas' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
           <i class="fa-solid fa-compass"></i> Petung Kompas Danyang
         </button>
         <button
-          onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('pustaka')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'pustaka' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
-          <i class="fa-solid fa-book-bookmark"></i> Pustaka Dongo, Usada &amp; Laku
-        </button>
-        <button
           onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('tumpeng')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'tumpeng' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'tumpeng' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
           <i class="fa-solid fa-bowl-rice"></i> Tumpeng Tombak Rojo
         </button>
         <button
           onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('ubarampe')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'ubarampe' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'ubarampe' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
           <i class="fa-solid fa-jar"></i> Tata Cara &amp; Ubarampe
         </button>
         <button
           onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('kawruh')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'kawruh' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'kawruh' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
           <i class="fa-solid fa-yin-yang"></i> Kawruh Batin &amp; Sangkan Paran
         </button>
         <button
           onclick="window.switchSinengkerSubtab && window.switchSinengkerSubtab('mantra')"
-          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 ${currentSinengkerSubtab === 'mantra' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
+          class="px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap transition flex items-center gap-2 cursor-pointer ${currentSinengkerSubtab === 'mantra' ? 'bg-gradient-to-r from-red-800 to-amber-700 text-white font-bold shadow-md' : 'bg-sogan-950/70 border border-sogan-800 text-sogan-300 hover:text-prada'}">
           <i class="fa-solid fa-wand-magic-sparkles"></i> Aji Mantra Sinengker (3)
         </button>
       </div>
@@ -272,7 +299,7 @@ function renderSinengkerUnlockedContent(container) {
 
 /**
  * Ganti sub-tab aktif di dalam modul Sinengker
- * @param {'kompas' | 'ruwatan' | 'pustaka' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'} subtab 
+ * @param {'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'ruwatan' | 'pustaka' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'} subtab 
  */
 export function switchSinengkerSubtab(subtab) {
   currentSinengkerSubtab = subtab;
@@ -288,11 +315,20 @@ function renderSinengkerCurrentSubtab() {
   if (!container) return;
 
   switch (currentSinengkerSubtab) {
+    case 'dongo':
+      renderPustakaDongoView(container);
+      break;
+    case 'kautaman':
+      renderPustakaKautamanView(container);
+      break;
+    case 'usada':
+      renderPustakaUsadaView(container);
+      break;
+    case 'kalacakra':
+      renderPustakaKalacakraView(container);
+      break;
     case 'ruwatan':
       renderSinengkerRuwatanView(container);
-      break;
-    case 'pustaka':
-      renderSinengkerPustakaView(container);
       break;
     case 'tumpeng':
       renderSinengkerTumpengView(container);

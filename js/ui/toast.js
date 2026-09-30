@@ -1,9 +1,11 @@
 // Toast Notification Utility
 
 export function showToast(msg) {
+  if (typeof document === 'undefined') return;
   const toast = document.getElementById('toastBox');
   if (!toast) return;
-  document.getElementById('toastMessage').innerText = msg;
+  const msgEl = document.getElementById('toastMessage');
+  if (msgEl) msgEl.innerText = msg;
   toast.classList.remove('translate-y-24', 'opacity-0');
   toast.classList.add('translate-y-0', 'opacity-100');
   setTimeout(() => {

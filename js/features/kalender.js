@@ -45,10 +45,12 @@ import {
   hapusBookmarkTanggal,
   renderBookmarkListPanel,
   printLaporanKalender,
+  downloadKalenderPdf,
   downloadKalenderPng,
   setKalenderViewMode,
   toggleKalenderViewMode,
-  renderKalenderListView
+  renderKalenderListView,
+  resetKalenderToday
 } from '../modules/kalender/kalender-ui.js';
 
 import {
@@ -130,10 +132,12 @@ export function wireKalenderFeature() {
   window.hapusBookmarkTanggal = hapusBookmarkTanggal;
   window.renderBookmarkListPanel = renderBookmarkListPanel;
   window.printLaporanKalender = printLaporanKalender;
+  window.downloadKalenderPdf = downloadKalenderPdf;
   window.downloadKalenderPng = downloadKalenderPng;
   window.setKalenderViewMode = setKalenderViewMode;
   window.toggleKalenderViewMode = toggleKalenderViewMode;
   window.renderKalenderListView = renderKalenderListView;
+  window.resetKalenderToday = resetKalenderToday;
 
   // Bookmark Service
   window.saveBookmark = saveBookmark;
@@ -193,10 +197,12 @@ export {
   hapusBookmarkTanggal,
   renderBookmarkListPanel,
   printLaporanKalender,
+  downloadKalenderPdf,
   downloadKalenderPng,
   setKalenderViewMode,
   toggleKalenderViewMode,
   renderKalenderListView,
+  resetKalenderToday,
   saveBookmark,
   deleteBookmark,
   getBookmarks,

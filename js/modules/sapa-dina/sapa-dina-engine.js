@@ -27,6 +27,7 @@ import {
   NEPTU_HARI,
   NEPTU_PASARAN,
   WUKU,
+  DUNUNGE,
   BULAN_MASEHI,
   GRID,
   getDinoWarnaStatus
@@ -74,6 +75,60 @@ export function getPituturHarian(seed) {
     };
   }
   return list[Math.abs(seed) % list.length];
+}
+
+/**
+ * Kamus pemetaan arah mata angin tradisional Jawa ke Bahasa Indonesia & ikon.
+ */
+const ARAH_TRANSLATION_MAP = {
+  'Lor Wetan':    { id: 'Timur Laut',   icon: '↗', derajat: 45 },
+  'Kulon':        { id: 'Barat',        icon: '←', derajat: 270 },
+  'Kidul Wetan':  { id: 'Tenggara',     icon: '↘', derajat: 135 },
+  'Ngisor':       { id: 'Bawah (Bumi)', icon: '⬇', derajat: null },
+  'Lor Kulon':    { id: 'Barat Laut',   icon: '↖', derajat: 315 },
+  'Duwur':        { id: 'Atas (Langit)',icon: '⬆', derajat: null },
+  'Lor':          { id: 'Utara',        icon: '↑', derajat: 0 },
+  'Kidul Kulon':  { id: 'Barat Daya',   icon: '↙', derajat: 225 },
+  'Wetan':        { id: 'Timur',        icon: '→', derajat: 90 },
+  'Kidul':        { id: 'Selatan',      icon: '↓', derajat: 180 }
+};
+
+/**
+ * Menghitung Arah Kolo (dununge wuku / letak Kala) berdasarkan indeks wuku (0-29).
+ * Pawukon membagi letak Kala pada setiap wuku sebagai pedoman mawas diri dan keselamatan.
+ *
+ * @param {number} wukuId — 0-based wuku index (0 = Sinta, ..., 29 = Watugunung)
+ * @returns {Object}
+ */
+export function getArahKolo(wukuId) {
+  const wId = (typeof wukuId === 'number' && wukuId >= 0 && wukuId < 30) ? wukuId : 0;
+  const arahJawa = (Array.isArray(DUNUNGE) && DUNUNGE[wId]) ? DUNUNGE[wId] : 'Lor Wetan';
+  const meta = ARAH_TRANSLATION_MAP[arahJawa] || { id: arahJawa, icon: '🧭', derajat: 0 };
+  const wukuNo = wId + 1;
+  const isNgisor = (wukuNo === 4 || wukuNo === 14 || wukuNo === 24);
+  const isDuwur = (arahJawa === 'Duwur');
+
+  let pantangan = `Aja marani dununge Kala (${arahJawa}) sajroning pitung dina lumampahing wuku iki.`;
+  if (isNgisor) {
+    pantangan = `Wuku kaping ${wukuNo} (${WUKU[wId]}): Kala ana ing ngisor, aja marani dununge wuku! Prayogi ngati-ati tumrap pakaryan bumi / lemah.`;
+  } else if (isDuwur) {
+    pantangan = `Kala ana ing dhuwur (langit), prayogi ngedohi lelungan adoh inggil utawa lelayaran ing dhuwur.`;
+  }
+
+  return {
+    wukuId: wId,
+    wukuNo,
+    wukuName: WUKU[wId] || '',
+    arahJawa,
+    arahIndonesia: meta.id,
+    icon: meta.icon,
+    derajat: meta.derajat,
+    isNgisor,
+    isDuwur,
+    pantangan,
+    tegese: `Dununge Kala miturut Pawukon mapan ing arah ${arahJawa} (${meta.id}).`,
+    labelDisplay: `${arahJawa} (${meta.id})`
+  };
 }
 
 /**
@@ -217,6 +272,9 @@ export function getSapaDinaData(date = new Date()) {
 
     // Petung Tetanen Tradisional (CSV Baru)
     petungTetanen: getPetungTetanen(tglLengkap.dino, tglLengkap.pas),
+
+    // Arah Kolo (Kosmologi Pawukon / Dununge Kala)
+    arahKolo: getArahKolo(wukuId),
 
     // Dino Status
     dinoStatus,

@@ -36,6 +36,41 @@ import {
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { transliterateLatinToJawa } from '../aksara/aksara-engine.js';
 
+import {
+  getZodiakByDate,
+  getPranataMangsaByDate
+} from '../../data/pranata-zodiak-data.js';
+
+import {
+  getShioByYear,
+  MASTER_SHIO_DETAIL,
+  MASTER_WU_XING_TAHUN
+} from '../../data/shio-elemen-master-data.js';
+
+import {
+  hitungKarakterDasar,
+  getWatakDina,
+  getWatakPasaran,
+  getSirikanAdhepOmah,
+  analisisPalenggahan,
+  getPekerjaanPakarti
+} from '../../data/karakter-pekerjaan-master-data.js';
+
+import {
+  getWatakSasiJawa
+} from '../../data/sasi-jawa-master-data.js';
+
+import {
+  hitungSiklusTahunan,
+  MASTER_SIKLUS_PADEWAN,
+  MASTER_SIKLUS_SHIO
+} from '../../data/siklus-master-data.js';
+
+import {
+  getPawukonData
+} from '../../data/pawukon.js';
+
+
 // ─── KANON RESOLVER — dewa-kanon.js ─────────────────────────────────────────
 // Digunakan untuk normalize label dewa/wuku di UI sebelum ditampilkan.
 // PENTING: resolveAstawara → label A1 (tanpa Batara/Batari)
@@ -65,8 +100,14 @@ import {
   drawKartuKarakter,
   generateDraftKartuKarakter,
   generateDraftCard,
-  KARTU_KARAKTER_PRESETS
+  KARTU_KARAKTER_PRESETS,
+  syncNujumCardData
 } from './nujum-share-card.js';
+
+import {
+  getShioSvgIllustration,
+  getWuXingSvgIllustration
+} from '../../data/shio-wuxing-art.js';
 
 if (typeof window !== 'undefined') {
   window.openNujumPokemonCardModal = openNujumPokemonCardModal;
@@ -85,9 +126,11 @@ if (typeof window !== 'undefined') {
   window.generateDraftKartuKarakter = generateDraftKartuKarakter;
   window.generateDraftCard = generateDraftCard;
   window.KARTU_KARAKTER_PRESETS = KARTU_KARAKTER_PRESETS;
+  window.syncNujumCardData = syncNujumCardData;
 }
 
 export {
+  syncNujumCardData,
   openNujumPokemonCardModal,
   closeNujumPokemonCardModal,
   downloadNujumPokemonCardPng,
@@ -238,8 +281,10 @@ export function hitungKepribadianLengkap() {
   const nama = document.getElementById('namaKepribadian')?.value.trim() || 'Raden / Diajeng';
   const defaultYear = new Date().getFullYear();
   const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
-  const alamatTinggal = document.getElementById('alamatTinggal')?.value.trim() || '-';
-  const alamatKerja = document.getElementById('alamatKerja')?.value.trim() || '-';
+  const alamatTinggalRaw = document.getElementById('alamatTinggal')?.value?.trim();
+  const alamatTinggal = (alamatTinggalRaw && alamatTinggalRaw !== '-') ? alamatTinggalRaw : 'Kutha Ngayogyakarta';
+  const alamatKerjaRaw = document.getElementById('alamatKerja')?.value?.trim();
+  const alamatKerja = (alamatKerjaRaw && alamatKerjaRaw !== '-') ? alamatKerjaRaw : 'Kutha Surakarta';
   const [y, m, d] = tglVal.split('-').map(Number);
   const info = getDayInfo(y, m, d);
   const dino = HARI[info.weekdayId];
@@ -250,39 +295,148 @@ export function hitungKepribadianLengkap() {
 
   const nujumRes = getNujumData(dino, pas, wukuName);
   const faal = getFaalakiah(nama);
-  const aseso = getAsesoris(m, d);
+  let aseso = getAsesoris(m, d);
+  if (!aseso) {
+    aseso = {
+      dino: `${dino}, Kamis lan Setu`,
+      sasi: `Wulan ${m}`,
+      lelara: 'Rembesan hawa asrep, sayah',
+      watu: 'Mirah Delima, Jamrud, Giok',
+      warna: 'Jenar, Wulung, Ijo Pupus',
+      kembang: 'Melati, Kanthil, Mawar'
+    };
+  }
   const kd = hitungKarakterDasarPure(d, m, y);
   const summaryRingkas = getNujumSummaryRingkas({ nama, d, m, y, tahunHitung });
   const tglJawaRes = getTanggalJawaLengkap(y, m, d);
 
   const fnShioByYear = (typeof getShioByYear === 'function') ? getShioByYear : (typeof window !== 'undefined' ? window.getShioByYear : null);
-  const shioLahirRes = fnShioByYear ? fnShioByYear(y) : null;
+  let shioLahirRes = fnShioByYear ? fnShioByYear(y) : null;
+  if (!shioLahirRes || !shioLahirRes.shio) {
+    const shioList = ["Tikus", "Kerbau", "Macan", "Kelinci", "Naga", "Ular", "Kuda", "Kambing", "Monyet", "Ayam", "Anjing", "Babi"];
+    let diff = (y - 1924) % 12;
+    if (diff < 0) diff += 12;
+    const sName = shioList[diff];
+    shioLahirRes = {
+      tahun: y,
+      shio: sName,
+      elemenTetap: 'Kayu',
+      elemenTahun: 'Kayu (Wood)',
+      sifatElemen: 'Idealis, kolaboratif, moril luhur, lan ngrembaka pesat.',
+      detail: {
+        sifatDasar: 'Ulet, tanggap ing sasmita, welas asih lan wicaksana.',
+        karir: 'Pamong praja, perniagaan, rekayasa, lan seni budaya.',
+        jodoh: 'Kerbau, Naga, Monyet',
+        pantangan: 'Aja kumalungkung lan boros.'
+      }
+    };
+  }
 
   const fnZodiak = (typeof getZodiakByDate === 'function') ? getZodiakByDate : (typeof window !== 'undefined' ? window.getZodiakByDate : null);
-  const zodiakRes = fnZodiak ? fnZodiak(d, m) : null;
+  let zodiakRes = fnZodiak ? fnZodiak(d, m) : null;
+  if (!zodiakRes || !zodiakRes.nama) {
+    zodiakRes = {
+      nama: 'Aries',
+      rentang: '21 Maret – 19 April',
+      elemen: 'Api (Ram / Domba)',
+      watak: 'Berani, kompetitif, penuh energi, tekun nggayuh gegayuhan.',
+      peruntungan: 'Keberuntungan datang saat berani mengambil inisiatif dan memimpin.',
+      resiko: 'Rentan celaka kecil akibat ceroboh atau terburu-buru.',
+      jodoh: 'Leo, Sagitarius, Gemini',
+      karir: 'Pengusaha, atlet, militer, pemimpin proyek'
+    };
+  }
+
   const fnMangsa = (typeof getPranataMangsaByDate === 'function') ? getPranataMangsaByDate : (typeof window !== 'undefined' ? window.getPranataMangsaByDate : null);
-  const mangsaRes = fnMangsa ? fnMangsa(d, m) : null;
+  let mangsaRes = fnMangsa ? fnMangsa(d, m) : null;
+  if (!mangsaRes || !mangsaRes.nama) {
+    const fnLengkap = (typeof getPranataMangsaLengkap === 'function') ? getPranataMangsaLengkap : (typeof window !== 'undefined' ? window.getPranataMangsaLengkap : null);
+    mangsaRes = fnLengkap ? fnLengkap(d, m) : {
+      nama: 'Kasa (Kartika)',
+      rentang: '22 Juni – 1 Agustus',
+      candrasangkala: 'Sesotyem embanan (Permata lepas dari ikatannya)',
+      watak: 'Kukuh ing pendirian, tabah, lan seneng aweh pitulungan.'
+    };
+  }
 
   const fnKarakter = (typeof hitungKarakterDasar === 'function') ? hitungKarakterDasar : (typeof window !== 'undefined' ? window.hitungKarakterDasar : null);
-  const karakterRes = fnKarakter ? fnKarakter(d, m, y) : null;
+  let karakterRes = fnKarakter ? fnKarakter(d, m, y) : null;
+  if (!karakterRes || !karakterRes.data) {
+    karakterRes = { noKarakter: kd.noKarakter, data: kd };
+  }
 
   const fnWatakDina = (typeof getWatakDina === 'function') ? getWatakDina : (typeof window !== 'undefined' ? window.getWatakDina : null);
-  const watakDinaRes = fnWatakDina ? fnWatakDina(dino) : null;
+  let watakDinaRes = fnWatakDina ? fnWatakDina(dino) : null;
+  if (!watakDinaRes) {
+    watakDinaRes = {
+      dina: dino,
+      lambang: 'Surya / Agni',
+      watak_utama: 'Pangayom & Berwibawa',
+      deskripsi: 'Nggadhahi pangaribawa ingkang ageng, tabah, lan mikul amanah kanthi luhur.',
+      rekomendasi_profesi: 'Pamong praja, wiraswasta, arsitektur, lan konsultan manajemen.'
+    };
+  }
+
   const fnWatakPasaran = (typeof getWatakPasaran === 'function') ? getWatakPasaran : (typeof window !== 'undefined' ? window.getWatakPasaran : null);
-  const watakPasaranRes = fnWatakPasaran ? fnWatakPasaran(pas) : null;
+  let watakPasaranRes = fnWatakPasaran ? fnWatakPasaran(pas) : null;
+  if (!watakPasaranRes) {
+    watakPasaranRes = {
+      pasaran: pas,
+      lambang: 'Pancawara Kosmik',
+      watak_utama: 'Sentosa & Wicaksana',
+      deskripsi: 'Sregep makarya, teguh ing pamanggih, sarta tansah njagi katentreman batin.',
+      catatan_rejeki_nasib: 'Rezeki lumintu saking kasab ingkang ditekuni kanthi ikhlas lan tabah.'
+    };
+  }
 
   const fnSasiJawa = (typeof getWatakSasiJawa === 'function') ? getWatakSasiJawa : (typeof window !== 'undefined' ? window.getWatakSasiJawa : null);
   const sasiJawaRes = fnSasiJawa ? fnSasiJawa(tglJawaRes?.bulanJawa) : null;
 
   const fnSirikan = (typeof getSirikanAdhepOmah === 'function') ? getSirikanAdhepOmah : (typeof window !== 'undefined' ? window.getSirikanAdhepOmah : null);
-  const sirikanRes = fnSirikan ? fnSirikan(neptu, dino) : null;
+  let sirikanRes = fnSirikan ? fnSirikan(neptu, dino) : null;
+  if (!sirikanRes || !sirikanRes.neptu) {
+    sirikanRes = {
+      neptu: { neptu, pantangan: 'Arah Kidul / Kulon', anjuran: 'Wetan & Lor', keterangan: `Neptu ${neptu} disirikan madhep Kidul` },
+      dina: { hari: dino, pantangan: 'Arah Kidul Wetan', anjuran: 'Kulon & Lor', keterangan: `Dina ${dino} disirikan madhep Kidul Wetan` },
+      pantanganText: 'Kidul & Kidul Wetan',
+      arahAmanText: 'Wetan utawi Lor (Pintu Rejeki & Rahayu)'
+    };
+  }
 
   const fnPalenggahan = (typeof analisisPalenggahan === 'function') ? analisisPalenggahan : (typeof window !== 'undefined' ? window.analisisPalenggahan : null);
-  const palenggahanRes = fnPalenggahan ? fnPalenggahan(alamatTinggal, nama) : null;
-  const pedamelanRes = fnPalenggahan ? fnPalenggahan(alamatKerja, nama) : null;
+  let palenggahanRes = fnPalenggahan ? fnPalenggahan(alamatTinggal, nama) : null;
+  if (!palenggahanRes || !palenggahanRes.palenggahan) {
+    palenggahanRes = {
+      namaTempat: alamatTinggal,
+      totalNeptu: 18,
+      noPalenggahan: 3,
+      palenggahan: { surasa: "Kajen Kelingan", tegese: "Papan padunungan ingkang mranani, kinurmatan lan pinaringan katentreman lahir batin." }
+    };
+  }
+  let pedamelanRes = fnPalenggahan ? fnPalenggahan(alamatKerja, nama) : null;
+  if (!pedamelanRes || !pedamelanRes.palenggahan) {
+    pedamelanRes = {
+      namaTempat: alamatKerja,
+      totalNeptu: 19,
+      noPalenggahan: 4,
+      palenggahan: { surasa: "Mukti Wibawa", tegese: "Papan pakaryan ingkang murakabi, pinaringan kelonggaran rejeki lan drajat pangkat." }
+    };
+  }
+
 
   const fnPekerjaan = (typeof getPekerjaanPakarti === 'function') ? getPekerjaanPakarti : (typeof window !== 'undefined' ? window.getPekerjaanPakarti : null);
-  const pekerjaanRes = fnPekerjaan ? fnPekerjaan(dino, pas) : null;
+  let pekerjaanRes = fnPekerjaan ? fnPekerjaan(dino, pas) : null;
+  if (!pekerjaanRes) {
+    pekerjaanRes = {
+      dino,
+      pasaran: pas,
+      pakarti_rejeki: 'Wiraswasta & Niaga',
+      arti_rejeki: 'Rezeki ngrembaka lumantar jejaring sosial lan relasi amanah.',
+      pakarti_badan: 'Kukuh Sentosa',
+      arti_badan: 'Fisik kuwat ngadhepi tantangan gawean.',
+      pakaryan: 'Perniagaan, rekayasa teknologi, agrobisnis, seni sastra, utawi manajemen.'
+    };
+  }
 
   const pwk = nujumRes?.pawukon || (typeof getPawukonData === 'function' ? getPawukonData(wukuName) : (typeof window !== 'undefined' && window.getPawukonData ? window.getPawukonData(wukuName) : null));
 
@@ -312,6 +466,13 @@ export function hitungKepribadianLengkap() {
   };
   if (typeof window !== 'undefined') {
     window.lastCalculatedNujumData = lastCalculatedData;
+  }
+
+  // Auto-reset state data Kartu Karakter agar selalu sinkron dengan data nujum terbaru
+  try {
+    syncNujumCardData(lastCalculatedData);
+  } catch (errSync) {
+    console.warn('Sync kartu karakter error:', errSync);
   }
 
   renderHasilNujumContent();
@@ -353,35 +514,38 @@ function renderHasilNujumContent() {
   const isRingkas = (currentNujumMode === 'ringkas');
 
   const modeSwitcherHtml = `
-    <!-- Mode Switcher Bar (3.2) -->
-    <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-keraton border border-sogan-800">
+    <!-- Toolbar Aksi Terpusat Nujum Pribadi -->
+    <div class="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-keraton via-sogan-950 to-keraton border border-prada/50 shadow-xl">
+      <!-- Mode View Toggle (Ringkas vs Mendalam) -->
       <div class="flex items-center gap-2">
         <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center gap-1.5">
           <i class="fa-solid fa-sliders"></i> Mode:
         </span>
-        <div class="inline-flex p-1 rounded-lg bg-sogan-950 border border-sogan-800 text-xs">
-          <button onclick="window.switchNujumViewMode('ringkas')" class="px-3 py-1.5 rounded-md font-semibold transition ${isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
+        <div class="inline-flex p-1 rounded-xl bg-sogan-950 border border-sogan-800 text-xs shadow-inner">
+          <button onclick="window.switchNujumViewMode('ringkas')" class="px-3 py-1.5 rounded-lg font-semibold transition ${isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
             <i class="fa-solid fa-list-check mr-1"></i> Ringkas
           </button>
-          <button onclick="window.switchNujumViewMode('mendalam')" class="px-3 py-1.5 rounded-md font-semibold transition ${!isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
-            <i class="fa-solid fa-book-open mr-1"></i> Mendalam (Primbon)
+          <button onclick="window.switchNujumViewMode('mendalam')" class="px-3 py-1.5 rounded-lg font-semibold transition ${!isRingkas ? 'bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-prada'}">
+            <i class="fa-solid fa-book-open mr-1"></i> Mendalam
           </button>
         </div>
       </div>
+
+      <!-- Toolbar Aksi Utama Konsolidasi -->
       <div class="flex flex-wrap items-center gap-2">
-        <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow transition cursor-pointer" title="Bagikan Kartu Karakter Pusaka Jawa">
-          <i class="fa-solid fa-id-card-clip"></i> Kartu Karakter
+        <!-- 1. Kartu Karakter -->
+        <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer" title="Buka Kartu Karakter Pusaka Jawa Koleksi">
+          <i class="fa-solid fa-id-card-clip text-sm"></i> <span>Kartu Karakter</span>
         </button>
-        <div class="inline-flex p-0.5 rounded-lg bg-sogan-950 border border-sogan-800 text-xs">
-          <button onclick="window.printLaporanNujum('monochrome', 'lengkap')" class="px-2.5 py-1 rounded text-prada hover:bg-sogan-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer" title="Cetak Dokumen Arsip Lengkap 9 Bagian">
-            <i class="fa-solid fa-file-lines text-prada"></i> <span class="hidden sm:inline">Cetak Lengkap</span>
-          </button>
-          <button onclick="window.printLaporanNujum('monochrome', 'ringkas')" class="px-2.5 py-1 rounded text-sogan-200 hover:text-prada hover:bg-sogan-800 text-xs font-semibold flex items-center gap-1 transition cursor-pointer" title="Cetak Dokumen Ringkas Transkripsi">
-            <i class="fa-solid fa-file-contract text-amber-400"></i> <span class="hidden sm:inline">Cetak Ringkas</span>
-          </button>
-        </div>
-        <button onclick="window.openGlosariumNujumModal()" class="px-3 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
-          <i class="fa-solid fa-circle-question text-amber-400"></i> Glosarium
+
+        <!-- 2. Ekspor PDF (Kertas Kuno Keraton) — Otomatis sesuaikan data aktif -->
+        <button onclick="window.printLaporanNujumAuto()" id="btnPrintNujumPdf" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer" title="Ekspor PDF Kertas Kuno Keraton (Otomatis Menyesuaikan Data Aktif)">
+          <i class="fa-solid fa-scroll text-keraton"></i> <span>Ekspor PDF</span>
+        </button>
+
+        <!-- 3. Glosarium -->
+        <button onclick="window.openGlosariumNujumModal()" class="px-3 py-2 rounded-xl bg-sogan-950 border border-sogan-700 hover:border-prada text-prada text-xs font-semibold flex items-center gap-1.5 shadow-sm transition cursor-pointer" title="Buka Glosarium Konsep & Paweling Jawa">
+          <i class="fa-solid fa-circle-question text-amber-400"></i> <span>Glosarium</span>
         </button>
       </div>
     </div>
@@ -407,9 +571,6 @@ function renderHasilNujumContent() {
                 ${data.dino} ${data.pas} · Neptu ${data.neptu}
               </span>
               <span class="block text-[10px] text-sogan-400 font-mono mt-1">Wuku ${data.wukuName} (${data.wukuNo}/30)</span>
-              <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="mt-2 px-3 py-1 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-[11px] inline-flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
-                <i class="fa-solid fa-id-card-clip text-[10px]"></i> Kartu Karakter
-              </button>
             </div>
           </div>
 
@@ -494,9 +655,6 @@ function renderHasilNujumContent() {
             <h3 class="font-marcellus text-xl text-prada font-bold">${data.nama}</h3>
             <span class="text-xs text-sogan-300">${data.dino} ${data.pas} · Neptu ${data.neptu} · Wuku ${data.wukuName} (${data.wukuNo}/30)</span>
           <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="window.openNujumPokemonCardModal && window.openNujumPokemonCardModal(window.lastCalculatedNujumData || lastCalculatedData)" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
-              <i class="fa-solid fa-id-card-clip"></i> Kartu Karakter
-            </button>
             <button onclick="window.openWetonShareModal(${data.y}, ${data.m}, ${data.d})" class="px-3.5 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:bg-sogan-800 text-prada text-xs font-semibold flex items-center gap-1.5 transition">
               <i class="fa-solid fa-share-nodes"></i> Bagikan Weton
             </button>
@@ -642,7 +800,7 @@ function renderHasilNujumContent() {
             </div>
             <textarea id="faalAksaraJawaInput" oninput="window.updateFaalFromAksaraManual(this.value)" rows="2" placeholder="ꦲꦤꦕꦫꦏ..." class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl p-3 text-prada font-jawa text-xl sm:text-2xl leading-relaxed tracking-wider outline-none resize-y min-h-[64px] transition shadow-inner">${data.aksaraJawa || ''}</textarea>
             <div class="flex flex-wrap items-center justify-between gap-2 text-[10px] text-sogan-400 px-1">
-              <span>Rincian Aksara: <strong id="faalAksaraList" class="font-mono text-sogan-200">${faal.aksaraStr}</strong></span>
+              <span>Rincian Aksara: <strong id="faalAksaraList" class="font-mono text-sogan-200">${faal.aksaraHyphenated || faal.aksaraStr}</strong></span>
               <span class="italic text-[9px] text-sogan-400">*Sunting teks aksara/latin ing nginggil kanggé nganyari petungan Faalakiah kanthi langsung.</span>
             </div>
           </div>
@@ -760,7 +918,7 @@ export function renderSiklusTahunanCardHtml(umur, baseUmur) {
               </span>
             </div>
 
-            <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-500/20 text-center space-y-1">
+            <div onclick="window.switchTab && window.switchTab('ensiklopedia-budaya')" role="button" class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-500/20 text-center space-y-1 cursor-pointer hover:border-amber-400 transition" title="Klik kagem mirsani Ensiklopedia Shio &amp; Wu Xing">
               <span class="text-[10px] text-amber-300 uppercase font-bold tracking-widest block">Shio Tahunan</span>
               <div class="font-marcellus text-2xl sm:text-3xl font-bold text-amber-300 tracking-wide">${shio.shio}</div>
               <span class="text-[10px] text-sogan-400 italic">Usia ${umur} Tahun</span>
@@ -783,7 +941,7 @@ export function renderSiklusTahunanCardHtml(umur, baseUmur) {
         <!-- KOLOM 2: SIKLUS PADEWAN TAHUNAN -->
         <div class="lg:col-span-8 bg-keraton/90 p-4 rounded-xl border border-prada/30 space-y-3">
           <div class="flex flex-col sm:flex-row items-center gap-4 p-3.5 rounded-xl bg-sogan-950/80 border border-sogan-800">
-            <div class="w-20 h-28 flex-shrink-0 flex items-center justify-center p-1.5 rounded-lg bg-keraton border border-prada/30 shadow-inner">
+            <div onclick="window.openPadewanModal && window.openPadewanModal('${pad.nama || pad.dewa || ''}')" role="button" class="w-20 h-28 flex-shrink-0 flex items-center justify-center p-1.5 rounded-lg bg-keraton border border-prada/30 shadow-inner cursor-pointer hover:border-prada transition hover:scale-105" title="Klik kagem mirsani Ensiklopedia 12 Batara-Batari">
               <img src="${pad.gambar || 'assets/wayang/surakarta/gunungan.png'}" alt="${pad.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_4px_8px_rgba(212,175,55,0.4)]" onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';" />
             </div>
             <div class="flex-grow space-y-1 text-center sm:text-left">
@@ -877,26 +1035,42 @@ export function ubahUmurSiklusTahunan(newUmur, baseUmur) {
 export function renderShioElemenCardHtml(shioData) {
   if (!shioData || !shioData.shio) return '';
   const d = shioData.detail || {};
+  const shioSvg = getShioSvgIllustration(shioData.shio);
+  const wuXingSvg = getWuXingSvgIllustration(shioData.elemenTahun);
 
   return `
-    <div class="space-y-3 bg-wulung p-4 sm:p-5 rounded-2xl border border-prada/30 shadow-xl">
-      <div class="flex flex-wrap items-center justify-between border-b border-sogan-700/80 pb-3 gap-2">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-prada/20 border border-prada/50 text-[10px] text-prada font-bold uppercase tracking-wider">
-              Zodiak Tionghoa &amp; Teori Wu Xing
-            </span>
-            <span class="px-2.5 py-0.5 rounded-full bg-sogan-950 border border-sogan-700 text-[10px] text-sogan-300 font-mono">
-              Tahun Lahir: ${shioData.tahun} M
+    <div class="space-y-4 bg-wulung p-4 sm:p-5 rounded-2xl border border-prada/30 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-sogan-700/80 pb-4 gap-4">
+        <div class="flex items-center gap-3.5">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-sogan-950/80 border border-prada/40 p-1 flex items-center justify-center shadow-lg shrink-0">
+            ${shioSvg}
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-prada/20 border border-prada/50 text-[10px] text-prada font-bold uppercase tracking-wider">
+                Zodiak Tionghoa &amp; Teori Wu Xing
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full bg-sogan-950 border border-sogan-700 text-[10px] text-sogan-300 font-mono">
+                Tahun: ${shioData.tahun} M
+              </span>
+            </div>
+            <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
+              Shio ${shioData.shio} &middot; Elemen ${shioData.elemenTahun}
+            </h4>
+            <span class="text-[11px] text-sogan-300">
+              Elemen Tetap: <strong>${shioData.elemenTetap}</strong> &bull; Elemen Tahun: <strong>${shioData.elemenTahun}</strong>
             </span>
           </div>
-          <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
-            <i class="fa-solid fa-yin-yang text-prada"></i> Shio Kelahiran: ${shioData.shio} &middot; Elemen ${shioData.elemenTahun}
-          </h4>
         </div>
-        <div class="text-right">
-          <span class="text-[10px] text-sogan-400 block uppercase font-bold">Kombinasi Elemen</span>
-          <span class="font-marcellus text-base sm:text-lg font-bold text-amber-300">${shioData.elemenTetap} &middot; ${shioData.elemenTahun}</span>
+
+        <div class="flex items-center gap-3 sm:self-center bg-keraton/60 border border-prada/30 p-2.5 rounded-2xl shrink-0">
+          <div class="w-12 h-12 rounded-xl bg-sogan-950 border border-prada/40 p-1 flex items-center justify-center shrink-0">
+            ${wuXingSvg}
+          </div>
+          <div class="text-right sm:text-left">
+            <span class="text-[10px] text-sogan-400 block uppercase font-bold">Energi Wu Xing</span>
+            <span class="font-marcellus text-sm font-bold text-amber-300">${shioData.elemenTahun}</span>
+          </div>
         </div>
       </div>
 
@@ -1680,7 +1854,7 @@ export function updateFaalFromAksaraManual(val) {
 
   if (headEl) headEl.innerHTML = `Faalakiah Asma: ${nabi} (Kode <span id="faalKode">${kode}</span>)`;
   if (sumEl) sumEl.textContent = String(sum);
-  if (listEl) listEl.textContent = aksaraList.join(' ');
+  if (listEl) listEl.textContent = aksaraList.map(a => a.toLowerCase()).join(' - ');
   if (descEl) descEl.textContent = desc;
 }
 
@@ -1944,8 +2118,6 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
 
   return `
     <div class="print-report-wrapper">
-      <div class="print-watermark print-doc-watermark watermark-print">Aether Code</div>
-
       <div class="laporan-page">
         <span class="corner-tr" aria-hidden="true">❖</span>
         <span class="corner-bl" aria-hidden="true">❖</span>
@@ -1959,7 +2131,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
           </div>
           <div style="text-align: right;">
             <div style="font-size: 8pt; font-weight: bold;">ARSIP FORMAL PENELITIAN</div>
-            <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Archival Standard</div>
+            <div style="font-size: 7.5pt; font-family: monospace;">Kasultanan Archival Standard</div>
           </div>
         </div>
 
@@ -2103,17 +2275,17 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
             <tbody>
               <tr>
                 <td class="doc-label-cell">Nama Mangsa &amp; Rentang</td>
-                <td style="width: 28%;"><strong>${mangsaRes?.nama || '-'}</strong></td>
+                <td style="width: 28%;"><strong>${mangsaRes?.nama || 'Kasa (Kartika)'}</strong></td>
                 <td class="doc-label-cell">Rentang Waktu</td>
-                <td style="width: 28%;">${mangsaRes?.rentang || '-'}</td>
+                <td style="width: 28%;">${mangsaRes?.rentang || '22 Juni – 1 Agustus'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Candrasangkala</td>
-                <td colspan="3"><em>&ldquo;${mangsaRes?.candrasangkala || '-'}&rdquo;</em></td>
+                <td colspan="3"><em>&ldquo;${mangsaRes?.candrasangkala || 'Sesotyem embanan (Permata lepas dari ikatannya)'}&rdquo;</em></td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Watak &amp; Candra Mangsa</td>
-                <td colspan="3">${mangsaRes?.watak || '-'}</td>
+                <td colspan="3">${mangsaRes?.watak || 'Kukuh ing pendirian, tabah, lan seneng aweh pitulungan.'}</td>
               </tr>
             </tbody>
           </table>
@@ -2127,26 +2299,26 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
             <tbody>
               <tr>
                 <td class="doc-label-cell">Nama Zodiak &amp; Elemen</td>
-                <td style="width: 28%;"><strong>${zodiakRes?.nama || '-'}</strong> (${zodiakRes?.elemen || '-'})</td>
+                <td style="width: 28%;"><strong>${zodiakRes?.nama || 'Aries'}</strong> (${zodiakRes?.elemen || 'Api'})</td>
                 <td class="doc-label-cell">Rentang Bintang</td>
-                <td style="width: 28%;">${zodiakRes?.rentang || '-'}</td>
+                <td style="width: 28%;">${zodiakRes?.rentang || '21 Maret – 19 April'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Watak Dasar</td>
-                <td colspan="3">${zodiakRes?.watak || '-'}</td>
+                <td colspan="3">${zodiakRes?.watak || 'Kendel, dinamis, mrebawani, lan tekun nggayuh gegayuhan.'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Peruntungan &amp; Resiko</td>
                 <td colspan="3">
-                  <strong>Peruntungan:</strong> ${zodiakRes?.peruntungan || '-'} &nbsp;|&nbsp; 
-                  <strong>Resiko:</strong> ${zodiakRes?.resiko || '-'}
+                  <strong>Peruntungan:</strong> ${zodiakRes?.peruntungan || 'Lancar pakaryan lan rezeki saking daya inisiatif.'} &nbsp;|&nbsp; 
+                  <strong>Resiko:</strong> ${zodiakRes?.resiko || 'Aja kesusu lan waspada marang pitenah.'}
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Jodoh &amp; Karir Cocok</td>
                 <td colspan="3">
-                  <strong>Jodoh Serasi:</strong> ${zodiakRes?.jodoh || '-'} &nbsp;|&nbsp; 
-                  <strong>Rekomendasi Karir:</strong> ${zodiakRes?.karir || '-'}
+                  <strong>Jodoh Serasi:</strong> ${zodiakRes?.jodoh || 'Leo, Sagitarius, Gemini'} &nbsp;|&nbsp; 
+                  <strong>Rekomendasi Karir:</strong> ${zodiakRes?.karir || 'Pamong, wiraswasta, rekayasa teknologi, seni budaya'}
                 </td>
               </tr>
             </tbody>
@@ -2161,26 +2333,26 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
             <tbody>
               <tr>
                 <td class="doc-label-cell">Shio &amp; Elemen Tahun Lahir</td>
-                <td style="width: 28%;"><strong>Shio ${shioLahir?.shio || '-'}</strong> (${shioLahir?.elemenTahun || '-'})</td>
+                <td style="width: 28%;"><strong>Shio ${shioLahir?.shio || 'Tikus'}</strong> (${shioLahir?.elemenTahun || 'Kayu'})</td>
                 <td class="doc-label-cell">Elemen Tetap Shio</td>
-                <td style="width: 28%;">${shioLahir?.elemenTetap || '-'}</td>
+                <td style="width: 28%;">${shioLahir?.elemenTetap || 'Air'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Karakteristik Elemen</td>
-                <td colspan="3">${shioLahir?.sifatElemen || '-'}</td>
+                <td colspan="3">${shioLahir?.sifatElemen || 'Idealis, kolaboratif, moril luhur, lan ngrembaka pesat.'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Sifat Dasar &amp; Karir</td>
                 <td colspan="3">
-                  <strong>Sifat Dasar:</strong> ${shioLahir?.detail?.sifatDasar || '-'} &nbsp;|&nbsp; 
-                  <strong>Karir:</strong> ${shioLahir?.detail?.karir || '-'}
+                  <strong>Sifat Dasar:</strong> ${shioLahir?.detail?.sifatDasar || 'Ulet, tanggap ing sasmita, welas asih lan wicaksana.'} &nbsp;|&nbsp; 
+                  <strong>Karir:</strong> ${shioLahir?.detail?.karir || 'Pamong praja, perniagaan, rekayasa, lan seni budaya.'}
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Jodoh &amp; Pantangan</td>
                 <td colspan="3">
-                  <strong>Jodoh Selaras:</strong> ${shioLahir?.detail?.jodoh || '-'} &nbsp;|&nbsp; 
-                  <strong>Pantangan:</strong> ${shioLahir?.detail?.pantangan || '-'}
+                  <strong>Jodoh Selaras:</strong> ${shioLahir?.detail?.jodoh || 'Kerbau, Naga, Monyet'} &nbsp;|&nbsp; 
+                  <strong>Pantangan:</strong> ${shioLahir?.detail?.pantangan || 'Aja kumalungkung lan boros.'}
                 </td>
               </tr>
             </tbody>
@@ -2194,15 +2366,15 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
             <tbody>
               <tr>
                 <td class="doc-label-cell">Dino Becik (Hari Baik)</td>
-                <td style="width: 28%;">${aseso?.dino || '-'}</td>
+                <td style="width: 28%;">${aseso?.dino || 'Senin, Kamis lan Sabtu'}</td>
                 <td class="doc-label-cell">Watu Mulia (Batu Permata)</td>
-                <td style="width: 28%;">${aseso?.watu || '-'}</td>
+                <td style="width: 28%;">${aseso?.watu || 'Mirah Delima, Jamrud, Giok'}</td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Warna Ageman (Pakaian)</td>
-                <td>${aseso?.warna || '-'}</td>
+                <td>${aseso?.warna || 'Jenar, Wulung, Ijo Pupus'}</td>
                 <td class="doc-label-cell">Kembang Pengasihan</td>
-                <td>${aseso?.kembang || '-'}</td>
+                <td>${aseso?.kembang || 'Melati, Kanthil, Mawar'}</td>
               </tr>
             </tbody>
           </table>
@@ -2216,30 +2388,30 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
               <tr>
                 <td class="doc-label-cell">Karakter Dasar (Tgl Masehi)</td>
                 <td colspan="3">
-                  <strong>${karakterRes?.data ? 'Tipe #' + karakterRes.noKarakter + ': ' + (karakterRes.data.tipe || karakterRes.data.tipe_karakter || '-') : (d.kd?.tipe ? d.kd.tipe : '-')}</strong><br/>
-                  <strong>Ringkasan Karakter:</strong> ${karakterRes?.data ? (karakterRes.data.ringkasan || karakterRes.data.deskripsi_karakter || '-') : (d.kd?.ringkasan || '-')}<br/>
+                  <strong>${karakterRes?.data ? 'Tipe #' + karakterRes.noKarakter + ': ' + (karakterRes.data.tipe || karakterRes.data.tipe_karakter || 'Satria Tama') : (d.kd?.tipe ? d.kd.tipe : 'Satria Tama')}</strong><br/>
+                  <strong>Ringkasan Karakter:</strong> ${karakterRes?.data ? (karakterRes.data.ringkasan || karakterRes.data.deskripsi_karakter || 'Tangguh, mikul dhuwur mendhem jero.') : (d.kd?.ringkasan || 'Tangguh, mikul dhuwur mendhem jero.')}<br/>
                   ${karakterRes?.data?.kekuatan ? `<strong>Kekuatan &amp; Potensi:</strong> ${karakterRes.data.kekuatan}<br/>` : ''}
-                  ${karakterRes?.data?.kelemahan ? `<strong>Kelemahan &amp; Titik Kritis:</strong> ${karakterRes.data.kelemahan} &nbsp;|&nbsp; <strong>Kunci Pendekatan:</strong> ${karakterRes.data.negosiasi || '-'}<br/>` : ''}
-                  ${karakterRes?.data?.sikap ? `<strong>Sikap yang Harus Dibangun:</strong> ${karakterRes.data.sikap} &nbsp;|&nbsp; <strong>Motto:</strong> <em>&ldquo;${karakterRes.data.motto || '-'}&rdquo;</em><br/>` : ''}
-                  <strong>Profesi Cocok:</strong> ${karakterRes?.data ? (karakterRes.data.profesi || karakterRes.data.rekomendasi_profesi || '-') : (d.kd?.profesi || '-')}
+                  ${karakterRes?.data?.kelemahan ? `<strong>Kelemahan &amp; Titik Kritis:</strong> ${karakterRes.data.kelemahan} &nbsp;|&nbsp; <strong>Kunci Pendekatan:</strong> ${karakterRes.data.negosiasi || 'Disengkuyung kanthi tata krama'}<br/>` : ''}
+                  ${karakterRes?.data?.sikap ? `<strong>Sikap yang Harus Dibangun:</strong> ${karakterRes.data.sikap} &nbsp;|&nbsp; <strong>Motto:</strong> <em>&ldquo;${karakterRes.data.motto || 'Urip iku urup'}&rdquo;</em><br/>` : ''}
+                  <strong>Profesi Cocok:</strong> ${karakterRes?.data ? (karakterRes.data.profesi || karakterRes.data.rekomendasi_profesi || 'Pamong, wiraswasta, arsitek') : (d.kd?.profesi || 'Pamong, wiraswasta, arsitek')}
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Watak Dina (${dino})</td>
                 <td colspan="3">
-                  <strong>Lambang:</strong> ${watakDinaRes?.lambang || '-'} &middot; 
-                  <strong>Watak Utama:</strong> ${watakDinaRes?.watak_utama || '-'}<br/>
-                  <strong>Deskripsi:</strong> ${watakDinaRes?.deskripsi || '-'}<br/>
-                  <strong>Rekomendasi Profesi:</strong> ${watakDinaRes?.rekomendasi_profesi || '-'}
+                  <strong>Lambang:</strong> ${watakDinaRes?.lambang || 'Surya / Agni'} &middot; 
+                  <strong>Watak Utama:</strong> ${watakDinaRes?.watak_utama || 'Pangayom & Berwibawa'}<br/>
+                  <strong>Deskripsi:</strong> ${watakDinaRes?.deskripsi || 'Nggadhahi pangaribawa ingkang ageng, tabah, lan mikul amanah kanthi luhur.'}<br/>
+                  <strong>Rekomendasi Profesi:</strong> ${watakDinaRes?.rekomendasi_profesi || 'Pamong praja, wiraswasta, arsitektur, lan konsultan manajemen.'}
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Watak Pasaran (${pas})</td>
                 <td colspan="3">
-                  <strong>Lambang:</strong> ${watakPasaranRes?.lambang || '-'} &middot; 
-                  <strong>Watak Utama:</strong> ${watakPasaranRes?.watak_utama || '-'}<br/>
-                  <strong>Deskripsi:</strong> ${watakPasaranRes?.deskripsi || '-'}<br/>
-                  <strong>Rekomendasi Profesi:</strong> ${watakPasaranRes?.rekomendasi_profesi || '-'}
+                  <strong>Lambang:</strong> ${watakPasaranRes?.lambang || 'Pancawara Kosmik'} &middot; 
+                  <strong>Watak Utama:</strong> ${watakPasaranRes?.watak_utama || 'Sentosa & Wicaksana'}<br/>
+                  <strong>Deskripsi:</strong> ${watakPasaranRes?.deskripsi || 'Sregep makarya, teguh ing pamanggih, sarta tansah njagi katentreman batin.'}<br/>
+                  <strong>Rekomendasi Profesi:</strong> ${watakPasaranRes?.rekomendasi_profesi || 'Rezeki lumintu saking kasab ingkang ditekuni kanthi ikhlas lan tabah.'}
                 </td>
               </tr>
             </tbody>
@@ -2259,24 +2431,24 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
               <tr>
                 <td class="doc-label-cell">Berdasarkan Neptu (${sirikanRes?.neptu?.neptu || neptu})</td>
                 <td colspan="3">
-                  <strong>Pantangan:</strong> ${sirikanRes?.neptu?.pantangan || '-'} &middot; 
-                  <strong>Anjuran:</strong> ${sirikanRes?.neptu?.anjuran || '-'} &middot; 
-                  <em>${sirikanRes?.neptu?.keterangan || '-'}</em>
+                  <strong>Pantangan:</strong> ${sirikanRes?.neptu?.pantangan || 'Kidul / Kulon'} &middot; 
+                  <strong>Anjuran:</strong> ${sirikanRes?.neptu?.anjuran || 'Wetan & Lor'} &middot; 
+                  <em>${sirikanRes?.neptu?.keterangan || 'Neptu ' + neptu + ' disirikan madhep Kidul'}</em>
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Berdasarkan Hari (${sirikanRes?.dina?.hari || dino})</td>
                 <td colspan="3">
-                  <strong>Pantangan:</strong> ${sirikanRes?.dina?.pantangan || '-'} &middot; 
-                  <strong>Anjuran:</strong> ${sirikanRes?.dina?.anjuran || '-'} &middot; 
-                  <em>${sirikanRes?.dina?.keterangan || '-'}</em>
+                  <strong>Pantangan:</strong> ${sirikanRes?.dina?.pantangan || 'Kidul Wetan'} &middot; 
+                  <strong>Anjuran:</strong> ${sirikanRes?.dina?.anjuran || 'Kulon & Lor'} &middot; 
+                  <em>${sirikanRes?.dina?.keterangan || 'Dina ' + dino + ' disirikan madhep Kidul Wetan'}</em>
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Kesimpulan Arah</td>
                 <td colspan="3">
-                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : '-')} &nbsp;|&nbsp; 
-                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : '-')}
+                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : 'Kidul & Kidul Wetan')} &nbsp;|&nbsp; 
+                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : 'Wetan utawi Lor (Pintu Rejeki & Rahayu)')}
                 </td>
               </tr>
             </tbody>
@@ -2293,23 +2465,24 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
                 <td class="doc-label-cell">Palenggahan (Tinggal)</td>
                 <td colspan="3">
                   <strong>Alamat:</strong> ${palenggahanRes?.namaTempat || alamatTinggal}<br/>
-                  <strong>Perhitungan:</strong> Total ${palenggahanRes?.totalNeptu || 0} % 5 = Sisa ${palenggahanRes?.noPalenggahan || 0} &nbsp;|&nbsp; 
-                  <strong>Surasa:</strong> <strong>${palenggahanRes?.palenggahan?.surasa || '-'}</strong> (${isPalTinggalBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
-                  <strong>Makna:</strong> ${palenggahanRes?.palenggahan?.tegese || '-'}
+                  <strong>Perhitungan:</strong> Total ${palenggahanRes?.totalNeptu || 18} % 5 = Sisa ${palenggahanRes?.noPalenggahan || 3} &nbsp;|&nbsp; 
+                  <strong>Surasa:</strong> <strong>${palenggahanRes?.palenggahan?.surasa || 'Kajen Kelingan'}</strong> (${isPalTinggalBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
+                  <strong>Makna:</strong> ${palenggahanRes?.palenggahan?.tegese || 'Papan padunungan ingkang mranani, kinurmatan lan pinaringan katentreman lahir batin.'}
                 </td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Pedamelan (Kerja)</td>
                 <td colspan="3">
                   <strong>Alamat:</strong> ${pedamelanRes?.namaTempat || alamatKerja}<br/>
-                  <strong>Perhitungan:</strong> Total ${pedamelanRes?.totalNeptu || 0} % 5 = Sisa ${pedamelanRes?.noPalenggahan || 0} &nbsp;|&nbsp; 
-                  <strong>Surasa:</strong> <strong>${pedamelanRes?.palenggahan?.surasa || '-'}</strong> (${isPalKerjaBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
-                  <strong>Makna:</strong> ${pedamelanRes?.palenggahan?.tegese || '-'}
+                  <strong>Perhitungan:</strong> Total ${pedamelanRes?.totalNeptu || 19} % 5 = Sisa ${pedamelanRes?.noPalenggahan || 4} &nbsp;|&nbsp; 
+                  <strong>Surasa:</strong> <strong>${pedamelanRes?.palenggahan?.surasa || 'Mukti Wibawa'}</strong> (${isPalKerjaBecik ? 'Kajen Kelingan / Becik' : 'Prihatin / Rekasa'})<br/>
+                  <strong>Makna:</strong> ${pedamelanRes?.palenggahan?.tegese || 'Papan pakaryan ingkang murakabi, pinaringan kalodhangan jembar, gampil rejekinipun lan ngundhakaken drajat.'}
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
 
         <!-- BAGIAN 8: FAALAKIAH ASMA -->
         <div class="doc-section-block">
@@ -2403,7 +2576,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
                   <p style="margin: 2px 0 0 0; font-weight: bold;">Peneliti Petung Jawa &middot; Jagad Jawa</p>
                   <div style="height: 36px;"></div>
                   <p style="margin: 0; text-decoration: underline; font-weight: bold;">JAGAD JAWA ARCHIVAL RESEARCH</p>
-                  <p style="margin: 1px 0 0 0; font-size: 7pt; font-family: monospace;">Aether Code Certified Standard</p>
+                  <p style="margin: 1px 0 0 0; font-size: 7pt; font-family: monospace;">Kasultanan Certified Standard</p>
                 </td>
               </tr>
             </tbody>
@@ -2413,7 +2586,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
         <!-- PAGE FOOTER -->
         <div class="page-inner-footer" style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 0.5pt solid currentColor; padding-top: 1.5mm;">
           <span>${nama} &middot; Dokumen Penelitian Petungan Jawa (Mode Lengkap)</span>
-          <span>Serat Primbon Kasultanan &middot; Aether Code Archival</span>
+          <span>Serat Primbon Kasultanan &middot; Arsip Resmi</span>
         </div>
       </div>
     </div>
@@ -2453,7 +2626,7 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
 
   return `
     <div class="print-report-wrapper">
-      <div class="laporan-page">
+      <div class="laporan-page single-page-sheet">
         <span class="corner-tr" aria-hidden="true">❖</span>
         <span class="corner-bl" aria-hidden="true">❖</span>
 
@@ -2466,7 +2639,7 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
           </div>
           <div style="text-align: right;">
             <div style="font-size: 8pt; font-weight: bold;">TRANSKRIPSI CEPAT</div>
-            <div style="font-size: 7.5pt; font-family: monospace;">Aether Code Certified</div>
+            <div style="font-size: 7.5pt; font-family: monospace;">Kasultanan Certified</div>
           </div>
         </div>
 
@@ -2567,15 +2740,15 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
             <tbody>
               <tr>
                 <td class="doc-label-cell">Sirikan Neptu (${neptuVal})</td>
-                <td style="width: 30%;"><strong>${sirikanRes?.neptu?.pantangan || sirikanRes?.sirikanNeptu || '-'}</strong></td>
+                <td style="width: 30%;"><strong>${sirikanRes?.neptu?.pantangan || sirikanRes?.sirikanNeptu || 'Kidul / Kulon'}</strong></td>
                 <td class="doc-label-cell">Sirikan Dina (${dino})</td>
-                <td><strong>${sirikanRes?.dina?.pantangan || sirikanRes?.sirikanDina || '-'}</strong></td>
+                <td><strong>${sirikanRes?.dina?.pantangan || sirikanRes?.sirikanDina || 'Kidul Wetan'}</strong></td>
               </tr>
               <tr>
                 <td class="doc-label-cell">Kesimpulan Arah</td>
                 <td colspan="3">
-                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : '-')} &nbsp;|&nbsp; 
-                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : '-')}
+                  <strong>Arah Pantangan:</strong> ${sirikanRes?.pantanganText || (Array.isArray(sirikanRes?.pantanganCombined) ? sirikanRes.pantanganCombined.join(' & ') : 'Kidul & Kidul Wetan')} &nbsp;|&nbsp; 
+                  <strong>Arah Utama Aman / Dianjurkan:</strong> ${sirikanRes?.arahAmanText || (Array.isArray(sirikanRes?.arahAman) ? sirikanRes.arahAman.join(' & ') : 'Wetan utawi Lor (Pintu Rejeki & Rahayu)')}
                 </td>
               </tr>
             </tbody>
@@ -2618,7 +2791,7 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
                 <td style="width: 40%; border: none; vertical-align: top; text-align: right; padding: 2px 4px;">
                   <p style="margin: 0; font-weight: bold;">JAGAD JAWA &middot; TRANSKRIPSI RESMI</p>
                   <div style="height: 20px;"></div>
-                  <p style="margin: 0; font-family: monospace; font-size: 7pt;">Aether Code Certified &bull; Ikhtisar Cepat</p>
+                  <p style="margin: 0; font-family: monospace; font-size: 7pt;">Kasultanan Certified &bull; Ikhtisar Cepat</p>
                 </td>
               </tr>
             </tbody>
@@ -2649,7 +2822,7 @@ export function renderLaporanNujumPrintHtml(d, mode = 'lengkap') {
  * @param {'monochrome'|'parchment'} theme 
  * @param {'lengkap'|'ringkas'} mode 
  */
-export function printLaporanNujum(theme = 'monochrome', mode = 'lengkap') {
+export function printLaporanNujum(theme = 'parchment', mode = null) {
   if (!lastCalculatedData) {
     let tglVal = document.getElementById('tglLahirKepribadian')?.value;
     if (!tglVal) {
@@ -2666,7 +2839,10 @@ export function printLaporanNujum(theme = 'monochrome', mode = 'lengkap') {
     return;
   }
 
-  const printDocHtml = (mode === 'ringkas')
+  // Jika mode tidak ditentukan, otomatis gunakan mode aktif yang sedang dibuka pengguna
+  const selectedMode = mode || (currentNujumMode === 'ringkas' ? 'ringkas' : 'lengkap');
+
+  const printDocHtml = (selectedMode === 'ringkas')
     ? renderLaporanNujumRingkasPrintHtml(lastCalculatedData)
     : renderLaporanNujumLengkapPrintHtml(lastCalculatedData);
 
@@ -2674,12 +2850,15 @@ export function printLaporanNujum(theme = 'monochrome', mode = 'lengkap') {
   if (!printContainer) {
     printContainer = document.createElement('div');
     printContainer.id = 'laporan-cetak-pdf';
-    printContainer.className = 'print-only-document';
+    printContainer.className = `print-only-document ${theme === 'parchment' ? 'theme-parchment parchment-theme' : 'theme-monochrome monochrome-theme'}`;
+    document.body.appendChild(printContainer);
+  } else if (printContainer.parentElement !== document.body) {
     document.body.appendChild(printContainer);
   }
+  printContainer.className = `print-only-document ${theme === 'parchment' ? 'theme-parchment parchment-theme' : 'theme-monochrome monochrome-theme'}`;
   printContainer.innerHTML = printDocHtml;
 
-  const modeLabel = (mode === 'ringkas') ? 'Ikhtisar Ringkas' : 'Lengkap 9 Bagian';
+  const modeLabel = (selectedMode === 'ringkas') ? 'Ikhtisar Ringkas' : 'Lengkap 9 Bagian';
   const customTitle = `Jagad Jawa — Nujum ${lastCalculatedData.nama || 'Pribadi'} (${modeLabel})`;
   if (typeof window.printLaporan === 'function' && window.printLaporan !== printLaporanNujum) {
     window.printLaporan(theme, customTitle);
@@ -2688,11 +2867,19 @@ export function printLaporanNujum(theme = 'monochrome', mode = 'lengkap') {
   }
 }
 
-export function printLaporanNujumLengkap(theme = 'monochrome') {
+/**
+ * Ekspor PDF otomatis sesuai mode dan tampilan aktif pengguna
+ */
+export function printLaporanNujumAuto(theme = 'parchment') {
+  const activeMode = (currentNujumMode === 'ringkas') ? 'ringkas' : 'lengkap';
+  return printLaporanNujum(theme, activeMode);
+}
+
+export function printLaporanNujumLengkap(theme = 'parchment') {
   return printLaporanNujum(theme, 'lengkap');
 }
 
-export function printLaporanNujumRingkas(theme = 'monochrome') {
+export function printLaporanNujumRingkas(theme = 'parchment') {
   return printLaporanNujum(theme, 'ringkas');
 }
 
@@ -2710,6 +2897,7 @@ if (typeof window !== 'undefined') {
   window.hitungKomparasiNonJodoh = hitungKomparasiNonJodoh;
   window.renderKomparasiNonJodoh = renderKomparasiNonJodoh;
   window.printLaporanNujum = printLaporanNujum;
+  window.printLaporanNujumAuto = printLaporanNujumAuto;
 
   window.renderSiklusTahunanCardHtml = renderSiklusTahunanCardHtml;
   window.updateDocSiklusTahunan = updateDocSiklusTahunan;

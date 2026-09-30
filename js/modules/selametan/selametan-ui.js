@@ -8,6 +8,7 @@
 import { hitungSelametanDates, TEMPLAT_DONGA_KEYAKINAN } from './selametan-engine.js';
 import { saveBookmark } from '../kalender/bookmark-service.js';
 import { showToast } from '../../ui/toast.js';
+import { downloadCanvasAsPng } from '../../ui/download-helper.js';
 
 let currentSelametanKeyakinan = 'universal';
 
@@ -41,6 +42,9 @@ export function gantiKeyakinanSelametan(keyakinanKey) {
  */
 export function hitungSelametan() {
   const inputEl = document.getElementById('tglWafatInput');
+  if (inputEl && !inputEl.value) {
+    inputEl.value = new Date().toISOString().slice(0, 10);
+  }
   const input = inputEl?.value;
   if (!input) {
     showToast('Pilih tanggal wafat terlebih dahulu.');
@@ -122,11 +126,11 @@ export function hitungSelametan() {
     items
   };
 
-  // Tampilkan tombol-tombol ekspor
-  ['btnPrintSelametan', 'btnPrintSelametanParchment', 'btnPrintSelametanMonochrome', 'btnDownloadSelametanPng'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.style.display = 'inline-flex';
-  });
+  // Tampilkan tombol ekspor PDF
+  const btnParchment = document.getElementById('btnPrintSelametanParchment');
+  if (btnParchment) btnParchment.style.display = 'inline-flex';
+  const btnLegacy = document.getElementById('btnPrintSelametan');
+  if (btnLegacy) btnLegacy.style.display = 'inline-flex';
 }
 
 /**
@@ -291,10 +295,17 @@ export function simpanSelametanKeBookmark(dateStr, namaTahap, weton, namaAlmarhu
 
 /**
  * Ekspor / Cetak Dokumen Serat Pengetan Tilar Donyo (PDF Resmi).
+ * Menggunakan format kertas kuno keraton seragam dengan data lengkap 7 milestone.
  * @param {'parchment' | 'monochrome'} theme 
  */
-export function printLaporanSelametan(theme = 'monochrome') {
-  const data = window.LAST_SELAMETAN_DATA;
+export function printLaporanSelametan(theme = 'parchment') {
+  let data = window.LAST_SELAMETAN_DATA;
+  if (!data || !data.items || data.items.length === 0) {
+    if (typeof hitungSelametan === 'function') {
+      hitungSelametan();
+      data = window.LAST_SELAMETAN_DATA;
+    }
+  }
   if (!data || !data.items || data.items.length === 0) {
     showToast('Hitung pengetan selametan rumiyin sakderengipun nyithak.');
     return;
@@ -302,6 +313,10 @@ export function printLaporanSelametan(theme = 'monochrome') {
 
   const { geblak, items, namaAlmarhum, waktuWafat } = data;
   const isParchment = theme === 'parchment';
+  const activeKeyInfo = (TEMPLAT_DONGA_KEYAKINAN && (TEMPLAT_DONGA_KEYAKINAN[data.keyakinan || currentSelametanKeyakinan] || TEMPLAT_DONGA_KEYAKINAN['universal'])) || {
+    nama: 'Universal / Sadaya Keyakinan',
+    deskripsi: 'Panduan refleksi luhur sadaya kapitayan.'
+  };
 
   let printContainer = document.getElementById('laporan-cetak-pdf');
   if (!printContainer) {
@@ -309,98 +324,120 @@ export function printLaporanSelametan(theme = 'monochrome') {
     printContainer.id = 'laporan-cetak-pdf';
     printContainer.className = 'print-only-document';
     document.body.appendChild(printContainer);
+  } else if (printContainer.parentElement !== document.body) {
+    document.body.appendChild(printContainer);
   }
-  const printArea = printContainer;
 
-  const bgStyle = isParchment
-    ? 'background-color: #fcf8f0; color: #3c1f11; border: 4px double #b87c24;'
-    : 'background-color: #ffffff; color: #111827; border: 2px solid #374151;';
+  printContainer.className = `print-only-document ${isParchment ? 'theme-parchment parchment-theme' : 'theme-monochrome monochrome-theme'}`;
+  printContainer.innerHTML = `
+    <div class="print-report-wrapper" style="width: 100%; box-sizing: border-box;">
+      <div class="laporan-page ${isParchment ? 'theme-parchment' : 'theme-monochrome'}" style="max-width: 860px; margin: 0 auto; padding: 22px 26px; ${isParchment ? 'background-color: #fdf6e2; color: #2b1d0c; border: 3px double #8c6224; outline: 1.5px solid #d4af37; outline-offset: -6px;' : 'background-color: #ffffff; color: #111827; border: 2px solid #374151;'} border-radius: 4px; position: relative; font-family: 'Times New Roman', Georgia, serif; box-sizing: border-box;">
+        
+        <span class="corner-tr" aria-hidden="true" style="position: absolute; top: 4px; right: 5px; color: ${isParchment ? '#8c6224' : '#111827'}; font-size: 14pt;">❖</span>
+        <span class="corner-bl" aria-hidden="true" style="position: absolute; bottom: 4px; left: 5px; color: ${isParchment ? '#8c6224' : '#111827'}; font-size: 14pt;">❖</span>
 
-  const headerBg = isParchment
-    ? 'background: linear-gradient(135deg, #f6ecd2 0%, #edd8a4 100%); border-bottom: 2px solid #b87c24;'
-    : 'background: #f3f4f6; border-bottom: 2px solid #111827;';
-
-  printArea.className = 'print-only-container';
-  printArea.innerHTML = `
-    <div style="${bgStyle} max-width: 800px; margin: 0 auto; padding: 28px; font-family: 'Plus Jakarta Sans', serif; border-radius: 8px;">
-      
-      <!-- Kop Serat Karaton -->
-      <div style="${headerBg} padding: 16px; border-radius: 6px; text-align: center; margin-bottom: 20px;">
-        <div style="font-family: 'Cinzel Decorative', serif; font-size: 20px; font-weight: 800; letter-spacing: 2px; color: ${isParchment ? '#724117' : '#111827'};">
-          SERAT PENGETAN TILAR DONYO
-        </div>
-        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: ${isParchment ? '#945c1a' : '#4b5563'}; margin-top: 4px;">
-          JAGAD JAWA NUSANTARA &bull; KASAMPURNAN SALIRA
-        </div>
-      </div>
-
-      <!-- Biodata Almarhum & Geblak -->
-      <div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 18px; font-size: 12px;">
-        <div style="flex: 1; padding: 12px; border: 1px solid ${isParchment ? '#d5a140' : '#d1d5db'}; border-radius: 6px; background: ${isParchment ? '#fffdfa' : '#fafafa'};">
-          <span style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: ${isParchment ? '#b87c24' : '#6b7280'}; display: block;">Identitas Jenazah:</span>
-          <div style="font-size: 14px; font-weight: bold; margin-top: 2px;">${namaAlmarhum ? 'Almarhum/ah ' + namaAlmarhum : 'Almarhum / Almarhumah'}</div>
-          <div style="color: ${isParchment ? '#724117' : '#374151'}; margin-top: 2px;">
-            Wafat: ${geblak.tanggalMasehiAsli || geblak.tanggalStr} ${waktuWafat === 'malam_maghrib' ? '(Bakda Maghrib)' : '(Siang)'}
+        <!-- Kop Serat Karaton -->
+        <div class="doc-header-kop" style="border-bottom: 2px solid ${isParchment ? '#8c6224' : '#111827'}; padding-bottom: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-end;">
+          <div>
+            <div style="font-size: 15pt; font-weight: bold; font-family: 'Cinzel Decorative', Georgia, serif; letter-spacing: 0.12em; color: ${isParchment ? '#724117' : '#111827'}; text-transform: uppercase;">
+              JAGAD JAWA &bull; SERAT PENGETAN TILAR DONYO
+            </div>
+            <div style="font-size: 9pt; font-weight: bold; color: ${isParchment ? '#8c6224' : '#374151'}; text-transform: uppercase; margin-top: 2px;">
+              PAWIYATAN KASAMPURNAN SALIRA &bull; JADWAL DINA PENGETAN SELAMETAN
+            </div>
+            <div style="font-size: 8pt; font-style: italic; color: ${isParchment ? '#5a381e' : '#4b5563'};">
+              Pranatan Petungan Adat Sultan Agungan &bull; Panduan Donga Refleksi (${activeKeyInfo.nama})
+            </div>
+          </div>
+          <div style="text-align: right; font-size: 8pt; color: ${isParchment ? '#5a381e' : '#4b5563'};">
+            <div style="font-weight: bold; font-family: monospace; color: ${isParchment ? '#724117' : '#111827'};">ARSIP FORMAL KULAWARGA</div>
+            <div>Cetak: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
           </div>
         </div>
 
-        <div style="flex: 1; padding: 12px; border: 1px solid ${isParchment ? '#d5a140' : '#d1d5db'}; border-radius: 6px; background: ${isParchment ? '#fffdfa' : '#fafafa'};">
-          <span style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: ${isParchment ? '#b87c24' : '#6b7280'}; display: block;">Dina Geblak (Petungan Jawi):</span>
-          <div style="font-size: 14px; font-weight: bold; margin-top: 2px; color: ${isParchment ? '#945c1a' : '#111827'};">
-            ${geblak.hari} ${geblak.pasaran} (Neptu: ${geblak.neptu})
+        <!-- Biodata Jenazah & Dina Geblak -->
+        <div style="display: flex; gap: 12px; margin-bottom: 14px; font-size: 11px;">
+          <div style="flex: 1; padding: 10px 12px; border: 1px solid ${isParchment ? '#d4af37' : '#d1d5db'}; border-radius: 6px; background-color: ${isParchment ? 'rgba(246, 236, 210, 0.6)' : '#fafafa'};">
+            <span style="font-size: 8.5pt; font-weight: bold; text-transform: uppercase; color: ${isParchment ? '#8c6224' : '#4b5563'}; letter-spacing: 0.05em; display: block;">Identitas Jenazah:</span>
+            <div style="font-size: 13pt; font-weight: bold; color: ${isParchment ? '#2b1d0c' : '#111827'}; margin-top: 2px;">
+              ${namaAlmarhum ? 'Almarhum/ah ' + namaAlmarhum : 'Almarhum / Almarhumah'}
+            </div>
+            <div style="color: ${isParchment ? '#5a381e' : '#374151'}; margin-top: 2px; font-size: 8.5pt;">
+              Wafat: ${geblak.tanggalMasehiAsli || geblak.tanggalStr} ${waktuWafat === 'malam_maghrib' ? '(Bakda Maghrib / Surup)' : '(Siang Sakderengipun Maghrib)'}
+            </div>
           </div>
-          <div style="color: ${isParchment ? '#724117' : '#374151'}; margin-top: 2px;">
-            Surup Pananggalan: ${geblak.tanggalStr}
+
+          <div style="flex: 1; padding: 10px 12px; border: 1px solid ${isParchment ? '#d4af37' : '#d1d5db'}; border-radius: 6px; background-color: ${isParchment ? 'rgba(246, 236, 210, 0.6)' : '#fafafa'};">
+            <span style="font-size: 8.5pt; font-weight: bold; text-transform: uppercase; color: ${isParchment ? '#8c6224' : '#4b5563'}; letter-spacing: 0.05em; display: block;">Dina Geblak (Petungan Jawi):</span>
+            <div style="font-size: 13pt; font-weight: bold; color: ${isParchment ? '#724117' : '#111827'}; margin-top: 2px;">
+              ${geblak.hari} ${geblak.pasaran} (Neptu: ${geblak.neptu})
+            </div>
+            <div style="color: ${isParchment ? '#5a381e' : '#374151'}; margin-top: 2px; font-size: 8.5pt;">
+              Surup Pananggalan: ${geblak.tanggalStr} ${waktuWafat === 'malam_maghrib' ? '· Dina Jawa gantos' : ''}
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tabel Jadwal 7 Pengetan -->
-      <table style="width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">
-        <thead>
-          <tr style="background: ${isParchment ? '#edd8a4' : '#e5e7eb'}; text-align: left; text-transform: uppercase;">
-            <th style="padding: 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">Pengetan</th>
-            <th style="padding: 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">Weton Jawi</th>
-            <th style="padding: 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">Tanggal Masehi</th>
-            <th style="padding: 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">Ubarampe &amp; Sedekah</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${items.map(j => `
-            <tr style="border-bottom: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'};">
-              <td style="padding: 8px; border: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'}; font-weight: bold;">
-                ${j.nama}<br><span style="font-size: 9px; font-weight: normal; color: ${isParchment ? '#945c1a' : '#6b7280'};">+${j.diffDays} dina saking geblak</span>
-              </td>
-              <td style="padding: 8px; border: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'}; font-weight: bold; color: ${isParchment ? '#945c1a' : '#111827'};">
-                ${j.targetWeton}
-              </td>
-              <td style="padding: 8px; border: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'};">
-                ${j.dateStr}<br><span style="font-size: 9px; color: ${isParchment ? '#945c1a' : '#6b7280'};">Wiwit jam 18.00 (Maghrib)</span>
-              </td>
-              <td style="padding: 8px; border: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'}; font-size: 10px;">
-                ${j.ubarampe}
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-
-      <!-- Catatan Adat & Tanda Tangan -->
-      <div style="font-size: 10.5px; color: ${isParchment ? '#724117' : '#4b5563'}; line-height: 1.5; margin-bottom: 24px; padding: 10px; background: ${isParchment ? '#f6ecd2' : '#f9fafb'}; border-radius: 4px;">
-        <strong>Pangeling-eling &amp; Refleksi:</strong> Upacara pengetan tilar donyo lumrahipun kaleksanan ing wayah sonten / bakda Maghrib (jam 18.00) minangka pangurmatan dhumateng arwah leluhur kanthi panduan doa/refleksi <em>${(TEMPLAT_DONGA_KEYAKINAN[data.keyakinan || currentSelametanKeyakinan] || TEMPLAT_DONGA_KEYAKINAN['universal']).nama}</em>. Mugi sedaya arwah pikantuk kasampurnan, pepadhang, saha katentreman langgeng ing Ngarsaning Gusti Kang Maha Agung, sarta kulawarga ingkang tinilar pinaringan katetepan manah lan karaharjan.
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; border-top: 1px solid ${isParchment ? '#b87c24' : '#d1d5db'}; pt-3;">
-        <div>
-          <span style="font-size: 9.5px; color: ${isParchment ? '#945c1a' : '#9ca3af'};">Jagad Jawa &bull; Sistem Kasampurnan Petungan Tradisi</span>
+        <!-- Tabel 7 Milestone Pengetan Lengkap -->
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 8.5pt; font-weight: bold; text-transform: uppercase; color: ${isParchment ? '#724117' : '#111827'}; margin-bottom: 5px; letter-spacing: 0.05em;">
+            JADWAL 7 TAHAPAN PENGETAN &amp; UBARAMPE SEDEKAH:
+          </div>
+          <table class="doc-table" style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid ${isParchment ? '#8c6224' : '#9ca3af'};">
+            <thead>
+              <tr style="background-color: ${isParchment ? '#edd8a4' : '#e5e7eb'}; color: ${isParchment ? '#724117' : '#111827'}; text-align: left; font-size: 8pt; text-transform: uppercase;">
+                <th style="padding: 6px 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'}; width: 14%;">Pengetan</th>
+                <th style="padding: 6px 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'}; width: 18%;">Weton Jawi</th>
+                <th style="padding: 6px 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'}; width: 18%;">Tanggal Masehi</th>
+                <th style="padding: 6px 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'}; width: 26%;">Ubarampe &amp; Makna</th>
+                <th style="padding: 6px 8px; border: 1px solid ${isParchment ? '#b87c24' : '#9ca3af'};">Donga &amp; Refleksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map((j, i) => `
+                <tr style="background-color: ${i % 2 === 1 ? (isParchment ? '#f6ecd2' : '#f9fafb') : 'transparent'}; border-bottom: 1px solid ${isParchment ? '#edd8a4' : '#e5e7eb'}; vertical-align: top;">
+                  <td style="padding: 6px 8px; border: 1px solid ${isParchment ? '#d4af37' : '#e5e7eb'}; font-weight: bold; color: ${isParchment ? '#724117' : '#111827'};">
+                    ${j.nama}
+                    <div style="font-size: 7.5pt; font-weight: normal; color: ${isParchment ? '#8c6224' : '#6b7280'};">+${j.diffDays} dina</div>
+                  </td>
+                  <td style="padding: 6px 8px; border: 1px solid ${isParchment ? '#d4af37' : '#e5e7eb'}; font-weight: bold; color: ${isParchment ? '#2b1d0c' : '#111827'};">
+                    ${j.targetWeton}
+                  </td>
+                  <td style="padding: 6px 8px; border: 1px solid ${isParchment ? '#d4af37' : '#e5e7eb'}; color: ${isParchment ? '#2b1d0c' : '#374151'};">
+                    ${j.dateStr}
+                    <div style="font-size: 7.5pt; color: ${isParchment ? '#8c6224' : '#6b7280'}; font-style: italic;">wiwit surup / 18.00</div>
+                  </td>
+                  <td style="padding: 6px 8px; border: 1px solid ${isParchment ? '#d4af37' : '#e5e7eb'}; font-size: 8pt; color: ${isParchment ? '#3c1f11' : '#374151'};">
+                    <strong>${j.ubarampe}</strong>
+                    <div style="font-size: 7.5pt; color: ${isParchment ? '#5a381e' : '#6b7280'}; margin-top: 2px;">${j.maknaKultural}</div>
+                  </td>
+                  <td style="padding: 6px 8px; border: 1px solid ${isParchment ? '#d4af37' : '#e5e7eb'}; font-size: 8pt; color: ${isParchment ? '#3c1f11' : '#374151'}; font-style: italic;">
+                    "${j.donga}"
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
         </div>
-        <div style="text-align: center;">
-          <div style="font-weight: bold; font-family: 'Cinzel Decorative', serif; font-size: 11px;">JAGAD JAWA NUSANTARA</div>
-          <div style="height: 36px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 9px; color: ${isParchment ? '#b87c24' : '#9ca3af'};">[ Cap Kawruh Resmi ]</div>
-          <div style="border-top: 1px solid ${isParchment ? '#b87c24' : '#4b5563'}; padding-top: 2px; font-size: 9.5px;">Serat Pengetan Tilar Donyo</div>
-        </div>
-      </div>
 
+        <!-- Catatan Adat & Refleksi -->
+        <div style="font-size: 8pt; color: ${isParchment ? '#5a381e' : '#4b5563'}; line-height: 1.45; margin-bottom: 12px; padding: 8px 10px; background-color: ${isParchment ? 'rgba(246, 236, 210, 0.7)' : '#f9fafb'}; border: 1px solid ${isParchment ? '#d4af37' : '#d1d5db'}; border-radius: 4px;">
+          <strong>Pangeling-eling Adat &amp; Doa Kasampurnan:</strong> Upacara pengetan tilar donyo lumrahipun kaleksanan ing wayah sonten / bakda Maghrib (jam 18.00) minangka pakurmatan saha donga suci katur dhumateng arwah leluhur kanthi panduan tradisi <em>${activeKeyInfo.nama}</em>. Sedekah ubarampe lan kenduri dados sarana silaturahmi sarta ngalap berkah karaharjan tumrap kulawarga ingkang tinilar. Mugi sedaya arwah pikantuk kasampurnan ing Ngarsaning Gusti Kang Akarya Jagad.
+        </div>
+
+        <!-- Tanda Tangan & Cap Kasampurnan -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 8.5pt; border-top: 1px solid ${isParchment ? '#8c6224' : '#9ca3af'}; padding-top: 6px;">
+          <div>
+            <div style="font-size: 7.5pt; color: ${isParchment ? '#8c6224' : '#6b7280'}; font-style: italic;">Jagad Jawa &bull; Sistem Kasampurnan Salira &bull; Pananggalan Adat Karaton</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-weight: bold; font-family: 'Cinzel Decorative', Georgia, serif; font-size: 9pt; color: ${isParchment ? '#724117' : '#111827'};">JAGAD JAWA NUSANTARA</div>
+            <div style="height: 26px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 8pt; color: ${isParchment ? '#8c6224' : '#9ca3af'};">[ Cap Pawiyatan Kasampurnan ]</div>
+            <div style="border-top: 1px solid ${isParchment ? '#8c6224' : '#4b5563'}; padding-top: 2px; font-size: 7.5pt; color: ${isParchment ? '#5a381e' : '#4b5563'};">Serat Pengetan Resmi</div>
+          </div>
+        </div>
+
+      </div>
     </div>
   `;
 
@@ -413,11 +450,12 @@ export function printLaporanSelametan(theme = 'monochrome') {
 }
 
 /**
- * Mengunduh tabel kartu selametan dalam format gambar PNG berkualitas tinggi.
+ * Mengunduh dokumen formal serat pengetan tilar donyo dalam format PNG resolusi tinggi.
+ * Selaras dengan tata letak cetak PDF (lengkap dengan kop, biodata, tabel jadwal, dan cap).
  */
 export async function downloadSelametanPng() {
-  const card = document.getElementById('hasilSelametanCard');
-  if (!card) {
+  const data = window.LAST_SELAMETAN_DATA;
+  if (!data || !data.geblak) {
     showToast('Tabel pengetan dereng kasedhiyakaken.');
     return;
   }
@@ -428,24 +466,134 @@ export async function downloadSelametanPng() {
   }
 
   try {
-    showToast('Nyiapaken gambar pengetan tilar donyo...');
-    const canvas = await window.html2canvas(card, {
-      backgroundColor: '#0f141d',
+    showToast('Nyiapaken dokumen formal pengetan tilar donyo (PNG)...');
+    
+    // Buat container render khusus offscreen
+    const offscreen = document.createElement('div');
+    offscreen.style.position = 'fixed';
+    offscreen.style.left = '-9999px';
+    offscreen.style.top = '0';
+    offscreen.style.width = '820px';
+    offscreen.style.padding = '36px';
+    offscreen.style.background = '#fcf8f0';
+    offscreen.style.color = '#3c1f11';
+    offscreen.style.fontFamily = "'Plus Jakarta Sans', Georgia, serif";
+    offscreen.style.border = '4px double #b87c24';
+    offscreen.style.borderRadius = '12px';
+    offscreen.style.boxSizing = 'border-box';
+    offscreen.style.zIndex = '-1000';
+
+    const geblak = data.geblak;
+    const items = data.items || [];
+    const namaAlmarhum = data.namaAlmarhum || '';
+    const waktuWafat = data.waktuWafat || 'siang';
+
+    offscreen.innerHTML = `
+      <div style="text-align: center; border-bottom: 2px solid #b87c24; padding-bottom: 16px; margin-bottom: 22px;">
+        <div style="font-family: 'Cinzel Decorative', Georgia, serif; font-size: 24px; font-weight: 800; letter-spacing: 2px; color: #724117;">
+          SERAT PENGETAN TILAR DONYO
+        </div>
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #945c1a; margin-top: 4px;">
+          JAGAD JAWA NUSANTARA &bull; KASAMPURNAN SALIRA LAN DONGANING LELUHUR
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; gap: 14px; margin-bottom: 20px; font-size: 12.5px;">
+        <div style="flex: 1; padding: 12px 14px; border: 1px solid #d5a140; border-radius: 8px; background: #fffdfa;">
+          <span style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #b87c24; display: block;">Identitas Jenazah:</span>
+          <div style="font-size: 15px; font-weight: bold; color: #2d1808; margin-top: 2px;">
+            ${namaAlmarhum ? 'Almarhum/ah ' + namaAlmarhum : 'Almarhum / Almarhumah'}
+          </div>
+          <div style="color: #724117; margin-top: 3px;">
+            Wafat: ${geblak.tanggalMasehiAsli || geblak.tanggalStr} ${waktuWafat === 'malam_maghrib' ? '(Bakda Maghrib)' : '(Siang)'}
+          </div>
+        </div>
+
+        <div style="flex: 1; padding: 12px 14px; border: 1px solid #d5a140; border-radius: 8px; background: #fffdfa;">
+          <span style="font-size: 10px; text-transform: uppercase; font-weight: bold; color: #b87c24; display: block;">Dina Geblak (Petungan Jawi):</span>
+          <div style="font-size: 15px; font-weight: bold; color: #945c1a; margin-top: 2px;">
+            ${geblak.hari} ${geblak.pasaran} (Neptu: ${geblak.neptu})
+          </div>
+          <div style="color: #724117; margin-top: 3px;">
+            Surup Pananggalan: ${geblak.tanggalStr}
+          </div>
+        </div>
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 22px; border: 1px solid #b87c24;">
+        <thead>
+          <tr style="background: #edd8a4; text-align: left; text-transform: uppercase; color: #5c350b;">
+            <th style="padding: 10px; border: 1px solid #b87c24;">Pengetan</th>
+            <th style="padding: 10px; border: 1px solid #b87c24;">Weton Jawi</th>
+            <th style="padding: 10px; border: 1px solid #b87c24;">Tanggal Masehi</th>
+            <th style="padding: 10px; border: 1px solid #b87c24;">Ubarampe &amp; Sedekah</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(j => `
+            <tr style="border-bottom: 1px solid #edd8a4; background: #ffffff;">
+              <td style="padding: 9px 10px; border: 1px solid #edd8a4; font-weight: bold;">
+                ${j.nama}<br><span style="font-size: 9.5px; font-weight: normal; color: #945c1a;">+${j.diffDays} dina saking geblak</span>
+              </td>
+              <td style="padding: 9px 10px; border: 1px solid #edd8a4; font-weight: bold; color: #945c1a;">
+                ${j.targetWeton}
+              </td>
+              <td style="padding: 9px 10px; border: 1px solid #edd8a4;">
+                ${j.dateStr}<br><span style="font-size: 9.5px; color: #724117;">Wiwit jam 18.00 (Maghrib)</span>
+              </td>
+              <td style="padding: 9px 10px; border: 1px solid #edd8a4; font-size: 10.5px; color: #4a2800;">
+                ${j.ubarampe}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <div style="font-size: 11px; color: #724117; line-height: 1.5; margin-bottom: 24px; padding: 12px; background: #f6ecd2; border-radius: 6px; border-left: 3px solid #b87c24;">
+        <strong>Pangeling-eling &amp; Refleksi Adat:</strong> Upacara pengetan tilar donyo lumrahipun kaleksanan ing wayah sonten utawi bakda Maghrib (jam 18.00) minangka pangurmatan dhumateng arwah leluhur kanthi panduan doa/refleksi kasampurnan. Mugi sedaya arwah pikantuk pepadhang saha katentreman langgeng ing Ngarsaning Gusti Kang Maha Agung.
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 11px; border-top: 1px solid #b87c24; padding-top: 12px;">
+        <div>
+          <span style="font-size: 10px; color: #945c1a;">Jagad Jawa &bull; Sistem Kasampurnan Petungan Tradisi Jawi</span>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-weight: bold; font-family: 'Cinzel Decorative', Georgia, serif; font-size: 11px; color: #724117;">JAGAD JAWA NUSANTARA</div>
+          <div style="height: 32px; display: flex; align-items: center; justify-content: center; font-style: italic; font-size: 9.5px; color: #b87c24;">[ Cap Kawruh Resmi ]</div>
+          <div style="border-top: 1px solid #b87c24; padding-top: 2px; font-size: 10px; color: #5c350b;">Serat Pengetan Tilar Donyo</div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(offscreen);
+
+    const canvas = await window.html2canvas(offscreen, {
+      backgroundColor: '#fcf8f0',
       scale: 2,
       useCORS: true
     });
-    const link = document.createElement('a');
-    const tgl = window.LAST_SELAMETAN_DATA?.geblak?.tanggalStr || 'selametan';
-    link.download = `pengetan-tilar-donyo-${tgl.replace(/\s+/g, '-')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    showToast('Gambar kasil dipundhuh!');
+
+    document.body.removeChild(offscreen);
+
+    const cleanNama = (namaAlmarhum || 'almarhum').replace(/[^a-zA-Z0-9]/g, '_');
+    const tgl = geblak.tanggalStr || 'selametan';
+    const filename = `Serat-Pengetan-Tilar-Donyo-${cleanNama}-${tgl.replace(/\s+/g, '-')}.png`;
+    
+    await downloadCanvasAsPng(canvas, filename, {
+      title: 'Serat Pengetan Tilar Donyo',
+      text: `Serat Resmi Pengetan Tilar Donyo: ${namaAlmarhum || 'Almarhum'} (${tgl})`
+    });
+
+    showToast('Dokumen formal pengetan kasil diundhuh! 📜✨');
   } catch (err) {
-    console.error('Gagal mengunduh PNG:', err);
+    console.error('Gagal mengunduh PNG formal:', err);
     showToast('Gagal ngundhuh gambar pengetan.');
   }
 }
 
 if (typeof window !== 'undefined') {
   window.gantiKeyakinanSelametan = gantiKeyakinanSelametan;
+  window.downloadSelametanPng = downloadSelametanPng;
+  window.hitungSelametan = hitungSelametan;
+  window.printLaporanSelametan = printLaporanSelametan;
 }

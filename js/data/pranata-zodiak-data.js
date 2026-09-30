@@ -1,4 +1,4 @@
-﻿// ==========================================
+// ==========================================
 // MASTER DATA ZODIAK & PRANATA MANGSA
 // ==========================================
 
@@ -265,3 +265,10 @@
     };
   }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
+
+const _rootPZ = (typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {}));
+export const MASTER_ZODIAK = _rootPZ.MASTER_ZODIAK;
+export const MASTER_PRANATA_MANGSA = _rootPZ.MASTER_PRANATA_MANGSA;
+export const getZodiakByDate = _rootPZ.getZodiakByDate;
+export const getPranataMangsaByDate = _rootPZ.getPranataMangsaByDate;
+

@@ -5,6 +5,12 @@
  */
 
 import { PUSTAKA_DATA, PUSTAKA_KATEGORI, PUSTAKA_ENTRI, PUSTAKA_DATA_TERSTRUKTUR } from '../../data/pustaka-db.js';
+import {
+  NASKAH_KUNO_LIST,
+  KAMUS_JAWA_INDONESIA,
+  KAMUS_JAWA_SANSKERTA,
+  DOKUMEN_REFERENSI_BUDAYA
+} from '../../data/pustaka-digital-db.js';
 
 export const PLACEHOLDER_NAMA_REGEX = /(\.{3,}|…+)/g;
 
@@ -184,4 +190,181 @@ export function getPustakaRelatedEntri(entri) {
   return results;
 }
 
-export { PUSTAKA_DATA, PUSTAKA_KATEGORI, PUSTAKA_ENTRI, PUSTAKA_DATA_TERSTRUKTUR };
+// ─── 2. FITUR DIGITAL LIBRARY: NASKAH KUNO & BABAD ─────────────────────────
+
+export function getAllNaskahKuno() {
+  return [...NASKAH_KUNO_LIST];
+}
+
+export function getNaskahKunoById(id) {
+  if (!id) return null;
+  return NASKAH_KUNO_LIST.find(n => n.id === id) || null;
+}
+
+export function searchNaskahKuno(query = '') {
+  const q = String(query).toLowerCase().trim();
+  if (!q) return getAllNaskahKuno();
+  return NASKAH_KUNO_LIST.filter(n =>
+    n.judul.toLowerCase().includes(q) ||
+    n.pengarang.toLowerCase().includes(q) ||
+    n.deskripsi.toLowerCase().includes(q) ||
+    n.isiRingkas.toLowerCase().includes(q) ||
+    (n.babList && n.babList.some(b => b.namaBab.toLowerCase().includes(q) || b.teksJawa.toLowerCase().includes(q) || b.terjemahan.toLowerCase().includes(q)))
+  );
+}
+
+export function formatNaskahPlainText(naskah) {
+  if (!naskah) return '';
+  let out = `📜 ${naskah.judul.toUpperCase()}\n`;
+  out += `Panganggit / Pujangga: ${naskah.pengarang} (${naskah.tahun})\n`;
+  out += `Kategori: ${naskah.kategori}\n`;
+  out += `Deskripsi: ${naskah.deskripsi}\n\n`;
+  out += `====================================================\n\n`;
+
+  if (Array.isArray(naskah.babList)) {
+    naskah.babList.forEach((bab, idx) => {
+      out += `[ ${bab.namaBab} ]\n\n`;
+      out += `Teks Basa Jawa:\n${bab.teksJawa}\n\n`;
+      out += `Terjemahan Basa Indonesia:\n${bab.terjemahan}\n\n`;
+      out += `----------------------------------------------------\n\n`;
+    });
+  }
+
+  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
+  return out;
+}
+
+// ─── 3. FITUR DIGITAL LIBRARY: KAMUS JAWA-INDONESIA & SANSKERTA ───────────
+
+export function getAllKamusJawaIndo() {
+  return [...KAMUS_JAWA_INDONESIA];
+}
+
+export function searchKamusJawaIndo(query = '') {
+  const q = String(query).toLowerCase().trim();
+  if (!q) return getAllKamusJawaIndo();
+  return KAMUS_JAWA_INDONESIA.filter(k =>
+    k.jawa.toLowerCase().includes(q) ||
+    k.krama.toLowerCase().includes(q) ||
+    k.id.toLowerCase().includes(q) ||
+    k.contoh.toLowerCase().includes(q)
+  );
+}
+
+export function getAllKamusJawaSanskerta() {
+  return [...KAMUS_JAWA_SANSKERTA];
+}
+
+export function searchKamusJawaSanskerta(query = '') {
+  const q = String(query).toLowerCase().trim();
+  if (!q) return getAllKamusJawaSanskerta();
+  return KAMUS_JAWA_SANSKERTA.filter(k =>
+    k.sanskerta.toLowerCase().includes(q) ||
+    k.jawa.toLowerCase().includes(q) ||
+    k.makna.toLowerCase().includes(q)
+  );
+}
+
+export function formatKamusPlainText(list, jenis = 'jawa-indo') {
+  if (!Array.isArray(list)) return '';
+  let out = `📚 KAMUS ${jenis === 'sanskerta' ? 'JAWA - SANSKERTA' : 'JAWA - INDONESIA'} — JAGAD JAWA\n`;
+  out += `Gunggunging Lema / Kosakata: ${list.length} tembung\n`;
+  out += `====================================================\n\n`;
+
+  if (jenis === 'sanskerta') {
+    list.forEach((item, idx) => {
+      out += `${idx + 1}. ${item.sanskerta} ➔ ${item.jawa}\n   Makna: ${item.makna}\n\n`;
+    });
+  } else {
+    list.forEach((item, idx) => {
+      out += `${idx + 1}. ${item.jawa} (Krama: ${item.krama}) = ${item.id}\n   Tuladha: "${item.contoh}"\n\n`;
+    });
+  }
+
+  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
+  return out;
+}
+
+// ─── 4. FITUR DIGITAL LIBRARY: DOKUMEN REFERENSI KEBUDAYAAN ──────────────
+
+export function getAllDokumenReferensi() {
+  return [...DOKUMEN_REFERENSI_BUDAYA];
+}
+
+export function getDokumenReferensiById(id) {
+  if (!id) return null;
+  return DOKUMEN_REFERENSI_BUDAYA.find(d => d.id === id) || null;
+}
+
+export function searchDokumenReferensi(query = '') {
+  const q = String(query).toLowerCase().trim();
+  if (!q) return getAllDokumenReferensi();
+  return DOKUMEN_REFERENSI_BUDAYA.filter(d =>
+    d.judul.toLowerCase().includes(q) ||
+    d.kategori.toLowerCase().includes(q) ||
+    (d.deskripsi && d.deskripsi.toLowerCase().includes(q)) ||
+    (d.ringkasan && d.ringkasan.toLowerCase().includes(q)) ||
+    (d.kontenTeks && d.kontenTeks.toLowerCase().includes(q))
+  );
+}
+
+export const getAllKamusJawaIndonesia = getAllKamusJawaIndo;
+export const searchKamusJawaIndonesia = searchKamusJawaIndo;
+
+export function formatKamusEntryPlainText(item, type = 'indonesia') {
+  if (!item) return '';
+  if (type === 'sanskerta') {
+    return `${item.sanskerta} ➔ ${item.jawa || item.istilah}\n   Arti: ${item.arti_harfiah || item.makna_filosofis || item.makna}`;
+  }
+  return `${item.jawa || item.kata} (Krama: ${item.krama || item.krama_inggil || '-'}) = ${item.indonesia || item.id || item.makna}\n   Tuladha: "${item.conto_ukara || item.contoh || '-'}"`;
+}
+
+export function formatDokumenReferensiPlainText(doc) {
+  if (!doc) return '';
+  let out = `📜 ${doc.judul?.toUpperCase() || 'DOKUMEN REFERENSI'}\n`;
+  if (doc.subjudul) out += `${doc.subjudul}\n`;
+  out += `Kategori: ${doc.kategori || '-'}\n`;
+  out += `====================================================\n\n`;
+  if (doc.ringkasan || doc.deskripsi) {
+    out += `Ringkasan:\n${doc.ringkasan || doc.deskripsi}\n\n`;
+  }
+  if (doc.kontenTeks) {
+    out += `${doc.kontenTeks}\n\n`;
+  }
+  if (Array.isArray(doc.pupuh_list)) {
+    out += `DAFTAR PAUGERAN PUPUH MACAPAT:\n`;
+    doc.pupuh_list.forEach((p, idx) => {
+      out += `${idx + 1}. ${p.nama} (${p.guru_gatra} Gatra) - ${p.guru_wilangan_lagu}\n   Watak: ${p.watak}\n\n`;
+    });
+  }
+  if (doc.laras) {
+    out += `LARAS & PATHET GAMELAN:\n`;
+    if (doc.laras.slendro) {
+      out += `• Slendro: ${doc.laras.slendro.deskripsi} (Pathet: ${doc.laras.slendro.pathet?.join(', ')})\n`;
+    }
+    if (doc.laras.pelog) {
+      out += `• Pelog: ${doc.laras.pelog.deskripsi} (Pathet: ${doc.laras.pelog.pathet?.join(', ')})\n`;
+    }
+    out += `\n`;
+  }
+  if (Array.isArray(doc.motif_larangan)) {
+    out += `MOTIF BATIK LARANGAN:\n`;
+    doc.motif_larangan.forEach((m, idx) => {
+      out += `${idx + 1}. ${m.nama} (${m.peruntukan}): ${m.filosofi}\n`;
+    });
+    out += `\n`;
+  }
+  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
+  return out;
+}
+
+export {
+  PUSTAKA_DATA,
+  PUSTAKA_KATEGORI,
+  PUSTAKA_ENTRI,
+  PUSTAKA_DATA_TERSTRUKTUR,
+  NASKAH_KUNO_LIST,
+  KAMUS_JAWA_INDONESIA,
+  KAMUS_JAWA_SANSKERTA,
+  DOKUMEN_REFERENSI_BUDAYA
+};

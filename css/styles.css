@@ -79,12 +79,12 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: 12px;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   .nav-container {
-    gap: 0.75rem;
+    gap: 16px;
   }
 }
 
@@ -169,6 +169,11 @@
 }
 
 .nav-center-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -182,17 +187,93 @@
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: 12px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 4px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
   .nav-menu {
-    gap: 0.35rem;
+    gap: 14px;
   }
+}
+
+/* Utility & Action Buttons Cluster (Kanan) */
+.nav-utility-cluster {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+@media (min-width: 1280px) {
+  .nav-utility-cluster {
+    gap: 14px;
+  }
+}
+
+.nav-action-btn,
+.mode-toggle-btn,
+.lang-toggle-btn,
+.nav-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 0.65rem;
+  font-size: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(14, 20, 32, 0.75);
+  color: #fef08a;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.nav-action-btn:hover,
+.mode-toggle-btn:hover,
+.lang-toggle-btn:hover,
+.nav-audio-btn:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+  color: #ffffff;
+}
+
+#themeToggleBtn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mode-badge-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.12rem 0.4rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  background: rgba(212, 175, 55, 0.18);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #fcd34d;
+}
+
+body.mode-pemula .mode-badge-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(52, 211, 153, 0.4);
+  color: #6ee7b7;
 }
 
 .nav-link {
@@ -210,6 +291,14 @@
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 1.2;
+}
+
+@media (max-width: 1024px) {
+  .nav-link {
+    padding: 0.3rem 0.42rem;
+    font-size: 0.73rem;
+    gap: 0.25rem;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -642,120 +731,220 @@
   transition: all 0.3s ease;
 }
 
-/* Aturan Margin Halaman Cetak Standar A4 & Pengendalian Header/Footer Browser */
+/* =========================================================================
+ * ATURAN CETAK GLOBAL — KONTROL HALAMAN A4 & ISOLASI AREA KALENDER
+ * Menggunakan margin 4mm 6mm untuk single-page fit presisi A4.
+ * ========================================================================= */
 @page {
   size: A4 portrait;
-  margin: 8mm 10mm 8mm 10mm;
+  margin: 4mm 6mm;
 }
 
 @page :left {
-  margin-left: 10mm;
+  margin-left: 6mm;
+  margin-top: 4mm;
+  margin-bottom: 4mm;
 }
 
 @page :right {
-  margin-right: 10mm;
+  margin-right: 6mm;
+  margin-top: 4mm;
+  margin-bottom: 4mm;
 }
 
 @media print {
+  /* ==========================================================================
+   * LAPISAN 1: KUNCI MARGIN & DIMENSI HALAMAN A4 TUNGGAL (SINGLE-PAGE FIT)
+   * ========================================================================== */
   @page {
     size: A4 portrait;
-    margin: 8mm 10mm 8mm 10mm;
+    margin: 4mm 6mm;
   }
 
-  /* Sembunyikan elemen browser header/footer default jika ada */
   @page :left {
-    margin-left: 10mm;
+    margin-left: 6mm;
+    margin-top: 4mm;
+    margin-bottom: 4mm;
   }
 
   @page :right {
-    margin-right: 10mm;
+    margin-right: 6mm;
+    margin-top: 4mm;
+    margin-bottom: 4mm;
   }
 
+  /* Sembunyikan SEMUA elemen saudara di luar kontainer cetak agar DOM height tidak meluber */
+  body > *:not(#printable-calendar-area):not(#laporan-cetak-pdf):not(#printArea) {
+    display: none !important;
+  }
+
+  /* Sembunyikan elemen non-cetak */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Default html & body saat cetak dokumen: override flexbox Tailwind, kunci warna terang, dan bebaskan tinggi */
+  html,
   body {
-    background: #ffffff !important;
-    color: #000000 !important;
-    font-size: 8pt !important;
-    line-height: 1.3 !important;
-    padding: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
     margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Sembunyikan seluruh container app biasa, navbar, dashboard, form, tombol, audio player */
-  header,
-  nav,
-  footer,
-  main,
-  #app,
-  .dashboard-container,
-  form,
-  button,
-  .btn-print,
-  #btnPrintKepribadian,
-  #btnPrintKepribadianLengkap,
-  #btnPrintKepribadianRingkas,
-  #btnPrintKepribadianParchment,
-  #btnPrintPerjodohan,
-  #btnPrintPerjodohanParchment,
-  #btnPrintPerjodohanMonochrome,
-  #btnPrintSelametan,
-  #btnPrintSelametanParchment,
-  #btnPrintSelametanMonochrome,
-  #btnPrintKalenderParchment,
-  #btnPrintKalenderMonochrome,
-  .no-print,
-  #ambientPlayerBar,
-  #toastBox,
-  .amber-light-trail-wrap,
-  .floating-decor,
-  .tab-content,
-  section,
-  #mobileMenu,
-  .nav-center-scroll,
-  .nav-utility-cluster,
-  .nav-dropdown-menu,
-  .screen-only-report {
-    display: none !important;
+  body.print-theme-parchment,
+  body.print-theme-parchment html {
+    background-color: #fdf6e2 !important;
+    color: #2b1d0c !important;
   }
 
-  /* Sembunyikan semua direct children body KECUALI container laporan cetak */
-  body > *:not(#laporan-cetak-pdf):not(#printArea):not(.print-only-document):not(.print-only-container):not(.print-running-header):not(.print-running-footer) {
-    display: none !important;
-  }
-
-  /* Hanya tampilkan container khusus laporan cetak */
-  #laporan-cetak-pdf,
-  #printArea,
-  .print-only-document,
-  .print-only-container {
-    display: block !important;
-    position: relative !important;
+  /* Kunci dimensi html & body tepat 1 lembar A4 portrait (289mm) KHUSUS saat cetak kalender */
+  body.print-kalender-active,
+  body.print-kalender-active html {
     width: 100% !important;
+    height: 100% !important;
+    max-height: 289mm !important;
     margin: 0 !important;
     padding: 0 !important;
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    font-family: 'Times New Roman', Times, 'Georgia', serif !important;
-    page-break-before: auto !important;
-    page-break-after: auto !important;
-    break-before: auto !important;
-    break-after: auto !important;
-    page-break-inside: auto !important;
-    break-inside: auto !important;
+    overflow: hidden !important;
+    background-color: #fdf8eb !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Halaman Laporan Tunggal (Single-Page Fit untuk Nujum Ringkas, Nujum Perjodohan, dsb) */
+  .single-page-sheet {
+    max-height: 284mm !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ==========================================================================
+   * LAPISAN 2A: AREA CETAK KALENDER (HANYA AKTIF SAAT print-kalender-active)
+   * ========================================================================== */
+  body.print-kalender-active #printable-calendar-area {
+    visibility: visible !important;
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 198mm !important;
+    height: 100% !important;
+    max-height: 289mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    background-color: #fdf8eb !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    z-index: 9999 !important;
+  }
+
+  body.print-kalender-active #printable-calendar-area * {
+    visibility: visible !important;
+  }
+
+  body.print-kalender-active #printable-calendar-area #laporan-cetak-pdf,
+  body.print-kalender-active #printable-calendar-area .print-only-document,
+  body.print-kalender-active #printable-calendar-area .print-only-container {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 289mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Sembunyikan #printable-calendar-area jika BUKAN sedang mencetak kalender */
+  body:not(.print-kalender-active) #printable-calendar-area {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Sembunyikan laporan non-kalender saat sedang cetak kalender */
+  body.print-kalender-active > #laporan-cetak-pdf,
+  body.print-kalender-active > #printArea {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* ==========================================================================
+   * LAPISAN 2B: DOKUMEN LAPORAN RESMI (Nujum Pribadi, Selametan, Jodoh, dsb)
+   * ========================================================================== */
+  #laporan-cetak-pdf,
+  .print-only-document,
+  body.print-mode-active #laporan-cetak-pdf,
+  #laporan-cetak-pdf.print-target-active,
+  #printArea {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    z-index: 10001 !important;
   }
 
   #laporan-cetak-pdf *,
-  #printArea *,
   .print-only-document *,
-  .print-only-container * {
+  body.print-mode-active #laporan-cetak-pdf *,
+  #laporan-cetak-pdf.print-target-active *,
+  #printArea *,
+  .laporan-page,
+  .laporan-page *,
+  .sheet,
+  .sheet * {
+    visibility: visible !important;
+  }
+
+  /* Hapus semua bayangan dan glow di dalam area cetak */
+  #printable-calendar-area *,
+  #laporan-cetak-pdf * {
     box-shadow: none !important;
     text-shadow: none !important;
   }
 
-  body:not(.print-theme-parchment) #laporan-cetak-pdf *,
-  body:not(.print-theme-parchment) #printArea *,
-  body:not(.print-theme-parchment) .print-only-document * {
+  /* Rendering gambar tajam */
+  #printable-calendar-area img,
+  #laporan-cetak-pdf img {
+    image-rendering: auto !important;
+    -ms-interpolation-mode: bicubic !important;
+  }
+
+
+
+  body:not(.print-theme-parchment):not(.print-theme-standard) #laporan-cetak-pdf *:not(.kalender-print-page *),
+  body:not(.print-theme-parchment):not(.print-theme-standard) #printArea *,
+  body:not(.print-theme-parchment):not(.print-theme-standard) .print-only-document *:not(.kalender-print-page *) {
     color: #000000 !important;
     border-color: #333333 !important;
   }
@@ -830,6 +1019,84 @@
     page-break-after: auto !important;
     break-after: auto !important;
     margin-bottom: 0 !important;
+  }
+
+  /* Format Cetak Kalender 1 Halaman Tunggal — Full Sheet (Fit to 1 Single Page A4) */
+  .kalender-print-page,
+  #laporan-cetak-pdf .kalender-print-page,
+  #printable-calendar-area .kalender-print-page {
+    width: 100% !important;
+    max-width: 198mm !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    max-height: 289mm !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+    padding: 1mm 1.5mm !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .kalender-print-page::before,
+  .kalender-print-page::after {
+    display: none !important;
+  }
+
+  .kalender-print-page table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    empty-cells: show !important;
+    margin-bottom: 3.5px !important;
+  }
+
+  .kalender-print-page th,
+  .kalender-print-page td {
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .kalender-print-page th {
+    text-align: center !important;
+    vertical-align: middle !important;
+    line-height: 1.2 !important;
+    padding: 7px 4px !important;
+    font-size: 9px !important;
+  }
+
+  .kalender-print-page td {
+    vertical-align: top !important;
+    padding: 4px 6px !important;
+    line-height: 1.2 !important;
+    font-size: 9px !important;
+  }
+
+  .kalender-print-page td.col-wuku,
+  .kalender-print-page td.col-wuku-sasi {
+    padding: 5px 4px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    line-height: 1.2 !important;
+    font-size: 8px !important;
+  }
+
+  .kalender-print-page tr,
+  .kalender-print-page div {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   /* Hentikan Pemenggalan Berlebihan pada Kontainer Seksi Besar (Continuous Flow) */
@@ -967,8 +1234,8 @@
     color: #2b1d0c !important;
   }
 
-  body.print-theme-parchment #laporan-cetak-pdf *,
-  #laporan-cetak-pdf.theme-parchment * {
+  body.print-theme-parchment #laporan-cetak-pdf *:not(.kalender-print-page *),
+  #laporan-cetak-pdf.theme-parchment *:not(.kalender-print-page *) {
     color: #2b1d0c !important;
   }
 
@@ -1041,21 +1308,8 @@
   body.print-theme-parchment .watermark-print,
   #laporan-cetak-pdf.theme-parchment .print-watermark,
   #laporan-cetak-pdf.parchment-theme .print-watermark {
-    display: block !important;
-    position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) rotate(-45deg) !important;
-    font-family: 'Times New Roman', Georgia, serif !important;
-    font-size: 78pt !important;
-    font-weight: 900 !important;
-    color: rgba(140, 98, 36, 0.10) !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.15em !important;
-    white-space: nowrap !important;
-    pointer-events: none !important;
-    z-index: -1 !important;
-    user-select: none !important;
+    display: none !important;
+    visibility: hidden !important;
   }
 
   body.print-theme-parchment .doc-header-kop,
@@ -1223,12 +1477,149 @@
     font-weight: bold !important;
   }
 
+  /* ========================================================================= */
+  /* THEME: STANDAR (WARNA ASLI BERSIH MODERN PADA KERTAS PUTIH)               */
+  /* ========================================================================= */
+  body.print-theme-standard {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  body.print-theme-standard #laporan-cetak-pdf,
+  #laporan-cetak-pdf.theme-standard {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  body.print-theme-standard .laporan-page,
+  #laporan-cetak-pdf.theme-standard .laporan-page {
+    background-color: #ffffff !important;
+    border: 2px solid #cbd5e1 !important;
+    color: #0f172a !important;
+  }
+
+  /* Penegasan Struktur Tabel Cetak Kalender: Kaku, Rapi, & Bebas Distorsi */
+  .kalender-print-page table {
+    table-layout: fixed !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .kalender-print-page tr,
+  .kalender-print-page td,
+  .kalender-print-page th {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    box-sizing: border-box !important;
+  }
+
   /* Hapus bayangan dan efek glow di cetak */
   * {
     box-shadow: none !important;
     text-shadow: none !important;
     filter: none !important;
   }
+}
+
+/* ========================================================================= */
+/* KONTANIER KHUSUS EKSPOR GAMBAR PNG KALENDER JAWA (A4 PORTRAIT 1240x1754)  */
+/* Mengunci rasio presisi A4 Portrait (1240px × 1754px), anti-melar & anti-cutoff */
+/* ========================================================================= */
+#kalender-export-capture-container,
+.a4-page-capture-frame {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 1240px !important;
+  max-width: 1240px !important;
+  min-width: 1240px !important;
+  height: 1754px !important;
+  max-height: 1754px !important;
+  min-height: 1754px !important;
+  margin: 0 !important;
+  padding: 16px 20px !important;
+  box-sizing: border-box !important;
+  background-color: #fdf8eb !important;
+  z-index: -9999 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  font-family: 'Times New Roman', Georgia, serif !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+#kalender-export-capture-container.theme-monochrome,
+#kalender-export-capture-container.theme-standard,
+.a4-page-capture-frame.theme-monochrome,
+.a4-page-capture-frame.theme-standard {
+  background-color: #ffffff !important;
+}
+
+#kalender-export-capture-container .kalender-print-page,
+.a4-page-capture-frame .kalender-print-page {
+  width: 1200px !important;
+  max-width: 1200px !important;
+  min-width: 1200px !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+  padding: 8px 12px !important;
+  margin: 0 auto !important;
+  background-color: #fdf8eb !important;
+  overflow: visible !important;
+}
+
+#kalender-export-capture-container.theme-monochrome .kalender-print-page,
+#kalender-export-capture-container.theme-standard .kalender-print-page,
+.a4-page-capture-frame.theme-monochrome .kalender-print-page,
+.a4-page-capture-frame.theme-standard .kalender-print-page {
+  background-color: #ffffff !important;
+}
+
+#kalender-export-capture-container table,
+.a4-page-capture-frame table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  empty-cells: show !important;
+  margin-bottom: 4px !important;
+  overflow: visible !important;
+}
+
+#kalender-export-capture-container th,
+#kalender-export-capture-container td,
+#kalender-export-capture-container div,
+#kalender-export-capture-container span,
+#kalender-export-capture-container p,
+#kalender-export-capture-container strong,
+#kalender-export-capture-container li,
+.a4-page-capture-frame th,
+.a4-page-capture-frame td,
+.a4-page-capture-frame div,
+.a4-page-capture-frame span,
+.a4-page-capture-frame p,
+.a4-page-capture-frame strong,
+.a4-page-capture-frame li {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+}
+
+#kalender-export-capture-container th,
+#kalender-export-capture-container td,
+.a4-page-capture-frame th,
+.a4-page-capture-frame td {
+  box-sizing: border-box !important;
+  height: auto !important;
+  max-height: none !important;
 }
 
 /* ========================================================================= */
@@ -1402,6 +1793,910 @@ body.mode-pemula .mode-toggle-btn:hover {
   background: rgba(16, 185, 129, 0.15);
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
 }
+
+/* ========================================================================= */
+/* NUANSA VISUAL KELIR WAYANG & PANGGUNG BLENCONG                            */
+/* ========================================================================= */
+
+body.kelir-wayang-active {
+  background-color: #0c0804 !important;
+  background-image: 
+    radial-gradient(ellipse 70% 50% at 50% 12%, rgba(245, 197, 66, 0.22) 0%, rgba(180, 83, 9, 0.12) 40%, transparent 75%),
+    radial-gradient(circle at 50% 0%, rgba(251, 191, 36, 0.18) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba(15, 23, 42, 0.95) 0%, rgba(12, 8, 4, 0.98) 70%),
+    repeating-linear-gradient(45deg, rgba(212, 175, 55, 0.015) 0, rgba(212, 175, 55, 0.015) 2px, transparent 2px, transparent 16px) !important;
+  background-attachment: fixed !important;
+  transition: background-color 0.4s ease, background-image 0.4s ease;
+}
+
+body.kelir-wayang-active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle at 50% 8%, rgba(253, 230, 138, 0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.6) 100%);
+  animation: blencongFlicker 6s infinite alternate ease-in-out;
+}
+
+@keyframes blencongFlicker {
+  0% { opacity: 0.85; }
+  25% { opacity: 0.95; }
+  50% { opacity: 0.90; }
+  75% { opacity: 1.0; }
+  100% { opacity: 0.88; }
+}
+
+/* ========================================================================= */
+/* ========================================================================= */
+/* MODE PADHANG (LIGHT MODE) — PARCHEMIN & KERATON SOGAN                     */
+/* ========================================================================= */
+
+body.theme-light,
+html.light body {
+  background-color: #fdfaf3 !important;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.09) 0%, transparent 50%),
+    radial-gradient(circle at 85% 85%, rgba(184, 124, 36, 0.07) 0%, transparent 50%),
+    radial-gradient(#b87c2415 1px, transparent 1px),
+    radial-gradient(#d4af3712 1px, #fdfaf3 1px) !important;
+  background-size: auto, auto, 28px 28px, 28px 28px !important;
+  color: #261608 !important;
+}
+
+body.theme-light .header-floating-bar {
+  background: rgba(254, 252, 247, 0.94) !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+  box-shadow: 0 4px 20px rgba(78, 43, 10, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+body.theme-light .brand-text {
+  color: #5c350b !important;
+}
+
+body.theme-light .brand-title {
+  background: linear-gradient(135deg, #7c470e 0%, #b45309 50%, #78350f 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.theme-light .brand-subtitle {
+  color: #785228 !important;
+}
+
+body.theme-light .nav-link,
+body.theme-light .nav-sublink {
+  color: #4a2800 !important;
+}
+
+body.theme-light .nav-link:hover,
+body.theme-light .nav-sublink:hover {
+  background-color: rgba(212, 175, 55, 0.15) !important;
+  color: #8c531b !important;
+}
+
+body.theme-light .nav-action-btn,
+body.theme-light .mode-toggle-btn,
+body.theme-light .lang-toggle-btn,
+body.theme-light .nav-audio-btn,
+body.theme-light #themeToggleBtn {
+  background: #ffffff !important;
+  color: #4a2800 !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+}
+
+body.theme-light .nav-action-btn:hover,
+body.theme-light .mode-toggle-btn:hover,
+body.theme-light .lang-toggle-btn:hover,
+body.theme-light .nav-audio-btn:hover,
+body.theme-light #themeToggleBtn:hover {
+  background: rgba(212, 175, 55, 0.15) !important;
+  color: #8c531b !important;
+  border-color: #b87c24 !important;
+}
+
+body.theme-light .mode-badge-pill {
+  background: rgba(184, 124, 36, 0.15) !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+  color: #78350f !important;
+}
+
+body.theme-light.mode-pemula .mode-badge-pill,
+body.theme-light .mode-pemula .mode-badge-pill {
+  background: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #14532d !important;
+}
+
+body.theme-light .nav-link.active,
+body.theme-light .nav-sublink.active {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(184, 124, 36, 0.25) 100%) !important;
+  color: #5c350b !important;
+  font-weight: 700;
+  border-color: rgba(184, 124, 36, 0.5) !important;
+}
+
+body.theme-light .nav-dropdown-menu {
+  background: #fdfaf3 !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+  box-shadow: 0 12px 30px rgba(78, 43, 10, 0.18) !important;
+}
+
+body.theme-light .gold-gradient-text,
+body.light .gold-gradient-text,
+html.light .gold-gradient-text {
+  background: linear-gradient(135deg, #7c470e 0%, #a16207 40%, #854d0e 80%, #583101 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* ─── CONTAINER & CARD SURFACES (IVORY / PARCHMENT WARM WHITE) ─── */
+body.theme-light .bg-keraton {
+  background-color: #ffffff !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.32) !important;
+  box-shadow: 0 4px 18px rgba(120, 53, 15, 0.05) !important;
+}
+
+body.theme-light .bg-wulung {
+  background-color: #f7f2e7 !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.32) !important;
+}
+
+body.theme-light .bg-sogan-950,
+body.theme-light .bg-sogan-900,
+body.theme-light .bg-sogan-800 {
+  background-color: #f4ecdc !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.28) !important;
+}
+
+/* Card Glow and Shadows in Light Mode */
+body.theme-light .amber-glow-card {
+  background: #ffffff !important;
+  border-color: rgba(184, 124, 36, 0.38) !important;
+  box-shadow: 0 6px 22px rgba(120, 53, 15, 0.08), 0 1px 3px rgba(120, 53, 15, 0.05) !important;
+  color: #261608 !important;
+}
+
+body.theme-light .amber-glow-text {
+  text-shadow: none !important;
+}
+
+/* Override all dark utility backgrounds in Light Mode */
+body.theme-light .bg-\[\#080c16\],
+body.theme-light .bg-\[\#0B0F19\],
+body.theme-light .bg-\[\#0B0F19\]\/85,
+body.theme-light .bg-\[\#0E131E\],
+body.theme-light .bg-\[\#0e1420\],
+body.theme-light .bg-\[\#10141e\],
+body.theme-light .bg-\[\#121722\],
+body.theme-light .bg-\[\#141d30\],
+body.theme-light .bg-\[\#151c2e\],
+body.theme-light .bg-\[\#1A2234\],
+body.theme-light .bg-\[\#1a2234\],
+body.theme-light .bg-\[\#181529\],
+body.theme-light .bg-\[\#0f141d\] {
+  background-color: #fdfaf3 !important;
+  color: #261608 !important;
+}
+
+/* Light mode mobile drawer */
+body.theme-light #mobileMenu aside {
+  background-color: #fdfaf3 !important;
+  border-left-color: rgba(184, 124, 36, 0.4) !important;
+  color: #261608 !important;
+}
+
+/* Override dark gradients on banners & hero panels */
+body.theme-light .from-sogan-950\/90,
+body.theme-light .from-sogan-950,
+body.theme-light .from-sogan-900,
+body.theme-light .from-\[\#0B0F19\],
+body.theme-light .from-slate-950,
+body.theme-light .from-stone-950 {
+  --tw-gradient-from: #fbf5e8 var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(251, 245, 232, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+body.theme-light .via-wulung\/95,
+body.theme-light .via-wulung,
+body.theme-light .via-sogan-900,
+body.theme-light .via-slate-900 {
+  --tw-gradient-to: rgba(247, 242, 231, 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), #f7f2e7 var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+}
+
+body.theme-light .to-keraton\/95,
+body.theme-light .to-keraton,
+body.theme-light .to-sogan-950,
+body.theme-light .to-slate-950 {
+  --tw-gradient-to: #ffffff var(--tw-gradient-to-position) !important;
+}
+
+/* Light mode text contrast overrides (WCAG AA compliant > 4.5:1 ratio) */
+body.theme-light .text-prada,
+html.light .text-prada {
+  color: #78350f !important; /* Deep rich bronze-gold, ratio ~7.5:1 on light cream */
+}
+
+body.theme-light .text-prada-light,
+html.light .text-prada-light {
+  color: #854d0e !important;
+}
+
+body.theme-light .text-sogan-100,
+body.theme-light .text-sogan-200 {
+  color: #261608 !important;
+}
+
+body.theme-light .text-sogan-200\/95,
+body.theme-light .text-sogan-300 {
+  color: #3b220c !important; /* warm deep brown, ratio > 7:1 */
+}
+
+body.theme-light .text-sogan-400 {
+  color: #5c350b !important;
+}
+
+body.theme-light .text-sogan-500 {
+  color: #6d400e !important;
+}
+
+body.theme-light .text-amber-100,
+body.theme-light .text-amber-200 {
+  color: #261608 !important;
+}
+
+body.theme-light .text-amber-300,
+body.theme-light .text-amber-400,
+body.theme-light .text-amber-500 {
+  color: #854d0e !important;
+}
+
+body.theme-light .text-yellow-100,
+body.theme-light .text-yellow-200,
+body.theme-light .text-yellow-300,
+body.theme-light .text-yellow-400,
+body.theme-light .text-yellow-500 {
+  color: #854d0e !important;
+}
+
+body.theme-light .text-white,
+body.theme-light .text-slate-50,
+body.theme-light .text-gray-50 {
+  color: #261608 !important;
+}
+
+body.theme-light .text-stone-100,
+body.theme-light .text-stone-200,
+body.theme-light .text-stone-300,
+body.theme-light .text-slate-100,
+body.theme-light .text-slate-200,
+body.theme-light .text-slate-300,
+body.theme-light .text-gray-100,
+body.theme-light .text-gray-200 {
+  color: #261608 !important;
+}
+
+body.theme-light .text-stone-400,
+body.theme-light .text-slate-400,
+body.theme-light .text-gray-400 {
+  color: #4a2d10 !important;
+}
+
+body.theme-light .text-stone-500,
+body.theme-light .text-slate-500,
+body.theme-light .text-gray-500 {
+  color: #633c16 !important;
+}
+
+body.theme-light .text-amber-200\/80,
+body.theme-light .text-amber-200\/70,
+body.theme-light .text-amber-300\/80 {
+  color: #3b220c !important;
+}
+
+/* Inputs, Selects, and Textareas in Light Mode */
+body.theme-light input:not([type="checkbox"]):not([type="radio"]),
+body.theme-light select,
+body.theme-light textarea {
+  background-color: #ffffff !important;
+  color: #1c1917 !important;
+  border-color: rgba(184, 124, 36, 0.45) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+body.theme-light input::placeholder,
+body.theme-light textarea::placeholder {
+  color: #8c6030 !important;
+}
+
+/* Border overrides in Light Mode */
+body.theme-light .border-sogan-900,
+body.theme-light .border-sogan-800,
+body.theme-light .border-sogan-700,
+body.theme-light .border-sogan-600 {
+  border-color: rgba(184, 124, 36, 0.3) !important;
+}
+
+body.theme-light .border-prada,
+body.theme-light .border-prada\/20,
+body.theme-light .border-prada\/30,
+body.theme-light .border-prada\/40,
+body.theme-light .border-prada\/50,
+body.theme-light .border-prada\/60 {
+  border-color: rgba(184, 124, 36, 0.45) !important;
+}
+
+/* Floating decorative elements softer in Light Mode */
+body.theme-light .floating-decor {
+  opacity: 0.07 !important;
+}
+
+/* Light mode modal backgrounds */
+body.theme-light #modalPustakaReader > div,
+body.theme-light #modalNujumPokemonCard > div,
+body.theme-light #modalGlosariumNujum > div,
+body.theme-light #modalEnsiklopediaWuku > div,
+body.theme-light #modalPadewan > div,
+body.theme-light #modalOnboarding > div,
+body.theme-light #modalPuspawarnaInfo > div,
+body.theme-light #headerLaporanMenu {
+  background: #fdfaf3 !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.45) !important;
+  box-shadow: 0 10px 40px rgba(78, 43, 10, 0.2) !important;
+}
+
+body.theme-light #modalPustakaReader .bg-\[\#0E131E\],
+body.theme-light #modalNujumPokemonCard .bg-\[\#0E131E\],
+body.theme-light #modalGlosariumNujum .bg-\[\#0E131E\],
+body.theme-light #modalPadewan .bg-\[\#0E131E\] {
+  background-color: #f7f2e7 !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+}
+
+/* Ensure High-Contrast Badges in Light Mode (WCAG AA Compliant) */
+body.theme-light .badge-becik,
+body.theme-light .text-emerald-300,
+body.theme-light .text-emerald-400 {
+  color: #14532d !important;
+}
+
+body.theme-light .bg-emerald-950\/40,
+body.theme-light .bg-emerald-950\/60,
+body.theme-light .bg-emerald-950\/80,
+body.theme-light .bg-emerald-950,
+body.theme-light .bg-emerald-900\/40,
+body.theme-light .bg-emerald-900\/50,
+body.theme-light .bg-emerald-900\/60 {
+  background-color: #dcfce7 !important;
+  color: #14532d !important;
+  border-color: rgba(22, 101, 52, 0.4) !important;
+}
+
+body.theme-light .badge-ala,
+body.theme-light .text-rose-300,
+body.theme-light .text-rose-400,
+body.theme-light .text-red-400 {
+  color: #991b1b !important;
+}
+
+body.theme-light .bg-rose-950\/60,
+body.theme-light .bg-rose-950\/80,
+body.theme-light .bg-rose-950,
+body.theme-light .bg-red-950\/40,
+body.theme-light .bg-red-950\/60,
+body.theme-light .bg-red-950\/80,
+body.theme-light .bg-rose-900\/40,
+body.theme-light .bg-rose-900\/50 {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border-color: rgba(153, 27, 27, 0.4) !important;
+}
+
+body.theme-light .bg-amber-950\/40,
+body.theme-light .bg-amber-950\/60,
+body.theme-light .bg-amber-950\/80,
+body.theme-light .bg-amber-950,
+body.theme-light .bg-amber-900\/40,
+body.theme-light .bg-amber-900\/50,
+body.theme-light .bg-amber-900\/60 {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border-color: rgba(180, 83, 9, 0.4) !important;
+}
+
+body.theme-light .bg-sky-950\/60,
+body.theme-light .bg-sky-950\/80,
+body.theme-light .bg-sky-950,
+body.theme-light .bg-blue-950\/60,
+body.theme-light .bg-sky-900\/40 {
+  background-color: #e0f2fe !important;
+  color: #075985 !important;
+  border-color: rgba(3, 105, 161, 0.4) !important;
+}
+
+body.theme-light .bg-purple-950\/60,
+body.theme-light .bg-purple-950\/80,
+body.theme-light .bg-purple-900\/40 {
+  background-color: #f3e8ff !important;
+  color: #6b21a8 !important;
+  border-color: rgba(107, 33, 168, 0.4) !important;
+}
+
+/* Additional card backgrounds, borders, and text in Light Mode */
+body.theme-light .bg-stone-900,
+body.theme-light .bg-stone-950,
+body.theme-light .bg-slate-900,
+body.theme-light .bg-slate-950,
+body.theme-light .bg-zinc-800,
+body.theme-light .bg-black\/30,
+body.theme-light .bg-black\/40,
+body.theme-light .bg-black\/50,
+body.theme-light .bg-black\/60,
+body.theme-light .bg-black\/80,
+body.theme-light .bg-black\/85,
+body.theme-light .bg-black {
+  background-color: #ffffff !important;
+  color: #261608 !important;
+}
+
+body.theme-light .border-stone-800,
+body.theme-light .border-stone-700,
+body.theme-light .border-slate-800,
+body.theme-light .border-slate-700,
+body.theme-light .border-amber-900\/30,
+body.theme-light .border-amber-900\/40,
+body.theme-light .border-amber-900\/50 {
+  border-color: rgba(184, 124, 36, 0.3) !important;
+}
+
+/* ─── PEMBALIKAN MUTLAK KONTEN & PANEL NUJUM DALAM LIGHT MODE ─── */
+body.theme-light #hasilKepribadianBox .bg-gradient-to-br,
+body.theme-light #hasilKepribadianBox .bg-gradient-to-r,
+body.theme-light #hasilKepribadianBox .bg-sogan-950,
+body.theme-light #hasilKepribadianBox .bg-wulung,
+body.theme-light #hasilKepribadianBox .bg-keraton {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #1a1a1a !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+  box-shadow: 0 4px 18px rgba(120, 53, 15, 0.06) !important;
+}
+
+/* Kotak Tipe Karakter Utama */
+body.theme-light .bg-sogan-900\/60,
+body.theme-light .bg-sogan-900\/70,
+body.theme-light .bg-sogan-900\/80,
+body.theme-light .bg-sogan-900 {
+  background-color: #fcf9f2 !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+}
+
+body.theme-light .border-amber-500\/30,
+body.theme-light .border-amber-500\/40,
+body.theme-light .border-amber-500\/50 {
+  border-color: rgba(184, 124, 36, 0.4) !important;
+}
+
+/* Kotak 3 Potensi & Kekuatan Utama */
+body.theme-light .bg-emerald-950\/40,
+body.theme-light .bg-emerald-950\/50,
+body.theme-light .bg-emerald-950 {
+  background-color: #f0fdf4 !important;
+  border-color: rgba(22, 101, 52, 0.35) !important;
+  color: #14532d !important;
+}
+
+body.theme-light .text-emerald-100,
+body.theme-light .text-emerald-200 {
+  color: #166534 !important;
+}
+
+/* Kotak Titik Mawas Diri (Area Waspada) */
+body.theme-light .bg-amber-950\/40,
+body.theme-light .bg-amber-950\/50,
+body.theme-light .bg-amber-950 {
+  background-color: #fefce8 !important;
+  border-color: rgba(161, 98, 7, 0.35) !important;
+  color: #713f12 !important;
+}
+
+body.theme-light .text-amber-100,
+body.theme-light .text-amber-200 {
+  color: #78350f !important;
+}
+
+/* Kotak Arah Rejeki / Hoki (Teal) */
+body.theme-light .bg-teal-950\/40,
+body.theme-light .bg-teal-950\/50,
+body.theme-light .bg-teal-950 {
+  background-color: #f0fdfa !important;
+  border-color: rgba(15, 118, 110, 0.35) !important;
+  color: #134e4a !important;
+}
+
+body.theme-light .text-teal-300,
+body.theme-light .text-teal-400 {
+  color: #0f766e !important;
+}
+
+body.theme-light .bg-teal-500\/20 {
+  background-color: #ccfbf1 !important;
+}
+
+/* Kotak Wejangan Faalakiah (Purple) */
+body.theme-light .bg-purple-950\/40,
+body.theme-light .bg-purple-950\/50,
+body.theme-light .bg-purple-950 {
+  background-color: #faf5ff !important;
+  border-color: rgba(126, 34, 206, 0.35) !important;
+  color: #581c87 !important;
+}
+
+body.theme-light .text-purple-300,
+body.theme-light .text-purple-400 {
+  color: #7e22ce !important;
+}
+
+body.theme-light .bg-purple-500\/20 {
+  background-color: #f3e8ff !important;
+}
+
+/* Kontainer Nujum Input & Panel Quick Info */
+body.theme-light #nujumPribadiCard,
+body.theme-light #subTabNujumNonJodoh,
+body.theme-light #tab-kepribadian .bg-keraton,
+body.theme-light #tab-kepribadian .bg-wulung,
+body.theme-light #tab-kepribadian .bg-sogan-950 {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+}
+
+/* Seluruh Teks Judul dan Paragraf di Nujum */
+body.theme-light #hasilKepribadianBox h3,
+body.theme-light #hasilKepribadianBox h4,
+body.theme-light #hasilKepribadianBox strong {
+  color: #1c1917 !important;
+}
+
+body.theme-light #hasilKepribadianBox p,
+body.theme-light #hasilKepribadianBox span:not(.badge):not([class*="bg-"]) {
+  color: #261608 !important;
+}
+
+/* Tombol dan Pills Toolbar di Mode Terang */
+body.theme-light .bg-sogan-900 {
+  background-color: #f7f2e7 !important;
+  color: #5c350b !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+}
+
+body.theme-light .bg-sogan-950 {
+  background-color: #f5eedf !important;
+  color: #5c350b !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+}
+
+/* ─── GENERAL PANEL & TAB CARDS IN LIGHT MODE ─── */
+body.theme-light section.tab-content .bg-keraton,
+body.theme-light section.tab-content .bg-wulung,
+body.theme-light section.tab-content .bg-sogan-950,
+body.theme-light section.tab-content .bg-sogan-900 {
+  background-color: #ffffff !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.32) !important;
+  box-shadow: 0 4px 18px rgba(120, 53, 15, 0.05) !important;
+}
+
+body.theme-light section.tab-content .bg-sogan-950\/70,
+body.theme-light section.tab-content .bg-sogan-950\/80,
+body.theme-light section.tab-content .bg-sogan-900\/70,
+body.theme-light section.tab-content .bg-sogan-900\/80 {
+  background-color: #faf5eb !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.28) !important;
+}
+
+/* Sub-header labels & small notes in Light Mode */
+body.theme-light .text-sogan-300,
+body.theme-light .text-sogan-400 {
+  color: #4a2800 !important;
+}
+
+body.theme-light .text-sogan-200 {
+  color: #261608 !important;
+}
+
+/* Specific elements inside modals */
+body.theme-light .modal-box,
+body.theme-light .modal-content {
+  background-color: #fdfaf3 !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.45) !important;
+}
+
+/* ─── COMPREHENSIVE LIGHT MODE COLOR & TEXT CONTRAST SYSTEM ─── */
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3,
+body.theme-light h4,
+body.theme-light h5,
+body.theme-light h6 {
+  color: #1c1917 !important;
+}
+
+/* Dark Gradients & Card Surfaces Inverted to Clean White / Ivory */
+body.theme-light [class*="from-[#1"],
+body.theme-light [class*="from-[#0"],
+body.theme-light [class*="from-[#2"] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(120, 53, 15, 0.05) !important;
+}
+
+body.theme-light .bg-black\/30,
+body.theme-light .bg-black\/40,
+body.theme-light .bg-black\/50,
+body.theme-light .bg-black\/60,
+body.theme-light .bg-black\/70,
+body.theme-light .bg-black\/80 {
+  background-color: #f7f2e7 !important;
+  border-color: rgba(184, 124, 36, 0.3) !important;
+  color: #1a1a1a !important;
+}
+
+/* Universal Text Contrast Enforcement in Light Mode */
+body.theme-light .text-amber-100,
+body.theme-light .text-amber-200,
+body.theme-light .text-slate-100,
+body.theme-light .text-slate-200,
+body.theme-light .text-slate-300,
+body.theme-light .text-gray-100,
+body.theme-light .text-gray-200,
+body.theme-light .text-gray-300,
+body.theme-light .text-zinc-100,
+body.theme-light .text-zinc-200,
+body.theme-light .text-zinc-300,
+body.light .text-amber-100,
+body.light .text-amber-200,
+body.light .text-slate-100,
+body.light .text-slate-200,
+body.light .text-slate-300,
+body.light .text-gray-100,
+body.light .text-gray-200,
+body.light .text-gray-300,
+body.light .text-zinc-100,
+body.light .text-zinc-200,
+body.light .text-zinc-300 {
+  color: #1a1a1a !important;
+}
+
+body.theme-light .text-slate-400,
+body.theme-light .text-gray-400,
+body.theme-light .text-zinc-400,
+body.light .text-slate-400,
+body.light .text-gray-400,
+body.light .text-zinc-400 {
+  color: #4b5563 !important;
+}
+
+body.theme-light .text-sogan-100,
+body.theme-light .text-sogan-200,
+body.light .text-sogan-100,
+body.light .text-sogan-200 {
+  color: #261608 !important;
+}
+
+body.theme-light .text-sogan-300,
+body.theme-light .text-sogan-400,
+body.theme-light .text-sogan-500,
+body.light .text-sogan-300,
+body.light .text-sogan-400,
+body.light .text-sogan-500 {
+  color: #4a2800 !important;
+}
+
+body.theme-light .text-teal-200,
+body.theme-light .text-teal-300,
+body.light .text-teal-200,
+body.light .text-teal-300 {
+  color: #0f766e !important;
+}
+
+body.theme-light .text-cyan-200,
+body.theme-light .text-cyan-300,
+body.light .text-cyan-200,
+body.light .text-cyan-300 {
+  color: #0e7490 !important;
+}
+
+body.theme-light .text-emerald-200,
+body.theme-light .text-emerald-300,
+body.light .text-emerald-200,
+body.light .text-emerald-300 {
+  color: #15803d !important;
+}
+
+body.theme-light .text-rose-200,
+body.theme-light .text-rose-300,
+body.light .text-rose-200,
+body.light .text-rose-300 {
+  color: #be123c !important;
+}
+
+body.theme-light .text-purple-200,
+body.theme-light .text-purple-300,
+body.light .text-purple-200,
+body.light .text-purple-300 {
+  color: #7e22ce !important;
+}
+
+/* Light Mode Form Inputs & Controls */
+body.theme-light input[type="text"],
+body.theme-light input[type="date"],
+body.theme-light input[type="number"],
+body.theme-light select,
+body.theme-light textarea,
+body.light input[type="text"],
+body.light input[type="date"],
+body.light input[type="number"],
+body.light select,
+body.light textarea {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+}
+
+body.theme-light input::placeholder,
+body.theme-light textarea::placeholder {
+  color: #8c7355 !important;
+}
+
+/* Pustaka Digital & Reader Specific Overrides */
+body.theme-light #pustakaSubtabContent .rounded-2xl,
+body.theme-light #pustakaSubtabContent .rounded-xl {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border-color: rgba(184, 124, 36, 0.35);
+}
+
+body.theme-light #pustakaReaderSectionsContainer > div {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+}
+
+body.theme-light #pustakaReaderSectionsContainer .bg-sogan-950\/90 {
+  background-color: #faf5eb !important;
+  border-color: rgba(184, 124, 36, 0.3) !important;
+}
+
+/* Modal Popup Surfaces in Light Mode */
+body.theme-light [id$="Modal"] .bg-keraton,
+body.theme-light [id$="Modal"] .bg-wulung,
+body.theme-light [id$="Modal"] .bg-sogan-950,
+body.theme-light .modal-overlay .bg-keraton,
+body.light [id$="Modal"] .bg-keraton,
+body.light [id$="Modal"] .bg-wulung,
+body.light [id$="Modal"] .bg-sogan-950,
+body.light .modal-overlay .bg-keraton {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+}
+
+/* ─── MITOLOGI NUSANTARA & MODAL DETAIL IN LIGHT MODE ─── */
+body.theme-light #mitologiPillarsGrid > div,
+body.light #mitologiPillarsGrid > div {
+  background: #ffffff !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+  box-shadow: 0 4px 20px rgba(120, 53, 15, 0.06) !important;
+  color: #261608 !important;
+}
+
+body.theme-light #mitologiPillarsGrid h4,
+body.light #mitologiPillarsGrid h4 {
+  color: #1c1917 !important;
+}
+
+body.theme-light #mitologiPillarsGrid p,
+body.light #mitologiPillarsGrid p {
+  color: #3d260f !important;
+}
+
+body.theme-light #modalDetailMitologi .bg-\[\#121722\],
+body.light #modalDetailMitologi .bg-\[\#121722\] {
+  background-color: #faf6ed !important;
+  border-color: rgba(184, 124, 36, 0.4) !important;
+  color: #261608 !important;
+}
+
+body.theme-light #modalDetailMitologi .bg-\[\#0E131E\],
+body.light #modalDetailMitologi .bg-\[\#0E131E\] {
+  background-color: #f5eedf !important;
+  border-color: rgba(184, 124, 36, 0.3) !important;
+  color: #4a2800 !important;
+}
+
+body.theme-light #modalDetailMitologi .bg-keraton\/90,
+body.light #modalDetailMitologi .bg-keraton\/90 {
+  background-color: #ffffff !important;
+  border-color: rgba(184, 124, 36, 0.3) !important;
+  color: #1a1a1a !important;
+}
+
+body.theme-light #modalDetailMitologi .bg-sogan-950\/80,
+body.light #modalDetailMitologi .bg-sogan-950\/80 {
+  background-color: #f7f2e7 !important;
+  border-color: rgba(184, 124, 36, 0.35) !important;
+  color: #261608 !important;
+}
+
+body.theme-light #modalDetailMitologi h4,
+body.light #modalDetailMitologi h4 {
+  color: #2c1a06 !important;
+  border-bottom-color: rgba(184, 124, 36, 0.3) !important;
+}
+
+body.theme-light #modalDetailMitologi .text-sogan-100,
+body.theme-light #modalDetailMitologi .text-sogan-200,
+body.light #modalDetailMitologi .text-sogan-100,
+body.light #modalDetailMitologi .text-sogan-200 {
+  color: #261608 !important;
+}
+
+/* ─── BODY.LIGHT UNIVERSAL ALIASES ─── */
+body.light,
+html.light body {
+  background-color: #fdfaf3 !important;
+  color: #261608 !important;
+}
+
+body.light section.tab-content .bg-keraton,
+body.light section.tab-content .bg-wulung,
+body.light section.tab-content .bg-sogan-950,
+body.light section.tab-content .bg-sogan-900,
+body.light [class*="from-[#1"],
+body.light [class*="from-[#0"] {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #261608 !important;
+  border-color: rgba(184, 124, 36, 0.32) !important;
+}
+
+body.light h1,
+body.light h2,
+body.light h3,
+body.light h4,
+body.light h5,
+body.light h6 {
+  color: #1c1917 !important;
+}
+
+body.light .text-sogan-200,
+body.light .text-sogan-300,
+body.light .text-sogan-400 {
+  color: #4a2800 !important;
+}
+
+body.light .text-amber-100,
+body.light .text-amber-200 {
+  color: #1a1a1a !important;
+}
+
+
+
 
 
 

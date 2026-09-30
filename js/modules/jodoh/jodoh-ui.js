@@ -46,8 +46,50 @@ export function initPerjodohanSelects() {
     PASARAN.forEach(p => pSel.appendChild(new Option(p, p)));
   });
 
+  // Pasang listener status hubungan (Belum Menikah vs Sudah Menikah)
+  initStatusHubunganPerjodohanEvents();
+
   // Render riwayat perhitungan awal
   renderRiwayatPerjodohan();
+}
+
+/**
+ * Handle perubahan radio button status hubungan secara real-time
+ * @param {'belum_menikah'|'sudah_menikah'} newStatus 
+ */
+export function onStatusHubunganChange(newStatus) {
+  const isSudah = (newStatus === 'sudah_menikah');
+  window.LAST_STATUS_HUBUNGAN = newStatus;
+  if (window.LAST_PERJODOHAN_DATA) {
+    if (isSudah) {
+      window.LAST_MANTU_DATA = [];
+      renderPanduanKeharmonisanPasutri(window.LAST_PERJODOHAN_DATA);
+    } else {
+      const mantu = cariRekomendasiTanggalMantu(window.LAST_PERJODOHAN_DATA.totalNeptu);
+      window.LAST_MANTU_DATA = mantu;
+      renderRekomendasiMantu(mantu);
+    }
+    const pairInfo = document.getElementById('perjodohanPairInfo');
+    if (pairInfo) {
+      const statusLabel = isSudah ? 'Pasutri (Sampun Nikah)' : 'Calon Penganten';
+      const p = window.LAST_PERJODOHAN_DATA.pria;
+      const w = window.LAST_PERJODOHAN_DATA.wanita;
+      pairInfo.innerHTML = `${w.nama} (${w.neptu}) &middot; ${p.nama} (${p.neptu}) &bull; Jumlah Neptu: <strong class="text-prada font-mono">${window.LAST_PERJODOHAN_DATA.totalNeptu}</strong> &bull; Status: <span class="text-amber-300 font-semibold">${statusLabel}</span>`;
+    }
+  }
+}
+
+/**
+ * Inisialisasi event listener radio status hubungan
+ */
+export function initStatusHubunganPerjodohanEvents() {
+  if (typeof document === 'undefined') return;
+  const radios = document.querySelectorAll('input[name="statusHubunganPerjodohan"]');
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      onStatusHubunganChange(radio.value);
+    });
+  });
 }
 
 export function autoDetectAksaraUI(side) {
@@ -211,10 +253,10 @@ export function hitungNujumPerjodohan() {
   const cardBox = document.getElementById('hasilPerjodohanCard');
   if (cardBox) cardBox.classList.remove('hidden');
 
-  ['btnPrintPerjodohan', 'btnPrintPerjodohanParchment', 'btnPrintPerjodohanMonochrome'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) btn.style.display = 'inline-flex';
-  });
+  const btnParchment = document.getElementById('btnPrintPerjodohanParchment');
+  if (btnParchment) btnParchment.style.display = 'inline-flex';
+  const btnLegacy = document.getElementById('btnPrintPerjodohan');
+  if (btnLegacy) btnLegacy.style.display = 'inline-flex';
 
   showToast('Pitung perjodohan kasil kapetung kanthi jangkep!');
 }
@@ -406,18 +448,18 @@ export function renderRekomendasiMantu(mantuList) {
                   <i class="fa-solid fa-leaf text-[9px]"></i> Dino Ijo
                 </span>
               </div>
-              <h5 class="font-marcellus text-sm font-bold text-sogan-100">${m.formattedDate}</h5>
-              <div class="text-[11px] text-sogan-400">
-                Weton: <strong class="text-prada">${m.weton}</strong> (Neptu: ${m.neptuHari}) &middot; Wuku ${m.wukuName}
+              <h5 class="font-marcellus text-sm font-bold text-amber-200">${m.formattedDate}</h5>
+              <div class="text-[11px] text-amber-100/90 font-medium">
+                Weton: <strong class="text-prada-light font-bold">${m.weton}</strong> (Neptu: ${m.neptuHari}) &middot; Wuku ${m.wukuName}
               </div>
             </div>
 
-            <div class="p-2 rounded-lg bg-sogan-950/80 border border-sogan-800/80 space-y-1 text-[11px]">
-              <div class="flex items-center justify-between">
-                <span class="text-sogan-400">Panca Sudha:</span>
-                <strong class="text-amber-300">${m.kategoriLabel}</strong>
+            <div class="p-2.5 rounded-lg bg-[#140e08]/95 border border-amber-900/60 space-y-1.5 text-[11px]">
+              <div class="flex items-center justify-between border-b border-amber-950/60 pb-1">
+                <span class="text-amber-200/80 font-medium">Panca Sudha:</span>
+                <strong class="text-amber-300 font-semibold">${m.kategoriLabel}</strong>
               </div>
-              <p class="text-sogan-300 text-[10.5px] italic leading-tight">${m.makna}</p>
+              <p class="text-amber-100 text-[11px] italic leading-relaxed">${m.makna}</p>
             </div>
 
             <button onclick="simpanMantuKeBookmark('${m.dateStr}', '${m.weton}', '${m.predikat}')" class="w-full py-1.5 px-2 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-prada text-[11px] font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
@@ -567,14 +609,20 @@ export function clearAllRiwayatPerjodohan() {
  * Cetak Laporan Perjodohan Kasultanan Resmi (Tahap 4.4).
  * @param {'parchment'|'monochrome'} theme 
  */
-export function printLaporanPerjodohan(theme = 'monochrome') {
+export function printLaporanPerjodohan(theme = 'parchment') {
+  if (!window.LAST_PERJODOHAN_DATA) {
+    if (typeof hitungNujumPerjodohan === 'function') {
+      hitungNujumPerjodohan();
+    }
+  }
   if (!window.LAST_PERJODOHAN_DATA) {
     showToast('Hitung pitung perjodohan terlebih dahulu sebelum mencetak.');
     return;
   }
 
   const hasil = window.LAST_PERJODOHAN_DATA;
-  const mantuList = window.LAST_MANTU_DATA || cariRekomendasiTanggalMantu(hasil.totalNeptu);
+  const isSudahMenikah = (window.LAST_STATUS_HUBUNGAN === 'sudah_menikah');
+  const mantuList = isSudahMenikah ? [] : (window.LAST_MANTU_DATA || cariRekomendasiTanggalMantu(hasil.totalNeptu));
   const keharmonisan = hasil.summary.keharmonisan || getTingkatKeharmonisan(hasil.summary.skorKeselarasan);
 
   let container = document.getElementById('laporan-cetak-pdf');
@@ -583,122 +631,137 @@ export function printLaporanPerjodohan(theme = 'monochrome') {
     container.id = 'laporan-cetak-pdf';
     container.className = 'print-only-document';
     document.body.appendChild(container);
+  } else if (container.parentElement !== document.body) {
+    document.body.appendChild(container);
   }
 
   const isParchment = theme === 'parchment';
   container.className = `print-only-document ${isParchment ? 'theme-parchment parchment-theme' : 'theme-monochrome monochrome-theme'}`;
 
+  // Styling palette untuk cetak (light parchment atau monochrome)
+  const boxBg = isParchment ? '#fbf5e6' : '#ffffff';
+  const boxBorder = isParchment ? '#c8a355' : '#374151';
+  const textDark = isParchment ? '#2b1d0c' : '#111827';
+  const textMuted = isParchment ? '#634720' : '#4b5563';
+  const goldHeading = isParchment ? '#8c6224' : '#111827';
+
   container.innerHTML = `
-    <div class="sheet a4-page space-y-4">
-      <!-- Kop Surat Kasultanan Resmi -->
-      <div class="kop-surat flex items-center justify-between border-b-2 border-prada pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full border-2 border-prada flex items-center justify-center font-cinzel text-xl font-bold text-prada">
-            ꦗ
-          </div>
-          <div>
-            <h2 class="font-cinzel text-lg font-bold tracking-wider text-prada">JAGAD JAWA &middot; SERAT PITUNG SALAKI RABI</h2>
-            <p class="text-[10px] tracking-wide text-sogan-300">Pawiyatan Luhur Budaya Nusantara &bull; Surat Katrangan Petungan Perjodohan Jawa</p>
-          </div>
-        </div>
-        <div class="text-right text-[10px] font-mono text-sogan-400">
-          <div>Tanggal Cetak: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
-          <div>Dokumen Resmi Kasultanan</div>
-        </div>
-      </div>
+    <div class="print-report-wrapper" style="width: 100%; box-sizing: border-box;">
+      <div class="laporan-page single-page-sheet ${isParchment ? 'theme-parchment' : 'theme-monochrome'}" style="max-width: 860px; margin: 0 auto; padding: 18px 24px; ${isParchment ? 'background-color: #fdf6e2; color: #2b1d0c; border: 3px double #8c6224; outline: 1.5px solid #d4af37; outline-offset: -5px;' : 'background-color: #ffffff; color: #111827; border: 2px solid #374151;'} border-radius: 4px; position: relative; font-family: 'Times New Roman', Georgia, serif; box-sizing: border-box;">
+        
+        <span class="corner-tr" aria-hidden="true" style="position: absolute; top: 4px; right: 5px; color: ${goldHeading}; font-size: 14pt;">❖</span>
+        <span class="corner-bl" aria-hidden="true" style="position: absolute; bottom: 4px; left: 5px; color: ${goldHeading}; font-size: 14pt;">❖</span>
 
-      <!-- Profil Kedua Calon Mempelai -->
-      <div class="grid grid-cols-2 gap-3 text-xs">
-        <div class="p-3 rounded-lg border border-sogan-700 bg-sogan-950/40 space-y-1">
-          <span class="text-[10px] font-mono uppercase text-prada font-bold block">Calon Pengantin Wanita (♀)</span>
-          <div class="font-bold text-sm text-sogan-100">${hasil.wanita.nama}</div>
-          <div class="text-[11px] text-sogan-300">Weton: <strong>${hasil.wanita.hari} ${hasil.wanita.pasaran}</strong> (Neptu: ${hasil.wanita.neptu})</div>
-          <div class="text-[10px] text-sogan-400">Aksara: ${hasil.wanita.aksaraDepan} / ${hasil.wanita.aksaraBelakang}</div>
-        </div>
-
-        <div class="p-3 rounded-lg border border-sogan-700 bg-sogan-950/40 space-y-1">
-          <span class="text-[10px] font-mono uppercase text-prada font-bold block">Calon Pengantin Pria (♂)</span>
-          <div class="font-bold text-sm text-sogan-100">${hasil.pria.nama}</div>
-          <div class="text-[11px] text-sogan-300">Weton: <strong>${hasil.pria.hari} ${hasil.pria.pasaran}</strong> (Neptu: ${hasil.pria.neptu})</div>
-          <div class="text-[10px] text-sogan-400">Aksara: ${hasil.pria.aksaraDepan} / ${hasil.pria.aksaraBelakang}</div>
-        </div>
-      </div>
-
-      <!-- Ringkasan Skor & Predikat Keharmonisan -->
-      <div class="p-3 rounded-lg border border-prada bg-sogan-900/30 flex items-center justify-between text-xs">
-        <div>
-          <span class="text-[10px] font-mono text-prada uppercase font-bold block">Hasil Evaluasi Keselarasan Pitung</span>
-          <div class="font-marcellus text-base font-bold text-sogan-100">${keharmonisan.predikat}</div>
-          <div class="text-[11px] text-sogan-300">Total Neptu Gabungan: <strong class="text-prada font-mono">${hasil.totalNeptu}</strong> &bull; Proporsi: ${hasil.summary.baik} Baik, ${hasil.summary.campur} Netral, ${hasil.summary.buruk} Ujian</div>
-        </div>
-        <div class="text-right">
-          <span class="text-2xl font-bold font-mono text-prada">${hasil.summary.skorKeselarasan}%</span>
-        </div>
-      </div>
-
-      <!-- Tabel 7 Metode Pitung Jawa -->
-      <div>
-        <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block mb-1">Rincian Petungan 7 Metode Primbon Jawa</span>
-        <table class="w-full text-xs border border-sogan-700 text-left">
-          <thead>
-            <tr class="border-b border-sogan-700 bg-sogan-950 text-prada text-[10px] uppercase font-mono">
-              <th class="p-2 w-8">No</th>
-              <th class="p-2 w-40">Metode &amp; Nama Petung</th>
-              <th class="p-2">Arti &amp; Wedharan Falsafah</th>
-              <th class="p-2 w-24 text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${hasil.rows.map(r => `
-              <tr class="border-b border-sogan-800 text-[11px]">
-                <td class="p-2 font-bold text-prada">${r.no}</td>
-                <td class="p-2 font-bold">${r.h.nama} <div class="text-[9px] text-sogan-400 font-mono">${r.namaMetode}</div></td>
-                <td class="p-2">${r.h.arti} <div class="text-[9px] text-sogan-400 font-mono">${r.rumus}</div></td>
-                <td class="p-2 text-center font-bold text-[10px] uppercase">${r.h.status}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-
-      ${(window.LAST_STATUS_HUBUNGAN === 'sudah_menikah') ? `
-      <!-- Panduan Gesang Bebrayan Pasutri (Sampun Nikah) -->
-      <div class="p-3 rounded-lg border border-sogan-700 bg-sogan-950/30 text-[11px] space-y-1">
-        <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block">Pituduh Gesang Bebrayan &amp; Pangruwating Pasulayan (Pasutri)</span>
-        <p class="text-sogan-200 leading-relaxed italic">"${keharmonisan.saranKultural}"</p>
-        <p class="text-[10px] text-sogan-400 mt-1">Urip bebrayan punika sarana ngasuh katresnan sejati, dados tuladha kautaman tumrap para putra, dumugi kaken-kaken ninen-ninen ing karaharjan.</p>
-      </div>
-      ` : `
-      <!-- Usulan 5 Tanggal Mantu Rahayu -->
-      <div>
-        <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block mb-1">Usulan Tanggal Mantu Rahayu (Dino Ijo &amp; Panca Sudha)</span>
-        <div class="grid grid-cols-5 gap-2 text-[10px]">
-          ${mantuList.slice(0, 5).map(m => `
-            <div class="p-2 rounded border border-sogan-700 bg-sogan-950/30 text-center space-y-0.5">
-              <strong class="text-prada block">${m.formattedDate.split(',')[1]?.trim() || m.formattedDate}</strong>
-              <span class="text-sogan-200 block font-semibold">${m.weton}</span>
-              <span class="text-[9px] px-1.5 py-0.2 rounded bg-sogan-900 border border-sogan-700 text-amber-300 font-mono inline-block">${m.predikat}</span>
+        <!-- Kop Surat Kasultanan Resmi -->
+        <div class="kop-surat flex items-center justify-between border-b-2 border-[#8c6224] pb-2 mb-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border-2 border-[#8c6224] flex items-center justify-center font-cinzel text-lg font-bold text-[#8c6224]">
+              ꦗ
             </div>
-          `).join('')}
+            <div>
+              <h2 class="font-cinzel text-base font-bold tracking-wider text-[#8c6224]">JAGAD JAWA &middot; SERAT PITUNG SALAKI RABI</h2>
+              <p class="text-[9.5px] tracking-wide text-[#634720]">Pawiyatan Luhur Budaya Nusantara &bull; Surat Katrangan Petungan Perjodohan Jawa</p>
+            </div>
+          </div>
+          <div class="text-right text-[9.5px] font-mono text-[#634720]">
+            <div>Tanggal Cetak: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            <div>Status: <strong>${isSudahMenikah ? 'Pasutri (Sampun Nikah)' : 'Calon Penganten'}</strong></div>
+          </div>
         </div>
-      </div>
-      `}
 
-      <!-- Disclaimer Etis & Kultural Perjodohan -->
-      <div class="p-2.5 rounded-lg border border-sogan-700 bg-sogan-950/50 text-[10px] text-sogan-300 space-y-1">
-        <strong class="text-prada block uppercase font-mono tracking-wider">Amanat Kultural &amp; Mawas Diri:</strong>
-        <p class="leading-relaxed">${DISCLAIMER_ETIS_PERJODOHAN}</p>
-      </div>
+        <!-- Profil Kedua Calon Mempelai / Pasutri -->
+        <div class="grid grid-cols-2 gap-2.5 text-xs mb-2">
+          <div class="p-2.5 rounded border" style="background-color: ${boxBg}; border-color: ${boxBorder}; color: ${textDark};">
+            <span class="text-[9.5px] font-mono uppercase font-bold block text-[#8c6224]">${isSudahMenikah ? 'Garwa Wanita (♀)' : 'Calon Pengantin Wanita (♀)'}</span>
+            <div class="font-bold text-sm text-[#2b1d0c]">${hasil.wanita.nama}</div>
+            <div class="text-[10.5px] text-[#422c10]">Weton: <strong>${hasil.wanita.hari} ${hasil.wanita.pasaran}</strong> (Neptu: ${hasil.wanita.neptu})</div>
+            <div class="text-[9.5px] text-[#634720]">Aksara: ${hasil.wanita.aksaraDepan} / ${hasil.wanita.aksaraBelakang}</div>
+          </div>
 
-      <!-- Tanda Tangan & Cap Pawiyatan -->
-      <div class="flex justify-between items-end pt-3 text-[11px] border-t border-sogan-800">
-        <div>
-          <span class="text-sogan-400 text-[10px]">Mugi Hyang Widhi tansah maringi berkah tentrem ing bebrayan.</span>
+          <div class="p-2.5 rounded border" style="background-color: ${boxBg}; border-color: ${boxBorder}; color: ${textDark};">
+            <span class="text-[9.5px] font-mono uppercase font-bold block text-[#8c6224]">${isSudahMenikah ? 'Garwa Kakung (♂)' : 'Calon Pengantin Pria (♂)'}</span>
+            <div class="font-bold text-sm text-[#2b1d0c]">${hasil.pria.nama}</div>
+            <div class="text-[10.5px] text-[#422c10]">Weton: <strong>${hasil.pria.hari} ${hasil.pria.pasaran}</strong> (Neptu: ${hasil.pria.neptu})</div>
+            <div class="text-[9.5px] text-[#634720]">Aksara: ${hasil.pria.aksaraDepan} / ${hasil.pria.aksaraBelakang}</div>
+          </div>
         </div>
-        <div class="text-center">
-          <div class="font-marcellus text-prada font-bold text-xs">JAGAD JAWA NUSANTARA</div>
-          <div class="h-10 flex items-center justify-center italic text-sogan-400 text-[10px]">[ Cap Pawiyatan Resmi ]</div>
-          <div class="text-[10px] text-sogan-300 border-t border-sogan-700 pt-1">Pawukon &amp; Primbon Adipati</div>
+
+        <!-- Ringkasan Skor & Predikat Keharmonisan -->
+        <div class="p-2.5 rounded border flex items-center justify-between text-xs mb-2" style="background-color: ${boxBg}; border-color: ${boxBorder};">
+          <div>
+            <span class="text-[9.5px] font-mono uppercase font-bold block text-[#8c6224]">Hasil Evaluasi Keselarasan Pitung</span>
+            <div class="font-marcellus text-sm font-bold text-[#2b1d0c]">${keharmonisan.predikat}</div>
+            <div class="text-[10.5px] text-[#634720]">Total Neptu Gabungan: <strong class="font-mono text-[#8c6224]">${hasil.totalNeptu}</strong> &bull; Proporsi: ${hasil.summary.baik} Baik, ${hasil.summary.campur} Netral, ${hasil.summary.buruk} Ujian</div>
+          </div>
+          <div class="text-right">
+            <span class="text-xl font-bold font-mono text-[#8c6224]">${hasil.summary.skorKeselarasan}%</span>
+          </div>
+        </div>
+
+        <!-- Tabel 7 Metode Pitung Jawa -->
+        <div class="mb-2">
+          <span class="text-[9.5px] font-mono uppercase font-bold tracking-wider block mb-1 text-[#8c6224]">Rincian Petungan 7 Metode Primbon Jawa</span>
+          <table class="w-full text-xs border text-left" style="border-color: ${boxBorder};">
+            <thead>
+              <tr class="border-b text-[9.5px] uppercase font-mono" style="background-color: ${isParchment ? '#efe1be' : '#e5e7eb'}; border-color: ${boxBorder}; color: ${goldHeading};">
+                <th class="p-1.5 w-7 text-center">No</th>
+                <th class="p-1.5 w-36">Metode &amp; Nama Petung</th>
+                <th class="p-1.5">Arti &amp; Wedharan Falsafah</th>
+                <th class="p-1.5 w-20 text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${hasil.rows.map(r => `
+                <tr class="border-b text-[10.5px]" style="border-color: ${isParchment ? '#ebdcb6' : '#f3f4f6'};">
+                  <td class="p-1.5 font-bold text-center text-[#8c6224]">${r.no}</td>
+                  <td class="p-1.5 font-bold text-[#2b1d0c]">${r.h.nama} <div class="text-[8.5px] text-[#634720] font-mono">${r.namaMetode}</div></td>
+                  <td class="p-1.5 text-[#2b1d0c]">${r.h.arti} <div class="text-[8.5px] text-[#634720] font-mono">${r.rumus}</div></td>
+                  <td class="p-1.5 text-center font-bold text-[9.5px] uppercase ${r.h.status === 'baik' ? 'text-emerald-700' : (r.h.status === 'buruk' ? 'text-rose-700' : 'text-amber-700')}">${r.h.status}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        ${isSudahMenikah ? `
+        <!-- Panduan Gesang Bebrayan Pasutri (Sampun Nikah) -->
+        <div class="p-2.5 rounded border text-[10.5px] space-y-1 mb-2" style="background-color: ${boxBg}; border-color: ${boxBorder};">
+          <span class="text-[9.5px] font-mono uppercase font-bold tracking-wider block text-[#8c6224]">Pituduh Gesang Bebrayan &amp; Pangruwating Pasulayan (Pasutri)</span>
+          <p class="text-[#2b1d0c] leading-relaxed italic">"${keharmonisan.saranKultural}"</p>
+          <p class="text-[9.5px] text-[#634720]">Urip bebrayan punika sarana ngasuh katresnan sejati, dados tuladha kautaman tumrap para putra, dumugi kaken-kaken ninen-ninen ing karaharjan.</p>
+        </div>
+        ` : `
+        <!-- Usulan 5 Tanggal Mantu Rahayu (Hanya Belum Menikah) -->
+        <div class="mb-2">
+          <span class="text-[9.5px] font-mono uppercase font-bold tracking-wider block mb-1 text-[#8c6224]">5 Usulan Tanggal Mantu Rahayu Terdekat (Dino Ijo &amp; Panca Sudha)</span>
+          <div class="grid grid-cols-5 gap-1.5 text-[9.5px]">
+            ${mantuList.slice(0, 5).map(m => `
+              <div class="p-1.5 rounded border text-center space-y-0.5" style="background-color: ${boxBg}; border-color: ${boxBorder};">
+                <strong class="text-[#8c6224] block text-[9.5px]">${m.formattedDate.split(',')[1]?.trim() || m.formattedDate}</strong>
+                <span class="text-[#2b1d0c] block font-semibold text-[9px]">${m.weton}</span>
+                <span class="text-[8px] px-1 py-0.2 rounded font-mono inline-block text-amber-800 bg-[#efe1be] border border-[#d4af37]">${m.predikat}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        `}
+
+        <!-- Disclaimer Etis & Kultural Perjodohan -->
+        <div class="p-2 rounded border text-[9.5px] space-y-0.5 mb-2" style="background-color: ${boxBg}; border-color: ${boxBorder}; color: ${textMuted};">
+          <strong class="text-[#8c6224] block uppercase font-mono tracking-wider text-[9px]">Amanat Kultural &amp; Mawas Diri:</strong>
+          <p class="leading-relaxed text-[#422c10]">${DISCLAIMER_ETIS_PERJODOHAN}</p>
+        </div>
+
+        <!-- Tanda Tangan & Cap Pawiyatan -->
+        <div class="flex justify-between items-end pt-1.5 text-[10px] border-t border-[#8c6224]/60">
+          <div>
+            <span class="text-[#634720] text-[9.5px]">Mugi Hyang Widhi tansah maringi berkah tentrem ing bebrayan.</span>
+          </div>
+          <div class="text-center">
+            <div class="font-marcellus text-[#8c6224] font-bold text-[11px]">JAGAD JAWA NUSANTARA</div>
+            <div class="h-6 flex items-center justify-center italic text-[#634720] text-[9px]">[ Cap Pawiyatan Resmi ]</div>
+            <div class="text-[9px] text-[#634720] border-t border-[#c8a355] pt-0.5">Pawukon &amp; Primbon Adipati</div>
+          </div>
         </div>
       </div>
     </div>
