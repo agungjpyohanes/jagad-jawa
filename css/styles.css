@@ -1,5 +1,116 @@
 /* Jagad Jawa — Portal Budaya Luhur Nusantara */
 
+/* ========================================================================= */
+/* PENGAMAN RESPONSIF & OVERFLOW MOBILE GLOBAL                               */
+/* Menjamin layout adaptif (fluid), anti-meluber di HP, dan ramah sentuhan    */
+/* ========================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Kontainer Utama & Struktur Layout */
+main,
+section,
+article,
+aside,
+header,
+footer,
+.tab-content,
+.container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Seluruh Kartu, Panel, Grid, dan Permukaan Konten */
+.bg-wulung,
+.bg-keraton,
+.amber-glow-card,
+.cal-week-card,
+[class*="rounded-2xl"],
+[class*="rounded-3xl"] {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Teks & Tipografi Pengaman Anti-Meluber */
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+label,
+li,
+td,
+th {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Kode & Teks Praformat */
+pre,
+code,
+kbd,
+samp {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Media, Kanvas, dan SVG */
+img,
+video,
+iframe,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  max-width: 100%;
+}
+
+/* Kontainer Pembungkus Tabel Responsif */
+.table-responsive,
+.table-responsive-wrapper,
+.cal-table-container,
+.overflow-x-auto {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.4) rgba(14, 20, 32, 0.9);
+}
+
 /* Latar Belakang Kosmik Antigravity: Deep Indigo & Dark Amber Gradient */
 .bg-antigravity-space {
   background-color: #080c16;
@@ -216,6 +327,60 @@
   }
 }
 
+@media (max-width: 639px) {
+  .header-nav {
+    top: 0.25rem;
+    width: calc(100% - 0.75rem);
+    margin: 0.25rem auto 0 auto;
+    max-width: 100%;
+  }
+
+  .header-floating-bar {
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.875rem;
+  }
+
+  .nav-container {
+    gap: 6px;
+  }
+
+  .nav-utility-cluster {
+    gap: 3.5px;
+  }
+
+  .brand-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-nav {
+    width: calc(100% - 0.5rem);
+    margin: 0.2rem auto 0 auto;
+  }
+
+  .header-floating-bar {
+    padding: 0.25rem 0.35rem;
+  }
+
+  .nav-container {
+    gap: 4px;
+  }
+
+  .nav-utility-cluster {
+    gap: 2px;
+  }
+
+  .brand-title {
+    font-size: 0.78rem;
+  }
+
+  #modeToggleBadge {
+    display: none;
+  }
+}
+
 .nav-action-btn,
 .mode-toggle-btn,
 .lang-toggle-btn,
@@ -237,6 +402,24 @@
   cursor: pointer;
 }
 
+@media (max-width: 639px) {
+  .nav-action-btn,
+  .mode-toggle-btn,
+  .lang-toggle-btn,
+  .nav-audio-btn {
+    height: 32px;
+    padding: 0 0.4rem;
+    font-size: 0.72rem;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .lang-toggle-btn {
+    padding: 0 0.3rem;
+  }
+}
+
 .nav-action-btn:hover,
 .mode-toggle-btn:hover,
 .lang-toggle-btn:hover,
@@ -256,6 +439,20 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  #themeToggleBtn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  #mobileMenuBtn {
+    height: 32px;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+  }
 }
 
 .mode-badge-pill {
@@ -2694,6 +2891,133 @@ body.light .text-amber-100,
 body.light .text-amber-200 {
   color: #1a1a1a !important;
 }
+
+/* ========================================================================= */
+/* ATURAN TABEL & KONTEN RESPONSIF UNTUK LAYAR SCREEN (NON-PRINT)            */
+/* Menjamin kenyamanan membaca, tata letak proporsional, dan anti-overflow   */
+/* ========================================================================= */
+
+@media screen {
+  /* Tabel umum pada layar screen agar tidak mendobrak lebar kontainer */
+  table:not(.kalender-print-page table):not(#kalender-export-capture-container table) {
+    max-width: 100%;
+  }
+
+  /* Penataan khusus elemen pada layar HP & Tablet */
+  @media (max-width: 767px) {
+    /* Kalender Sultan Agungan Table Grid */
+    #calTable {
+      min-width: 580px;
+      width: 100%;
+    }
+
+    #calTable .cal-day-cell {
+      min-width: 58px;
+      padding: 0.25rem !important;
+    }
+
+    #calTable .wuku-col-cell {
+      min-width: 48px;
+      padding: 0.25rem !important;
+    }
+
+    /* Tabel Perjodohan 7 Metode */
+    #hasilPerjodohanCard table {
+      min-width: 480px;
+    }
+
+    /* Tabel Selametan */
+    #tabelHasilSelametan {
+      min-width: 460px;
+    }
+
+    /* Input elements font size 16px untuk mencegah auto-zoom di iOS Safari Mobile */
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea {
+      font-size: 16px !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Optimasi Padding & Margin Kartu pada Layar Mobile */
+    .tab-content .p-5,
+    .tab-content .p-6,
+    .tab-content .sm\:p-6,
+    .tab-content .sm\:p-7,
+    .tab-content .sm\:p-8 {
+      padding: 0.85rem !important;
+    }
+
+    /* Optimasi Heading agar proporsional dan tidak memicu overflow */
+    h1 {
+      font-size: clamp(1.4rem, 5.5vw, 2.2rem) !important;
+      line-height: 1.25 !important;
+    }
+
+    h2 {
+      font-size: clamp(1.2rem, 4.5vw, 1.75rem) !important;
+      line-height: 1.3 !important;
+    }
+
+    /* Sapa Dina card mobile padding */
+    #sapa-dina-container {
+      padding-left: 0.25rem !important;
+      padding-right: 0.25rem !important;
+    }
+
+    /* Gamelan Saron keyboard tuning */
+    #saronContainer {
+      gap: 0.25rem;
+    }
+
+    #saronContainer > div {
+      padding: 0.35rem 0.15rem !important;
+    }
+
+    #saronContainer > div span:last-child {
+      font-size: 8px;
+      padding: 0 2px;
+    }
+
+    /* Studio Aksara Virtual Keyboard Scroll Palette */
+    #virtualKeyboardPalette {
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Modal Dialog Mobile Sizing */
+    [id$="Modal"] > div,
+    .modal-dialog > div {
+      width: calc(100% - 0.75rem) !important;
+      max-width: calc(100% - 0.75rem) !important;
+      margin: 0 auto !important;
+      max-height: 94vh !important;
+    }
+
+    /* Tumpeng 7 Hotspot Buttons */
+    #tab-tumpeng .grid-cols-7 button {
+      padding: 0.35rem 0.15rem !important;
+    }
+  }
+
+  /* Optimasi ekstra untuk layar sangat kecil (< 380px) */
+  @media (max-width: 380px) {
+    main {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .tab-content .p-5,
+    .tab-content .p-6 {
+      padding: 0.65rem !important;
+    }
+  }
+}
+
 
 
 

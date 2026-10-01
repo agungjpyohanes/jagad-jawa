@@ -26,6 +26,7 @@
   "author": "Jagad Jawa Team",
   "license": "MIT",
   "dependencies": {
+    "csv-parse": "^7.0.3",
     "firebase": "^12.19.0"
   }
 }

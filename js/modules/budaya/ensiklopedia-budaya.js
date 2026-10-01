@@ -503,24 +503,26 @@ export function renderEnsiklopediaTabContent() {
               <h4 class="font-marcellus text-base font-bold text-amber-300 flex items-center gap-2 border-b border-sogan-800 pb-2">
                 <i class="fa-solid fa-calendar-week text-prada"></i> 7 Dina (Saptawara)
               </h4>
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="border-b border-sogan-700 text-sogan-400 text-[11px]">
-                    <th class="py-1.5">Dina</th>
-                    <th class="py-1.5">Neptu</th>
-                    <th class="py-1.5">Arah Keberuntungan</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-sogan-900/60 text-sogan-200">
-                  <tr><td class="py-2 font-bold text-amber-100">Minggu (Radite)</td><td class="py-2 font-mono text-prada">5</td><td class="py-2">Wetan (Timur)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Senin (Soma)</td><td class="py-2 font-mono text-prada">4</td><td class="py-2">Lor (Utara)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Selasa (Anggara)</td><td class="py-2 font-mono text-prada">3</td><td class="py-2">Kidul (Selatan)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Rabu (Buda)</td><td class="py-2 font-mono text-prada">7</td><td class="py-2">Kulon (Barat)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Kamis (Respati)</td><td class="py-2 font-mono text-prada">8</td><td class="py-2">Wetan (Timur)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Jumat (Sukra)</td><td class="py-2 font-mono text-prada">6</td><td class="py-2">Kulon (Barat)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Sabtu (Tumpak)</td><td class="py-2 font-mono text-prada">9</td><td class="py-2">Kidul (Selatan)</td></tr>
-                </tbody>
-              </table>
+              <div class="overflow-x-auto w-full max-w-full">
+                <table class="w-full text-left border-collapse min-w-[280px]">
+                  <thead>
+                    <tr class="border-b border-sogan-700 text-sogan-400 text-[11px]">
+                      <th class="py-1.5">Dina</th>
+                      <th class="py-1.5">Neptu</th>
+                      <th class="py-1.5">Arah Keberuntungan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-sogan-900/60 text-sogan-200">
+                    <tr><td class="py-2 font-bold text-amber-100">Minggu (Radite)</td><td class="py-2 font-mono text-prada">5</td><td class="py-2">Wetan (Timur)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Senin (Soma)</td><td class="py-2 font-mono text-prada">4</td><td class="py-2">Lor (Utara)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Selasa (Anggara)</td><td class="py-2 font-mono text-prada">3</td><td class="py-2">Kidul (Selatan)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Rabu (Buda)</td><td class="py-2 font-mono text-prada">7</td><td class="py-2">Kulon (Barat)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Kamis (Respati)</td><td class="py-2 font-mono text-prada">8</td><td class="py-2">Wetan (Timur)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Jumat (Sukra)</td><td class="py-2 font-mono text-prada">6</td><td class="py-2">Kulon (Barat)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Sabtu (Tumpak)</td><td class="py-2 font-mono text-prada">9</td><td class="py-2">Kidul (Selatan)</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <!-- 5 Pasaran Jawa / Pancawara -->
@@ -528,22 +530,24 @@ export function renderEnsiklopediaTabContent() {
               <h4 class="font-marcellus text-base font-bold text-emerald-300 flex items-center gap-2 border-b border-sogan-800 pb-2">
                 <i class="fa-solid fa-recycle text-prada"></i> 5 Pasaran (Pancawara)
               </h4>
-              <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="border-b border-sogan-700 text-sogan-400 text-[11px]">
-                    <th class="py-1.5">Pasaran</th>
-                    <th class="py-1.5">Neptu</th>
-                    <th class="py-1.5">Elemen &amp; Panggonan</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-sogan-900/60 text-sogan-200">
-                  <tr><td class="py-2 font-bold text-amber-100">Legi (Manis)</td><td class="py-2 font-mono text-prada">5</td><td class="py-2">Kayu &bull; Wetan (Timur)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Pahing (Pethakan)</td><td class="py-2 font-mono text-prada">9</td><td class="py-2">Geni &bull; Kidul (Selatan)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Pon (Petakan)</td><td class="py-2 font-mono text-prada">7</td><td class="py-2">Logam &bull; Kulon (Barat)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Wage (Cemengan)</td><td class="py-2 font-mono text-prada">4</td><td class="py-2">Banyu &bull; Lor (Utara)</td></tr>
-                  <tr><td class="py-2 font-bold text-amber-100">Kliwon (Asih)</td><td class="py-2 font-mono text-prada">8</td><td class="py-2">Lemah &bull; Puser (Tengah)</td></tr>
-                </tbody>
-              </table>
+              <div class="overflow-x-auto w-full max-w-full">
+                <table class="w-full text-left border-collapse min-w-[280px]">
+                  <thead>
+                    <tr class="border-b border-sogan-700 text-sogan-400 text-[11px]">
+                      <th class="py-1.5">Pasaran</th>
+                      <th class="py-1.5">Neptu</th>
+                      <th class="py-1.5">Elemen &amp; Panggonan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-sogan-900/60 text-sogan-200">
+                    <tr><td class="py-2 font-bold text-amber-100">Legi (Manis)</td><td class="py-2 font-mono text-prada">5</td><td class="py-2">Kayu &bull; Wetan (Timur)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Pahing (Pethakan)</td><td class="py-2 font-mono text-prada">9</td><td class="py-2">Geni &bull; Kidul (Selatan)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Pon (Petakan)</td><td class="py-2 font-mono text-prada">7</td><td class="py-2">Logam &bull; Kulon (Barat)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Wage (Cemengan)</td><td class="py-2 font-mono text-prada">4</td><td class="py-2">Banyu &bull; Lor (Utara)</td></tr>
+                    <tr><td class="py-2 font-bold text-amber-100">Kliwon (Asih)</td><td class="py-2 font-mono text-prada">8</td><td class="py-2">Lemah &bull; Puser (Tengah)</td></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
