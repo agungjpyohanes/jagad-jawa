@@ -356,7 +356,7 @@
         <!-- Audio & Utility Cluster (Kanan - Laporan, Mode, Bahasa, Tema, Audio) -->
         <div class="nav-utility-cluster flex items-center shrink-0">
           <!-- 1. Consolidated Laporan & Mode Menu (Ringkas, Modern & Terpadu) -->
-          <div class="relative dropdown-group shrink-0" id="headerLaporanContainer">
+          <div class="relative dropdown-group shrink-0 hidden md:inline-block" id="headerLaporanContainer">
             <button
               id="modeToggleBtn"
               onclick="toggleHeaderLaporanMenu(event)"
@@ -449,7 +449,7 @@
           </div>
 
           <!-- 3. Language Switcher (ID / JA) -->
-          <button onclick="toggleLanguage()" class="lang-toggle-btn shrink-0" title="Ganti Bahasa (Indonesia / Jawa)">
+          <button onclick="toggleLanguage()" class="lang-toggle-btn shrink-0 hidden sm:inline-flex" title="Ganti Bahasa (Indonesia / Jawa)">
             <i class="fa-solid fa-language text-amber-400 text-xs"></i>
             <span class="lang-toggle-short text-[11px] font-bold">ID</span>
           </button>
@@ -473,8 +473,15 @@
           <audio id="puspawarnaAudioElement" src="assets/audio/puspowarno.mp3" preload="auto" loop></audio>
 
           <!-- 6. Mobile Toggle Button -->
-          <button id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Buka Menu" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden p-2 rounded-xl bg-sogan-900 border border-prada/30 text-sogan-200 hover:text-prada focus:outline-none transition cursor-pointer shrink-0">
-            <i class="fa-solid fa-bars text-base"></i>
+          <button
+            id="mobileMenuBtn"
+            onclick="toggleMobileMenu()"
+            aria-label="Buka Menu"
+            aria-expanded="false"
+            aria-controls="mobileMenu"
+            class="inline-flex md:hidden items-center justify-center p-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-sogan-800 focus:outline-none focus:ring-2 focus:ring-prada/50 transition cursor-pointer shrink-0"
+          >
+            <i class="fa-solid fa-bars text-base text-prada"></i>
           </button>
         </div>
 
