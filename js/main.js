@@ -510,6 +510,48 @@ export function bootstrap() {
   }
 
   initModalListeners();
+
+  // Reaktif re-render seluruh modul aktif saat preferensi bahasa diubah
+  if (typeof window !== 'undefined') {
+    window.addEventListener('language-changed', () => {
+      if (typeof window.renderKalender === 'function') {
+        try { window.renderKalender(); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.initSapaDina === 'function') {
+        try { window.initSapaDina('sapa-dina-container'); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.hitungNujumPribadi === 'function') {
+        const container = document.getElementById('nujumResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungNujumPribadi(); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.renderFullWukuPage === 'function') {
+        const tabWuku = document.getElementById('tabWuku');
+        if (tabWuku && !tabWuku.classList.contains('hidden')) {
+          try { window.renderFullWukuPage(); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.hitungOmahDariUI === 'function') {
+        const container = document.getElementById('omahResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungOmahDariUI(false); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.hitungIjabDariUI === 'function') {
+        const container = document.getElementById('ijabResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungIjabDariUI(false); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.syncTernakDariTanggal === 'function') {
+        const container = document.getElementById('ternakResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.syncTernakDariTanggal(); } catch (e) { /* ignore */ }
+        }
+      }
+    });
+  }
 }
 
 if (typeof document !== 'undefined') {

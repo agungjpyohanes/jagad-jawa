@@ -9,6 +9,7 @@ import { getPetungKehidupanByDate, getPetungKehidupanByWeton, cariHariPetungKehi
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
+import { getBilingualText } from '../../ui/i18n.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -239,26 +240,26 @@ export function renderTernakResult(data) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <div>
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-black/30 border border-current">
-              Kategori: ${ternak.badge.label}
+              Kategori: ${getBilingualText(ternak.badge.label)}
             </span>
           </div>
           <div class="text-xs text-sogan-200 font-mono">
-            Status: <strong class="text-prada-light">${ternak.status_ringkas}</strong>
+            Status: <strong class="text-prada-light">${getBilingualText(ternak.status_ringkas)}</strong>
           </div>
         </div>
 
         <div class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 mb-2">
-          Pituduh Wiwit Ternak: ${ternak.kode}
+          Pituduh Wiwit Ternak: ${getBilingualText(ternak.kode)}
         </div>
         <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed mb-4">
-          ${ternak.tegese}
+          ${getBilingualText(ternak.tegese)}
         </p>
 
         <div class="p-4 rounded-xl bg-keraton/70 border border-sogan-800 text-xs text-sogan-200">
           <div class="text-prada font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
             <i class="fa-solid fa-lightbulb"></i> Saran Praktis Pangupakara:
           </div>
-          <p class="leading-relaxed text-[11.5px]">${ternak.saran_praktis}</p>
+          <p class="leading-relaxed text-[11.5px]">${getBilingualText(ternak.saran_praktis)}</p>
         </div>
       </div>
     </div>
@@ -269,23 +270,23 @@ export function renderTernakResult(data) {
     <div class="p-5 sm:p-6 rounded-2xl bg-wulung/80 border border-amber-600/40 shadow-xl backdrop-blur-md relative overflow-hidden mb-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
         <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-950/60 border border-amber-500/40 text-amber-300">
-          Jaluran Loro: ${loro.kode}
+          Jaluran Loro: ${getBilingualText(loro.kode)}
         </span>
         <span class="text-xs font-mono text-sogan-300">Kearifan Husada Tradisi</span>
       </div>
 
       <div class="text-xl font-cinzel font-bold text-amber-100 mb-2">
-        Surasa &amp; Jalaran: ${loro.kode}
+        Surasa &amp; Jalaran: ${getBilingualText(loro.kode)}
       </div>
       <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed mb-4">
-        ${loro.tegese}
+        ${getBilingualText(loro.tegese)}
       </p>
 
       <div class="p-4 rounded-xl bg-keraton/70 border border-sogan-800 text-xs mb-4">
         <div class="text-amber-300 font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
           <i class="fa-solid fa-mortar-pestle"></i> Pitedah Tamba Tradisi (Tombone):
         </div>
-        <p class="leading-relaxed text-[11.5px] text-sogan-200">${loro.tombone}</p>
+        <p class="leading-relaxed text-[11.5px] text-sogan-200">${getBilingualText(loro.tombone)}</p>
       </div>
 
       <!-- FIXED MANDATORY MEDICAL DISCLAIMER -->
@@ -293,7 +294,7 @@ export function renderTernakResult(data) {
         <i class="fa-solid fa-triangle-exclamation text-rose-400 mt-0.5 shrink-0 text-sm"></i>
         <div class="leading-relaxed text-[11.5px]">
           <strong class="font-bold text-rose-300 block mb-0.5">Pènget Medis Wigati:</strong>
-          ${loro.disclaimer_medis}
+          ${getBilingualText(loro.disclaimer_medis)}
         </div>
       </div>
     </div>
@@ -321,16 +322,16 @@ export function renderTernakResult(data) {
       <div class="p-5 sm:p-6 rounded-2xl bg-wulung/80 border border-stone-600/40 shadow-xl backdrop-blur-md relative overflow-hidden mb-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
           <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-stone-900/80 border border-stone-500/40 text-stone-200">
-            Kategori Geblak: ${geblak.kode}
+            Kategori Geblak: ${getBilingualText(geblak.kode)}
           </span>
           <span class="text-xs font-mono text-sogan-300">Penghormatan Adat &amp; Wiradat</span>
         </div>
 
         <div class="text-xl font-cinzel font-bold text-amber-100 mb-2">
-          Petung Dinten Geblak: ${geblak.kode}
+          Petung Dinten Geblak: ${getBilingualText(geblak.kode)}
         </div>
         <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed mb-4">
-          ${geblak.tegese}
+          ${getBilingualText(geblak.tegese)}
         </p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
@@ -338,19 +339,19 @@ export function renderTernakResult(data) {
             <div class="text-prada font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
               <i class="fa-solid fa-people-roof"></i> Fokus Ingkang Katilaran:
             </div>
-            <p class="leading-relaxed text-[11px] text-sogan-200">${geblak.fokus_ditinggal}</p>
+            <p class="leading-relaxed text-[11px] text-sogan-200">${getBilingualText(geblak.fokus_ditinggal)}</p>
           </div>
 
           <div class="p-3.5 rounded-xl bg-keraton/70 border border-sogan-800 text-xs">
             <div class="text-prada font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
               <i class="fa-solid fa-hands-praying"></i> Wiradat 40 Dinten:
             </div>
-            <p class="leading-relaxed text-[11px] text-sogan-200">${geblak.wiradat_40_dina}</p>
+            <p class="leading-relaxed text-[11px] text-sogan-200">${getBilingualText(geblak.wiradat_40_dina)}</p>
           </div>
         </div>
 
         <div class="p-3 rounded-xl bg-amber-950/20 border border-amber-600/20 text-[11px] text-sogan-300 leading-relaxed italic">
-          <i class="fa-solid fa-shield-heart text-prada mr-1"></i> ${geblak.disclaimer_adat}
+          <i class="fa-solid fa-shield-heart text-prada mr-1"></i> ${getBilingualText(geblak.disclaimer_adat)}
         </div>
       </div>
     `;

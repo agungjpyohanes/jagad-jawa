@@ -13,6 +13,7 @@ import {
 } from '../../data/omah-db.js';
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
+import { getBilingualText } from '../../ui/i18n.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -270,14 +271,14 @@ export function renderOmahResult(data) {
           <div class="flex items-center justify-between mb-2">
             <span class="text-[11px] uppercase font-mono tracking-wider text-sogan-300">${title}</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${badgeColor}">
-              ${setObj.status}
+              ${getBilingualText(setObj.status)}
             </span>
           </div>
           <div class="text-xl font-cinzel font-bold text-prada mb-1">
-            ${setObj.nama}
+            ${getBilingualText(setObj.nama)}
           </div>
           <p class="text-xs text-sogan-100 leading-relaxed mb-3">
-            ${setObj.watak}
+            ${getBilingualText(setObj.watak)}
           </p>
         </div>
         <div class="pt-2.5 border-t border-sogan-800 text-[10.5px] text-sogan-400 font-mono flex items-center justify-between">
@@ -296,10 +297,10 @@ export function renderOmahResult(data) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
             <h4 class="text-sm font-cinzel font-bold text-amber-200 flex items-center gap-2">
-              <i class="fa-solid fa-door-open text-prada"></i> Cempuri Lawangan — Madhep ${cempuri.arah}
+              <i class="fa-solid fa-door-open text-prada"></i> Cempuri Lawangan — Madhep ${getBilingualText(cempuri.arah)}
             </h4>
             <p class="text-xs text-sogan-300 mt-0.5">
-              Matriks pitedah 9 posisi lawang ingpager cempuri sisih ${cempuri.arah}
+              Matriks pitedah 9 posisi lawang ingpager cempuri sisih ${getBilingualText(cempuri.arah)}
             </p>
           </div>
           ${cempuri.selected ? `
@@ -324,7 +325,7 @@ export function renderOmahResult(data) {
                   ${isSelected ? '<span class="text-[10px] text-prada font-bold uppercase tracking-wider"><i class="fa-solid fa-check"></i> Kapilih</span>' : ''}
                 </div>
                 <div class="text-xs text-sogan-100 font-medium leading-relaxed">
-                  ${pos.arti}
+                  ${getBilingualText(pos.arti)}
                 </div>
               </div>
             `;
@@ -342,8 +343,8 @@ export function renderOmahResult(data) {
         <i class="fa-solid fa-ban text-rose-400 text-lg mt-0.5 shrink-0"></i>
         <div>
           <strong class="text-sm font-bold text-rose-300 block mb-0.5">Pènget Larangan Arah Boyongan:</strong>
-          <p class="text-xs leading-relaxed font-semibold">${laranganBoyongan.warningText}</p>
-          <p class="text-[11px] text-rose-300/80 mt-1">Dina punika gadhah cacah neptu ${neptuApp.neptuJumlah}, boten kaparengaken boyongan tumuju arah ${laranganBoyongan.checkedDirection}.</p>
+          <p class="text-xs leading-relaxed font-semibold">${getBilingualText(laranganBoyongan.warningText)}</p>
+          <p class="text-[11px] text-rose-300/80 mt-1">Dina punika gadhah cacah neptu ${neptuApp.neptuJumlah}, boten kaparengaken boyongan tumuju arah ${getBilingualText(laranganBoyongan.checkedDirection)}.</p>
         </div>
       </div>
     `;

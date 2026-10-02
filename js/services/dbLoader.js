@@ -10,7 +10,8 @@
  * 4. Menyediakan utility helper resolusi teks dwibahasa (Bilingual: { id, jv }).
  */
 
-import { getLanguage } from '../ui/i18n.js';
+import { getLanguage, getBilingualText, resolveBilingualRecord } from '../ui/i18n.js';
+export { getBilingualText, resolveBilingualRecord };
 
 export const DB_FILES = {
   '01': '01-kalender-constants.json',
@@ -301,27 +302,6 @@ export async function preloadDatabases(keys) {
   return Promise.all(keys.map(k => loadDb(k)));
 }
 
-/**
- * Helper Dwibahasa: Membaca teks berdasarkan bahasa aktif ('id' atau 'jv')
- * Mendukung objek berbentuk `{ id: '...', jv: '...' }` maupun string murni.
- * @param {string|object} val
- * @param {'id'|'jv'} [lang]
- * @returns {string}
- */
-export function getBilingualText(val, lang = null) {
-  if (val === null || val === undefined) return '';
-  if (typeof val === 'string') return val;
-  if (typeof val === 'number') return String(val);
-  if (typeof val === 'object') {
-    const targetLang = (lang === 'jv' || lang === 'id') ? lang : getLanguage();
-    if (val[targetLang] !== undefined && val[targetLang] !== null) {
-      return String(val[targetLang]);
-    }
-    if (val.id !== undefined && val.id !== null) return String(val.id);
-    if (val.jv !== undefined && val.jv !== null) return String(val.jv);
-  }
-  return String(val);
-}
 
 export default {
   load: loadDb,

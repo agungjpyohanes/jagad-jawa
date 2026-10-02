@@ -15,6 +15,7 @@ import {
 } from '../../data/ijab-db.js';
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
+import { getBilingualText } from '../../ui/i18n.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -226,8 +227,8 @@ export function renderIjabResult(data) {
       <div class="p-3 rounded-xl border ${badgeCls} flex items-start gap-2.5 bg-keraton/60">
         <i class="fa-solid ${icon} mt-0.5 text-xs"></i>
         <div>
-          <div class="text-xs font-bold text-prada">${f.label}</div>
-          <div class="text-[11.5px] leading-relaxed opacity-90">${f.desc}</div>
+          <div class="text-xs font-bold text-prada">${getBilingualText(f.label)}</div>
+          <div class="text-[11.5px] leading-relaxed opacity-90">${getBilingualText(f.desc)}</div>
         </div>
       </div>
     `;
@@ -249,7 +250,7 @@ export function renderIjabResult(data) {
             ${wukuData ? `<span class="text-sm font-sans font-normal text-amber-300/80">· Wuku ${wukuData.wuku}</span>` : ''}
           </h3>
           <p class="text-xs text-sogan-200 mt-1 max-w-xl">
-            Simpulan Rangkuman: <strong class="text-prada-light font-semibold">${simpulan.badge}</strong>
+            Simpulan Rangkuman: <strong class="text-prada-light font-semibold">${getBilingualText(simpulan.badge)}</strong>
           </p>
         </div>
         <div class="text-left sm:text-right shrink-0">
@@ -271,14 +272,14 @@ export function renderIjabResult(data) {
               <i class="fa-solid fa-gem text-prada"></i> Surasane Ijab
             </span>
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${wetonBadgeBg}">
-              ${wetonData?.status_ringkas || 'Sedheng'}
+              ${getBilingualText(wetonData?.status_ringkas) || 'Sedheng'}
             </span>
           </div>
           <div class="text-lg font-cinzel font-bold text-amber-200 mb-1.5">
-            ${wetonData?.surasane_ijab || '-'}
+            ${getBilingualText(wetonData?.surasane_ijab) || '-'}
           </div>
           <div class="text-xs text-sogan-100 leading-relaxed mb-4">
-            ${wetonData?.tegese_surasa_ijab || '-'}
+            ${getBilingualText(wetonData?.tegese_surasa_ijab) || '-'}
           </div>
         </div>
         <div class="pt-3 border-t border-sogan-800/80 text-[11px] text-sogan-400 flex items-center justify-between">
@@ -295,7 +296,7 @@ export function renderIjabResult(data) {
               <i class="fa-solid fa-scroll text-amber-400"></i> Wuku Palakrama
             </span>
             <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${wukuBadgeBg}">
-              ${wukuData?.kanggo_ijab || 'Sedheng'}
+              ${getBilingualText(wukuData?.kanggo_ijab) || 'Sedheng'}
             </span>
           </div>
           <div class="text-lg font-cinzel font-bold text-amber-200 mb-1.5">
@@ -327,7 +328,7 @@ export function renderIjabResult(data) {
           <div class="text-[11px] text-sogan-400 font-mono">Sasi Jawa:</div>
           <div class="text-sm font-bold text-prada mt-0.5">${sasiData?.sasi_jawa || 'Sedaya / Boten Dipilih'}</div>
           <div class="text-[11px] text-sogan-200 mt-1 leading-normal">
-            ${sasiData?.kanggo_ijab || 'Pilihan sasi bakal mbabar wahananing ijab.'}
+            ${getBilingualText(sasiData?.kanggo_ijab) || 'Pilihan sasi bakal mbabar wahananing ijab.'}
           </div>
         </div>
 
@@ -335,7 +336,7 @@ export function renderIjabResult(data) {
           <div class="text-[11px] text-sogan-400 font-mono">Tahun Jawa (Windu):</div>
           <div class="text-sm font-bold text-prada mt-0.5">${tahunData ? `Tahun ${tahunData.tahun_jawa}` : 'Sedaya / Boten Dipilih'}</div>
           <div class="text-[11px] text-sogan-200 mt-1 leading-normal">
-            ${tahunData?.kanggo_ijab || 'Pilihan windu mbabar sasi ingkang kalebo wisa.'}
+            ${getBilingualText(tahunData?.kanggo_ijab) || 'Pilihan windu mbabar sasi ingkang kalebo wisa.'}
           </div>
         </div>
 
@@ -343,7 +344,7 @@ export function renderIjabResult(data) {
           <div class="text-[11px] text-sogan-400 font-mono">Tanggal Jawa:</div>
           <div class="text-sm font-bold text-prada mt-0.5">${tanggalData ? `Tanggal ${tanggalData.tanggal_jawa}` : 'Sedaya / Boten Dipilih'}</div>
           <div class="text-[11px] text-sogan-200 mt-1 leading-normal">
-            ${tanggalData ? `${tanggalData.pakarti_tanggal_jawa} (${tanggalData.tegese_status})` : 'Pilihan tanggal 1-30 mbabar pakarti tanggal.'}
+            ${tanggalData ? `${getBilingualText(tanggalData.pakarti_tanggal_jawa)} (${getBilingualText(tanggalData.tegese_status)})` : 'Pilihan tanggal 1-30 mbabar pakarti tanggal.'}
           </div>
         </div>
 

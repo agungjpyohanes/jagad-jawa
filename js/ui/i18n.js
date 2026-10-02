@@ -356,9 +356,94 @@ export function toggleLanguage() {
 }
 
 /**
+ * Helper Dwibahasa: Membaca teks berdasarkan bahasa aktif ('id' atau 'jv')
+ * Mendukung objek berbentuk `{ id: '...', jv: '...' }`, string biasa, angka, array, dsb.
+ * @param {string|object|number|Array} val
+ * @param {'id'|'jv'} [lang]
+ * @returns {string}
+ */
+export function getBilingualText(val, lang = null) {
+  if (val === null || val === undefined) return '';
+  if (typeof val === 'string') return val;
+  if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+  if (Array.isArray(val)) {
+    return val.map(item => getBilingualText(item, lang)).join(', ');
+  }
+  if (typeof val === 'object') {
+    const targetLang = (lang === 'jv' || lang === 'id') ? lang : getLanguage();
+    if (val[targetLang] !== undefined && val[targetLang] !== null) {
+      return getBilingualText(val[targetLang], targetLang);
+    }
+    if (val.id !== undefined && val.id !== null && typeof val.id === 'string') return val.id;
+    if (val.jv !== undefined && val.jv !== null && typeof val.jv === 'string') return val.jv;
+    if (val.id !== undefined && val.id !== null) return String(val.id);
+    if (val.jv !== undefined && val.jv !== null) return String(val.jv);
+  }
+  return String(val);
+}
+
+/**
+ * Menyelesaikan seluruh properti dwibahasa `{ id, jv }` dalam objek atau array rekursif.
+ * @param {object|Array} record
+ * @param {'id'|'jv'} [lang]
+ * @returns {object|Array}
+ */
+export function resolveBilingualRecord(record, lang = null) {
+  if (!record || typeof record !== 'object') return record;
+  if (Array.isArray(record)) {
+    return record.map(item => resolveBilingualRecord(item, lang));
+  }
+  if (('id' in record || 'jv' in record) && Object.keys(record).every(k => k === 'id' || k === 'jv')) {
+    return getBilingualText(record, lang);
+  }
+  const resolved = {};
+  for (const [key, val] of Object.entries(record)) {
+    if (val && typeof val === 'object' && ('id' in val || 'jv' in val) && (typeof val.id === 'string' || typeof val.jv === 'string') && Object.keys(val).every(k => k === 'id' || k === 'jv')) {
+      resolved[key] = getBilingualText(val, lang);
+    } else if (val && typeof val === 'object' && !Array.isArray(val)) {
+      resolved[key] = resolveBilingualRecord(val, lang);
+    } else if (Array.isArray(val)) {
+      resolved[key] = val.map(item => resolveBilingualRecord(item, lang));
+    } else {
+      resolved[key] = val;
+    }
+  }
+  return resolved;
+}
+
+/**
+ * Menerjemahkan key kamus DICTIONARY ke bahasa aktif
+ * @param {string} key
+ * @param {'id'|'jv'} [lang]
+ * @returns {string}
+ */
+export function t(key, lang = null) {
+  const targetLang = (lang === 'jv' || lang === 'id') ? lang : getLanguage();
+  if (DICTIONARY[key] && DICTIONARY[key][targetLang]) {
+    return DICTIONARY[key][targetLang];
+  }
+  if (DICTIONARY[key]) {
+    return DICTIONARY[key].id || DICTIONARY[key].jv || key;
+  }
+  return key;
+}
+
+/**
  * Inisialisasi awal modul i18n
  */
 export function initI18n() {
   const lang = getLanguage();
   applyLanguage(lang);
+}
+
+// Window attachments untuk interoperabilitas modul browser & handler inline
+if (typeof window !== 'undefined') {
+  window.currentLanguage = currentLang;
+  window.getLanguage = getLanguage;
+  window.setLanguage = setLanguage;
+  window.toggleLanguage = toggleLanguage;
+  window.applyLanguage = applyLanguage;
+  window.getBilingualText = getBilingualText;
+  window.resolveBilingualRecord = resolveBilingualRecord;
+  window.t = t;
 }

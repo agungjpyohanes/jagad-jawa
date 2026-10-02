@@ -34,6 +34,7 @@ import {
 } from './nujum-engine.js';
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { getBilingualText } from '../../ui/i18n.js';
 import { transliterateLatinToJawa } from '../aksara/aksara-engine.js';
 
 import {
@@ -1147,7 +1148,7 @@ export function renderPranataZodiakCardHtml(mangsaRes, zodiakRes) {
         </div>
         <div class="text-right">
           <span class="text-[10px] font-mono text-cyan-300/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">
-            ${mangsaRes ? mangsaRes.nama : ''} &bull; ${zodiakRes ? zodiakRes.nama : ''}
+            ${mangsaRes ? getBilingualText(mangsaRes.nama) : ''} &bull; ${zodiakRes ? getBilingualText(zodiakRes.nama) : ''}
           </span>
         </div>
       </div>
@@ -1161,16 +1162,16 @@ export function renderPranataZodiakCardHtml(mangsaRes, zodiakRes) {
                 <i class="fa-solid fa-seedling text-emerald-400"></i> Pranata Mangsa Jawa
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-emerald-500/40 text-[10px] font-bold text-emerald-300 font-mono">
-                ${mangsaRes.rentang}
+                ${getBilingualText(mangsaRes.rentang)}
               </span>
             </div>
-            <div class="font-marcellus text-lg font-bold text-prada-light">${mangsaRes.nama}</div>
+            <div class="font-marcellus text-lg font-bold text-prada-light">${getBilingualText(mangsaRes.nama)}</div>
             <div class="text-[11px] text-amber-300/90 font-serif italic mt-0.5 mb-2">
-              &ldquo;${mangsaRes.candrasangkala}&rdquo;
+              &ldquo;${getBilingualText(mangsaRes.candrasangkala)}&rdquo;
             </div>
             <div class="p-2.5 bg-sogan-950/80 rounded-lg border border-sogan-800 text-xs text-sogan-200 leading-relaxed">
               <span class="text-[10px] uppercase font-bold text-sogan-400 block mb-1">Candra &amp; Watak Mangsa:</span>
-              ${mangsaRes.watak}
+              ${getBilingualText(mangsaRes.watak)}
             </div>
           </div>
         </div>
@@ -1184,32 +1185,32 @@ export function renderPranataZodiakCardHtml(mangsaRes, zodiakRes) {
                 <i class="fa-solid fa-star-and-crescent text-cyan-400"></i> Zodiak Surya (Falakiah)
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-cyan-500/40 text-[10px] font-bold text-cyan-300 font-mono">
-                ${zodiakRes.rentang}
+                ${getBilingualText(zodiakRes.rentang)}
               </span>
             </div>
             <div class="flex items-center justify-between">
-              <div class="font-marcellus text-lg font-bold text-prada-light">${zodiakRes.nama}</div>
-              <span class="text-[10px] font-medium text-sogan-300 bg-sogan-950 px-2 py-0.5 rounded border border-sogan-700">${zodiakRes.elemen}</span>
+              <div class="font-marcellus text-lg font-bold text-prada-light">${getBilingualText(zodiakRes.nama)}</div>
+              <span class="text-[10px] font-medium text-sogan-300 bg-sogan-950 px-2 py-0.5 rounded border border-sogan-700">${getBilingualText(zodiakRes.elemen)}</span>
             </div>
-            <p class="text-xs text-sogan-200 mt-1 leading-relaxed">${zodiakRes.watak}</p>
+            <p class="text-xs text-sogan-200 mt-1 leading-relaxed">${getBilingualText(zodiakRes.watak)}</p>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
             <div class="p-2 bg-sogan-950/70 rounded border border-emerald-900/40">
               <span class="text-[9px] uppercase font-bold text-emerald-300 block mb-0.5"><i class="fa-solid fa-arrow-trend-up mr-1"></i> Peruntungan</span>
-              <span class="text-sogan-200 text-[10px] leading-tight block">${zodiakRes.peruntungan}</span>
+              <span class="text-sogan-200 text-[10px] leading-tight block">${getBilingualText(zodiakRes.peruntungan)}</span>
             </div>
             <div class="p-2 bg-sogan-950/70 rounded border border-rose-900/40">
               <span class="text-[9px] uppercase font-bold text-rose-300 block mb-0.5"><i class="fa-solid fa-shield-halved mr-1"></i> Resiko</span>
-              <span class="text-sogan-200 text-[10px] leading-tight block">${zodiakRes.resiko}</span>
+              <span class="text-sogan-200 text-[10px] leading-tight block">${getBilingualText(zodiakRes.resiko)}</span>
             </div>
             <div class="p-2 bg-sogan-950/70 rounded border border-pink-900/40">
               <span class="text-[9px] uppercase font-bold text-pink-300 block mb-0.5"><i class="fa-solid fa-heart mr-1"></i> Jodoh Serasi</span>
-              <span class="text-sogan-200 text-[10px] leading-tight block">${zodiakRes.jodoh}</span>
+              <span class="text-sogan-200 text-[10px] leading-tight block">${getBilingualText(zodiakRes.jodoh)}</span>
             </div>
             <div class="p-2 bg-sogan-950/70 rounded border border-blue-900/40">
               <span class="text-[9px] uppercase font-bold text-blue-300 block mb-0.5"><i class="fa-solid fa-briefcase mr-1"></i> Rekomendasi Karir</span>
-              <span class="text-sogan-200 text-[10px] leading-tight block">${zodiakRes.karir}</span>
+              <span class="text-sogan-200 text-[10px] leading-tight block">${getBilingualText(zodiakRes.karir)}</span>
             </div>
           </div>
         </div>
@@ -1236,18 +1237,18 @@ export function renderKarakterDasarCardHtml(karakterRes) {
             </span>
           </div>
           <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
-            <i class="fa-solid fa-brain text-prada"></i> Karakter Dasar: ${d.tipe} (Tipe #${karakterRes.noKarakter})
+            <i class="fa-solid fa-brain text-prada"></i> Karakter Dasar: ${getBilingualText(d.tipe)} (Tipe #${karakterRes.noKarakter})
           </h4>
         </div>
         <div class="text-right">
           <span class="text-[10px] text-sogan-400 block uppercase font-bold">Kategori Profil</span>
-          <span class="font-marcellus text-lg sm:text-xl font-bold text-amber-300">${d.tipe}</span>
+          <span class="font-marcellus text-lg sm:text-xl font-bold text-amber-300">${getBilingualText(d.tipe)}</span>
         </div>
       </div>
 
       <div class="p-3 bg-keraton/90 rounded-xl border border-sogan-800 space-y-1">
         <span class="text-[10px] text-sogan-400 uppercase font-bold tracking-wider block">Ringkasan Esensi Karakter:</span>
-        <p class="text-sogan-100 text-xs sm:text-sm leading-relaxed font-medium">${d.ringkasan}</p>
+        <p class="text-sogan-100 text-xs sm:text-sm leading-relaxed font-medium">${getBilingualText(d.ringkasan)}</p>
       </div>
 
       ${d.kekuatan ? `
@@ -1256,7 +1257,7 @@ export function renderKarakterDasarCardHtml(karakterRes) {
           <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
             <i class="fa-solid fa-award text-emerald-400"></i> Kekuatan &amp; Potensi Bawaan
           </span>
-          <div class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed whitespace-pre-line">${d.kekuatan}</div>
+          <div class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed whitespace-pre-line">${getBilingualText(d.kekuatan)}</div>
         </div>
 
         <div class="p-3 bg-keraton/80 rounded-xl border border-rose-900/40 space-y-2 flex flex-col justify-between">
@@ -1264,13 +1265,13 @@ export function renderKarakterDasarCardHtml(karakterRes) {
             <span class="text-[10px] uppercase font-bold text-rose-300 flex items-center gap-1.5 tracking-wider mb-1">
               <i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Kelemahan &amp; Titik Kritis
             </span>
-            <p class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed">${d.kelemahan || '-'}</p>
+            <p class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed">${getBilingualText(d.kelemahan || '-')}</p>
           </div>
           <div class="pt-2 border-t border-sogan-800/80">
             <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider mb-1">
               <i class="fa-solid fa-handshake text-amber-400"></i> Kunci Pendekatan &amp; Negosiasi
             </span>
-            <p class="text-amber-100/90 text-[11px] leading-relaxed italic">${d.negosiasi || '-'}</p>
+            <p class="text-amber-100/90 text-[11px] leading-relaxed italic">${getBilingualText(d.negosiasi || '-')}</p>
           </div>
         </div>
       </div>
@@ -1280,14 +1281,14 @@ export function renderKarakterDasarCardHtml(karakterRes) {
           <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 tracking-wider">
             <i class="fa-solid fa-seedling text-amber-400"></i> Sikap yang Harus Dibangun
           </span>
-          <p class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed">${d.sikap || '-'}</p>
+          <p class="text-sogan-200 text-[11px] sm:text-xs leading-relaxed">${getBilingualText(d.sikap || '-')}</p>
         </div>
 
         <div class="p-3 bg-sogan-950/80 rounded-xl border border-prada/30 space-y-1 flex flex-col justify-center">
           <span class="text-[10px] uppercase font-bold text-prada-light flex items-center gap-1.5 tracking-wider">
             <i class="fa-solid fa-quote-left text-prada"></i> Motto Bawah Sadar
           </span>
-          <p class="text-prada-light text-[11px] sm:text-xs font-semibold italic">"${d.motto || '-'}"</p>
+          <p class="text-prada-light text-[11px] sm:text-xs font-semibold italic">"${getBilingualText(d.motto || '-')}"</p>
         </div>
       </div>
       ` : ''}
@@ -1297,7 +1298,7 @@ export function renderKarakterDasarCardHtml(karakterRes) {
 
 export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sasiJawaRes) {
   if (!watakDinaRes && !watakPasaranRes && !sasiJawaRes) return '';
-  const sasiName = sasiJawaRes?.sasi && sasiJawaRes.sasi !== '-' ? sasiJawaRes.sasi : '';
+  const sasiName = sasiJawaRes?.sasi && sasiJawaRes.sasi !== '-' ? getBilingualText(sasiJawaRes.sasi) : '';
   const titleSasi = sasiName ? ` &amp; Sasi (${sasiName})` : '';
   return `
     <div class="space-y-3 bg-wulung p-4 sm:p-5 rounded-2xl border border-prada/30 shadow-xl">
@@ -1307,7 +1308,7 @@ export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sa
             Watak Dina, Pasaran &amp; Sasi Jawa
           </span>
           <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
-            <i class="fa-solid fa-sun text-amber-400"></i> Watak Hari (${watakDinaRes?.dina || '-'}), Pasaran (${watakPasaranRes?.pasaran || '-'})${titleSasi}
+            <i class="fa-solid fa-sun text-amber-400"></i> Watak Hari (${getBilingualText(watakDinaRes?.dina || '-')}), Pasaran (${getBilingualText(watakPasaranRes?.pasaran || '-')})${titleSasi}
           </h4>
         </div>
         <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">
@@ -1321,26 +1322,26 @@ export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sa
           <div class="space-y-2">
             <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
               <span class="text-[10px] uppercase font-bold text-amber-300 tracking-wider flex items-center gap-1.5">
-                <i class="fa-solid fa-calendar-day text-amber-400"></i> Dina: ${watakDinaRes.dina}
+                <i class="fa-solid fa-calendar-day text-amber-400"></i> Dina: ${getBilingualText(watakDinaRes.dina)}
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-amber-500/30 text-[10px] text-prada font-bold">
-                Lambang: ${watakDinaRes.lambang}
+                Lambang: ${getBilingualText(watakDinaRes.lambang)}
               </span>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Watak Utama:</span>
-              <p class="font-bold text-sogan-100 text-xs">${watakDinaRes.watak_utama}</p>
+              <p class="font-bold text-sogan-100 text-xs">${getBilingualText(watakDinaRes.watak_utama)}</p>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Deskripsi Lengkap:</span>
-              <p class="text-sogan-200 text-[11px] leading-relaxed">${watakDinaRes.deskripsi}</p>
+              <p class="text-sogan-200 text-[11px] leading-relaxed">${getBilingualText(watakDinaRes.deskripsi)}</p>
             </div>
           </div>
           <div class="p-2.5 bg-sogan-950/80 rounded-lg border border-sogan-800">
             <span class="text-[10px] text-emerald-300 uppercase font-bold block mb-0.5 flex items-center gap-1">
               <i class="fa-solid fa-briefcase text-emerald-400"></i> Rekomendasi Profesi Dina:
             </span>
-            <p class="text-sogan-200 text-[11px]">${watakDinaRes.rekomendasi_profesi}</p>
+            <p class="text-sogan-200 text-[11px]">${getBilingualText(watakDinaRes.rekomendasi_profesi)}</p>
           </div>
         </div>
         ` : ''}
@@ -1350,26 +1351,26 @@ export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sa
           <div class="space-y-2">
             <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
               <span class="text-[10px] uppercase font-bold text-blue-300 tracking-wider flex items-center gap-1.5">
-                <i class="fa-solid fa-compass text-blue-400"></i> Pasaran: ${watakPasaranRes.pasaran}
+                <i class="fa-solid fa-compass text-blue-400"></i> Pasaran: ${getBilingualText(watakPasaranRes.pasaran)}
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-blue-500/30 text-[10px] text-prada font-bold">
-                Lambang: ${watakPasaranRes.lambang}
+                Lambang: ${getBilingualText(watakPasaranRes.lambang)}
               </span>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Watak Utama:</span>
-              <p class="font-bold text-sogan-100 text-xs">${watakPasaranRes.watak_utama}</p>
+              <p class="font-bold text-sogan-100 text-xs">${getBilingualText(watakPasaranRes.watak_utama)}</p>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Deskripsi Lengkap:</span>
-              <p class="text-sogan-200 text-[11px] leading-relaxed">${watakPasaranRes.deskripsi}</p>
+              <p class="text-sogan-200 text-[11px] leading-relaxed">${getBilingualText(watakPasaranRes.deskripsi)}</p>
             </div>
           </div>
           <div class="p-2.5 bg-sogan-950/80 rounded-lg border border-sogan-800">
             <span class="text-[10px] text-amber-300 uppercase font-bold block mb-0.5 flex items-center gap-1">
               <i class="fa-solid fa-coins text-amber-400"></i> Catatan Rejeki &amp; Nasib:
             </span>
-            <p class="text-sogan-200 text-[11px]">${watakPasaranRes.catatan_rejeki_nasib}</p>
+            <p class="text-sogan-200 text-[11px]">${getBilingualText(watakPasaranRes.catatan_rejeki_nasib || watakPasaranRes.catatan_rejeki)}</p>
           </div>
         </div>
         ` : ''}
@@ -1378,15 +1379,15 @@ export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sa
         <div class="col-span-1 md:col-span-2 p-4 bg-keraton/90 rounded-xl border border-teal-800/40 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between border-b border-sogan-800 pb-2 gap-2">
             <span class="text-[10px] uppercase font-bold text-teal-300 tracking-wider flex items-center gap-1.5">
-              <i class="fa-solid fa-moon text-teal-400"></i> Watak Sasi Lahir Jawa: ${sasiJawaRes.sasi}
+              <i class="fa-solid fa-moon text-teal-400"></i> Watak Sasi Lahir Jawa: ${getBilingualText(sasiJawaRes.sasi)}
             </span>
             <span class="px-2.5 py-0.5 rounded bg-sogan-950 border border-teal-500/40 text-[10px] text-prada-light font-bold font-mono">
-              Padanan Hijriyah: ${sasiJawaRes.padanan}
+              Padanan Hijriyah: ${getBilingualText(sasiJawaRes.padanan)}
             </span>
           </div>
           <div>
             <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-1">Watak Karakteristik Sasi:</span>
-            <p class="text-sogan-100 text-xs sm:text-[13px] leading-relaxed font-medium">${sasiJawaRes.watak}</p>
+            <p class="text-sogan-100 text-xs sm:text-[13px] leading-relaxed font-medium">${getBilingualText(sasiJawaRes.watak)}</p>
           </div>
         </div>
         ` : ''}
@@ -1409,7 +1410,7 @@ export function renderPekerjaanPakartiCardHtml(pekerjaanRes) {
           </h4>
         </div>
         <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">
-          Weton: <strong class="text-prada-light">${pekerjaanRes.dino} ${pekerjaanRes.pasaran}</strong>
+          Weton: <strong class="text-prada-light">${getBilingualText(pekerjaanRes.dino)} ${getBilingualText(pekerjaanRes.pasaran)}</strong>
         </span>
       </div>
 
@@ -1418,27 +1419,27 @@ export function renderPekerjaanPakartiCardHtml(pekerjaanRes) {
           <div class="grid grid-cols-2 gap-2">
             <div class="p-2.5 rounded-lg bg-sogan-950/80 border border-amber-500/30 text-center">
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block">Pakarti Rejeki</span>
-              <span class="font-marcellus text-base sm:text-lg font-bold text-amber-300">${pekerjaanRes.pakarti_rejeki}</span>
+              <span class="font-marcellus text-base sm:text-lg font-bold text-amber-300">${getBilingualText(pekerjaanRes.pakarti_rejeki)}</span>
             </div>
             <div class="p-2.5 rounded-lg bg-sogan-950/80 border border-prada/30 text-center">
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block">Pakarti Badan</span>
-              <span class="font-marcellus text-base sm:text-lg font-bold text-prada-light">${pekerjaanRes.pakarti_badan}</span>
+              <span class="font-marcellus text-base sm:text-lg font-bold text-prada-light">${getBilingualText(pekerjaanRes.pakarti_badan)}</span>
             </div>
           </div>
           
           <div class="space-y-2">
             <div class="p-2.5 bg-sogan-950/60 rounded-lg border border-sogan-800/80 space-y-1">
               <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-circle-info text-amber-400"></i> Makna Pakarti Rejeki (${pekerjaanRes.pakarti_rejeki})
+                <i class="fa-solid fa-circle-info text-amber-400"></i> Makna Pakarti Rejeki (${getBilingualText(pekerjaanRes.pakarti_rejeki)})
               </span>
-              <p class="text-sogan-200 text-[11px] leading-relaxed italic">"${pekerjaanRes.arti_rejeki}"</p>
+              <p class="text-sogan-200 text-[11px] leading-relaxed italic">"${getBilingualText(pekerjaanRes.arti_rejeki)}"</p>
             </div>
             ${pekerjaanRes.arti_badan && pekerjaanRes.arti_badan !== '-' ? `
             <div class="p-2.5 bg-sogan-950/60 rounded-lg border border-prada/30 space-y-1">
               <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-person-rays text-prada"></i> Filosofi Pakarti Badan (${pekerjaanRes.pakarti_badan})
+                <i class="fa-solid fa-person-rays text-prada"></i> Filosofi Pakarti Badan (${getBilingualText(pekerjaanRes.pakarti_badan)})
               </span>
-              <p class="text-sogan-200 text-[11px] leading-relaxed italic">"${pekerjaanRes.arti_badan}"</p>
+              <p class="text-sogan-200 text-[11px] leading-relaxed italic">"${getBilingualText(pekerjaanRes.arti_badan)}"</p>
             </div>
             ` : ''}
           </div>
@@ -1450,7 +1451,7 @@ export function renderPekerjaanPakartiCardHtml(pekerjaanRes) {
               <i class="fa-solid fa-compass-drafting text-amber-400"></i> Rekomendasi Pakaryan (Bidang Usaha &amp; Karier)
             </span>
             <p class="text-sogan-100 text-xs sm:text-sm leading-relaxed p-3 rounded-lg bg-sogan-950 border border-sogan-800 font-medium">
-              ${pekerjaanRes.pakaryan}
+              ${getBilingualText(pekerjaanRes.pakaryan)}
             </p>
           </div>
           <p class="text-[10px] text-sogan-400 italic">
@@ -1480,7 +1481,7 @@ export function renderSirikanAdhepOmahCardHtml(sirikanRes) {
           </h4>
         </div>
         <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">
-          Neptu ${neptuVal} &middot; Dina ${sirikanRes.dino}
+          Neptu ${neptuVal} &middot; Dina ${getBilingualText(sirikanRes.dino)}
         </span>
       </div>
 
@@ -1499,7 +1500,7 @@ export function renderSirikanAdhepOmahCardHtml(sirikanRes) {
           </div>
           <div class="p-3 bg-rose-950/40 rounded-lg border border-rose-800/60 text-center">
             <span class="text-[10px] uppercase font-semibold text-rose-300/80 block">Arah Sirikan Neptu:</span>
-            <span class="font-marcellus text-lg sm:text-xl font-bold text-rose-300 tracking-wide">${sirikanRes.sirikanNeptu}</span>
+            <span class="font-marcellus text-lg sm:text-xl font-bold text-rose-300 tracking-wide">${getBilingualText(sirikanRes.sirikanNeptu)}</span>
           </div>
           <p class="text-[10px] text-sogan-400 italic">
             *Berdasarkan rumus petungan Neptu Weton (${neptuVal}) dari Serat Primbon Griya Jawa.
@@ -1513,17 +1514,17 @@ export function renderSirikanAdhepOmahCardHtml(sirikanRes) {
                 <i class="fa-solid fa-ban text-amber-400"></i> Sirikan Adhedhasar Dina
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-amber-500/40 text-[10px] text-amber-300 font-mono">
-                Dina ${sirikanRes.dino}
+                Dina ${getBilingualText(sirikanRes.dino)}
               </span>
             </div>
             <p class="text-sogan-300 text-[11px]">Pantangan arah hadap bangunan / lawang ngarep omah:</p>
           </div>
           <div class="p-3 bg-amber-950/40 rounded-lg border border-amber-800/60 text-center">
             <span class="text-[10px] uppercase font-semibold text-amber-300/80 block">Arah Sirikan Dina:</span>
-            <span class="font-marcellus text-lg sm:text-xl font-bold text-amber-300 tracking-wide">${sirikanRes.sirikanDina}</span>
+            <span class="font-marcellus text-lg sm:text-xl font-bold text-amber-300 tracking-wide">${getBilingualText(sirikanRes.sirikanDina)}</span>
           </div>
           <p class="text-[10px] text-sogan-400 italic">
-            *Berdasarkan pasuryan hari kelahiran (${sirikanRes.dino}) agar terhindar dari sengkala griya.
+            *Berdasarkan pasuryan hari kelahiran (${getBilingualText(sirikanRes.dino)}) agar terhindar dari sengkala griya.
           </p>
         </div>
       </div>
@@ -1533,7 +1534,7 @@ export function renderSirikanAdhepOmahCardHtml(sirikanRes) {
           <i class="fa-solid fa-circle-info text-prada"></i> Paugeran &amp; Nasehat Griya
         </span>
         <p class="text-sogan-200 text-[11px] leading-relaxed">
-          ${sirikanRes.catatan} Apabila kondisi lahan mengharuskan rumah menghadap ke arah sirikan, masyarakat Jawa biasanya menyiasati dengan memiringkan arah pintu utama (lawang kori) atau membuat akses jalan masuk samping agar sirkulasi hawa tidak berhadapan langsung dengan arah pantangan.
+          ${getBilingualText(sirikanRes.catatan)} Apabila kondisi lahan mengharuskan rumah menghadap ke arah sirikan, masyarakat Jawa biasanya menyiasati dengan memiringkan arah pintu utama (lawang kori) atau membuat akses jalan masuk samping agar sirkulasi hawa tidak berhadapan langsung dengan arah pantangan.
         </p>
       </div>
     </div>
