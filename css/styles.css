@@ -455,6 +455,34 @@ svg {
   }
 }
 
+#mobileMenuBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 34px;
+  padding: 0 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 10;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  #mobileMenuBtn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #mobileMenuBtn {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
 .mode-badge-pill {
   font-size: 0.65rem;
   font-weight: 700;
@@ -2078,7 +2106,8 @@ body.theme-light .nav-action-btn,
 body.theme-light .mode-toggle-btn,
 body.theme-light .lang-toggle-btn,
 body.theme-light .nav-audio-btn,
-body.theme-light #themeToggleBtn {
+body.theme-light #themeToggleBtn,
+body.theme-light #mobileMenuBtn {
   background: #ffffff !important;
   color: #4a2800 !important;
   border-color: rgba(184, 124, 36, 0.4) !important;
@@ -2088,7 +2117,8 @@ body.theme-light .nav-action-btn:hover,
 body.theme-light .mode-toggle-btn:hover,
 body.theme-light .lang-toggle-btn:hover,
 body.theme-light .nav-audio-btn:hover,
-body.theme-light #themeToggleBtn:hover {
+body.theme-light #themeToggleBtn:hover,
+body.theme-light #mobileMenuBtn:hover {
   background: rgba(212, 175, 55, 0.15) !important;
   color: #8c531b !important;
   border-color: #b87c24 !important;
