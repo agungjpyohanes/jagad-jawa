@@ -45,10 +45,15 @@ import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
 import { getWukuPetenget } from '../../data/wuku-petenget-db.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
 import { getLanguage, getBilingualText, t } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentFilterType = 'all';
 
 export function initKalenderSelects() {
+  loadDomainData('kalender').catch((err) => {
+    console.warn('[kalender-ui] loadDomainData fallback:', err);
+  });
+
   const sel = document.getElementById('bulanSel');
   if (!sel) return;
   sel.innerHTML = BULAN_MASEHI.map((b, i) => `<option value="${i + 1}">${b}</option>`).join('');

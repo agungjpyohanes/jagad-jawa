@@ -15,6 +15,7 @@
 import { getSapaDinaData } from './sapa-dina-engine.js';
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { getLanguage, getBilingualText } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 // ─── KONSTANTA ────────────────────────────────────────────────────────────────
 const LS_KEY_DISMISSED = 'jagadjawa_sapa_dismissed';
@@ -984,6 +985,9 @@ export async function shareSapaDinaToday() {
  * @param {string} [containerId='sapa-dina-container']
  */
 export function initSapaDina(containerId = 'sapa-dina-container') {
+  loadDomainData('sapa-dina').catch((err) => {
+    console.warn('[sapa-dina-ui] loadDomainData fallback:', err);
+  });
   // Render langsung saat init
   renderSapaDina(containerId);
 

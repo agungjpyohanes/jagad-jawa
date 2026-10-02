@@ -42,6 +42,7 @@ import {
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { downloadTextFile } from '../../ui/download-helper.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentPustakaSubtab = 'kamus'; // 'kamus' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'naskah' | 'referensi'
 let currentPustakaContainerId = 'pustakaContainer';
@@ -103,6 +104,9 @@ function formatBahasaBadges(bahasaList) {
  * @param {string} [containerId='pustakaContainer']
  */
 export function initPustakaUI(containerId = 'pustakaContainer') {
+  loadDomainData('pustaka').catch((e) => {
+    console.warn('[pustaka-ui] loadDomainData fallback:', e);
+  });
   if (containerId) currentPustakaContainerId = containerId;
   const container = document.getElementById(containerId) ||
                     document.getElementById(currentPustakaContainerId) ||

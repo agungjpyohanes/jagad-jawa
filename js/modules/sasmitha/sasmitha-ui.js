@@ -16,6 +16,7 @@ import {
 import { SASMITHA_KEDUT } from '../../data/sasmitha-db.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentSubtab = 'impen'; // 'impen' | 'kedut' | 'gerhana' | 'lindu' | 'tejo'
 let queryImpen = '';
@@ -82,6 +83,9 @@ const KEDUT_CATEGORIES = [
  * Inisialisasi komponen UI Sasmitha
  */
 export function initSasmithaUI() {
+  loadDomainData('sasmitha').catch((e) => {
+    console.warn('[sasmitha-ui] loadDomainData fallback:', e);
+  });
   setupEventListeners();
   renderSasmithaView();
 }

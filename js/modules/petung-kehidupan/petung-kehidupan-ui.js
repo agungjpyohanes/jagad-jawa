@@ -10,6 +10,7 @@ import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
 import { getBilingualText } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -22,6 +23,9 @@ let currentResultData = null;
  * Inisialisasi komponen UI Petung Kehidupan
  */
 export function initTernakUI() {
+  loadDomainData('petung-kehidupan').catch((e) => {
+    console.warn('[petung-kehidupan-ui] loadDomainData fallback:', e);
+  });
   populateSelects();
   setupEventListeners();
 

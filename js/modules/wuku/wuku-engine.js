@@ -16,15 +16,38 @@ import {
   getWukuPetenget,
   WUKU_PETENGET_LIST
 } from '../../data/wuku-petenget-db.js';
+import { loadDomainData, mapWukuItem } from '../../services/dbLoader.js';
+
+let currentWukuList = Array.isArray(PAWUKON_LIST) ? PAWUKON_LIST.map(mapWukuItem) : [];
+
+/**
+ * Memuat database ensiklopedia wuku secara asinkron dari dbLoader
+ * @returns {Promise<Array<Object>>}
+ */
+export async function loadWukuData() {
+  try {
+    const domainData = await loadDomainData('wuku');
+    if (domainData && Array.isArray(domainData.pawukonList) && domainData.pawukonList.length > 0) {
+      currentWukuList = domainData.pawukonList;
+      if (typeof window !== 'undefined') {
+        window.PAWUKON_LIST = currentWukuList;
+      }
+    }
+  } catch (err) {
+    console.warn('[wuku-engine] loadWukuData fallback:', err);
+  }
+  return currentWukuList;
+}
 
 /**
  * Mendapatkan daftar seluruh 30 wuku.
  * @returns {Array<Object>}
  */
 export function getAllWuku() {
+  if (currentWukuList && currentWukuList.length > 0) return currentWukuList;
   const list = PAWUKON_LIST || (typeof window !== 'undefined' && window.PAWUKON_LIST) || 
                (typeof globalThis !== 'undefined' && globalThis.PAWUKON_LIST) || [];
-  return list;
+  return list.map(mapWukuItem);
 }
 
 /**

@@ -109,6 +109,7 @@ import {
   getShioSvgIllustration,
   getWuXingSvgIllustration
 } from '../../data/shio-wuxing-art.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 if (typeof window !== 'undefined') {
   window.openNujumPokemonCardModal = openNujumPokemonCardModal;
@@ -272,7 +273,12 @@ export function switchNujumViewMode(mode) {
 /**
  * Menghitung Nujum Kepribadian Lengkap
  */
-export function hitungKepribadianLengkap() {
+export async function hitungKepribadianLengkap() {
+  try {
+    await loadDomainData('nujum');
+  } catch (e) {
+    console.warn('[nujum-ui] loadDomainData fallback:', e);
+  }
   const tglVal = document.getElementById('tglLahirKepribadian')?.value;
   if (!tglVal) {
     showToast('Pilih tanggal lahir terlebih dahulu.');

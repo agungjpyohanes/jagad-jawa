@@ -22,8 +22,12 @@ import {
 import { saveBookmark } from '../kalender/bookmark-service.js';
 import { HARI, PASARAN, NEPTU_HARI, NEPTU_PASARAN, getDayInfo } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 export function initPerjodohanSelects() {
+  loadDomainData('jodoh').catch((e) => {
+    console.warn('[jodoh-ui] loadDomainData fallback:', e);
+  });
   const selects = ['aksaraDepanP', 'aksaraBelakangP', 'aksaraDepanL', 'aksaraBelakangL'];
   selects.forEach(id => {
     const sel = document.getElementById(id);
@@ -141,7 +145,12 @@ export function updateNeptuPerjodohan(side) {
   }
 }
 
-export function hitungNujumPerjodohan() {
+export async function hitungNujumPerjodohan() {
+  try {
+    await loadDomainData('jodoh');
+  } catch (e) {
+    console.warn('[jodoh-ui] hitungNujumPerjodohan fallback:', e);
+  }
   const neptuPText = document.getElementById('neptuPBadge')?.innerText;
   const neptuLText = document.getElementById('neptuLBadge')?.innerText;
   const neptuP = parseInt(neptuPText || '');

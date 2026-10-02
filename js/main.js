@@ -457,25 +457,33 @@ function registerServiceWorker() {
   }
 }
 
+// ─── DATABASE SERVICE (JSON DATABASE LOADER) ──────────────────────────────
+import { loadDomainData } from './services/dbLoader.js';
+
 // ─── BOOTSTRAP INITIAL APPLICATION STATE ──────────────────────────────────
 export function bootstrap() {
   initI18n();
   initModeFeature();
   registerServiceWorker();
 
-  if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects();
-  if (typeof window.renderKalender === 'function') window.renderKalender();
-  initQuickTodayBadge();
+  // Migrasi bertahap dbLoader: trigger pemuatan domain inti secara asinkron
+  loadDomainData('kalender').catch((e) => console.warn('[bootstrap] kalender domain fallback:', e));
+  loadDomainData('sapa-dina').catch((e) => console.warn('[bootstrap] sapa-dina domain fallback:', e));
+
+  // Pemuatan UI dengan boundary resilien agar halaman tidak pernah blank
+  try { if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects(); } catch (e) { console.warn(e); }
+  try { if (typeof window.renderKalender === 'function') window.renderKalender(); } catch (e) { console.warn(e); }
+  try { initQuickTodayBadge(); } catch (e) { console.warn(e); }
 
   // Phase II: Sapa Dina — Ringkasan Harian (inisialisasi setelah kalender)
-  initSapaDina('sapa-dina-container');
+  try { initSapaDina('sapa-dina-container'); } catch (e) { console.warn(e); }
 
-  if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects();
-  if (typeof window.initIjabUI === 'function') window.initIjabUI();
-  if (typeof window.initOmahUI === 'function') window.initOmahUI();
-  if (typeof window.initTernakUI === 'function') window.initTernakUI();
-  if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI();
-  if (typeof window.initMitologiUI === 'function') window.initMitologiUI();
+  try { if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initIjabUI === 'function') window.initIjabUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initOmahUI === 'function') window.initOmahUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initTernakUI === 'function') window.initTernakUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initMitologiUI === 'function') window.initMitologiUI(); } catch (e) { console.warn(e); }
 
   // Inisialisasi Fitur Tema & Kelir Wayang Panggung
   initThemeFeature();

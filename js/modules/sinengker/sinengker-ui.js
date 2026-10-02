@@ -30,6 +30,7 @@ import {
 } from '../pustaka/pustaka-ui.js';
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
@@ -69,6 +70,9 @@ function updateKompasSampleHighlight(currentQuery) {
  * @param {string} [containerId='sinengkerContainer']
  */
 export function initSinengkerUI(containerId = 'sinengkerContainer') {
+  loadDomainData('sinengker').catch((e) => {
+    console.warn('[sinengker-ui] loadDomainData fallback:', e);
+  });
   const container = document.getElementById(containerId);
   if (!container) return;
 

@@ -9,6 +9,7 @@ import { hitungSelametanDates, TEMPLAT_DONGA_KEYAKINAN } from './selametan-engin
 import { saveBookmark } from '../kalender/bookmark-service.js';
 import { showToast } from '../../ui/toast.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentSelametanKeyakinan = 'universal';
 
@@ -40,7 +41,12 @@ export function gantiKeyakinanSelametan(keyakinanKey) {
 /**
  * Menghitung dan merender seluruh hasil selametan tilar donyo.
  */
-export function hitungSelametan() {
+export async function hitungSelametan() {
+  try {
+    await loadDomainData('selametan');
+  } catch (e) {
+    console.warn('[selametan-ui] loadDomainData fallback:', e);
+  }
   const inputEl = document.getElementById('tglWafatInput');
   if (inputEl && !inputEl.value) {
     inputEl.value = new Date().toISOString().slice(0, 10);

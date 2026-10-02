@@ -16,6 +16,7 @@ import {
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
 import { getBilingualText } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -24,6 +25,9 @@ const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
  * Inisialisasi komponen UI Petung Ijab
  */
 export function initIjabUI() {
+  loadDomainData('ijab').catch((e) => {
+    console.warn('[ijab-ui] loadDomainData fallback:', e);
+  });
   populateSelects();
   setupEventListeners();
 

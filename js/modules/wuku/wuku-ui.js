@@ -12,7 +12,8 @@ import {
   searchWukuWithCategory,
   getWukuDetailSummary,
   getWukuPetenget,
-  illustrationPath
+  illustrationPath,
+  loadWukuData
 } from './wuku-engine.js';
 import {
   SIKLUS12_SLUGS,
@@ -29,7 +30,12 @@ let currentWukuCategory = 'all';
  * Membuka modal ensiklopedia 30 Wuku Nusantara.
  * @param {string|number} [initialWuku] Nomor atau nama wuku awal yang langsung dibuka
  */
-export function openEnsiklopediaWukuModal(initialWuku) {
+export async function openEnsiklopediaWukuModal(initialWuku) {
+  try {
+    await loadWukuData();
+  } catch (err) {
+    console.warn('[wuku-ui] loadWukuData fallback:', err);
+  }
   const modal = document.getElementById('modalEnsiklopediaWuku');
   if (!modal) return;
 
@@ -778,7 +784,12 @@ export function closePadewanDetailModal() {
 /**
  * Merender halaman Ensiklopedia Wuku secara penuh (untuk tab wuku mandiri).
  */
-export function renderFullWukuPage() {
+export async function renderFullWukuPage() {
+  try {
+    await loadWukuData();
+  } catch (err) {
+    console.warn('[wuku-ui] renderFullWukuPage fallback:', err);
+  }
   renderWukuGrid(getAllWuku());
   selectWukuDetail(activeWukuNo || 1);
 }
