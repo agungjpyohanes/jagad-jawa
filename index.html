@@ -9,9 +9,6 @@
   <link rel="apple-touch-icon" href="./assets/icon.svg">
   <title>Jagad Jawa — Menjelajahi Kebudayaan Luhur Nusantara</title>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,42 +17,13 @@
   <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Modular Styles -->
+  <!-- Modular Styles (compiled via Vite with Tailwind CSS) -->
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- html2canvas & jsPDF for High-Res PNG & 1-Page PDF Exports -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            sogan: {
-              50: "#fcf8f0", 100: "#f6ecd2", 200: "#edd8a4", 300: "#e1bd6f",
-              400: "#d5a140", 500: "#b87c24", 600: "#945c1a", 700: "#724117",
-              800: "#552e16", 900: "#3c1f11", 950: "#1e0d06",
-            },
-            prada: { light: "#fdf0cd", DEFAULT: "#d4af37", dark: "#9a7b1c" },
-            keraton: "#0f141d",
-            wulung: "#182030",
-            ala: "#a8402f",
-            becik: "#276749",
-          },
-          fontFamily: {
-            cinzel: ['"Cinzel Decorative"', "serif"],
-            fraunces: ['"Fraunces"', "serif"],
-            marcellus: ['"Marcellus"', "serif"],
-            mono: ['"JetBrains Mono"', "monospace"],
-            sans: ['"Plus Jakarta Sans"', "sans-serif"],
-            jawa: ['"Noto Sans Javanese"', "serif"],
-          }
-        }
-      }
-    }
-  </script>
+</head>
 <body class="bg-[#0B0F19] text-amber-50 min-h-screen font-sans antialiased selection:bg-sogan-500 selection:text-white flex flex-col justify-between relative overflow-x-hidden w-full max-w-full">
 
   <!-- ==================== DEKORATIF ANTIGRAVITY MOTIFS (BACKGROUND & FOREGROUND) ==================== -->
@@ -106,23 +74,37 @@
     <div class="header-floating-bar rounded-2xl bg-[#0B0F19]/85 backdrop-blur-md border border-prada/30 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-300">
       <div class="nav-container flex flex-nowrap items-center justify-between gap-3 lg:gap-4 px-2.5 sm:px-3.5 py-1.5">
         
-        <!-- Brand Cluster (Kiri) -->
-        <a href="javascript:void(0)" onclick="switchTab('beranda')" class="brand-wrapper group cursor-pointer shrink-0 min-w-0 flex items-center gap-1.5 sm:gap-2">
-          <div class="brand-logo group-hover:scale-105 transition-transform duration-300 shrink-0">
-            <!-- Geometric Batik Motif (Ceplok / Kawung Gold SVG) -->
-            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-prada drop-shadow-[0_0_6px_rgba(212,175,55,0.6)]" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="24 4 44 24 24 44 4 24" fill="rgba(212,175,55,0.15)" />
-              <circle cx="24" cy="24" r="7" fill="rgba(245,197,66,0.25)" stroke="#f5c542" stroke-width="1.8" />
-              <path d="M24 10 C20 17 20 31 24 38" stroke="#d4af37" />
-              <path d="M10 24 C17 20 31 20 38 24" stroke="#d4af37" />
-              <circle cx="24" cy="24" r="2" fill="#fff5d6" />
-            </svg>
-          </div>
-          <div class="brand-text min-w-0">
-            <h1 class="brand-title whitespace-nowrap text-sm sm:text-base font-bold tracking-wider">JAGAD JAWA</h1>
-            <span class="brand-subtitle whitespace-nowrap hidden lg:block text-[10px] text-sogan-400" data-i18n="brand_subtitle">Portal Budaya Nusantara</span>
-          </div>
-        </a>
+        <!-- Left Cluster: Global Back Button & Brand -->
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-0">
+          <!-- Centralized Global Back Button (Hanya Muncul Saat Tidak di Tab Beranda) -->
+          <button
+            id="globalNavBackBtn"
+            onclick="navigasiKembali()"
+            class="hidden items-center justify-center w-8 h-8 rounded-xl bg-sogan-950/80 hover:bg-sogan-900 border border-prada/40 hover:border-prada text-prada transition shadow-sm cursor-pointer shrink-0 group"
+            title="Kembali ke halaman sebelumnya"
+            aria-label="Kembali"
+          >
+            <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
+          </button>
+
+          <!-- Brand Cluster (Kiri) -->
+          <a href="javascript:void(0)" onclick="switchTab('beranda')" class="brand-wrapper group cursor-pointer shrink-0 min-w-0 flex items-center gap-1.5 sm:gap-2">
+            <div class="brand-logo group-hover:scale-105 transition-transform duration-300 shrink-0">
+              <!-- Geometric Batik Motif (Ceplok / Kawung Gold SVG) -->
+              <svg class="w-4 h-4 sm:w-5 sm:h-5 text-prada drop-shadow-[0_0_6px_rgba(212,175,55,0.6)]" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="24 4 44 24 24 44 4 24" fill="rgba(212,175,55,0.15)" />
+                <circle cx="24" cy="24" r="7" fill="rgba(245,197,66,0.25)" stroke="#f5c542" stroke-width="1.8" />
+                <path d="M24 10 C20 17 20 31 24 38" stroke="#d4af37" />
+                <path d="M10 24 C17 20 31 20 38 24" stroke="#d4af37" />
+                <circle cx="24" cy="24" r="2" fill="#fff5d6" />
+              </svg>
+            </div>
+            <div class="brand-text min-w-0">
+              <h1 class="brand-title whitespace-nowrap text-sm sm:text-base font-bold tracking-wider">JAGAD JAWA</h1>
+              <span class="brand-subtitle whitespace-nowrap hidden lg:block text-[10px] text-sogan-400" data-i18n="brand_subtitle">Portal Budaya Nusantara</span>
+            </div>
+          </a>
+        </div>
 
         <!-- Navigation Links (Tengah - 4 Kategori Budaya Inti) -->
         <div class="nav-center-scroll nav-center-desktop flex-1 py-0.5 min-w-0 hidden md:flex justify-center">
@@ -1035,13 +1017,7 @@
     <!-- ========================================================================= -->
     <section id="tab-kalender" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <!-- Controls Panel -->
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-wrap items-center justify-between gap-4">
@@ -1211,13 +1187,7 @@
     <!-- ========================================================================= -->
     <section id="tab-tanggal-jawa" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
         <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Konversi &amp; Penjelajah Tanggal Jawa</h2>
@@ -1250,13 +1220,7 @@
     <!-- ========================================================================= -->
     <section id="tab-kepribadian" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -1447,13 +1411,7 @@
     <!-- ========================================================================= -->
     <section id="tab-perjodohan" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
       
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
         <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Perjodohan Jawa &middot; Pitung Jawa</h2>
@@ -1660,13 +1618,7 @@
     <!-- ========================================================================= -->
     <section id="tab-selametan" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <div class="bg-wulung p-5 sm:p-6 rounded-2xl border border-sogan-800 space-y-2">
         <div class="flex flex-wrap items-center justify-between gap-2">
@@ -2196,13 +2148,7 @@
     <!-- ========================================================================= -->
     <section id="tab-gamelan" class="tab-content hidden space-y-8">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <!-- ==================== PENGANTAR KARAWITAN & TEMBANG MACAPAT ==================== -->
       <div class="space-y-6">
@@ -2474,13 +2420,7 @@
     <!-- ========================================================================= -->
     <section id="tab-aksara" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
         <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Studio Aksara Jawa (Hanacaraka)</h2>
@@ -2777,13 +2717,7 @@
     <!-- ========================================================================= -->
     <section id="tab-wayang" class="tab-content hidden space-y-6">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -2869,13 +2803,7 @@
     <!-- ========================================================================= -->
     <section id="tab-pitutur" class="tab-content hidden space-y-8">
       
-      <!-- Tombol Navigasi Kembali -->
-      <div class="flex items-center">
-        <button onclick="navigasiKembali()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-sogan-900/90 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-sogan-200 hover:text-prada text-xs font-semibold transition duration-200 shadow-sm cursor-pointer group">
-          <i class="fa-solid fa-arrow-left text-xs group-hover:-translate-x-0.5 transition-transform"></i>
-          <span>← Kembali</span>
-        </button>
-      </div>
+
 
       <!-- Generator Pitutur Luhur Harian -->
       <div class="bg-gradient-to-b from-sogan-950 via-wulung to-keraton p-6 sm:p-10 rounded-3xl border border-sogan-700 shadow-2xl text-center space-y-5">
@@ -2978,10 +2906,6 @@
       <!-- Top Navigation & Title Bar -->
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
-          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold" title="Kembali">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="hidden sm:inline">Kembali</span>
-          </button>
           <div>
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-bowl-rice"></i> Seni, Tradisi, &amp; Filosofi Jawa
@@ -3286,9 +3210,6 @@
 
         <div class="pt-2 flex flex-wrap justify-between items-center gap-3 text-xs text-sogan-400">
           <span class="italic">Dipetik saking Serat Centhini &amp; Wewarah Sesaji Ageng Karaton Surakarta / Ngayogyakarta</span>
-          <button onclick="navigasiKembali()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/40 text-prada hover:bg-prada/20 transition font-semibold flex items-center gap-1.5">
-            <i class="fa-solid fa-arrow-left"></i> Kembali ke Beranda
-          </button>
         </div>
       </div>
 
@@ -3302,10 +3223,6 @@
       <!-- Top Navigation & Title Bar -->
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
-          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="hidden sm:inline">Kembali</span>
-          </button>
           <div>
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-compass"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
@@ -3425,10 +3342,6 @@
       <!-- Top Navigation & Title Bar -->
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
-          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="hidden sm:inline">Kembali</span>
-          </button>
           <div>
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-scroll"></i> Sastra &amp; Mitologi Kuno
@@ -3474,10 +3387,6 @@
       <!-- Top Navigation & Title Bar -->
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
-          <button onclick="navigasiKembali()" class="p-2.5 rounded-xl bg-sogan-900/80 border border-prada/40 text-prada hover:bg-prada/20 transition flex items-center gap-2 text-xs font-semibold cursor-pointer" title="Kembali">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="hidden sm:inline">Kembali</span>
-          </button>
           <div>
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-scroll"></i> Arsip &amp; Penerbitan Resmi

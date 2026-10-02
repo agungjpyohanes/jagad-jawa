@@ -1,62 +1,45 @@
 # Jagad Jawa — Menjelajahi Kebudayaan Luhur Nusantara
 
-**JAGAD JAWA** · Versi 2.0 (`branch: jawa-v2`)  
-Portal Kebudayaan Luhur Nusantara, Penanggalan Jawa Sultan Agungan, Nujum Primbon 6 Dimensi Bincil, Pitung Perjodohan, Pawukon, Aksara Jawa, dan Wayang Purwa.
+**JAGAD JAWA** · Versi 3.0 (`branch: jawa-v11`)  
+Portal Kebudayaan Luhur Nusantara, Penanggalan Jawa Sultan Agungan, Nujum Primbon 6 Dimensi Bincil, Pitung Perjodohan, Pawukon, Petung Omah & Cempuri, Petung Ijab, Petung Kehidupan & Tetanen, Sasmitha Tanda Alam, Pustaka Digital & Sinengker Sakral, Aksara Jawa, dan Wayang Purwa Gagrag Surakarta.
 
 ---
 
 ## Daftar Isi
-1. [Perbedaan Fundamental: jawa-v1 vs jawa-v2](#perbedaan-fundamental-jawa-v1-vs-jawa-v2)
-2. [Perilaku yang Dijamin Sama dengan jawa-v1 (Zero Change pada Formula)](#perilaku-yang-dijamin-sama-dengan-jawa-v1)
+1. [Arsitektur & Evolusi Versi: jawa-v10 & jawa-v11](#arsitektur--evolusi-versi-jawa-v10--jawa-v11)
+2. [Kaidah Emas (Zero Change pada Formula Inti)](#kaidah-emas-zero-change-pada-formula-inti)
 3. [Struktur Direktori Modern](#struktur-direktori-modern)
-4. [Fitur-Fitur Utama](#fitur-fitur-utama)
-5. [Cara Menjalankan Secara Lokal](#cara-menjalankan-secara-lokal)
-6. [Menjalankan Pengujian Otomatis (Unit Tests)](#menjalankan-pengujian-otomatis-unit-tests)
-7. [Checklist Manual QA 15 Menit untuk Rilis](#checklist-manual-qa-15-menit-untuk-rilis)
-8. [Panduan Deploy](#panduan-deploy)
+4. [Struktur Database JSON & dbLoader Service](#struktur-database-json--dbloader-service)
+5. [Fitur-Fitur Unggulan](#fitur-fitur-unggulan)
+6. [Panduan Instalasi & Penggunaan Lokal](#panduan-instalasi--penggunaan-lokal)
+7. [Menjalankan Pengujian Otomatis (Unit Tests)](#menjalankan-pengujian-otomatis-unit-tests)
+8. [Panduan Kompilasi & Build Produksi](#panduan-kompilasi--build-produksi)
+9. [Panduan Deploy](#panduan-deploy)
 
 ---
 
-## Perbedaan Fundamental: jawa-v1 vs jawa-v2
+## Arsitektur & Evolusi Versi: jawa-v10 & jawa-v11
 
-| Aspek | Versi Lama (`jawa-v1`) | Versi Modern (`jawa-v2`) |
+| Aspek | Versi Lawas (`jawa-v2`) | Arsitektur Mutakhir (`jawa-v10` / `jawa-v11`) |
 | :--- | :--- | :--- |
-| **Arsitektur Kode** | Monolitik: 1 berkas `index.html` (147 KB) yang mencampur HTML, CSS, ribuan baris JS, dan basis data JSON dalam satu tag `<script>`. | Modular ES Modules: Pemisahan tegas antara UI (`js/ui/`), Fitur (`js/features/`), Logika domain (`js/modules/`), dan Pure Datasets (`js/data/`). |
-| **Konsolidasi Data Nujum** | Fragmentasi data: Terdapat inkonsistensi antara `nujum-master-data.js`, `nujum_database.js`, dan lookup manual. | **Single Source of Truth**: Seluruh modul nujum merujuk ke `js/data/nujum-matrix.js` (210 exact lookup) dengan zero modulo pada 6 dimensi bincil. |
-| **Dukungan Offline & PWA** | Tidak ada Service Worker atau manifest; jika internet putus, aset eksternal dan script gagal dimuat. | **Full PWA Ready**: Memiliki `manifest.webmanifest`, ikon vektor, dan `sw.js` yang meng-cache shell, dataset nujum, dan calendar data sehingga bisa diakses **100% offline**. |
-| **Layout Kalender Mobile** | Hanya tabel 9 kolom yang terpotong atau harus digeser horizontal lebar di ponsel. | **Mode Ganda**: Pengguna mobile dapat memilih **Mode Tabel (Grid)** atau **Mode List Minggu (Weekly View)** per pekan yang sangat pas di layar smartphone. |
-| **Aksesibilitas & Bahasa** | Label antarmuka statis campuran; kontras badge status Ala/Becik beberapa kali kurang terbaca pada latar gelap. | **Toggle Dwibahasa (ID / Jawa)** via `i18n.js` tanpa mutasi key data. Kontras badge Ala (`#b91c1c`) dan Becik (`#15803d`) telah terstandarisasi **WCAG AA (>4.5:1)**. |
-| **Fitur Tambahan** | Belum ada riwayat perjodohan, kartu weton gambar, dan sistem penandaan tanggal. | Bookmark tanggal lokal, Generator Share Card Weton (PNG & teks WhatsApp), Selametan Wizard (penanganan Maghrib), dan Audio Synthesizer Gamelan. |
+| **Integrasi Database** | Data diimpor statis dari berkas JS (`js/data/*.js`) yang menambah bobot inisial bundle. | **Asinkron & Terpusat (`dbLoader.js`)**: Seluruh 37 berkas master database JSON (`public/data/*.json`) dimuat secara dinamis per domain dengan key-mapping normalizer, memory cache, dan zero-blank fallback. |
+| **Sistem Bilingual (i18n)** | Kamus teks terbatas pada sebagian label antarmuka. | **Sistem Dwibahasa Penuh (ID & JV)**: Mendukung Bahasa Indonesia (`id`) dan Basa Jawi (`jv`) tersimpan di `localStorage`. Menu navigasi utama dikunci tetap Bahasa Indonesia agar navigasi konsisten. |
+| **Navigasi & Tombol Kembali** | Tombol "← Kembali" tersebar lokal di masing-masing modul sehingga bertumpuk dan tidak seragam. | **Konsolidasi Terpusat**: Seluruh tombol lokal dihapus, digantikan oleh tombol navigasi kembali global di navbar utama yang terhubung langsung ke `navigasiKembali()`. |
+| **Styling & CSS Bundler** | Memuat Tailwind CSS melalui CDN eksternal `<script src="https://cdn.tailwindcss.com"></script>`. | **Kompilasi Lokal Vite + PostCSS**: Menggunakan Tailwind CSS lokal via `postcss.config.cjs` & `tailwind.config.cjs`, di-bundle secara efisien saat `npm run build`. |
+| **Aset Multimedia** | Struktur aset tersebar di folder `assets/` dan `public/assets/`. | **Penyatuan Eksklusif**: Seluruh aset gambar, ilustrasi wayang, dan audio dikonsolidasi di folder publik `public/assets/` dengan path terverifikasi tanpa *broken link*. |
+| **Service Worker PWA** | Versi cache v2 hanya mencakup aset kalender & nujum dasar. | **Service Worker v3 (`CACHE_NAME = 'jagad-jawa-v3'`)**: Precache lengkap mencakup seluruh domain baru (`sapa-dina`, `omah`, `sinengker`, `pustaka`, `ijab`, dll.), berkas JSON data, dan audio. |
 
 ---
 
-## Perilaku yang Dijamin Sama dengan jawa-v1
+## Kaidah Emas (Zero Change pada Formula Inti)
 
 > [!IMPORTANT]
-> **Kaidah Emas `jawa-v2`**: Seluruh formula matematis, siklus penanggalan, dan pemetaan kultural **100% identik** dengan `jawa-v1`. Tidak ada algoritma hitung yang diubah saat online maupun offline.
-
-1. **Perhitungan Bobot Neptu**:
-   - **7 Hari**: Minggu (5), Senin (4), Selasa (3), Rabu (7), Kamis (8), Jumat (6), Sabtu (9).
-   - **5 Pasaran**: Legi (5), Pahing (9), Pon (7), Wage (4), Kliwon (8).
-   - **Total Neptu**: Formula `NEPTU_HARI + NEPTU_PASARAN` untuk seluruh 35 kombinasi dino-pasaran, rentang 7 (Selasa Wage) hingga 18 (Sabtu Pahing).
-2. **Matriks Bincil 6 Dimensi (`getNujumData`)**:
-   - Seluruh 210 kombinasi wuku dan hari-pasaran dipetakan secara **exact lookup** dari matriks kanonis primbon tanpa rumus modulo aproksimasi:
-     - **Padewan**: 8 Dewa (Sri, Indra, Guru, Yama, Rudra, Brama, Kala, Uma).
-     - **Paringkelan**: 6 Ringkel (Tungle, Aryang, Warukung, Paningron, Uwas, Mawulu).
-     - **Padangon**: 8 Dangu (Dadi, Dangu, Jagur, Gigis, Brama, Wogan, Tulus, Wurung).
-     - **Paarasan**: 10 Aras (Lakuning Pandhita Sakti, Aras Tuding, Lakuning Banyu, dll.).
-     - **Pancasuda**: 7 Laku (Bumi Kapetak, Satria Wibawa, Tunggak Semi, Wasesa Segara, dll.).
-     - **Kamarokan**: 2 Status Lintang (Nuju Pati & Kala Tinantang).
-3. **7 Kaidah Pitung Perjodohan**:
-   - **Metode I (Modulo 4 / Panca Suda)**: Sisa 1 (Gembili), Sisa 2 (Sri), Sisa 3 (Gedhong), Sisa 0 (Lara/Pati).
-   - **Metode II (Modulo 5 / Pancawardhana)**: Sri, Lungguh, Dunya, Lara, Pati.
-   - **Metode III (Modulo 7 / Petung Salaki Rabi)**: Wasesa Segara, Tunggak Semi, Satria Wibawa, Sumur Sinaba, Satria Wirang, Bumi Kapetak, Lebu Katiyup Angin.
-   - **Metode IV s/d VII**: Pembobotan aksara carakan penganten, pancer padha, dan kaidah dina rahayu.
-4. **Julian Day Number (JDN) & Epoch Referensi Abadi**:
-   - Patokan Abadi: **29 Agustus 2021 = Minggu Pahing, Wuku Sinta (JDN 2459456)**.
-   - Sinkronisasi siklus 210 hari Pawukon, 35 hari Wetonan, dan tahun Anno Javanico (AJ) Sultan Agungan terbukti presisi lintas abad (1900 s/d 2200).
-5. **Kalkulasi Offline**:
-   - Saat offline, Service Worker mengeksekusi pure functions dari berkas JS lokal yang sama persis tanpa mock data dummy.
+> **Preservasi 100% Rumus Matematis & Kultural**: Seluruh kalkulasi inti penanggalan dan primbon tetap mempertahankan nilai matematis orisinalnya tanpa perubahan:
+> - **Julian Day Number (JDN)**: Epoch Abadi **29 Agustus 2021 = Minggu Pahing, Wuku Sinta (JDN 2459456)**.
+> - **Bobot Neptu**: 7 Hari (Minggu: 5 s.d. Sabtu: 9) dan 5 Pasaran (Legi: 5, Pahing: 9, Pon: 7, Wage: 4, Kliwon: 8).
+> - **Pawukon**: Siklus 30 wuku (210 hari) dari Sinta hingga Watugunung.
+> - **Pitung Perjodohan**: Metode Modulo 4, 5, 7, 8, dan bobot aksara carakan.
+> - **Sistem Pergantian Hari**: Kaidah Sultan Agungan jam 18:00 (Surup / Maghrib).
 
 ---
 
@@ -66,147 +49,160 @@ Portal Kebudayaan Luhur Nusantara, Penanggalan Jawa Sultan Agungan, Nujum Primbo
 jagad-jawa/
 ├── index.html                 # Entry point HTML semantik & responsif
 ├── manifest.webmanifest       # Web App Manifest PWA (standalone, theme-color)
-├── sw.js                      # Service Worker cache shell, nujum matrix & kalender
+├── sw.js                      # Service Worker v3 (PWA Offline Engine)
+├── package.json               # Konfigurasi dependensi, scripts & devDependencies
+├── postcss.config.cjs         # Konfigurasi PostCSS untuk Tailwind CSS bundler
+├── tailwind.config.cjs        # Konfigurasi tema warna Keraton, Sogan, Prada, & Fon Budaya
+├── vite.config.js             # Konfigurasi Vite bundler
 ├── css/
-│   └── styles.css             # Custom styling (batik motif, print layout, kalender mobile)
-├── assets/
-│   ├── icon.svg               # Ikon vektor Gunungan & Ceplok Keraton
-│   ├── audio/                 # Berkas audio Puspawarna & gamelan
-│   └── wayang/                # Ilustrasi tokoh wayang purwa
+│   └── styles.css             # Entry point styles dengan @tailwind directives & layout khusus
+├── public/                    # Direktori publik root untuk aset statis Vite
+│   ├── assets/
+│   │   ├── audio/             # Ketawang Puspawarna (puspowarno.mp3)
+│   │   ├── icon.svg           # Ikon vektor Gunungan & Ceplok Keraton
+│   │   └── illustrations/     # Gunungan Tripurusa, Kompas Danyang, Tumpeng, Wayang PNG
+│   │       ├── astawara/      # Ilustrasi 8 Astawara
+│   │       ├── dewane/        # Ilustrasi dewa wuku
+│   │       ├── siklus12/      # Ilustrasi 12 batara siklus padewan
+│   │       ├── wayang/        # 25 karakter wayang kulit purwa Surakarta (.png)
+│   │       └── wuku/          # 30 kartu visual wuku
+│   └── data/                  # 37 Master database JSON bilinggual (01 s/d 37)
 ├── js/
-│   ├── main.js                # Orchestrator utama, bootstrap, & SW registration
-│   ├── features/              # Feature wiring modules (thin wrappers ke window)
-│   │   ├── kalender.js        # Kalender, mode list minggu, bookmark, share card
-│   │   ├── nujum.js           # Lazy loading dataset nujum & wuku
-│   │   ├── jodoh.js           # Pitung perjodohan & riwayat mantu
-│   │   ├── selametan.js       # Pengetan tilar donyo (Geblak s/d Nyewu)
-│   │   ├── aksara.js          # Hanacaraka, sandhangan & kuis aksara
-│   │   ├── wayang.js          # Wayang purwa & etika kultural
-│   │   └── audio.js           # Gamelan synth & sound FX
-│   ├── modules/               # Domain logic & antarmuka per modul
-│   │   ├── kalender/          # kalender-engine, kalender-ui, bookmark-service, share-card
-│   │   ├── nujum/             # nujum-engine, nujum-ui
-│   │   ├── jodoh/             # jodoh-engine, jodoh-ui, jodoh-history
-│   │   ├── selametan/         # selametan-engine, selametan-ui
-│   │   ├── aksara/            # aksara-engine, aksara-ui
-│   │   ├── wayang/            # wayang-engine, wayang-ui
-│   │   ├── wuku/              # wuku-engine, wuku-ui
-│   │   └── budaya/            # tripurusa & ensiklopedia-budaya
-│   ├── data/                  # Pure datasets & pure functions (bebas DOM)
-│   │   ├── nujum-matrix.js    # Single Source of Truth 210 kombinasi bincil
-│   │   ├── calendar.js        # JDN, Wuku, Pasaran, Dino Ijo/Ala, getDayInfo()
-│   │   ├── dino-rules.js      # Tabel aturan hari sakral & dino gede
-│   │   ├── pawukon.js         # Ensiklopedia lengkap 30 wuku
-│   │   ├── personality.js     # Faalakiah 12 Nabi & Asesoris watak
-│   │   ├── marriage.js        # Tabel hasil 7 pitung perjodohan
-│   │   └── ...                # pitutur, selametan, wayang, tumpeng
-│   └── ui/                    # UI Controller generik
-│       ├── i18n.js            # Manajer dwibahasa (ID / Jawa)
-│       ├── navigation.js      # Navigasi tab, drawer mobile, cetak laporan
-│       ├── modal.js           # Modal backdrop & keyboard Escape handler
-│       └── toast.js           # Notifikasi toast & clipboard helper
-├── tests/                     # Test suite otomatis (Node.js test runner)
-│   ├── pure-functions.test.js # Tes referensi matematis baku v1
-│   ├── pwa-ux.test.js         # Tes PWA, SW cache, mode list minggu, i18n, kontras badge
-│   └── ... (18 berkas tes)    # Cakupan domain lengkap (74 passing unit tests)
-└── docs/                      # Dokumentasi teknis & regresi
+│   ├── main.js                # Bootstrap aplikasi, preloader database & inisialisasi UI
+│   ├── services/
+│   │   └── dbLoader.js        # Centralized async JSON Loader, Key Mapper, & Fallbacks
+│   ├── ui/                    # UI Orchestrators (Navigation, i18n, Modal, Toast, Mode)
+│   ├── features/              # Feature wirings ke window global
+│   ├── modules/               # Domain logic & UI per modul budaya:
+│   │   ├── kalender/          # Kalender Jawa, Pranata Mangsa, Bookmark, Share Card
+│   │   ├── nujum/             # 6 Dimensi Bincil, Faalakiah 12 Nabi, Shio, Watak
+│   │   ├── jodoh/             # Pitung Salaki Rabi & riwayat pasangan
+│   │   ├── selametan/         # Haul leluhur (Geblak s.d. Nyewu)
+│   │   ├── ijab/              # Petung Palakrama & Neptu khusus nikah
+│   │   ├── omah/              # Petung griya, cempuri lawangan & boyongan
+│   │   ├── petung-kehidupan/  # Petung ternak, loro, geblak 35 weton
+│   │   ├── sapa-dina/         # Inspirasi harian agraris, tetanen & petenget
+│   │   ├── sasmitha/          # Sasmitha alam, impen, kedut anatomi, gerhana, lindu
+│   │   ├── wuku/              # Ensiklopedia 30 wuku & petenget pilar
+│   │   ├── aksara/            # Studio Aksara Jawa & transliterasi realtime
+│   │   ├── wayang/            # Panggung kelir wayang & tata krama dalang
+│   │   ├── pustaka/           # Pustaka dongo, usada usada, & piwulang
+│   │   ├── sinengker/         # Pustaka sinengker, proteksi PIN, kompas danyang
+│   │   └── budaya/            # Telur Jagad (Tripurusa) & ensiklopedia budaya
+│   └── data/                  # Pure datasets & fallback offline resilien
+└── tests/                     # Test suite otomatis (Node.js test runner)
 ```
 
 ---
 
-## Fitur-Fitur Utama
+## Struktur Database JSON & dbLoader Service
 
-1. **Beranda & Weton Instan**: Menampilkan penanggalan hari ini secara instan beserta Weton, Neptu, dan Wuku.
-2. **Kalender Jawa Sultan Agungan**:
-   - Generator kalender bulanan lengkap dengan padanan Masehi, Hijriah, dan Jawa.
-   - **Mode Tampilan**: Mode Tabel (Grid) dan Mode List Minggu (Weekly View) responsif mobile.
-   - Klasifikasi warna hari: **Dino Ijo (Becik)**, **Dino Abang (Ala)**, dan **Dino Gede (Border Emas & Bintang ★)**.
-   - Filter cerdas hari, penyimpanan penanda tanggal (Bookmark), serta ekspor laporan ke PDF dan PNG resolusi tinggi.
-   - Modal detail tanggal mendalam: Pranata Mangsa agraris, konversi tahun Jawa, dan generator kartu weton WhatsApp.
-3. **Nujum Pribadi & Primbon**:
-   - 6 Dimensi Bincil eksak, Faalakiah 12 Nabi & Tolak Balak, Shio & Elemen, Zodiak Jawa, serta Siklus Tahunan umur.
-   - Fitur komparasi keselarasan non-jodoh (rekan kerja, mitra bisnis, sahabat).
-4. **Pitung Perjodohan**:
-   - Evaluasi 7 metode primbon salaki rabi lengkap dengan skor keharmonisan dan rekomendasi 5 tanggal mantu rahayu.
-   - Manajemen riwayat perhitungan perjodohan di penyimpanan lokal.
-5. **Pengetan Tilar Donyo (Selametan)**:
-   - Perhitungan 7 milestone (Geblak, 3 dina, 7 dina, 40 dina, 100 dina, Pendak 1, Pendak 2, Nyewu).
-   - Pengalihan hari otomatis jika waktu wafat bakda Maghrib sesuai kaidah Sultan Agungan.
-6. **Ensiklopedia 30 Wuku & Budaya**:
-   - Rincian mendalam 30 Wuku Pawukon (dewa, pohon, burung, gedung, celaka, dan tolak balak).
-   - Modul interaktif Telur Jagad (Tripurusa) dan glosarium konsep tradisional.
-7. **Studio Aksara & Kelir Wayang**:
-   - Transliterasi dua arah Latin ke Aksara Jawa (sandhangan swara, panyigeg, wyanjana).
-   - Virtual Gamelan synthesizer (Pelog & Slendro) dan wayang kulit interaktif.
+Pemuatan data dikelola secara tunggal melalui [`js/services/dbLoader.js`](file:///d:/04-JAWA/jagad-jawa/js/services/dbLoader.js):
+- **Domain-Driven Asynchronous Loading**: Memanggil `loadDomainData(domain)` untuk domain `kalender`, `wuku`, `jodoh`, `nujum`, `selametan`, `ijab`, `omah`, `petung-kehidupan`, `sapa-dina`, `sasmitha`, `pustaka`, `sinengker`.
+- **Key Normalization**: Merekonsiliasi variasi kunci properti JSON (`id` ⟷ `no_wuku`, `nama` ⟷ `nama_wuku`, `dino` ⟷ `dina`, `wiwit_ternak` ⟷ `ternak`, dll.).
+- **Zero Blank Resilience**: Bila terjadi kegagalan jaringan atau ketiadaan berkas JSON, fungsi `getDomainFallback()` secara instan mengembalikan data cadangan bawaan tanpa membuat antarmuka menjadi blank.
 
 ---
 
-## Cara Menjalankan Secara Lokal
+## Fitur-Fitur Unggulan
 
-Karena menggunakan **ES Modules**, aplikasi harus dijalankan menggunakan web server lokal:
+1. **Kalender Jawa Sultan Agungan & Pranata Mangsa**:
+   - Tampilan bulanan lengkap dengan konversi Masehi, Hijriah, dan Saka Jawa (AJ).
+   - Mode Tampilan Ganda: Mode Kalender Grid dan Mode List Minggu responsif.
+   - Status hari: Dino Ijo (Becik), Dino Abang (Ala), Dino Gede (★), dan Dino Sirikan.
+2. **Nujum Pribadi & Primbon 6 Dimensi Bincil**:
+   - Analisis Padewan, Paringkelan, Padangon, Paarasan, Pancasuda, dan Kamarokan secara eksak.
+3. **Pitung Perjodohan (7 Kaidah Salaki Rabi)**:
+   - Evaluasi keselarasan weton calon mempelai beserta 5 rekomendasi tanggal mantu rahayu.
+4. **Petung Omah & Petung Ijab**:
+   - Penentuan arah hadap rumah, bukaan cempuri lawangan 4 penjuru, dan neptu khusus ijab kabul.
+5. **Petung Kehidupan & Tetanen**:
+   - Keselarasan bercocok tanam (oyot, uwit, godhong, uwoh) dan panduan memelihara hewan ternak.
+6. **Sasmitha (Tanda Alam & Anatomi Tubuh)**:
+   - Penafsiran impen (mimpi), titik anatomi kedutan tubuh interaktif, serta pratanda gerhana, lindu, dan tejo.
+7. **Pustaka Sinengker & Kompas Danyang**:
+   - Akses naskah wingit dengan konfirmasi kultural dan proteksi PIN, disertai kalkulator Kompas Danyang 360°.
+8. **Studio Aksara Jawa Real-time**:
+   - Papan ketik transliterasi aksara Jawa instan dilengkapi sandhangan swara dan panyigeg.
+9. **Panggung Kelir Wayang & Gamelan**:
+   - Simulasi pementasan wayang purwa gagrag Surakarta dengan efek suara kepyak/dodokan dan pemutar audio Ketawang Puspawarna.
 
-```bash
-# Opsi 1: Menggunakan Python 3
-python -m http.server 3000
+---
 
-# Opsi 2: Menggunakan Vite (NPM)
-npm install
-npm run dev
-```
+## Panduan Instalasi & Penggunaan Lokal
 
-Buka peramban di `http://localhost:3000` (atau port yang ditentukan).
+### Prasyarat
+- **Node.js**: Versi 18+ (disarankan Node.js 20 atau 22).
+- **NPM**: Versi 9+.
+
+### Langkah-Langkah
+
+1. **Clone & Masuk ke Direktori Proyek**:
+   ```bash
+   git clone -b jawa-v11 https://github.com/agungjpyohanes/jagad-jawa.git
+   cd jagad-jawa
+   ```
+
+2. **Instal Dependensi**:
+   ```bash
+   npm install
+   ```
+
+3. **Jalankan Development Server**:
+   ```bash
+   npm run dev
+   ```
+   Aplikasi akan berjalan pada `http://localhost:3000`.
 
 ---
 
 ## Menjalankan Pengujian Otomatis (Unit Tests)
 
-Jagad Jawa menggunakan test runner bawaan Node.js (`node:test`) tanpa dependensi berat:
+Jagad Jawa dilengkapi rangkaian tes komprehensif menggunakan Node.js Test Runner bawaan (`node:test`):
 
 ```bash
-# Menjalankan seluruh 74 unit tests
+# Menjalankan seluruh test suite (216 tests)
 npm test
 
-# Menjalankan spesifik pengujian PWA & UX
-node --test tests/pwa-ux.test.js
+# Menjalankan pengujian integrasi database JSON dbLoader
+node tests/db-loader-integration.test.js
 
-# Menjalankan pengujian pure functions patokan abadi
-node --test tests/pure-functions.test.js
+# Menjalankan pengujian PWA & Service Worker
+node --test tests/pwa-ux.test.js
 ```
 
 ---
 
-## Checklist Manual QA 15 Menit untuk Rilis
+## Panduan Kompilasi & Build Produksi
 
-Gunakan panduan pengujian end-to-end ini sebelum melakukan merge atau rilis:
+Untuk menghasilkan berkas produksi yang siap didistribusikan:
 
-| Durasi | Modul yang Diuji | Langkah Pengujian & Kriteria Kelulusan |
-| :---: | :--- | :--- |
-| **00:00 - 02:00** | **Beranda & Navigasi** | 1. Buka halaman utama; pastikan badge weton hari ini di navbar terisi benar.<br>2. Buka dropdown navigasi desktop (Wektu, Nujum, Budaya) lalu klik salah satu item.<br>3. Perkecil viewport ke ukuran mobile (≤480px); buka drawer menu mobile dan pastikan seluruh link berfungsi. |
-| **02:00 - 05:00** | **Kalender Jawa & Mode List** | 1. Ubah bulan & tahun; kalender harus merender hari, pasaran, wuku, dan sasi Jawa.<br>2. Klik tombol **Mode List Minggu**: pastikan tampilan beralih ke daftar vertikal per pekan yang rapi.<br>3. Klik salah satu sel hari: modal detail tanggal harus terbuka menampilkan badge Ala/Becik berkontras tinggi.<br>4. Uji tombol filter: `Sedaya Dina`, `Dino Ijo`, `Dino Gede`, dan `Ditandhai`.<br>5. Simpan 1 catatan bookmark pada tanggal terpilih, pastikan ikon 🔖 muncul di sel. |
-| **05:00 - 08:00** | **Nujum & Ensiklopedia Wuku** | 1. Masuk tab **Nujum Pribadi**: masukkan tanggal lahir, klik Hitung Nujum.<br>2. Pastikan 6 dimensi bincil (Padewan, Paringkelan, dll.) tampil lengkap.<br>3. Klik tombol ensiklopedia wuku: modal 30 wuku terbuka, ketik nama wuku (misal: "Sinta") pada kotak pencarian dan periksa deskripsinya. |
-| **08:00 - 10:00** | **Pitung Jodoh & Selametan** | 1. Masuk tab **Perjodohan**: masukkan data calon pengantin pria dan wanita, klik hitung.<br>2. Verifikasi 7 metode pitung terisi dan rekomendasi 5 tanggal mantu rahayu muncul.<br>3. Masuk tab **Selametan**: masukkan tanggal wafat, coba switch radio "Siang (Sebelum Maghrib)" vs "Malam (Bakda Maghrib)" — pastikan tanggal geblak bergeser 1 hari saat malam. |
-| **10:00 - 12:00** | **Seni Budaya & Audio** | 1. Klik tombol **Ketawang Puspawarna** di navbar: pastikan audio berjalan & equalizer berkedip.<br>2. Masuk tab **Studio Aksara**: ketik teks latin, pastikan aksara Jawa tertransliterasi.<br>3. Masuk tab **Gamelan**: bunyikan beberapa bilah saron dan gong.<br>4. Masuk tab **Wayang**: gerakkan karakter wayang pada kelir virtual. |
-| **12:00 - 13:30** | **Aksesibilitas & Dwibahasa** | 1. Klik tombol toggle **ID / JA** di navbar: pastikan seluruh label UI berganti dari Bahasa Indonesia ke Basa Jawa.<br>2. Pastikan key data pada weton/tanggal Jawa **tidak ikut berubah**.<br>3. Periksa kontras teks badge Ala (`#b91c1c`) dan Becik (`#15803d`): teks putih harus tajam dan jelas terbaca. |
-| **13:30 - 15:00** | **PWA & Offline Readiness** | 1. Buka Chrome DevTools → Tab **Application** → **Service Workers**: pastikan status *Activated and running* dari `sw.js`.<br>2. Cek bagian **Manifest**: pastikan nama, short name, dan icon terdeteksi.<br>3. Buka tab **Network**, centang mode **Offline**, lalu reload halaman.<br>4. Pastikan aplikasi tetap terbuka normal, kalender dan nujum tetap dapat menghitung weton secara instan tanpa sambungan internet. |
+```bash
+npm run build
+```
+
+Hasil build akan tersimpan di direktori `dist/` dengan aset CSS (Tailwind lokal), JavaScript chunking, dan Service Worker v3 teroptimasi. Untuk menguji hasil build secara lokal:
+
+```bash
+npm run preview
+```
 
 ---
 
 ## Panduan Deploy
 
-Aplikasi adalah *Single Page Application* statis berbasis ES Modules yang kompatibel penuh dengan penyedia hosting statis:
+Aplikasi merupakan *Single Page Application* (SPA) statis yang siap di-deploy langsung ke penyedia hosting cloud:
 
 ### Vercel
-1. Import repositori GitHub ke [Vercel](https://vercel.com).
-2. Framework Preset: **Other** (Static).
-3. Root Directory: `.`
-4. Konfigurasi `vercel.json` sudah tersedia secara otomatis.
+1. Hubungkan repositori GitHub ke dashboard Vercel.
+2. Build Command: `npm run build`
+3. Output Directory: `dist`
+4. Root Directory: `.`
 
 ### Firebase Hosting
 ```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-firebase deploy
+npm run build
+firebase deploy --only hosting
 ```
 
 ---

@@ -1,4 +1,7 @@
 /* Jagad Jawa — Portal Budaya Luhur Nusantara */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ========================================================================= */
 /* PENGAMAN RESPONSIF & OVERFLOW MOBILE GLOBAL                               */

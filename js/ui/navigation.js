@@ -35,7 +35,17 @@ function switchTab(tabId, pushState = true) {
 
   // Close any open desktop dropdowns upon selection & close mobile menu
   closeAllNavDropdowns();
-  closeMobileMenu();
+  // Update global header back button visibility (hide on beranda, show on subtabs)
+  const globalBackBtn = document.getElementById('globalNavBackBtn');
+  if (globalBackBtn) {
+    if (tabId === 'beranda') {
+      globalBackBtn.classList.add('hidden');
+      globalBackBtn.classList.remove('inline-flex');
+    } else {
+      globalBackBtn.classList.remove('hidden');
+      globalBackBtn.classList.add('inline-flex');
+    }
+  }
 
   if (pushState !== false && typeof history !== 'undefined' && history.pushState) {
     history.pushState({ tab: tabId }, '', '#' + tabId);
