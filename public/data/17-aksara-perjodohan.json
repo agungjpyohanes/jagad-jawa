@@ -1,0 +1,9 @@
+[
+  { "kode": "HA", "neptu": 1 }, { "kode": "NA", "neptu": 2 }, { "kode": "CA", "neptu": 3 },
+  { "kode": "RA", "neptu": 4 }, { "kode": "KA", "neptu": 5 }, { "kode": "DA", "neptu": 6 },
+  { "kode": "TA", "neptu": 7 }, { "kode": "SA", "neptu": 8 }, { "kode": "WA", "neptu": 9 },
+  { "kode": "LA", "neptu": 10 }, { "kode": "PA", "neptu": 11 }, { "kode": "DHA", "neptu": 12 },
+  { "kode": "JA", "neptu": 13 }, { "kode": "YA", "neptu": 14 }, { "kode": "NYA", "neptu": 15 },
+  { "kode": "MA", "neptu": 16 }, { "kode": "GA", "neptu": 17 }, { "kode": "BA", "neptu": 18 },
+  { "kode": "THA", "neptu": 19 }, { "kode": "NGA", "neptu": 20 }
+]

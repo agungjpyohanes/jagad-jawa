@@ -1,0 +1,10 @@
+{
+  "neptu_hari": {"minggu": 5, "senin": 4, "selasa": 3, "rabu": 7, "kamis": 8, "jumat": 6, "sabtu": 9},
+  "neptu_pasaran": {"legi": 5, "pahing": 9, "pon": 7, "wage": 4, "kliwon": 8},
+  "nama_hari": ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+  "nama_pasaran": ["Legi", "Pahing", "Pon", "Wage", "Kliwon"],
+  "nama_wuku": ["Sinta", "Landep", "Wukir", "Kurantil", "Tolu", "Gumbreg", "Warigalit", "Warigagung", "Julungwangi", "Sungsang", "Galungan", "Kuningan", "Langkir", "Mandasiya", "Julungpujut", "Pahang", "Kuruwelut", "Marakeh", "Tambir", "Medangkungan", "Maktal", "Wuye", "Manahil", "Prangbakat", "Bala", "Wugu", "Wayang", "Kulawu", "Dukut", "Watugunung"],
+  "nama_bulan_jawa": ["Sura", "Sapar", "Mulud", "Bakda Mulud", "Jumadilawal", "Jumadilakir", "Rejeb", "Ruwah", "Pasa", "Sawal", "Sela", "Besar"],
+  "nama_windu": ["Alip", "Ehe", "Jimawal", "Je", "Dal", "Be", "Wawu", "Jimakir"],
+  "epoch_pawukon": {"jdn": 2459456, "tanggal": "2021-08-29", "keterangan": "Minggu Pahing Wuku Sinta"}
+}

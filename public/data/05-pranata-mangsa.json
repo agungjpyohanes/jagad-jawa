@@ -1,0 +1,146 @@
+[
+  {
+    "id": 1,
+    "nama": { "id": "Kasa (Kartika)", "jv": "Kasa (Kartika)" },
+    "rentang": "22 Juni – 1 Agustus",
+    "durasi_hari": 41,
+    "candrasangkala": { "id": "Mutiara lepas dari ikatannya", "jv": "Sesotya murca ing embanan" },
+    "musim_tani": { "id": "Mangsa Katiga (Kemarau Awal)", "jv": "Mangsa Katiga (Kemarau Awal)" },
+    "watak": {
+      "id": "Berjiwa mandiri, teguh pendirian, dan memiliki harga diri tinggi. Senang kerapian dan keteraturan, namun cenderung pendiam serta agak keras kepala jika keyakinannya diusik.",
+      "jv": "Berjiwa mandiri, teguh pendirian, lan gadhah harga diri inggil. Seneng kerapihan lan keteraturan, nanging cenderung pendiam sarta ageng keras kepala menawi keyakinannya diusik."
+    }
+  },
+  {
+    "id": 2,
+    "nama": { "id": "Karo (Puspita)", "jv": "Karo (Puspita)" },
+    "rentang": "2 Agustus – 24 Agustus",
+    "durasi_hari": 23,
+    "candrasangkala": { "id": "Bumi merekah", "jv": "Bantala rengka" },
+    "musim_tani": { "id": "Mangsa Katiga (Puncak Kemarau)", "jv": "Mangsa Katiga (Puncak Kemarau)" },
+    "watak": {
+      "id": "Terbuka, jujur, dan berani bicara apa adanya. Penuh semangat dan pantang menyerah, tetapi terkadang mudah tersulut emosi jika melihat ketidakadilan.",
+      "jv": "Terbuka, jujur, lan wani wicanten apa adane. Penuh semangat lan pantang menyerah, nanging kadhangkala gampil tersulut emosi menawi mirsani ketidakadilan."
+    }
+  },
+  {
+    "id": 3,
+    "nama": { "id": "Katelu (Manggasri)", "jv": "Katelu (Manggasri)" },
+    "rentang": "25 Agustus – 17 September",
+    "durasi_hari": 24,
+    "candrasangkala": { "id": "Anak patuh pada sang ayah", "jv": "Suta manut ing bapa" },
+    "musim_tani": { "id": "Mangsa Katiga (Akhir Kemarau)", "jv": "Mangsa Katiga (Akhir Kemarau)" },
+    "watak": {
+      "id": "Berbakti, penuh rasa tanggung jawab, dan teliti dalam bekerja. Pribadinya tenang, disiplin, dan setia, meski terkadang agak kaku atau ragu mengambil risiko baru.",
+      "jv": "Berbakti, penuh rasa tanggung jawab, lan teliti ing pakaryan. Pribadinipun tenang, disiplin, lan setya, sanajan kadhangkala ageng kaku utawi ragu njupuk risiko enggal."
+    }
+  },
+  {
+    "id": 4,
+    "nama": { "id": "Kapat (Sitra)", "jv": "Kapat (Sitra)" },
+    "rentang": "18 September – 12 Oktober",
+    "durasi_hari": 25,
+    "candrasangkala": { "id": "Air mata menggenang di dalam kalbu", "jv": "Waspa kumembeng jroning kalbu" },
+    "musim_tani": { "id": "Mangsa Labuh (Peralihan Menuju Hujan)", "jv": "Mangsa Labuh (Peralihan Menuju Hujan)" },
+    "watak": {
+      "id": "Peka rasa, berjiwa artistik, dan memiliki empati tinggi terhadap sesama. Pikirannya bijaksana dan suka menolong, namun rentan merasa tersinggung atau memendam kecewa.",
+      "jv": "Peka rasa, berjiwa artistik, lan gadhah empati inggil tumrap sasami. Pikiranipun bijaksana lan remen nulung, nanging rentan rumangsa tersinggung utawi memendam kecewa."
+    }
+  },
+  {
+    "id": 5,
+    "nama": { "id": "Kalima (Manggala)", "jv": "Kalima (Manggala)" },
+    "rentang": "13 Oktober – 8 November",
+    "durasi_hari": 27,
+    "candrasangkala": { "id": "Pancuran emas tercurah di dunia", "jv": "Pancuran mas sumawur ing jagad" },
+    "musim_tani": { "id": "Mangsa Labuh (Hujan Awal)", "jv": "Mangsa Labuh (Hujan Awal)" },
+    "watak": {
+      "id": "Luwes, pandai berkomunikasi, dermawan, dan berbakat menjadi pemimpin. Pemikirannya strategis serta berwawasan luas, meski terkadang gampang bosan jika rutinitas monoton.",
+      "jv": "Luwes, pinter komunikasi, dermawan, lan berbakat dados pemimpin. Pikiranipun strategis sarta berwawasan wiyar, sanajan kadhangkala gampil bosen menawi rutinitas monoton."
+    }
+  },
+  {
+    "id": 6,
+    "nama": { "id": "Kanem (Naya)", "jv": "Kanem (Naya)" },
+    "rentang": "9 November – 21 Desember",
+    "durasi_hari": 43,
+    "candrasangkala": { "id": "Rasa mulia kesucian", "jv": "Rasa mulya kasuciyan" },
+    "musim_tani": { "id": "Mangsa Rendheng (Musim Hujan Aktif)", "jv": "Mangsa Rendheng (Musim Hujan Aktif)" },
+    "watak": {
+      "id": "Cerdas, berwibawa, dan senang mengayomi. Memiliki intuisi tajam serta ketertarikan mendalam pada ilmu pengetahuan atau spiritualitas, namun terkadang cenderung suka mengatur lingkungan.",
+      "jv": "Cerdas, berwibawa, lan remen ngayomi. Gadah intuisi tajem sarta ketertarikan mendalam tumrap ilmu pengetahuan utawi spiritualitas, nanging kadhangkala cenderung remen ngatur lingkungan."
+    }
+  },
+  {
+    "id": 7,
+    "nama": { "id": "Kapitu (Palguna)", "jv": "Kapitu (Palguna)" },
+    "rentang": "22 Desember – 2 Februari",
+    "durasi_hari": 43,
+    "candrasangkala": { "id": "Racun hanyut terbawa angin", "jv": "Wisa kentas ing maruta" },
+    "musim_tani": { "id": "Mangsa Rendheng (Puncak Hujan)", "jv": "Mangsa Rendheng (Puncak Hujan)" },
+    "watak": {
+      "id": "Punya daya tahan batin yang luar biasa, tekun, dan tahan uji menghadapi cobaan hidup. Tampak tenang dan misterius di luar, tetapi sangat loyal serta melindungi keluarga.",
+      "jv": "Gadah daya tahan batin ingkang luar biasa, tekun, lan tahan uji ngadhepi coban gesang. Katingal tenang lan misterius ing njawi, nanging setya ngreksa kulawarga."
+    }
+  },
+  {
+    "id": 8,
+    "nama": { "id": "Kawolu (Wisaka)", "jv": "Kawolu (Wisaka)" },
+    "rentang": "3 Februari – 29 Februari",
+    "durasi_hari": 26,
+    "candrasangkala": { "id": "Tersebar di dalam sanubari", "jv": "Anjrah jroning kayun" },
+    "musim_tani": { "id": "Mangsa Rendheng (Mereda)", "jv": "Mangsa Rendheng (Mereda)" },
+    "watak": {
+      "id": "Penuh ide baru, visioner, dan ramah kepada siapa saja. Senang bersosialisasi dan dinamis, namun pikirannya kerap melompat-lompat sehingga butuh fokus agar gagasannya tuntas.",
+      "jv": "Penuh ide enggal, visioner, lan ramah dhateng sinten kemawon. Remen sosialisasi lan dinamis, nanging pikiranipun kerep mlompat-lompat saengga butuh fokus supados gagasanipun tuntas."
+    }
+  },
+  {
+    "id": 9,
+    "nama": { "id": "Kasanga (Jita)", "jv": "Kasanga (Jita)" },
+    "rentang": "1 Maret – 25 Maret",
+    "durasi_hari": 25,
+    "candrasangkala": { "id": "Terucapnya kata-kata mulia", "jv": "Wedharing wacana mulya" },
+    "musim_tani": { "id": "Mangsa Mareng (Peralihan ke Kemarau)", "jv": "Mangsa Mareng (Peralihan ke Kemarau)" },
+    "watak": {
+      "id": "Tajam tutur katanya, diplomatis, dan mudah menarik simpati orang lain. Memiliki karisma alami serta kemampuan meyakinkan orang, meski terkadang perlu berhati-hati agar tidak dominan.",
+      "jv": "Tajam wicantenipun, diplomatis, lan gampil narik simpati tiyang sanes. Gadah karisma alami sarta kemampuan meyakinkan tiyang, sanajan kadhangkala kedah ati-ati supados mboten dominan."
+    }
+  },
+  {
+    "id": 10,
+    "nama": { "id": "Kadasa (Srawana)", "jv": "Kadasa (Srawana)" },
+    "rentang": "26 Maret – 18 April",
+    "durasi_hari": 24,
+    "candrasangkala": { "id": "Gedung terkunci di dalam batin", "jv": "Gedhong mineb jroning kalbu" },
+    "musim_tani": { "id": "Mangsa Mareng (Panen Raya)", "jv": "Mangsa Mareng (Panen Raya)" },
+    "watak": {
+      "id": "Penyimpan rahasia yang ulung, cermat berhitung, dan bijak dalam mengambil keputusan. Tipe perencana matang yang penuh kehati-hatian, meski terkadang tampak tertutup.",
+      "jv": "Panyimpen rahasia ingkang ulung, cermat ngitung, lan bijak njupuk keputusan. Tipe perencana matang ingkang penuh kehati-hatian, sanajan kadhangkala katingal tertutup."
+    }
+  },
+  {
+    "id": 11,
+    "nama": { "id": "Desta (Padrawana)", "jv": "Desta (Padrawana)" },
+    "rentang": "19 April – 11 Mei",
+    "durasi_hari": 23,
+    "candrasangkala": { "id": "Intan permata terasah berkilau", "jv": "Sesotya sinarawedi" },
+    "musim_tani": { "id": "Mangsa Mareng Pungkasan", "jv": "Mangsa Mareng Pungkasan" },
+    "watak": {
+      "id": "Lembut tutur katanya, ramah, dan disukai banyak kalangan. Memiliki kepekaan estetika tinggi serta pembawaan damai, namun terkadang kurang tegas bila dihadapkan pada perselisihan.",
+      "jv": "Lembut wicantenipun, ramah, lan disenengi akeh kalangan. Gadah kepekaan estetika inggil sarta pembawaan damai, nanging kadhangkala kurang tegas menawi ngadhepi perselisihan."
+    }
+  },
+  {
+    "id": 12,
+    "nama": { "id": "Saddha (Asuji)", "jv": "Saddha (Asuji)" },
+    "rentang": "12 Mei – 21 Juni",
+    "durasi_hari": 41,
+    "candrasangkala": { "id": "Air mengalir meninggalkan tempatnya", "jv": "Tirta sah saking sasana" },
+    "musim_tani": { "id": "Mangsa Mareng nyang Katiga", "jv": "Mangsa Mareng nyang Katiga" },
+    "watak": {
+      "id": "Dinamis, gemar bepergian atau mencoba hal baru, serta pantang berdiam diri. Cepat beradaptasi di lingkungan asing dan berani bertindak mandiri, meski cenderung cepat merasa jenuh.",
+      "jv": "Dinamis, remen lelungan utawi nyobi perkawis enggal, sarta pantang berdiam diri. Rikat adaptasi ing lingkungan asing lan wani tumindak mandiri, sanajan cenderung rikat gampil bosen."
+    }
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "padewan": {
+    "sri": { "id": "Welas asih", "jv": "Welas asih" },
+    "indra": { "id": "Teliti, angkuh", "jv": "Teliti, angkuh" },
+    "guru": { "id": "Memberi percobaan, lelemeran", "jv": "Memberi percobaan, lelemeran" },
+    "yamadipati": { "id": "Pengertian, malas", "jv": "Pangerten, males" },
+    "rudra": { "id": "Berbudi luhur", "jv": "Berbudi luhur" },
+    "brama": { "id": "Brangasan", "jv": "Brangasan" },
+    "kala": { "id": "Serakah, bohong", "jv": "Serakah, goroh" },
+    "uma": { "id": "Welas asih", "jv": "Welas asih" }
+  },
+  "paringkelan": {
+    "tungle": { "id": "Tidak tepat janji", "jv": "Ora tepet janji" },
+    "aryang": { "id": "Pelupa", "jv": "Gampang lali" },
+    "wurukung": { "id": "Lengah", "jv": "Lengah" },
+    "paningron": { "id": "Takabur", "jv": "Takabur" },
+    "uwas": { "id": "Melikan", "jv": "Melikan" },
+    "mawulu": { "id": "Sering sakit", "jv": "Kerep lara" }
+  },
+  "pandangon": {
+    "dangu": { "id": "Pendiam, bodoh, keras hati", "jv": "Meneng, bodho, keras ati" },
+    "jagur": { "id": "Luwes, kuat, iri hati", "jv": "Luwes, kuwat, iri ati" },
+    "gigis": { "id": "Kuat dapat menerima keadaan", "jv": "Kuat nampi kahanan" },
+    "kerangan": { "id": "Teliti, berpendirian", "jv": "Teliti, duwe pendirian" },
+    "nohan": { "id": "Welas asih", "jv": "Welas asih" },
+    "wogan": { "id": "Tekun, hemat dan kuat pendiriannya", "jv": "Tekun, hemat lan kuwat pendirian" },
+    "tulus": { "id": "Jujur, banyak kemauannya", "jv": "Jujur, akeh kemauan" },
+    "wurung": { "id": "Berangasan dan tidak sabaran", "jv": "Brangasan lan ora sabar" },
+    "dadi": { "id": "Tidak mau disaingi", "jv": "Ora gelem disaingi" }
+  },
+  "paarasan": {
+    "aras_tuding": { "id": "Pemberani dan terpakai kinerjanya tapi sering menjual perabotnya dan suka mencuri (climut)", "jv": "Wani lan terpakai kinerjanipun nanging seneng sade perabot lan maling (climut)" },
+    "aras_kembang": { "id": "Larang anak tetapi dikasihi banyak orang dan mudah berpikir bekerja serta diluluti orang", "jv": "Larang anak nanging dikasihi akeh wong lan gampil mikir nyambut gawe sarta diluluti wong" },
+    "lakuning_lintang": { "id": "Pendiam, rendah hati, betah melek, berdagang dan jual bahasa tidak bisa diarahkan, sering pindah rumah", "jv": "Meneng, andhap asor, betah melek, dagang lan sade basa mboten saged diarahken, sering pindhah omah" },
+    "lakuning_rembulan": { "id": "Pandai, cekatan, luas pandangannya, diluluti orang, sukses hidupnya tetapi jangan sungkan-sungkan", "jv": "Pinter, cekatan, wiyar pandanganipun, diluluti wong, sukses gesangipun nanging mboten sungkan-sungkan" },
+    "lakuning_srengenge": { "id": "Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan", "jv": "Pangerten, manis wicaranipun, kreatif, tansah kalah padu lan mboten akeh mangan" },
+    "lakuning_banyu": { "id": "Teguh, rajin, ramah, bisa jadi pemimpin, banyak makan dan selalu bertengkar", "jv": "Teguh, rajin, ramah, saged dados pemimpin, akeh mangan lan tansah padu" },
+    "lakuning_bumi": { "id": "Pendiam, pemarah, bodoh, senang selingkuh dan welas asih tidak punya teman/saudara", "jv": "Meneng, pemarah, bodho, seneng selingkuh lan welas asih mboten gadhah kanca/sedulur" },
+    "lakuning_geni": { "id": "Pemarah, dengki, pemberani, banyak rencana dan untuk perempuan banyak celakanya", "jv": "Pemarah, dengki, wani, akeh rencana lan kangge perempuan akeh celakanipun" },
+    "lakuning_angin": { "id": "Pendiam, suka disanjung, tidak teguh dan tawar doanya, sering pindah rumah dan menyenangkan orang", "jv": "Meneng, seneng disanjung, ora teguh lan tawar doanipun, sering pindhah omah lan nyenengaken wong" },
+    "aras_pepet": { "id": "Pendiam, tajam pikirannya, termasyur karyanya, ada bakat jadi paranormal dan jarang kesampaian cita-citanya", "jv": "Meneng, tajem pikiranipun, termasyur karyanipun, wonten bakat dados paranormal lan jarang kesampaian cita-citanipun" }
+  },
+  "pancasuda": {
+    "wasesa_segara": { "id": "Berjiwa besar, pemaaf, dapat menerima masukan baik/jelek dan berwibawa", "jv": "Berjiwa ageng, pemaaf, saged nampi masukan sae/ala lan berwibawa" },
+    "tunggak_semi": { "id": "Banyak rejeki, walau dipotong tetap ada rejekinya", "jv": "Akeh rejeki, sanajan dipotong tetap wonten rejekinipun" },
+    "satriya_wibawa": { "id": "Dimanapun selalu berwibawa dan dihormati orang", "jv": "Ing pundi kemawon tansah berwibawa lan dihormati wong" },
+    "sumur_sinaba": { "id": "Menjadi tempat menimba ilmu", "jv": "Dados papan ngudi ilmu" },
+    "satriya_wirang": { "id": "Dimanapun selalu dipermalukan walau beritikad baik dan banyak halangan", "jv": "Ing pundi kemawon tansah dipermalukne sanajan niat sae lan akeh alangan" },
+    "bumi_kapetak": { "id": "Bersih hatinya kuat pendiriannya, malas dan tidak tahan lapar, harus rajin belajar", "jv": "Resik atinipun kuwat pendirianipun, males lan ora tahan luwe, kedah rajin sinau" },
+    "lebu_ketiyup_angin": { "id": "Melarat, tidak kerasan sering pindah rumah dan berkayal, baik untuk berburu", "jv": "Melarat, ora kerasan sering pindhah omah lan berkayal, sae kangge mburu" }
+  },
+  "kamarokan": {
+    "nuju_padu": { "id": "Jelek, dalam segala hal sering bertengkar apa lagi untuk pernikahan", "jv": "Ora sae, ing sedaya hal sering padu apa malih kangge palakrama" },
+    "kala_tinantang": { "id": "Jelek, selalu kekurangan hidupnya, sering sakit dan besar amarahnya", "jv": "Ora sae, tansah kekurangan gesangipun, sering lara lan ageng amarahipun" },
+    "sanggar_waringin": { "id": "Baik, tentram, bahagia, banyak rejeki, berkembang, terang hatinya, menjadi pelindung", "jv": "Sae, tentrem, bagya, akeh rejeki, berkembang, terang manahipun, dados pangayoman" },
+    "mantri_sinarojo": { "id": "Baik, tercapai cita-citanya, senang hidupnya, murah sandang-pangan dan banyak anak", "jv": "Sae, kasembadan cita-citanipun, seneng gesangipun, mirah sandhang-pangan lan akeh anak" },
+    "macan_ketawan": { "id": "Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek", "jv": "Cukupan, disegani nanging ugi dijauhi wong, sering kelangan, wonten niat ala" },
+    "nuju_pati": { "id": "Jelek, mampat rejekinya, susah hidupnya, cepat cerai jodohnya, banyak bencana", "jv": "Ora sae, mampet rejekinipun, susah gesangipun, cepet pegat jodho, akeh bencana" }
+  }
+}
