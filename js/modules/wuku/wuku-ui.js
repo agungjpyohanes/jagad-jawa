@@ -665,7 +665,7 @@ export function openPadewanDetailModal(target) {
               alt="${label}" 
               class="w-full h-auto rounded-xl object-cover shadow-inner"
               style="aspect-ratio: 400/560;"
-              onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';"
+              onerror="this.onerror=null; this.src='/assets/illustrations/wayang/gunungan.png';"
             />
             <div class="absolute bottom-3 left-3 right-3 text-center px-2 py-1 rounded-xl bg-keraton/90 backdrop-blur-sm border border-prada/40">
               <span class="text-[11px] font-mono text-amber-200 font-bold block truncate">${dewaGelar}</span>

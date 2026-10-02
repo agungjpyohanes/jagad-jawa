@@ -30,7 +30,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bila bertemu jodoh pada siklus usia ini akan banyak anak, kehidupan rumah tangga tentram dan lebih betah tinggal di rumah.",
       bahaya: "Rentan difitnah orang karena ada yang iri hati; hindari spekulasi usaha.",
       solusi: "Mengandalkan ketajaman firasat dan kejernihan hati; berhati-hati dalam pergaulan agar tidak memicu rasa iri dengki.",
-      gambar: "assets/wayang/surakarta/batara_surya.png"
+      gambar: "/assets/illustrations/wayang/batara_surya.png"
     },
     2: {
       nama: "Batara Bromo", dewa: "Sang Hyang Brahma / Batara Bromo",
@@ -41,7 +41,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bila bertemu jodoh pada usia ini hidupnya rukun dan menjadi pasangan suami-istri (pasutri) teladan.",
       bahaya: "Mudah terkena senjata atau benda tajam (pisau, pedang, keris); rawan diperalat pejabat/atasan yang memiliki kepentingan terselubung.",
       solusi: "Harus waspada pada usia ini, jangan terlalu percaya kepada orang lain, cermati motif dukungan pihak atasan agar tidak menyesal di kemudian hari.",
-      gambar: "assets/wayang/surakarta/gunungan.png"
+      gambar: "/assets/illustrations/wayang/gunungan.png"
     },
     3: {
       nama: "Batari Durga", dewa: "Batari Durga / Dewi Durga",
@@ -52,7 +52,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Jika bertemu jodoh pada usia ini harus sangat berhati-hati karena kehidupan rumah tangga rawan serba susah dan dipenuhi kebingungan.",
       bahaya: "Sering ditipu dan diperalat, risiko terjerat utang atau mengalami kecelakaan kerja/fisik, dianggap berbahaya oleh pimpinan.",
       solusi: "Mendekatkan diri dan pasrah kepada Allah SWT Yang Maha Tahu; jaga stamina dari angin malam dan hindari jeratan utang piutang.",
-      gambar: "assets/wayang/surakarta/batari_durga.png"
+      gambar: "/assets/illustrations/wayang/batari_durga.png"
     },
     4: {
       nama: "Batara Asmoro", dewa: "Sang Hyang Kamajaya / Batara Asmoro",
@@ -63,7 +63,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bila bertemu jodoh pada usia ini akan dikaruniai banyak anak, kehidupan perkawinan rukun, tentram, dan berbahagia.",
       bahaya: "Sering difitnah, dirongrong, ditipu, dan dirampok; bahaya besar jika berseteru dengan pejabat tinggi (bisa menjadi buron).",
       solusi: "Jangan meminjamkan uang sembarangan; jangan menentang arus kekuasaan atau bermusuhan dengan orang berpangkat tinggi.",
-      gambar: "assets/wayang/surakarta/batara_kamajaya.png"
+      gambar: "/assets/illustrations/wayang/batara_kamajaya.png"
     },
     5: {
       nama: "Batara Isworo", dewa: "Sang Hyang Iswara / Batara Guru (Siwa)",
@@ -74,7 +74,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Sangat tepat bertemu jodoh pada masa ini karena berada di puncak kejayaan hidup.",
       bahaya: "Godaan seks dan asmara terlarang saat perjalanan jauh; jebakan di depan jalan hidup; kehilangan kesempatan emas jika harta dihamburkan hingga jatuh merana.",
       solusi: "Jangan menghamburkan harta; tetap konsisten pada tujuan hidup dan jangan mudah berbelok arah; jaga kesehatan dengan olahraga; bila jatuh perlu sarana ruwatan.",
-      gambar: "assets/wayang/surakarta/batara_guru.png"
+      gambar: "/assets/illustrations/wayang/batara_guru.png"
     },
     6: {
       nama: "Batari Nagagini", dewa: "Batari Nagagini & Batara Antaboga",
@@ -85,7 +85,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Dalam hubungan perkawinan dapat hidup rukun, meskipun sering diterpa gosip, fitnah, atau terpisah jarak dinas.",
       bahaya: "Gampang terkena godaan seks; adanya musuh tersembunyi, teror surat kaleng, dan fitnah rekan sekerja.",
       solusi: "Jangan ikut campur urusan finansial orang lain; jaga kesehatan mata dan istirahat cukup; bentengi diri dari godaan syahwat di luar rumah.",
-      gambar: "assets/wayang/surakarta/gunungan.png"
+      gambar: "/assets/illustrations/wayang/gunungan.png"
     },
     7: {
       nama: "Batara Kamajaya", dewa: "Batara Kamajaya & Batari Ratih (Kamaratih)",
@@ -96,7 +96,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Sangat harmonis; perjumpaan dengan pria/wanita idaman akan cepat berlanjut ke jenjang pernikahan yang langgeng.",
       bahaya: "Bahaya kecelakaan fisik terjatuh dari tempat tinggi (memanjat tangga/pohon/bangunan).",
       solusi: "Kelola rasa cemburu menjadi dedikasi profesional; selalu berhati-hati saat beraktivitas di ketinggian.",
-      gambar: "assets/wayang/surakarta/batara_kamajaya.png"
+      gambar: "/assets/illustrations/wayang/batara_kamajaya.png"
     },
     8: {
       nama: "Batari Sri", dewa: "Batari Sri (Dewi Kemakmuran & Pangan)",
@@ -107,7 +107,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Pertemuan dengan lawan jenis pada siklus usia ini kelanjutannya kurang baik atau rawan membawa duka.",
       bahaya: "Sering berpindah-pindah tempat tinggal/kerja; beban pikiran menumpuk; kerugian finansial akibat terlalu murah hati.",
       solusi: "Selesaikan setiap persoalan hidup dengan tuntas dan bijaksana, jangan melarikan diri dari realitas; jaga kesehatan paru-paru dan jantung.",
-      gambar: "assets/wayang/surakarta/gunungan.png"
+      gambar: "/assets/illustrations/wayang/gunungan.png"
     },
     9: {
       nama: "Batara Bayu", dewa: "Sang Hyang Bayu (Dewa Angin)",
@@ -118,7 +118,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bagi yang masih lajang, jodoh akan dipertemukan di tengah perjalanan dinas/mobilitas luar rumah.",
       bahaya: "Godaan pergaulan bebas di luar rumah; bahaya kecelakaan lalu lintas saat mengemudikan kendaraan (memegang setir mobil) akibat keraguan.",
       solusi: "Tingkatkan ketakwaan kepada Tuhan dan senantiasa ingat keluarga di rumah; jangan menyetir kendaraan saat bimbang atau lelah.",
-      gambar: "assets/wayang/surakarta/batara_bayu.png"
+      gambar: "/assets/illustrations/wayang/batara_bayu.png"
     },
     10: {
       nama: "Batara Wisnu", dewa: "Sang Hyang Wisnu",
@@ -129,7 +129,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bagi yang belum menikah akan dipertemukan dengan jodohnya dalam perjalanan tugas/dinas.",
       bahaya: "Konflik atau persaingan terselubung dengan rekan seprofesi; bahaya besar/celaka jika mengingkari kesepakatan atau janji kerja.",
       solusi: "Pegang teguh janji dan integritas profesional; jaga ritme kerja agar organ kardiovaskular tetap sehat; rawat ikatan batin dengan keluarga.",
-      gambar: "assets/wayang/surakarta/batara_wisnu.png"
+      gambar: "/assets/illustrations/wayang/batara_wisnu.png"
     },
     11: {
       nama: "Batara Endro", dewa: "Sang Hyang Indra / Batara Endro",
@@ -140,7 +140,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bagi yang lajang agak sulit mendapatkan jodoh pada siklus ini karena sikap jiwanya tertutup dan pasif.",
       bahaya: "Bahaya perampokan atau pencurian bila suka memamerkan perhiasan/harta; menjadi sasaran kedengkian orang yang iri atas keberhasilannya.",
       solusi: "Hindari gaya hidup pamer kekayaan (hedonis); aktifkan raga dengan olahraga teratur; buka diri dalam pergaulan agar memudahkan jodoh.",
-      gambar: "assets/wayang/surakarta/batara_indra.png"
+      gambar: "/assets/illustrations/wayang/batara_indra.png"
     },
     12: {
       nama: "Batara Yamadipati", dewa: "Sang Hyang Yamadipati / Batara Yamadipati",
@@ -151,7 +151,7 @@ export const MASTER_SIKLUS_PADEWAN = {
       keluarga: "Bagi yang belum menikah akan menjadi pasangan yang sangat harmonis, meskipun resepsi pernikahan mungkin tertunda pelaksanaannya.",
       bahaya: "Godaan kemaksiatan/bujukan iblis; bahaya kecelakaan fatal yang berisiko cedera permanen hingga mengancam keselamatan nyawa.",
       solusi: "Senantiasa memohon petunjuk dan perlindungan Allah SWT; jauhi kemaksiatan dan kesenangan fana; ekstra waspada terhadap keselamatan fisik.",
-      gambar: "assets/wayang/surakarta/gunungan.png"
+      gambar: "/assets/illustrations/wayang/gunungan.png"
     }
   };
 
@@ -167,7 +167,7 @@ export function hitungSiklusTahunan(umur) {
     padewan: MASTER_SIKLUS_PADEWAN[siklusNo] || {
       nama: "-", dewa: "-", watak: "-", karier: "-",
       kelemahan: "-", kesehatan: "-", keluarga: "-",
-      bahaya: "-", solusi: "-", gambar: "assets/wayang/surakarta/gunungan.png"
+      bahaya: "-", solusi: "-", gambar: "/assets/illustrations/wayang/gunungan.png"
     }
   };
 }

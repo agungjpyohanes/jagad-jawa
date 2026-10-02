@@ -168,26 +168,63 @@ export function renderAksaraKeyboardPalette() {
   }
 }
 
+export function getAksaraOutputElement() {
+  return document.getElementById('jawaOutput') || document.getElementById('aksaraOutput');
+}
+
+export function updateAksaraCharCount() {
+  const outputEl = getAksaraOutputElement();
+  const labelEl = document.getElementById('charCountLabel');
+  if (!labelEl) return;
+  const text = outputEl ? (outputEl.value !== undefined ? outputEl.value : outputEl.textContent) : '';
+  const count = text ? [...text.trim()].length : 0;
+  labelEl.textContent = `${count} Aksara`;
+}
+
 export function convertLatinToJawa() {
   const inputEl = document.getElementById('latinInput');
-  const outputEl = document.getElementById('aksaraOutput');
-  if (!inputEl || !outputEl) return;
+  const outputEl = getAksaraOutputElement();
+  if (!inputEl) return;
 
   const latinText = inputEl.value;
   const jawaText = transliterateLatinToJawa(latinText);
-  outputEl.textContent = jawaText || 'ꦲꦤꦕꦫꦏ';
+
+  if (outputEl) {
+    if ('value' in outputEl) {
+      outputEl.value = jawaText;
+    } else {
+      outputEl.textContent = jawaText;
+    }
+  }
+  updateAksaraCharCount();
+}
+
+export function setSampleAksara(text) {
+  const inputEl = document.getElementById('latinInput');
+  if (inputEl) {
+    inputEl.value = text;
+    convertLatinToJawa();
+  }
 }
 
 export function insertAksaraChar(aksara) {
   const inputEl = document.getElementById('latinInput');
-  if (!inputEl) return;
-  const start = inputEl.selectionStart || inputEl.value.length;
-  const end = inputEl.selectionEnd || inputEl.value.length;
-  const val = inputEl.value;
-  inputEl.value = val.substring(0, start) + aksara + val.substring(end);
-  inputEl.selectionStart = inputEl.selectionEnd = start + aksara.length;
-  inputEl.focus();
-  convertLatinToJawa();
+  const jawaEl = document.getElementById('jawaOutput') || document.getElementById('aksaraOutput');
+  const target = (typeof document !== 'undefined' && document.activeElement === jawaEl) ? jawaEl : (inputEl || jawaEl);
+  if (!target) return;
+  
+  const start = target.selectionStart || target.value.length;
+  const end = target.selectionEnd || target.value.length;
+  const val = target.value;
+  target.value = val.substring(0, start) + aksara + val.substring(end);
+  target.selectionStart = target.selectionEnd = start + aksara.length;
+  target.focus();
+  
+  if (target === inputEl) {
+    convertLatinToJawa();
+  } else {
+    updateAksaraCharCount();
+  }
 }
 
 export function clearAksaraInput() {
@@ -198,10 +235,52 @@ export function clearAksaraInput() {
   }
 }
 
-export function copyAksaraOutput() {
-  const outputEl = document.getElementById('aksaraOutput');
+export function clearJawaText() {
+  const outputEl = getAksaraOutputElement();
   if (outputEl) {
-    copyToClipboard(outputEl.textContent || '', 'Aksara kasil disalin!');
+    if ('value' in outputEl) {
+      outputEl.value = '';
+    } else {
+      outputEl.textContent = '';
+    }
+  }
+  updateAksaraCharCount();
+}
+
+export function copyJawaText() {
+  const outputEl = getAksaraOutputElement();
+  const text = outputEl ? (outputEl.value !== undefined ? outputEl.value : outputEl.textContent) : '';
+  if (text) {
+    copyToClipboard(text, 'Aksara kasil disalin!');
+  } else {
+    showToast('Kolom aksara taksih suwung.');
+  }
+}
+
+export function copyAksaraOutput() {
+  copyJawaText();
+}
+
+export function initAksaraListeners() {
+  const inputEl = document.getElementById('latinInput');
+  const outputEl = getAksaraOutputElement();
+
+  if (inputEl) {
+    inputEl.removeEventListener('input', convertLatinToJawa);
+    inputEl.addEventListener('input', convertLatinToJawa);
+    inputEl.addEventListener('keyup', convertLatinToJawa);
+    inputEl.addEventListener('paste', () => setTimeout(convertLatinToJawa, 10));
+  }
+
+  if (outputEl && outputEl.tagName === 'TEXTAREA') {
+    outputEl.addEventListener('input', updateAksaraCharCount);
+    outputEl.addEventListener('keyup', updateAksaraCharCount);
+  }
+
+  if (inputEl && inputEl.value) {
+    convertLatinToJawa();
+  } else {
+    updateAksaraCharCount();
   }
 }
 

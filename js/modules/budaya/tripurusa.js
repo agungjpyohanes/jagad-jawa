@@ -8,7 +8,7 @@
 export const TRIPURUSA_DATA = {
   judul: "Telur Jagad &bull; Tripurusa",
   subjudul: "Kosmologi Asal-Usul Antaga (Togog), Ismaya (Semar), & Manikmaya (Batara Guru)",
-  gambar: "assets/gunungan_tripurusa.jpeg",
+  gambar: "/assets/illustrations/gunungan_tripurusa.jpeg",
   deskripsiSingkat: "Mitos sebutir telur kosmis (Telur Jagad / Endhog Wisesa) minangka sangkan paraning dumadi tiga tokoh utama panguwasa kahyangan lan pamomong marcapada sajroning jagad pewayangan Jawa.",
   
   tokoh: [

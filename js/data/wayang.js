@@ -15,7 +15,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Drupadi',
     tunggangan: '-',
     ajian: 'Ajian Kawastrawam, Jimat Kalimasada.',
-    gambar: 'assets/wayang/surakarta/puntadewa.png'
+    gambar: '/assets/illustrations/wayang/puntadewa.png'
   },
   {
     id: 'bima',
@@ -27,7 +27,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Arimbi, Dewi Nagagini, Dewi Urangayu',
     tunggangan: '-',
     ajian: 'Aji Bandung Bandawasa, Aji Wungkal Bener, Aji Bayubajra.',
-    gambar: 'assets/wayang/surakarta/bima.png'
+    gambar: '/assets/illustrations/wayang/bima.png'
   },
   {
     id: 'arjuna',
@@ -39,7 +39,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Wara Sumbadra, Dewi Srikandi, Dewi Larasati, Dewi Manuhara',
     tunggangan: 'Kuda Ciptawilaha',
     ajian: 'Aji Sepiangin, Aji Palimunan, Aji Asmaragama, Aji Malayabumi.',
-    gambar: 'assets/wayang/surakarta/arjuna.png'
+    gambar: '/assets/illustrations/wayang/arjuna.png'
   },
   {
     id: 'nakula',
@@ -51,7 +51,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Suyati, Dewi Srengganawati',
     tunggangan: 'Jaran Prangwedana',
     ajian: 'Aji Pranawajati (kawruh mangerteni rasa atining sasama manungsa).',
-    gambar: 'assets/wayang/surakarta/nakula.png'
+    gambar: '/assets/illustrations/wayang/nakula.png'
   },
   {
     id: 'sadewa',
@@ -63,7 +63,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Padmarini',
     tunggangan: '-',
     ajian: 'Aji Purnamajati (waspada marang sadurunge winarah).',
-    gambar: 'assets/wayang/surakarta/sadewa.png'
+    gambar: '/assets/illustrations/wayang/sadewa.png'
   },
 
   // ==========================================
@@ -79,7 +79,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Kanastren',
     tunggangan: '-',
     ajian: 'Ajian Ismaya Jati, Aji Kuncung Putih.',
-    gambar: 'assets/wayang/surakarta/semar.png'
+    gambar: '/assets/illustrations/wayang/semar.png'
   },
   {
     id: 'gareng',
@@ -91,7 +91,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Sarindri',
     tunggangan: '-',
     ajian: '-',
-    gambar: 'assets/wayang/surakarta/gareng.png'
+    gambar: '/assets/illustrations/wayang/gareng.png'
   },
   {
     id: 'petruk',
@@ -103,7 +103,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Ambarwati',
     tunggangan: '-',
     ajian: 'Aji Welut Putih (angel cinandhak dening mungsuh).',
-    gambar: 'assets/wayang/surakarta/petruk.png'
+    gambar: '/assets/illustrations/wayang/petruk.png'
   },
   {
     id: 'bagong',
@@ -115,7 +115,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Bagnawati',
     tunggangan: '-',
     ajian: 'Aji Bayu Sejati',
-    gambar: 'assets/wayang/surakarta/bagong.png'
+    gambar: '/assets/illustrations/wayang/bagong.png'
   },
 
   // ==========================================
@@ -131,7 +131,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Pregiwa',
     tunggangan: '-',
     ajian: 'Aji Brajamusti, Aji Narantaka, Aji Brajadenta.',
-    gambar: 'assets/wayang/surakarta/gatotkaca.png'
+    gambar: '/assets/illustrations/wayang/gatotkaca.png'
   },
   {
     id: 'abimanyu',
@@ -143,7 +143,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Utari, Dewi Siti Sundari',
     tunggangan: 'Kuda Kyai Ciptawilaha',
     ajian: 'Aji Jayadratha, Aji Wungkal Bener.',
-    gambar: 'assets/wayang/surakarta/abimanyu.png'
+    gambar: '/assets/illustrations/wayang/abimanyu.png'
   },
   {
     id: 'antareja',
@@ -155,7 +155,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Ganggi',
     tunggangan: '-',
     ajian: 'Upas Anta (idu ngandhut wisa mandi panglebur badan mungsuh), Aji Amblasbumi.',
-    gambar: 'assets/wayang/surakarta/antareja.png'
+    gambar: '/assets/illustrations/wayang/antareja.png'
   },
   {
     id: 'irawan',
@@ -167,7 +167,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Titisari',
     tunggangan: '-',
     ajian: 'Aji Guna Santika',
-    gambar: 'assets/wayang/surakarta/irawan.png'
+    gambar: '/assets/illustrations/wayang/irawan.png'
   },
   {
     id: 'wisanggeni',
@@ -179,7 +179,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Mustikawati',
     tunggangan: 'Melesat mabur tanpa swiwi',
     ajian: 'Aji Gumbalagni (daya bakar geni saketi)',
-    gambar: 'assets/wayang/surakarta/wisanggeni.png'
+    gambar: '/assets/illustrations/wayang/wisanggeni.png'
   },
   {
     id: 'antasena',
@@ -191,7 +191,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Jenakawati',
     tunggangan: 'Sisik naga (ambles bumi lan nglangi samodra bebas)',
     ajian: 'Kuping Tirta Buwana (ajian banyu)',
-    gambar: 'assets/wayang/surakarta/antasena.png'
+    gambar: '/assets/illustrations/wayang/antasena.png'
   },
 
   // ==========================================
@@ -207,7 +207,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Uma',
     tunggangan: 'Lembu Andini',
     ajian: 'Aji Kemayan, Aji Kawastrawam.',
-    gambar: 'assets/wayang/surakarta/batara_guru.png'
+    gambar: '/assets/illustrations/wayang/batara_guru.png'
   },
   {
     id: 'batara_narada',
@@ -219,7 +219,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Kanistri',
     tunggangan: '-',
     ajian: 'Aji Cipta Hening',
-    gambar: 'assets/wayang/surakarta/batara_narada.png'
+    gambar: '/assets/illustrations/wayang/batara_narada.png'
   },
   {
     id: 'batara_surya',
@@ -231,7 +231,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Kesti',
     tunggangan: 'Kuda Pitu Kencana (Kreta Surya)',
     ajian: 'Aji Kalasurya (pepadhang pamungkas).',
-    gambar: 'assets/wayang/surakarta/batara_surya.png'
+    gambar: '/assets/illustrations/wayang/batara_surya.png'
   },
   {
     id: 'batara_kamajaya',
@@ -243,7 +243,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Ratih',
     tunggangan: '-',
     ajian: 'Aji Asmaragama',
-    gambar: 'assets/wayang/surakarta/batara_kamajaya.png'
+    gambar: '/assets/illustrations/wayang/batara_kamajaya.png'
   },
   {
     id: 'batara_bayu',
@@ -255,7 +255,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Sumi',
     tunggangan: 'Gajah Erawata',
     ajian: 'Aji Bayubajra, Aji Maruta Sejati.',
-    gambar: 'assets/wayang/surakarta/batara_bayu.png'
+    gambar: '/assets/illustrations/wayang/batara_bayu.png'
   },
   {
     id: 'batara_wisnu',
@@ -267,7 +267,7 @@ const WAYANG_LIST = [
     pasangan: 'Dewi Sri Sekar (Batari Sri)',
     tunggangan: 'Manuk Garudha (Garudheya)',
     ajian: 'Triwikrama (tiwikrama malih dadi buta sakti Brahala)',
-    gambar: 'assets/wayang/surakarta/batara_wisnu.png'
+    gambar: '/assets/illustrations/wayang/batara_wisnu.png'
   },
   {
     id: 'batara_indra',
@@ -279,7 +279,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Wiyati',
     tunggangan: 'Gajah Erawata (Airavata)',
     ajian: 'Endralaksana',
-    gambar: 'assets/wayang/surakarta/batara_indra.png'
+    gambar: '/assets/illustrations/wayang/batara_indra.png'
   },
   {
     id: 'batara_kala',
@@ -291,7 +291,7 @@ const WAYANG_LIST = [
     pasangan: 'Batari Durga',
     tunggangan: 'Celeng Kresna / Buta Menggala',
     ajian: 'Panggilingan Kala, Siwur Tirta Pralaya',
-    gambar: 'assets/wayang/surakarta/batara_kala.png'
+    gambar: '/assets/illustrations/wayang/batara_kala.png'
   },
   {
     id: 'batari_durga',
@@ -303,7 +303,7 @@ const WAYANG_LIST = [
     pasangan: 'Batara Kala',
     tunggangan: 'Macan Lodhaya (Kala Maruta)',
     ajian: 'Aji Panyirepan Alas, Kalika Maya',
-    gambar: 'assets/wayang/surakarta/batari_durga.png'
+    gambar: '/assets/illustrations/wayang/batari_durga.png'
   },
 
   // ==========================================
@@ -319,7 +319,7 @@ const WAYANG_LIST = [
     pasangan: '-',
     tunggangan: '-',
     ajian: 'Tancep Kayon (Pambuka, Jejer, lan Panutup Lakon).',
-    gambar: 'assets/wayang/surakarta/gunungan.png'
+    gambar: '/assets/illustrations/wayang/gunungan.png'
   }
 ];
 

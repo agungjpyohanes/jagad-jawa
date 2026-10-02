@@ -706,7 +706,7 @@ function renderSinengkerKompasView(container) {
               <!-- Mode 2: Bagan Naskah Asli kanthi Jarum Overlay Putar -->
               <div class="relative w-full max-w-[320px] aspect-square rounded-2xl bg-white p-2 shadow-2xl border-2 border-prada/60 group cursor-pointer overflow-visible" onclick="window.openKompasImageZoomModal && window.openKompasImageZoomModal()">
                 <img
-                  src="./assets/kompas_danyang.jpg"
+                  src="/assets/illustrations/kompas_danyang.jpg"
                   alt="Kompas Danyang Spiritual Jawa"
                   style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;"
                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
@@ -1702,7 +1702,7 @@ async function renderSinengkerTumpengView(container) {
 
           <!-- Image Container with Relative Positioning for Hotspots -->
           <div class="relative w-full rounded-2xl overflow-hidden border border-sogan-700/80 bg-black/60 shadow-inner group">
-            <img src="assets/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
+            <img src="/assets/illustrations/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
 
             <!-- Hotspot 1: Tumpeng Panca Warna (Tengah) -->
             <button type="button" onclick="window.selectTumpengHotspot && window.selectTumpengHotspot(1)" data-hotspot="1" class="tumpeng-hotspot-btn active bg-prada text-keraton border-2 border-amber-200" style="top: 22%; left: 50%;" title="1. Tumpeng Panca Warna (Kiblat Papat Limo Pancer)">
@@ -1945,7 +1945,7 @@ export function openKompasImageZoomModal() {
           </button>
         </div>
         <div class="p-4 overflow-visible flex items-center justify-center bg-white">
-          <img src="./assets/kompas_danyang.jpg" alt="Kompas Danyang" style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;" class="max-h-[75vh] w-auto object-contain block mx-auto rounded-xl shadow" />
+          <img src="/assets/illustrations/kompas_danyang.jpg" alt="Kompas Danyang" style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;" class="max-h-[75vh] w-auto object-contain block mx-auto rounded-xl shadow" />
         </div>
         <div class="px-5 py-3 border-t border-sogan-800 bg-keraton flex items-center justify-between text-xs text-sogan-300">
           <span>Aset Asli: <code class="text-amber-300 font-mono">kompas_danyang.jpg</code></span>

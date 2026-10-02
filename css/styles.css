@@ -190,12 +190,12 @@ svg {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 @media (min-width: 1024px) {
   .nav-container {
-    gap: 16px;
+    gap: 14px;
   }
 }
 
@@ -298,12 +298,18 @@ svg {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   list-style: none;
   margin: 0;
   padding: 0 4px;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .nav-menu {
+    gap: 10px;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -316,14 +322,20 @@ svg {
 .nav-utility-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   flex-shrink: 0;
   flex-wrap: nowrap;
 }
 
+@media (min-width: 1024px) {
+  .nav-utility-cluster {
+    gap: 8px;
+  }
+}
+
 @media (min-width: 1280px) {
   .nav-utility-cluster {
-    gap: 14px;
+    gap: 12px;
   }
 }
 
@@ -407,16 +419,16 @@ svg {
   .mode-toggle-btn,
   .lang-toggle-btn,
   .nav-audio-btn {
-    height: 32px;
-    padding: 0 0.4rem;
-    font-size: 0.72rem;
+    height: 30px;
+    padding: 0 0.35rem;
+    font-size: 0.7rem;
     border-radius: 8px;
   }
 }
 
 @media (max-width: 380px) {
   .lang-toggle-btn {
-    padding: 0 0.3rem;
+    padding: 0 0.25rem;
   }
 }
 
@@ -443,14 +455,16 @@ svg {
 
 @media (max-width: 639px) {
   #themeToggleBtn {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
   }
 
   #mobileMenuBtn {
-    height: 32px;
-    padding: 0.25rem 0.5rem;
+    min-width: 30px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
     border-radius: 8px;
   }
 }

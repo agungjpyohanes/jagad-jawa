@@ -42,6 +42,7 @@ function switchTab(tabId, pushState = true) {
   }
 
   if (tabId === 'aksara') {
+    if (typeof window.initAksaraListeners === 'function') window.initAksaraListeners();
     // Canvas init will be handled by aksara module
     window.dispatchEvent(new CustomEvent('init-aksara-canvas'));
   }

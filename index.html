@@ -120,7 +120,7 @@
           </div>
           <div class="brand-text min-w-0">
             <h1 class="brand-title whitespace-nowrap text-sm sm:text-base font-bold tracking-wider">JAGAD JAWA</h1>
-            <span class="brand-subtitle whitespace-nowrap hidden lg:block text-[10px] text-sogan-400">Portal Budaya Nusantara</span>
+            <span class="brand-subtitle whitespace-nowrap hidden lg:block text-[10px] text-sogan-400" data-i18n="brand_subtitle">Portal Budaya Nusantara</span>
           </div>
         </a>
 
@@ -129,14 +129,14 @@
           <nav class="nav-menu flex items-center">
             <!-- 1. Beranda -->
             <button onclick="switchTab('beranda')" class="nav-btn nav-link active px-2.5 py-1.5 text-xs rounded-xl flex items-center gap-1.5 transition" data-tab="beranda">
-              <i class="fa-solid fa-house text-xs"></i> <span>Beranda</span>
+              <i class="fa-solid fa-house text-xs"></i> <span data-i18n="nav_beranda">Beranda</span>
             </button>
 
             <!-- 2. Wektu & Penanggalan (Dropdown) -->
             <div class="nav-dropdown-group relative group">
               <button type="button" class="nav-dropdown-trigger nav-link px-2.5 py-1.5 text-xs rounded-xl flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="wektu" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
                 <i class="fa-solid fa-calendar-days text-prada text-xs"></i>
-                <span>Wektu<span class="hidden xl:inline">&nbsp;&amp; Penanggalan</span></span>
+                <span data-i18n="nav_wektu">Wektu<span class="hidden xl:inline">&nbsp;&amp; Penanggalan</span></span>
                 <i class="fa-solid fa-chevron-down text-[8px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
               </button>
               <div class="nav-dropdown-menu">
@@ -145,8 +145,8 @@
                     <i class="fa-solid fa-calendar-days"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Kalender Jawa</div>
-                    <div class="text-[10px] text-sogan-400">Pasaran, Dino Ala/Becik &amp; Weton</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_kalender">Kalender Jawa</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_kalender_sub">Pasaran, Dino Ala/Becik &amp; Weton</div>
                   </div>
                 </button>
                 <button onclick="switchTab('tanggal-jawa')" class="nav-sublink group/item" data-tab="tanggal-jawa">
@@ -154,8 +154,8 @@
                     <i class="fa-solid fa-moon"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Konversi Tanggal</div>
-                    <div class="text-[10px] text-sogan-400">Masehi ke Jawa &amp; Pranata Mangsa</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_konversi">Konversi Tanggal</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_konversi_sub">Masehi ke Jawa &amp; Pranata Mangsa</div>
                   </div>
                 </button>
               </div>
@@ -165,7 +165,7 @@
             <div class="nav-dropdown-group relative group">
               <button type="button" class="nav-dropdown-trigger nav-link px-2.5 py-1.5 text-xs rounded-xl flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="nujum" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
                 <i class="fa-solid fa-wand-magic-sparkles text-prada text-xs"></i>
-                <span>Nujum<span class="hidden xl:inline">&nbsp;&amp; Primbon</span></span>
+                <span data-i18n="nav_nujum">Nujum<span class="hidden xl:inline">&nbsp;&amp; Primbon</span></span>
                 <i class="fa-solid fa-chevron-down text-[8px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
               </button>
               <div class="nav-dropdown-menu">
@@ -174,8 +174,8 @@
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Nujum Pribadi</div>
-                    <div class="text-[10px] text-sogan-400">Watak Bincil, Faalakiah, &amp; Shio</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_nujum_pribadi">Nujum Pribadi</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_nujum_sub">Watak Bincil, Faalakiah, &amp; Shio</div>
                   </div>
                 </button>
                 <button onclick="switchTab('perjodohan')" class="nav-sublink group/item" data-tab="perjodohan">
@@ -183,8 +183,8 @@
                     <i class="fa-solid fa-heart"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Perjodohan (Pitung)</div>
-                    <div class="text-[10px] text-sogan-400">Petung Jodoh Salaki Rabi &amp; Neptu</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_jodoh">Perjodohan (Pitung)</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_jodoh_sub">Petung Jodoh Salaki Rabi &amp; Neptu</div>
                   </div>
                 </button>
                 <button onclick="switchTab('selametan')" class="nav-sublink group/item" data-tab="selametan">
@@ -192,8 +192,8 @@
                     <i class="fa-solid fa-hourglass-half"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pengetan Tilar Donyo</div>
-                    <div class="text-[10px] text-sogan-400">Selametan Geblak dumugi Nyewu</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_selametan">Pengetan Tilar Donyo</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_selametan_sub">Selametan Geblak dumugi Nyewu</div>
                   </div>
                 </button>
                 <button onclick="switchTab('ijab')" class="nav-sublink group/item" data-tab="ijab">
@@ -201,8 +201,8 @@
                     <i class="fa-solid fa-ring"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Petung Ijab (Palakrama)</div>
-                    <div class="text-[10px] text-sogan-400">Neptu Khusus, Wuku, &amp; Surasa</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_ijab">Petung Ijab (Palakrama)</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_ijab_sub">Neptu Khusus, Wuku, &amp; Surasa</div>
                   </div>
                 </button>
                 <button onclick="switchTab('omah')" class="nav-sublink group/item" data-tab="omah">
@@ -210,8 +210,8 @@
                     <i class="fa-solid fa-house-chimney"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Petung Omah &amp; Cempuri</div>
-                    <div class="text-[10px] text-sogan-400">Pembangunan, Boyongan, &amp; Lawang</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_omah">Petung Omah &amp; Cempuri</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_omah_sub">Pembangunan, Boyongan, &amp; Lawang</div>
                   </div>
                 </button>
                 <button onclick="switchTab('ternak')" class="nav-sublink group/item" data-tab="ternak">
@@ -251,7 +251,7 @@
             <div class="nav-dropdown-group relative group">
               <button type="button" class="nav-dropdown-trigger nav-link px-2.5 py-1.5 text-xs rounded-xl flex items-center gap-1.5 focus:outline-none cursor-pointer" data-group="budaya" aria-expanded="false" onclick="toggleNavDropdown(this, event)">
                 <i class="fa-solid fa-masks-theater text-prada text-xs"></i>
-                <span>Budaya<span class="hidden xl:inline">&nbsp;&amp; Seni</span></span>
+                <span data-i18n="nav_budaya">Budaya<span class="hidden xl:inline">&nbsp;&amp; Seni</span></span>
                 <i class="fa-solid fa-chevron-down text-[8px] opacity-70 ml-0.5 transition-transform duration-200 group-hover:rotate-180"></i>
               </button>
               <div class="nav-dropdown-menu">
@@ -260,8 +260,8 @@
                     <i class="fa-solid fa-compass"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Ensiklopedia 30 Wuku</div>
-                    <div class="text-[10px] text-sogan-400">Pawukon Jawi: Sinta dumugi Watugunung</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_wuku">Ensiklopedia 30 Wuku</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_wuku_sub">Pawukon Jawi: Sinta dumugi Watugunung</div>
                   </div>
                 </button>
                 <button onclick="switchTab('tripurusa')" class="nav-sublink group/item ahli-only" data-tab="tripurusa">
@@ -269,8 +269,8 @@
                     <i class="fa-solid fa-egg"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Telur Jagad (Tripurusa)</div>
-                    <div class="text-[10px] text-sogan-400">Mitologi Antaga, Ismaya, Manikmaya</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_tripurusa">Telur Jagad (Tripurusa)</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_tripurusa_sub">Mitologi Antaga, Ismaya, Manikmaya</div>
                   </div>
                 </button>
                 <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink group/item ahli-only" data-tab="ensiklopedia-budaya">
@@ -278,8 +278,8 @@
                     <i class="fa-solid fa-book-journal-whills"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Ensiklopedia Primbon &amp; Falakiah</div>
-                    <div class="text-[10px] text-sogan-400">6 Bincil, Shio, Zodiak &amp; Tabel Neptu</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_ensiklo_budaya">Ensiklopedia Primbon &amp; Falakiah</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_ensiklo_budaya_sub">6 Bincil, Shio, Zodiak &amp; Tabel Neptu</div>
                   </div>
                 </button>
                 <button onclick="switchTab('mitologi')" class="nav-sublink group/item" data-tab="mitologi">
@@ -287,8 +287,8 @@
                     <i class="fa-solid fa-scroll"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Mitologi Nusantara</div>
-                    <div class="text-[10px] text-sogan-400">Asal-Usul Wuku, Pasaran &amp; Cerita Kuno</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_mitologi">Mitologi Nusantara</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_mitologi_sub">Asal-Usul Wuku, Pasaran &amp; Cerita Kuno</div>
                   </div>
                 </button>
                 <button onclick="switchTab('gamelan')" class="nav-sublink group/item" data-tab="gamelan">
@@ -296,8 +296,8 @@
                     <i class="fa-solid fa-drum"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Gamelan Jawa</div>
-                    <div class="text-[10px] text-sogan-400">Gamelan Maya Pelog &amp; Slendro</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_gamelan">Gamelan Jawa</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_gamelan_sub">Gamelan Maya Pelog &amp; Slendro</div>
                   </div>
                 </button>
                 <button onclick="switchTab('aksara')" class="nav-sublink group/item" data-tab="aksara">
@@ -305,8 +305,8 @@
                     <i class="fa-solid fa-feather-pointed"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Studio Aksara Jawa</div>
-                    <div class="text-[10px] text-sogan-400">Papan Ketik &amp; Transliterasi Aksara</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_aksara">Studio Aksara Jawa</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_aksara_sub">Papan Ketik &amp; Transliterasi Aksara</div>
                   </div>
                 </button>
                 <button onclick="switchTab('wayang')" class="nav-sublink group/item" data-tab="wayang">
@@ -314,8 +314,8 @@
                     <i class="fa-solid fa-masks-theater"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Panggung Kelir Wayang</div>
-                    <div class="text-[10px] text-sogan-400">Simulasi Wayang Kulit Interaktif</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_wayang">Panggung Kelir Wayang</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_wayang_sub">Simulasi Wayang Kulit Interaktif</div>
                   </div>
                 </button>
                 <button onclick="switchTab('pitutur')" class="nav-sublink group/item" data-tab="pitutur">
@@ -323,8 +323,8 @@
                     <i class="fa-solid fa-quote-left"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pitutur Luhur &amp; Kuis</div>
-                    <div class="text-[10px] text-sogan-400">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_pitutur">Pitutur Luhur &amp; Kuis</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_pitutur_sub">Falsafah Luhur &amp; Uji Wawasan Budaya</div>
                   </div>
                 </button>
                 <button onclick="switchTab('pustaka')" class="nav-sublink group/item" data-tab="pustaka">
@@ -332,8 +332,8 @@
                     <i class="fa-solid fa-book-bookmark"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light">Pustaka Digital</div>
-                    <div class="text-[10px] text-sogan-400">Naskah Kuno, Kamus &amp; Usada</div>
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_pustaka">Pustaka Digital</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_pustaka_sub">Naskah Kuno, Kamus &amp; Usada</div>
                   </div>
                 </button>
                 <button onclick="switchTab('sinengker')" class="nav-sublink group/item" data-tab="sinengker">
@@ -341,10 +341,10 @@
                     <i class="fa-solid fa-shield-halved text-amber-400"></i>
                   </div>
                   <div class="text-left">
-                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light flex items-center gap-1.5">
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light flex items-center gap-1.5" data-i18n="nav_sinengker">
                       Pustaka Sinengker <i class="fa-solid fa-lock text-[9px] text-amber-400"></i>
                     </div>
-                    <div class="text-[10px] text-red-300/80">Kompas Danyang &amp; Aji Wingit</div>
+                    <div class="text-[10px] text-red-300/80" data-i18n="nav_sinengker_sub">Kompas Danyang &amp; Aji Wingit</div>
                   </div>
                 </button>
               </div>
@@ -448,10 +448,10 @@
             </div>
           </div>
 
-          <!-- 3. Language Switcher (ID / JA) -->
-          <button onclick="toggleLanguage()" class="lang-toggle-btn shrink-0 hidden sm:inline-flex" title="Ganti Bahasa (Indonesia / Jawa)">
+          <!-- 3. Language Switcher (ID / JV) -->
+          <button id="langToggleBtn" onclick="toggleLanguage()" class="lang-toggle-btn shrink-0 inline-flex items-center gap-1 sm:gap-1.5" title="Ganti Bahasa (Indonesia / Jawa)" data-i18n-title="lang_toggle_title" aria-label="Mode Bahasa: ID">
             <i class="fa-solid fa-language text-amber-400 text-xs"></i>
-            <span class="lang-toggle-short text-[11px] font-bold">ID</span>
+            <span id="langToggleBadge" class="lang-toggle-short text-[11px] font-bold">ID</span>
           </button>
 
           <!-- 4. Theme Toggle Button (Sun ☀️ / Moon 🌙) -->
@@ -562,20 +562,20 @@
         <div class="flex-1 overflow-y-auto px-3 py-3 space-y-3 no-scrollbar text-xs">
           <!-- 1. Beranda -->
           <button onclick="switchTab('beranda')" class="nav-sublink w-full text-left px-3 py-2 rounded-xl text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-3 font-semibold transition" data-tab="beranda">
-            <i class="fa-solid fa-house w-4 text-prada"></i> <span>Beranda Utama</span>
+            <i class="fa-solid fa-house w-4 text-prada"></i> <span data-i18n="nav_beranda">Beranda Utama</span>
           </button>
 
           <!-- 2. Kalender & Waktu -->
           <div class="pt-1">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-calendar-days text-[9px]"></i> Kalender &amp; Waktu
+              <i class="fa-solid fa-calendar-days text-[9px]"></i> <span data-i18n="nav_wektu">Kalender &amp; Waktu</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('kalender')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="kalender">
-                <i class="fa-solid fa-calendar-days w-4 text-prada"></i> <span>Kalender Jawa</span>
+                <i class="fa-solid fa-calendar-days w-4 text-prada"></i> <span data-i18n="nav_kalender">Kalender Jawa</span>
               </button>
               <button onclick="switchTab('tanggal-jawa')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="tanggal-jawa">
-                <i class="fa-solid fa-moon w-4 text-prada"></i> <span>Konversi Tanggal Jawa</span>
+                <i class="fa-solid fa-moon w-4 text-prada"></i> <span data-i18n="nav_konversi">Konversi Tanggal Jawa</span>
               </button>
             </div>
           </div>
@@ -583,23 +583,23 @@
           <!-- 3. Nujum, Perjodohan & Selametan -->
           <div class="pt-1">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> Nujum, Jodoh &amp; Selametan
+              <i class="fa-solid fa-wand-magic-sparkles text-[9px]"></i> <span data-i18n="nav_nujum">Nujum, Jodoh &amp; Selametan</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('kepribadian')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="kepribadian">
-                <i class="fa-solid fa-wand-magic-sparkles w-4 text-prada"></i> <span>Nujum Pribadi</span>
+                <i class="fa-solid fa-wand-magic-sparkles w-4 text-prada"></i> <span data-i18n="nav_nujum_pribadi">Nujum Pribadi</span>
               </button>
               <button onclick="switchTab('perjodohan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="perjodohan">
-                <i class="fa-solid fa-heart w-4 text-prada"></i> <span>Perjodohan (Pitung Jawa)</span>
+                <i class="fa-solid fa-heart w-4 text-prada"></i> <span data-i18n="nav_jodoh">Perjodohan (Pitung Jawa)</span>
               </button>
               <button onclick="switchTab('selametan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="selametan">
-                <i class="fa-solid fa-hourglass-half w-4 text-prada"></i> <span>Selametan (Pengetan Tilar Donyo)</span>
+                <i class="fa-solid fa-hourglass-half w-4 text-prada"></i> <span data-i18n="nav_selametan">Selametan (Pengetan Tilar Donyo)</span>
               </button>
               <button onclick="switchTab('ijab')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="ijab">
-                <i class="fa-solid fa-ring w-4 text-prada"></i> <span>Petung Ijab (Palakrama)</span>
+                <i class="fa-solid fa-ring w-4 text-prada"></i> <span data-i18n="nav_ijab">Petung Ijab (Palakrama)</span>
               </button>
               <button onclick="switchTab('omah')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="omah">
-                <i class="fa-solid fa-house-chimney w-4 text-prada"></i> <span>Petung Omah &amp; Cempuri</span>
+                <i class="fa-solid fa-house-chimney w-4 text-prada"></i> <span data-i18n="nav_omah">Petung Omah &amp; Cempuri</span>
               </button>
               <button onclick="switchTab('ternak')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="ternak">
                 <i class="fa-solid fa-paw w-4 text-prada"></i>
@@ -617,23 +617,23 @@
           <!-- 4. Budaya & Pawukon -->
           <div class="pt-1">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-compass text-[9px]"></i> Budaya &amp; Pawukon
+              <i class="fa-solid fa-compass text-[9px]"></i> <span data-i18n="nav_budaya">Budaya &amp; Pawukon</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('wuku')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="wuku">
-                <i class="fa-solid fa-compass w-4 text-prada"></i> <span>Ensiklopedia 30 Wuku</span>
+                <i class="fa-solid fa-compass w-4 text-prada"></i> <span data-i18n="nav_wuku">Ensiklopedia 30 Wuku</span>
               </button>
               <button onclick="switchTab('tripurusa')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 ahli-only transition" data-tab="tripurusa">
-                <i class="fa-solid fa-egg w-4 text-prada"></i> <span>Telur Jagad (Tripurusa)</span>
+                <i class="fa-solid fa-egg w-4 text-prada"></i> <span data-i18n="nav_tripurusa">Telur Jagad (Tripurusa)</span>
               </button>
               <button onclick="switchTab('ensiklopedia-budaya')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 ahli-only transition" data-tab="ensiklopedia-budaya">
-                <i class="fa-solid fa-book-journal-whills w-4 text-prada"></i> <span>Ensiklopedia Primbon &amp; Falakiah</span>
+                <i class="fa-solid fa-book-journal-whills w-4 text-prada"></i> <span data-i18n="nav_ensiklo_budaya">Ensiklopedia Primbon &amp; Falakiah</span>
               </button>
               <button onclick="switchTab('mitologi')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="mitologi">
-                <i class="fa-solid fa-scroll w-4 text-prada"></i> <span>Mitologi Nusantara</span>
+                <i class="fa-solid fa-scroll w-4 text-prada"></i> <span data-i18n="nav_mitologi">Mitologi Nusantara</span>
               </button>
               <button onclick="switchTab('gamelan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="gamelan">
-                <i class="fa-solid fa-drum w-4 text-prada"></i> <span>Gamelan Jawa</span>
+                <i class="fa-solid fa-drum w-4 text-prada"></i> <span data-i18n="nav_gamelan">Gamelan Jawa</span>
               </button>
             </div>
           </div>
@@ -641,23 +641,23 @@
           <!-- 5. Seni & Sastra -->
           <div class="pt-1">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-masks-theater text-[9px]"></i> Seni &amp; Sastra
+              <i class="fa-solid fa-masks-theater text-[9px]"></i> <span>Seni &amp; Sastra</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('aksara')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="aksara">
-                <i class="fa-solid fa-feather-pointed w-4 text-prada"></i> <span>Studio Aksara Jawa</span>
+                <i class="fa-solid fa-feather-pointed w-4 text-prada"></i> <span data-i18n="nav_aksara">Studio Aksara Jawa</span>
               </button>
               <button onclick="switchTab('wayang')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="wayang">
-                <i class="fa-solid fa-masks-theater w-4 text-prada"></i> <span>Panggung Kelir Wayang</span>
+                <i class="fa-solid fa-masks-theater w-4 text-prada"></i> <span data-i18n="nav_wayang">Panggung Kelir Wayang</span>
               </button>
               <button onclick="switchTab('pitutur')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="pitutur">
-                <i class="fa-solid fa-quote-left w-4 text-prada"></i> <span>Pitutur Luhur &amp; Kuis</span>
+                <i class="fa-solid fa-quote-left w-4 text-prada"></i> <span data-i18n="nav_pitutur">Pitutur Luhur &amp; Kuis</span>
               </button>
               <button onclick="switchTab('pustaka')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="pustaka">
-                <i class="fa-solid fa-book-bookmark w-4 text-prada"></i> <span>Pustaka Digital Jawa</span>
+                <i class="fa-solid fa-book-bookmark w-4 text-prada"></i> <span data-i18n="nav_pustaka">Pustaka Digital Jawa</span>
               </button>
               <button onclick="switchTab('sinengker')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-amber-200 hover:bg-red-950/70 flex items-center gap-2.5 transition" data-tab="sinengker">
-                <i class="fa-solid fa-shield-halved w-4 text-amber-400"></i> <span class="flex items-center gap-1.5">Pustaka Sinengker <i class="fa-solid fa-lock text-[9px] text-amber-400"></i></span>
+                <i class="fa-solid fa-shield-halved w-4 text-amber-400"></i> <span class="flex items-center gap-1.5" data-i18n="nav_sinengker">Pustaka Sinengker <i class="fa-solid fa-lock text-[9px] text-amber-400"></i></span>
               </button>
             </div>
           </div>
@@ -2818,7 +2818,7 @@
         <!-- Wayang Puppet yang dapat digeser -->
         <div id="wayangPuppet" class="relative cursor-grab active:cursor-grabbing transition-transform duration-75 flex flex-col items-center">
           <div id="puppetVisual" class="w-48 sm:w-60 h-64 sm:h-72 flex items-center justify-center">
-            <img src="assets/wayang/surakarta/arjuna.png" alt="Raden Arjuna" class="max-h-full max-w-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] transition-all duration-300 select-none pointer-events-none" />
+            <img src="/assets/illustrations/wayang/arjuna.png" alt="Raden Arjuna" class="max-h-full max-w-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] transition-all duration-300 select-none pointer-events-none" />
           </div>
           <span id="wayangActorName" class="px-3.5 py-1 rounded-full bg-keraton/95 border border-prada/60 text-xs text-prada font-bold -mt-2 shadow-lg tracking-wide">
             Raden Arjuna (Janaka / Dananjaya / Permadi)
@@ -3032,7 +3032,7 @@
 
           <!-- Image Container with Relative Positioning for Hotspots -->
           <div class="relative w-full rounded-2xl overflow-hidden border border-sogan-700/80 bg-black/60 shadow-inner group">
-            <img src="assets/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
+            <img src="/assets/illustrations/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
 
             <!-- Hotspot 1: Tumpeng Panca Warna (Tengah) -->
             <button type="button" onclick="selectTumpengHotspot(1)" data-hotspot="1" class="tumpeng-hotspot-btn active bg-prada text-keraton border-2 border-amber-200" style="top: 22%; left: 50%;" title="1. Tumpeng Panca Warna (Kiblat Papat Limo Pancer)">

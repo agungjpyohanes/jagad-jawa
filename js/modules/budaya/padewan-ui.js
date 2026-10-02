@@ -68,7 +68,7 @@ export function renderPadewanDetail(no) {
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sogan-800 pb-3 bg-keraton/80 p-3.5 rounded-2xl border border-prada/30 shadow">
         <div class="flex items-center gap-3.5">
           <div class="w-16 h-20 rounded-xl bg-sogan-950 border border-prada/40 p-1 flex items-center justify-center shrink-0 shadow-md">
-            <img src="${data.gambar || 'assets/wayang/surakarta/gunungan.png'}" alt="${data.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_4px_rgba(212,175,55,0.4)]" onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';" />
+            <img src="${data.gambar || '/assets/illustrations/wayang/gunungan.png'}" alt="${data.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_2px_4px_rgba(212,175,55,0.4)]" onerror="this.onerror=null; this.src='/assets/illustrations/wayang/gunungan.png';" />
           </div>
           <div>
             <span class="text-[10px] uppercase font-mono tracking-wider text-prada font-bold block">

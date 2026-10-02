@@ -373,6 +373,7 @@ if (typeof window !== 'undefined') {
         break;
 
       case 'aksara':
+        if (typeof window.initAksaraListeners === 'function') window.initAksaraListeners();
         if (typeof window.renderAksaraKeyboardPalette === 'function') window.renderAksaraKeyboardPalette();
         if (typeof window.initDrawingCanvas === 'function') window.initDrawingCanvas();
         if (typeof window.renderSandhanganGuidePanel === 'function') window.renderSandhanganGuidePanel();

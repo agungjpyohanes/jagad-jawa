@@ -48,7 +48,7 @@ export function renderWayangGrid() {
       class="wayang-card-item p-2.5 rounded-xl bg-keraton border border-sogan-800 text-left transition hover:border-prada hover:scale-[1.02] group flex flex-col items-center text-center cursor-pointer"
       data-id="${char.id}" data-kategori="${char.kategori}">
       <div class="w-16 h-20 mb-2 flex items-center justify-center overflow-hidden">
-        <img src="${char.gambar}" alt="${char.nama}" class="max-h-full max-w-full object-contain filter group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)] transition duration-200" onerror="this.style.display='none'" />
+        <img src="${char.gambar}" alt="${char.nama}" class="max-h-full max-w-full object-contain filter group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)] transition duration-200" onerror="this.onerror=null; this.src='/assets/illustrations/wayang/gunungan.png';" />
       </div>
       <div class="w-full">
         <span class="text-[9px] px-1.5 py-0.5 rounded bg-sogan-900 border border-sogan-700 text-prada block truncate mb-1">
@@ -112,6 +112,7 @@ export function selectWayangCharacter(id) {
   if (puppetImg) {
     puppetImg.src = data.gambar;
     puppetImg.alt = data.nama;
+    puppetImg.onerror = () => { puppetImg.src = '/assets/illustrations/wayang/gunungan.png'; };
   }
 
   // Update nama aktor di bawah wayang
@@ -209,6 +210,7 @@ export function openWayangDetailModal(id) {
   if (imgEl) {
     imgEl.src = data.gambar;
     imgEl.alt = data.nama;
+    imgEl.onerror = () => { imgEl.src = '/assets/illustrations/wayang/gunungan.png'; };
   }
 
   modal.classList.remove('hidden');

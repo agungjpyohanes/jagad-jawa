@@ -14,12 +14,16 @@ const STORAGE_KEY = 'jagad_jawa_lang';
 export const DICTIONARY = {
   // Brand & Header
   brand_subtitle: {
-    id: 'Menjelajahi Kebudayaan Luhur Nusantara',
-    jv: 'Njlajah Kabudayan Luhur Nuswantara'
+    id: 'Portal Budaya Nusantara',
+    jv: 'Gapura Budaya Nusantara'
   },
   lang_toggle_badge: {
     id: 'ID',
-    jv: 'JA'
+    jv: 'JV'
+  },
+  lang_toggle_title: {
+    id: 'Ganti Bahasa (Indonesia / Jawa)',
+    jv: 'Gantos Basa (Indonesia / Jawi)'
   },
 
   // Navigation Links & Dropdowns
@@ -75,6 +79,38 @@ export const DICTIONARY = {
     id: 'Selametan Geblak hingga Nyewu',
     jv: 'Selametan Geblak dumugi Nyewu'
   },
+  nav_ijab: {
+    id: 'Petung Ijab (Palakrama)',
+    jv: 'Petung Ijab (Palakrama)'
+  },
+  nav_ijab_sub: {
+    id: 'Neptu Khusus, Wuku, & Surasa',
+    jv: 'Neptu Mirunggan, Wuku, & Surasa'
+  },
+  nav_omah: {
+    id: 'Petung Omah & Cempuri',
+    jv: 'Petung Griya & Cempuri'
+  },
+  nav_omah_sub: {
+    id: 'Pembangunan, Boyongan, & Lawang',
+    jv: 'Pambangunan, Boyongan, & Lawangan'
+  },
+  nav_ternak: {
+    id: 'Petung Kehidupan',
+    jv: 'Petung Panguripan'
+  },
+  nav_ternak_sub: {
+    id: 'Ternak, Loro, & Geblak',
+    jv: 'Ingon-ingon, Gerah, & Geblak'
+  },
+  nav_sasmitha: {
+    id: 'Sasmitha (Tanda Alam)',
+    jv: 'Sasmitha (Pratandha Alam)'
+  },
+  nav_sasmitha_sub: {
+    id: 'Impen, Kedut, Gerhana, Lindu',
+    jv: 'Impen, Kedut, Grahana, Lindhu'
+  },
   nav_budaya: {
     id: 'Seni & Budaya',
     jv: 'Seni & Kabudayan'
@@ -87,21 +123,77 @@ export const DICTIONARY = {
     id: 'Pawukon Jawa: Sinta hingga Watugunung',
     jv: 'Pawukon Jawi: Sinta dumugi Watugunung'
   },
+  nav_tripurusa: {
+    id: 'Telur Jagad (Tripurusa)',
+    jv: 'Endhog Wisesa (Tripurusa)'
+  },
+  nav_tripurusa_sub: {
+    id: 'Mitologi Antaga, Ismaya, Manikmaya',
+    jv: 'Mitologi Antaga, Ismaya, Manikmaya'
+  },
+  nav_ensiklo_budaya: {
+    id: 'Ensiklopedia Budaya',
+    jv: 'Kawruh Kabudayan'
+  },
+  nav_ensiklo_budaya_sub: {
+    id: '6 Bincil, Shio, Zodiak & Neptu',
+    jv: '6 Bincil, Shio, Zodiak & Neptu'
+  },
+  nav_mitologi: {
+    id: 'Mitologi Nusantara',
+    jv: 'Mitologi Nuswantara'
+  },
+  nav_mitologi_sub: {
+    id: 'Asal-Usul Wuku, Pasaran & Cerita Kuno',
+    jv: 'Mulabuka Wuku, Pasaran & Cariyos Kuno'
+  },
   nav_gamelan: {
     id: 'Gamelan Maya',
     jv: 'Gamelan Jawa'
+  },
+  nav_gamelan_sub: {
+    id: 'Gamelan Maya Pelog & Slendro',
+    jv: 'Gamelan Maya Pelog & Slendro'
   },
   nav_aksara: {
     id: 'Studio Aksara Jawa',
     jv: 'Papan Aksara Jawa'
   },
+  nav_aksara_sub: {
+    id: 'Papan Ketik & Transliterasi Aksara',
+    jv: 'Papan Ketik & Transliterasi Aksara'
+  },
   nav_wayang: {
-    id: 'Kelir Wayang Purwa',
-    jv: 'Kelir Wayang Purwa'
+    id: 'Panggung Kelir Wayang',
+    jv: 'Panggung Kelir Wayang'
+  },
+  nav_wayang_sub: {
+    id: 'Simulasi Wayang Kulit Interaktif',
+    jv: 'Pentas Wayang Kulit Interaktif'
   },
   nav_pitutur: {
-    id: 'Pitutur & Kuis',
-    jv: 'Pitutur & Kuis'
+    id: 'Pitutur Luhur & Kuis',
+    jv: 'Piwulang Luhur & Cangkriman'
+  },
+  nav_pitutur_sub: {
+    id: 'Falsafah Luhur & Uji Wawasan',
+    jv: 'Falsafah Luhur & Uji Kawruh'
+  },
+  nav_pustaka: {
+    id: 'Pustaka Digital',
+    jv: 'Pustaka Jawa'
+  },
+  nav_pustaka_sub: {
+    id: 'Naskah Kuno, Kamus & Usada',
+    jv: 'Serat Kuno, Bausastra & Usada'
+  },
+  nav_sinengker: {
+    id: 'Pustaka Sinengker',
+    jv: 'Pustaka Sinengker'
+  },
+  nav_sinengker_sub: {
+    id: 'Kompas Danyang & Aji Wingit',
+    jv: 'Kompas Danyang & Aji Wingit'
   },
 
   // Kalender Toolbar & Filter
@@ -201,7 +293,11 @@ export function applyLanguage(lang = currentLang) {
   currentLang = (lang === 'jv') ? 'jv' : 'id';
 
   if (typeof window !== 'undefined' && window.localStorage) {
-    localStorage.setItem(STORAGE_KEY, currentLang);
+    try {
+      localStorage.setItem(STORAGE_KEY, currentLang);
+    } catch (e) {
+      console.warn('[i18n] Failed to save language:', e);
+    }
   }
 
   if (typeof document === 'undefined') return;
@@ -216,18 +312,27 @@ export function applyLanguage(lang = currentLang) {
   });
 
   // Update teks tombol switch bahasa di navbar
-  const toggleBadges = document.querySelectorAll('.lang-toggle-text');
+  const toggleBadges = document.querySelectorAll('.lang-toggle-short, #langToggleBadge');
   toggleBadges.forEach((el) => {
-    el.textContent = currentLang === 'id' ? 'ID (Bhs Indonesia)' : 'JA (Basa Jawa)';
+    el.textContent = currentLang === 'jv' ? 'JV' : 'ID';
   });
 
-  const toggleShorts = document.querySelectorAll('.lang-toggle-short');
-  toggleShorts.forEach((el) => {
-    el.textContent = currentLang.toUpperCase();
+  const toggleTexts = document.querySelectorAll('.lang-toggle-text');
+  toggleTexts.forEach((el) => {
+    el.textContent = currentLang === 'jv' ? 'JV (Basa Jawa)' : 'ID (Bhs Indonesia)';
+  });
+
+  const toggleBtns = document.querySelectorAll('.lang-toggle-btn');
+  toggleBtns.forEach((btn) => {
+    btn.setAttribute('title', currentLang === 'jv' 
+      ? 'Basa Jawi aktif (Klik kagem gantos Basa Indonesia)' 
+      : 'Bahasa Indonesia aktif (Klik untuk beralih ke Basa Jawa)');
+    btn.setAttribute('aria-label', `Mode Bahasa: ${currentLang.toUpperCase()}`);
   });
 
   // Trigger event jika ada modul yang ingin mendengarkan
   if (typeof window !== 'undefined') {
+    window.currentLanguage = currentLang;
     window.dispatchEvent(new CustomEvent('language-changed', { detail: { lang: currentLang } }));
   }
 }

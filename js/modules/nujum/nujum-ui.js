@@ -942,7 +942,7 @@ export function renderSiklusTahunanCardHtml(umur, baseUmur) {
         <div class="lg:col-span-8 bg-keraton/90 p-4 rounded-xl border border-prada/30 space-y-3">
           <div class="flex flex-col sm:flex-row items-center gap-4 p-3.5 rounded-xl bg-sogan-950/80 border border-sogan-800">
             <div onclick="window.openPadewanModal && window.openPadewanModal('${pad.nama || pad.dewa || ''}')" role="button" class="w-20 h-28 flex-shrink-0 flex items-center justify-center p-1.5 rounded-lg bg-keraton border border-prada/30 shadow-inner cursor-pointer hover:border-prada transition hover:scale-105" title="Klik kagem mirsani Ensiklopedia 12 Batara-Batari">
-              <img src="${pad.gambar || 'assets/wayang/surakarta/gunungan.png'}" alt="${pad.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_4px_8px_rgba(212,175,55,0.4)]" onerror="this.onerror=null; this.src='assets/wayang/surakarta/gunungan.png';" />
+              <img src="${pad.gambar || '/assets/illustrations/wayang/gunungan.png'}" alt="${pad.nama}" class="max-h-full max-w-full object-contain filter drop-shadow-[0_4px_8px_rgba(212,175,55,0.4)]" onerror="this.onerror=null; this.src='/assets/illustrations/wayang/gunungan.png';" />
             </div>
             <div class="flex-grow space-y-1 text-center sm:text-left">
               <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">

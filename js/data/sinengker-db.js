@@ -15,7 +15,7 @@ export const SINENGKER_DATA = {
   petung_kompas_danyang: {
     judul: "PETUNG KOMPAS DANYANG",
     deskripsi: "Panduan arah mata angin dan aksara Jawa dalam kompas spiritual Danyang desa/kelurahan.",
-    gambar_aset: "assets/kompas_danyang.jpg",
+    gambar_aset: "/assets/illustrations/kompas_danyang.jpg",
     arah_utama: {
       lor: ["THA", "NGA", "GA", "BA"],
       wetan: ["HA", "NA", "CA", "RA", "KA", "DA"],
