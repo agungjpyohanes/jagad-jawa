@@ -69,6 +69,9 @@ function switchTab(tabId, pushState = true) {
     window.initMitologiUI();
   }
 
+  // Perbarui jejak hierarki Breadcrumb bergaya Windows Explorer
+  renderBreadcrumb(tabId);
+
   window.dispatchEvent(new CustomEvent('tab-switched', { detail: { tabId } }));
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -153,6 +156,235 @@ if (typeof document !== 'undefined') {
   });
 }
 
+// ─── HIERARKI BREADCRUMB (GAYA WINDOWS EXPLORER) ───────────────────────────
+const BREADCRUMB_MAP = {
+  'beranda': {
+    category: null,
+    title: 'Beranda',
+    icon: 'fa-solid fa-house',
+    sub: null
+  },
+  'kalender': {
+    category: { label: 'Wektu & Penanggalan', icon: 'fa-solid fa-calendar-days' },
+    title: 'Kalender Jawa',
+    icon: 'fa-solid fa-calendar-days',
+    sub: 'Pranata Mangsa & Weton'
+  },
+  'tanggal-jawa': {
+    category: { label: 'Wektu & Penanggalan', icon: 'fa-solid fa-calendar-days' },
+    title: 'Konversi Tanggal Jawa',
+    icon: 'fa-solid fa-moon',
+    sub: 'Sultan Agungan & Anno Javanico'
+  },
+  'kepribadian': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Nujum Pribadi',
+    icon: 'fa-solid fa-wand-magic-sparkles',
+    sub: '6 Dimensi Bincil & Karakter'
+  },
+  'perjodohan': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Perjodohan (Pitung Jawa)',
+    icon: 'fa-solid fa-heart',
+    sub: 'Salaki Rabi & Neptu Pasangan'
+  },
+  'selametan': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Pengetan Tilar Donyo',
+    icon: 'fa-solid fa-hourglass-half',
+    sub: 'Haul Leluhur Geblak - Nyewu'
+  },
+  'ijab': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Petung Ijab (Palakrama)',
+    icon: 'fa-solid fa-ring',
+    sub: 'Neptu Khusus Nikah'
+  },
+  'omah': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Petung Omah & Cempuri',
+    icon: 'fa-solid fa-house-chimney',
+    sub: 'Pembangunan & Lawangan'
+  },
+  'ternak': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Petung Kehidupan',
+    icon: 'fa-solid fa-paw',
+    sub: 'Ternak, Loro, & Geblak'
+  },
+  'sasmitha': {
+    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: 'Sasmitha (Tanda Alam & Tubuh)',
+    icon: 'fa-solid fa-eye',
+    sub: 'Impen, Kedut, & Fenomena Langit'
+  },
+  'wuku': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Ensiklopedia 30 Wuku',
+    icon: 'fa-solid fa-compass',
+    sub: 'Pawukon Sinta - Watugunung'
+  },
+  'tripurusa': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Telur Jagad (Tripurusa)',
+    icon: 'fa-solid fa-egg',
+    sub: 'Mitologi Kosmologi Wayang'
+  },
+  'ensiklopedia-budaya': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Ensiklopedia Budaya & Primbon',
+    icon: 'fa-solid fa-book-journal-whills',
+    sub: 'Falakiah & Referensi Lengkap'
+  },
+  'mitologi': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Mitologi Nusantara',
+    icon: 'fa-solid fa-scroll',
+    sub: 'Sastra & Cerita Kuno'
+  },
+  'gamelan': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Gamelan Maya',
+    icon: 'fa-solid fa-drum',
+    sub: 'Karawitan Pelog & Slendro'
+  },
+  'aksara': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Studio Aksara Jawa',
+    icon: 'fa-solid fa-feather-pointed',
+    sub: 'Papan Ketik & Transliterasi'
+  },
+  'wayang': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Panggung Kelir Wayang',
+    icon: 'fa-solid fa-masks-theater',
+    sub: 'Wayang Kulit Purwa Surakarta'
+  },
+  'pitutur': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Pitutur Luhur & Kuis',
+    icon: 'fa-solid fa-quote-left',
+    sub: 'Falsafah Luhur & Uji Wawasan'
+  },
+  'pustaka': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Pustaka Digital',
+    icon: 'fa-solid fa-book-bookmark',
+    sub: 'Serat Kuno & Usada Tradisi'
+  },
+  'sinengker': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Pustaka Sinengker',
+    icon: 'fa-solid fa-shield-halved',
+    sub: 'Kompas Danyang 360°'
+  },
+  'laporan': {
+    category: { label: 'Laporan & Ekspor', icon: 'fa-solid fa-file-pdf' },
+    title: 'Pusat Laporan Keraton',
+    icon: 'fa-solid fa-file-pdf',
+    sub: 'Dokumen Resmi & Piagam'
+  }
+};
+
+/**
+ * Merender Breadcrumb bergaya Windows Explorer berdasarkan tab aktif dan sub-level opsional
+ * @param {string} tabId 
+ * @param {string|null} subTitle 
+ */
+function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
+  const container = document.getElementById('breadcrumbTrail');
+  const summaryEl = document.getElementById('breadcrumbPathSummary');
+  if (!container) return;
+
+  const info = BREADCRUMB_MAP[tabId] || {
+    category: null,
+    title: tabId.charAt(0).toUpperCase() + tabId.slice(1),
+    icon: 'fa-solid fa-folder',
+    sub: null
+  };
+
+  const segments = [];
+
+  // Root / Home Segment (Selalu ada, bisa diklik untuk pulang ke Beranda)
+  segments.push({
+    label: 'Beranda',
+    icon: 'fa-solid fa-house',
+    action: () => switchTab('beranda'),
+    isCurrent: tabId === 'beranda' && !subTitle
+  });
+
+  // Category Level (jika ada grup induknya, misal "Wektu & Penanggalan")
+  if (info.category && tabId !== 'beranda') {
+    segments.push({
+      label: info.category.label,
+      icon: info.category.icon,
+      action: null, // Virtual category folder
+      isCurrent: false
+    });
+  }
+
+  // Module / Tab Level
+  if (tabId !== 'beranda') {
+    segments.push({
+      label: info.title,
+      icon: info.icon,
+      action: subTitle ? () => switchTab(tabId) : null,
+      isCurrent: !subTitle
+    });
+  }
+
+  // Deep Sub-level (jika ada sub-fitur atau kalkulasi aktif)
+  const activeSub = subTitle || info.sub;
+  if (activeSub && tabId !== 'beranda') {
+    segments.push({
+      label: activeSub,
+      icon: 'fa-solid fa-file-lines',
+      action: null,
+      isCurrent: true
+    });
+  }
+
+  // Bangun elemen HTML Breadcrumb bergaya Windows Explorer
+  let html = '';
+  segments.forEach((seg, idx) => {
+    const isLast = idx === segments.length - 1;
+    const isClickable = !isLast && typeof seg.action === 'function';
+
+    html += `
+      <div class="breadcrumb-item inline-flex items-center gap-1.5 shrink-0 ${isLast ? 'text-prada font-bold' : 'text-sogan-300'}">
+        ${idx > 0 ? `<i class="fa-solid fa-chevron-right text-[9px] text-sogan-500 mx-1 select-none opacity-80" aria-hidden="true"></i>` : ''}
+        ${isClickable ? `
+          <button
+            type="button"
+            onclick="(${seg.action.toString()})()"
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg hover:bg-sogan-900/90 hover:text-prada transition duration-150 cursor-pointer focus:outline-none focus:ring-1 focus:ring-prada/40 group"
+            title="Lompat ke ${seg.label}"
+          >
+            <i class="${seg.icon} text-[10px] text-sogan-400 group-hover:text-amber-300 transition-colors"></i>
+            <span class="hover:underline underline-offset-2">${seg.label}</span>
+          </button>
+        ` : `
+          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg ${isLast ? 'bg-prada/15 text-amber-200 border border-prada/30' : 'text-sogan-400'}">
+            <i class="${seg.icon} text-[10px] ${isLast ? 'text-amber-300' : 'text-sogan-500'}"></i>
+            <span class="truncate max-w-[200px] sm:max-w-none">${seg.label}</span>
+          </span>
+        `}
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  // Update Windows Explorer path summary: JagadJawa:\Wektu\Kalender Jawa
+  if (summaryEl) {
+    const pathParts = ['JagadJawa:'];
+    if (info.category) pathParts.push(info.category.label.split('&')[0].trim());
+    if (tabId !== 'beranda') pathParts.push(info.title);
+    if (activeSub && tabId !== 'beranda') pathParts.push(activeSub.split('&')[0].trim());
+    summaryEl.textContent = pathParts.join('\\');
+  }
+}
+
 // Global Navigasi Kembali & Browser History Sync
 function navigasiKembali() {
   if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -171,13 +403,12 @@ if (typeof window !== 'undefined') {
     return 'beranda';
   };
 
-  // Listener popstate (tombol back/forward browser & UI)
+  // Listener popstate (tombol back/forward browser & UI native navigation)
   window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.tab && document.getElementById(`tab-${event.state.tab}`)) {
-      switchTab(event.state.tab, false);
-    } else {
-      switchTab(resolveCurrentHashTab(), false);
-    }
+    const targetTab = (event.state && event.state.tab && document.getElementById(`tab-${event.state.tab}`))
+      ? event.state.tab
+      : resolveCurrentHashTab();
+    switchTab(targetTab, false);
   });
 
   // Listener hashchange (sinkronisasi langsung jika URL hash diubah / link routing)
@@ -203,6 +434,11 @@ if (typeof window !== 'undefined') {
           switchTab(tabId);
         }
       }
+    });
+    // Re-render breadcrumb if language changes
+    window.addEventListener('language-changed', () => {
+      const currentTab = resolveCurrentHashTab();
+      renderBreadcrumb(currentTab);
     });
   };
 
@@ -469,6 +705,7 @@ if (typeof window !== 'undefined') {
   window.downloadElementAsPng = downloadElementAsPng;
   window.toggleNavDropdown = toggleNavDropdown;
   window.closeAllNavDropdowns = closeAllNavDropdowns;
+  window.renderBreadcrumb = renderBreadcrumb;
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -480,7 +717,8 @@ if (typeof module !== 'undefined' && module.exports) {
     printSection,
     downloadElementAsPng,
     toggleNavDropdown,
-    closeAllNavDropdowns
+    closeAllNavDropdowns,
+    renderBreadcrumb
   };
 }
 
@@ -493,7 +731,8 @@ export {
   printSection,
   downloadElementAsPng,
   toggleNavDropdown,
-  closeAllNavDropdowns
+  closeAllNavDropdowns,
+  renderBreadcrumb
 };
 
 export default {
@@ -505,5 +744,6 @@ export default {
   printSection,
   downloadElementAsPng,
   toggleNavDropdown,
-  closeAllNavDropdowns
+  closeAllNavDropdowns,
+  renderBreadcrumb
 };

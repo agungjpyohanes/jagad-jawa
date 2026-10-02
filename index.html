@@ -666,8 +666,21 @@
     </div>
   </header>
 
+  <!-- ==================== BREADCRUMB NAVIGATION (GAYA WINDOWS EXPLORER) ==================== -->
+  <nav id="appBreadcrumbNav" aria-label="Breadcrumb Navigation" class="w-[calc(100%-1rem)] sm:w-[calc(100%-1.5rem)] max-w-7xl mx-auto px-1 sm:px-2 -mt-1 mb-3">
+    <div class="breadcrumb-bar flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl bg-[#0E131E]/80 backdrop-blur-md border border-prada/25 text-xs text-sogan-300 shadow-sm overflow-x-auto select-none font-sans">
+      <div id="breadcrumbTrail" class="flex items-center flex-nowrap gap-1.5 min-w-0 overflow-x-auto py-0.5 scrollbar-thin">
+        <!-- Render dinamis via renderBreadcrumb() di navigation.js -->
+      </div>
+      <div class="hidden sm:flex items-center gap-1.5 text-[10px] text-sogan-400 font-mono shrink-0 pl-2 border-l border-sogan-800/60">
+        <i class="fa-regular fa-compass text-prada"></i>
+        <span id="breadcrumbPathSummary">JagadJawa:\\Beranda</span>
+      </div>
+    </div>
+  </nav>
+
   <!-- ==================== WADAH KONTEN UTAMA ==================== -->
-  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 flex-grow w-full min-w-0">
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full min-w-0">
 
     <!-- ========================================================================= -->
     <!-- TAB 1: BERANDA -->
