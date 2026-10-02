@@ -14,6 +14,7 @@
 
 import { getSapaDinaData } from './sapa-dina-engine.js';
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { getLanguage, getBilingualText } from '../../ui/i18n.js';
 
 // ─── KONSTANTA ────────────────────────────────────────────────────────────────
 const LS_KEY_DISMISSED = 'jagadjawa_sapa_dismissed';
@@ -491,6 +492,11 @@ function renderCollapsedStrip(containerId, data) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  const currentLang = getLanguage();
+  const isJv = (currentLang === 'jv');
+  const labelHariIni = isJv ? 'Sapa Dina dinten punika:' : 'Sapa Dina hari ini:';
+  const btnLihatLagi = isJv ? 'Pirsani malih' : 'Lihat lagi';
+
   container.innerHTML = `
     <div class="w-full flex items-center justify-between gap-3 px-4 py-2.5
                 rounded-xl border border-prada/20 bg-sogan-950/60
@@ -499,7 +505,7 @@ function renderCollapsedStrip(containerId, data) {
       <div class="flex items-center gap-2.5 min-w-0">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
         <span class="font-semibold text-prada/80 truncate">
-          Sapa Dina hari ini:
+          ${labelHariIni}
         </span>
         <span class="text-sogan-200 truncate">
           ${data.wetonDisplay} &middot; Neptu ${data.neptu} &middot; Wuku ${data.wukuDisplay}
@@ -511,10 +517,10 @@ function renderCollapsedStrip(containerId, data) {
                border border-prada/30 bg-sogan-900 hover:bg-sogan-800
                text-prada hover:text-prada-light font-semibold transition-all duration-200
                focus:outline-none focus:ring-1 focus:ring-prada/40"
-        title="Tampilkan kembali Sapa Dina"
-        aria-label="Tampilkan kembali Sapa Dina">
+        title="${btnLihatLagi}"
+        aria-label="${btnLihatLagi}">
         <i class="fa-solid fa-chevron-down text-[9px]"></i>
-        <span>Lihat lagi</span>
+        <span>${btnLihatLagi}</span>
       </button>
     </div>
   `;
@@ -540,6 +546,14 @@ function renderExpandedCard(containerId, data) {
         ? pranata.pratandhaAlam.substring(0, 118) + '…'
         : pranata.pratandhaAlam)
     : '';
+
+  const currentLang = getLanguage();
+  const isJv = (currentLang === 'jv');
+  const labelTutup = isJv ? 'Tutup dinten punika' : 'Tutup hari ini';
+  const labelWetonTitle = isJv ? 'Weton Pasaran Dinten Punika' : 'Weton Pasaran Hari Ini';
+  const labelPetungNeptu = isJv ? 'Pétung Neptu' : 'Perhitungan Neptu';
+  const labelTahunJawa = isJv ? 'Taun Jawi' : 'Tahun Jawa';
+  const labelArahKolo = isJv ? 'Arah Kolo (Dununge Kala)' : 'Arah Kala (Letak Kala)';
 
   container.innerHTML = `
     <!-- Sapa Dina Card (Royal Keraton Adiluhung) -->
@@ -641,10 +655,10 @@ function renderExpandedCard(containerId, data) {
                  text-sogan-400 hover:text-sogan-200 text-[11px] font-medium
                  transition-all duration-200
                  focus:outline-none focus:ring-1 focus:ring-prada/30"
-          title="Tutup Sapa Dina hari ini"
-          aria-label="Tutup Sapa Dina hari ini">
+          title="${labelTutup}"
+          aria-label="${labelTutup}">
           <i class="fa-solid fa-xmark text-[10px]"></i>
-          <span class="hidden sm:inline">Tutup hari ini</span>
+          <span class="hidden sm:inline">${labelTutup}</span>
         </button>
       </div>
 
@@ -668,7 +682,7 @@ function renderExpandedCard(containerId, data) {
               </span>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="font-mono text-[10px] uppercase tracking-widest text-prada/70 mb-0.5">Weton Pasaran Dina</div>
+              <div class="font-mono text-[10px] uppercase tracking-widest text-prada/70 mb-0.5">${labelWetonTitle}</div>
               <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text leading-tight tracking-wide drop-shadow-sm">
                 ${wetonDisplay}
               </h2>
@@ -691,7 +705,7 @@ function renderExpandedCard(containerId, data) {
           <!-- Breakdown Neptu -->
           <div class="px-3 py-2 rounded-xl bg-sogan-900/50 border border-sogan-800/60">
             <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider mb-1">
-              Petung Neptu
+              ${labelPetungNeptu}
             </div>
             <div class="text-[12px] text-sogan-200 font-medium">
               ${neptuBreakdown}
@@ -708,7 +722,7 @@ function renderExpandedCard(containerId, data) {
               </div>
             </div>
             <div class="px-3 py-2.5 rounded-xl bg-sogan-900/40 border border-sogan-800/50">
-              <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider">Tahun Jawa</div>
+              <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider">${labelTahunJawa}</div>
               <div class="text-sm font-bold text-sogan-100 mt-0.5">
                 ${tahunAJ} AJ
                 <span class="text-sogan-400 font-normal text-[10px]">${tahunSiklus}</span>
@@ -722,7 +736,7 @@ function renderExpandedCard(containerId, data) {
             <div class="flex items-center justify-between">
               <div class="font-mono text-[10px] font-bold uppercase tracking-wider ${data.arahKolo.isNgisor ? 'text-red-400' : 'text-amber-400'} flex items-center gap-1.5">
                 <i class="fa-solid fa-compass ${data.arahKolo.isNgisor ? 'text-red-400 animate-pulse' : 'text-amber-400'}"></i>
-                <span>Arah Kolo (Dununge Kala)</span>
+                <span>${labelArahKolo}</span>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${data.arahKolo.isNgisor ? 'bg-red-900/70 text-red-200 border border-red-600/60' : 'bg-sogan-950 text-prada border border-prada/40'} font-mono">
                 ${data.arahKolo.icon} ${data.arahKolo.arahJawa}

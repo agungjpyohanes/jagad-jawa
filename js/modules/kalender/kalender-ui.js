@@ -44,6 +44,7 @@ import { illustrationPath } from '../../data/dewa-kanon.js';
 import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
 import { getWukuPetenget } from '../../data/wuku-petenget-db.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
+import { getLanguage, getBilingualText, t } from '../../ui/i18n.js';
 
 let currentFilterType = 'all';
 
@@ -569,6 +570,8 @@ export function bukaDetailTanggalJawa(y, m, d) {
   }
 
   // 4. Dino Gede Status
+  const currentLang = getLanguage();
+  const isJv = (currentLang === 'jv');
   const dinoGedeObj = checkDinoGede(info.wukuId, info.weekdayId, info.pasaranId, info.hijri[0], info.hijri[1]);
   const elBoxDinoGede = document.getElementById('modalBoxDinoGede');
   const elIconDinoGede = document.getElementById('modalIconDinoGede');
@@ -578,13 +581,19 @@ export function bukaDetailTanggalJawa(y, m, d) {
   if (dinoGedeObj.isGede) {
     if (elBoxDinoGede) elBoxDinoGede.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-amber-500/20 border-amber-400 text-amber-200 shadow-md shadow-amber-500/10';
     if (elIconDinoGede) elIconDinoGede.textContent = '★';
-    if (elTitleDinoGede) elTitleDinoGede.textContent = `DINO GEDE: ${dinoGedeObj.label.toUpperCase()}`;
-    if (elDescDinoGede) elDescDinoGede.textContent = 'Dina wigati lan sakral ing petungan pawukon & penanggalan Jawa.';
+    if (elTitleDinoGede) elTitleDinoGede.textContent = isJv
+      ? `DINO GEDE: ${dinoGedeObj.label.toUpperCase()}`
+      : `HARI BESAR: ${dinoGedeObj.label.toUpperCase()}`;
+    if (elDescDinoGede) elDescDinoGede.textContent = isJv
+      ? 'Dina wigati lan sakral ing petungan pawukon & penanggalan Jawa.'
+      : 'Hari penting dan sakral dalam perhitungan pawukon & penanggalan Jawa.';
   } else {
     if (elBoxDinoGede) elBoxDinoGede.className = 'p-3 rounded-xl border flex items-center gap-2.5 bg-sogan-950/60 border-sogan-800 text-sogan-400';
     if (elIconDinoGede) elIconDinoGede.textContent = '✧';
-    if (elTitleDinoGede) elTitleDinoGede.textContent = 'DINA LUMRAH';
-    if (elDescDinoGede) elDescDinoGede.textContent = 'Boten klebet pengetan Dino Gede khusus.';
+    if (elTitleDinoGede) elTitleDinoGede.textContent = isJv ? 'DINA LUMRAH' : 'HARI BIASA';
+    if (elDescDinoGede) elDescDinoGede.textContent = isJv
+      ? 'Boten klebet pengetan Dino Gede khusus.'
+      : 'Tidak termasuk peringatan Hari Besar khusus.';
   }
 
   // 5. Ala / Becik Status
@@ -602,22 +611,30 @@ export function bukaDetailTanggalJawa(y, m, d) {
     if (elIconAlaBecik) elIconAlaBecik.textContent = '▲';
     if (elTitleAlaBecik) {
       elTitleAlaBecik.className = 'font-bold text-xs uppercase tracking-wide text-red-100';
-      elTitleAlaBecik.textContent = `STATUS: ALA / NAHAS (▲ ${code ? code + ' Ala' : 'Ala'})`;
+      elTitleAlaBecik.textContent = isJv
+        ? `STATUS: ALA / NAHAS (▲ ${code ? code + ' Ala' : 'Ala'})`
+        : `STATUS: HARI BURUK / PANTANGAN (▲ ${code ? code + ' Buruk' : 'Buruk'})`;
     }
     if (elDescAlaBecik) {
       elDescAlaBecik.className = 'text-[11px] text-red-100 mt-0.5 leading-tight font-medium';
-      elDescAlaBecik.textContent = 'Dina awon tumrap adeg griya, mantu, utawi lelungan tebih.';
+      elDescAlaBecik.textContent = isJv
+        ? 'Dina awon tumrap adeg griya, mantu, utawi lelungan tebih.'
+        : 'Hari yang dihindari untuk mendirikan rumah, pernikahan, atau bepergian jauh.';
     }
   } else {
     if (elBoxAlaBecik) elBoxAlaBecik.className = 'p-3.5 rounded-xl border flex items-center gap-3 bg-emerald-950/90 border-emerald-500 text-emerald-50 shadow-lg shadow-emerald-950/30';
     if (elIconAlaBecik) elIconAlaBecik.textContent = '✓';
     if (elTitleAlaBecik) {
       elTitleAlaBecik.className = 'font-bold text-xs uppercase tracking-wide text-emerald-100';
-      elTitleAlaBecik.textContent = `STATUS: BECIK / RAHAYU (✓ Becik)`;
+      elTitleAlaBecik.textContent = isJv
+        ? `STATUS: BECIK / RAHAYU (✓ Becik)`
+        : `STATUS: HARI BAIK / RAHAYU (✓ Baik)`;
     }
     if (elDescAlaBecik) {
       elDescAlaBecik.className = 'text-[11px] text-emerald-100 mt-0.5 leading-tight font-medium';
-      elDescAlaBecik.textContent = 'Dina becik kanggé maneka warni hajat, lelungan, lan pakaryan.';
+      elDescAlaBecik.textContent = isJv
+        ? 'Dina becik kanggé maneka warni hajat, lelungan, lan pakaryan.'
+        : 'Hari baik untuk berbagai hajat, bepergian, dan memulai pekerjaan.';
     }
   }
 

@@ -10,9 +10,14 @@ const rootDir = path.resolve(__dirname, '..');
 
 import {
   DICTIONARY,
+  NAV_DICTIONARY,
+  CONTENT_DICTIONARY,
+  isMenuKey,
   getLanguage,
   setLanguage,
-  toggleLanguage
+  toggleLanguage,
+  applyLanguage,
+  t
 } from '../js/ui/i18n.js';
 
 import {
@@ -108,6 +113,41 @@ describe('Fase H — UX: Toggle Label Indonesia & Basa Jawa (Tanpa Mutasi Data)'
     assert.strictEqual(tglSetelahGantiBahasa.wukuName, tglAwal.wukuName);
     assert.strictEqual(tglSetelahGantiBahasa.tahunAJ, tglAwal.tahunAJ);
     assert.strictEqual(tglSetelahGantiBahasa.bulanJawa, tglAwal.bulanJawa);
+  });
+
+  it('jawa-v11: menu navigasi utama wajib dikunci tetap Bahasa Indonesia (ID) bahkan dalam mode Basa Jawi (JV)', () => {
+    // Mode ID awal
+    setLanguage('id');
+    assert.strictEqual(getLanguage(), 'id');
+    assert.strictEqual(t('nav_beranda'), 'Beranda');
+    assert.strictEqual(t('nav_kalender'), 'Kalender Jawa');
+    assert.strictEqual(t('nav_nujum'), 'Nujum & Primbon');
+    assert.strictEqual(t('cal_saring_label'), 'Saring Hari:');
+
+    // Switch ke Mode JV
+    setLanguage('jv');
+    assert.strictEqual(getLanguage(), 'jv');
+
+    // ATURAN KETAT: Label Menu Navigasi Utama TETAP Bahasa Indonesia (ID)
+    assert.strictEqual(t('nav_beranda'), 'Beranda');
+    assert.strictEqual(t('nav_kalender'), 'Kalender Jawa');
+    assert.strictEqual(t('nav_nujum'), 'Nujum & Primbon');
+    assert.strictEqual(t('nav_budaya'), 'Seni & Budaya');
+    assert.strictEqual(t('nav_aksara'), 'Studio Aksara Jawa');
+    assert.strictEqual(t('nav_wayang'), 'Panggung Kelir Wayang');
+
+    // Namun deskripsi & isi konten modul beralih ke Basa Jawi yang otentik
+    assert.strictEqual(t('cal_saring_label'), 'Saring Dina:');
+    assert.strictEqual(t('cal_filter_ijo'), 'Dino Ijo (Becik)');
+    assert.strictEqual(t('tab_wuku_desc'), 'Njlajahi siklus 30 wuku wiwit Sinta dumugi Watugunung sesarengan Bathara Pangayom lan 4 pilar petenget.');
+
+    // Verifikasi pemisahan kamus dan isMenuKey
+    assert.strictEqual(isMenuKey('nav_beranda'), true);
+    assert.strictEqual(isMenuKey('nav_kalender'), true);
+    assert.strictEqual(isMenuKey('cal_saring_label'), false);
+    assert.strictEqual(isMenuKey('tab_wuku_desc'), false);
+    assert.ok(NAV_DICTIONARY.nav_beranda);
+    assert.ok(CONTENT_DICTIONARY.cal_saring_label);
   });
 });
 
