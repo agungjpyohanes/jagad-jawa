@@ -1,0 +1,122 @@
+[
+  {
+    "no": 1, "nama": { "id": "Batara Suryo", "jv": "Batara Suryo" }, "dewa": { "id": "Sang Hyang Surya", "jv": "Sang Hyang Surya" },
+    "watak": { "id": "Manja, sangat bergantung pada orang lain, kadang berani nekat, firasatnya tajam dan terang hatinya.", "jv": "Manja, sangat bergantung marang tiyang sanes, kadhang wani nekat, firasatipun tajem lan terang manahipun." },
+    "karier": { "id": "Disenangi atasan jika beruntung. Wiraswasta jangan berspekulasi.", "jv": "Disenengi atasan menawi beruntung. Wiraswasta mboten prayogi spekulasi." },
+    "kelemahan": { "id": "Kurang mandiri, kurang gigih berjuang.", "jv": "Kurang mandiri, kurang gigih berjuang." },
+    "kesehatan": { "id": "Takut air, rentan sakit panas/demam.", "jv": "Taket toya, rentan sakit panas/demam." },
+    "keluarga": { "id": "Bila bertemu jodoh akan banyak anak, rumah tangga tentram.", "jv": "Menawi ketemu jodho badhe akeh anak, gesang kulawarga tentrem." },
+    "bahaya": { "id": "Rentan difitnah orang karena ada yang iri hati.", "jv": "Rentan difitnah tiyang amargi wonten ingkang iri ati." },
+    "solusi": { "id": "Mengandalkan ketajaman firasat dan kejernihan hati.", "jv": "Ngandelaken ketajaman firasat lan kejernihan manah." }
+  },
+  {
+    "no": 2, "nama": { "id": "Batara Bromo", "jv": "Batara Bromo" }, "dewa": { "id": "Sang Hyang Brahma", "jv": "Sang Hyang Brahma" },
+    "watak": { "id": "Ingin berkuasa, keras hati, angkuh, berani membuat terobosan.", "jv": "Pengin berkuasa, keras ati, angkuh, wani damel terobosan." },
+    "karier": { "id": "Karier cepat menanjak, mendapat dukungan pejabat tinggi.", "jv": "Karier rikat menanjak, pikantuk dukungan pejabat inggil." },
+    "kelemahan": { "id": "Angkuh, terlalu mudah percaya kepada orang.", "jv": "Angkuh, kakehan gampil percaya marang tiyang." },
+    "kesehatan": { "id": "Fisik kuat dan tidak mudah terserang penyakit.", "jv": "Fisik kiyat lan mboten gampil terserang penyakit." },
+    "keluarga": { "id": "Bila bertemu jodoh akan rukun dan menjadi pasangan teladan.", "jv": "Menawi ketemu jodho gesangipun rukun lan dados pasangan teladan." },
+    "bahaya": { "id": "Mudah terkena senjata atau benda tajam.", "jv": "Gampil kenging sanjata utawi benda tajam." },
+    "solusi": { "id": "Harus waspada, jangan terlalu percaya kepada orang lain.", "jv": "Kedah waspada, mboten kakehan percaya marang tiyang sanes." }
+  },
+  {
+    "no": 3, "nama": { "id": "Batari Durga", "jv": "Batari Durga" }, "dewa": { "id": "Sang Hyang Durga", "jv": "Sang Hyang Durga" },
+    "watak": { "id": "Gampang bingung, sulit berkonsentrasi.", "jv": "Gampang bingung, angel konsentrasi." },
+    "karier": { "id": "Sulit fokus dalam pekerjaan, sering berganti bidang.", "jv": "Angel fokus ing pakaryan, kerep gantos bidang." },
+    "kelemahan": { "id": "Mudah bingung dan tidak konsisten.", "jv": "Gampang bingung lan mboten konsisten." },
+    "kesehatan": { "id": "Rentan stres dan gangguan saraf.", "jv": "Rentan stres lan gangguan saraf." },
+    "keluarga": { "id": "Rumah tangga sering gonjang-ganjing.", "jv": "Gesang kulawarga kerep gonjang-ganjing." },
+    "bahaya": { "id": "Rentan kecelakaan akibat kurang fokus.", "jv": "Rentan kacilakan amargi kirang fokus." },
+    "solusi": { "id": "Perlu meditasi dan latihan konsentrasi.", "jv": "Perlu meditasi lan latihan konsentrasi." }
+  },
+  {
+    "no": 4, "nama": { "id": "Batara Asmoro", "jv": "Batara Asmoro" }, "dewa": { "id": "Sang Hyang Asmara", "jv": "Sang Hyang Asmara" },
+    "watak": { "id": "Selalu waspada, hemat, perasa.", "jv": "Tansah waspada, hemat, perasa." },
+    "karier": { "id": "Cocok di bidang keuangan, akuntansi.", "jv": "Cocog ing bidang keuangan, akuntansi." },
+    "kelemahan": { "id": "Terlalu hemat hingga kikir.", "jv": "Kakehan hemat ngantos kikir." },
+    "kesehatan": { "id": "Rentan penyakit jantung.", "jv": "Rentan penyakit jantung." },
+    "keluarga": { "id": "Rumah tangga stabil namun kurang romantis.", "jv": "Gesang kulawarga stabil nanging kirang romantis." },
+    "bahaya": { "id": "Rentan masalah keuangan akibat terlalu pelit.", "jv": "Rentan masalah keuangan amargi kakehan pelit." },
+    "solusi": { "id": "Belajar berbagi dan berinvestasi.", "jv": "Sinau berbagi lan investasi." }
+  },
+  {
+    "no": 5, "nama": { "id": "Batara Isworo", "jv": "Batara Isworo" }, "dewa": { "id": "Sang Hyang Iswara", "jv": "Sang Hyang Iswara" },
+    "watak": { "id": "Ramah, senang bergurau, percaya diri.", "jv": "Ramah, seneng guyon, percaya diri." },
+    "karier": { "id": "Cocok di bidang hiburan, marketing.", "jv": "Cocog ing bidang hiburan, marketing." },
+    "kelemahan": { "id": "Terlalu percaya diri hingga sombong.", "jv": "Kakehan percaya diri ngantos sombong." },
+    "kesehatan": { "id": "Fisik kuat namun rentan cedera.", "jv": "Fisik kiyat nanging rentan cedera." },
+    "keluarga": { "id": "Rumah tangga ramai dan menyenangkan.", "jv": "Gesang kulawarga rame lan nyenengaken." },
+    "bahaya": { "id": "Rentan konflik akibat kurang serius.", "jv": "Rentan konflik amargi kirang serius." },
+    "solusi": { "id": "Belajar lebih serius dan bertanggung jawab.", "jv": "Sinau langkung serius lan tanggung jawab." }
+  },
+  {
+    "no": 6, "nama": { "id": "Batari Nagagini", "jv": "Batari Nagagini" }, "dewa": { "id": "Sang Hyang Nagagini", "jv": "Sang Hyang Nagagini" },
+    "watak": { "id": "Suka mencampuri urusan orang lain.", "jv": "Seneng nyampuri urusan tiyang sanes." },
+    "karier": { "id": "Cocok di bidang HR, konsultan.", "jv": "Cocog ing bidang HR, konsultan." },
+    "kelemahan": { "id": "Terlalu ikut campur urusan orang.", "jv": "Kakehan melu-melu urusan tiyang." },
+    "kesehatan": { "id": "Rentan penyakit pencernaan.", "jv": "Rentan penyakit pencernaan." },
+    "keluarga": { "id": "Rumah tangga sering campur tangan mertua.", "jv": "Gesang kulawarga kerep campur tangan mertua." },
+    "bahaya": { "id": "Rentan fitnah dan gosip.", "jv": "Rentan fitnah lan gosip." },
+    "solusi": { "id": "Belajar menjaga privasi dan batasan.", "jv": "Sinau njagi privasi lan watesan." }
+  },
+  {
+    "no": 7, "nama": { "id": "Batara Kamajaya", "jv": "Batara Kamajaya" }, "dewa": { "id": "Sang Hyang Kamajaya", "jv": "Sang Hyang Kamajaya" },
+    "watak": { "id": "Ramah, disenangi, penuh kasih sayang.", "jv": "Ramah, disenengi, penuh kasih sayang." },
+    "karier": { "id": "Cocok di bidang seni, desain.", "jv": "Cocog ing bidang seni, desain." },
+    "kelemahan": { "id": "Terlalu lembut hingga kurang tegas.", "jv": "Kakehan lembut ngantos kirang tegas." },
+    "kesehatan": { "id": "Rentan penyakit kulit.", "jv": "Rentan penyakit kulit." },
+    "keluarga": { "id": "Rumah tangga harmonis dan romantis.", "jv": "Gesang kulawarga harmonis lan romantis." },
+    "bahaya": { "id": "Rentan godaan dan perselingkuhan.", "jv": "Rentan godaan lan perselingkuhan." },
+    "solusi": { "id": "Belajar tegas dan setia.", "jv": "Sinau tegas lan setia." }
+  },
+  {
+    "no": 8, "nama": { "id": "Batari Sri", "jv": "Batari Sri" }, "dewa": { "id": "Sang Hyang Sri", "jv": "Sang Hyang Sri" },
+    "watak": { "id": "Tutur kata sejuk, berhati pemurah.", "jv": "Tembungipun sejuk, atinipun pemurah." },
+    "karier": { "id": "Cocok di bidang pertanian, kuliner.", "jv": "Cocog ing bidang pertanian, kuliner." },
+    "kelemahan": { "id": "Terlalu pemurah hingga boros.", "jv": "Kakehan pemurah ngantos boros." },
+    "kesehatan": { "id": "Rentan obesitas.", "jv": "Rentan obesitas." },
+    "keluarga": { "id": "Rumah tangga sejahtera dan makmur.", "jv": "Gesang kulawarga sejahtera lan makmur." },
+    "bahaya": { "id": "Rentan kerugian finansial akibat boros.", "jv": "Rentan kerugian finansial amargi boros." },
+    "solusi": { "id": "Belajar berhemat dan investasi.", "jv": "Sinau hemat lan investasi." }
+  },
+  {
+    "no": 9, "nama": { "id": "Batara Bayu", "jv": "Batara Bayu" }, "dewa": { "id": "Sang Hyang Bayu", "jv": "Sang Hyang Bayu" },
+    "watak": { "id": "Dinamis, pantang menyerah, tidak betah diam.", "jv": "Dinamis, pantang nyerah, ora betah meneng." },
+    "karier": { "id": "Cocok di bidang olahraga, ekspedisi.", "jv": "Cocog ing bidang olahraga, ekspedisi." },
+    "kelemahan": { "id": "Terlalu aktif hingga kurang istirahat.", "jv": "Kakehan aktif ngantos kirang istirahat." },
+    "kesehatan": { "id": "Rentan cedera otot dan sendi.", "jv": "Rentan cedera otot lan sendi." },
+    "keluarga": { "id": "Rumah tangga dinamis namun sering jauh.", "jv": "Gesang kulawarga dinamis nanging kerep tebih." },
+    "bahaya": { "id": "Rentan kecelakaan saat bepergian.", "jv": "Rentan kacilakan menawi lelungan." },
+    "solusi": { "id": "Belajar istirahat dan bersama keluarga.", "jv": "Sinau istirahat lan sesarengan kulawarga." }
+  },
+  {
+    "no": 10, "nama": { "id": "Batara Wisnu", "jv": "Batara Wisnu" }, "dewa": { "id": "Sang Hyang Wisnu", "jv": "Sang Hyang Wisnu" },
+    "watak": { "id": "Bijaksana, pandai, baik hati.", "jv": "Bijaksana, pinter, ati sae." },
+    "karier": { "id": "Cocok di bidang pendidikan, pemerintahan.", "jv": "Cocog ing bidang pendidikan, pemerintahan." },
+    "kelemahan": { "id": "Terlalu bijaksana hingga ragu bertindak.", "jv": "Kakehan bijaksana ngantos ragu tumindak." },
+    "kesehatan": { "id": "Rentan penyakit mata.", "jv": "Rentan penyakit mata." },
+    "keluarga": { "id": "Rumah tangga dihormati dan disegani.", "jv": "Gesang kulawarga dihormati lan disegani." },
+    "bahaya": { "id": "Rentan politik dan intrik.", "jv": "Rentan politik lan intrik." },
+    "solusi": { "id": "Belajar tegas dan mengambil keputusan.", "jv": "Sinau tegas lan njupuk keputusan." }
+  },
+  {
+    "no": 11, "nama": { "id": "Batara Endro", "jv": "Batara Endro" }, "dewa": { "id": "Sang Hyang Indra", "jv": "Sang Hyang Indra" },
+    "watak": { "id": "Tenang, disiplin, tahu kewajiban.", "jv": "Tentrem, disiplin, ngerti kewajiban." },
+    "karier": { "id": "Cocok di bidang hukum, militer.", "jv": "Cocog ing bidang hukum, militer." },
+    "kelemahan": { "id": "Terlalu disiplin hingga kaku.", "jv": "Kakehan disiplin ngantos kaku." },
+    "kesehatan": { "id": "Rentan stres dan tekanan.", "jv": "Rentan stres lan tekanan." },
+    "keluarga": { "id": "Rumah tangga teratur namun kurang hangat.", "jv": "Gesang kulawarga teratur nanging kirang anget." },
+    "bahaya": { "id": "Rentan konflik akibat terlalu kaku.", "jv": "Rentan konflik amargi kakehan kaku." },
+    "solusi": { "id": "Belajar fleksibel dan santai.", "jv": "Sinau fleksibel lan santai." }
+  },
+  {
+    "no": 12, "nama": { "id": "Batara Yamadipati", "jv": "Batara Yamadipati" }, "dewa": { "id": "Sang Hyang Yamadipati", "jv": "Sang Hyang Yamadipati" },
+    "watak": { "id": "Disiplin tinggi, welas asih, sosial.", "jv": "Disiplin inggil, welas asih, sosial." },
+    "karier": { "id": "Cocok di bidang sosial, kemanusiaan.", "jv": "Cocog ing bidang sosial, kemanusiaan." },
+    "kelemahan": { "id": "Terlalu sosial hingga kurang waktu sendiri.", "jv": "Kakehan sosial ngantos kirang wekdal piyambak." },
+    "kesehatan": { "id": "Rentan kelelahan.", "jv": "Rentan kesel." },
+    "keluarga": { "id": "Rumah tangga dihormati dan dicintai banyak orang.", "jv": "Gesang kulawarga dihormati lan ditresnani akeh tiyang." },
+    "bahaya": { "id": "Rentan penyakit akibat kelelahan.", "jv": "Rentan penyakit amargi kesel." },
+    "solusi": { "id": "Belajar menjaga keseimbangan hidup.", "jv": "Sinau njagi keseimbangan gesang." }
+  }
+]

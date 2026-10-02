@@ -1,0 +1,1262 @@
+{
+  "Sinta": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Ngusadani, nenumbali, gawe sarat supaya murah udan, memantu masang pengasihan",
+        "id": "Mengobati, menumbali, membuat syarat supaya hujan murah, membantu memasang pengasihan"
+      },
+      "ala": {
+        "jv": "Olah kaweruh, nenandur, ngadan-adani, bebakal pekarangan",
+        "id": "Mencari ilmu, menanam, membangun, membuka lahan pekarangan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Ngusadani, nenumbali",
+        "id": "Mengobati, menumbali"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nenandur, bebakal pekarangan",
+        "id": "Menanam, membuka lahan pekarangan"
+      }
+    }
+  },
+  "Landep": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Anyabung pedang, naleni pager, gawe wisaya iwak",
+        "id": "Mengasah pedang, mengikat pagar, membuat jampi ikan"
+      },
+      "ala": {
+        "jv": "Ngalih panggonan, memantu barusahan, gawe kori",
+        "id": "Pindah tempat, membantu berusahan, membuat pintu"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Wukir": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Memantu, dandan-dandan sembarang rusak, memitran tulus",
+        "id": "Membantu, memperbaiki segala yang rusak, berteman tulus"
+      },
+      "ala": {
+        "jv": "Tetirah, nambani lelara, nenumbali, ngedegake omah",
+        "id": "Bertapa, mengobati penyakit, menumbali, mendirikan rumah"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Memantu, dandan-dandan",
+        "id": "Membantu, memperbaiki"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Kurantil": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek pawestri gelis oleh",
+        "id": "Mencari istri cepat mendapat"
+      },
+      "ala": {
+        "jv": "Memantu, nglumpukake wong ora bisa kumpul, memitran sulaya",
+        "id": "Membantu, mengumpulkan orang yang tidak bisa berkumpul, berteman yang bercekcok"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Tolu": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek pangupaya jiwa, nambani lelara, nenandur, ngalih panggonan",
+        "id": "Mencari penghidupan, mengobati penyakit, menanam, pindah tempat"
+      },
+      "ala": {
+        "jv": "Anyidra, lelungan, ngabotohan",
+        "id": "Berkhianat, bepergian, berjudi"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Golek pangupaya jiwa, nambani lelara",
+        "id": "Mencari penghidupan, mengobati penyakit"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Golek pangupaya jiwa",
+        "id": "Mencari penghidupan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nenandur",
+        "id": "Menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Gumbreg": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Bebesanan, anggaota kauntungan",
+        "id": "Bertunangan, berusaha mencari keuntungan"
+      },
+      "ala": {
+        "jv": "Nenandur kitri, ngedegake omah",
+        "id": "Menanam pohon, mendirikan rumah"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nenandur kitri, ngedegake omah",
+        "id": "Menanam pohon, mendirikan rumah"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nenandur kitri",
+        "id": "Menanam pohon"
+      }
+    }
+  },
+  "Warigalit": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Tepung prasanakan, memule marang leluhur",
+        "id": "Bertemu kerabat, memuliakan leluhur"
+      },
+      "ala": {
+        "jv": "Pagaweyan laku silib, lelungan adoh, mangsah perang",
+        "id": "Pekerjaan yang rahasia, bepergian jauh, berperang"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Pagaweyan laku silib",
+        "id": "Pekerjaan yang rahasia"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Warigagung": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Ngadegake omah, nenandur, bebesanan",
+        "id": "Mendirikan rumah, menanam, bertunangan"
+      },
+      "ala": {
+        "jv": "Lelungan, laku anenamur, ngalih panggonan",
+        "id": "Bepergian, bertapa, pindah tempat"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nenandur",
+        "id": "Menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Julungwangi": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Lunga tirakat oleh Wahyu, ambubak lemah, nenandur",
+        "id": "Pergi bertapa mendapat wahyu, membuka lahan, menanam"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, ngalih panggonan, duwe gawe",
+        "id": "Bepergian jauh, pindah tempat, punya hajatan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, ngalih panggonan",
+        "id": "Bepergian jauh, pindah tempat"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan adoh",
+        "id": "Bepergian jauh"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Ambubak lemah, nenandur",
+        "id": "Membuka lahan, menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Sungsang": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek panagupaya jiwa, ngalih panggonan, gawe prasanaan",
+        "id": "Mencari penghidupan, pindah tempat, membuat persiapan"
+      },
+      "ala": {
+        "jv": "Memenek, negor kitri, lelungan adoh suka-suka",
+        "id": "Memanjat, menebang pohon, bepergian jauh untuk bersenang-senang"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Golek panagupaya jiwa",
+        "id": "Mencari penghidupan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Golek pangupaya jiwa, nenandur",
+        "id": "Mencari penghidupan, menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Galungan": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Lunga tirakat, sesanja ora adoh, anggeguru pangawikan",
+        "id": "Pergi bertapa, niat tidak jauh, berguru ilmu"
+      },
+      "ala": {
+        "jv": "Nandur pring, lelungan adoh, nambani wong lara",
+        "id": "Menanam bambu, bepergian jauh, mengobati orang sakit"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nandur pring, lelungan adoh",
+        "id": "Menanam bambu, bepergian jauh"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nandur pring",
+        "id": "Menanam bambu"
+      }
+    }
+  },
+  "Kuningan": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek sanak, anggaota, mitulungi wong",
+        "id": "Mencari saudara, berusaha, menolong orang"
+      },
+      "ala": {
+        "jv": "Nenandur, maju omah, duwe gawe mantu",
+        "id": "Menanam, memperluas rumah, punya hajatan pernikahan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Golek sanak, anggaota",
+        "id": "Mencari saudara, berusaha"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nenandur",
+        "id": "Menanam"
+      }
+    }
+  },
+  "Langkir": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Nenandur, lelungan, bebesanan, marangi gegaman",
+        "id": "Menanam, bepergian, bertunangan, mengasah senjata"
+      },
+      "ala": {
+        "jv": "Nyidra, nandukake prakara, pancakara",
+        "id": "Berkhianat, menuduh perkara, berkelahi"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Nenandur, lelungan, bebesanan",
+        "id": "Menanam, bepergian, bertunangan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nenandur",
+        "id": "Menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Mandasiya": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Amemitran, nambani wong lara, duwe gawe mantu",
+        "id": "Berteman, mengobati orang sakit, punya hajatan pernikahan"
+      },
+      "ala": {
+        "jv": "Lelungan, golek pangupayajiwa, gawe sumur",
+        "id": "Bepergian, mencari penghidupan, membuat sumur"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Amemitran, nambani wong lara",
+        "id": "Berteman, mengobati orang sakit"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan, golek pangupayajiwa",
+        "id": "Bepergian, mencari penghidupan"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Julungpujut": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek pangupayajiwa, amilala rajakaya, nandur pala kirna",
+        "id": "Mencari penghidupan, memelihara ternak, menanam tanaman keras"
+      },
+      "ala": {
+        "jv": "Ngadan-adani, sesanja",
+        "id": "Membangun, berniat"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Golek pangupayajiwa, amilala rajakaya",
+        "id": "Mencari penghidupan, memelihara ternak"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Golek pangupayajiwa, nandur pala kirna",
+        "id": "Mencari penghidupan, menanam tanaman keras"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Pahang": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Nambani lelara, nandur samubarang, ngarah pawestri",
+        "id": "Mengobati penyakit, menanam segala sesuatu, mencari istri"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, golek pangupayajiwa, ngadan-adani",
+        "id": "Bepergian jauh, mencari penghidupan, membangun"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Nambani lelara, nandur samubarang",
+        "id": "Mengobati penyakit, menanam segala sesuatu"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, golek pangupayajiwa",
+        "id": "Bepergian jauh, mencari penghidupan"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Kuruwelut": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Nontoni, ngrancang bakal omah",
+        "id": "Melihat-lihat, merancang bakal rumah"
+      },
+      "ala": {
+        "jv": "Lelungan, dandan-dandan, nambani lelara, nandur jujutan",
+        "id": "Bepergian, memperbaiki, mengobati penyakit, menanam tanaman menjalar"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan, dandan-dandan, nambani lelara",
+        "id": "Bepergian, memperbaiki, mengobati penyakit"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nandur jujutan",
+        "id": "Menanam tanaman menjalar"
+      }
+    }
+  },
+  "Marakeh": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Nenandur, masang tumbal, dandan omah, mangun pekarangan",
+        "id": "Menanam, memasang tumbal, memperbaiki rumah, membangun pekarangan"
+      },
+      "ala": {
+        "jv": "Anggaoata, asih-asihan, alih-alihan",
+        "id": "Berusaha, saling mengasihi, saling berpindah"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nenandur, mangun pekarangan",
+        "id": "Menanam, membangun pekarangan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Tambir": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Lunga dagang, golek pangupayajiwa, nandur pala kirna",
+        "id": "Pergi berdagang, mencari penghidupan, menanam tanaman keras"
+      },
+      "ala": {
+        "jv": "Lunga tirakat, anggeguru pangawikan, mangsah perang",
+        "id": "Pergi bertapa, berguru ilmu, berperang"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Lunga dagang, golek pangupayajiwa",
+        "id": "Pergi berdagang, mencari penghidupan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Golek pangupayajiwa, nandur pala kirna",
+        "id": "Mencari penghidupan, menanam tanaman keras"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Medangkungan": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Alaki rabi, ngadegake omah, golek sarana",
+        "id": "Menikah, mendirikan rumah, mencari sarana"
+      },
+      "ala": {
+        "jv": "Nandukake para padu, anyidra",
+        "id": "Menuduh orang berkelahi, berkhianat"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Maktal": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Duwe gawe mantu, nekakake wong sambatan, dandan-dandan",
+        "id": "Punya hajatan pernikahan, memanggil orang sambatan, memperbaiki"
+      },
+      "ala": {
+        "jv": "Lelungan, ngalih panggonan, amantokake",
+        "id": "Bepergian, pindah tempat, menyelesaikan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Duwe gawe mantu, nekakake wong sambatan",
+        "id": "Punya hajatan pernikahan, memanggil orang sambatan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Wuye": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek manuk, nenandur, memule kaduluran, lelungan golek rejeki",
+        "id": "Mencari burung, menanam, memuliakan persaudaraan, bepergian mencari rezeki"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, angapus-apusi",
+        "id": "Bepergian jauh, saling menipu"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Golek manuk, nenandur, memule kaduluran",
+        "id": "Mencari burung, menanam, memuliakan persaudaraan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nenandur",
+        "id": "Menanam"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Manahil": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Lunga golek tamba/sarat, gawe bendungan, bebakal kuburan",
+        "id": "Pergi mencari obat/syarat, membuat bendungan, membuka lahan kuburan"
+      },
+      "ala": {
+        "jv": "Nibakake wiji, apek wiji, memantu, anggaoata",
+        "id": "Menabur biji, mengambil biji, membantu, berusaha"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Lunga golek tamba/sarat, gawe bendungan",
+        "id": "Pergi mencari obat/syarat, membuat bendungan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Prangbakat": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Anggaoata samaran, rawat ing pasimpenan, meminta padagangan",
+        "id": "Berusaha secara rahasia, merawat di tempat simpanan, meminta dagangan"
+      },
+      "ala": {
+        "jv": "Lelungan, ngedekake omah, nandur kitri, golek pagaweyan",
+        "id": "Bepergian, mendirikan rumah, menanam pohon, mencari pekerjaan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan, ngedekake omah, nandur kitri",
+        "id": "Bepergian, mendirikan rumah, menanam pohon"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lelungan, ngedekake omah",
+        "id": "Bepergian, mendirikan rumah"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Nandur kitri",
+        "id": "Menanam pohon"
+      }
+    }
+  },
+  "Bala": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Tilik mesan mitra, amet saraya mirukunake pawongan",
+        "id": "Menengok sahabat, mengambil sarana mendamaikan orang"
+      },
+      "ala": {
+        "jv": "Medarake pangawikan, ambabar pangajaran, dandan-dandan",
+        "id": "Menyebarkan pengetahuan, menyebar ajaran, memperbaiki"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Tilik mesan mitra, amet saraya",
+        "id": "Menengok sahabat, mengambil sarana"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Wugu": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Dandan-dandan omah, duwe gawe mantu, lungo golek rejeki",
+        "id": "Memperbaiki rumah, punya hajatan pernikahan, pergi mencari rezeki"
+      },
+      "ala": {
+        "jv": "Amemitran sulaya ing tembe, arerukunan, golek pangan",
+        "id": "Berteman yang akan bercekcok di kemudian hari, saling rukun, mencari makanan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Dandan-dandan omah, duwe gawe mantu",
+        "id": "Memperbaiki rumah, punya hajatan pernikahan"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nandur pala kependem",
+        "id": "Menanam tanaman dalam tanah"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Wayang": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Golek rejeki, anggeguru pangawikan, ulah kawignyan",
+        "id": "Mencari rezeki, berguru ilmu, mengasah keterampilan"
+      },
+      "ala": {
+        "jv": "Lunga tilik wong lara, ngadan-adani, mangsah perang",
+        "id": "Pergi menjenguk orang sakit, membangun, berperang"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lunga tilik wong lara, ngadan-adani",
+        "id": "Pergi menjenguk orang sakit, membangun"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "Golek rejeki, anggeguru pangawikan",
+        "id": "Mencari rezeki, berguru ilmu"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Kulawu": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Nambani wong lara, palakrama, wewayuhan, amemitran",
+        "id": "Mengobati orang sakit, menikah, berteman, berteman"
+      },
+      "ala": {
+        "jv": "Lelungan adoh, alih-alihan, ambukak alas",
+        "id": "Bepergian jauh, saling berpindah, membuka hutan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Nambani wong lara, palakrama",
+        "id": "Mengobati orang sakit, menikah"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Dukut": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Dandan-dandan, memangun kitri, karang kirna, golek pawestri",
+        "id": "Memperbaiki, membangun pohon, karang tanaman keras, mencari istri"
+      },
+      "ala": {
+        "jv": "Lunga golek pangupayajiwa, anggeguru pangawikan",
+        "id": "Pergi mencari penghidupan, berguru ilmu"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Dandan-dandan, memangun kitri, golek pawestri",
+        "id": "Memperbaiki, membangun pohon, mencari istri"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "Lunga golek pangupayajiwa",
+        "id": "Pergi mencari penghidupan"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  },
+  "Watugunung": {
+    "ala_becik": {
+      "becik": {
+        "jv": "Lunga golek tamba, nandur samubarang, memitran, bebesanan",
+        "id": "Pergi mencari obat, menanam segala sesuatu, berteman, bertunangan"
+      },
+      "ala": {
+        "jv": "Gawe pager pekarangan, sesimpen ing parawatan",
+        "id": "Membuat pagar pekarangan, menyimpan di perawatan"
+      }
+    },
+    "nambani": {
+      "becik": {
+        "jv": "Lunga golek tamba, nandur samubarang",
+        "id": "Pergi mencari obat, menanam segala sesuatu"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "pangupajiwa": {
+      "becik": {
+        "jv": "-",
+        "id": "-"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    },
+    "tetanen": {
+      "becik": {
+        "jv": "Nandur samubarang",
+        "id": "Menanam segala sesuatu"
+      },
+      "ala": {
+        "jv": "-",
+        "id": "-"
+      }
+    }
+  }
+}

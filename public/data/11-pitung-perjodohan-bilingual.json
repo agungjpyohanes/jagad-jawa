@@ -1,0 +1,72 @@
+{
+  "metode_I_panca_suda": {
+    "nama": { "id": "Metode I: Panca Suda (Modulo 4)", "jv": "Metode I: Panca Suda (Modulo 4)" },
+    "rumus": { "id": "Sisa pembagian total neptu penganten dengan 4", "jv": "Sisa pambagining total neptu penganten kaliyan 4" },
+    "hasil": [
+      { "sisa": 0, "nama": "PUNGGEL", "arti": { "id": "Sering bertengkar, berpisah/putus", "jv": "Padudon, pisah/pegat" }, "status": "buruk" },
+      { "sisa": 1, "nama": "GENTHA", "arti": { "id": "Sulit punya anak, tapi mudah rezeki", "jv": "Larang anak, gampang rejeki" }, "status": "campur" },
+      { "sisa": 2, "nama": "GEMBILI", "arti": { "id": "Banyak anak, rezeki pas-pasan", "jv": "Sugih anak, rejeki pas-pasan" }, "status": "buruk" },
+      { "sisa": 3, "nama": "SRI", "arti": { "id": "Kaya raya, hidup tenteram", "jv": "Sugih rejeki, ayem tentrem" }, "status": "baik" }
+    ]
+  },
+  "metode_II_pancawardhana": {
+    "nama": { "id": "Metode II: Pancawardhana (Modulo 5)", "jv": "Metode II: Pancawardhana (Modulo 5)" },
+    "rumus": { "id": "Sisa pembagian total neptu dengan 5", "jv": "Sisa pambagining total neptu kaliyan 5" },
+    "hasil": [
+      { "sisa": 0, "nama": "PATI", "arti": { "id": "Melarat, banyak cobaan", "jv": "Melarat" }, "status": "buruk" },
+      { "sisa": 1, "nama": "SRI", "arti": { "id": "Cukup sandang pangan", "jv": "Sandang pangan" }, "status": "baik" },
+      { "sisa": 2, "nama": "LUNGGUH", "arti": { "id": "Berderajat, dihormati", "jv": "Kajen kelingan" }, "status": "baik" },
+      { "sisa": 3, "nama": "GEDHONG", "arti": { "id": "Tenteram, ayem", "jv": "Tentrem ayem" }, "status": "baik" },
+      { "sisa": 4, "nama": "LARA", "arti": { "id": "Sesak, rekasa", "jv": "Rekasa" }, "status": "buruk" }
+    ]
+  },
+  "metode_III_petung_salaki_rabi": {
+    "nama": { "id": "Metode III: Petung Salaki Rabi (Modulo 7)", "jv": "Metode III: Petung Salaki Rabi (Modulo 7)" },
+    "rumus": { "id": "Sisa pembagian total neptu dengan 7", "jv": "Sisa pambagining total neptu kaliyan 7" },
+    "hasil": [
+      { "sisa": 0, "nama": "LEBU KETIYUP ANGIN", "arti": { "id": "Harta mudah hilang, tidak tenteram", "jv": "Kurang begjane sarta kerep pindah omah" }, "status": "buruk" },
+      { "sisa": 1, "nama": "WASESA SEGARA", "arti": { "id": "Berjiwa besar, pemaaf, berkuasa luas", "jv": "Jembar budine" }, "status": "baik" },
+      { "sisa": 2, "nama": "TUNGGAK SEMI", "arti": { "id": "Banyak anak namun sering sakit", "jv": "Sugih anak sarta tansah lara-laranen" }, "status": "campur" },
+      { "sisa": 3, "nama": "SATRIYA WIBAWA", "arti": { "id": "Berwibawa, disegani, bisa kaya", "jv": "Gede begjane lan bisa sugih" }, "status": "baik" },
+      { "sisa": 4, "nama": "SUMUR SINABA", "arti": { "id": "Menjadi tempat menimba ilmu, pengayoman", "jv": "Bisa dadi pengayoman sanak kadang" }, "status": "baik" },
+      { "sisa": 5, "nama": "SATRIYA WIRANG", "arti": { "id": "Sering susah, melarat", "jv": "Kerep susah kang andadekake melarat" }, "status": "buruk" },
+      { "sisa": 6, "nama": "BUMI KAPETAK", "arti": { "id": "Dikucilkan tapi bisa menyimpan harta", "jv": "Dikucilkan ing wong nanging bisa simpen banda donyane" }, "status": "campur" }
+    ]
+  },
+  "metode_IV_aksara_penganten": {
+    "nama": { "id": "Metode IV: Aksara Penganten", "jv": "Metode IV: Aksara Penganten" },
+    "rumus": { "id": "Berdasarkan aksara depan & belakang nama penganten", "jv": "Adhedhasar aksara ngarep & mburi jeneng penganten" },
+    "hasil": [
+      { "sisa": 0, "nama": "PANDHAWA", "arti": { "id": "Tenteram selamanya", "jv": "Ayem tentrem saklawase" }, "status": "baik" },
+      { "sisa": 1, "nama": "TUNGGAK TANPA SEMI", "arti": { "id": "Sengsara selamanya", "jv": "Sengsara saklawase" }, "status": "buruk" },
+      { "sisa": 2, "nama": "PISANG PINUNGGEL", "arti": { "id": "Putus salah satu (cerai/mati)", "jv": "Pedhot salah sawiji" }, "status": "buruk" },
+      { "sisa": 3, "nama": "LUMBUNG GUMULING", "arti": { "id": "Selalu boros, rezeki habis", "jv": "Tansah boros rejekine" }, "status": "buruk" },
+      { "sisa": 4, "nama": "SANGGAR WARINGIN", "arti": { "id": "Menjadi pelindung sanak saudara", "jv": "Pengayoman sanak kadang" }, "status": "baik" },
+      { "sisa": 5, "nama": "PADARINGAN KEBAK", "arti": { "id": "Rezeki melimpah ruah", "jv": "Rejekine mbludak lan sugih" }, "status": "baik" },
+      { "sisa": 6, "nama": "SATRIYA LELAKU", "arti": { "id": "Harus giat berusaha/dagang", "jv": "Kudu giat among dagang" }, "status": "baik" }
+    ]
+  },
+  "metode_V_aksara_v2": {
+    "nama": { "id": "Metode V: Aksara V2", "jv": "Metode V: Aksara V2" },
+    "hasil": [
+      { "sisa": 0, "nama": "LINTANG PURNAMA", "arti": { "id": "Sangat baik, cita-cita tercapai", "jv": "Luwih becik bakal kasembadan" }, "status": "baik" },
+      { "sisa": 1, "nama": "ASIH ALAKI", "arti": { "id": "Rukun, satu tujuan", "jv": "Rukun wus tunggal karepe" }, "status": "baik" },
+      { "sisa": 2, "nama": "KEMARON SIH", "arti": { "id": "Sering bertengkar pikiran", "jv": "Kerep padudon pikirane" }, "status": "buruk" },
+      { "sisa": 3, "nama": "SUKARTA", "arti": { "id": "Ada halangan dalam rumah tangga", "jv": "Pakewuh jejodohane" }, "status": "buruk" },
+      { "sisa": 4, "nama": "KALATUKA", "arti": { "id": "Kurang baik, banyak cobaan", "jv": "Ora becik jejodohane" }, "status": "buruk" },
+      { "sisa": 5, "nama": "MANTRI SUKA", "arti": { "id": "Baik, akan mendapat derajat", "jv": "Becik bakal antuk drajat" }, "status": "baik" },
+      { "sisa": 6, "nama": "SUKA SUGIH", "arti": { "id": "Baik, akan kaya raya", "jv": "Becik bakal sugih donya" }, "status": "baik" }
+    ]
+  },
+  "metode_VI_pancer_padha": {
+    "nama": { "id": "Metode VI: Pancer Padha", "jv": "Metode VI: Pancer Padha" },
+    "hasil": [
+      { "sisa": 0, "nama": "LATAR", "arti": { "id": "Selalu susah", "jv": "Tansah susah" }, "status": "buruk" },
+      { "sisa": 1, "nama": "LARUNG", "arti": { "id": "Rezeki cepat datang, cepat pergi", "jv": "Gelis teka lan lunga rejekine" }, "status": "buruk" },
+      { "sisa": 2, "nama": "GONDANG", "arti": { "id": "Bisa menyimpan harta", "jv": "Bisa nyimpen banda donya" }, "status": "baik" },
+      { "sisa": 3, "nama": "OMAH", "arti": { "id": "Bisa menyimpan rezeki, selamat", "jv": "Bisa simpen rejeki slamet" }, "status": "baik" },
+      { "sisa": 4, "nama": "BALI", "arti": { "id": "Boros, rezeki tidak sisa", "jv": "Boros rejekine" }, "status": "buruk" },
+      { "sisa": 5, "nama": "PAWON", "arti": { "id": "Tidak pernah kekurangan pangan", "jv": "Ora tau kekurangan pangan" }, "status": "baik" }
+    ]
+  }
+}

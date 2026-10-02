@@ -1,0 +1,40 @@
+{
+  "jenis_selametan": [
+    { "idx": 0, "nama": { "id": "3 Harian (Nelu Dinani)", "jv": "3 Dinani" }, "hari_ke": 3, "keterangan": { "id": "Tiga hari setelah wafat", "jv": "Telung dinane wafat" } },
+    { "idx": 1, "nama": { "id": "7 Harian (Ngitu Dinani)", "jv": "7 Dinani" }, "hari_ke": 7, "keterangan": { "id": "Tujuh hari setelah wafat", "jv": "Pitung dinane wafat" } },
+    { "idx": 2, "nama": { "id": "40 Harian (Matang Puluh)", "jv": "Matang Puluh" }, "hari_ke": 40, "keterangan": { "id": "Empat puluh hari setelah wafat", "jv": "Sekawan puluh dinane wafat" } },
+    { "idx": 3, "nama": { "id": "100 Harian (Nyatus)", "jv": "Nyatus" }, "hari_ke": 100, "keterangan": { "id": "Seratus hari setelah wafat", "jv": "Satus dinane wafat" } },
+    { "idx": 4, "nama": { "id": "Pendak Pisan (1 Tahun Jawa)", "jv": "Pendhak Pisan (1 Taun Jawi)" }, "hari_ke": 354, "keterangan": { "id": "Satu tahun (12 bulan Jawa) setelah wafat", "jv": "Setaun (12 sasi Jawi) wafat" } },
+    { "idx": 5, "nama": { "id": "Pendak Pindho (2 Tahun Jawa)", "jv": "Pendhak Pindho (2 Taun Jawi)" }, "hari_ke": 710, "keterangan": { "id": "Dua tahun setelah wafat", "jv": "Loro taun wafat" } },
+    { "idx": 6, "nama": { "id": "Nyewu (1000 Hari)", "jv": "Nyewu (1000 Dinten)" }, "hari_ke": 1000, "keterangan": { "id": "Seribu hari setelah wafat (Haul Besar)", "jv": "Sewu dinane wafat (Haul Ageng)" } }
+  ],
+  "target_hari_berdasarkan_wafat": {
+    "minggu": ["Selasa", "Sabtu", "Kamis", "Senin", "Rabu", "Selasa", "Jumat"],
+    "senin": ["Rabu", "Minggu", "Jumat", "Selasa", "Kamis", "Rabu", "Sabtu"],
+    "selasa": ["Kamis", "Senin", "Sabtu", "Rabu", "Jumat", "Kamis", "Minggu"],
+    "rabu": ["Jumat", "Selasa", "Minggu", "Kamis", "Sabtu", "Jumat", "Senin"],
+    "kamis": ["Sabtu", "Rabu", "Senin", "Jumat", "Minggu", "Sabtu", "Selasa"],
+    "jumat": ["Minggu", "Kamis", "Selasa", "Sabtu", "Senin", "Minggu", "Rabu"],
+    "sabtu": ["Senin", "Jumat", "Rabu", "Minggu", "Selasa", "Senin", "Kamis"]
+  },
+  "target_pasaran_berdasarkan_wafat": {
+    "pahing": ["Wage", "Pon", "Legi", "Legi", "Kliwon", "Legi", "Legi"],
+    "pon": ["Kliwon", "Wage", "Pahing", "Pahing", "Legi", "Pahing", "Pahing"],
+    "wage": ["Legi", "Kliwon", "Pon", "Pon", "Pahing", "Pon", "Pon"],
+    "kliwon": ["Pahing", "Legi", "Wage", "Wage", "Pon", "Wage", "Wage"],
+    "legi": ["Pon", "Pahing", "Kliwon", "Kliwon", "Wage", "Kliwon", "Kliwon"]
+  },
+  "aturan_magrib": {
+    "id": "Jika wafat setelah Maghrib (Jam 18.00), hitungan hari (Geblak) digeser +1 hari.",
+    "jv": "Menawi wafat sasampunipun Maghrib (Jam 18.00), petungan dinten (Geblak) wiwit benjingipun (+1 dinten)."
+  },
+  "urutan_target": [
+    { "idx": 0, "label": { "id": "Geblak (Hari Wafat)", "jv": "Geblak (Dinten Wafat)" } },
+    { "idx": 1, "label": { "id": "3 Harian", "jv": "3 Dinani" } },
+    { "idx": 2, "label": { "id": "7 Harian", "jv": "7 Dinani" } },
+    { "idx": 3, "label": { "id": "40 Harian", "jv": "40 Dinani" } },
+    { "idx": 4, "label": { "id": "100 Harian", "jv": "100 Dinani" } },
+    { "idx": 5, "label": { "id": "Pendak Pisan", "jv": "Pendhak Pisan" } },
+    { "idx": 6, "label": { "id": "Pendak Pindho", "jv": "Pendhak Pindho" } }
+  ]
+}

@@ -1,0 +1,101 @@
+[
+  {
+    "no": 1, "tipe": { "id": "Leader", "jv": "Leader" },
+    "ringkasan": {
+      "id": "Pemimpin berorientasi aksi, pragmatis, cepat, fokus hasil dan materi, namun lemah dalam pembinaan serta enggan dikritik.",
+      "jv": "Pimpinan berorientasi aksi, pragmatis, rikat, fokus asil lan materi, nanging lemah ing pembinaan sarta enggan dikritik."
+    },
+    "kekuatan": {
+      "id": "Tergesa-gesa, to the point, cepat marah tapi suka damai, aura leadership besar, egosentris, suka sistem baru, jago melobby, praktis, prinsip keras.",
+      "jv": "Tergesa-gesa, to the point, rikat nesu nanging seneng damai, aura leadership ageng, egosentris, seneng sistem enggal, jago melobby, praktis, prinsip keras."
+    },
+    "kelemahan": { "id": "Tidak suka dikritik/dilampaui/dibantah, gengsi besar.", "jv": "Ora seneng dikritik/dilampaui/dibantah, gengsi ageng." },
+    "negosiasi": { "id": "Disanjung, diperhatikan dan dilayani.", "jv": "Disanjung, diprihatosaken lan dilayani." },
+    "sikap": { "id": "Belajar tentang leadership, lebih sabar dan mau menerima pendapat orang lain.", "jv": "Sinau bab leadership, langkung sabar lan purun nampi pendapat tiyang sanes." },
+    "motto": { "id": "Aku datang... aku buktikan... aku menang! Dan terbukti dalam bentuk materi.", "jv": "Aku rawuh... aku buktikaken... aku menang! Lan kabukti ing wujud materi." }
+  },
+  {
+    "no": 2, "tipe": { "id": "Diplomat", "jv": "Diplomat" },
+    "ringkasan": {
+      "id": "Sosok konvensional, santun, cinta damai, setia dan tekun di balik layar, namun ragu mengambil keputusan serta takut risiko/perubahan.",
+      "jv": "Sosok konvensional, santun, cinta damai, setia lan tekun ing wingking layar, nanging ragu njupuk keputusan sarta wedi risiko/owah-owahan."
+    },
+    "kekuatan": {
+      "id": "Konvensional tradisional, halus sopan santun, sulit membuat keputusan, peka situasi, suka filsafat religius, bermain di balik layar, suka damai, tekun, loyalitas setia.",
+      "jv": "Konvensional tradisional, alus sopan santun, angel njupuk keputusan, peka situasi, seneng filsafat religius, main ing wingking layar, seneng damai, tekun, loyalitas setia."
+    },
+    "kelemahan": { "id": "Sulit membuat keputusan, takut perubahan, kurang berani mengambil risiko.", "jv": "Angel njupuk keputusan, wedi owah-owahan, kirang wani njupuk risiko." },
+    "negosiasi": { "id": "Disanjung, dilayani, diperhatikan dan dibuka paradigma berpikirnya.", "jv": "Disanjung, dilayani, diprihatosaken lan dipunbuka paradigma mikiripun." },
+    "sikap": { "id": "Berani tampil dan lebih berani mengambil risiko.", "jv": "Wani tampil lan langkung wani njupuk risiko." },
+    "motto": { "id": "Hidup adalah untuk dinikmati, masih bisa enak-enak begini, mengapa harus berubah?", "jv": "Gesang punika kangge dinikmati, taksih saged enak-enak kados pundi, kenging menapa kedah owah?" }
+  },
+  {
+    "no": 3, "tipe": { "id": "Analisis", "jv": "Analisis" },
+    "ringkasan": {
+      "id": "Sosok perfeksionis estetis, analitis dan kritis, gemar menolong namun teoritis dan sangat sensitif terhadap perhatian serta penghargaan.",
+      "jv": "Sosok perfeksionis estetis, analitis lan kritis, remen nulung nanging teoritis lan sanget sensitif tumrap prihatos sarta penghargaan."
+    },
+    "kekuatan": {
+      "id": "Perfeksionis menyukai keindahan, senang menolong penasihat baik, analitis teliti kritis, sering mengandalkan teori, sangat sensitif butuh perhatian, menjaga gengsi penampilan.",
+      "jv": "Perfeksionis remen kaendahan, seneng nulung penasihat sae, analitis teliti kritis, sering ngandelaken teori, sanget sensitif butuh prihatos, njaga gengsi penampilan."
+    },
+    "kelemahan": { "id": "Sensitif, terlalu teoritis, mudah tersinggung jika kurang dihargai.", "jv": "Sensitif, kakehan teoritis, gampil tersinggung menawi kirang dihargai." },
+    "negosiasi": { "id": "Diberi apresiasi tulus, diakui karya dan ketelitiannya.", "jv": "Diparingi apresiasi tulus, diakoni karya lan ketelitianipun." },
+    "sikap": { "id": "Lebih praktis, kurangi overthinking, dan berani eksekusi langsung.", "jv": "Langkung praktis, kurangi overthinking, lan wani eksekusi langsung." },
+    "motto": { "id": "Segala sesuatu harus tertata sempurna, indah, dan akurat.", "jv": "Sedaya kedah tertata sempurna, endah, lan akurat." }
+  },
+  {
+    "no": 4, "tipe": { "id": "Realis", "jv": "Realis" },
+    "ringkasan": { "id": "Praktis, realistis, berpijak pada kenyataan dan efisiensi tindakan.", "jv": "Praktis, realistis, berpijak ing kanyataan lan efisiensi tindakan." },
+    "kekuatan": { "id": "Berpijak pada kenyataan, menghargai efisiensi dan waktu, solitif menghadapi kendala teknis, tidak mudah percaya hal abstrak tanpa bukti.", "jv": "Berpijak ing kanyataan, ngargai efisiensi lan wekdal, solitif ngadhepi kendala teknis, ora gampil percaya hal abstrak tanpa bukti." },
+    "kelemahan": { "id": "Kurang memiliki visi jangka panjang yang imajinatif.", "jv": "Kurang gadhah visi jangka panjang ingkang imajinatif." },
+    "negosiasi": { "id": "Berikan bukti nyata, data empiris, dan hasil konkret.", "jv": "Paringi bukti nyata, data empiris, lan asil konkret." },
+    "sikap": { "id": "Buka diri terhadap inovasi dan pemikiran baru di luar kebiasaan.", "jv": "Buka diri tumrap inovasi lan pemikiran enggal ing njawi kebiasaan." },
+    "motto": { "id": "Bukti nyata di depan mata lebih berarti daripada sejuta teori.", "jv": "Bukti nyata ing ngajeng mripat langkung berarti tinimbang sejuta teori." }
+  },
+  {
+    "no": 5, "tipe": { "id": "Adventurer", "jv": "Adventurer" },
+    "ringkasan": { "id": "Dinamis, menyukai kebebasan, petualang, adaptif terhadap perubahan.", "jv": "Dinamis, remen kamardikan, petualang, adaptif tumrap owah-owahan." },
+    "kekuatan": { "id": "Dinamis energik tidak betah diam, menyukai petualangan tantangan baru, cepat beradaptasi lingkungan asing, berjiwa bebas dan kreatif.", "jv": "Dinamis energik ora betah meneng, remen petualangan tantangan enggal, rikat adaptasi lingkungan asing, berjiwa bebas lan kreatif." },
+    "kelemahan": { "id": "Mudah bosan, kurang disiplin pada rutinitas ketat.", "jv": "Gampil bosen, kurang disiplin ing rutinitas ketat." },
+    "negosiasi": { "id": "Berikan keleluasaan gerak dan hindari aturan birokrasi kaku.", "jv": "Paringi keleluasaan gerak lan hindari aturan birokrasi kaku." },
+    "sikap": { "id": "Tingkatkan ketekunan dan fokus pada satu tujuan akhir.", "jv": "Tingkataken ketekunan lan fokus ing satunggal tujuan pungkasan." },
+    "motto": { "id": "Hidup adalah kebebasan untuk menjelajah dan menemukan.", "jv": "Gesang punika kamardikan kangge njelajah lan nemokaken." }
+  },
+  {
+    "no": 6, "tipe": { "id": "Idealis", "jv": "Idealis" },
+    "ringkasan": { "id": "Memiliki cita-cita luhur, berpegang teguh pada prinsip, nilai moral, dan keyakinan.", "jv": "Gadhah cita-cita luhur, berpegang teguh ing prinsip, nilai moral, lan keyakinan." },
+    "kekuatan": { "id": "Cita-cita luhur standar moral tinggi, setia pada prinsip hidup, membela kebenaran penuh semangat, integritas batin kuat.", "jv": "Cita-cita luhur standar moral inggil, setia ing prinsip gesang, mbelani kebenaran penuh semangat, integritas batin kiyat." },
+    "kelemahan": { "id": "Terkadang terlalu kaku, sulit berkompromi dengan realitas praktis.", "jv": "Kadhang kakehan kaku, angel berkompromi kaliyan realitas praktis." },
+    "negosiasi": { "id": "Gugah nilai etika, moral, dan misi luhur perjuangannya.", "jv": "Gugah nilai etika, moral, lan misi luhur perjuanganipun." },
+    "sikap": { "id": "Lebih fleksibel memahami sudut pandang orang lain tanpa kehilangan prinsip.", "jv": "Langkung fleksibel mangertos sudut pandang tiyang sanes tanpa kelangan prinsip." },
+    "motto": { "id": "Prinsip hidup dan kebenaran adalah segalanya.", "jv": "Prinsip gesang lan kebenaran punika sedayanipun." }
+  },
+  {
+    "no": 7, "tipe": { "id": "Edukatif", "jv": "Edukatif" },
+    "ringkasan": { "id": "Berorientasi pada pembelajaran, bimbingan, pencerahan, dan penyebaran ilmu pengetahuan.", "jv": "Berorientasi ing pembelajaran, bimbingan, pencerahan, lan panyebaran ilmu pengetahuan." },
+    "kekuatan": { "id": "Suka membagikan ilmu membimbing, sabar mendidik mengarahkan, berwawasan luas gemar membaca, menjadi rujukan nasihat orang lain.", "jv": "Remen mbagi ilmu mbimbing, sabar ngeducasi ngarahken, berwawasan wiyar remen maca, dados rujukan nasihat tiyang sanes." },
+    "kelemahan": { "id": "Terkadang tampak menggurui atau terlalu banyak bicara teori.", "jv": "Kadhang katingal menggurui atau kakehan wicanten teori." },
+    "negosiasi": { "id": "Hargai pengetahuannya dan ajak berdiskusi secara bijak.", "jv": "Argai pengetahuanipun lan ajak diskusi kanthi bijak." },
+    "sikap": { "id": "Imbangi teori dengan praktik nyata yang membumi.", "jv": "Imbangi teori kaliyan praktik nyata ingkang membumi." },
+    "motto": { "id": "Ilmu yang bermanfaat adalah pelita bagi kehidupan.", "jv": "Ilmu ingkang bermanfaat punika pelita kangge gesang." }
+  },
+  {
+    "no": 8, "tipe": { "id": "Eksekutor", "jv": "Eksekutor" },
+    "ringkasan": { "id": "Pekerja keras, gigih, berorientasi hasil nyata, tangguh menghadapi tekanan eksekusi.", "jv": "Pekerja keras, gigih, berorientasi asil nyata, tangguh ngadhepi tekanan eksekusi." },
+    "kekuatan": { "id": "Pekerja keras tangguh di bawah tekanan, berorientasi hasil nyata penyelesaian tugas, disiplin fokus pantang menyerah, handal menggerakkan operasional.", "jv": "Pekerja keras tangguh ing ngandhap tekanan, berorientasi asil nyata penyelesaian tugas, disiplin fokus pantang nyerah, handal nggerakaken operasional." },
+    "kelemahan": { "id": "Keras kepala, terkadang mengabaikan aspek perasaan orang lain.", "jv": "Keras kepala, kadhang ngabaikan aspek perasaan tiyang sanes." },
+    "negosiasi": { "id": "Berikan target yang jelas, wewenang, dan kejelasan hasil.", "jv": "Paringi target ingkang cetha, wewenang, lan kejelasan asil." },
+    "sikap": { "id": "Tingkatkan empati dan kelembutan dalam berinteraksi sosial.", "jv": "Tingkataken empati lan kelembutan ing interaksi sosial." },
+    "motto": { "id": "Kerja tuntas, hasil nyata, tanpa banyak alasan.", "jv": "Kerja tuntas, asil nyata, tanpa akeh alesan." }
+  },
+  {
+    "no": 9, "tipe": { "id": "Entertainer", "jv": "Entertainer" },
+    "ringkasan": { "id": "Komunikatif, ekspresif, ceria, memiliki daya tarik sosial dan menghibur sesama.", "jv": "Komunikatif, ekspresif, ceria, gadhah daya tarik sosial lan nghibur sasami." },
+    "kekuatan": { "id": "Komunikatif ekspresif ceria, daya tarik sosial kuat di keramaian, mampu mencairkan suasana menghibur, mudah diterima berbagai kalangan.", "jv": "Komunikatif ekspresif ceria, daya tarik sosial kiyat ing keramaian, saged ncairaken suasana nghibur, gampil dipuntampi berbagai kalangan." },
+    "kelemahan": { "id": "Mudah terdistraksi, kurang sabar dalam hal detail teknis.", "jv": "Gampil terdistraksi, kurang sabar ing hal detail teknis." },
+    "negosiasi": { "id": "Gunakan pendekatan yang menyenangkan, santai, dan penuh antusiasme.", "jv": "Gunakaken pendekatan ingkang nyenengaken, santai, lan penuh antusiasme." },
+    "sikap": { "id": "Tingkatkan kedisiplinan dan ketelitian dalam mengelola urusan penting.", "jv": "Tingkataken kedisiplinan lan ketelitian ing ngelola urusan penting." },
+    "motto": { "id": "Hidup harus membawa keceriaan dan kebahagiaan bagi sesama.", "jv": "Gesang kedah mbeta keceriaan lan kebahagiaan kangge sasami." }
+  }
+]

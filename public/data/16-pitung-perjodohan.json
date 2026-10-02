@@ -1,0 +1,74 @@
+[
+  {
+    "metode": "I (Panca Suda)",
+    "deskripsi": "Sisa pembagian total neptu dengan 4",
+    "hasil": [
+      { "sisa": 0, "nama": "PUNGGEL", "arti": "Padudon, Pisah/Pegat", "status": "buruk" },
+      { "sisa": 1, "nama": "GENTHA", "arti": "Larang Anak, gampang rejeki", "status": "campur" },
+      { "sisa": 2, "nama": "GEMBILI", "arti": "Sugih Anak, rejeki pas-pasan", "status": "buruk" },
+      { "sisa": 3, "nama": "SRI", "arti": "Sugih Rejeki, ayem tentrem", "status": "baik" }
+    ]
+  },
+  {
+    "metode": "II (Pancawardhana)",
+    "deskripsi": "Sisa pembagian total neptu dengan 5",
+    "hasil": [
+      { "sisa": 0, "nama": "PATI", "arti": "Melarat", "status": "buruk" },
+      { "sisa": 1, "nama": "SRI", "arti": "Sandang Pangan", "status": "baik" },
+      { "sisa": 2, "nama": "LUNGGUH", "arti": "Kajen Kelingan", "status": "baik" },
+      { "sisa": 3, "nama": "GEDHONG", "arti": "Tentrem Ayem", "status": "baik" },
+      { "sisa": 4, "nama": "LARA", "arti": "Rekasa", "status": "buruk" }
+    ]
+  },
+  {
+    "metode": "III (Petung Salaki Rabi)",
+    "deskripsi": "Sisa pembagian total neptu dengan 7",
+    "hasil": [
+      { "sisa": 0, "nama": "LEBU KETIYUP ANGIN", "arti": "Kurang Begjane sarta kerep Pindah Omah", "status": "buruk" },
+      { "sisa": 1, "nama": "WASESA SEGARA", "arti": "Jembar Budine", "status": "baik" },
+      { "sisa": 2, "nama": "TUNGGAK SEMI", "arti": "Sugih Anak sarta tansah Lara-Laranen", "status": "campur" },
+      { "sisa": 3, "nama": "SATRIYA WIBAWA", "arti": "Gede Begjane lan Bisa Sugih", "status": "baik" },
+      { "sisa": 4, "nama": "SUMUR SINABA", "arti": "Bisa Dadi Pengayoman Sanak Kadang", "status": "baik" },
+      { "sisa": 5, "nama": "SATRIYA WIRANG", "arti": "Kerep Susah kang Andadekake Melarat", "status": "buruk" },
+      { "sisa": 6, "nama": "BUMI KAPETAK", "arti": "Dikucilken ing wong nanging bisa Simpen Banda Donyane", "status": "campur" }
+    ]
+  },
+  {
+    "metode": "IV (Aksara Penganten)",
+    "deskripsi": "Berdasarkan aksara depan & belakang nama",
+    "hasil": [
+      { "sisa": 0, "nama": "PANDHAWA", "arti": "Ayem Tentrem Saklawase", "status": "baik" },
+      { "sisa": 1, "nama": "TUNGGAK TANPA SEMI", "arti": "Sengsara Saklawase", "status": "buruk" },
+      { "sisa": 2, "nama": "PISANG PINUNGGEL", "arti": "Pedhot Salah Sawiji", "status": "buruk" },
+      { "sisa": 3, "nama": "LUMBUNG GUMULING", "arti": "Tansah Boros Rejekine", "status": "buruk" },
+      { "sisa": 4, "nama": "SANGGAR WARINGIN", "arti": "Pengayoman Sanak Kadang", "status": "baik" },
+      { "sisa": 5, "nama": "PADARINGAN KEBAK", "arti": "Rejekine Mbludak lan Sugih", "status": "baik" },
+      { "sisa": 6, "nama": "SATRIYA LELAKU", "arti": "Kudu Giat Among Dagang", "status": "baik" }
+    ]
+  },
+  {
+    "metode": "V (Aksara V2)",
+    "deskripsi": "Variasi perhitungan aksara",
+    "hasil": [
+      { "sisa": 0, "nama": "LINTANG PURNAMA", "arti": "Luwih becik bakal kasembadan", "status": "baik" },
+      { "sisa": 1, "nama": "ASIH ALAKI", "arti": "Rukun wus tunggal karepe", "status": "baik" },
+      { "sisa": 2, "nama": "KEMARON SIH", "arti": "Kerep padudon pikirane", "status": "buruk" },
+      { "sisa": 3, "nama": "SUKARTA", "arti": "Pakewuh jejodohane", "status": "buruk" },
+      { "sisa": 4, "nama": "KALATUKA", "arti": "Ora becik jejodohane", "status": "buruk" },
+      { "sisa": 5, "nama": "MANTRI SUKA", "arti": "Becik bakal antuk drajat", "status": "baik" },
+      { "sisa": 6, "nama": "SUKA SUGIH", "arti": "Becik bakal sugih donya", "status": "baik" }
+    ]
+  },
+  {
+    "metode": "VI (Pancer Padha)",
+    "deskripsi": "Berdasarkan pancer (pusat) weton",
+    "hasil": [
+      { "sisa": 0, "nama": "LATAR", "arti": "Tansah susah", "status": "buruk" },
+      { "sisa": 1, "nama": "LARUNG", "arti": "Gelis teka lan lunga rejekine", "status": "buruk" },
+      { "sisa": 2, "nama": "GONDANG", "arti": "Bisa nyimpen banda donya", "status": "baik" },
+      { "sisa": 3, "nama": "OMAH", "arti": "Bisa simpen rejeki slamet", "status": "baik" },
+      { "sisa": 4, "nama": "BALI", "arti": "Boros rejekine", "status": "buruk" },
+      { "sisa": 5, "nama": "PAWON", "arti": "Ora tau kekurangan pangan", "status": "baik" }
+    ]
+  }
+]

@@ -499,6 +499,15 @@ export function bootstrap() {
     }
   }
 
+  // Inisialisasi default tanggal lahir Nujum dengan hari ini bila belum terisi
+  const tglLahirKepribadianInput = document.getElementById('tglLahirKepribadian');
+  if (tglLahirKepribadianInput && !tglLahirKepribadianInput.value) {
+    tglLahirKepribadianInput.value = new Date().toISOString().slice(0, 10);
+    if (typeof window.updateKepribadianQuickInfo === 'function') {
+      window.updateKepribadianQuickInfo();
+    }
+  }
+
   initModalListeners();
 }
 

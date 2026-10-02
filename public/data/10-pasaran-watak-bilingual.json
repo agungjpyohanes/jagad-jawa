@@ -1,0 +1,37 @@
+[
+  {
+    "nama": "Legi",
+    "lambang": {"id": "Bulan / Manis", "jv": "Rembulan / Manis"},
+    "watak_utama": {"id": "Suka mengalah, ikhlas, pemaaf, murah rejeki", "jv": "Remen ngalah, ikhlas, pemaaf, murah rejeki"},
+    "deskripsi": {"id": "Penuh tanggung jawab dan berhati dermawan. Sangat supel, enak diajak bergaul, pembawaan gembira seolah tanpa beban.", "jv": "Penuh tanggung jawab lan dermawan. Sanget supel, enak diajak bergaul, pembawaan gembira kados mboten gadhah beban."},
+    "catatan_rejeki": {"id": "Banyak mengalami keberuntungan, namun juga sering diterpa fitnah dan kesialan.", "jv": "Akeh ngalami keberuntungan, nanging ugi kerep dipunfitnah lan kenging kesialan."}
+  },
+  {
+    "nama": "Pahing",
+    "lambang": {"id": "Kepodang / Abritan", "jv": "Kepodhang / Abritan"},
+    "watak_utama": {"id": "Penuh perhitungan, mandiri, suka menolong dan cinta kebersihan", "jv": "Penuh perhitungan, mandiri, remen nulung lan cinta kebersihan"},
+    "deskripsi": {"id": "Tekun dan penuh perhitungan dalam mencari keuntungan. Mandiri, kuat menahan lapar, berjiwa penolong.", "jv": "Tekun lan penuh perhitungan nggoleki keuntungan. Mandiri, kiyat nahan luwe, berjiwa penolong."},
+    "catatan_rejeki": {"id": "Sering kena tipu; jika kehilangan barang/peluang jarang bisa kembali.", "jv": "Kerep kenging tipu; menawi kelangan barang/peluang jarang saged wangsul."}
+  },
+  {
+    "nama": "Pon",
+    "lambang": {"id": "Kencana (Emas) / Jenean", "jv": "Kencana (Emas) / Jenean"},
+    "watak_utama": {"id": "Bicaranya diterima banyak orang, mandiri dan teguh pendirian", "jv": "Wicantenipun dipun tampi akeh tiyang, mandiri lan teguh pendirian"},
+    "deskripsi": {"id": "Suka tinggal di rumah dan betah di kediaman. Tidak mau mengambil apa yang bukan hak miliknya.", "jv": "Remen wonten ing griya lan betah ing kediaman. Mboten purun njupuk ingkang sanes hakipun."},
+    "catatan_rejeki": {"id": "Rejekinya cukup dan senantiasa berkecukupan.", "jv": "Rejekinipun cekap lan tansah berkecukupan."}
+  },
+  {
+    "nama": "Wage",
+    "lambang": {"id": "Dandang (Gagak) / Cemengan", "jv": "Dandang (Gagak) / Cemengan"},
+    "watak_utama": {"id": "Menarik namun berkarakter angkuh, setia dan penurut", "jv": "Menarik nanging berkarakter angkuh, setia lan penurut"},
+    "deskripsi": {"id": "Berdaya tarik memikat tetapi cenderung terlihat angkuh. Memiliki loyalitas tinggi, setia, dan penurut.", "jv": "Gadah daya tarik memikat nanging cenderung katingal angkuh. Gadah loyalitas inggil, setia, lan penurut."},
+    "catatan_rejeki": {"id": "Perlu dibantu orang lain dalam mencari nafkah; rentan mendapat fitnah.", "jv": "Prelu dipunbiyantu tiyang sanes nggoleki nafkah; rentan kenging fitnah."}
+  },
+  {
+    "nama": "Kliwon",
+    "lambang": {"id": "Kumbang / Kasih", "jv": "Kumbang / Kasih"},
+    "watak_utama": {"id": "Pandai bergaul dan periang, ambisius namun setia janji", "jv": "Pinter bergaul lan periang, ambisius nanging setia janji"},
+    "deskripsi": {"id": "Sangat pandai berbicara, supel, dan mudah bergaul. Berjiwa periang dan ambisius dalam mencapai tujuan.", "jv": "Sanget pinter wicanten, supel, lan gampil bergaul. Berjiwa periang lan ambisius nggayuh tujuan."},
+    "catatan_rejeki": {"id": "Banyak mendapatkan keselamatan, perlindungan, dan doa.", "jv": "Akeh pikantuk kaslametan, pangayoman, lan donga."}
+  }
+]

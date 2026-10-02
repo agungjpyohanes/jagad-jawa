@@ -1,0 +1,9 @@
+[
+  { "dina_lahir": "Kamis", "sirikan_adhep": { "id": "Timur", "jv": "WETAN / TIMUR" } },
+  { "dina_lahir": "Sabtu", "sirikan_adhep": { "id": "Timur", "jv": "WETAN / TIMUR" } },
+  { "dina_lahir": "Senin", "sirikan_adhep": { "id": "Timur", "jv": "WETAN / TIMUR" } },
+  { "dina_lahir": "Jumat", "sirikan_adhep": { "id": "Selatan", "jv": "KIDUL / SELATAN" } },
+  { "dina_lahir": "Minggu", "sirikan_adhep": { "id": "Selatan", "jv": "KIDUL / SELATAN" } },
+  { "dina_lahir": "Selasa", "sirikan_adhep": { "id": "Selatan", "jv": "KIDUL / SELATAN" } },
+  { "dina_lahir": "Rabu", "sirikan_adhep": { "id": "Barat", "jv": "KULON / BARAT" } }
+]

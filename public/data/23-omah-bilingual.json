@@ -1,0 +1,71 @@
+{
+  "cempuri_lawangan": {
+    "metadata": { "id": "Petung arah pintu berdasarkan neptu weton pemilik rumah", "jv": "Petung arah lawang adhedhasar neptu weton sing duwe omah" },
+    "utara": [
+      { "no": 1, "arti": { "id": "Mempunyai anak yang bagus", "jv": "Darbe anak tur bagus" } },
+      { "no": 2, "arti": { "id": "Tidak mempunyai utang", "jv": "Ora duwe utang" } },
+      { "no": 3, "arti": { "id": "Mendapat kemurkaan/teguran", "jv": "Manggung duka cipto" } },
+      { "no": 4, "arti": { "id": "Sering kecurian", "jv": "Kerep kemalingan" } },
+      { "no": 5, "arti": { "id": "Mendapat kekayaan", "jv": "Oleh kasugihan" } },
+      { "no": 6, "arti": { "id": "Banyak anak", "jv": "Sugih anak" } },
+      { "no": 7, "arti": { "id": "Sering sakit dan susah", "jv": "Geringen kerep kasusahan" } },
+      { "no": 8, "arti": { "id": "Kaya dari perak/logam", "jv": "Sugih saka slaka" } },
+      { "no": 9, "arti": { "id": "Sering mendapat uang", "jv": "Kerep oleh duit" } }
+    ],
+    "timur": [
+      { "no": 1, "arti": { "id": "Sering mendapat uang", "jv": "Kerep oleh duit" } },
+      { "no": 2, "arti": { "id": "Mendapat kekayaan", "jv": "Oleh kasugihan" } },
+      { "no": 3, "arti": { "id": "Banyak anak", "jv": "Sugih anak" } },
+      { "no": 4, "arti": { "id": "Sering sakit dan susah", "jv": "Geringen kerep kasusahan" } },
+      { "no": 5, "arti": { "id": "Kaya dari perak/logam", "jv": "Sugih saka slaka" } },
+      { "no": 6, "arti": { "id": "Sering kecurian", "jv": "Kerep kemalingan" } },
+      { "no": 7, "arti": { "id": "Mempunyai anak yang bagus", "jv": "Darbe anak tur bagus" } },
+      { "no": 8, "arti": { "id": "Tidak mempunyai utang", "jv": "Ora duwe utang" } },
+      { "no": 9, "arti": { "id": "Mendapat kemurkaan/teguran", "jv": "Manggung duka cipto" } }
+    ],
+    "selatan": [
+      { "no": 1, "arti": { "id": "Sering sakit dan susah", "jv": "Geringen kerep kasusahan" } },
+      { "no": 2, "arti": { "id": "Kaya dari perak/logam", "jv": "Sugih saka slaka" } },
+      { "no": 3, "arti": { "id": "Banyak anak", "jv": "Sugih anak" } },
+      { "no": 4, "arti": { "id": "Sering mendapat uang", "jv": "Kerep oleh duit" } },
+      { "no": 5, "arti": { "id": "Mendapat kekayaan", "jv": "Oleh kasugihan" } },
+      { "no": 6, "arti": { "id": "Sering kecurian", "jv": "Kerep kemalingan" } },
+      { "no": 7, "arti": { "id": "Mempunyai anak yang bagus", "jv": "Darbe anak tur bagus" } },
+      { "no": 8, "arti": { "id": "Tidak mempunyai utang", "jv": "Ora duwe utang" } },
+      { "no": 9, "arti": { "id": "Mendapat kemurkaan/teguran", "jv": "Manggung duka cipto" } }
+    ],
+    "barat": [
+      { "no": 1, "arti": { "id": "Sering kecurian", "jv": "Kerep kemalingan" } },
+      { "no": 2, "arti": { "id": "Mempunyai anak yang bagus", "jv": "Darbe anak tur bagus" } },
+      { "no": 3, "arti": { "id": "Tidak mempunyai utang", "jv": "Ora duwe utang" } },
+      { "no": 4, "arti": { "id": "Mendapat kemurkaan/teguran", "jv": "Manggung duka cipto" } },
+      { "no": 5, "arti": { "id": "Kaya dari perak/logam", "jv": "Sugih saka slaka" } },
+      { "no": 6, "arti": { "id": "Sering mendapat uang", "jv": "Kerep oleh duit" } },
+      { "no": 7, "arti": { "id": "Mendapat kekayaan", "jv": "Oleh kasugihan" } },
+      { "no": 8, "arti": { "id": "Banyak anak", "jv": "Sugih anak" } },
+      { "no": 9, "arti": { "id": "Sering sakit dan susah", "jv": "Geringen kerep kasusahan" } }
+    ]
+  },
+  "omah_sisa": {
+    "metadata": { "id": "Petung rumah berdasarkan sisa pembagian neptu dengan 4 (Set A) atau 5 (Set B)", "jv": "Petung omah adhedhasar sisa pambagining neptu kaliyan 4 (Set A) utawi 5 (Set B)" },
+    "set_a_modulo_4": [
+      { "sisa": 0, "nama": "GENI", "watak": { "id": "Sering kebakaran atau panas hati", "jv": "Kerep kobongan utawa panas ati" } },
+      { "sisa": 1, "nama": "BUMI", "watak": { "id": "Tetap kukuh serta rahayu selamat", "jv": "Tetep kukuh sarta rahayu slamet" } },
+      { "sisa": 2, "nama": "JALMO", "watak": { "id": "Belum ada setahun kecurian", "jv": "Durung ana setahun kemalingan" } },
+      { "sisa": 3, "nama": "WANA", "watak": { "id": "Kena teluh lelembut dan sakit-sakitan", "jv": "Keteluh lelembut lan lara-laranen" } }
+    ],
+    "set_b_modulo_5": [
+      { "sisa": 0, "nama": "KAPETAK", "watak": { "id": "Belum ada setahun kematian", "jv": "Durung ana setahun kepaten" } },
+      { "sisa": 1, "nama": "GENI", "watak": { "id": "Sering kebakaran", "jv": "Kerep kobongan" } },
+      { "sisa": 2, "nama": "BUMI", "watak": { "id": "Tetap kukuh selamat", "jv": "Tetep kukuh slamet" } },
+      { "sisa": 3, "nama": "JALMO", "watak": { "id": "Sering kecurian", "jv": "Kerep kemalingan" } },
+      { "sisa": 4, "nama": "WANA", "watak": { "id": "Kena teluh dan sakit", "jv": "Keteluh lan lara" } }
+    ]
+  },
+  "pilih_lemah": [
+    { "ciri": { "id": "Tanah miring ke timur", "jv": "Lemah miring ngetan" }, "aran": "Manik Mulyo", "watak": { "id": "Hilang penyakitnya, banyak rezeki dan selamat", "jv": "Sirna ing lelara, akeh rejekine lan slamet" } },
+    { "ciri": { "id": "Tanah miring ke barat", "jv": "Lemah miring ngulon" }, "aran": "Sri Sadana", "watak": { "id": "Sering bertengkar, banyak penyakit", "jv": "Kerep rebutan rasa, akeh lelarane" } },
+    { "ciri": { "id": "Tanah miring ke selatan", "jv": "Lemah miring ngidul" }, "aran": "Raja Pendhita", "watak": { "id": "Berwibawa dan banyak anak", "jv": "Berwibawa lan akeh anak" } },
+    { "ciri": { "id": "Tanah miring ke utara", "jv": "Lemah miring ngalor" }, "aran": "Sri Tinurun", "watak": { "id": "Banyak mendapat rezeki dari arah jauh", "jv": "Akeh pikantuk rejeki saking arah tebih" } }
+  ]
+}

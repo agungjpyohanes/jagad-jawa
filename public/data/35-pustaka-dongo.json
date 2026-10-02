@@ -1,0 +1,1011 @@
+{
+  "meta": {
+    "nama": "Pustaka Dongo, Wirid & Ubarampe Jawa",
+    "versi": "1.1.0",
+    "dibuat": "2026-09-24",
+    "aplikasi": "Jagad Jawa",
+    "menu": "Pustaka",
+    "bahasa_antarmuka": "id",
+    "hak_cipta": "Aether Code",
+    "jumlah_kategori": 5,
+    "jumlah_entri": 12,
+    "sumber_file": [
+      "DONGA_RUWATAN_WETON_pocket.docx",
+      "DONGA_SAJRONING_WULAN_SURO_pocket.docx",
+      "DONGO_DONGO_PANGLEBURING_DOSA_pocket.docx",
+      "DONGO_NYINGKIRAKE_SENGKALA_ING_1_SURO_pocket.docx",
+      "DONGO_PADINAN_pocket.docx",
+      "DONGO_PUJI_DINA_pocket.docx",
+      "DONGO_SEMEDI_KANGGO_MANGERTENI_WUJUD_pocket.docx",
+      "DONGO_SEMEDI_MANGERTENI_SADULURE_PAPAT_KALIMA_PANCER_pocket.docx",
+      "DONGO_SEMEDI_NYAMPURNAKE_WUJUD_pocket.docx",
+      "DONGO_SEMEDI_PANETEPAN_KAPERCAYAN_MARANG_GUSTI_pocket.docx",
+      "DONGO_SESUCI_BADAN_ADUS_KERAMAS_pocket.docx",
+      "DONGO_WIRID_MALEM_1_SURO_pocket.docx"
+    ],
+    "sumber_dikecualikan": [
+      {
+        "file": "DONGO_KETERANGAN_GAMBAR_TUMPENG_TOMBAK_ROJO_pocket.docx",
+        "alasan": "Tumpeng Tombak Rojo sudah ada di menu tersendiri"
+      }
+    ],
+    "konvensi": {
+      "bagian.tipe": "utama | lanjutan | catatan | tabel | daftar",
+      "baris": "Setiap elemen adalah satu baris teks sesuai sumber; tampilkan dengan pemisah baris.",
+      "……… (titik isian)": "Tempat mengisi nama; aplikasi dapat menggantinya dengan input pengguna.",
+      "terkait": "Relasi antar-entri (id) beserta alasannya.",
+      "teks_cari": "Teks huruf kecil gabungan judul dan isi untuk pencarian."
+    }
+  },
+  "kategori": [
+    {
+      "id": "wirid-harian",
+      "nama": "Wirid & Doa Harian",
+      "urutan": 1,
+      "deskripsi": "Wirid menurut hari dan pasaran serta doa yang dibaca sehari-hari."
+    },
+    {
+      "id": "sesuci",
+      "nama": "Sesuci & Penyucian Diri",
+      "urutan": 2,
+      "deskripsi": "Niyat dan tata cara penyucian badan (adus keramas)."
+    },
+    {
+      "id": "semedi",
+      "nama": "Semedi & Mantra",
+      "urutan": 3,
+      "deskripsi": "Rangkaian semedi berbentuk mantra suku kata, dilanjutkan doa."
+    },
+    {
+      "id": "ruwatan",
+      "nama": "Ruwatan & Panglebur Dosa",
+      "urutan": 4,
+      "deskripsi": "Donga ruwatan weton dan panglebur dosa untuk sadulur papat kalima pancer."
+    },
+    {
+      "id": "wulan-suro",
+      "nama": "Wulan Suro",
+      "urutan": 5,
+      "deskripsi": "Wirid dan donga untuk malam 1 Suro dan sepanjang bulan Suro."
+    }
+  ],
+  "entri": [
+    {
+      "id": "puji-dina",
+      "kategori": "wirid-harian",
+      "judul": "Wirid Puji Dina",
+      "subjudul": "Wiridan kang kudu diwaca miturut dina lan pasaran",
+      "ringkasan": "Wirid tujuh hari lengkap dengan jumlah bacaan, arah menghadap menurut pasaran, jam baca, dan nabi pemilik tiap hari.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "tabel-wirid",
+      "waktu_pakai": "Harian, menurut dina lan pasaran",
+      "bagian": [
+        {
+          "id": "wirid-hari",
+          "label": "Wirid menurut dina",
+          "tipe": "tabel",
+          "baris": [
+            "MINGGU : Ya Chayu, Ya Chayumu (500x)",
+            "SENEN : Ya Rohmanu, Ya Rahimmu (400x)",
+            "SLASA : Ya Maliku, Ya Kudusu (300x)",
+            "REBO : Ya Kabiru, Ya Muntaha (700x)",
+            "KEMIS : Ya Aliyu, Ya Alimu (800x)",
+            "JUMAT : Ya Kafila, Ya Muhgeni (600x)",
+            "SETU : Ya Fatah, Ya Rajah (900x)"
+          ],
+          "data_ref": "data_terstruktur.wirid_hari"
+        },
+        {
+          "id": "adhep-pasaran",
+          "label": "Adhep miturut pasaran",
+          "tipe": "tabel",
+          "baris": [
+            "LEGI adhepe WETAN/TIMUR",
+            "PAHING adhepe KIDUL/SELATAN",
+            "PON adhepe NGULON/BARAT",
+            "WAGE adhepe NGALOR/UTARA",
+            "KLIWON adhepe TENGAH (sak-adhep2e)/BEBAS"
+          ],
+          "data_ref": "data_terstruktur.arah_pasaran"
+        },
+        {
+          "id": "jam-baca",
+          "label": "Jam",
+          "tipe": "tabel",
+          "baris": [
+            "Senin 21-04",
+            "Slasa 18-01",
+            "Rabu 22-05",
+            "Kamis 19-02",
+            "Jumat 23",
+            "Sabtu 20-03",
+            "Minggu 24"
+          ],
+          "data_ref": "data_terstruktur.wirid_hari",
+          "catatan": "Jumat (23) dan Minggu (24) adalah waktu tepat, bukan rentang."
+        },
+        {
+          "id": "pujine-dina-pitu",
+          "label": "Pujine Dina Pitu",
+          "tipe": "tabel",
+          "baris": [
+            "Dina Ahad ; Ya Chayu, Ya Chayumu, nabi Adam kang ndarbeni",
+            "Dina Senen ; Ya Rohmanu, Ya Rahimmu, nabi’ullah kang ndarben",
+            "Dina Selasa ; Ya Maliku, Ya Kudusu, nabi Isa kang ndarbeni",
+            "Dina Rebo ; Ya Kabiru, Ya Muntaha, pepitu uripipun nabi Ibrahim kang ndarbeni",
+            "Dina Kemis ; Ya Aliyu, Ya Alimu, wewolu uripipun, nabi Idris kang ndarbeni",
+            "Dina Jumungah ; Ya Kafila, Ya Muhgeni, ya enem uripipun, nabi Rasul kang ndarbeni",
+            "Dina Saptu ; Ya Fatah, Ya Rajah, sesanga uripipun, nabi Iskhak kang ndarbeni"
+          ],
+          "data_ref": "data_terstruktur.wirid_hari"
+        }
+      ],
+      "tag": [
+        "wirid",
+        "dina",
+        "pasaran",
+        "neptu",
+        "weton"
+      ],
+      "keterhubungan_aplikasi": {
+        "modul": "Kalender Jawa",
+        "kunci": [
+          "hari",
+          "pasaran"
+        ]
+      },
+      "sumber_file": "DONGO_PUJI_DINA_pocket.docx",
+      "teks_cari": "wirid puji dina wiridan kang kudu diwaca miturut dina lan pasaran wirid menurut dina minggu : ya chayu, ya chayumu (500x) senen : ya rohmanu, ya rahimmu (400x) slasa : ya maliku, ya kudusu (300x) rebo : ya kabiru, ya muntaha (700x) kemis : ya aliyu, ya alimu (800x) jumat : ya kafila, ya muhgeni (600x) setu : ya fatah, ya rajah (900x) adhep miturut pasaran legi adhepe wetan/timur pahing adhepe kidul/selatan pon adhepe ngulon/barat wage adhepe ngalor/utara kliwon adhepe tengah (sak-adhep2e)/bebas jam senin 21-04 slasa 18-01 rabu 22-05 kamis 19-02 jumat 23 sabtu 20-03 minggu 24 pujine dina pitu dina ahad ; ya chayu, ya chayumu, nabi adam kang ndarbeni dina senen ; ya rohmanu, ya rahimmu, nabi’ullah kang ndarben dina selasa ; ya maliku, ya kudusu, nabi isa kang ndarbeni dina rebo ; ya kabiru, ya muntaha, pepitu uripipun nabi ibrahim kang ndarbeni dina kemis ; ya aliyu, ya alimu, wewolu uripipun, nabi idris kang ndarbeni dina jumungah ; ya kafila, ya muhgeni, ya enem uripipun, nabi rasul kang ndarbeni dina saptu ; ya fatah, ya rajah, sesanga uripipun, nabi iskhak kang ndarbeni"
+    },
+    {
+      "id": "dongo-padinan",
+      "kategori": "wirid-harian",
+      "judul": "Dongo Padinan",
+      "subjudul": "Doa harian",
+      "ringkasan": "Tiga doa harian: Doa Damai (bahasa Indonesia), Rama Kawula, dan Salam Maria (bahasa Jawa).",
+      "bahasa": [
+        "id",
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": "Padinan (setiap hari)",
+      "bagian": [
+        {
+          "id": "doa-damai",
+          "label": "Doa Damai Fransiskus Asisi",
+          "tipe": "utama",
+          "baris": [
+            "Tuhan,",
+            "Jadikanlah aku pembawa damai,",
+            "Bila terjadi kebencian, jadikanlah aku pembawa cinta kasih,",
+            "Bila terjadi penghinaan, jadikanlah aku pembawa pengampunan,",
+            "Bila terjadi perselisihan, jadikanlah aku pembawa kerukunan,",
+            "Bila terjadi kebimbangan, jadikanlah aku pembawa kepastian,",
+            "Bila terjadi kesesatan, jadikanlah aku pembawa kebenaran,",
+            "Bila terjadi kecemasan, Jadikanlah aku pembawa harapan,",
+            "Bila terjadi kesedihan, jadikanlah aku sumber kegembiraan,",
+            "Bila terjadi kegelapan, jadikanlah aku pembawa terang,",
+            "Tuhan semoga aku ingin menghibur daripada dihibur,",
+            "memahami daripada dipahami, mencintai daripada dicintai,",
+            "sebab",
+            "dengan memberi aku menerima, dengan mengampuni aku diampuni,",
+            "dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya.",
+            "Aamiin."
+          ],
+          "bahasa": "id"
+        },
+        {
+          "id": "rama-kawula",
+          "label": "Rama Kawula",
+          "tipe": "utama",
+          "baris": [
+            "Rama kawula ing swarga",
+            "Asma Dalem kaluhurna",
+            "Kraton Dalem mugi rawuha",
+            "Karsa Dalem kalampahana",
+            "wonten ing donya kados ing swarga",
+            "kawula nyuwun rejeki kangge sapunika",
+            "sakathahing lepat nyuwun pangapunten Dalem",
+            "kados dene anggen kawula ugi ngapunten dhateng sesami",
+            "kawula nyuwun tinebihna saking panggodha",
+            "saha linuwarna saking piawon",
+            "Aamiin"
+          ],
+          "bahasa": "jw"
+        },
+        {
+          "id": "salam-maria",
+          "label": "Salam Maria",
+          "tipe": "utama",
+          "baris": [
+            "Sembah bekti kawula, Dèwi Maria, kekasihing Allah.",
+            "Pangéran nunggil ing panjenengan dalem.",
+            "Sami-sami wanita Sang Dèwi pinuji piyambak,",
+            "saha pinuji ugi wohing salira Dalem, Sri Yésus.",
+            "Dèwi Maria, Ibuning Allah, kawula tiyang dosa sami nyuwun pangèstu dalem,",
+            "samangké tuwin bénjing dumugining pejah.",
+            "Aamiin."
+          ],
+          "bahasa": "jw",
+          "pengulangan": 3,
+          "catatan": "Tanda '3x' berada di akhir dokumen tepat setelah Salam Maria; diasumsikan berlaku untuk bagian ini."
+        }
+      ],
+      "tag": [
+        "doa",
+        "harian",
+        "kristiani"
+      ],
+      "sumber_file": "DONGO_PADINAN_pocket.docx",
+      "teks_cari": "dongo padinan doa harian doa damai fransiskus asisi tuhan, jadikanlah aku pembawa damai, bila terjadi kebencian, jadikanlah aku pembawa cinta kasih, bila terjadi penghinaan, jadikanlah aku pembawa pengampunan, bila terjadi perselisihan, jadikanlah aku pembawa kerukunan, bila terjadi kebimbangan, jadikanlah aku pembawa kepastian, bila terjadi kesesatan, jadikanlah aku pembawa kebenaran, bila terjadi kecemasan, jadikanlah aku pembawa harapan, bila terjadi kesedihan, jadikanlah aku sumber kegembiraan, bila terjadi kegelapan, jadikanlah aku pembawa terang, tuhan semoga aku ingin menghibur daripada dihibur, memahami daripada dipahami, mencintai daripada dicintai, sebab dengan memberi aku menerima, dengan mengampuni aku diampuni, dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya. aamiin. rama kawula rama kawula ing swarga asma dalem kaluhurna kraton dalem mugi rawuha karsa dalem kalampahana wonten ing donya kados ing swarga kawula nyuwun rejeki kangge sapunika sakathahing lepat nyuwun pangapunten dalem kados dene anggen kawula ugi ngapunten dhateng sesami kawula nyuwun tinebihna saking panggodha saha linuwarna saking piawon aamiin salam maria sembah bekti kawula, dèwi maria, kekasihing allah. pangéran nunggil ing panjenengan dalem. sami-sami wanita sang dèwi pinuji piyambak, saha pinuji ugi wohing salira dalem, sri yésus. dèwi maria, ibuning allah, kawula tiyang dosa sami nyuwun pangèstu dalem, samangké tuwin bénjing dumugining pejah. aamiin."
+    },
+    {
+      "id": "sesuci-badan-adus-keramas",
+      "kategori": "sesuci",
+      "judul": "Sesuci Badan / Adus Keramas",
+      "subjudul": null,
+      "ringkasan": "Dua niyat penyucian saat mandi dan keramas, ditambah catatan cara menyawuk air.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": "Saat adus keramas",
+      "bagian": [
+        {
+          "id": "niyat-1",
+          "label": "Niyat 1 (Banyuku Suci)",
+          "tipe": "utama",
+          "baris": [
+            "Niyat Ingsun arep adus Banyuku Suci",
+            "Arane Banyu Kundha Gumala",
+            "Ombaking banyu ginawa urip",
+            "Urip langgeng tan kenaning owah",
+            "Yen owah saking kersaning Allah"
+          ]
+        },
+        {
+          "id": "niyat-2",
+          "label": "Niyat 2 (Banyuku Nur Allah)",
+          "tipe": "utama",
+          "baris": [
+            "Niyat Ingsung adus Banyuku Nur Allah",
+            "Tekaning banyu kodrat Allah",
+            "Kawula ya Gusti",
+            "Kawula ya kumpulaning Gusti",
+            "Resik njaba – Resik njero",
+            "Urip langgeng tankenaning owah",
+            "Yen owah saking kersaning Allah"
+          ]
+        },
+        {
+          "id": "nb-tata-cara",
+          "label": "NB (tata cara)",
+          "tipe": "catatan",
+          "baris": [
+            "Nyawuk banyu nganggo tangan kiwa diusapke ana bathuk banjur Adus Kramas"
+          ]
+        }
+      ],
+      "tag": [
+        "sesuci",
+        "adus",
+        "keramas",
+        "niyat"
+      ],
+      "sumber_file": "DONGO_SESUCI_BADAN_ADUS_KERAMAS_pocket.docx",
+      "teks_cari": "sesuci badan / adus keramas niyat 1 (banyuku suci) niyat ingsun arep adus banyuku suci arane banyu kundha gumala ombaking banyu ginawa urip urip langgeng tan kenaning owah yen owah saking kersaning allah niyat 2 (banyuku nur allah) niyat ingsung adus banyuku nur allah tekaning banyu kodrat allah kawula ya gusti kawula ya kumpulaning gusti resik njaba – resik njero urip langgeng tankenaning owah yen owah saking kersaning allah nb (tata cara) nyawuk banyu nganggo tangan kiwa diusapke ana bathuk banjur adus kramas"
+    },
+    {
+      "id": "semedi-mangerteni-wujud",
+      "kategori": "semedi",
+      "judul": "Semedi Kanggo Mangerteni Wujud",
+      "subjudul": "Panguripaning sadulur papat minangaka utusaning Gusti",
+      "ringkasan": "Semedi berupa satu rangkaian mantra suku kata untuk mengenali wujud; tanpa bagian lanjutan.",
+      "bahasa": [
+        "mantra"
+      ],
+      "jenis_isi": "mantra",
+      "waktu_pakai": null,
+      "bagian": [
+        {
+          "id": "mantra",
+          "label": "Mantra",
+          "tipe": "utama",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "DHOYOTOYO GOKOJO BOYOGOYO",
+            "THODOSO DOTHO GOBOSO KOJODOLO HOJODO",
+            "DHONOYO BOKOJO",
+            "LOHOBOSO JODOHOPO",
+            "THOROWOTHO BOSONYOYOJO"
+          ]
+        }
+      ],
+      "tag": [
+        "semedi",
+        "mantra",
+        "sadulur-papat"
+      ],
+      "formula_pembuka": "DOTHO GOBOSO KOJODOLO HOJODO",
+      "sumber_file": "DONGO_SEMEDI_KANGGO_MANGERTENI_WUJUD_pocket.docx",
+      "teks_cari": "semedi kanggo mangerteni wujud panguripaning sadulur papat minangaka utusaning gusti mantra dotho goboso kojodolo hojodo dhoyotoyo gokojo boyogoyo thodoso dotho goboso kojodolo hojodo dhonoyo bokojo lohoboso jodohopo thorowotho bosonyoyojo"
+    },
+    {
+      "id": "semedi-mangerteni-sadulure",
+      "kategori": "semedi",
+      "judul": "Semedi Mangerteni Sadulure Papat Kalima Pancer",
+      "subjudul": null,
+      "ringkasan": "Semedi mantra untuk mengenali sadulur papat kalima pancer, dilanjutkan donga.",
+      "bahasa": [
+        "mantra"
+      ],
+      "jenis_isi": "mantra",
+      "waktu_pakai": null,
+      "bagian": [
+        {
+          "id": "mantra",
+          "label": "Mantra",
+          "tipe": "utama",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "NYOHOMONG KOJODO",
+            "LOKOGO POHODHO KOBOHOJO",
+            "DHOHOMONG HOJODO THOROWOTHO BOKO",
+            "SOJODO GOYOKOJO THODOYO",
+            "DHOHOMONG HOJODO THOROWOTHO BOKO",
+            "GOKOROTHO POYOMONG",
+            "NYOHONYO HOBO KOJODOLO HOJODO",
+            "DHOYO DHOYO DHODO SOJODO GOYOKOJO"
+          ]
+        },
+        {
+          "id": "lanjutan",
+          "label": "Lanjutan donga",
+          "tipe": "lanjutan",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "JOKOBOKO NYOHOLOKO THOLOYODHO"
+          ],
+          "petunjuk": "Banjur diterusake donga"
+        }
+      ],
+      "tag": [
+        "semedi",
+        "mantra",
+        "sadulur-papat"
+      ],
+      "formula_pembuka": "DOTHO GOBOSO KOJODOLO HOJODO",
+      "terkait": [
+        {
+          "id": "ruwatan-weton",
+          "alasan": "sama-sama membahas sadulur papat kalima pancer"
+        },
+        {
+          "id": "panglebur-dosa",
+          "alasan": "sama-sama membahas sadulur papat"
+        }
+      ],
+      "sumber_file": "DONGO_SEMEDI_MANGERTENI_SADULURE_PAPAT_KALIMA_PANCER_pocket.docx",
+      "teks_cari": "semedi mangerteni sadulure papat kalima pancer mantra dotho goboso kojodolo hojodo nyohomong kojodo lokogo pohodho kobohojo dhohomong hojodo thorowotho boko sojodo goyokojo thodoyo dhohomong hojodo thorowotho boko gokorotho poyomong nyohonyo hobo kojodolo hojodo dhoyo dhoyo dhodo sojodo goyokojo lanjutan donga dotho goboso kojodolo hojodo jokoboko nyoholoko tholoyodho"
+    },
+    {
+      "id": "semedi-nyampurnake-wujud",
+      "kategori": "semedi",
+      "judul": "Semedi Nyampurnake Wujud",
+      "subjudul": "Nalika ingsun mampan ing bumi suci",
+      "ringkasan": "Semedi mantra untuk menyempurnakan wujud saat berada di bumi suci, dilanjutkan donga berpola 'YOHO'.",
+      "bahasa": [
+        "mantra"
+      ],
+      "jenis_isi": "mantra",
+      "waktu_pakai": "Nalika ingsun mampan ing bumi suci",
+      "bagian": [
+        {
+          "id": "mantra",
+          "label": "Mantra",
+          "tipe": "utama",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "NYOHOMONG KOJODO",
+            "LOKOGOKO DHONYOTHO MONGJOHOJO",
+            "DHOHOMONG HOJODO",
+            "THOROWOTHO BOSOJODO",
+            "SOJODO GOYOKOJO",
+            "KOJODOLO HOJODO DHOYOTOYO",
+            "GOTHO BOWOSO"
+          ]
+        },
+        {
+          "id": "lanjutan",
+          "label": "Lanjutan donga",
+          "tipe": "lanjutan",
+          "baris": [
+            "YOHO DOTHOGOBOSO",
+            "YOHO JOBOROLO",
+            "YOHO MOKOHOLO",
+            "YOHO HOSOROPOLO",
+            "YOHO HOJOROLO",
+            "YOHO SOJODO GOYOKOJO",
+            "GOKOROWOHO BOSOJOKO",
+            "DHOHOJOTHO JODOGOYO"
+          ],
+          "petunjuk": "Banjur diterusake donga"
+        }
+      ],
+      "tag": [
+        "semedi",
+        "mantra"
+      ],
+      "formula_pembuka": "DOTHO GOBOSO KOJODOLO HOJODO",
+      "sumber_file": "DONGO_SEMEDI_NYAMPURNAKE_WUJUD_pocket.docx",
+      "teks_cari": "semedi nyampurnake wujud nalika ingsun mampan ing bumi suci mantra dotho goboso kojodolo hojodo nyohomong kojodo lokogoko dhonyotho mongjohojo dhohomong hojodo thorowotho bosojodo sojodo goyokojo kojodolo hojodo dhoyotoyo gotho bowoso lanjutan donga yoho dothogoboso yoho joborolo yoho mokoholo yoho hosoropolo yoho hojorolo yoho sojodo goyokojo gokorowoho bosojoko dhohojotho jodogoyo"
+    },
+    {
+      "id": "semedi-panetepan-kapercayan",
+      "kategori": "semedi",
+      "judul": "Semedi Panetepan Kapercayan Marang Gusti Kang Maha Kuwasa",
+      "subjudul": null,
+      "ringkasan": "Semedi mantra penetapan kepercayaan kepada Gusti, dilanjutkan donga singkat.",
+      "bahasa": [
+        "mantra"
+      ],
+      "jenis_isi": "mantra",
+      "waktu_pakai": null,
+      "bagian": [
+        {
+          "id": "mantra",
+          "label": "Mantra",
+          "tipe": "utama",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "JODO HONOTHO POHOLOKO",
+            "DHOKO JOYONYOYO KOJODOLO HOJODO",
+            "SOJODO GOYOKOJO GOTHO NGOYOJO"
+          ]
+        },
+        {
+          "id": "lanjutan",
+          "label": "Lanjutan donga",
+          "tipe": "lanjutan",
+          "baris": [
+            "DOTHO GOBOSO KOJODOLO HOJODO",
+            "DHOYOTOYO GOTHO BOWOSO"
+          ],
+          "petunjuk": "Banjur diterusake donga"
+        }
+      ],
+      "tag": [
+        "semedi",
+        "mantra"
+      ],
+      "formula_pembuka": "DOTHO GOBOSO KOJODOLO HOJODO",
+      "sumber_file": "DONGO_SEMEDI_PANETEPAN_KAPERCAYAN_MARANG_GUSTI_pocket.docx",
+      "teks_cari": "semedi panetepan kapercayan marang gusti kang maha kuwasa mantra dotho goboso kojodolo hojodo jodo honotho poholoko dhoko joyonyoyo kojodolo hojodo sojodo goyokojo gotho ngoyojo lanjutan donga dotho goboso kojodolo hojodo dhoyotoyo gotho bowoso"
+    },
+    {
+      "id": "ruwatan-weton",
+      "kategori": "ruwatan",
+      "judul": "Donga Ruwatan Weton",
+      "subjudul": "Untuk diri sendiri (pribadi) dan untuk keluarga",
+      "ringkasan": "Dua varian donga ruwatan weton: pribadi, dan keluarga dengan titik isian untuk nama.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": "Ruwatan weton",
+      "bagian": [
+        {
+          "id": "pribadi",
+          "label": "Kanggo awake dewe (pribadi)",
+          "tipe": "utama",
+          "baris": [
+            "Niyat Ingsun Angruwat",
+            "Kadang Ingsun Papat Kalima Pancer",
+            "Kang Dumunung Aneng Badan Ingsun",
+            "Kakang Kawah, Adi Ari-ari, Getih Puser",
+            "Sakehe Kadang Ingsun Kang Metu Saka Dalan Ina",
+            "Lan Kang Ora Metu Dalan Ina",
+            "Sarta Kadang Ingsun Kang Metu Bareng Sedina",
+            "Kabeh Pada Sampurna",
+            "Nirmala Waluya Ing Kahanan Jati Kalawan Kodrat Ingsun",
+            "Hu Allah Hu Allah Hu Allah"
+          ],
+          "varian": "pribadi"
+        },
+        {
+          "id": "keluarga",
+          "label": "Kanggo keluarga",
+          "tipe": "utama",
+          "baris": [
+            "Niyat Ingsun Angruwat",
+            "Kadange ……… Papat Kalima Pancer",
+            "Kang Dumunung Aneng Badane ………",
+            "Kakang Kawah, Adi Ari-ari, Getih Puser",
+            "Sakehe Kadange ……… Kang Metu Saka Dalan Ina",
+            "Lan Kang Ora Metu Dalan Ina",
+            "Sarta Kadange ……… Kang Metu Bareng Sedina",
+            "Kabeh Pada Sampurna",
+            "Nirmala Waluya Ing Kahanan Jati Kalawan Kodrate ………",
+            "Hu Allah Hu Allah Hu Allah"
+          ],
+          "varian": "keluarga",
+          "isian": "Titik ………  diisi nama orang yang didoakan."
+        }
+      ],
+      "penutup": "Hu Allah Hu Allah Hu Allah",
+      "tag": [
+        "ruwatan",
+        "weton",
+        "sadulur-papat",
+        "kakang-kawah-adi-ari-ari"
+      ],
+      "terkait": [
+        {
+          "id": "panglebur-dosa",
+          "alasan": "sama-sama untuk ngruwat sadulur papat"
+        }
+      ],
+      "sumber_file": "DONGA_RUWATAN_WETON_pocket.docx",
+      "teks_cari": "donga ruwatan weton untuk diri sendiri (pribadi) dan untuk keluarga kanggo awake dewe (pribadi) niyat ingsun angruwat kadang ingsun papat kalima pancer kang dumunung aneng badan ingsun kakang kawah, adi ari-ari, getih puser sakehe kadang ingsun kang metu saka dalan ina lan kang ora metu dalan ina sarta kadang ingsun kang metu bareng sedina kabeh pada sampurna nirmala waluya ing kahanan jati kalawan kodrat ingsun hu allah hu allah hu allah kanggo keluarga niyat ingsun angruwat kadange ……… papat kalima pancer kang dumunung aneng badane ……… kakang kawah, adi ari-ari, getih puser sakehe kadange ……… kang metu saka dalan ina lan kang ora metu dalan ina sarta kadange ……… kang metu bareng sedina kabeh pada sampurna nirmala waluya ing kahanan jati kalawan kodrate ……… hu allah hu allah hu allah"
+    },
+    {
+      "id": "panglebur-dosa",
+      "kategori": "ruwatan",
+      "judul": "Dongo Pangleburing Dosa",
+      "subjudul": "Kanggo ngruwat sadulur papat",
+      "ringkasan": "Doa peleburan dosa dan kesalahan dalam rangka meruwat sadulur papat.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": null,
+      "bagian": [
+        {
+          "id": "utama",
+          "label": "Donga",
+          "tipe": "utama",
+          "baris": [
+            "Gusti ingkang Maha Pangaksama, ingkang kuwasa paring kasampurnan marang ingsun.",
+            "Kawula nglebur dosa sarta kesalahan ingsun, ingkang damel kasangsaran gesang ingsun.",
+            "Sirnakaken sadaya bebaya, saking kuwasa Gusti ingkang Maha Pangaksama ing saklaminipun.",
+            "Kawula sampurnakaken wujud ingsun, ingkang sakwaunipun sampun sirna.",
+            "Selamet sampurna marang wujud ingsun ingkang Maha Suci, saking kuwasaning Gusti.",
+            "Hu Allah Hu Allah Hu Allah"
+          ]
+        }
+      ],
+      "penutup": "Hu Allah Hu Allah Hu Allah",
+      "tag": [
+        "ruwatan",
+        "dosa",
+        "sadulur-papat"
+      ],
+      "terkait": [
+        {
+          "id": "ruwatan-weton",
+          "alasan": "sama-sama untuk ngruwat sadulur papat"
+        }
+      ],
+      "sumber_file": "DONGO_DONGO_PANGLEBURING_DOSA_pocket.docx",
+      "teks_cari": "dongo pangleburing dosa kanggo ngruwat sadulur papat donga gusti ingkang maha pangaksama, ingkang kuwasa paring kasampurnan marang ingsun. kawula nglebur dosa sarta kesalahan ingsun, ingkang damel kasangsaran gesang ingsun. sirnakaken sadaya bebaya, saking kuwasa gusti ingkang maha pangaksama ing saklaminipun. kawula sampurnakaken wujud ingsun, ingkang sakwaunipun sampun sirna. selamet sampurna marang wujud ingsun ingkang maha suci, saking kuwasaning gusti. hu allah hu allah hu allah"
+    },
+    {
+      "id": "wirid-malem-1-suro",
+      "kategori": "wulan-suro",
+      "judul": "Wirid ing Malem 1 (Siji) Suro",
+      "subjudul": "Semedi ing pinggir samodra",
+      "ringkasan": "Wirid tiga nama Gusti yang dibaca 33 kali, dilanjutkan donga panyuwunan panjang umur yang dibaca 100 kali.",
+      "bahasa": [
+        "jw",
+        "mantra"
+      ],
+      "jenis_isi": "wirid",
+      "waktu_pakai": "Malem 1 Suro",
+      "waktu_kalender": {
+        "sasi_jawa": "Suro",
+        "tanggal": 1,
+        "catatan": "disebut 'malem' 1 Suro"
+      },
+      "bagian": [
+        {
+          "id": "wirid",
+          "label": "Wirid",
+          "tipe": "utama",
+          "baris": [
+            "YA GUSTI KANG MAHA SUCI",
+            "YA GUSTI KANG MAHA PANGAKSAMA",
+            "YA GUSTI KANG MAHA SENTOSA"
+          ],
+          "pengulangan": 33,
+          "catatan": "NB: Diwaca kaping 33 (per rangkaian, bukan per baris).",
+          "pengulangan_per": "rangkaian"
+        },
+        {
+          "id": "lanjutan",
+          "label": "Donga panyuwunan kanggo panjang umur",
+          "tipe": "lanjutan",
+          "baris": [
+            "WOYO DOTHO GOBOSO",
+            "WOYO BOSOTO"
+          ],
+          "pengulangan": 100,
+          "petunjuk": "Banjur diterusake donga panyuwunan kanggo Panjang Umur",
+          "catatan": "NB: Diwaca kaping 100 (per rangkaian, bukan per baris).",
+          "pengulangan_per": "rangkaian"
+        }
+      ],
+      "tag": [
+        "suro",
+        "wirid",
+        "semedi",
+        "samodra",
+        "panjang-umur"
+      ],
+      "terkait": [
+        {
+          "id": "donga-sajroning-wulan-suro",
+          "alasan": "subjudul sama: semedi ing pinggir samodra"
+        },
+        {
+          "id": "nyingkirake-sengkala-1-suro",
+          "alasan": "sama-sama untuk 1 Suro"
+        }
+      ],
+      "keterhubungan_aplikasi": {
+        "modul": "Kalender Jawa",
+        "kunci": [
+          "sasi=Suro",
+          "tanggal=1"
+        ]
+      },
+      "sumber_file": "DONGO_WIRID_MALEM_1_SURO_pocket.docx",
+      "teks_cari": "wirid ing malem 1 (siji) suro semedi ing pinggir samodra wirid ya gusti kang maha suci ya gusti kang maha pangaksama ya gusti kang maha sentosa donga panyuwunan kanggo panjang umur woyo dotho goboso woyo bosoto"
+    },
+    {
+      "id": "donga-sajroning-wulan-suro",
+      "kategori": "wulan-suro",
+      "judul": "Donga Sajroning Wulan Suro",
+      "subjudul": "Semedi ing pinggir samodra / bengawan",
+      "ringkasan": "Doa panjang berbahasa Jawa krama berisi syukur, permohonan ampun, dan penyerahan diri, dibaca sepanjang bulan Suro.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": "Sepanjang wulan Suro",
+      "waktu_kalender": {
+        "sasi_jawa": "Suro",
+        "tanggal": null
+      },
+      "bagian": [
+        {
+          "id": "utama",
+          "label": "Donga",
+          "tipe": "utama",
+          "baris": [
+            "Duh Gusti Ingkang Maha Suci",
+            "Ingkang Tansah Kawula Sembah Rina Kalawan Wengi",
+            "Kawula Ngaturaken Agunging Panuwun Ingkang Tanpa Pepindan",
+            "Awit Sadaya Berkah Rahmat Sarta Nugraha Dalem Gusti",
+            "Ingkang Sampun Pinaringaken Dumateng Kawula Sakanca Rowang",
+            "Duh Gusti Ingkang Maha Pangaksama",
+            "Kawula Nyuwun Sih Lumunturing Pangaksama Ingkang Agung",
+            "Mugi Gusti Tansah Paring Pangapunten Sadaya Dosa Tuwin Kalepatan Kawula",
+            "Sakanca Rowang Dalah Kulawarga Sabrayat Sakukuban Sarta Leluhur Kawula",
+            "Mboten Katalumpen Dumateng Leluhur Agung Ing Tanah Jawa",
+            "Mugi Gusti Tansah Paring Pangapunten Sadaya Dosa Tuwin Kalepatanipun",
+            "Sarta Linuwarana Saking Bebenduning Allah",
+            "Lan Pinaringan Gesang Langgeng Wonten Keraton Dalem Ing Suwarga",
+            "Duh Gusti Ingkang Maha Kuwasa",
+            "Kawula Pitados Dumateng Sadaya Panguwaos Sarta Kawicaksanan Dalem Gusti",
+            "Pramila Sadaya Lampah Sarta Gesang Kawula Sakanca Rowang",
+            "Tansah Sumarah Wonten Ngarsa Dalem Gusti",
+            "Duh Gusti Ingkang Maha Asih",
+            "Kawula Nyadong Berkah Dalem, Mugi Gusti Tansah Paring Teguh Rahayu Slamet",
+            "Tansah Manggih Bagya Mulya Bejo Basuki Widodo Kalis Nir Ing Sambikala",
+            "Sarta Tambahing Daya Kekiyatan Mugi Sadaya Ingkang Kawula Sedya Teka",
+            "Kawula Cipto Dadi, Ngertos Sakderengipun Winarah Saking Kersaning Allah",
+            "Hu Allah Hu Allah Hu Allah"
+          ]
+        }
+      ],
+      "penutup": "Hu Allah Hu Allah Hu Allah",
+      "tag": [
+        "suro",
+        "doa",
+        "samodra",
+        "leluhur"
+      ],
+      "terkait": [
+        {
+          "id": "wirid-malem-1-suro",
+          "alasan": "subjudul sama: semedi ing pinggir samodra"
+        }
+      ],
+      "sumber_file": "DONGA_SAJRONING_WULAN_SURO_pocket.docx",
+      "teks_cari": "donga sajroning wulan suro semedi ing pinggir samodra / bengawan donga duh gusti ingkang maha suci ingkang tansah kawula sembah rina kalawan wengi kawula ngaturaken agunging panuwun ingkang tanpa pepindan awit sadaya berkah rahmat sarta nugraha dalem gusti ingkang sampun pinaringaken dumateng kawula sakanca rowang duh gusti ingkang maha pangaksama kawula nyuwun sih lumunturing pangaksama ingkang agung mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatan kawula sakanca rowang dalah kulawarga sabrayat sakukuban sarta leluhur kawula mboten katalumpen dumateng leluhur agung ing tanah jawa mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatanipun sarta linuwarana saking bebenduning allah lan pinaringan gesang langgeng wonten keraton dalem ing suwarga duh gusti ingkang maha kuwasa kawula pitados dumateng sadaya panguwaos sarta kawicaksanan dalem gusti pramila sadaya lampah sarta gesang kawula sakanca rowang tansah sumarah wonten ngarsa dalem gusti duh gusti ingkang maha asih kawula nyadong berkah dalem, mugi gusti tansah paring teguh rahayu slamet tansah manggih bagya mulya bejo basuki widodo kalis nir ing sambikala sarta tambahing daya kekiyatan mugi sadaya ingkang kawula sedya teka kawula cipto dadi, ngertos sakderengipun winarah saking kersaning allah hu allah hu allah hu allah"
+    },
+    {
+      "id": "nyingkirake-sengkala-1-suro",
+      "kategori": "wulan-suro",
+      "judul": "Nyingkirake Sengkala ing Tanggal 1 Suro",
+      "subjudul": null,
+      "ringkasan": "Doa singkat menyingkirkan sengkala pada 1 Suro, dengan titik isian nama.",
+      "bahasa": [
+        "jw"
+      ],
+      "jenis_isi": "teks-doa",
+      "waktu_pakai": "Tanggal 1 Suro",
+      "waktu_kalender": {
+        "sasi_jawa": "Suro",
+        "tanggal": 1
+      },
+      "bagian": [
+        {
+          "id": "utama",
+          "label": "Donga",
+          "tipe": "utama",
+          "baris": [
+            "Gusti Ingkang Welas Asih lan Maha Wicaksana",
+            "Gusti Ingkang Maha Kuwasa lan Paring Pangaksama Dumatheng Kawula",
+            "Sirnakna Sadaya Bebaya Saking Raganing ………",
+            "Sirnakna Sadaya Dosa lan Kalepataning ………",
+            "Dumateng Saduluripun ……… Kang Papat Lima Pancer",
+            "Teguh Rahayu Selamet Marang Kuwasaning ………",
+            "Budi Sampurna Marang Wujudipun ………"
+          ]
+        }
+      ],
+      "isian": "Titik ……… diisi nama orang yang didoakan.",
+      "tag": [
+        "suro",
+        "sengkala",
+        "sadulur-papat"
+      ],
+      "terkait": [
+        {
+          "id": "wirid-malem-1-suro",
+          "alasan": "sama-sama untuk 1 Suro"
+        }
+      ],
+      "keterhubungan_aplikasi": {
+        "modul": "Kalender Jawa",
+        "kunci": [
+          "sasi=Suro",
+          "tanggal=1"
+        ]
+      },
+      "sumber_file": "DONGO_NYINGKIRAKE_SENGKALA_ING_1_SURO_pocket.docx",
+      "teks_cari": "nyingkirake sengkala ing tanggal 1 suro donga gusti ingkang welas asih lan maha wicaksana gusti ingkang maha kuwasa lan paring pangaksama dumatheng kawula sirnakna sadaya bebaya saking raganing ……… sirnakna sadaya dosa lan kalepataning ……… dumateng saduluripun ……… kang papat lima pancer teguh rahayu selamet marang kuwasaning ……… budi sampurna marang wujudipun ………"
+    }
+  ],
+  "data_terstruktur": {
+    "wirid_hari": [
+      {
+        "hari": "minggu",
+        "alias_hari": [
+          "ahad"
+        ],
+        "wirid": "Ya Chayu, Ya Chayumu",
+        "jumlah_bacaan": 500,
+        "neptu_hari": 5,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": null,
+        "nabi_pemilik_menurut_teks": "nabi Adam",
+        "jam_mentah": "24",
+        "jam_mulai": null,
+        "jam_selesai": null,
+        "jam_catatan": "Waktu tepat (satu titik waktu), bukan rentang. 24 = tengah malam (00.00).",
+        "jam_tepat": 24
+      },
+      {
+        "hari": "senin",
+        "alias_hari": [
+          "senen"
+        ],
+        "wirid": "Ya Rohmanu, Ya Rahimmu",
+        "jumlah_bacaan": 400,
+        "neptu_hari": 4,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": null,
+        "nabi_pemilik_menurut_teks": "nabi'ullah",
+        "jam_mentah": "21-04",
+        "jam_mulai": 21,
+        "jam_selesai": 4,
+        "jam_catatan": "Rentang jam (24 jam).",
+        "jam_tepat": null
+      },
+      {
+        "hari": "selasa",
+        "alias_hari": [
+          "slasa"
+        ],
+        "wirid": "Ya Maliku, Ya Kudusu",
+        "jumlah_bacaan": 300,
+        "neptu_hari": 3,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": null,
+        "nabi_pemilik_menurut_teks": "nabi Isa",
+        "jam_mentah": "18-01",
+        "jam_mulai": 18,
+        "jam_selesai": 1,
+        "jam_catatan": "Rentang jam (24 jam).",
+        "jam_tepat": null
+      },
+      {
+        "hari": "rabu",
+        "alias_hari": [
+          "rebo"
+        ],
+        "wirid": "Ya Kabiru, Ya Muntaha",
+        "jumlah_bacaan": 700,
+        "neptu_hari": 7,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": "pepitu uripipun",
+        "nabi_pemilik_menurut_teks": "nabi Ibrahim",
+        "jam_mentah": "22-05",
+        "jam_mulai": 22,
+        "jam_selesai": 5,
+        "jam_catatan": "Rentang jam (24 jam).",
+        "jam_tepat": null
+      },
+      {
+        "hari": "kamis",
+        "alias_hari": [
+          "kemis"
+        ],
+        "wirid": "Ya Aliyu, Ya Alimu",
+        "jumlah_bacaan": 800,
+        "neptu_hari": 8,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": "wewolu uripipun",
+        "nabi_pemilik_menurut_teks": "nabi Idris",
+        "jam_mentah": "19-02",
+        "jam_mulai": 19,
+        "jam_selesai": 2,
+        "jam_catatan": "Rentang jam (24 jam).",
+        "jam_tepat": null
+      },
+      {
+        "hari": "jumat",
+        "alias_hari": [
+          "jumungah"
+        ],
+        "wirid": "Ya Kafila, Ya Muhgeni",
+        "jumlah_bacaan": 600,
+        "neptu_hari": 6,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": "ya enem uripipun",
+        "nabi_pemilik_menurut_teks": "nabi Rasul",
+        "jam_mentah": "23",
+        "jam_mulai": null,
+        "jam_selesai": null,
+        "jam_catatan": "Waktu tepat (satu titik waktu), bukan rentang.",
+        "jam_tepat": 23
+      },
+      {
+        "hari": "sabtu",
+        "alias_hari": [
+          "setu",
+          "saptu"
+        ],
+        "wirid": "Ya Fatah, Ya Rajah",
+        "jumlah_bacaan": 900,
+        "neptu_hari": 9,
+        "jumlah_sama_dengan_neptu_x100": true,
+        "neptu_disebut_di_teks": "sesanga uripipun",
+        "nabi_pemilik_menurut_teks": "nabi Iskhak",
+        "jam_mentah": "20-03",
+        "jam_mulai": 20,
+        "jam_selesai": 3,
+        "jam_catatan": "Rentang jam (24 jam).",
+        "jam_tepat": null
+      }
+    ],
+    "arah_pasaran": [
+      {
+        "pasaran": "legi",
+        "arah_jawa": "wetan",
+        "arah_indonesia": "timur",
+        "catatan": null
+      },
+      {
+        "pasaran": "pahing",
+        "arah_jawa": "kidul",
+        "arah_indonesia": "selatan",
+        "catatan": null
+      },
+      {
+        "pasaran": "pon",
+        "arah_jawa": "kulon",
+        "arah_indonesia": "barat",
+        "catatan": null
+      },
+      {
+        "pasaran": "wage",
+        "arah_jawa": "lor",
+        "arah_indonesia": "utara",
+        "catatan": null
+      },
+      {
+        "pasaran": "kliwon",
+        "arah_jawa": "tengah",
+        "arah_indonesia": "tengah/bebas",
+        "catatan": "Kliwon: tengah (sak-adhep2e)/bebas."
+      }
+    ]
+  },
+  "catatan_editorial": [
+    {
+      "entri": "puji-dina",
+      "jenis": "keputusan",
+      "catatan": "Ejaan nama wirid pada daftar 'Pujine Dina Pitu' disesuaikan mengikuti tabel (Ya Chayu, Ya Rohmanu, Ya Aliyu, Ya Kafila, dst.) atas konfirmasi pemilik."
+    },
+    {
+      "entri": "puji-dina",
+      "jenis": "keputusan",
+      "catatan": "Jam Jumat (23) dan Minggu (24) memang satu titik waktu karena waktunya harus tepat; hari lain berupa rentang jam."
+    },
+    {
+      "entri": "wirid-malem-1-suro",
+      "jenis": "keputusan",
+      "catatan": "Pengulangan 33x dan 100x berlaku per rangkaian, bukan per baris."
+    },
+    {
+      "entri": "ruwatan-weton",
+      "jenis": "keputusan",
+      "catatan": "Titik isian '………' adalah tempat nama orang yang didoakan (dikonfirmasi pemilik)."
+    },
+    {
+      "entri": "*",
+      "jenis": "dikecualikan",
+      "catatan": "DONGO_KETERANGAN_GAMBAR_TUMPENG_TOMBAK_ROJO_pocket.docx tidak dimasukkan karena Tumpeng Tombak Rojo sudah ada di menu tersendiri."
+    },
+    {
+      "entri": "puji-dina",
+      "jenis": "temuan",
+      "catatan": "Jumlah bacaan sama dengan neptu hari x 100 untuk ketujuh hari (Minggu 5=500 ... Sabtu 9=900). Neptu Rabu-Sabtu juga disebut eksplisit di teks."
+    },
+    {
+      "entri": "puji-dina",
+      "jenis": "koreksi",
+      "catatan": "Baris Dina Ahad di sumber tertulis 'ndarbemni'; dikoreksi menjadi 'ndarbeni' atas konfirmasi pemilik."
+    },
+    {
+      "entri": "puji-dina",
+      "jenis": "variasi-nama-hari",
+      "catatan": "Nama hari bervariasi (Senen/Senin, Slasa/Selasa, Rebo/Rabu, Kemis/Kamis, Jumat/Jumungah, Setu/Saptu/Sabtu, Minggu/Ahad). Disediakan alias untuk pencarian."
+    },
+    {
+      "entri": "nyingkirake-sengkala-1-suro",
+      "jenis": "placeholder",
+      "catatan": "Lima titik isian '………'. Bagian 'Kang Papat Lima Pancer' berbeda dari 'Papat Kalima Pancer' di dokumen lain."
+    },
+    {
+      "entri": "ruwatan-weton",
+      "jenis": "placeholder",
+      "catatan": "Varian keluarga memiliki titik isian '………' pada setiap baris yang menyebut kadang."
+    },
+    {
+      "entri": "dongo-padinan",
+      "jenis": "asumsi",
+      "catatan": "Tanda '3x' ada di akhir dokumen tepat setelah Salam Maria; diasumsikan berlaku untuk Salam Maria. Doa Damai berbahasa Indonesia, dua doa lain berbahasa Jawa."
+    },
+    {
+      "entri": "semedi-*",
+      "jenis": "pola",
+      "catatan": "Keempat semedi diawali baris yang sama ('DOTHO GOBOSO KOJODOLO HOJODO'). Semua kata tersusun dari konsonan dengan vokal 'o', yang tampaknya pelafalan aksara Jawa; ini dugaan dan belum diverifikasi. Teks disimpan apa adanya."
+    },
+    {
+      "entri": "wirid-malem-1-suro",
+      "jenis": "relasi",
+      "catatan": "Subjudul 'Semedi ing pinggir samodra' sama dengan Donga Sajroning Wulan Suro (yang menambahkan 'bengawan')."
+    },
+    {
+      "entri": "*",
+      "jenis": "normalisasi",
+      "catatan": "Spasi berlebih dirapikan dan panjang titik isian diseragamkan menjadi '………'; huruf besar/kecil, ejaan, dan tanda baca dipertahankan sesuai sumber. Nomor halaman pada footer tidak disertakan."
+    }
+  ]
+}
