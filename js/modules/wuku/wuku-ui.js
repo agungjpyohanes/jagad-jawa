@@ -21,7 +21,7 @@ import {
 } from '../../data/dewa-kanon.js';
 import { MASTER_SIKLUS_PADEWAN } from '../../data/siklus-master-data.js';
 import { showToast } from '../../ui/toast.js';
-import { getBilingualText } from '../../ui/i18n.js';
+import { getBilingualText, getLanguage } from '../../ui/i18n.js';
 
 let activeWukuNo = 1;
 let currentWukuCategory = 'all';
@@ -84,11 +84,13 @@ export function renderWukuGrid(list) {
   const containers = [containerModal, containerTab].filter(Boolean);
   if (containers.length === 0) return;
 
+  const isJv = (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv';
+
   if (!list || list.length === 0) {
     const emptyHtml = `
       <div class="col-span-full p-6 text-center text-xs text-sogan-400">
         <i class="fa-solid fa-circle-question text-lg mb-2 text-prada/60 block"></i>
-        Mboten wonten wuku ingkang jumbuh kaliyan padosan sampeyan.
+        ${isJv ? 'Mboten wonten wuku ingkang jumbuh kaliyan padosan sampeyan.' : 'Tidak ada wuku yang cocok dengan pencarian Anda.'}
       </div>
     `;
     containers.forEach(c => { c.innerHTML = emptyHtml; });
@@ -101,9 +103,14 @@ export function renderWukuGrid(list) {
       ? 'border-prada bg-prada/15 shadow-[0_0_12px_rgba(212,175,55,0.35)]' 
       : 'border-sogan-800 bg-keraton hover:border-prada/60 hover:bg-sogan-900/40';
 
+    const cardTitle = isJv
+      ? `Bikak rincian wuku ${w.nama_wuku}`
+      : `Buka rincian wuku ${w.nama_wuku}`;
+
     return `
       <button onclick="window.selectWukuDetail(${w.no_wuku})"
         id="wukuCard-${w.no_wuku}"
+        title="${cardTitle}"
         class="wuku-card-btn p-2 sm:p-2.5 rounded-xl border text-left transition flex items-center gap-2.5 cursor-pointer active:scale-95 ${activeClass}">
         <div class="w-7 h-7 rounded-lg bg-sogan-950 border border-prada/40 flex items-center justify-center font-mono font-bold text-xs text-prada shrink-0">
           ${w.no_wuku}
@@ -171,6 +178,9 @@ export function selectWukuDetail(noOrName) {
   if (!summary) return;
 
   activeWukuNo = summary.no;
+  if (typeof window !== 'undefined') {
+    window.activeWukuNo = summary.no;
+  }
 
   // Perbarui styling aktif pada grid kartu di seluruh container
   document.querySelectorAll('.wuku-card-btn').forEach(btn => {
@@ -188,6 +198,57 @@ export function selectWukuDetail(noOrName) {
   ].filter(Boolean);
   if (detailBoxes.length === 0) return;
 
+  const isJv = (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv';
+
+  const wukuHeaderLabel = isJv
+    ? `WUKU KAPING ${summary.no} SAKING 30`
+    : `WUKU KE-${summary.no} DARI 30`;
+
+  const wukuImgTitle = isJv
+    ? `Klik kagem mirsani rincian wuku ${summary.nama}`
+    : `Klik untuk melihat rincian wuku ${summary.nama}`;
+
+  const wukuImgSubtitle = isJv
+    ? 'Gambar Lambang Wuku'
+    : 'Ilustrasi Lambang Wuku';
+
+  const dewaImgTitle = isJv
+    ? 'Klik kagem mirsani rincian mendalam Batara Dewane Wuku'
+    : 'Klik untuk melihat rincian mendalam Batara Pelindung Wuku';
+
+  const dewaImgSubtitle = isJv
+    ? 'Dewa Pangayom (Klik Detail)'
+    : 'Dewa Pelindung (Klik Detail)';
+
+  const watakTitle = isJv ? 'Watak Budi Pangerti' : 'Karakter & Budi Pekerti';
+  const bilahiTitle = isJv ? 'Bilahi & Bebaya Kultural' : 'Pantangan & Bahaya Budaya';
+  const sesajiTitle = isJv ? 'Sesaji Ruwat:' : 'Sesaji Ruwatan:';
+  const tindihTitle = isJv ? 'Tindih:' : 'Tindih:';
+  const slametanTitle = isJv ? 'Boga Slametan:' : 'Hidangan Selametan:';
+  const iwakTitle = isJv ? 'Iwak:' : 'Lauk Pauk:';
+  const jamuTitle = isJv ? 'Jamu & Pangupaya:' : 'Obat Tradisional & Ikhtiar:';
+  const tambaTitle = isJv ? 'Tamba:' : 'Obat:';
+  const dongaTitle = isJv ? 'Donga:' : 'Doa:';
+  const profesiTitle = isJv ? 'Pangupajiwa:' : 'Profesi:';
+
+  const pilarHeader = isJv ? 'Petenget Nujum 4 Pilar Pawukon' : 'Peringatan Nujum 4 Pilar Wuku';
+  const pilarBadge = isJv ? 'Pituduh Tradisional' : 'Pedoman Tradisional';
+
+  const alaBecikTitle = isJv ? 'Ala & Becik Wuku' : 'Baik & Buruk Wuku';
+  const alaBecikSub = isJv ? 'Pituduh Dina' : 'Petunjuk Hari';
+  const becikLabel = isJv ? '✓ Kang Becik:' : '✓ Yang Baik:';
+  const alaLabel = isJv ? '✗ Kang Ala (Sirikan):' : '✗ Pantangan (Dilarang):';
+
+  const nambaniTitle = isJv ? 'Nambani (Usada & Jamu)' : 'Pengobatan Tradisional (Usada & Jamu)';
+  const nambaniSub = isJv ? 'Tamba Lara' : 'Penyembuhan Sakit';
+
+  const pangupajiwaTitle = isJv ? 'Pangupajiwa (Panguripan)' : 'Mata Pencaharian (Rezeki)';
+  const pangupajiwaSub = isJv ? 'Rejeki' : 'Rezeki';
+
+  const tetanenTitle = isJv ? 'Tetanen (Tetanduran)' : 'Pertanian & Tanaman';
+  const tetanenSub = isJv ? 'Palawija' : 'Palawija';
+  const tetanenBecikLabel = isJv ? '✓ Kang Becik Ditandur:' : '✓ Yang Baik Ditanam:';
+
   const htmlContent = `
     <div class="space-y-4 text-xs">
       
@@ -198,7 +259,7 @@ export function selectWukuDetail(noOrName) {
             ${summary.no}
           </div>
           <div>
-            <span class="text-[10px] font-mono text-prada uppercase tracking-widest font-semibold block">WUKU KAPING ${summary.no} SAKING 30</span>
+            <span class="text-[10px] font-mono text-prada uppercase tracking-widest font-semibold block">${wukuHeaderLabel}</span>
             <h3 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">${summary.nama}</h3>
           </div>
         </div>
@@ -214,7 +275,7 @@ export function selectWukuDetail(noOrName) {
       <div class="grid grid-cols-2 gap-3 sm:gap-4 p-3.5 rounded-2xl bg-keraton/70 border border-sogan-800/80 shadow-md">
         <!-- Kartu Gambar Wuku (Interaktif Pop-up Ensiklopedia) -->
         <div class="flex flex-col items-center space-y-2 text-center">
-          <div onclick="window.openEnsiklopediaWukuModal && window.openEnsiklopediaWukuModal('${summary.nama}')" role="button" class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group cursor-pointer hover:border-prada transition" title="Klik kagem mirsani rincian wuku ${summary.nama}">
+          <div onclick="window.openEnsiklopediaWukuModal && window.openEnsiklopediaWukuModal('${summary.nama}')" role="button" class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group cursor-pointer hover:border-prada transition" title="${wukuImgTitle}">
             <img 
               src="${summary.imageWuku}" 
               alt="Wuku ${summary.nama}" 
@@ -232,12 +293,12 @@ export function selectWukuDetail(noOrName) {
             <span class="text-[11px] font-bold text-prada uppercase tracking-wider flex items-center justify-center gap-1">
               <i class="fa-solid fa-compass text-amber-400"></i> ${summary.nama}
             </span>
-            <span class="text-[10px] text-sogan-400">Ilustrasi Lambang Wuku</span>
+            <span class="text-[10px] text-sogan-400">${wukuImgSubtitle}</span>
           </div>
         </div>
 
         <!-- Kartu Gambar Dewane (Interaktif Pop-up Detail Dewa) -->
-        <div class="flex flex-col items-center space-y-2 text-center cursor-pointer group" onclick="window.openPadewanDetailModal ? window.openPadewanDetailModal('${summary.dewane}') : (window.openPadewanModal && window.openPadewanModal('${summary.dewane}'))" title="Klik kagem mirsani rincian mendalam Batara Dewane Wuku">
+        <div class="flex flex-col items-center space-y-2 text-center cursor-pointer group" onclick="window.openPadewanDetailModal ? window.openPadewanDetailModal('${summary.dewane}') : (window.openPadewanModal && window.openPadewanModal('${summary.dewane}'))" title="${dewaImgTitle}">
           <div class="relative w-full max-w-[200px] overflow-hidden rounded-xl border border-prada/40 bg-sogan-950 shadow-lg group-hover:border-prada group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
             <img 
               src="${summary.imageDewane}" 
@@ -256,7 +317,7 @@ export function selectWukuDetail(noOrName) {
             <span class="text-[11px] font-bold text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1 truncate px-1" title="${summary.dewane}">
               <i class="fa-solid fa-shield-halved text-amber-400"></i> ${summary.dewane.replace('Sang Hyang ', 'SH ')}
             </span>
-            <span class="text-[10px] text-sogan-400 group-hover:text-amber-200 transition">Dewa Pangayom (Klik Detail)</span>
+            <span class="text-[10px] text-sogan-400 group-hover:text-amber-200 transition">${dewaImgSubtitle}</span>
           </div>
         </div>
       </div>
@@ -267,7 +328,7 @@ export function selectWukuDetail(noOrName) {
         <!-- Watak Budi Pangerti -->
         <div class="p-3.5 rounded-xl bg-keraton border border-sogan-800 space-y-1">
           <span class="text-[10px] uppercase font-bold text-prada flex items-center gap-1 tracking-wider">
-            <i class="fa-solid fa-feather-pointed"></i> Watak Budi Pangerti
+            <i class="fa-solid fa-feather-pointed"></i> ${watakTitle}
           </span>
           <p class="text-sogan-200 leading-relaxed text-[11.5px]">${getBilingualText(summary.watak)}</p>
         </div>
@@ -275,7 +336,7 @@ export function selectWukuDetail(noOrName) {
         <!-- Bilahi & Bebaya -->
         <div class="p-3.5 rounded-xl bg-keraton border border-amber-900/50 space-y-1">
           <span class="text-[10px] uppercase font-bold text-amber-400 flex items-center gap-1 tracking-wider">
-            <i class="fa-solid fa-triangle-exclamation"></i> Bilahi &amp; Bebaya Kultural
+            <i class="fa-solid fa-triangle-exclamation"></i> ${bilahiTitle}
           </span>
           <p class="text-amber-100/90 leading-relaxed text-[11.5px]">${getBilingualText(summary.bilahi)}</p>
         </div>
@@ -287,35 +348,35 @@ export function selectWukuDetail(noOrName) {
         <!-- Sesaji Ruwat -->
         <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/80 space-y-1">
           <span class="text-[10px] uppercase font-bold text-prada block tracking-wider">
-            <i class="fa-solid fa-fire-burner mr-1"></i> Sesaji Ruwat:
+            <i class="fa-solid fa-fire-burner mr-1"></i> ${sesajiTitle}
           </span>
           <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.sesaji)}</p>
           <div class="text-[10px] text-sogan-400 pt-1 border-t border-sogan-900 mt-1">
-            Tindih: <strong class="text-prada font-mono">${getBilingualText(summary.tindih)}</strong>
+            ${tindihTitle} <strong class="text-prada font-mono">${getBilingualText(summary.tindih)}</strong>
           </div>
         </div>
 
         <!-- Boga Selamatan -->
         <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/80 space-y-1">
           <span class="text-[10px] uppercase font-bold text-prada block tracking-wider">
-            <i class="fa-solid fa-bowl-rice mr-1"></i> Boga Slametan:
+            <i class="fa-solid fa-bowl-rice mr-1"></i> ${slametanTitle}
           </span>
           <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.sega)}</p>
           <div class="text-[10px] text-sogan-400 pt-1 border-t border-sogan-900 mt-1">
-            Iwak: <span class="text-sogan-200">${getBilingualText(summary.iwak)}</span>
+            ${iwakTitle} <span class="text-sogan-200">${getBilingualText(summary.iwak)}</span>
           </div>
         </div>
 
         <!-- Donga & Herbal -->
         <div class="p-3 rounded-xl bg-sogan-950/70 border border-sogan-800/80 space-y-1">
           <span class="text-[10px] uppercase font-bold text-amber-300 block tracking-wider">
-            <i class="fa-solid fa-leaf mr-1"></i> Jamu &amp; Pangupaya:
+            <i class="fa-solid fa-leaf mr-1"></i> ${jamuTitle}
           </span>
           <div class="text-sogan-300 leading-relaxed">
-            Tamba: <span class="text-emerald-300 font-medium">${getBilingualText(summary.tamba)}</span>
+            ${tambaTitle} <span class="text-emerald-300 font-medium">${getBilingualText(summary.tamba)}</span>
           </div>
           <div class="text-[10px] text-sogan-400 pt-1 border-t border-sogan-900 mt-1">
-            Donga: <strong class="text-prada">${getBilingualText(summary.donga)}</strong> · Profesi: <em>${getBilingualText(summary.pangupaya)}</em>
+            ${dongaTitle} <strong class="text-prada">${getBilingualText(summary.donga)}</strong> &bull; ${profesiTitle} <em>${getBilingualText(summary.pangupaya)}</em>
           </div>
         </div>
       </div>
@@ -324,10 +385,10 @@ export function selectWukuDetail(noOrName) {
       <div class="space-y-3 pt-2 border-t border-sogan-800/80">
         <div class="flex items-center justify-between">
           <span class="text-[11px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
-            <i class="fa-solid fa-scroll text-prada"></i> Petenget Nujum 4 Pilar Pawukon
+            <i class="fa-solid fa-scroll text-prada"></i> ${pilarHeader}
           </span>
           <span class="text-[9.5px] font-mono px-2 py-0.5 rounded bg-sogan-900 text-prada border border-prada/30">
-            Pituduh Tradisional
+            ${pilarBadge}
           </span>
         </div>
 
@@ -337,17 +398,17 @@ export function selectWukuDetail(noOrName) {
           <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-sky-900/40 space-y-1.5 shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-sky-300 flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-scale-balanced"></i> Ala &amp; Becik Wuku
+                <i class="fa-solid fa-scale-balanced"></i> ${alaBecikTitle}
               </span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-950 border border-sky-700/50 text-sky-300 font-mono">Pituduh Dina</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-sky-950 border border-sky-700/50 text-sky-300 font-mono">${alaBecikSub}</span>
             </div>
             <div class="space-y-1 text-[11px]">
               <div>
-                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">${becikLabel}</span>
                 <p class="text-sogan-200 leading-relaxed">${getBilingualText(summary.alaBecik?.becik) || '-'}</p>
               </div>
               <div class="pt-1 border-t border-sogan-900/60">
-                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">${alaLabel}</span>
                 <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.alaBecik?.ala) || '-'}</p>
               </div>
             </div>
@@ -357,17 +418,17 @@ export function selectWukuDetail(noOrName) {
           <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-emerald-900/40 space-y-1.5 shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-mortar-pestle"></i> Nambani (Usada &amp; Jamu)
+                <i class="fa-solid fa-mortar-pestle"></i> ${nambaniTitle}
               </span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700/50 text-emerald-300 font-mono">Tamba Lara</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700/50 text-emerald-300 font-mono">${nambaniSub}</span>
             </div>
             <div class="space-y-1 text-[11px]">
               <div>
-                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">${becikLabel}</span>
                 <p class="text-sogan-200 leading-relaxed">${getBilingualText(summary.nambani?.becik) || '-'}</p>
               </div>
               <div class="pt-1 border-t border-sogan-900/60">
-                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">${alaLabel}</span>
                 <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.nambani?.ala) || '-'}</p>
               </div>
             </div>
@@ -377,17 +438,17 @@ export function selectWukuDetail(noOrName) {
           <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-900/40 space-y-1.5 shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-coins"></i> Pangupajiwa (Panguripan)
+                <i class="fa-solid fa-coins"></i> ${pangupajiwaTitle}
               </span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700/50 text-amber-300 font-mono">Rejeki</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700/50 text-amber-300 font-mono">${pangupajiwaSub}</span>
             </div>
             <div class="space-y-1 text-[11px]">
               <div>
-                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik:</span>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">${becikLabel}</span>
                 <p class="text-sogan-200 leading-relaxed">${getBilingualText(summary.pangupajiwa?.becik) || '-'}</p>
               </div>
               <div class="pt-1 border-t border-sogan-900/60">
-                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">${alaLabel}</span>
                 <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.pangupajiwa?.ala) || '-'}</p>
               </div>
             </div>
@@ -397,17 +458,17 @@ export function selectWukuDetail(noOrName) {
           <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-teal-900/40 space-y-1.5 shadow-sm">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-teal-300 flex items-center gap-1.5 tracking-wider">
-                <i class="fa-solid fa-wheat-awn"></i> Tetanen (Tetanduran)
+                <i class="fa-solid fa-wheat-awn"></i> ${tetanenTitle}
               </span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 border border-teal-700/50 text-teal-300 font-mono">Palawija</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-teal-950 border border-teal-700/50 text-teal-300 font-mono">${tetanenSub}</span>
             </div>
             <div class="space-y-1 text-[11px]">
               <div>
-                <span class="text-emerald-400 font-medium font-mono text-[10px] block">✓ Kang Becik Ditandur:</span>
+                <span class="text-emerald-400 font-medium font-mono text-[10px] block">${tetanenBecikLabel}</span>
                 <p class="text-sogan-200 leading-relaxed">${getBilingualText(summary.tetanen?.becik) || '-'}</p>
               </div>
               <div class="pt-1 border-t border-sogan-900/60">
-                <span class="text-rose-400 font-medium font-mono text-[10px] block">✗ Kang Ala (Sirikan):</span>
+                <span class="text-rose-400 font-medium font-mono text-[10px] block">${alaLabel}</span>
                 <p class="text-sogan-300 leading-relaxed">${getBilingualText(summary.tetanen?.ala) || '-'}</p>
               </div>
             </div>
@@ -627,6 +688,19 @@ export function openPadewanDetailModal(target) {
     document.body.appendChild(detailModal);
   }
 
+  const isJv = (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv';
+  const backBtnTitle = isJv ? 'Wangsul dhateng galeri 12 Padewan' : 'Kembali ke galeri 12 Batara';
+  const panguwasaSub = isJv ? 'Panguwasa Kanon Tahunan (Yuswa Modulo 12)' : 'Penguasa Kanon Tahunan (Usia Modulo 12)';
+  const watakHead = isJv ? 'Watak & Karakter Jiwa:' : 'Karakter & Kepribadian:';
+  const karierHead = isJv ? 'Karier, Pakaryan & Rezeki:' : 'Karier, Pekerjaan & Rezeki:';
+  const kelemahanHead = isJv ? 'Titik Mawas Diri:' : 'Titik Waspada Diri:';
+  const bahayaHead = isJv ? 'Kerawanan / Bahaya:' : 'Kerawanan & Bahaya:';
+  const keluargaHead = isJv ? 'Jodoh & Rumah Tangga:' : 'Jodoh & Kehidupan Keluarga:';
+  const kesehatanHead = isJv ? 'Kasarasan (Kesehatan):' : 'Kesehatan Tradisional:';
+  const solusiHead = isJv ? 'Piweling Rahayu & Solusi Luhur:' : 'Nasihat Keselamatan & Solusi:';
+  const footerNote = isJv ? 'Kanon Padewan Siklus Tahunan Jawa' : 'Kanon Batara Siklus Tahunan Jawa';
+  const btnCloseText = isJv ? 'Tutup Rincian' : 'Tutup Rincian';
+
   detailModal.innerHTML = `
     <div class="relative w-full max-w-4xl bg-gradient-to-b from-[#131826] via-[#0E131E] to-[#080B12] border-2 border-prada/60 rounded-3xl shadow-[0_0_60px_rgba(212,175,55,0.35)] overflow-hidden flex flex-col max-h-[94vh]">
       <!-- Header Detail Modal -->
@@ -636,7 +710,7 @@ export function openPadewanDetailModal(target) {
             type="button"
             onclick="window.closePadewanDetailModal && window.closePadewanDetailModal(); window.openPadewanModal && window.openPadewanModal();"
             class="px-3 py-1.5 rounded-xl bg-sogan-900 border border-prada/40 text-prada text-xs font-semibold hover:bg-sogan-800 transition flex items-center gap-1.5 cursor-pointer"
-            title="Wangsul dhateng galeri 12 Padewan">
+            title="${backBtnTitle}">
             <i class="fa-solid fa-arrow-left text-[10px]"></i>
             <span class="hidden sm:inline">Galeri 12</span>
           </button>
@@ -679,7 +753,7 @@ export function openPadewanDetailModal(target) {
             </div>
           </div>
           <span class="text-[11px] text-sogan-400 font-mono text-center">
-            Panguwasa Kanon Tahunan (Usia Modulo 12)
+            ${panguwasaSub}
           </span>
         </div>
 
@@ -689,7 +763,7 @@ export function openPadewanDetailModal(target) {
           <!-- Watak & Sifat Tahunan -->
           <div class="p-4 rounded-2xl bg-[#0F1420] border border-amber-600/30 space-y-1.5 shadow">
             <div class="flex items-center gap-2 text-amber-300 font-bold text-xs uppercase font-mono tracking-wider">
-              <i class="fa-solid fa-feather-pointed text-amber-400"></i> Watak &amp; Karakter Jiwa:
+              <i class="fa-solid fa-feather-pointed text-amber-400"></i> ${watakHead}
             </div>
             <p class="text-sogan-100">${getBilingualText(dewaData.watak) || '-'}</p>
           </div>
@@ -697,7 +771,7 @@ export function openPadewanDetailModal(target) {
           <!-- Karier & Rejeki -->
           <div class="p-4 rounded-2xl bg-[#0F1420] border border-emerald-600/30 space-y-1.5 shadow">
             <div class="flex items-center gap-2 text-emerald-300 font-bold text-xs uppercase font-mono tracking-wider">
-              <i class="fa-solid fa-coins text-emerald-400"></i> Karier, Pakaryan &amp; Rezeki:
+              <i class="fa-solid fa-coins text-emerald-400"></i> ${karierHead}
             </div>
             <p class="text-sogan-100">${getBilingualText(dewaData.karier) || '-'}</p>
           </div>
@@ -706,13 +780,13 @@ export function openPadewanDetailModal(target) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="p-3.5 rounded-2xl bg-amber-950/30 border border-amber-700/40 space-y-1">
               <div class="flex items-center gap-1.5 text-amber-300 font-bold text-[11px] uppercase font-mono">
-                <i class="fa-solid fa-triangle-exclamation"></i> Titik Mawas Diri:
+                <i class="fa-solid fa-triangle-exclamation"></i> ${kelemahanHead}
               </div>
               <p class="text-sogan-200 text-[11.5px]">${getBilingualText(dewaData.kelemahan) || '-'}</p>
             </div>
             <div class="p-3.5 rounded-2xl bg-red-950/30 border border-red-700/40 space-y-1">
               <div class="flex items-center gap-1.5 text-red-300 font-bold text-[11px] uppercase font-mono">
-                <i class="fa-solid fa-shield-halved"></i> Kerawanan / Bahaya:
+                <i class="fa-solid fa-shield-halved"></i> ${bahayaHead}
               </div>
               <p class="text-sogan-200 text-[11.5px]">${getBilingualText(dewaData.bahaya) || '-'}</p>
             </div>
@@ -722,13 +796,13 @@ export function openPadewanDetailModal(target) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="p-3.5 rounded-2xl bg-pink-950/20 border border-pink-700/30 space-y-1">
               <div class="flex items-center gap-1.5 text-pink-300 font-bold text-[11px] uppercase font-mono">
-                <i class="fa-solid fa-heart"></i> Jodoh &amp; Rumah Tangga:
+                <i class="fa-solid fa-heart"></i> ${keluargaHead}
               </div>
               <p class="text-sogan-200 text-[11.5px]">${getBilingualText(dewaData.keluarga) || '-'}</p>
             </div>
             <div class="p-3.5 rounded-2xl bg-teal-950/20 border border-teal-700/30 space-y-1">
               <div class="flex items-center gap-1.5 text-teal-300 font-bold text-[11px] uppercase font-mono">
-                <i class="fa-solid fa-heart-pulse"></i> Kasarasan (Kesehatan):
+                <i class="fa-solid fa-heart-pulse"></i> ${kesehatanHead}
               </div>
               <p class="text-sogan-200 text-[11.5px]">${getBilingualText(dewaData.kesehatan) || '-'}</p>
             </div>
@@ -737,7 +811,7 @@ export function openPadewanDetailModal(target) {
           <!-- Piweling Rahayu / Solusi -->
           <div class="p-4 rounded-2xl bg-gradient-to-r from-amber-950/40 to-sogan-950 border border-prada/40 space-y-1.5 shadow">
             <div class="flex items-center gap-2 text-prada font-bold text-xs uppercase font-mono tracking-wider">
-              <i class="fa-solid fa-circle-check text-amber-400"></i> Piweling Rahayu &amp; Solusi Luhur:
+              <i class="fa-solid fa-circle-check text-amber-400"></i> ${solusiHead}
             </div>
             <p class="text-amber-100 italic font-marcellus text-sm leading-relaxed">
               "${getBilingualText(dewaData.solusi) || '-'}"
@@ -750,11 +824,11 @@ export function openPadewanDetailModal(target) {
 
       <!-- Footer Detail Modal -->
       <div class="px-6 py-3.5 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between text-xs text-sogan-400">
-        <span class="font-mono text-[11px]">Kanon Padewan Siklus Tahunan Jawa</span>
+        <span class="font-mono text-[11px]">${footerNote}</span>
         <button
           onclick="window.closePadewanDetailModal && window.closePadewanDetailModal()"
           class="px-5 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs hover:brightness-110 transition cursor-pointer">
-          Tutup Rincian
+          ${btnCloseText}
         </button>
       </div>
     </div>
@@ -806,6 +880,18 @@ if (typeof window !== 'undefined') {
   window.closePadewanModal = closePadewanModal;
   window.openPadewanDetailModal = openPadewanDetailModal;
   window.closePadewanDetailModal = closePadewanDetailModal;
+  window.activeWukuNo = activeWukuNo;
+  window.getAllWuku = getAllWuku;
+
+  // Reaktif re-render saat bahasa diganti
+  window.addEventListener('language-changed', () => {
+    try {
+      renderWukuGrid(getAllWuku());
+      selectWukuDetail(activeWukuNo || 1);
+    } catch (e) {
+      /* ignore */
+    }
+  });
 }
 
 

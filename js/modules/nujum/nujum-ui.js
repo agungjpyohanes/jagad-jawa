@@ -34,7 +34,7 @@ import {
 } from './nujum-engine.js';
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
-import { getBilingualText } from '../../ui/i18n.js';
+import { getBilingualText, getLanguage } from '../../ui/i18n.js';
 import { transliterateLatinToJawa } from '../aksara/aksara-engine.js';
 
 import {
@@ -2177,40 +2177,40 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
 
         <!-- BAGIAN 2: ENSIKLOPEDIA PAWUKON -->
         <div class="doc-section-block">
-          <div class="doc-section-title">BAGIAN 2: ENSIKLOPEDIA PAWUKON</div>
+          <div class="doc-section-title">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'PERANGAN 2: ENSIKLOPEDIA PAWUKON' : 'BAGIAN 2: ENSIKLOPEDIA PAWUKON'}</div>
           <table class="doc-table">
             <tbody>
               <tr>
-                <td class="doc-label-cell">Wuku &amp; Dewa</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Wuku & Dewa' : 'Wuku & Batara Pelindung'}</td>
                 <td colspan="3"><strong>Wuku ${pwk?.nama_wuku || wukuName} (${pwk?.no_wuku || wukuNo})</strong> &mdash; Dewane: <strong>${pwk?.dewane || '-'}</strong></td>
               </tr>
               <tr>
-                <td class="doc-label-cell">Watak Budi Pangerti</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Watak Budi Pangerti' : 'Karakter & Budi Pekerti'}</td>
                 <td colspan="3">${pwk?.watek_budi_pangerti || '-'}</td>
               </tr>
               <tr>
-                <td class="doc-label-cell">Bilahi &amp; Bebaya (Pantangan)</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Bilahi & Bebaya (Sirikan)' : 'Pantangan & Bahaya Budaya'}</td>
                 <td colspan="3">${pwk?.bilahi_bebaya || '-'}</td>
               </tr>
               <tr>
-                <td class="doc-label-cell">Pangupaya Jiwa (Kiprah Usaha)</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Pangupaya Jiwa (Kiprah Usaha)' : 'Mata Pencaharian & Usaha'}</td>
                 <td colspan="3">${pwk?.pangupaya_jiwa || '-'}</td>
               </tr>
               <tr>
-                <td class="doc-label-cell">Potensi Lelaran &amp; Usada</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Potensi Lelaran & Usada' : 'Potensi Penyakit & Pengobatan Tradisional'}</td>
                 <td colspan="3">
-                  <strong>Potensi Lelaran:</strong> ${aseso?.lelara || '-'}<br/>
-                  <strong>Tamba Yen Lara (Usada Wuku):</strong> <em>${pwk?.tamba_yen_lara || '-'}</em>
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Potensi Lelaran:' : 'Potensi Penyakit:'}</strong> ${aseso?.lelara || '-'}<br/>
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Tamba Yen Lara (Usada Wuku):' : 'Obat Tradisional (Usada Wuku):'}</strong> <em>${pwk?.tamba_yen_lara || '-'}</em>
                 </td>
               </tr>
               <tr>
-                <td class="doc-label-cell">Ruwatan &amp; Donga Slamet</td>
+                <td class="doc-label-cell">${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Ruwatan & Donga Slamet' : 'Ruwatan & Doa Keselamatan'}</td>
                 <td colspan="3">
-                  <strong>Donga:</strong> ${pwk?.donga_slamet || '-'} &middot; 
-                  <strong>Sesaji:</strong> ${pwk?.sesaji_ruwat || '-'} &middot; 
-                  <strong>Tindih:</strong> ${pwk?.tindih_ruwat || '-'}<br/>
-                  <strong>Sega &amp; Iwak Selamatan:</strong> ${(pwk?.selamatan_sega && pwk?.selamatan_iwak) ? pwk.selamatan_sega + ' & ' + pwk.selamatan_iwak : (pwk?.selamatan_sega || '-')} &middot; 
-                  <strong>Salawat:</strong> ${pwk?.salawat || '-'}
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Donga:' : 'Doa:'}</strong> ${pwk?.donga_slamet || '-'} &middot; 
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Sesaji:' : 'Sesaji:'}</strong> ${pwk?.sesaji_ruwat || '-'} &middot; 
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Tindih:' : 'Tindih:'}</strong> ${pwk?.tindih_ruwat || '-'}<br/>
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Sega & Iwak Selamatan:' : 'Hidangan Nasi & Lauk Selamatan:'}</strong> ${(pwk?.selamatan_sega && pwk?.selamatan_iwak) ? pwk.selamatan_sega + ' & ' + pwk.selamatan_iwak : (pwk?.selamatan_sega || '-')} &middot; 
+                  <strong>${(typeof getLanguage === 'function' && getLanguage() === 'jv') ? 'Salawat:' : 'Sedekah/Salawat:'}</strong> ${pwk?.salawat || '-'}
                 </td>
               </tr>
             </tbody>

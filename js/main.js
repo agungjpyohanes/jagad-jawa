@@ -557,10 +557,19 @@ export function bootstrap() {
         }
       }
       if (typeof window.renderFullWukuPage === 'function') {
-        const tabWuku = document.getElementById('tabWuku');
+        const tabWuku = document.getElementById('tab-wuku');
         if (tabWuku && !tabWuku.classList.contains('hidden')) {
           try { window.renderFullWukuPage(); } catch (e) { /* ignore */ }
         }
+      }
+      if (typeof window.selectWukuDetail === 'function' && window.activeWukuNo) {
+        try { window.selectWukuDetail(window.activeWukuNo); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.renderWukuGrid === 'function' && typeof window.getAllWuku === 'function') {
+        try { window.renderWukuGrid(window.getAllWuku()); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.initMitologiUI === 'function') {
+        try { window.initMitologiUI(); } catch (e) { /* ignore */ }
       }
       if (typeof window.hitungOmahDariUI === 'function') {
         const container = document.getElementById('omahResultContainer');

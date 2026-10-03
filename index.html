@@ -3203,7 +3203,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
           <div>
-            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5" data-i18n="wuku_top_badge">
               <i class="fa-solid fa-compass"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
             </span>
             <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_wuku_title">Ensiklopedia 30 Wuku Nusantara</span></h2>
@@ -3212,11 +3212,11 @@
         <div class="flex items-center gap-2">
           <button onclick="window.openPadewanModal && window.openPadewanModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada text-xs font-bold hover:bg-prada/20 transition flex items-center gap-2 shadow cursor-pointer" title="Buka Galeri 12 Dewa Siklus Padewan">
             <i class="fa-solid fa-users text-amber-400"></i>
-            <span>12 Batara-Batari</span>
+            <span data-i18n="wuku_btn_12_batara">12 Batara-Batari</span>
           </button>
           <button onclick="openEnsiklopediaWukuModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada text-xs font-bold hover:bg-prada/20 transition flex items-center gap-2 shadow cursor-pointer">
             <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
-            <span>Mode Dialog Modal</span>
+            <span data-i18n="wuku_btn_mode_modal">Mode Dialog Modal</span>
           </button>
         </div>
       </div>
@@ -3225,12 +3225,12 @@
       <div class="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#121722] via-[#1A2234] to-[#0E131E] border border-prada/30 shadow-2xl relative overflow-hidden">
         <div class="max-w-3xl space-y-2">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
-            <i class="fa-solid fa-book-bookmark text-amber-400"></i> Direktori Komplit Pawukon Jawi
+            <i class="fa-solid fa-book-bookmark text-amber-400"></i> <span data-i18n="wuku_banner_badge">Direktori Komplit Pawukon Jawi</span>
           </div>
-          <h3 class="font-marcellus text-lg sm:text-xl font-bold text-amber-100">
+          <h3 class="font-marcellus text-lg sm:text-xl font-bold text-amber-100" data-i18n="wuku_banner_title">
             Siklus 30 Wuku: Sinta dumugi Watugunung
           </h3>
-          <p class="text-xs text-sogan-300 leading-relaxed">
+          <p class="text-xs text-sogan-300 leading-relaxed" data-i18n="wuku_banner_desc">
             Saben wuku lumampah laminipun pitung dinten (7 dina). Saben wuku nggadhahi panguwasa Dewa, watak budi pakarti, larangan bilahi (sengkolo), sesaji ruwat pangupaya karahayon, sarta do'a tolak bala kangge njagi karukunan lair batin.
           </p>
         </div>
@@ -3241,30 +3241,30 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div class="relative w-full sm:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-sogan-400 text-xs"></i>
-            <input type="text" id="tabCariWukuInput" oninput="filterWukuGrid(this)" placeholder="Pados wuku, dewa, profesi, tetanduran..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
+            <input type="text" id="tabCariWukuInput" oninput="filterWukuGrid(this)" data-i18n-placeholder="wuku_search_placeholder" placeholder="Pados wuku, dewa, profesi, tetanduran..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
           </div>
-          <div class="text-[11px] text-sogan-400">
+          <div class="text-[11px] text-sogan-400" data-i18n="wuku_hint_click">
             Klik salah satunggaling kartu wuku ing ngandhap kanggé mirsani rincian jangkep
           </div>
         </div>
         <!-- Kategori Nujum & Primbon Pills -->
         <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-sogan-900/60 text-xs">
           <span class="text-[10px] text-sogan-400 font-mono uppercase tracking-wider mr-1">
-            <i class="fa-solid fa-filter text-prada mr-1"></i>Pilar Nujum:
+            <i class="fa-solid fa-filter text-prada mr-1"></i><span data-i18n="wuku_filter_label">Pilar Nujum:</span>
           </span>
-          <button type="button" data-cat="all" onclick="setWukuCategoryFilter('all')" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-prada bg-prada/20 text-prada shadow-[0_0_10px_rgba(212,175,55,0.25)] transition cursor-pointer">
+          <button type="button" data-cat="all" onclick="setWukuCategoryFilter('all')" data-i18n="wuku_pill_all" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-prada bg-prada/20 text-prada shadow-[0_0_10px_rgba(212,175,55,0.25)] transition cursor-pointer">
             Kabeh (30 Wuku)
           </button>
-          <button type="button" data-cat="nambani" onclick="setWukuCategoryFilter('nambani')" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="nambani" onclick="setWukuCategoryFilter('nambani')" data-i18n="wuku_pill_nambani" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-mortar-pestle mr-1 text-emerald-400"></i>Nambani (Usada)
           </button>
-          <button type="button" data-cat="pangupajiwa" onclick="setWukuCategoryFilter('pangupajiwa')" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="pangupajiwa" onclick="setWukuCategoryFilter('pangupajiwa')" data-i18n="wuku_pill_pangupajiwa" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-coins mr-1 text-amber-400"></i>Pangupajiwa (Rejeki)
           </button>
-          <button type="button" data-cat="tetanen" onclick="setWukuCategoryFilter('tetanen')" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="tetanen" onclick="setWukuCategoryFilter('tetanen')" data-i18n="wuku_pill_tetanen" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-wheat-awn mr-1 text-teal-400"></i>Tetanen (Pertanian)
           </button>
-          <button type="button" data-cat="ala_becik" onclick="setWukuCategoryFilter('ala_becik')" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="ala_becik" onclick="setWukuCategoryFilter('ala_becik')" data-i18n="wuku_pill_ala_becik" class="wuku-cat-pill px-3 py-1 rounded-lg text-[11px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-scale-balanced mr-1 text-sky-400"></i>Ala &amp; Becik
           </button>
         </div>
@@ -3276,10 +3276,10 @@
         <!-- Kolom Kiri: Grid 30 Wuku (Scrollable) -->
         <div class="lg:col-span-5 space-y-2 border border-sogan-800/80 rounded-2xl p-3 bg-keraton/60 max-h-[520px] overflow-y-auto">
           <div class="flex items-center justify-between px-1 mb-1">
-            <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider">
+            <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider" data-i18n="wuku_list_title">
               Daftar 30 Wuku (Urut 1 - 30):
             </span>
-            <span class="text-[10px] text-sogan-500">210 Dina Siklus</span>
+            <span class="text-[10px] text-sogan-500" data-i18n="wuku_cycle_duration">210 Dina Siklus</span>
           </div>
           <div id="tabWukuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5">
             <!-- Diisi liwat renderWukuGrid() -->
@@ -3320,7 +3320,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-sogan-800/80">
         <div class="flex items-center gap-3">
           <div>
-            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5" data-i18n="mitologi_top_badge">
               <i class="fa-solid fa-scroll"></i> Sastra &amp; Mitologi Kuno
             </span>
             <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_mitologi_title">Mitologi Nusantara</span></h2>
@@ -3329,7 +3329,7 @@
         <div class="flex items-center gap-2">
           <span class="px-3 py-1.5 rounded-full bg-prada/15 border border-prada/40 text-prada text-xs font-bold font-serif flex items-center gap-1.5 shadow-sm">
             <i class="fa-solid fa-feather-pointed text-amber-400"></i>
-            <span>Carita Warisan Luhur</span>
+            <span data-i18n="mitologi_badge_heritage">Carita Warisan Luhur</span>
           </span>
         </div>
       </div>
@@ -3337,13 +3337,13 @@
       <!-- Banner Pengantar -->
       <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sogan-950 via-keraton to-wulung border border-prada/40 p-6 sm:p-8 shadow-2xl">
         <div class="space-y-3 max-w-3xl">
-          <span class="px-3 py-1 rounded-full bg-prada/20 border border-prada/50 text-prada text-xs font-mono font-bold uppercase tracking-wider">
+          <span class="px-3 py-1 rounded-full bg-prada/20 border border-prada/50 text-prada text-xs font-mono font-bold uppercase tracking-wider" data-i18n="mitologi_banner_badge">
             Kosmologi &amp; Jagad Mistik Jawa
           </span>
-          <h3 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text">
+          <h3 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text" data-i18n="mitologi_banner_title">
             Sangkan Paraning Dongeng &amp; Sastra Budaya
           </h3>
-          <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed">
+          <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed" data-i18n="mitologi_banner_desc">
             Nusantara kasusun saking geguritan sejarah, kapitayan purba, lan mitologi adiluhung. Ing ngriki kacathet asal-usul 30 siklus wuku saking tragedi agung Prabu Watugunung, dumadine 5 pasaran Jawa, sarta pasrawungan gaib para danyang kaliyan para linuwih tanah Jawa.
           </p>
         </div>
@@ -4552,11 +4552,11 @@
         <div class="flex items-center gap-2 shrink-0">
           <button onclick="toggleMitologiFontSize()" title="Gantos Ukuran Font" class="p-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada/60 text-prada text-xs font-bold transition flex items-center gap-1 cursor-pointer">
             <i class="fa-solid fa-text-height"></i>
-            <span class="hidden sm:inline">Font</span>
+            <span class="hidden sm:inline" data-i18n="mitologi_modal_font">Font</span>
           </button>
           <button id="modalMitologiCopyBtn" title="Salin Cariyos" class="p-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada/60 text-prada text-xs font-bold transition flex items-center gap-1 cursor-pointer">
             <i class="fa-solid fa-copy"></i>
-            <span class="hidden sm:inline">Salin</span>
+            <span class="hidden sm:inline" data-i18n="mitologi_modal_copy">Salin</span>
           </button>
           <button onclick="closeMitologiModal()" class="w-9 h-9 rounded-xl bg-sogan-900/80 border border-sogan-700 hover:bg-rose-950/70 hover:border-rose-500/60 text-sogan-300 hover:text-rose-200 flex items-center justify-center transition cursor-pointer" aria-label="Tutup Modal">
             <i class="fa-solid fa-xmark text-sm"></i>
@@ -4571,10 +4571,10 @@
 
       <!-- Footer Modal -->
       <div class="px-5 sm:px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between">
-        <span class="text-[11px] text-sogan-400 italic">
+        <span class="text-[11px] text-sogan-400 italic" data-i18n="mitologi_badge_heritage">
           <i class="fa-solid fa-feather-pointed text-amber-400 mr-1"></i> Carita Warisan Leluhur Nusantara
         </span>
-        <button onclick="closeMitologiModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer">
+        <button onclick="closeMitologiModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer" data-i18n="btn_close">
           Tutup
         </button>
       </div>
@@ -4592,10 +4592,10 @@
             <i class="fa-solid fa-compass"></i>
           </div>
           <div>
-            <h3 id="modalWukuTitle" class="font-marcellus text-lg sm:text-xl font-bold text-prada">
+            <h3 id="modalWukuTitle" class="font-marcellus text-lg sm:text-xl font-bold text-prada" data-i18n="modal_wuku_title">
               Ensiklopedia 30 Wuku Nusantara
             </h3>
-            <p class="text-[11px] text-sogan-400">Direktori komplit Pawukon Jawi: Sinta dumugi Watugunung (Dewane, Watak, Bilahi, &amp; Ruwat)</p>
+            <p class="text-[11px] text-sogan-400" data-i18n="modal_wuku_desc">Direktori komplit Pawukon Jawi: Sinta dumugi Watugunung (Dewane, Watak, Bilahi, &amp; Ruwat)</p>
           </div>
         </div>
 
@@ -4609,29 +4609,29 @@
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
           <div class="relative w-full sm:w-72">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-sogan-400 text-xs"></i>
-            <input type="text" id="cariWukuInput" oninput="filterWukuGrid(this)" placeholder="Pados wuku, dewa, profesi, tetanduran..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
+            <input type="text" id="cariWukuInput" oninput="filterWukuGrid(this)" data-i18n-placeholder="wuku_search_placeholder" placeholder="Pados wuku, dewa, profesi, tetanduran..." class="w-full bg-keraton border border-sogan-700 rounded-xl pl-8 pr-3 py-2 text-sogan-100 text-xs focus:border-prada outline-none placeholder-sogan-500">
           </div>
-          <div class="text-[11px] text-sogan-400 hidden sm:block">
+          <div class="text-[11px] text-sogan-400 hidden sm:block" data-i18n="wuku_hint_click">
             Klik salah satunggaling wuku kanggé mirsani rincian jangkep
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-1.5 text-xs">
           <span class="text-[10px] text-sogan-400 font-mono uppercase tracking-wider mr-1">
-            <i class="fa-solid fa-filter text-prada mr-1"></i>Pilar:
+            <i class="fa-solid fa-filter text-prada mr-1"></i><span data-i18n="wuku_filter_label">Pilar:</span>
           </span>
-          <button type="button" data-cat="all" onclick="setWukuCategoryFilter('all')" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-prada bg-prada/20 text-prada shadow-[0_0_10px_rgba(212,175,55,0.25)] transition cursor-pointer">
+          <button type="button" data-cat="all" onclick="setWukuCategoryFilter('all')" data-i18n="wuku_pill_all" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-prada bg-prada/20 text-prada shadow-[0_0_10px_rgba(212,175,55,0.25)] transition cursor-pointer">
             Kabeh
           </button>
-          <button type="button" data-cat="nambani" onclick="setWukuCategoryFilter('nambani')" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="nambani" onclick="setWukuCategoryFilter('nambani')" data-i18n="wuku_pill_nambani" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-mortar-pestle mr-1 text-emerald-400"></i>Nambani
           </button>
-          <button type="button" data-cat="pangupajiwa" onclick="setWukuCategoryFilter('pangupajiwa')" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="pangupajiwa" onclick="setWukuCategoryFilter('pangupajiwa')" data-i18n="wuku_pill_pangupajiwa" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-coins mr-1 text-amber-400"></i>Pangupajiwa
           </button>
-          <button type="button" data-cat="tetanen" onclick="setWukuCategoryFilter('tetanen')" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="tetanen" onclick="setWukuCategoryFilter('tetanen')" data-i18n="wuku_pill_tetanen" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-wheat-awn mr-1 text-teal-400"></i>Tetanen
           </button>
-          <button type="button" data-cat="ala_becik" onclick="setWukuCategoryFilter('ala_becik')" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
+          <button type="button" data-cat="ala_becik" onclick="setWukuCategoryFilter('ala_becik')" data-i18n="wuku_pill_ala_becik" class="wuku-cat-pill px-2.5 py-1 rounded-lg text-[10.5px] font-medium border border-sogan-800 bg-sogan-950/80 text-sogan-300 hover:border-prada/60 hover:text-amber-200 transition cursor-pointer">
             <i class="fa-solid fa-scale-balanced mr-1 text-sky-400"></i>Ala &amp; Becik
           </button>
         </div>
@@ -4642,7 +4642,7 @@
         
         <!-- Kolom Kiri: Grid 30 Wuku (Scrollable) -->
         <div class="lg:col-span-5 space-y-2 border border-sogan-800/80 rounded-2xl p-3 bg-keraton/50 max-h-[380px] lg:max-h-[460px] overflow-y-auto">
-          <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block px-1 mb-1">
+          <span class="text-[10px] font-mono text-prada uppercase font-bold tracking-wider block px-1 mb-1" data-i18n="wuku_list_title">
             Daftar 30 Wuku (Urut 1 - 30):
           </span>
           <div id="gridEnsiklopediaWuku" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-1.5">
@@ -4661,10 +4661,10 @@
 
       <!-- Footer Modal -->
       <div class="px-6 py-3 border-t border-sogan-800 bg-[#0E131E] flex items-center justify-between">
-        <span class="text-[11px] text-sogan-400 italic">
+        <span class="text-[11px] text-sogan-400 italic" data-i18n="wuku_top_badge">
           <i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
         </span>
-        <button onclick="closeEnsiklopediaWukuModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer">
+        <button onclick="closeEnsiklopediaWukuModal()" class="px-4 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold transition cursor-pointer" data-i18n="btn_close">
           Tutup
         </button>
       </div>

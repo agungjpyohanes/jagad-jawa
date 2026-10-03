@@ -167,4 +167,46 @@ describe('Sistem Bilingual Penuh (100% ID vs 100% JV) & Arsitektur Kamus Terpusa
     assert.strictEqual(resolvedJv.tags[0], 'Kagunan');
     assert.strictEqual(resolvedJv.counter, 42);
   });
+
+  test('8. Dwibahasa Penuh Ensiklopedia Wuku (ID vs JV)', () => {
+    // Mode ID
+    setLanguage('id');
+    assert.strictEqual(t('wuku_pill_all'), 'Semua (30 Wuku)');
+    assert.strictEqual(t('wuku_pill_nambani'), 'Pengobatan (Usada)');
+    assert.strictEqual(t('wuku_pill_pangupajiwa'), 'Mata Pencaharian (Rezeki)');
+    assert.strictEqual(t('wuku_pill_tetanen'), 'Pertanian & Tanaman');
+    assert.strictEqual(t('wuku_pill_ala_becik'), 'Baik & Buruk');
+    assert.strictEqual(t('wuku_cycle_duration'), 'Siklus 210 Hari');
+    assert.strictEqual(t('wuku_search_placeholder'), 'Cari wuku, dewa, profesi, tanaman...');
+
+    // Mode JV
+    setLanguage('jv');
+    assert.strictEqual(t('wuku_pill_all'), 'Kabeh (30 Wuku)');
+    assert.strictEqual(t('wuku_pill_nambani'), 'Nambani (Usada)');
+    assert.strictEqual(t('wuku_pill_pangupajiwa'), 'Pangupajiwa (Rejeki)');
+    assert.strictEqual(t('wuku_pill_tetanen'), 'Tetanen (Pertanian)');
+    assert.strictEqual(t('wuku_pill_ala_becik'), 'Ala & Becik');
+    assert.strictEqual(t('wuku_cycle_duration'), '210 Dina Siklus');
+    assert.strictEqual(t('wuku_search_placeholder'), 'Pados wuku, dewa, profesi, tetanduran...');
+  });
+
+  test('9. Dwibahasa Penuh Mitologi Nusantara (ID vs JV)', () => {
+    // Mode ID
+    setLanguage('id');
+    assert.strictEqual(t('mitologi_btn_read'), 'Baca Lebih Lengkap');
+    assert.strictEqual(t('mitologi_badge_heritage'), 'Cerita Warisan Luhur');
+    assert.strictEqual(t('mitologi_modal_copy'), 'Salin Cerita');
+    assert.strictEqual(t('mitologi_modal_summary_title'), 'Ringkasan Cerita:');
+    assert.strictEqual(t('mitologi_modal_tokoh_title'), 'Tokoh / Unsur Utama:');
+    assert.strictEqual(t('mitologi_modal_moral_title'), 'Falsafah & Ajaran Luhur:');
+
+    // Mode JV
+    setLanguage('jv');
+    assert.strictEqual(t('mitologi_btn_read'), 'Waos Langkung Jangkep');
+    assert.strictEqual(t('mitologi_badge_heritage'), 'Carita Warisan Luhur');
+    assert.strictEqual(t('mitologi_modal_copy'), 'Turun Cariyos');
+    assert.strictEqual(t('mitologi_modal_summary_title'), 'Ringkesan Cariyos:');
+    assert.strictEqual(t('mitologi_modal_tokoh_title'), 'Paraga / Unsur Wigati:');
+    assert.strictEqual(t('mitologi_modal_moral_title'), 'Falsafah & Piwulang Luhur:');
+  });
 });
