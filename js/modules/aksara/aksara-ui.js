@@ -41,7 +41,7 @@ export function renderAksaraKeyboardPalette() {
     container.innerHTML = `
       <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-2">
         ${Object.entries(AKSARA_NGLEGENA).map(([latin, aksara]) => `
-          <button onclick="window.insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+          <button onclick="window.insertAksaraChar('${aksara}')" aria-label="Aksara ${latin}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
             <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
             <div class="text-[10px] text-sogan-400 font-mono uppercase mt-0.5">${latin}</div>
           </button>
@@ -52,7 +52,7 @@ export function renderAksaraKeyboardPalette() {
     container.innerHTML = `
       <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-2">
         ${Object.entries(PASANGAN_MAP).map(([latin, aksara]) => `
-          <button onclick="window.insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+          <button onclick="window.insertAksaraChar('${aksara}')" aria-label="Pasangan ${latin}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
             <div class="text-amber-300 font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
             <div class="text-[9px] text-sogan-400 font-mono mt-0.5">pas. ${latin}</div>
           </button>
@@ -66,7 +66,7 @@ export function renderAksaraKeyboardPalette() {
           <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Sandhangan Swara</span>
           <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
             ${Object.entries(SANDHANGAN_SWARA).map(([key, item]) => `
-              <button onclick="window.insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
+              <button onclick="window.insertAksaraChar('${item.aksara}')" aria-label="Sandhangan ${item.nama}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
                 <span class="text-prada font-jawa text-xl">${item.aksara}</span>
                 <div class="text-left">
                   <div class="text-xs text-sogan-100 font-semibold">${item.latin}</div>
@@ -82,7 +82,7 @@ export function renderAksaraKeyboardPalette() {
             <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Panyigeg Wanda</span>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               ${Object.entries(SANDHANGAN_PANYIGEG).map(([key, item]) => `
-                <button onclick="window.insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
+                <button onclick="window.insertAksaraChar('${item.aksara}')" aria-label="Panyigeg ${item.nama}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
                   <div class="text-prada font-jawa text-lg">${item.aksara}</div>
                   <div class="text-[10px] text-sogan-300 font-medium">${item.latin}</div>
                 </button>
@@ -93,16 +93,16 @@ export function renderAksaraKeyboardPalette() {
             <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Sandhangan Wyanjana & Vokal Khusus</span>
             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
               ${Object.entries(SANDHANGAN_WYANJANA).map(([key, item]) => `
-                <button onclick="window.insertAksaraChar('${item.aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
+                <button onclick="window.insertAksaraChar('${item.aksara}')" aria-label="Sandhangan Wyanjana ${item.nama}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm">
                   <div class="text-prada font-jawa text-lg">${item.aksara}</div>
                   <div class="text-[9px] text-sogan-300 font-medium">${item.latin}</div>
                 </button>
               `).join('')}
-              <button onclick="window.insertAksaraChar('ꦉ')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Pa Cerek (re pepet)">
+              <button onclick="window.insertAksaraChar('ꦉ')" aria-label="Aksara Pa Cerek" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Pa Cerek (re pepet)">
                 <div class="text-prada font-jawa text-lg">ꦉ</div>
                 <div class="text-[9px] text-sogan-300 font-medium">Pa Cerek</div>
               </button>
-              <button onclick="window.insertAksaraChar('ꦊ')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Nga Lelet (le pepet)">
+              <button onclick="window.insertAksaraChar('ꦊ')" aria-label="Aksara Nga Lelet" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm" title="Nga Lelet (le pepet)">
                 <div class="text-prada font-jawa text-lg">ꦊ</div>
                 <div class="text-[9px] text-sogan-300 font-medium">Nga Lelet</div>
               </button>
@@ -118,7 +118,7 @@ export function renderAksaraKeyboardPalette() {
           <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Aksara Murda (Huruf Kapital Tradisional)</span>
           <div class="grid grid-cols-4 sm:grid-cols-8 gap-2">
             ${Object.entries(AKSARA_MURDA).map(([latin, aksara]) => `
-              <button onclick="window.insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+              <button onclick="window.insertAksaraChar('${aksara}')" aria-label="Aksara Murda ${latin}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
                 <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
                 <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${latin}</div>
               </button>
@@ -129,7 +129,7 @@ export function renderAksaraKeyboardPalette() {
           <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Aksara Swara (Vokal Mandiri)</span>
           <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
             ${Object.entries(AKSARA_SWARA).map(([latin, aksara]) => `
-              <button onclick="window.insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+              <button onclick="window.insertAksaraChar('${aksara}')" aria-label="Aksara Swara ${latin}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
                 <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
                 <div class="text-[10px] text-sogan-400 font-mono mt-0.5">Swara ${latin}</div>
               </button>
@@ -145,7 +145,7 @@ export function renderAksaraKeyboardPalette() {
           <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Angka Jawa (0 - 9)</span>
           <div class="grid grid-cols-5 sm:grid-cols-10 gap-2">
             ${Object.entries(ANGKA_JAWA).map(([latin, aksara]) => `
-              <button onclick="window.insertAksaraChar('${aksara}')" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
+              <button onclick="window.insertAksaraChar('${aksara}')" aria-label="Angka Jawa ${latin}" class="p-2 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center group active:scale-95 shadow-sm">
                 <div class="text-prada font-jawa text-xl group-hover:scale-110 transition">${aksara}</div>
                 <div class="text-[10px] text-sogan-400 font-mono mt-0.5">${latin}</div>
               </button>
@@ -156,7 +156,7 @@ export function renderAksaraKeyboardPalette() {
           <span class="text-[10px] uppercase font-bold text-prada tracking-wider block mb-1.5">Tandha Wacan (Tanda Baca)</span>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             ${Object.entries(PADA_JAWA).map(([key, item]) => `
-              <button onclick="window.insertAksaraChar('${item.aksara} ')" class="p-2.5 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
+              <button onclick="window.insertAksaraChar('${item.aksara} ')" aria-label="Tanda Baca ${item.nama}" class="p-2.5 rounded-xl bg-keraton border border-sogan-800 hover:border-prada hover:bg-sogan-900/60 transition text-center active:scale-95 shadow-sm flex items-center justify-center gap-2">
                 <span class="text-prada font-jawa text-xl">${item.aksara}</span>
                 <span class="text-xs text-sogan-200 font-medium">${item.nama}</span>
               </button>

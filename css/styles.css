@@ -3082,6 +3082,69 @@ body.light .text-amber-200 {
   box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
 }
 
+/* ==================== A11Y & MODERN UX ENHANCEMENTS (WCAG AA) ==================== */
+html, body {
+  font-size: 16px;
+}
+
+/* 1. Aksesibilitas Keyboard Focus Visible yang tegas */
+*:focus-visible {
+  outline: 2px solid #d4af37 !important;
+  outline-offset: 2px !important;
+}
+
+/* 2. Penghormatan prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 3. Peningkatan Kontras Warna WCAG AA untuk Status Ala & Becik */
+.badge-status-ala,
+.text-rose-400,
+.text-red-400 {
+  color: #f87171 !important;
+}
+
+.badge-status-becik,
+.text-emerald-400,
+.text-green-400 {
+  color: #4ade80 !important;
+}
+
+.text-amber-400,
+.text-yellow-400 {
+  color: #facc15 !important;
+}
+
+/* 4. Bottom Navigation Styling */
+#mobileBottomNav {
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.65);
+}
+
+#mobileBottomNav .mobile-nav-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobileBottomNav .mobile-nav-btn.active {
+  color: #d4af37 !important;
+}
+
+#mobileBottomNav .mobile-nav-btn.active i {
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.6));
+}
+
+/* 5. Sticky TOC Link Highlighting */
+.toc-item-link {
+  transition: all 0.2s ease-in-out;
+}
+
+
 
 
 

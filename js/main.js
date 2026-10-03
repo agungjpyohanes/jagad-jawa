@@ -28,6 +28,18 @@ import {
 } from './ui/mode.js';
 import { initThemeFeature } from './ui/theme.js';
 import { initKelirWayangFeature } from './ui/kelir-wayang.js';
+import { initStickyToc } from './ui/navigation.js';
+import {
+  renderHeroTodayCard,
+  initAllFormRealtimeCalculators,
+  toggleTermTooltip,
+  initJodohWizard,
+  setJodohWizardStep,
+  drawShareCardQrCode,
+  syncDocumentLangAttribute,
+  saveUserProfileWeton,
+  loadUserProfileWeton
+} from './ui/ux-enhancements.js';
 
 // ─── DOMAIN FEATURES & WIRING ─────────────────────────────────────────────
 import { wireKalenderFeature, initQuickTodayBadge } from './features/kalender.js';
@@ -517,11 +529,21 @@ export function bootstrap() {
     }
   }
 
+  // Inisialisasi UX Enhancements (jawa-v11: Hero Card, Realtime Form Calc, Sticky TOC, Wizard Stepper, Profile Weton)
+  try { renderHeroTodayCard(); } catch (e) { console.warn(e); }
+  try { initAllFormRealtimeCalculators(); } catch (e) { console.warn(e); }
+  try { initStickyToc(); } catch (e) { console.warn(e); }
+  try { initJodohWizard(); } catch (e) { console.warn(e); }
+  try { loadUserProfileWeton(); } catch (e) { console.warn(e); }
+  try { syncDocumentLangAttribute(getLanguage()); } catch (e) { console.warn(e); }
+
   initModalListeners();
 
   // Reaktif re-render seluruh modul aktif saat preferensi bahasa diubah
   if (typeof window !== 'undefined') {
     window.addEventListener('language-changed', () => {
+      try { syncDocumentLangAttribute(getLanguage()); } catch (e) { /* ignore */ }
+      try { renderHeroTodayCard(); } catch (e) { /* ignore */ }
       if (typeof window.renderKalender === 'function') {
         try { window.renderKalender(); } catch (e) { /* ignore */ }
       }
@@ -558,6 +580,10 @@ export function bootstrap() {
           try { window.syncTernakDariTanggal(); } catch (e) { /* ignore */ }
         }
       }
+    });
+
+    window.addEventListener('mode-changed', () => {
+      try { initJodohWizard(); } catch (e) { /* ignore */ }
     });
   }
 }

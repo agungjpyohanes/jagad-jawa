@@ -125,7 +125,7 @@ export function applyModeToUI(targetMode) {
     const mobileTextEl = document.getElementById('mobileModeToggleText');
     const mobileBtnEl = document.getElementById('mobileModeToggleBtn');
     if (mobileTextEl) {
-      mobileTextEl.textContent = currentMode === MODE_PEMULA ? 'Ringkas (Pemula)' : 'Lengkap (Ahli)';
+      mobileTextEl.textContent = currentMode === MODE_PEMULA ? 'Ringkas' : 'Lengkap';
     }
     if (mobileBtnEl) {
       mobileBtnEl.setAttribute('title', currentMode === MODE_PEMULA ? 'Mode Ringkas' : 'Mode Lengkap');
@@ -136,7 +136,7 @@ export function applyModeToUI(targetMode) {
 }
 
 /**
- * Toggle beralih antara Mode Pemula dan Mode Ahli
+ * Toggle beralih antara Mode Ringkas dan Mode Lengkap
  */
 export function toggleMode() {
   const current = getMode() || MODE_AHLI;
@@ -145,8 +145,8 @@ export function toggleMode() {
 
   if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
     const msg = next === MODE_PEMULA
-      ? 'Mode Ringkas (Pemula) diaktifake. Fitur esensial ditampilake.'
-      : 'Mode Lengkap (Ahli) diaktifake. Sedaya fitur primbon jangkep cumawis.';
+      ? 'Mode Ringkas diaktifake. Fitur esensial ditampilake.'
+      : 'Mode Lengkap diaktifake. Sedaya fitur primbon jangkep cumawis.';
     window.showToast(msg);
   }
 
@@ -154,7 +154,154 @@ export function toggleMode() {
 }
 
 /**
- * Menampilkan modal onboarding pemilihan mode
+ * Menampilkan banner tipis pemberitahuan mode di Beranda
+ */
+export function showModeBanner() {
+  if (typeof document === 'undefined') return;
+  const banner = document.getElementById('modeNoticeBanner');
+  if (banner) {
+    const isDismissed = sessionStorage.getItem('jagad_jawa_mode_banner_dismissed') === 'true';
+    if (!isDismissed) {
+      banner.classList.remove('hidden');
+      banner.classList.add('flex');
+    } else {
+      banner.classList.add('hidden');
+      banner.classList.remove('flex');
+    }
+  }
+}
+
+/**
+ * Menutup banner pemberitahuan mode
+ */
+export function dismissModeBanner() {
+  if (typeof document === 'undefined') return;
+  const banner = document.getElementById('modeNoticeBanner');
+  if (banner) {
+    banner.classList.add('hidden');
+    banner.classList.remove('flex');
+  }
+  try {
+    sessionStorage.setItem('jagad_jawa_mode_banner_dismissed', 'true');
+  } catch (_) {}
+}
+
+// ─── ONBOARDING TOUR 3 LANGKAH (NON-BLOKIR) ─────────────────────────────────
+
+const TOUR_STORAGE_KEY = 'jagad_jawa_tour_completed';
+let currentTourStep = 1;
+
+export const TOUR_STEPS = [
+  {
+    step: 1,
+    title: { id: '1. Cek Weton di Kalender', jv: '1. Priksa Weton ing Kalender' },
+    desc: { 
+      id: 'Lihat kalender Sultan Agungan, pasaran hari ini, weton kelahiran, dan siklus dino ala/becik.', 
+      jv: 'Pirsani kalender Sultan Agungan, pasaran dinten punika, weton wiyosan, sarta dino ala/becik.' 
+    },
+    icon: 'fa-solid fa-calendar-days text-amber-400',
+    tab: 'kalender',
+    actionText: { id: 'Buka Kalender', jv: 'Bukak Kalender' }
+  },
+  {
+    step: 2,
+    title: { id: '2. Belajar Aksara di Studio', jv: '2. Sinau Aksara ing Studio' },
+    desc: { 
+      id: 'Latihan menulis dan transliterasi otomatis huruf Latin ke Hanacaraka dengan papan ketik virtual.', 
+      jv: 'Gladhi nulis lan transliterasi otomatis aksara Latin dhateng Hanacaraka kanthi papan ketik virtual.' 
+    },
+    icon: 'fa-solid fa-pen-nib text-teal-400',
+    tab: 'aksara',
+    actionText: { id: 'Buka Studio Aksara', jv: 'Bukak Studio Aksara' }
+  },
+  {
+    step: 3,
+    title: { id: '3. Mainkan Gamelan Maya', jv: '3. Tabuh Gamelan Maya' },
+    desc: { 
+      id: 'Eksplorasi instrumen gamelan Jawa interaktif: Saron, Bonang, Kendang, dan Gong berlaras Pelog & Slendro.', 
+      jv: 'Nggarap instrumen gamelan Jawa interaktif: Saron, Bonang, Kendhang, lan Gong laras Pelog & Slendro.' 
+    },
+    icon: 'fa-solid fa-drum text-emerald-400',
+    tab: 'gamelan',
+    actionText: { id: 'Coba Gamelan', jv: 'Cobi Gamelan' }
+  }
+];
+
+export function hasCompletedTour() {
+  if (typeof localStorage === 'undefined') return false;
+  return localStorage.getItem(TOUR_STORAGE_KEY) === 'true';
+}
+
+export function initOnboardingTour() {
+  if (typeof document === 'undefined') return;
+  if (hasCompletedTour()) return;
+  currentTourStep = 1;
+  renderTourStep();
+}
+
+export function renderTourStep() {
+  if (typeof document === 'undefined') return;
+  const tourCard = document.getElementById('onboardingTourCard');
+  if (!tourCard) return;
+
+  if (hasCompletedTour()) {
+    tourCard.classList.add('hidden');
+    return;
+  }
+
+  const stepData = TOUR_STEPS.find(s => s.step === currentTourStep) || TOUR_STEPS[0];
+  const lang = (typeof window !== 'undefined' && window.getLanguage) ? window.getLanguage() : 'id';
+
+  tourCard.classList.remove('hidden');
+
+  const titleEl = document.getElementById('tourStepTitle');
+  const descEl = document.getElementById('tourStepDesc');
+  const iconEl = document.getElementById('tourStepIcon');
+  const actionBtn = document.getElementById('tourActionBtn');
+  const nextBtn = document.getElementById('tourNextBtn');
+  const indicatorEl = document.getElementById('tourStepIndicator');
+
+  if (titleEl) titleEl.textContent = stepData.title[lang] || stepData.title.id;
+  if (descEl) descEl.textContent = stepData.desc[lang] || stepData.desc.id;
+  if (iconEl) iconEl.className = `${stepData.icon} text-lg`;
+  if (actionBtn) {
+    actionBtn.textContent = stepData.actionText[lang] || stepData.actionText.id;
+    actionBtn.onclick = () => {
+      if (typeof window.switchTab === 'function') window.switchTab(stepData.tab);
+    };
+  }
+  if (nextBtn) {
+    const isLast = currentTourStep >= TOUR_STEPS.length;
+    nextBtn.textContent = isLast ? (lang === 'jv' ? 'Rampung' : 'Mulai Menjelajah!') : (lang === 'jv' ? 'Lajeng' : 'Lanjut');
+  }
+  if (indicatorEl) {
+    indicatorEl.textContent = `Langkah ${currentTourStep} / ${TOUR_STEPS.length}`;
+  }
+}
+
+export function nextTourStep() {
+  if (currentTourStep < TOUR_STEPS.length) {
+    currentTourStep++;
+    renderTourStep();
+  } else {
+    skipTour();
+  }
+}
+
+export function skipTour() {
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.setItem(TOUR_STORAGE_KEY, 'true');
+    } catch (_) {}
+  }
+  const tourCard = document.getElementById('onboardingTourCard');
+  if (tourCard) {
+    tourCard.classList.add('hidden');
+  }
+}
+
+/**
+ * Menampilkan modal onboarding pemilihan mode (opsional manual)
  */
 export function showOnboardingModal() {
   if (typeof document === 'undefined') return;
@@ -193,21 +340,26 @@ export function pilihModeAwal(mode) {
   if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
     const msg = mode === MODE_PEMULA
       ? 'Sugeng rawuh! Mode Ringkas aktif. Panjenengan saged ngowahi ing menu kapan kemawon.'
-      : 'Sugeng rawuh! Mode Lengkap (Ahli) aktif. Sedaya fitur primbon jangkep cumawis.';
+      : 'Sugeng rawuh! Mode Lengkap aktif. Sedaya fitur primbon jangkep cumawis.';
     window.showToast(msg);
   }
 }
 
 /**
  * Inisialisasi awal preferensi mode aplikasi
+ * P0: Pengguna baru langsung masuk dalam "Mode Ringkas" secara default,
+ * tanpa gerbang modal yang memblokir, dengan banner pemberitahuan tipis.
  */
 export function initModeFeature() {
   if (hasModePreference()) {
     applyModeToUI();
   } else {
-    // Belum pernah memilih: terapkan mode default visual (ahli) lalu tampilkan modal
-    applyModeToUI(MODE_AHLI);
-    showOnboardingModal();
+    // Pengguna baru: Tetapkan Mode Ringkas secara default dan simpan
+    setMode(MODE_PEMULA);
+    // Tampilkan banner tipis pemberitahuan di Beranda
+    showModeBanner();
+    // Inisialisasi tur onboarding non-blokir
+    initOnboardingTour();
   }
 }
 
@@ -316,6 +468,12 @@ if (typeof window !== 'undefined') {
   window.closeOnboardingModal = closeOnboardingModal;
   window.pilihModeAwal = pilihModeAwal;
   window.initModeFeature = initModeFeature;
+  window.showModeBanner = showModeBanner;
+  window.dismissModeBanner = dismissModeBanner;
+  window.initOnboardingTour = initOnboardingTour;
+  window.renderTourStep = renderTourStep;
+  window.nextTourStep = nextTourStep;
+  window.skipTour = skipTour;
   window.toggleHeaderLaporanMenu = toggleHeaderLaporanMenu;
   window.closeHeaderLaporanMenu = closeHeaderLaporanMenu;
   window.updateHeaderLaporanMenuUI = updateHeaderLaporanMenuUI;

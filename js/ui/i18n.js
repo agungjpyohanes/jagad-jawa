@@ -142,6 +142,30 @@ export const NAV_DICTIONARY = {
     id: 'Sasmitha (Tanda Alam & Tubuh)',
     jv: 'Sasmitha (Pratandha Alam & Badan)'
   },
+  nav_primbon: {
+    id: 'Primbon',
+    jv: 'Primbon'
+  },
+  nav_belajar: {
+    id: 'Belajar',
+    jv: 'Sinau'
+  },
+  nav_saya: {
+    id: 'Saya',
+    jv: 'Kula'
+  },
+  mode_ringkas: {
+    id: 'Ringkas',
+    jv: 'Ringkes'
+  },
+  mode_lengkap: {
+    id: 'Lengkap',
+    jv: 'Jangkep'
+  },
+  mode_banner_text: {
+    id: 'Mode Ringkas aktif untuk pengalaman cepat & ramah pemula.',
+    jv: 'Mode Ringkes aktif kanggé pamurwakan ingkang gampil & rikat.'
+  },
   nav_budaya: {
     id: 'Seni & Budaya',
     jv: 'Seni & Kabudayan'
@@ -739,6 +763,11 @@ export function applyLanguage(lang = currentLang) {
   }
 
   if (typeof document === 'undefined') return;
+
+  // Sinkronisasi atribut lang HTML secara dinamis (A11y Requirement 7)
+  if (document.documentElement) {
+    document.documentElement.setAttribute('lang', currentLang === 'jv' ? 'jv' : 'id');
+  }
 
   // 1. Perbarui teks seluruh elemen bertanda data-i18n
   const elements = document.querySelectorAll('[data-i18n]');

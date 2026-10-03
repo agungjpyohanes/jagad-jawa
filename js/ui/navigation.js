@@ -35,6 +35,44 @@ function switchTab(tabId, pushState = true) {
 
   // Close any open desktop dropdowns upon selection & close mobile menu
   closeAllNavDropdowns();
+  
+  // ─── BOTTOM NAVIGATION (5-ITEM) ACTIVE STATE UPDATE ───
+  const primbonTabs = ['primbon', 'kepribadian', 'perjodohan', 'selametan', 'ijab', 'omah', 'ternak', 'sasmitha', 'sinengker'];
+  const belajarTabs = ['belajar', 'aksara', 'gamelan', 'wayang', 'pitutur', 'wuku', 'tumpeng', 'tripurusa', 'pustaka', 'ensiklopedia-budaya', 'mitologi'];
+  
+  let activeBottomNav = tabId;
+  if (primbonTabs.includes(tabId)) activeBottomNav = 'primbon';
+  else if (belajarTabs.includes(tabId)) activeBottomNav = 'belajar';
+  else if (tabId === 'kalender' || tabId === 'tanggal-jawa') activeBottomNav = 'kalender';
+  else if (tabId === 'saya') activeBottomNav = 'saya';
+  else activeBottomNav = 'beranda';
+
+  document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+    if (btn.dataset.tab === activeBottomNav) {
+      btn.classList.add('active', 'text-prada');
+      btn.classList.remove('text-sogan-400');
+    } else {
+      btn.classList.remove('active', 'text-prada');
+      btn.classList.add('text-sogan-400');
+    }
+  });
+
+  // ─── MOBILE HEADER BAR (PAGE TITLE & BACK BUTTON) ───
+  const mobileTitleEl = document.getElementById('mobileNavPageTitle');
+  const mobileHeaderBar = document.getElementById('mobileHeaderNavBar');
+  if (mobileTitleEl) {
+    const info = BREADCRUMB_MAP[tabId];
+    const pageTitle = info ? getNavBilingualText(info.title) : tabId.toUpperCase();
+    mobileTitleEl.textContent = pageTitle;
+  }
+  if (mobileHeaderBar) {
+    if (tabId === 'beranda') {
+      mobileHeaderBar.classList.add('hidden');
+    } else {
+      mobileHeaderBar.classList.remove('hidden');
+    }
+  }
+
   // Update global header back button visibility (hide on beranda, show on subtabs)
   const globalBackBtn = document.getElementById('globalNavBackBtn');
   if (globalBackBtn) {
@@ -289,6 +327,24 @@ const BREADCRUMB_MAP = {
     title: { id: 'Pusat Laporan Tradisi Luhur', jv: 'Pusat Serat Laporan Tradhisi Luhur' },
     icon: 'fa-solid fa-file-pdf',
     sub: { id: 'Dokumen Resmi & Piagam', jv: 'Serat Resmi & Piagam' }
+  },
+  'primbon': {
+    category: { label: { id: 'Portal Petung', jv: 'Papan Petung' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Hub Primbon & Petungan', jv: 'Pusat Primbon & Petungan' },
+    icon: 'fa-solid fa-wand-magic-sparkles',
+    sub: { id: 'Pituduh Gesang & Watak', jv: 'Pituduh Gesang & Watak' }
+  },
+  'belajar': {
+    category: { label: { id: 'Pustaka & Budaya', jv: 'Pustaka & Kabudayan' }, icon: 'fa-solid fa-book-open-reader' },
+    title: { id: 'Pusat Belajar Budaya', jv: 'Pusat Sinau Kabudayan' },
+    icon: 'fa-solid fa-book-open-reader',
+    sub: { id: 'Aksara, Gamelan, Wayang & Serat', jv: 'Aksara, Gamelan, Wayang & Serat' }
+  },
+  'saya': {
+    category: { label: { id: 'Profil & Pengaturan', jv: 'Profil & Pangaturan' }, icon: 'fa-solid fa-user-gear' },
+    title: { id: 'Ruang Saya', jv: 'Ruang Kula' },
+    icon: 'fa-solid fa-user-gear',
+    sub: { id: 'Weton, Riwayat & Preferensi', jv: 'Weton, Riwayat & Pilihan' }
   }
 };
 
@@ -471,6 +527,37 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
 }
 
 // Global Navigasi Kembali & Browser History Sync
+/**
+ * Sticky Table of Contents (TOC) dengan IntersectionObserver
+ */
+function initStickyToc() {
+  if (typeof document === 'undefined' || typeof IntersectionObserver === 'undefined') return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        if (id) {
+          document.querySelectorAll('.toc-item-link').forEach(link => {
+            if (link.getAttribute('href') === `#${id}` || link.dataset.targetId === id) {
+              link.classList.add('text-prada', 'font-bold', 'border-l-2', 'border-prada', 'bg-prada/10');
+              link.classList.remove('text-sogan-400');
+            } else {
+              link.classList.remove('text-prada', 'font-bold', 'border-l-2', 'border-prada', 'bg-prada/10');
+              link.classList.add('text-sogan-400');
+            }
+          });
+        }
+      }
+    });
+  }, { rootMargin: '-10% 0px -65% 0px' });
+
+  document.querySelectorAll('#tab-wuku [id], #tab-tumpeng [id], #tab-ensiklopedia-budaya [id]').forEach(el => {
+    if (el.tagName && el.tagName.match(/^H[234]$/)) {
+      observer.observe(el);
+    }
+  });
+}
+
 function navigasiKembali() {
   if (typeof window !== 'undefined' && window.history.length > 1) {
     window.history.back();
@@ -481,8 +568,44 @@ function navigasiKembali() {
 
 if (typeof window !== 'undefined') {
   const resolveCurrentHashTab = () => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash && document.getElementById(`tab-${hash}`)) {
+    let hash = window.location.hash.replace('#', '').trim();
+    if (!hash) return 'beranda';
+
+    // Dukungan routing bertingkat / hierarchical: #primbon/jodoh atau #belajar/aksara
+    if (hash.includes('/')) {
+      const parts = hash.split('/');
+      const section = parts[0];
+      const sub = parts[1];
+      const aliasMap = {
+        'jodoh': 'perjodohan',
+        'nujum': 'kepribadian',
+        'selametan': 'selametan',
+        'ijab': 'ijab',
+        'omah': 'omah',
+        'kehidupan': 'ternak',
+        'ternak': 'ternak',
+        'sasmitha': 'sasmitha',
+        'sinengker': 'sinengker',
+        'aksara': 'aksara',
+        'gamelan': 'gamelan',
+        'wayang': 'wayang',
+        'pitutur': 'pitutur',
+        'wuku': 'wuku',
+        'tumpeng': 'tumpeng',
+        'tripurusa': 'tripurusa',
+        'pustaka': 'pustaka',
+        'ensiklopedia': 'ensiklopedia-budaya',
+        'mitologi': 'mitologi'
+      };
+      if (aliasMap[sub] && document.getElementById(`tab-${aliasMap[sub]}`)) {
+        return aliasMap[sub];
+      }
+      if (document.getElementById(`tab-${section}`)) {
+        return section;
+      }
+    }
+
+    if (document.getElementById(`tab-${hash}`)) {
       return hash;
     }
     return 'beranda';
@@ -785,6 +908,7 @@ if (typeof window !== 'undefined') {
   window.toggleMobileMenu = toggleMobileMenu;
   window.closeMobileMenu = closeMobileMenu;
   window.navigasiKembali = navigasiKembali;
+  window.initStickyToc = initStickyToc;
   window.printLaporan = printLaporan;
   window.printSection = printSection;
   window.downloadElementAsPng = downloadElementAsPng;
@@ -799,6 +923,7 @@ if (typeof module !== 'undefined' && module.exports) {
     toggleMobileMenu,
     closeMobileMenu,
     navigasiKembali,
+    initStickyToc,
     printLaporan,
     printSection,
     downloadElementAsPng,
@@ -814,6 +939,7 @@ export {
   toggleMobileMenu,
   closeMobileMenu,
   navigasiKembali,
+  initStickyToc,
   printLaporan,
   printSection,
   downloadElementAsPng,
@@ -828,6 +954,7 @@ export default {
   toggleMobileMenu,
   closeMobileMenu,
   navigasiKembali,
+  initStickyToc,
   printLaporan,
   printSection,
   downloadElementAsPng,

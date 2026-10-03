@@ -6,6 +6,7 @@
 
 import { getDayInfo, getTanggalJawaLengkap, getNeptu, getPranataMangsaLengkap, BULAN_MASEHI } from './kalender-engine.js';
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { drawShareCardQrCode } from '../../ui/ux-enhancements.js';
 
 const KUTIPAN_BIJAK = [
   { jawa: "Urip iku urup.", arti: "Hidup itu hendaknya menyala dan memberi manfaat bagi sesama." },
@@ -67,8 +68,10 @@ export function shareWetonViaWhatsApp(y, m, d) {
  * @param {number} y 
  * @param {number} m 
  * @param {number} d 
+ * @param {string} [customNama='']
+ * @param {'standard'|'story'|'feed'} [ratio='standard']
  */
-export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
+export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '', ratio = 'standard') {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
@@ -77,8 +80,20 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
   const quote = getCulturalQuote(y * 10000 + m * 100 + d);
   const tglMasehiStr = `${d} ${BULAN_MASEHI[m - 1]} ${y}`;
 
-  const width = 640;
-  const height = 800;
+  let width = 640;
+  let height = 800;
+  if (ratio === 'story') {
+    width = 1080;
+    height = 1920;
+  } else if (ratio === 'feed') {
+    width = 1080;
+    height = 1350;
+  } else if (ratio === 'square') {
+    width = 1080;
+    height = 1080;
+  }
+
+  const scale = width / 640;
   canvas.width = width;
   canvas.height = height;
 
@@ -197,10 +212,15 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
   ctx.font = '12px sans-serif';
   ctx.fillText(quote.arti, width / 2, 630);
 
-  // 8. Footer Watermark & Branding
+  // 8. Footer Watermark & QR Code
   ctx.fillStyle = '#64748b';
   ctx.font = '11px monospace';
-  ctx.fillText('jagad-jawa.web.app · Lestari Budaya Luhur Nusantara', width / 2, 730);
+  ctx.textAlign = 'left';
+  ctx.fillText('jagad-jawa.web.app · Lestari Budaya Luhur Nusantara', 45, height - 35);
+  ctx.fillText('Pituduh Gesang & Petungan Kalender Tradisi', 45, height - 20);
+
+  // Gambar QR Code visual di pojok kanan bawah
+  drawShareCardQrCode(ctx, width - 85, height - 85, 55);
 }
 
 /**
@@ -230,6 +250,8 @@ export function openWetonShareModal(y, m, d, customNama = '') {
     namaInput.value = customNama;
   }
 
+  let currentRatio = 'standard';
+
   const rerender = () => {
     let curY = y, curM = m, curD = d;
     if (dateInput && dateInput.value) {
@@ -239,7 +261,7 @@ export function openWetonShareModal(y, m, d, customNama = '') {
       }
     }
     const curNama = namaInput ? namaInput.value.trim() : '';
-    drawWetonCardToCanvas(canvas, curY, curM, curD, curNama);
+    drawWetonCardToCanvas(canvas, curY, curM, curD, curNama, currentRatio);
 
     const btnWa = document.getElementById('btnShareWetonWA');
     if (btnWa) {
@@ -250,6 +272,19 @@ export function openWetonShareModal(y, m, d, customNama = '') {
     if (btnDownload) {
       btnDownload.onclick = () => downloadShareCardPng(curY, curM, curD, curNama);
     }
+
+    // Ratio toggle buttons
+    document.querySelectorAll('.share-card-ratio-btn').forEach(btn => {
+      if (btn.dataset.ratio === currentRatio) {
+        btn.className = 'share-card-ratio-btn px-3 py-1.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow-md transition';
+      } else {
+        btn.className = 'share-card-ratio-btn px-3 py-1.5 rounded-xl bg-sogan-900 border border-sogan-800 text-sogan-300 hover:text-prada text-xs transition';
+      }
+      btn.onclick = () => {
+        currentRatio = btn.dataset.ratio || 'standard';
+        rerender();
+      };
+    });
 
     const btnCopy = document.getElementById('btnCopyShareText');
     if (btnCopy) {
