@@ -272,6 +272,54 @@ export const CONTENT_DICTIONARY = {
     id: 'Warisan Adiluhung',
     jv: 'Warisan Adiluhung'
   },
+  hero_today_tag: {
+    id: 'Dinten Punika · Hari Ini',
+    jv: 'Dinten Punika · Dinten Menika'
+  },
+  hero_btn_share_card: {
+    id: 'Bagikan Kartu',
+    jv: 'Bagekaken Kartu'
+  },
+  hero_btn_share_text: {
+    id: 'Bagikan Teks',
+    jv: 'Bagekaken Serat'
+  },
+  hero_quick_actions_title: {
+    id: 'Aksi Cepat · Pilihan Populer',
+    jv: 'Tumindak Gancang · Pilihan Utama'
+  },
+  hero_quick_weton: {
+    id: 'Cek Weton',
+    jv: 'Priksa Weton'
+  },
+  hero_quick_weton_desc: {
+    id: 'Kalender & Pasaran',
+    jv: 'Kalendher & Pasaran'
+  },
+  hero_quick_jodoh: {
+    id: 'Petung Jodoh',
+    jv: 'Pétung Jodhok'
+  },
+  hero_quick_jodoh_desc: {
+    id: 'Salaki Rabi & Neptu',
+    jv: 'Salaki Rabi & Neptu'
+  },
+  hero_quick_ijab: {
+    id: 'Hari Baik Ijab',
+    jv: 'Dina Becik Ijab'
+  },
+  hero_quick_ijab_desc: {
+    id: 'Palakrama Manten',
+    jv: 'Palakrama Pengantèn'
+  },
+  hero_quick_selametan: {
+    id: 'Selametan',
+    jv: 'Wilujengan'
+  },
+  hero_quick_selametan_desc: {
+    id: 'Geblak dumugi Nyewu',
+    jv: 'Geblak dumugi Nyèwu'
+  },
   hero_title: {
     id: 'MENYELAMI KEARIFAN LOKAL',
     jv: 'NYELAMI KAWRUH ADILUHUNG'

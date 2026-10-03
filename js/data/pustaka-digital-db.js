@@ -74,7 +74,7 @@ export const NASKAH_KUNO_LIST = [
   {
     id: 'babad-tanah-jawi',
     judul: 'Babad Tanah Jawi (Ringkasan Babad)',
-    pengarang: 'Pujangga Kasultanan Mataram Surakarta',
+    pengarang: 'Pujangga Tradisi Mataram Surakarta',
     tahun: 'Abad XVII–XVIII M',
     kategori: 'Naskah Sejarah & Genealogi Nusantara',
     aksaraJawa: 'ꦧꦧꦢ꧀ꦠꦤꦃꦗꦮꦶ',
@@ -226,7 +226,7 @@ export const DOKUMEN_REFERENSI_BUDAYA = [
     id: 'kawruh-karawitan-gamelan',
     judul: 'Kawruh Karawitan & Ricikan Gamelan Jawi',
     kategori: 'Seni Musik Tradisional',
-    deskripsi: 'Wawasan mendalam babagan laras Slendro (5 nada) lan Pelog (7 nada), ricikan instrumen pamangku irama lan pamangku gending, sarta pathet karawitan Kasultanan.',
+    deskripsi: 'Wawasan mendalam babagan laras Slendro (5 nada) lan Pelog (7 nada), ricikan instrumen pamangku irama lan pamangku gending, sarta pathet karawitan tradisi adiluhung.',
     kontenTeks: `KAWRUH KARAWITAN & RICIKAN GAMELAN JAWA\n\nA. LARAS GAMELAN:\n1. Laras Slendro: Nggadhahi 5 nada ing saben oktaf (1-Ji, 2-Ro, 3-Lu, 5-Ma, 6-Nem). Karakter: Bungah, gumregah, tinarbuka.\n2. Laras Pelog: Nggadhahi 7 nada ing saben oktaf (1-Penunggul, 2-Gulu, 3-Dhadha, 4-Pelog, 5-Lima, 6-Nem, 7-Barang). Karakter: Syahdu, wingit, agung, trenyuh.\n\nB. PATHET KARAWITAN:\n- Slendro: Pathet Nem (wiwit jam 21.00), Pathet Sanga (wiwit jam 00.00), Pathet Manyura (wiwit jam 03.00 dumugi enjang).\n- Pelog: Pathet Lima, Pathet Nem, Pathet Barang.\n\nC. RICIKAN INSTRUMEN UTAMA:\n1. Kendhang (Kendhang Ageng, Ciblon, Ketipung): Pamangku irama, dados pamimpin lampahing gending.\n2. Bonang (Barung lan Panerus): Pamurba lagu, mbabar cengkok lan ngembangi melodhi.\n3. Gender (Barung lan Panerus): Paring swasana adem wingit lumantar tabuhan tangan loro.\n4. Saron (Demung, Barung, Peking): Balungan gending kanthi bilahan perunggu tebal.\n5. Kenong & Kempul: Pamangku struktur gongan alit.\n6. Gong Ageng: Titik puncak pungkasan siklus gongan, pralambang Hyang Maha Tunggal.`
   },
   {

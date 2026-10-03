@@ -36,7 +36,7 @@ export function buildWhatsAppShareText(y, m, d) {
   const tglMasehiStr = `${d} ${BULAN_MASEHI[m - 1]} ${y}`;
 
   return `✨ *WETON & PETUNGAN JAWA* ✨\n` +
-    `_Kadhudhah lumantar Jagad Jawa — Kasultanan Nusantara_\n\n` +
+    `_Kadhudhah lumantar Jagad Jawa — Budaya Luhur Nusantara_\n\n` +
     `📅 *Tanggal Masehi:* ${tglMasehiStr}\n` +
     `🌟 *Weton:* *${tglJawa.dino} ${tglJawa.pas}*\n` +
     `🔢 *Neptu:* ${tglJawa.neptu} (${tglJawa.dino} + ${tglJawa.pas})\n` +
@@ -118,7 +118,7 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '', ratio = 
   ctx.fillStyle = '#fdf0cd';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';
-  ctx.fillText('PAWIYATAN KASULTANAN · JAGAD JAWA', width / 2, 58);
+  ctx.fillText('PAWIYATAN LUHUR · JAGAD JAWA', width / 2, 58);
 
   ctx.fillStyle = '#d4af37';
   ctx.font = 'bold 22px serif';

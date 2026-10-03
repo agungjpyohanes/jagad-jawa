@@ -7,7 +7,6 @@ export function closeAnyActiveModal() {
   const modalConfigs = [
     { id: 'modalDetailKalender', close: () => { if (typeof window.tutupDetailTanggalJawa === 'function') window.tutupDetailTanggalJawa(); } },
     { id: 'modalShareCardWeton', close: () => { if (typeof window.closeWetonShareModal === 'function') window.closeWetonShareModal(); } },
-    { id: 'modalShareSapaDina', close: () => { if (typeof window.closeSapaDinaShareModal === 'function') window.closeSapaDinaShareModal(); } },
     { id: 'modalNujumPokemonCard', close: () => { if (typeof window.closeNujumPokemonCardModal === 'function') window.closeNujumPokemonCardModal(); } },
     { id: 'modalPustakaReader', close: () => { if (typeof window.closePustakaReader === 'function') window.closePustakaReader(); } },
     { id: 'modalGlosariumNujum', close: () => { if (typeof window.closeGlosariumNujumModal === 'function') window.closeGlosariumNujumModal(); } },
@@ -30,7 +29,6 @@ export function initModalListeners() {
   const modalConfigs = [
     { id: 'modalDetailKalender', close: () => { if (typeof window.tutupDetailTanggalJawa === 'function') window.tutupDetailTanggalJawa(); } },
     { id: 'modalShareCardWeton', close: () => { if (typeof window.closeWetonShareModal === 'function') window.closeWetonShareModal(); } },
-    { id: 'modalShareSapaDina', close: () => { if (typeof window.closeSapaDinaShareModal === 'function') window.closeSapaDinaShareModal(); } },
     { id: 'modalNujumPokemonCard', close: () => { if (typeof window.closeNujumPokemonCardModal === 'function') window.closeNujumPokemonCardModal(); } },
     { id: 'modalPustakaReader', close: () => { if (typeof window.closePustakaReader === 'function') window.closePustakaReader(); } },
     { id: 'modalGlosariumNujum', close: () => { if (typeof window.closeGlosariumNujumModal === 'function') window.closeGlosariumNujumModal(); } },

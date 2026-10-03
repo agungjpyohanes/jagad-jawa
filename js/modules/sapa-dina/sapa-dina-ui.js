@@ -184,7 +184,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   ctx.fillStyle = '#eedc9a';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';
-  ctx.fillText('✦ KASULTANAN NUSANTARA · JAGAD JAWA ✦', width / 2, 60);
+  ctx.fillText('✦ BUDAYA LUHUR NUSANTARA · JAGAD JAWA ✦', width / 2, 60);
 
   ctx.fillStyle = '#d4af37';
   ctx.font = 'bold 28px serif';
@@ -353,7 +353,12 @@ export function openSapaDinaShareModal(data = null) {
 
   const modal = document.getElementById('modalShareSapaDina');
   const canvas = document.getElementById('sapaDinaShareCardCanvas');
-  if (!modal || !canvas) return;
+  if (!modal || !canvas) {
+    if (typeof window !== 'undefined' && typeof window.openWetonShareModal === 'function') {
+      window.openWetonShareModal();
+    }
+    return;
+  }
 
   drawSapaDinaCardToCanvas(canvas, d);
 

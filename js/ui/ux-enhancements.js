@@ -9,7 +9,12 @@
  * 5. Dynamic HTML lang attribute & live update.
  */
 
-import { getDayInfo, toJDN, PASARAN, HARI } from '../data/calendar.js';
+import { getDayInfo, toJDN, PASARAN, HARI, getTanggalJawaLengkap } from '../data/calendar.js';
+import { getSapaDinaData } from '../modules/sapa-dina/sapa-dina-engine.js';
+import { buildSapaDinaShareText } from '../modules/sapa-dina/sapa-dina-ui.js';
+import { buildWhatsAppShareText } from '../modules/kalender/share-card.js';
+import { showToast, copyToClipboard } from './toast.js';
+import { getLanguage } from './i18n.js';
 
 // ─── 0. HERO KARTU HARI INI ─────────────────────────────────────────────────
 
@@ -21,12 +26,19 @@ export function renderHeroTodayCard() {
   const d = now.getDate();
 
   try {
-    const info = getDayInfo(y, m, d);
-    if (!info) return;
+    const data = getSapaDinaData(now);
+    if (!data) return;
+
+    const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
+      ? window.getLanguage()
+      : 'id';
+    const isJv = lang === 'jv';
 
     // 1. Tanggal Masehi
     const masehiEl = document.getElementById('heroMasehiDateText');
-    const namaHariMasehi = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][now.getDay()];
+    const namaHariMasehi = isJv
+      ? ['Ngahad', 'Senen', 'Selasa', 'Rebo', 'Kemis', 'Jemuwah', 'Setu'][now.getDay()]
+      : ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][now.getDay()];
     const namaBulanMasehi = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][m - 1];
     if (masehiEl) {
       masehiEl.textContent = `${namaHariMasehi}, ${d} ${namaBulanMasehi} ${y}`;
@@ -35,34 +47,35 @@ export function renderHeroTodayCard() {
     // 2. Weton Utama
     const wetonEl = document.getElementById('heroJawaWetonText');
     if (wetonEl) {
-      wetonEl.textContent = `${info.dina || info.hari} ${info.pasaran}`;
+      wetonEl.textContent = data.wetonDisplay;
     }
 
     // 3. Tanggal Jawa
     const jawaEl = document.getElementById('heroTanggalJawaLengkap');
     if (jawaEl) {
-      jawaEl.textContent = `${info.tglJawa} ${info.sasiJawa} ${info.tahunJawa} ${info.winduJawa || ''}`;
+      jawaEl.textContent = `${data.tglJawa} ${data.bulanJawa} ${data.tahunAJ} AJ · Tahun ${data.tahunSiklus}, Windu ${data.namaWindu}`;
     }
 
     // 4. Neptu Badge
     const neptuEl = document.getElementById('heroNeptuWetonBadge');
     if (neptuEl) {
-      neptuEl.textContent = `Neptu ${info.neptu}`;
+      neptuEl.textContent = `Neptu ${data.neptu}`;
     }
 
     // 5. Wuku & Pranata Mangsa
     const wukuEl = document.getElementById('heroWukuPranataText');
     if (wukuEl) {
-      wukuEl.textContent = `Wuku ${info.wuku || '-'} • Mangsa ${info.pranataMangsa || '-'}`;
+      wukuEl.textContent = `Wuku ${data.wukuDisplay} (${data.wukuNo}/30) • Mangsa ${data.pranata.nama}`;
     }
 
     // 6. Status Dino (Becik / Ala / Dino Gede)
     const statusEl = document.getElementById('heroDinoStatusBadge');
     if (statusEl) {
-      if (info.isDinoGede) {
+      const dinoStatus = data.dinoStatus;
+      if (dinoStatus.isGede) {
         statusEl.className = 'px-3.5 py-1.5 rounded-xl border border-amber-500/50 bg-amber-500/15 text-amber-300 font-bold text-xs shadow-sm inline-flex items-center gap-1.5';
         statusEl.innerHTML = '<i class="fa-solid fa-crown text-amber-300"></i> Dino Gede (Sakral)';
-      } else if (info.isBecik) {
+      } else if (dinoStatus.isIjo) {
         statusEl.className = 'px-3.5 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-500/15 text-emerald-300 font-bold text-xs shadow-sm inline-flex items-center gap-1.5';
         statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> Dina Becik (Rahayu)';
       } else {
@@ -70,15 +83,155 @@ export function renderHeroTodayCard() {
         statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Dina Ala (Prayitna)';
       }
     }
+
+    // 7. Rincian Akordeon: Pitutur
+    const pituturAksaraEl = document.getElementById('heroPituturAksara');
+    if (pituturAksaraEl && data.pitutur) {
+      pituturAksaraEl.textContent = data.pitutur.aksara || '';
+    }
+    const pituturJawaEl = document.getElementById('heroPituturJawa');
+    if (pituturJawaEl && data.pitutur) {
+      pituturJawaEl.textContent = `"${data.pitutur.jawa}"`;
+    }
+    const pituturArtiEl = document.getElementById('heroPituturArtiHarfiah');
+    if (pituturArtiEl && data.pitutur) {
+      pituturArtiEl.textContent = data.pitutur.artiHarfiah || '';
+    }
+    const pituturMaknaEl = document.getElementById('heroPituturMaknaLengkap');
+    if (pituturMaknaEl && data.pitutur) {
+      pituturMaknaEl.textContent = data.pitutur.makna || '';
+    }
+    const pituturSumberEl = document.getElementById('heroPituturSumber');
+    if (pituturSumberEl && data.pitutur) {
+      pituturSumberEl.textContent = data.pitutur.sumber || 'Falsafah Luhur Jawa';
+    }
+
+    // 8. Rincian Akordeon: Pranata Mangsa Box
+    const pranataNamaEl = document.getElementById('heroPranataNama');
+    if (pranataNamaEl && data.pranata) {
+      pranataNamaEl.textContent = data.pranata.nama;
+    }
+    const pranataMusimEl = document.getElementById('heroPranataMusim');
+    if (pranataMusimEl && data.pranata) {
+      pranataMusimEl.textContent = `${data.pranata.musimTani} (${data.pranata.rentang})`;
+    }
+    const pranataCandraEl = document.getElementById('heroPranataCandrasangkala');
+    if (pranataCandraEl && data.pranata) {
+      pranataCandraEl.textContent = `"${data.pranata.candrasangkala}"`;
+    }
+    const pranataPratandhaEl = document.getElementById('heroPranataPratandha');
+    if (pranataPratandhaEl && data.pranata) {
+      pranataPratandhaEl.textContent = data.pranata.pratandhaAlam || '';
+    }
+
+    // 9. Rincian Akordeon: Dununge Kala (Arah Kolo)
+    const arahKoloNamaEl = document.getElementById('heroArahKoloNama');
+    if (arahKoloNamaEl && data.arahKolo) {
+      arahKoloNamaEl.textContent = data.arahKolo.labelDisplay;
+    }
+    const arahKoloPantanganEl = document.getElementById('heroArahKoloPantangan');
+    if (arahKoloPantanganEl && data.arahKolo) {
+      arahKoloPantanganEl.textContent = data.arahKolo.pantangan;
+    }
+
+    // 10. Rincian Akordeon: Petung Tetanen
+    const tetanenKatEl = document.getElementById('heroTetanenKategori');
+    if (tetanenKatEl && data.petungTetanen) {
+      tetanenKatEl.textContent = data.petungTetanen.kategoriLabel;
+    }
+    const tetanenBecikEl = document.getElementById('heroTetanenBecik');
+    if (tetanenBecikEl && data.petungTetanen) {
+      tetanenBecikEl.textContent = isJv
+        ? `Kang becik: ${data.petungTetanen.kangBecik}`
+        : `Yang dianjurkan: ${data.petungTetanen.kangBecik}`;
+    }
+    const tetanenTegeseEl = document.getElementById('heroTetanenTegese');
+    if (tetanenTegeseEl && data.petungTetanen) {
+      tetanenTegeseEl.textContent = data.petungTetanen.tegese;
+    }
+
+    // 11. Sinkronisasi Teks Tombol Akordeon
+    const textToggleEl = document.getElementById('heroDetailToggleText');
+    const panel = document.getElementById('heroTodayDetailPanel');
+    if (textToggleEl) {
+      const isExpanded = panel && !panel.classList.contains('hidden');
+      if (isExpanded) {
+        textToggleEl.textContent = isJv ? 'Tutup Rincian' : 'Tutup Rincian Hari Ini';
+      } else {
+        textToggleEl.textContent = isJv ? 'Bikak Rincian Dinten Punika & Pitutur' : 'Buka Rincian Hari Ini & Pitutur';
+      }
+    }
   } catch (err) {
     console.warn('[renderHeroTodayCard]', err);
+  }
+}
+
+/**
+ * Toggle ekspansi akordeon halus untuk rincian Sapa Dina di Kartu Hari Ini
+ */
+export function toggleHeroTodayAccordion() {
+  const panel = document.getElementById('heroTodayDetailPanel');
+  const btn = document.getElementById('btnToggleHeroDetail');
+  const chevron = document.getElementById('heroDetailChevron');
+  const textEl = document.getElementById('heroDetailToggleText');
+  if (!panel) return;
+
+  const isHidden = panel.classList.contains('hidden');
+  const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
+    ? window.getLanguage()
+    : 'id';
+  const isJv = lang === 'jv';
+
+  if (isHidden) {
+    panel.classList.remove('hidden');
+    if (chevron) chevron.classList.add('rotate-180');
+    if (textEl) textEl.textContent = isJv ? 'Tutup Rincian' : 'Tutup Rincian Hari Ini';
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  } else {
+    panel.classList.add('hidden');
+    if (chevron) chevron.classList.remove('rotate-180');
+    if (textEl) textEl.textContent = isJv ? 'Bikak Rincian Dinten Punika & Pitutur' : 'Buka Rincian Hari Ini & Pitutur';
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+/**
+ * Membagikan ringkasan teks weton hari ini via Web Share API atau salin clipboard
+ */
+export function shareTodayWetonText() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+
+  let text = '';
+  try {
+    const data = getSapaDinaData(now);
+    text = buildSapaDinaShareText(data);
+  } catch (_) {
+    text = buildWhatsAppShareText(y, m, d);
+  }
+
+  if (navigator.share) {
+    navigator.share({
+      title: `Weton Hari Ini — Jagad Jawa`,
+      text: text
+    }).then(() => {
+      showToast('Ringkasan dinten punika kasil kabagekake! ✨');
+    }).catch(err => {
+      if (err.name !== 'AbortError') {
+        copyToClipboard(text, 'Teks ringkasan dinten punika kasil disalin kanggé WhatsApp!');
+      }
+    });
+  } else {
+    copyToClipboard(text, 'Teks ringkasan dinten punika kasil disalin kanggé WhatsApp!');
   }
 }
 
 // ─── 1. KALKULASI REAL-TIME FORMULIR ────────────────────────────────────────
 
 /**
- * Mengaitkan input tanggal dengan kalkulasi instan weton & neptu
+ * Mengaitkan input tanggal dengan kalkulasi instan weton & neptu tanpa pernah menghasilkan undefined
  * @param {string} inputId 
  * @param {string} badgeContainerId 
  */
@@ -105,18 +258,18 @@ export function attachRealtimeDateCalculator(inputId, badgeContainerId) {
     if (isNaN(y) || isNaN(m) || isNaN(d)) return;
 
     try {
-      const info = getDayInfo(y, m, d);
-      if (!info) return;
+      const tglJawa = getTanggalJawaLengkap(y, m, d);
+      if (!tglJawa) return;
 
       badgeEl.classList.remove('hidden');
       badgeEl.innerHTML = `
         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sogan-950/80 border border-prada/40 text-prada text-xs font-semibold shadow-sm animate-fade-in">
           <i class="fa-solid fa-sparkles text-amber-300"></i>
-          <span>${info.dina || info.hari} ${info.pasaran}</span>
+          <span>${tglJawa.dino || ''} ${tglJawa.pas || ''}</span>
           <span class="text-sogan-400">&bull;</span>
-          <span class="text-amber-200">Neptu ${info.neptu}</span>
+          <span class="text-amber-200">Neptu ${tglJawa.neptu || 0}</span>
           <span class="text-sogan-400">&bull;</span>
-          <span class="text-sogan-300">Wuku ${info.wuku || '-'}</span>
+          <span class="text-sogan-300">Wuku ${tglJawa.wukuName || '-'}</span>
         </div>
       `;
     } catch (_) {
@@ -411,11 +564,11 @@ export function renderUserProfileWeton(birthDateStr) {
   const wukuEl = document.getElementById('userProfileWukuText');
 
   try {
-    const info = getDayInfo(y, m, d);
-    if (info) {
-      if (wetonEl) wetonEl.textContent = `${info.dina || info.hari} ${info.pasaran}`;
-      if (neptuEl) neptuEl.textContent = `${info.neptu}`;
-      if (wukuEl) wukuEl.textContent = `${info.wuku || '-'}`;
+    const tglJawa = getTanggalJawaLengkap(y, m, d);
+    if (tglJawa) {
+      if (wetonEl) wetonEl.textContent = `${tglJawa.dino} ${tglJawa.pas}`;
+      if (neptuEl) neptuEl.textContent = `${tglJawa.neptu}`;
+      if (wukuEl) wukuEl.textContent = `${tglJawa.wukuName || '-'}`;
     }
   } catch (err) {
     console.warn('[renderUserProfileWeton]', err);
@@ -425,6 +578,8 @@ export function renderUserProfileWeton(birthDateStr) {
 // Global window exposure
 if (typeof window !== 'undefined') {
   window.renderHeroTodayCard = renderHeroTodayCard;
+  window.toggleHeroTodayAccordion = toggleHeroTodayAccordion;
+  window.shareTodayWetonText = shareTodayWetonText;
   window.attachRealtimeDateCalculator = attachRealtimeDateCalculator;
   window.initAllFormRealtimeCalculators = initAllFormRealtimeCalculators;
   window.toggleTermTooltip = toggleTermTooltip;
