@@ -1,7 +1,57 @@
 [
-  { "no": 1, "surasa": "SONYA", "arti": { "id": "Mengalami kesusahan / keprihatinan", "jv": "Ngalami kahanan rekasa / keprihatinan" } },
-  { "no": 2, "surasa": "AGOTHO", "arti": { "id": "Tidak memiliki apa-apa / miskin", "jv": "Ora duwe apa-apa / mlarat" } },
-  { "no": 3, "surasa": "GEDHONG", "arti": { "id": "Dihormati, diingat karena kebaikannya", "jv": "Kajen kelingan (dihormati, eling marang kautaman)" } },
-  { "no": 4, "surasa": "PANDHITA", "arti": { "id": "Bijaksana, berwatak suci, luhur", "jv": "Kajen kelingan (watak mandita, linuhung)" } },
-  { "no": 5, "surasa": "RATU", "arti": { "id": "Berkuasa, mulia, berwibawa luhur", "jv": "Kajen kelingan (kamulyan, kawibawan luhur)" } }
+  {
+    "no": 1,
+    "surasa": {
+      "id": "SONYA",
+      "jv": "SONYA"
+    },
+    "arti": {
+      "id": "Mengalami kesusahan / keprihatinan",
+      "jv": "Ngalami kahanan rekasa / keprihatinan"
+    }
+  },
+  {
+    "no": 2,
+    "surasa": {
+      "id": "AGOTHO",
+      "jv": "AGOTHO"
+    },
+    "arti": {
+      "id": "Tidak memiliki apa-apa / miskin",
+      "jv": "Ora duwe apa-apa / mlarat"
+    }
+  },
+  {
+    "no": 3,
+    "surasa": {
+      "id": "GEDHONG",
+      "jv": "GEDHONG"
+    },
+    "arti": {
+      "id": "Dihormati, diingat karena kebaikannya",
+      "jv": "Kajen kelingan (dihormati, eling marang kautaman)"
+    }
+  },
+  {
+    "no": 4,
+    "surasa": {
+      "id": "PANDHITA",
+      "jv": "PANDHITA"
+    },
+    "arti": {
+      "id": "Bijaksana, berwatak suci, luhur",
+      "jv": "Kajen kelingan (watak mandita, linuhung)"
+    }
+  },
+  {
+    "no": 5,
+    "surasa": {
+      "id": "RATU",
+      "jv": "RATU"
+    },
+    "arti": {
+      "id": "Berkuasa, mulia, berwibawa luhur",
+      "jv": "Kajen kelingan (kamulyan, kawibawan luhur)"
+    }
+  }
 ]

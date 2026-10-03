@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#182030"/>
+      <stop offset="100%" stop-color="#0B0F19"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf0cd"/>
+      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#9a7b1c"/>
+    </linearGradient>
+    <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Rounded Square -->
+  <rect width="512" height="512" rx="100" fill="url(#bgGrad)" stroke="#d4af37" stroke-width="4"/>
+
+  <!-- Decorative Outer Ring -->
+  <circle cx="256" cy="256" r="210" fill="none" stroke="url(#goldGrad)" stroke-width="2.5" stroke-dasharray="10 6" opacity="0.4"/>
+
+  <!-- Central Gunungan Motif -->
+  <g filter="url(#goldGlow)">
+    <!-- Gunungan Outline / Silhouette -->
+    <path d="M 256,70 
+             C 256,70 110,250 85,380 
+             C 75,430 130,442 256,442 
+             C 382,442 437,430 427,380 
+             C 402,250 256,70 256,70 Z" 
+          fill="none" stroke="url(#goldGrad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Inside Tree of Life / Pintu Gapura & Cabang -->
+    <path d="M 256,120 L 256,430" stroke="url(#goldGrad)" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Gapura Arch at Bottom -->
+    <path d="M 216,430 C 216,380 296,380 296,430" fill="rgba(212,175,55,0.2)" stroke="url(#goldGrad)" stroke-width="6"/>
+
+    <!-- Gunungan Branches -->
+    <path d="M 256,200 C 210,180 160,220 130,280" fill="none" stroke="url(#goldGrad)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 256,200 C 302,180 352,220 382,280" fill="none" stroke="url(#goldGrad)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 256,270 C 200,260 160,310 140,360" fill="none" stroke="url(#goldGrad)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 256,270 C 312,260 352,310 372,360" fill="none" stroke="url(#goldGrad)" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Central Kawung Gem -->
+    <circle cx="256" cy="256" r="28" fill="#182030" stroke="url(#goldGrad)" stroke-width="4"/>
+    <circle cx="256" cy="256" r="14" fill="url(#goldGrad)"/>
+  </g>
+</svg>

@@ -8,7 +8,7 @@
 export const TRIPURUSA_DATA = {
   judul: "Telur Jagad &bull; Tripurusa",
   subjudul: "Kosmologi Asal-Usul Antaga (Togog), Ismaya (Semar), & Manikmaya (Batara Guru)",
-  gambar: "assets/gunungan_tripurusa.jpeg",
+  gambar: "/assets/illustrations/gunungan_tripurusa.jpeg",
   deskripsiSingkat: "Mitos sebutir telur kosmis (Telur Jagad / Endhog Wisesa) minangka sangkan paraning dumadi tiga tokoh utama panguwasa kahyangan lan pamomong marcapada sajroning jagad pewayangan Jawa.",
   
   tokoh: [
@@ -130,7 +130,7 @@ export function renderTripurusaModule(containerId = 'tripurusaContentContainer')
           </div>
         </div>
 
-        <!-- Kolom Kanan: Aset Gambar Gunungan Tripurusa Pigura Keraton -->
+        <!-- Kolom Kanan: Aset Gambar Gunungan Tripurusa Pigura Tradisi Luhur -->
         <div class="lg:col-span-5 flex flex-col items-center justify-center">
           <div class="w-full max-w-md mx-auto relative group rounded-2xl p-2.5 sm:p-3 bg-gradient-to-b from-sogan-700/60 via-prada/30 to-sogan-900 border-2 border-prada/60 shadow-[0_0_35px_rgba(212,175,55,0.25)] transition-all duration-300 hover:shadow-[0_0_50px_rgba(212,175,55,0.45)]">
             <div class="relative overflow-hidden rounded-xl bg-keraton/90 flex items-center justify-center p-1 sm:p-2">

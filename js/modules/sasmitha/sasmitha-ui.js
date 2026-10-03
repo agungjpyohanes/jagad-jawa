@@ -16,6 +16,8 @@ import {
 import { SASMITHA_KEDUT } from '../../data/sasmitha-db.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
+import { loadDomainData } from '../../services/dbLoader.js';
+import { getBilingualText } from '../../ui/i18n.js';
 
 let currentSubtab = 'impen'; // 'impen' | 'kedut' | 'gerhana' | 'lindu' | 'tejo'
 let queryImpen = '';
@@ -82,6 +84,9 @@ const KEDUT_CATEGORIES = [
  * Inisialisasi komponen UI Sasmitha
  */
 export function initSasmithaUI() {
+  loadDomainData('sasmitha').catch((e) => {
+    console.warn('[sasmitha-ui] loadDomainData fallback:', e);
+  });
   setupEventListeners();
   renderSasmithaView();
 }
@@ -93,6 +98,9 @@ function setupEventListeners() {
       if (isPemula() && (currentSubtab === 'gerhana' || currentSubtab === 'lindu' || currentSubtab === 'tejo')) {
         currentSubtab = 'impen';
       }
+      renderSasmithaView();
+    });
+    window.addEventListener('language-changed', () => {
       renderSasmithaView();
     });
   }
@@ -282,12 +290,12 @@ function renderImpenContent() {
               <i class="fa-solid fa-sparkles text-prada/60 group-hover:text-prada transition"></i>
             </div>
             <div class="text-xs sm:text-sm font-semibold text-amber-200 mb-2 leading-snug">
-              Yèn ngimpi: <span class="text-prada-light">"${item.yen_ngimpi}"</span>
+              Yèn ngimpi: <span class="text-prada-light">"${getBilingualText(item.yen_ngimpi)}"</span>
             </div>
           </div>
           <div class="pt-2.5 border-t border-sogan-800/80 text-xs text-sogan-200 leading-relaxed bg-keraton/40 p-2.5 rounded-lg mt-2">
             <strong class="text-prada text-[11px] block font-mono uppercase mb-0.5">Pratandhané:</strong>
-            ${item.pratanda}
+            ${getBilingualText(item.pratanda)}
           </div>
         </div>
       `).join('')}
@@ -315,13 +323,13 @@ export function pilihTitikAnatomiKedut(id) {
           <span class="px-2.5 py-1 rounded-lg bg-prada text-keraton font-mono font-bold text-xs shadow">
             Nomer ${item.id}
           </span>
-          <h4 class="text-sm sm:text-base font-bold text-amber-100">${item.bagian_badan}</h4>
+          <h4 class="text-sm sm:text-base font-bold text-amber-100">${getBilingualText(item.bagian_badan)}</h4>
         </div>
         <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-sogan-900 border border-sogan-700 text-prada">${item.kategori}</span>
       </div>
       <div class="text-xs text-sogan-200 leading-relaxed">
         <span class="text-prada font-semibold block text-[11px] uppercase font-mono mb-0.5">Wahanané / Pratandha:</span>
-        <p class="text-amber-100 font-serif text-sm bg-keraton/60 p-2.5 rounded-lg border border-sogan-800">${item.wahanane}</p>
+        <p class="text-amber-100 font-serif text-sm bg-keraton/60 p-2.5 rounded-lg border border-sogan-800">${getBilingualText(item.wahanane)}</p>
       </div>
     `;
   }
@@ -428,13 +436,13 @@ function renderKedutContent() {
                 <span class="px-2.5 py-1 rounded-lg bg-prada text-keraton font-mono font-bold text-xs shadow">
                   Nomer ${activeSpotlight.id}
                 </span>
-                <h4 class="text-sm sm:text-base font-bold text-amber-100">${activeSpotlight.bagian_badan}</h4>
+                <h4 class="text-sm sm:text-base font-bold text-amber-100">${getBilingualText(activeSpotlight.bagian_badan)}</h4>
               </div>
               <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-sogan-900 border border-sogan-700 text-prada">${activeSpotlight.kategori}</span>
             </div>
             <div class="text-xs text-sogan-200 leading-relaxed">
               <span class="text-prada font-semibold block text-[11px] uppercase font-mono mb-0.5">Wahanané / Pratandha:</span>
-              <p class="text-amber-100 font-serif text-sm bg-keraton/60 p-2.5 rounded-lg border border-sogan-800">${activeSpotlight.wahanane}</p>
+              <p class="text-amber-100 font-serif text-sm bg-keraton/60 p-2.5 rounded-lg border border-sogan-800">${getBilingualText(activeSpotlight.wahanane)}</p>
             </div>
           </div>
         </div>
@@ -465,7 +473,7 @@ function renderKedutContent() {
                   </marker>
                 </defs>
 
-                <!-- SILUET DASAR TUBUH MANUSIA (KERATON GOLD CONTOUR) -->
+                <!-- SILUET DASAR TUBUH MANUSIA (TRADISI GOLD CONTOUR) -->
                 <g fill="#121824" stroke="#d4af37" stroke-width="1.8" filter="url(#goldGlow)" opacity="0.95">
                   <!-- Kepala & Leher -->
                   <ellipse cx="270" cy="68" rx="30" ry="38" />
@@ -554,12 +562,12 @@ function renderKedutContent() {
                         <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${isSelected ? 'bg-prada text-keraton' : 'bg-sogan-950 text-amber-300 border border-sogan-700'}">
                           No. ${p.id}
                         </span>
-                        <strong class="text-xs text-amber-100">${item.bagian_badan}</strong>
+                        <strong class="text-xs text-amber-100">${getBilingualText(item.bagian_badan)}</strong>
                       </div>
                       <span class="text-[9.5px] text-sogan-400 font-mono">${item.kategori}</span>
                     </div>
                     <div class="text-[11px] text-sogan-300 leading-snug pl-1 border-l-2 ${isSelected ? 'border-prada text-amber-100' : 'border-sogan-700/60'}">
-                      ${item.wahanane}
+                      ${getBilingualText(item.wahanane)}
                     </div>
                   </div>
                 `;
@@ -672,12 +680,12 @@ function renderKedutContent() {
               ${kd.is_sensitive ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-600/40">Khusus</span>' : ''}
             </div>
             <div class="text-xs sm:text-sm font-bold text-amber-100 mb-1.5">
-              ${kd.bagian_badan}
+              ${getBilingualText(kd.bagian_badan)}
             </div>
           </div>
           <div class="pt-2 border-t border-sogan-800/80 text-xs text-sogan-200 leading-relaxed bg-keraton/40 p-2 rounded-lg mt-1">
             <span class="text-[10px] text-sogan-400 font-mono block">Wahanané:</span>
-            <span class="font-medium text-prada-light">${kd.wahanane}</span>
+            <span class="font-medium text-prada-light">${getBilingualText(kd.wahanane)}</span>
           </div>
         </div>
       `).join('')}
@@ -742,7 +750,7 @@ function renderGerhanaContent() {
           </div>
           <div class="p-4 rounded-xl bg-wulung/80 border border-sogan-800 text-xs sm:text-sm text-sogan-100 leading-relaxed mb-3">
             <i class="fa-solid fa-quote-left text-prada mr-1.5 opacity-70"></i>
-            ${data.ngalamat}
+            ${getBilingualText(data.ngalamat)}
           </div>
           <p class="text-[11px] text-sogan-400 italic">
             *Katrangan: Pitedah punika sastra budaya tradisi leluhur nalika mirsani gerhana rembulan utawi srengéngé minangka sarana mawas dhiri lan manembah marang Hyang Widhi.
@@ -839,17 +847,17 @@ function renderLinduContent() {
           </div>
           <div class="p-4 rounded-xl bg-wulung/80 border border-sogan-800 text-xs sm:text-sm text-sogan-100 leading-relaxed mb-4">
             <i class="fa-solid fa-quote-left text-prada mr-1.5 opacity-70"></i>
-            ${data.ngalamatPilihan}
+            ${getBilingualText(data.ngalamatPilihan)}
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="p-3 rounded-xl bg-keraton/60 border border-sogan-800">
               <span class="text-[10px] text-sogan-400 font-mono block">Ngalamat Wayah Awan:</span>
-              <p class="text-sogan-200 mt-0.5 leading-relaxed">${data.ngalamat_awan}</p>
+              <p class="text-sogan-200 mt-0.5 leading-relaxed">${getBilingualText(data.ngalamat_awan)}</p>
             </div>
             <div class="p-3 rounded-xl bg-keraton/60 border border-sogan-800">
               <span class="text-[10px] text-sogan-400 font-mono block">Ngalamat Wayah Wengi:</span>
-              <p class="text-sogan-200 mt-0.5 leading-relaxed">${data.ngalamat_wengi}</p>
+              <p class="text-sogan-200 mt-0.5 leading-relaxed">${getBilingualText(data.ngalamat_wengi)}</p>
             </div>
           </div>
         </div>
@@ -901,7 +909,7 @@ function renderTejoContent() {
           </div>
           <div class="pt-2.5 border-t border-sogan-800/80 text-xs text-sogan-200 leading-relaxed bg-keraton/40 p-2.5 rounded-lg mt-2">
             <strong class="text-prada text-[10.5px] block font-mono uppercase mb-0.5">Ngalamat:</strong>
-            ${t.ngalamat}
+            ${getBilingualText(t.ngalamat)}
           </div>
         </div>
       `).join('')}
@@ -1012,7 +1020,7 @@ function renderMerapiContent() {
           <span>Sumbu Filosofis &amp; Kearifan Mitigasi Bencana</span>
         </div>
         <p>
-          Gunung Merapi minangka salah satunggaling cagak utama ing <strong>Sumbu Filosofis Ngayogyakarta</strong> (Panggung Krapyak – Keraton Ngayogyakarta – Tugu Pal Putih – Gunung Merapi). Ing kapitayan Jawa, Merapi sanes mung redi geni, nanging peparinging Gusti ingkang tansah maringi pituduh dhumateng titah ing bumi supados tansah eling, ngurmati alam, lan manembah mring Kang Akarya Jagad.
+          Gunung Merapi minangka salah satunggaling cagak utama ing <strong>Sumbu Filosofis Ngayogyakarta</strong> (Panggung Krapyak – Sasana Luhur – Tugu Pal Putih – Gunung Merapi). Ing kapitayan Jawa, Merapi sanes mung redi geni, nanging peparinging Gusti ingkang tansah maringi pituduh dhumateng titah ing bumi supados tansah eling, ngurmati alam, lan manembah mring Kang Akarya Jagad.
         </p>
         <div class="p-3 rounded-xl bg-amber-950/40 border border-amber-800/40 text-[11.5px] text-amber-200/90 italic">
           <strong class="not-italic text-amber-300 font-mono">Pitedah Luhur:</strong> Sasmitha punika minangka pandom mawas diri sarta kearifan budaya leluhur ingkang selaras kaliyan mitigasi bencana modern saking badan resmi pamarentah (BPPTKG / PVMBG / BMKG).

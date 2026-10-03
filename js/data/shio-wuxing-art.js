@@ -1,6 +1,6 @@
 /**
  * Jagad Jawa — Aset Vektor Ilustrasi Shio & Teori 5 Elemen (Wu Xing)
- * Menyediakan representasi SVG berornamen keraton & prada emas
+ * Menyediakan representasi SVG berornamen tradisi & prada emas
  * untuk 12 Shio siklus hewan dan 5 Elemen Wu Xing tanpa risiko broken image.
  */
 

@@ -28,6 +28,18 @@ import {
 } from './ui/mode.js';
 import { initThemeFeature } from './ui/theme.js';
 import { initKelirWayangFeature } from './ui/kelir-wayang.js';
+import { initStickyToc } from './ui/navigation.js';
+import {
+  renderHeroTodayCard,
+  initAllFormRealtimeCalculators,
+  toggleTermTooltip,
+  initJodohWizard,
+  setJodohWizardStep,
+  drawShareCardQrCode,
+  syncDocumentLangAttribute,
+  saveUserProfileWeton,
+  loadUserProfileWeton
+} from './ui/ux-enhancements.js';
 
 // ─── DOMAIN FEATURES & WIRING ─────────────────────────────────────────────
 import { wireKalenderFeature, initQuickTodayBadge } from './features/kalender.js';
@@ -373,6 +385,7 @@ if (typeof window !== 'undefined') {
         break;
 
       case 'aksara':
+        if (typeof window.initAksaraListeners === 'function') window.initAksaraListeners();
         if (typeof window.renderAksaraKeyboardPalette === 'function') window.renderAksaraKeyboardPalette();
         if (typeof window.initDrawingCanvas === 'function') window.initDrawingCanvas();
         if (typeof window.renderSandhanganGuidePanel === 'function') window.renderSandhanganGuidePanel();
@@ -456,25 +469,33 @@ function registerServiceWorker() {
   }
 }
 
+// ─── DATABASE SERVICE (JSON DATABASE LOADER) ──────────────────────────────
+import { loadDomainData } from './services/dbLoader.js';
+
 // ─── BOOTSTRAP INITIAL APPLICATION STATE ──────────────────────────────────
 export function bootstrap() {
   initI18n();
   initModeFeature();
   registerServiceWorker();
 
-  if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects();
-  if (typeof window.renderKalender === 'function') window.renderKalender();
-  initQuickTodayBadge();
+  // Migrasi bertahap dbLoader: trigger pemuatan domain inti secara asinkron
+  loadDomainData('kalender').catch((e) => console.warn('[bootstrap] kalender domain fallback:', e));
+  loadDomainData('sapa-dina').catch((e) => console.warn('[bootstrap] sapa-dina domain fallback:', e));
+
+  // Pemuatan UI dengan boundary resilien agar halaman tidak pernah blank
+  try { if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects(); } catch (e) { console.warn(e); }
+  try { if (typeof window.renderKalender === 'function') window.renderKalender(); } catch (e) { console.warn(e); }
+  try { initQuickTodayBadge(); } catch (e) { console.warn(e); }
 
   // Phase II: Sapa Dina — Ringkasan Harian (inisialisasi setelah kalender)
-  initSapaDina('sapa-dina-container');
+  try { initSapaDina('sapa-dina-container'); } catch (e) { console.warn(e); }
 
-  if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects();
-  if (typeof window.initIjabUI === 'function') window.initIjabUI();
-  if (typeof window.initOmahUI === 'function') window.initOmahUI();
-  if (typeof window.initTernakUI === 'function') window.initTernakUI();
-  if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI();
-  if (typeof window.initMitologiUI === 'function') window.initMitologiUI();
+  try { if (typeof window.initPerjodohanSelects === 'function') window.initPerjodohanSelects(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initIjabUI === 'function') window.initIjabUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initOmahUI === 'function') window.initOmahUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initTernakUI === 'function') window.initTernakUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initSasmithaUI === 'function') window.initSasmithaUI(); } catch (e) { console.warn(e); }
+  try { if (typeof window.initMitologiUI === 'function') window.initMitologiUI(); } catch (e) { console.warn(e); }
 
   // Inisialisasi Fitur Tema & Kelir Wayang Panggung
   initThemeFeature();
@@ -508,7 +529,72 @@ export function bootstrap() {
     }
   }
 
+  // Inisialisasi UX Enhancements (jawa-v11: Hero Card, Realtime Form Calc, Sticky TOC, Wizard Stepper, Profile Weton)
+  try { renderHeroTodayCard(); } catch (e) { console.warn(e); }
+  try { initAllFormRealtimeCalculators(); } catch (e) { console.warn(e); }
+  try { initStickyToc(); } catch (e) { console.warn(e); }
+  try { initJodohWizard(); } catch (e) { console.warn(e); }
+  try { loadUserProfileWeton(); } catch (e) { console.warn(e); }
+  try { syncDocumentLangAttribute(getLanguage()); } catch (e) { console.warn(e); }
+
   initModalListeners();
+
+  // Reaktif re-render seluruh modul aktif saat preferensi bahasa diubah
+  if (typeof window !== 'undefined') {
+    window.addEventListener('language-changed', () => {
+      try { syncDocumentLangAttribute(getLanguage()); } catch (e) { /* ignore */ }
+      try { renderHeroTodayCard(); } catch (e) { /* ignore */ }
+      if (typeof window.renderKalender === 'function') {
+        try { window.renderKalender(); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.initSapaDina === 'function') {
+        try { window.initSapaDina('sapa-dina-container'); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.hitungNujumPribadi === 'function') {
+        const container = document.getElementById('nujumResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungNujumPribadi(); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.renderFullWukuPage === 'function') {
+        const tabWuku = document.getElementById('tab-wuku');
+        if (tabWuku && !tabWuku.classList.contains('hidden')) {
+          try { window.renderFullWukuPage(); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.selectWukuDetail === 'function' && window.activeWukuNo) {
+        try { window.selectWukuDetail(window.activeWukuNo); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.renderWukuGrid === 'function' && typeof window.getAllWuku === 'function') {
+        try { window.renderWukuGrid(window.getAllWuku()); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.initMitologiUI === 'function') {
+        try { window.initMitologiUI(); } catch (e) { /* ignore */ }
+      }
+      if (typeof window.hitungOmahDariUI === 'function') {
+        const container = document.getElementById('omahResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungOmahDariUI(false); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.hitungIjabDariUI === 'function') {
+        const container = document.getElementById('ijabResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.hitungIjabDariUI(false); } catch (e) { /* ignore */ }
+        }
+      }
+      if (typeof window.syncTernakDariTanggal === 'function') {
+        const container = document.getElementById('ternakResultContainer');
+        if (container && container.innerHTML.trim()) {
+          try { window.syncTernakDariTanggal(); } catch (e) { /* ignore */ }
+        }
+      }
+    });
+
+    window.addEventListener('mode-changed', () => {
+      try { initJodohWizard(); } catch (e) { /* ignore */ }
+    });
+  }
 }
 
 if (typeof document !== 'undefined') {

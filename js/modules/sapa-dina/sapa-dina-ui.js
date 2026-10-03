@@ -14,6 +14,8 @@
 
 import { getSapaDinaData } from './sapa-dina-engine.js';
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { getLanguage, getBilingualText } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 // ─── KONSTANTA ────────────────────────────────────────────────────────────────
 const LS_KEY_DISMISSED = 'jagadjawa_sapa_dismissed';
@@ -65,6 +67,29 @@ function clearDismissState() {
  */
 export function buildSapaDinaShareText(data) {
   const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr, petungTetanen, arahKolo } = data;
+  const isJv = getLanguage() === 'jv';
+
+  if (isJv) {
+    return (
+      `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
+      `_Ringkesan Padintenan Kalendher Jawi_\n\n` +
+      `📅 *${hariTanggalStr}*\n` +
+      `⭐ *Weton:* ${wetonDisplay}\n` +
+      `🔢 *Neptu:* ${neptu} (${data.neptuBreakdown})\n` +
+      `🪐 *Wuku:* ${wukuDisplay} (${data.wukuNo}/30)\n` +
+      (arahKolo ? `🧭 *Dununge Kala:* ${arahKolo.arahJawa} — ${arahKolo.pantangan}\n` : '') +
+      `🌾 *Pranata Mangsa:* ${pranata.nama} — ${pranata.musimTani}\n` +
+      (petungTetanen ? `🌱 *Pétung Tetanèn (Petung Tetanen):* ${petungTetanen.kategoriLabel} (${petungTetanen.kangBecik}) — ${petungTetanen.tegese}\n` : '') +
+      `🪶 *Candrasangkala:* "${pranata.candrasangkala}"\n` +
+      `${dinoStatus.isIjo ? '🟢' : '🔴'} *Status Dina:* ${dinoStatus.statusText}` +
+      `${dinoStatus.specialLabel ? ' · ' + dinoStatus.specialLabel : ''}\n\n` +
+      `💬 *Piwulang Luhur Dinten Punika:*\n` +
+      `"${pitutur.jawa}"\n` +
+      `_${pitutur.artiHarfiah}_\n\n` +
+      `Njajah kalendher Jawi & kabudayan Nuswantara:\nhttps://jagad-jawa.vercel.app`
+    );
+  }
+
   return (
     `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
     `_Ringkasan Harian Kalender Jawa_\n\n` +
@@ -90,6 +115,7 @@ export function buildSapaDinaShareText(data) {
  * @param {Object} data — SapaDinaPayload
  */
 export async function shareSapaDina(data) {
+  const isJv = getLanguage() === 'jv';
   const text = buildSapaDinaShareText(data);
 
   if (navigator.share) {
@@ -98,15 +124,15 @@ export async function shareSapaDina(data) {
         title: `Sapa Dina — ${data.wetonDisplay}`,
         text
       });
-      showToast('Sapa Dina berhasil dibagikan! ✨');
+      showToast(isJv ? 'Sapa Dina kasil kabagekaken! ✨' : 'Sapa Dina berhasil dibagikan! ✨');
     } catch (err) {
       // User membatalkan share — tidak perlu tampil error
       if (err.name !== 'AbortError') {
-        copyToClipboard(text, 'Teks Sapa Dina disalin ke clipboard!');
+        copyToClipboard(text, isJv ? 'Teks Sapa Dina kasalin dhateng clipboard!' : 'Teks Sapa Dina disalin ke clipboard!');
       }
     }
   } else {
-    copyToClipboard(text, 'Teks Sapa Dina disalin ke clipboard!');
+    copyToClipboard(text, isJv ? 'Teks Sapa Dina kasalin dhateng clipboard!' : 'Teks Sapa Dina disalin ke clipboard!');
   }
 }
 
@@ -125,7 +151,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   canvas.width = width;
   canvas.height = height;
 
-  // 1. Background Gradient Gelap Keraton
+  // 1. Background Gradient Gelap Tradisi
   const grad = ctx.createLinearGradient(0, 0, width, height);
   grad.addColorStop(0, '#0c1018');
   grad.addColorStop(0.35, '#131b29');
@@ -136,7 +162,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   ctx.roundRect(0, 0, width, height, 24);
   ctx.fill();
 
-  // 2. Ornamen Bingkai Emas (Dual Border Keraton)
+  // 2. Ornamen Bingkai Emas (Dual Border Tradisi)
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 4;
   ctx.strokeRect(20, 20, width - 40, height - 40);
@@ -145,7 +171,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(28, 28, width - 56, height - 56);
 
-  // Ornate Corner Brackets (Sudut Mahkota Keraton)
+  // Ornate Corner Brackets (Sudut Mahkota Tradisi)
   const drawCornerFlourish = (cx, cy, flipX, flipY) => {
     ctx.save();
     ctx.translate(cx, cy);
@@ -178,11 +204,11 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   drawCornerFlourish(20, height - 20, false, true);
   drawCornerFlourish(width - 20, height - 20, true, true);
 
-  // 3. Header Kop Keraton
+  // 3. Header Kop Tradisi Jawa
   ctx.fillStyle = '#eedc9a';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';
-  ctx.fillText('✦ KASULTANAN NUSANTARA · JAGAD JAWA ✦', width / 2, 60);
+  ctx.fillText('✦ BUDAYA LUHUR NUSANTARA · JAGAD JAWA ✦', width / 2, 60);
 
   ctx.fillStyle = '#d4af37';
   ctx.font = 'bold 28px serif';
@@ -351,7 +377,12 @@ export function openSapaDinaShareModal(data = null) {
 
   const modal = document.getElementById('modalShareSapaDina');
   const canvas = document.getElementById('sapaDinaShareCardCanvas');
-  if (!modal || !canvas) return;
+  if (!modal || !canvas) {
+    if (typeof window !== 'undefined' && typeof window.openWetonShareModal === 'function') {
+      window.openWetonShareModal();
+    }
+    return;
+  }
 
   drawSapaDinaCardToCanvas(canvas, d);
 
@@ -491,6 +522,11 @@ function renderCollapsedStrip(containerId, data) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  const currentLang = getLanguage();
+  const isJv = (currentLang === 'jv');
+  const labelHariIni = isJv ? 'Sapa Dina dinten punika:' : 'Sapa Dina hari ini:';
+  const btnLihatLagi = isJv ? 'Pirsani malih' : 'Lihat lagi';
+
   container.innerHTML = `
     <div class="w-full flex items-center justify-between gap-3 px-4 py-2.5
                 rounded-xl border border-prada/20 bg-sogan-950/60
@@ -499,7 +535,7 @@ function renderCollapsedStrip(containerId, data) {
       <div class="flex items-center gap-2.5 min-w-0">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
         <span class="font-semibold text-prada/80 truncate">
-          Sapa Dina hari ini:
+          ${labelHariIni}
         </span>
         <span class="text-sogan-200 truncate">
           ${data.wetonDisplay} &middot; Neptu ${data.neptu} &middot; Wuku ${data.wukuDisplay}
@@ -511,10 +547,10 @@ function renderCollapsedStrip(containerId, data) {
                border border-prada/30 bg-sogan-900 hover:bg-sogan-800
                text-prada hover:text-prada-light font-semibold transition-all duration-200
                focus:outline-none focus:ring-1 focus:ring-prada/40"
-        title="Tampilkan kembali Sapa Dina"
-        aria-label="Tampilkan kembali Sapa Dina">
+        title="${btnLihatLagi}"
+        aria-label="${btnLihatLagi}">
         <i class="fa-solid fa-chevron-down text-[9px]"></i>
-        <span>Lihat lagi</span>
+        <span>${btnLihatLagi}</span>
       </button>
     </div>
   `;
@@ -541,8 +577,16 @@ function renderExpandedCard(containerId, data) {
         : pranata.pratandhaAlam)
     : '';
 
+  const currentLang = getLanguage();
+  const isJv = (currentLang === 'jv');
+  const labelTutup = isJv ? 'Tutup dinten punika' : 'Tutup hari ini';
+  const labelWetonTitle = isJv ? 'Weton Pasaran Dinten Punika' : 'Weton Pasaran Hari Ini';
+  const labelPetungNeptu = isJv ? 'Pétung Neptu' : 'Perhitungan Neptu';
+  const labelTahunJawa = isJv ? 'Taun Jawi' : 'Tahun Jawa';
+  const labelArahKolo = isJv ? 'Arah Kolo (Dununge Kala)' : 'Arah Kala (Letak Kala)';
+
   container.innerHTML = `
-    <!-- Sapa Dina Card (Royal Keraton Adiluhung) -->
+    <!-- Sapa Dina Card (Tradisi Luhur Adiluhung) -->
     <article
       class="relative w-full rounded-2xl overflow-hidden
              bg-gradient-to-br from-sogan-950/95 via-wulung/90 to-keraton/95
@@ -551,7 +595,7 @@ function renderExpandedCard(containerId, data) {
       role="region"
       aria-label="Sapa Dina — Ringkasan Harian">
 
-      <!-- Ornamen Pojok Keraton (4 Sudut Tradisi Adiluhung) -->
+      <!-- Ornamen Pojok Tradisi (4 Sudut Tradisi Adiluhung) -->
       <div class="absolute top-2 left-2 w-8 h-8 pointer-events-none text-prada/40 select-none z-20" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M 2 24 L 2 2 L 24 2" />
@@ -641,10 +685,10 @@ function renderExpandedCard(containerId, data) {
                  text-sogan-400 hover:text-sogan-200 text-[11px] font-medium
                  transition-all duration-200
                  focus:outline-none focus:ring-1 focus:ring-prada/30"
-          title="Tutup Sapa Dina hari ini"
-          aria-label="Tutup Sapa Dina hari ini">
+          title="${labelTutup}"
+          aria-label="${labelTutup}">
           <i class="fa-solid fa-xmark text-[10px]"></i>
-          <span class="hidden sm:inline">Tutup hari ini</span>
+          <span class="hidden sm:inline">${labelTutup}</span>
         </button>
       </div>
 
@@ -654,7 +698,7 @@ function renderExpandedCard(containerId, data) {
         <!-- Kolom Kiri: Weton & Kalender Jawa -->
         <div class="px-4 sm:px-6 py-5 space-y-4">
 
-          <!-- Badge Weton Utama (Royal Keraton Medallion) -->
+          <!-- Badge Weton Utama (Medali Tradisi Luhur) -->
           <div class="flex items-start gap-4">
             <div class="flex-shrink-0 w-16 h-16 rounded-2xl
                         bg-gradient-to-br from-prada/25 via-sogan-900 to-keraton
@@ -668,7 +712,7 @@ function renderExpandedCard(containerId, data) {
               </span>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="font-mono text-[10px] uppercase tracking-widest text-prada/70 mb-0.5">Weton Pasaran Dina</div>
+              <div class="font-mono text-[10px] uppercase tracking-widest text-prada/70 mb-0.5">${labelWetonTitle}</div>
               <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text leading-tight tracking-wide drop-shadow-sm">
                 ${wetonDisplay}
               </h2>
@@ -691,7 +735,7 @@ function renderExpandedCard(containerId, data) {
           <!-- Breakdown Neptu -->
           <div class="px-3 py-2 rounded-xl bg-sogan-900/50 border border-sogan-800/60">
             <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider mb-1">
-              Petung Neptu
+              ${labelPetungNeptu}
             </div>
             <div class="text-[12px] text-sogan-200 font-medium">
               ${neptuBreakdown}
@@ -708,7 +752,7 @@ function renderExpandedCard(containerId, data) {
               </div>
             </div>
             <div class="px-3 py-2.5 rounded-xl bg-sogan-900/40 border border-sogan-800/50">
-              <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider">Tahun Jawa</div>
+              <div class="font-mono text-[10px] text-prada/70 uppercase tracking-wider">${labelTahunJawa}</div>
               <div class="text-sm font-bold text-sogan-100 mt-0.5">
                 ${tahunAJ} AJ
                 <span class="text-sogan-400 font-normal text-[10px]">${tahunSiklus}</span>
@@ -722,7 +766,7 @@ function renderExpandedCard(containerId, data) {
             <div class="flex items-center justify-between">
               <div class="font-mono text-[10px] font-bold uppercase tracking-wider ${data.arahKolo.isNgisor ? 'text-red-400' : 'text-amber-400'} flex items-center gap-1.5">
                 <i class="fa-solid fa-compass ${data.arahKolo.isNgisor ? 'text-red-400 animate-pulse' : 'text-amber-400'}"></i>
-                <span>Arah Kolo (Dununge Kala)</span>
+                <span>${labelArahKolo}</span>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${data.arahKolo.isNgisor ? 'bg-red-900/70 text-red-200 border border-red-600/60' : 'bg-sogan-950 text-prada border border-prada/40'} font-mono">
                 ${data.arahKolo.icon} ${data.arahKolo.arahJawa}
@@ -970,6 +1014,9 @@ export async function shareSapaDinaToday() {
  * @param {string} [containerId='sapa-dina-container']
  */
 export function initSapaDina(containerId = 'sapa-dina-container') {
+  loadDomainData('sapa-dina').catch((err) => {
+    console.warn('[sapa-dina-ui] loadDomainData fallback:', err);
+  });
   // Render langsung saat init
   renderSapaDina(containerId);
 

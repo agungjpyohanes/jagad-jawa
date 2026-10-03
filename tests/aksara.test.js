@@ -47,3 +47,29 @@ test('Aksara Engine - Sandhangan Panyigeg (-r, -ng, -h, paten)', () => {
   const resGajah = transliterateLatinToJawa('gajah');
   assert.equal(resGajah, 'ꦒꦗꦃ');
 });
+
+test('Aksara Engine - Transliterasi Kalimat Real-Time Lengkap', () => {
+  // sugeng rawuh -> ꦱꦸꦒꦼꦁ ꦫꦮꦸꦃ
+  assert.equal(transliterateLatinToJawa('sugeng rawuh'), 'ꦱꦸꦒꦼꦁ ꦫꦮꦸꦃ');
+
+  // hanacaraka -> ꦲꦤꦕꦫꦏ
+  assert.equal(transliterateLatinToJawa('hanacaraka'), 'ꦲꦤꦕꦫꦏ');
+
+  // String kosong
+  assert.equal(transliterateLatinToJawa(''), '');
+  assert.equal(transliterateLatinToJawa(null), '');
+});
+
+test('Studio Aksara UI - Integritas DOM elemen jawaOutput & latinInput di index.html', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const html = fs.readFileSync(path.resolve('index.html'), 'utf8');
+
+  assert.ok(html.includes('id="latinInput"'), 'index.html harus memuat id="latinInput"');
+  assert.ok(html.includes('id="jawaOutput"'), 'index.html harus memuat id="jawaOutput"');
+  assert.ok(html.includes('id="charCountLabel"'), 'index.html harus memuat id="charCountLabel"');
+  assert.ok(html.includes('convertLatinToJawa()'), 'index.html harus memanggil convertLatinToJawa()');
+  assert.ok(html.includes('clearJawaText()'), 'index.html harus memanggil clearJawaText()');
+  assert.ok(html.includes('copyJawaText()'), 'index.html harus memanggil copyJawaText()');
+  assert.ok(html.includes('setSampleAksara('), 'index.html harus memuat setSampleAksara');
+});

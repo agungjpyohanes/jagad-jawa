@@ -10,7 +10,13 @@ import {
   convertLatinToJawa,
   insertAksaraChar,
   clearAksaraInput,
+  clearJawaText,
+  copyJawaText,
   copyAksaraOutput,
+  setSampleAksara,
+  updateAksaraCharCount,
+  initAksaraListeners,
+  getAksaraOutputElement,
   initDrawingCanvas,
   clearCanvas,
   renderSandhanganGuidePanel,
@@ -33,7 +39,13 @@ export function wireAksaraFeature() {
   window.convertLatinToJawa = convertLatinToJawa;
   window.insertAksaraChar = insertAksaraChar;
   window.clearAksaraInput = clearAksaraInput;
+  window.clearJawaText = clearJawaText;
+  window.copyJawaText = copyJawaText;
   window.copyAksaraOutput = copyAksaraOutput;
+  window.setSampleAksara = setSampleAksara;
+  window.updateAksaraCharCount = updateAksaraCharCount;
+  window.initAksaraListeners = initAksaraListeners;
+  window.getAksaraOutputElement = getAksaraOutputElement;
   window.initDrawingCanvas = initDrawingCanvas;
   window.clearCanvas = clearCanvas;
   window.transliterateLatinToJawa = transliterateLatinToJawa;
@@ -44,6 +56,9 @@ export function wireAksaraFeature() {
   window.showAksaraQuizResult = showAksaraQuizResult;
   window.SANDHANGAN_GUIDE_DATA = SANDHANGAN_GUIDE_DATA;
   window.AKSARA_QUIZ_QUESTIONS = AKSARA_QUIZ_QUESTIONS;
+
+  // Inisialisasi event listener real-time input aksara
+  initAksaraListeners();
 }
 
 export {
@@ -53,7 +68,13 @@ export {
   convertLatinToJawa,
   insertAksaraChar,
   clearAksaraInput,
+  clearJawaText,
+  copyJawaText,
   copyAksaraOutput,
+  setSampleAksara,
+  updateAksaraCharCount,
+  initAksaraListeners,
+  getAksaraOutputElement,
   initDrawingCanvas,
   clearCanvas,
   renderSandhanganGuidePanel,

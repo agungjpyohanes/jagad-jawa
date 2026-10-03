@@ -3,639 +3,1278 @@
     "kata": "Abang",
     "jawa": "Abang",
     "krama": "Abrit",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Merah",
-    "arti": "Merah",
-    "contoh": "Kelir abrit punika tegesipun greget lan wani."
+    "arti": {
+      "id": "Merah",
+      "jv": "Abang (Krama: Abrit)"
+    },
+    "contoh": {
+      "id": "Kelir abrit punika tegesipun greget lan wani.",
+      "jv": "Kelir abrit punika tegesipun greget lan wani."
+    }
   },
   {
     "kata": "Adem",
     "jawa": "Adem",
     "krama": "Asrep",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Dingin / Sejuk",
-    "arti": "Dingin / Sejuk",
-    "contoh": "Hawa asrep ing wayah esuk."
+    "arti": {
+      "id": "Dingin / Sejuk",
+      "jv": "Adem (Krama: Asrep)"
+    },
+    "contoh": {
+      "id": "Hawa asrep ing wayah esuk.",
+      "jv": "Hawa asrep ing wayah esuk."
+    }
   },
   {
     "kata": "Adoh",
     "jawa": "Adoh",
     "krama": "Tebih",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Jauh",
-    "arti": "Jauh",
-    "contoh": "Griya kula tebih saking kitha."
+    "arti": {
+      "id": "Jauh",
+      "jv": "Adoh (Krama: Tebih)"
+    },
+    "contoh": {
+      "id": "Griya kula tebih saking kitha.",
+      "jv": "Griya kula tebih saking kitha."
+    }
   },
   {
     "kata": "Aja",
     "jawa": "Aja",
     "krama": "Sampun",
-    "jenis": "kata keterangan / larangan",
+    "jenis": {
+      "id": "kata keterangan / larangan",
+      "jv": "kata keterangan / larangan"
+    },
     "indonesia": "Jangan",
-    "arti": "Jangan",
-    "contoh": "Sampun kesupen ngunjuk jampi."
+    "arti": {
+      "id": "Jangan",
+      "jv": "Aja (Krama: Sampun)"
+    },
+    "contoh": {
+      "id": "Sampun kesupen ngunjuk jampi.",
+      "jv": "Sampun kesupen ngunjuk jampi."
+    }
   },
   {
     "kata": "Akeh",
     "jawa": "Akeh",
     "krama": "Kathah",
-    "jenis": "kata bilangan / sifat",
+    "jenis": {
+      "id": "kata bilangan / sifat",
+      "jv": "kata bilangan / sifat"
+    },
     "indonesia": "Banyak",
-    "arti": "Banyak",
-    "contoh": "Kathah berkah ingkang katampi."
+    "arti": {
+      "id": "Banyak",
+      "jv": "Akeh (Krama: Kathah)"
+    },
+    "contoh": {
+      "id": "Kathah berkah ingkang katampi.",
+      "jv": "Kathah berkah ingkang katampi."
+    }
   },
   {
     "kata": "Ala",
     "jawa": "Ala",
     "krama": "Awon",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Buruk / Jelek",
-    "arti": "Buruk / Jelek",
-    "contoh": "Singkirana tumindak ingkang awon."
+    "arti": {
+      "id": "Buruk / Jelek",
+      "jv": "Ala (Krama: Awon)"
+    },
+    "contoh": {
+      "id": "Singkirana tumindak ingkang awon.",
+      "jv": "Singkirana tumindak ingkang awon."
+    }
   },
   {
     "kata": "Amarga",
     "jawa": "Amarga",
     "krama": "Amargi",
-    "jenis": "kata sambung / konjungsi",
+    "jenis": {
+      "id": "kata sambung / konjungsi",
+      "jv": "kata sambung / konjungsi"
+    },
     "indonesia": "Karena / Sebab",
-    "arti": "Karena / Sebab",
-    "contoh": "Amargi katresnanipun ingkang tulus."
+    "arti": {
+      "id": "Karena / Sebab",
+      "jv": "Amarga (Krama: Amargi)"
+    },
+    "contoh": {
+      "id": "Amargi katresnanipun ingkang tulus.",
+      "jv": "Amargi katresnanipun ingkang tulus."
+    }
   },
   {
     "kata": "Ampuh",
     "jawa": "Ampuh",
     "krama": "Ampuh / Mandraguna",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Sakti / Berdaya magis tinggi",
-    "arti": "Sakti / Berdaya magis tinggi",
-    "contoh": "Pusaka keris punika ampuh sanget."
+    "arti": {
+      "id": "Sakti / Berdaya magis tinggi",
+      "jv": "Ampuh (Krama: Ampuh / Mandraguna)"
+    },
+    "contoh": {
+      "id": "Pusaka keris punika ampuh sanget.",
+      "jv": "Pusaka keris punika ampuh sanget."
+    }
   },
   {
     "kata": "Anak",
     "jawa": "Anak",
     "krama": "Putra / Atmaja",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Anak",
-    "arti": "Anak",
-    "contoh": "Putra kinasihipun sampun ngancik diwasa."
+    "arti": {
+      "id": "Anak",
+      "jv": "Anak (Krama: Putra / Atmaja)"
+    },
+    "contoh": {
+      "id": "Putra kinasihipun sampun ngancik diwasa.",
+      "jv": "Putra kinasihipun sampun ngancik diwasa."
+    }
   },
   {
     "kata": "Anyar",
     "jawa": "Anyar",
     "krama": "Enggal",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Baru",
-    "arti": "Baru",
-    "contoh": "Mangsa enggal sampun tumiba."
+    "arti": {
+      "id": "Baru",
+      "jv": "Anyar (Krama: Enggal)"
+    },
+    "contoh": {
+      "id": "Mangsa enggal sampun tumiba.",
+      "jv": "Mangsa enggal sampun tumiba."
+    }
   },
   {
     "kata": "Apik",
     "jawa": "Apik",
     "krama": "Sae",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Bagus / Baik",
-    "arti": "Bagus / Baik",
-    "contoh": "Paugeran punika sae sanget kangge tetuladan."
+    "arti": {
+      "id": "Bagus / Baik",
+      "jv": "Apik (Krama: Sae)"
+    },
+    "contoh": {
+      "id": "Paugeran punika sae sanget kangge tetuladan.",
+      "jv": "Paugeran punika sae sanget kangge tetuladan."
+    }
   },
   {
     "kata": "Arep",
     "jawa": "Arep",
     "krama": "Badhe",
-    "jenis": "kata bantu / verba",
+    "jenis": {
+      "id": "kata bantu / verba",
+      "jv": "kata bantu / verba"
+    },
     "indonesia": "Akan / Hendak",
-    "arti": "Akan / Hendak",
-    "contoh": "Kula badhe sowan dhateng karaton."
+    "arti": {
+      "id": "Akan / Hendak",
+      "jv": "Arep (Krama: Badhe)"
+    },
+    "contoh": {
+      "id": "Kula badhe sowan dhateng sasana tradisi.",
+      "jv": "Kula badhe sowan dhateng sasana tradisi."
+    }
   },
   {
     "kata": "Asu",
     "jawa": "Asu",
     "krama": "Segawon",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Anjing",
-    "arti": "Anjing",
-    "contoh": "Swanten segawon njegug ing wanci dalu minangka sasmitha pènget."
+    "arti": {
+      "id": "Anjing",
+      "jv": "Asu (Krama: Segawon)"
+    },
+    "contoh": {
+      "id": "Swanten segawon njegug ing wanci dalu minangka sasmitha pènget.",
+      "jv": "Swanten segawon njegug ing wanci dalu minangka sasmitha pènget."
+    }
   },
   {
     "kata": "Ati",
     "jawa": "Ati",
     "krama": "Manah / Penggalih",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Hati / Kalbu",
-    "arti": "Hati / Kalbu",
-    "contoh": "Njagi resiking penggalih saking pamrih."
+    "arti": {
+      "id": "Hati / Kalbu",
+      "jv": "Ati (Krama: Manah / Penggalih)"
+    },
+    "contoh": {
+      "id": "Njagi resiking penggalih saking pamrih.",
+      "jv": "Njagi resiking penggalih saking pamrih."
+    }
   },
   {
     "kata": "Banyu",
     "jawa": "Banyu",
     "krama": "Toya",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Air",
-    "arti": "Air",
-    "contoh": "Toya wening suci kangge panyucen raga."
+    "arti": {
+      "id": "Air",
+      "jv": "Banyu (Krama: Toya)"
+    },
+    "contoh": {
+      "id": "Toya wening suci kangge panyucen raga.",
+      "jv": "Toya wening suci kangge panyucen raga."
+    }
   },
   {
     "kata": "Bapak",
     "jawa": "Bapak",
     "krama": "Rama",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Ayah",
-    "arti": "Ayah",
-    "contoh": "Dhawuhipun Rama tansah dipun estokaken."
+    "arti": {
+      "id": "Ayah",
+      "jv": "Bapak (Krama: Rama)"
+    },
+    "contoh": {
+      "id": "Dhawuhipun Rama tansah dipun estokaken.",
+      "jv": "Dhawuhipun Rama tansah dipun estokaken."
+    }
   },
   {
     "kata": "Basa",
     "jawa": "Basa",
     "krama": "Basa",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Bahasa / Tata Krama",
-    "arti": "Bahasa / Tata Krama",
-    "contoh": "Basa Jawi ngemot surasa unggah-ungguh luhur."
+    "arti": {
+      "id": "Bahasa / Tata Krama",
+      "jv": "Basa (Krama: Basa)"
+    },
+    "contoh": {
+      "id": "Basa Jawi ngemot surasa unggah-ungguh luhur.",
+      "jv": "Basa Jawi ngemot surasa unggah-ungguh luhur."
+    }
   },
   {
     "kata": "Becik",
     "jawa": "Becik",
     "krama": "Sae / Utama",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Baik / Kebajikan",
-    "arti": "Baik / Kebajikan",
-    "contoh": "Becik ketitik ala ketara."
+    "arti": {
+      "id": "Baik / Kebajikan",
+      "jv": "Becik (Krama: Sae / Utama)"
+    },
+    "contoh": {
+      "id": "Becik ketitik ala ketara.",
+      "jv": "Becik ketitik ala ketara."
+    }
   },
   {
     "kata": "Bengi",
     "jawa": "Bengi",
     "krama": "Dalu",
-    "jenis": "kata benda / keterangan",
+    "jenis": {
+      "id": "kata benda / keterangan",
+      "jv": "kata benda / keterangan"
+    },
     "indonesia": "Malam",
-    "arti": "Malam",
-    "contoh": "Semedi ing wanci dalu ngudi katentreman."
+    "arti": {
+      "id": "Malam",
+      "jv": "Bengi (Krama: Dalu)"
+    },
+    "contoh": {
+      "id": "Semedi ing wanci dalu ngudi katentreman.",
+      "jv": "Semedi ing wanci dalu ngudi katentreman."
+    }
   },
   {
     "kata": "Bojo",
     "jawa": "Bojo",
     "krama": "Garwa",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Suami / Istri (Pasangan hidup)",
-    "arti": "Suami / Istri (Pasangan hidup)",
-    "contoh": "Garwa tegesipun sigaraning nyawa."
+    "arti": {
+      "id": "Suami / Istri (Pasangan hidup)",
+      "jv": "Bojo (Krama: Garwa)"
+    },
+    "contoh": {
+      "id": "Garwa tegesipun sigaraning nyawa.",
+      "jv": "Garwa tegesipun sigaraning nyawa."
+    }
   },
   {
     "kata": "Bumi",
     "jawa": "Bumi",
     "krama": "Bantala / Siti",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Tanah / Bumi",
-    "arti": "Tanah / Bumi",
-    "contoh": "Siti pertiwi ingkang subur makmur."
+    "arti": {
+      "id": "Tanah / Bumi",
+      "jv": "Bumi (Krama: Bantala / Siti)"
+    },
+    "contoh": {
+      "id": "Siti pertiwi ingkang subur makmur.",
+      "jv": "Siti pertiwi ingkang subur makmur."
+    }
   },
   {
     "kata": "Cilik",
     "jawa": "Cilik",
     "krama": "Alit",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Kecil",
-    "arti": "Kecil",
-    "contoh": "Wiwit alit sampun dipun-wulang budi pekerti."
+    "arti": {
+      "id": "Kecil",
+      "jv": "Cilik (Krama: Alit)"
+    },
+    "contoh": {
+      "id": "Wiwit alit sampun dipun-wulang budi pekerti.",
+      "jv": "Wiwit alit sampun dipun-wulang budi pekerti."
+    }
   },
   {
     "kata": "Dina",
     "jawa": "Dina",
     "krama": "Dinten",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Hari",
-    "arti": "Hari",
-    "contoh": "Dinten punika dinten Selasa Kliwon."
+    "arti": {
+      "id": "Hari",
+      "jv": "Dina (Krama: Dinten)"
+    },
+    "contoh": {
+      "id": "Dinten punika dinten Selasa Kliwon.",
+      "jv": "Dinten punika dinten Selasa Kliwon."
+    }
   },
   {
     "kata": "Dalan",
     "jawa": "Dalan",
     "krama": "Mardi / Rurung",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Jalan",
-    "arti": "Jalan",
-    "contoh": "Mardi luhur tumuju kasampurnan."
+    "arti": {
+      "id": "Jalan",
+      "jv": "Dalan (Krama: Mardi / Rurung)"
+    },
+    "contoh": {
+      "id": "Mardi luhur tumuju kasampurnan.",
+      "jv": "Mardi luhur tumuju kasampurnan."
+    }
   },
   {
     "kata": "Dewa",
     "jawa": "Dewa",
     "krama": "Bathara / Hyang",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Dewa / Pelindung Suci",
-    "arti": "Dewa / Pelindung Suci",
-    "contoh": "Sang Hyang Yamadipati pangreksaning wuku Sinta."
+    "arti": {
+      "id": "Dewa / Pelindung Suci",
+      "jv": "Dewa (Krama: Bathara / Hyang)"
+    },
+    "contoh": {
+      "id": "Sang Hyang Yamadipati pangreksaning wuku Sinta.",
+      "jv": "Sang Hyang Yamadipati pangreksaning wuku Sinta."
+    }
   },
   {
     "kata": "Dhuwit",
     "jawa": "Dhuwit",
     "krama": "Arta",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Uang",
-    "arti": "Uang",
-    "contoh": "Ngginakaken arta kanthi prayitna."
+    "arti": {
+      "id": "Uang",
+      "jv": "Dhuwit (Krama: Arta)"
+    },
+    "contoh": {
+      "id": "Ngginakaken arta kanthi prayitna.",
+      "jv": "Ngginakaken arta kanthi prayitna."
+    }
   },
   {
     "kata": "Dolan",
     "jawa": "Dolan",
     "krama": "Ameng-ameng",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Bermain / Bepergian santai",
-    "arti": "Bermain / Bepergian santai",
-    "contoh": "Ameng-ameng dhateng candi Borobudur."
+    "arti": {
+      "id": "Bermain / Bepergian santai",
+      "jv": "Dolan (Krama: Ameng-ameng)"
+    },
+    "contoh": {
+      "id": "Ameng-ameng dhateng candi Borobudur.",
+      "jv": "Ameng-ameng dhateng candi Borobudur."
+    }
   },
   {
     "kata": "Edan",
     "jawa": "Edan",
     "krama": "Gendheng / Ewah",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Gila / Hilang akal",
-    "arti": "Gila / Hilang akal",
-    "contoh": "Zaman edan prayogi tansah eling waspada."
+    "arti": {
+      "id": "Gila / Hilang akal",
+      "jv": "Edan (Krama: Gendheng / Ewah)"
+    },
+    "contoh": {
+      "id": "Zaman edan prayogi tansah eling waspada.",
+      "jv": "Zaman edan prayogi tansah eling waspada."
+    }
   },
   {
     "kata": "Eling",
     "jawa": "Eling",
     "krama": "Emut",
-    "jenis": "kata kerja / sifat",
+    "jenis": {
+      "id": "kata kerja / sifat",
+      "jv": "kata kerja / sifat"
+    },
     "indonesia": "Ingat / Sadar",
-    "arti": "Ingat / Sadar",
-    "contoh": "Tansah emut marang Hyang Widhi."
+    "arti": {
+      "id": "Ingat / Sadar",
+      "jv": "Eling (Krama: Emut)"
+    },
+    "contoh": {
+      "id": "Tansah emut marang Hyang Widhi.",
+      "jv": "Tansah emut marang Hyang Widhi."
+    }
   },
   {
     "kata": "Entek",
     "jawa": "Entek",
     "krama": "Telas",
-    "jenis": "kata sifat / keadaan",
+    "jenis": {
+      "id": "kata sifat / keadaan",
+      "jv": "kata sifat / keadaan"
+    },
     "indonesia": "Habis",
-    "arti": "Habis",
-    "contoh": "Ubarampe sampun telas kaginakaken."
+    "arti": {
+      "id": "Habis",
+      "jv": "Entek (Krama: Telas)"
+    },
+    "contoh": {
+      "id": "Ubarampe sampun telas kaginakaken.",
+      "jv": "Ubarampe sampun telas kaginakaken."
+    }
   },
   {
     "kata": "Gajah",
     "jawa": "Gajah",
     "krama": "Liman / Dirgantara",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Gajah",
-    "arti": "Gajah",
-    "contoh": "Watak gajah ing petung ternak tegesipun kuwat sentosa."
+    "arti": {
+      "id": "Gajah",
+      "jv": "Gajah (Krama: Liman / Dirgantara)"
+    },
+    "contoh": {
+      "id": "Watak gajah ing petung ternak tegesipun kuwat sentosa.",
+      "jv": "Watak gajah ing petung ternak tegesipun kuwat sentosa."
+    }
   },
   {
     "kata": "Gedhe",
     "jawa": "Gedhe",
     "krama": "Ageng",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Besar / Agung",
-    "arti": "Besar / Agung",
-    "contoh": "Kraton Ageng Kasultanan Ngayogyakarta."
+    "arti": {
+      "id": "Besar / Agung",
+      "jv": "Gedhe (Krama: Ageng)"
+    },
+    "contoh": {
+      "id": "Sasana Ageng ing Tanah Jawa.",
+      "jv": "Sasana Ageng ing Tanah Jawa."
+    }
   },
   {
     "kata": "Golek",
     "jawa": "Golek",
     "krama": "Pados",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Mencari",
-    "arti": "Mencari",
-    "contoh": "Pados ngelmu kasampurnan gesang."
+    "arti": {
+      "id": "Mencari",
+      "jv": "Golek (Krama: Pados)"
+    },
+    "contoh": {
+      "id": "Pados ngelmu kasampurnan gesang.",
+      "jv": "Pados ngelmu kasampurnan gesang."
+    }
   },
   {
     "kata": "Ilang",
     "jawa": "Ilang",
     "krama": "Ical",
-    "jenis": "kata kerja / keadaan",
+    "jenis": {
+      "id": "kata kerja / keadaan",
+      "jv": "kata kerja / keadaan"
+    },
     "indonesia": "Hilang / Lenyap",
-    "arti": "Hilang / Lenyap",
-    "contoh": "Sengkala sampun ical lebur dening donga."
+    "arti": {
+      "id": "Hilang / Lenyap",
+      "jv": "Ilang (Krama: Ical)"
+    },
+    "contoh": {
+      "id": "Sengkala sampun ical lebur dening donga.",
+      "jv": "Sengkala sampun ical lebur dening donga."
+    }
   },
   {
     "kata": "Iwak",
     "jawa": "Iwak",
     "krama": "Ulam",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Ikan / Daging lauk",
-    "arti": "Ikan / Daging lauk",
-    "contoh": "Ulam pitik cemani kangge sedekah ruwatan."
+    "arti": {
+      "id": "Ikan / Daging lauk",
+      "jv": "Iwak (Krama: Ulam)"
+    },
+    "contoh": {
+      "id": "Ulam pitik cemani kangge sedekah ruwatan.",
+      "jv": "Ulam pitik cemani kangge sedekah ruwatan."
+    }
   },
   {
     "kata": "Jaran",
     "jawa": "Jaran",
     "krama": "Kuda / Titihan",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Kuda",
-    "arti": "Kuda",
-    "contoh": "Titihanipun sang satria gagah sanget."
+    "arti": {
+      "id": "Kuda",
+      "jv": "Jaran (Krama: Kuda / Titihan)"
+    },
+    "contoh": {
+      "id": "Titihanipun sang satria gagah sanget.",
+      "jv": "Titihanipun sang satria gagah sanget."
+    }
   },
   {
     "kata": "Jeneng",
     "jawa": "Jeneng",
     "krama": "Asma",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Nama",
-    "arti": "Nama",
-    "contoh": "Asma panjenengan sinten?"
+    "arti": {
+      "id": "Nama",
+      "jv": "Jeneng (Krama: Asma)"
+    },
+    "contoh": {
+      "id": "Asma panjenengan sinten?",
+      "jv": "Asma panjenengan sinten?"
+    }
   },
   {
     "kata": "Kali",
     "jawa": "Kali",
     "krama": "Lepen",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Sungai",
-    "arti": "Sungai",
-    "contoh": "Lepen Bengawan Solo ingkang agung."
+    "arti": {
+      "id": "Sungai",
+      "jv": "Kali (Krama: Lepen)"
+    },
+    "contoh": {
+      "id": "Lepen Bengawan Solo ingkang agung.",
+      "jv": "Lepen Bengawan Solo ingkang agung."
+    }
   },
   {
     "kata": "Karep",
     "jawa": "Karep",
     "krama": "Kersa / Pikajeng",
-    "jenis": "kata benda / kehendak",
+    "jenis": {
+      "id": "kata benda / kehendak",
+      "jv": "kata benda / kehendak"
+    },
     "indonesia": "Kemauan / Kehendak",
-    "arti": "Kemauan / Kehendak",
-    "contoh": "Manut kersaning Hyang Kang Murbeng Gesang."
+    "arti": {
+      "id": "Kemauan / Kehendak",
+      "jv": "Karep (Krama: Kersa / Pikajeng)"
+    },
+    "contoh": {
+      "id": "Manut kersaning Hyang Kang Murbeng Gesang.",
+      "jv": "Manut kersaning Hyang Kang Murbeng Gesang."
+    }
   },
   {
     "kata": "Kembang",
     "jawa": "Kembang",
     "krama": "Sekar",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Bunga",
-    "arti": "Bunga",
-    "contoh": "Sekar setaman kangge sarana sesuci."
+    "arti": {
+      "id": "Bunga",
+      "jv": "Kembang (Krama: Sekar)"
+    },
+    "contoh": {
+      "id": "Sekar setaman kangge sarana sesuci.",
+      "jv": "Sekar setaman kangge sarana sesuci."
+    }
   },
   {
     "kata": "Keris",
     "jawa": "Keris",
     "krama": "Dhuwung / Curiga",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Keris / Tosan Aji",
-    "arti": "Keris / Tosan Aji",
-    "contoh": "Dhuwung pusaka warisan para leluhur."
+    "arti": {
+      "id": "Keris / Tosan Aji",
+      "jv": "Keris (Krama: Dhuwung / Curiga)"
+    },
+    "contoh": {
+      "id": "Dhuwung pusaka warisan para leluhur.",
+      "jv": "Dhuwung pusaka warisan para leluhur."
+    }
   },
   {
     "kata": "Klambi",
     "jawa": "Klambi",
     "krama": "Ageman",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Pakaian / Busana",
-    "arti": "Pakaian / Busana",
-    "contoh": "Ageman surjan sembada berwibawa."
+    "arti": {
+      "id": "Pakaian / Busana",
+      "jv": "Klambi (Krama: Ageman)"
+    },
+    "contoh": {
+      "id": "Ageman surjan sembada berwibawa.",
+      "jv": "Ageman surjan sembada berwibawa."
+    }
   },
   {
     "kata": "Kucing",
     "jawa": "Kucing",
     "krama": "Kucing",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Kucing",
-    "arti": "Kucing",
-    "contoh": "Kucing ngeong ing wanci enjang pratandha tentrem."
+    "arti": {
+      "id": "Kucing",
+      "jv": "Kucing (Krama: Kucing)"
+    },
+    "contoh": {
+      "id": "Kucing ngeong ing wanci enjang pratandha tentrem.",
+      "jv": "Kucing ngeong ing wanci enjang pratandha tentrem."
+    }
   },
   {
     "kata": "Kuning",
     "jawa": "Kuning",
     "krama": "Jene",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Kuning / Emas",
-    "arti": "Kuning / Emas",
-    "contoh": "Prada jene ngrenggani panggung kelir."
+    "arti": {
+      "id": "Kuning / Emas",
+      "jv": "Kuning (Krama: Jene)"
+    },
+    "contoh": {
+      "id": "Prada jene ngrenggani panggung kelir.",
+      "jv": "Prada jene ngrenggani panggung kelir."
+    }
   },
   {
     "kata": "Kuru",
     "jawa": "Kuru",
     "krama": "Kera",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Kurus",
-    "arti": "Kurus",
-    "contoh": "Raga kera amargi kekirangan dhahar."
+    "arti": {
+      "id": "Kurus",
+      "jv": "Kuru (Krama: Kera)"
+    },
+    "contoh": {
+      "id": "Raga kera amargi kekirangan dhahar.",
+      "jv": "Raga kera amargi kekirangan dhahar."
+    }
   },
   {
     "kata": "Lara",
     "jawa": "Lara",
     "krama": "Gering / Sakit",
-    "jenis": "kata sifat / keadaan",
+    "jenis": {
+      "id": "kata sifat / keadaan",
+      "jv": "kata sifat / keadaan"
+    },
     "indonesia": "Sakit / Menderita",
-    "arti": "Sakit / Menderita",
-    "contoh": "Jampi usadasipun sampun kacawisaken."
+    "arti": {
+      "id": "Sakit / Menderita",
+      "jv": "Lara (Krama: Gering / Sakit)"
+    },
+    "contoh": {
+      "id": "Jampi usadasipun sampun kacawisaken.",
+      "jv": "Jampi usadasipun sampun kacawisaken."
+    }
   },
   {
     "kata": "Lelungan",
     "jawa": "Lelungan",
     "krama": "Kekesahan",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Bepergian jauh",
-    "arti": "Bepergian jauh",
-    "contoh": "Sampun kekesahan nrajang arah kolo wuku."
+    "arti": {
+      "id": "Bepergian jauh",
+      "jv": "Lelungan (Krama: Kekesahan)"
+    },
+    "contoh": {
+      "id": "Sampun kekesahan nrajang arah kolo wuku.",
+      "jv": "Sampun kekesahan nrajang arah kolo wuku."
+    }
   },
   {
     "kata": "Lemah",
     "jawa": "Lemah",
     "krama": "Siti",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Tanah / Lahan",
-    "arti": "Tanah / Lahan",
-    "contoh": "Siti pekawisan ingkang subur rahayu."
+    "arti": {
+      "id": "Tanah / Lahan",
+      "jv": "Lemah (Krama: Siti)"
+    },
+    "contoh": {
+      "id": "Siti pekawisan ingkang subur rahayu.",
+      "jv": "Siti pekawisan ingkang subur rahayu."
+    }
   },
   {
     "kata": "Loro",
     "jawa": "Loro",
     "krama": "Kalih",
-    "jenis": "kata bilangan",
+    "jenis": {
+      "id": "kata bilangan",
+      "jv": "tembung wilangan"
+    },
     "indonesia": "Dua",
-    "arti": "Dua",
-    "contoh": "Paugeran larasipun wonten kalih: Slendro lan Pelog."
+    "arti": {
+      "id": "Dua",
+      "jv": "Loro (Krama: Kalih)"
+    },
+    "contoh": {
+      "id": "Paugeran larasipun wonten kalih: Slendro lan Pelog.",
+      "jv": "Paugeran larasipun wonten kalih: Slendro lan Pelog."
+    }
   },
   {
     "kata": "Mangan",
     "jawa": "Mangan",
     "krama": "Dhahar / Nedha",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Makan",
-    "arti": "Makan",
-    "contoh": "Katuran dhahar sesarengan kulawarga."
+    "arti": {
+      "id": "Makan",
+      "jv": "Mangan (Krama: Dhahar / Nedha)"
+    },
+    "contoh": {
+      "id": "Katuran dhahar sesarengan kulawarga.",
+      "jv": "Katuran dhahar sesarengan kulawarga."
+    }
   },
   {
     "kata": "Mati",
     "jawa": "Mati",
     "krama": "Sedho / Tilar Donyo",
-    "jenis": "kata kerja / keadaan",
+    "jenis": {
+      "id": "kata kerja / keadaan",
+      "jv": "kata kerja / keadaan"
+    },
     "indonesia": "Mati / Wafat / Meninggal",
-    "arti": "Mati / Wafat / Meninggal",
-    "contoh": "Pengetan tilar donyo mengeti arwah leluhur."
+    "arti": {
+      "id": "Mati / Wafat / Meninggal",
+      "jv": "Mati (Krama: Sedho / Tilar Donyo)"
+    },
+    "contoh": {
+      "id": "Pengetan tilar donyo mengeti arwah leluhur.",
+      "jv": "Pengetan tilar donyo mengeti arwah leluhur."
+    }
   },
   {
     "kata": "Matur",
     "jawa": "Matur",
     "krama": "Matur / Ngendika",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Berbicara / Mengatakan",
-    "arti": "Berbicara / Mengatakan",
-    "contoh": "Matur nuwun sanget awit berkahipun."
+    "arti": {
+      "id": "Berbicara / Mengatakan",
+      "jv": "Matur (Krama: Matur / Ngendika)"
+    },
+    "contoh": {
+      "id": "Matur nuwun sanget awit berkahipun.",
+      "jv": "Matur nuwun sanget awit berkahipun."
+    }
   },
   {
     "kata": "Mripat",
     "jawa": "Mripat",
     "krama": "Soca / Paningal",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Mata",
-    "arti": "Mata",
-    "contoh": "Soca ingkang wasis niti sasmitha."
+    "arti": {
+      "id": "Mata",
+      "jv": "Mripat (Krama: Soca / Paningal)"
+    },
+    "contoh": {
+      "id": "Soca ingkang wasis niti sasmitha.",
+      "jv": "Soca ingkang wasis niti sasmitha."
+    }
   },
   {
     "kata": "Mulih",
     "jawa": "Mulih",
     "krama": "Wangsul / Kondur",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Pulang",
-    "arti": "Pulang",
-    "contoh": "Bapak sampun kondur saking kantor."
+    "arti": {
+      "id": "Pulang",
+      "jv": "Mulih (Krama: Wangsul / Kondur)"
+    },
+    "contoh": {
+      "id": "Bapak sampun kondur saking kantor.",
+      "jv": "Bapak sampun kondur saking kantor."
+    }
   },
   {
     "kata": "Nekat",
     "jawa": "Nekat",
     "krama": "Nekat / Wantun",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Berani mati / Nekat",
-    "arti": "Berani mati / Nekat",
-    "contoh": "Sampun wantun nrajang larangan adat."
+    "arti": {
+      "id": "Berani mati / Nekat",
+      "jv": "Nekat (Krama: Nekat / Wantun)"
+    },
+    "contoh": {
+      "id": "Sampun wantun nrajang larangan adat.",
+      "jv": "Sampun wantun nrajang larangan adat."
+    }
   },
   {
     "kata": "Nulis",
     "jawa": "Nulis",
     "krama": "Nyerat",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Menulis",
-    "arti": "Menulis",
-    "contoh": "Nyerat aksara Jawi kanthi leres."
+    "arti": {
+      "id": "Menulis",
+      "jv": "Nulis (Krama: Nyerat)"
+    },
+    "contoh": {
+      "id": "Nyerat aksara Jawi kanthi leres.",
+      "jv": "Nyerat aksara Jawi kanthi leres."
+    }
   },
   {
     "kata": "Omah",
     "jawa": "Omah",
     "krama": "Griya / Dalem",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Rumah",
-    "arti": "Rumah",
-    "contoh": "Griya joglo ingkang ngemot tumpang sari."
+    "arti": {
+      "id": "Rumah",
+      "jv": "Omah (Krama: Griya / Dalem)"
+    },
+    "contoh": {
+      "id": "Griya joglo ingkang ngemot tumpang sari.",
+      "jv": "Griya joglo ingkang ngemot tumpang sari."
+    }
   },
   {
     "kata": "Pangan",
     "jawa": "Pangan",
     "krama": "Tedhan / Dhaharan",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Makanan",
-    "arti": "Makanan",
-    "contoh": "Dhaharan tradisional klepon lan jadah."
+    "arti": {
+      "id": "Makanan",
+      "jv": "Pangan (Krama: Tedhan / Dhaharan)"
+    },
+    "contoh": {
+      "id": "Dhaharan tradisional klepon lan jadah.",
+      "jv": "Dhaharan tradisional klepon lan jadah."
+    }
   },
   {
     "kata": "Pikiran",
     "jawa": "Pikiran",
     "krama": "Panggalihan / Nalar",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Pikiran / Akal Budi",
-    "arti": "Pikiran / Akal Budi",
-    "contoh": "Nalar ingkang wening nuntun rahayu."
+    "arti": {
+      "id": "Pikiran / Akal Budi",
+      "jv": "Pikiran (Krama: Panggalihan / Nalar)"
+    },
+    "contoh": {
+      "id": "Nalar ingkang wening nuntun rahayu.",
+      "jv": "Nalar ingkang wening nuntun rahayu."
+    }
   },
   {
     "kata": "Putih",
     "jawa": "Putih",
     "krama": "Pethak",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Putih",
-    "arti": "Putih",
-    "contoh": "Kain mori pethak kangge kelir wayang."
+    "arti": {
+      "id": "Putih",
+      "jv": "Putih (Krama: Pethak)"
+    },
+    "contoh": {
+      "id": "Kain mori pethak kangge kelir wayang.",
+      "jv": "Kain mori pethak kangge kelir wayang."
+    }
   },
   {
     "kata": "Rasa",
     "jawa": "Rasa",
     "krama": "Raos",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Rasa / Firasat Batin",
-    "arti": "Rasa / Firasat Batin",
-    "contoh": "Pangraos bathin ingkang landhep."
+    "arti": {
+      "id": "Rasa / Firasat Batin",
+      "jv": "Rasa (Krama: Raos)"
+    },
+    "contoh": {
+      "id": "Pangraos bathin ingkang landhep.",
+      "jv": "Pangraos bathin ingkang landhep."
+    }
   },
   {
     "kata": "Sabar",
     "jawa": "Sabar",
     "krama": "Sabar / Ririh",
-    "jenis": "kata sifat",
+    "jenis": {
+      "id": "kata sifat",
+      "jv": "tembung kahanan"
+    },
     "indonesia": "Sabar / Tenang",
-    "arti": "Sabar / Tenang",
-    "contoh": "Sabar narima marang pandum."
+    "arti": {
+      "id": "Sabar / Tenang",
+      "jv": "Sabar (Krama: Sabar / Ririh)"
+    },
+    "contoh": {
+      "id": "Sabar narima marang pandum.",
+      "jv": "Sabar narima marang pandum."
+    }
   },
   {
     "kata": "Sapa",
     "jawa": "Sapa",
     "krama": "Sinten",
-    "jenis": "kata tanya",
+    "jenis": {
+      "id": "kata tanya",
+      "jv": "kata tanya"
+    },
     "indonesia": "Siapa",
-    "arti": "Siapa",
-    "contoh": "Sapa sira sapa ingsun."
+    "arti": {
+      "id": "Siapa",
+      "jv": "Sapa (Krama: Sinten)"
+    },
+    "contoh": {
+      "id": "Sapa sira sapa ingsun.",
+      "jv": "Sapa sira sapa ingsun."
+    }
   },
   {
     "kata": "Sawah",
     "jawa": "Sawah",
     "krama": "Sabin",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Sawah",
-    "arti": "Sawah",
-    "contoh": "Sabin ingkang ijo royo-royo."
+    "arti": {
+      "id": "Sawah",
+      "jv": "Sawah (Krama: Sabin)"
+    },
+    "contoh": {
+      "id": "Sabin ingkang ijo royo-royo.",
+      "jv": "Sabin ingkang ijo royo-royo."
+    }
   },
   {
     "kata": "Siji",
     "jawa": "Siji",
     "krama": "Setunggal",
-    "jenis": "kata bilangan",
+    "jenis": {
+      "id": "kata bilangan",
+      "jv": "tembung wilangan"
+    },
     "indonesia": "Satu",
-    "arti": "Satu",
-    "contoh": "Gusti Kang Maha Setunggal."
+    "arti": {
+      "id": "Satu",
+      "jv": "Siji (Krama: Setunggal)"
+    },
+    "contoh": {
+      "id": "Gusti Kang Maha Setunggal.",
+      "jv": "Gusti Kang Maha Setunggal."
+    }
   },
   {
     "kata": "Slamet",
     "jawa": "Slamet",
     "krama": "Wilujeng / Rahayu",
-    "jenis": "kata sifat / keadaan",
+    "jenis": {
+      "id": "kata sifat / keadaan",
+      "jv": "kata sifat / keadaan"
+    },
     "indonesia": "Selamat / Sejahtera",
-    "arti": "Selamat / Sejahtera",
-    "contoh": "Mugi-mugi tansah pinaringan rahayu wilujeng."
+    "arti": {
+      "id": "Selamat / Sejahtera",
+      "jv": "Slamet (Krama: Wilujeng / Rahayu)"
+    },
+    "contoh": {
+      "id": "Mugi-mugi tansah pinaringan rahayu wilujeng.",
+      "jv": "Mugi-mugi tansah pinaringan rahayu wilujeng."
+    }
   },
   {
     "kata": "Tekek",
     "jawa": "Tekek",
     "krama": "Tekek",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Tokek",
-    "arti": "Tokek",
-    "contoh": "Unine tekek ing wanci dalu minangka sasmitha Sida Karya."
+    "arti": {
+      "id": "Tokek",
+      "jv": "Tekek (Krama: Tekek)"
+    },
+    "contoh": {
+      "id": "Unine tekek ing wanci dalu minangka sasmitha Sida Karya.",
+      "jv": "Unine tekek ing wanci dalu minangka sasmitha Sida Karya."
+    }
   },
   {
     "kata": "Tembung",
     "jawa": "Tembung",
     "krama": "Tembung",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Kata / Ucapan",
-    "arti": "Kata / Ucapan",
-    "contoh": "Tembung Kawi ingkang endah adi."
+    "arti": {
+      "id": "Kata / Ucapan",
+      "jv": "Tembung (Krama: Tembung)"
+    },
+    "contoh": {
+      "id": "Tembung Kawi ingkang endah adi.",
+      "jv": "Tembung Kawi ingkang endah adi."
+    }
   },
   {
     "kata": "Turu",
     "jawa": "Turu",
     "krama": "Sare",
-    "jenis": "kata kerja",
+    "jenis": {
+      "id": "kata kerja",
+      "jv": "tembung kriya"
+    },
     "indonesia": "Tidur",
-    "arti": "Tidur",
-    "contoh": "Sare ingkang cekap njagi kawarasan."
+    "arti": {
+      "id": "Tidur",
+      "jv": "Turu (Krama: Sare)"
+    },
+    "contoh": {
+      "id": "Sare ingkang cekap njagi kawarasan.",
+      "jv": "Sare ingkang cekap njagi kawarasan."
+    }
   },
   {
     "kata": "Udan",
     "jawa": "Udan",
     "krama": "Jawah",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Hujan",
-    "arti": "Hujan",
-    "contoh": "Mangsa Rendheng kathah jawah deres."
+    "arti": {
+      "id": "Hujan",
+      "jv": "Udan (Krama: Jawah)"
+    },
+    "contoh": {
+      "id": "Mangsa Rendheng kathah jawah deres.",
+      "jv": "Mangsa Rendheng kathah jawah deres."
+    }
   },
   {
     "kata": "Wong",
     "jawa": "Wong",
     "krama": "Tiyang / Jalma",
-    "jenis": "kata benda",
+    "jenis": {
+      "id": "kata benda",
+      "jv": "tembung aran"
+    },
     "indonesia": "Orang / Manusia",
-    "arti": "Orang / Manusia",
-    "contoh": "Tiyang Jawi remen gotong royong."
+    "arti": {
+      "id": "Orang / Manusia",
+      "jv": "Wong (Krama: Tiyang / Jalma)"
+    },
+    "contoh": {
+      "id": "Tiyang Jawi remen gotong royong.",
+      "jv": "Tiyang Jawi remen gotong royong."
+    }
   }
 ]

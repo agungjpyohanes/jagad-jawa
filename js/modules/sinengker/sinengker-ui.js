@@ -30,6 +30,7 @@ import {
 } from '../pustaka/pustaka-ui.js';
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
@@ -69,6 +70,9 @@ function updateKompasSampleHighlight(currentQuery) {
  * @param {string} [containerId='sinengkerContainer']
  */
 export function initSinengkerUI(containerId = 'sinengkerContainer') {
+  loadDomainData('sinengker').catch((e) => {
+    console.warn('[sinengker-ui] loadDomainData fallback:', e);
+  });
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -130,7 +134,7 @@ function renderSinengkerLockedGate(container) {
             <i class="fa-solid fa-key mr-1 text-amber-400"></i> Sandi Pambuka Sinengker:
           </label>
           <span class="text-[11px] text-sogan-400 block">
-            Ketik sandi keraton utawi konfirmasi rahasia kagem mbikak wewengkon.
+            Ketik sandi rahasia utawi konfirmasi kagem mbikak wewengkon.
           </span>
         </div>
 
@@ -138,7 +142,7 @@ function renderSinengkerLockedGate(container) {
           <input
             type="password"
             id="sinengkerPinInput"
-            placeholder="Ketik sandi keraton..."
+            placeholder="Ketik sandi wadi..."
             onkeydown="if(event.key === 'Enter') window.submitSinengkerPin && window.submitSinengkerPin(this.value)"
             class="w-full pl-4 pr-11 py-3 rounded-xl bg-keraton border border-sogan-700 focus:border-prada text-sm text-sogan-100 placeholder-sogan-500 outline-none transition font-mono tracking-wider text-center"
           />
@@ -706,7 +710,7 @@ function renderSinengkerKompasView(container) {
               <!-- Mode 2: Bagan Naskah Asli kanthi Jarum Overlay Putar -->
               <div class="relative w-full max-w-[320px] aspect-square rounded-2xl bg-white p-2 shadow-2xl border-2 border-prada/60 group cursor-pointer overflow-visible" onclick="window.openKompasImageZoomModal && window.openKompasImageZoomModal()">
                 <img
-                  src="./assets/kompas_danyang.jpg"
+                  src="/assets/illustrations/kompas_danyang.jpg"
                   alt="Kompas Danyang Spiritual Jawa"
                   style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;"
                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
@@ -1674,7 +1678,7 @@ async function renderSinengkerTumpengView(container) {
         <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-prada/10 blur-3xl pointer-events-none"></div>
         <div class="relative z-10 max-w-4xl space-y-3">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
-            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Karaton
+            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Leluhur
           </div>
           <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100 leading-snug">
             Keseimbangan Kiblat Papat Limo Pancer &amp; Ketajaman Spiritual Manungsa
@@ -1702,7 +1706,7 @@ async function renderSinengkerTumpengView(container) {
 
           <!-- Image Container with Relative Positioning for Hotspots -->
           <div class="relative w-full rounded-2xl overflow-hidden border border-sogan-700/80 bg-black/60 shadow-inner group">
-            <img src="assets/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
+            <img src="/assets/illustrations/tumpeng_tumbak rojo_ilustrasi.jpeg" alt="Ilustrasi Lengkap Tumpeng Tombak Rojo Jawa" class="w-full h-auto object-contain block rounded-2xl" />
 
             <!-- Hotspot 1: Tumpeng Panca Warna (Tengah) -->
             <button type="button" onclick="window.selectTumpengHotspot && window.selectTumpengHotspot(1)" data-hotspot="1" class="tumpeng-hotspot-btn active bg-prada text-keraton border-2 border-amber-200" style="top: 22%; left: 50%;" title="1. Tumpeng Panca Warna (Kiblat Papat Limo Pancer)">
@@ -1945,7 +1949,7 @@ export function openKompasImageZoomModal() {
           </button>
         </div>
         <div class="p-4 overflow-visible flex items-center justify-center bg-white">
-          <img src="./assets/kompas_danyang.jpg" alt="Kompas Danyang" style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;" class="max-h-[75vh] w-auto object-contain block mx-auto rounded-xl shadow" />
+          <img src="/assets/illustrations/kompas_danyang.jpg" alt="Kompas Danyang" style="transform: rotate(-90deg); image-rendering: crisp-edges; image-rendering: -webkit-optimize-contrast;" class="max-h-[75vh] w-auto object-contain block mx-auto rounded-xl shadow" />
         </div>
         <div class="px-5 py-3 border-t border-sogan-800 bg-keraton flex items-center justify-between text-xs text-sogan-300">
           <span>Aset Asli: <code class="text-amber-300 font-mono">kompas_danyang.jpg</code></span>

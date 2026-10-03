@@ -1,23 +1,429 @@
 {
   "shio_12": [
-    { "urutan": 1, "nama": "Tikus", "elemen_tetap": "Air", "sifat_dasar": { "id": "Cerdas, cerdik, adaptif, ambisius", "jv": "Cerdas, cerdik, adaptif, ambisius" }, "positif": { "id": "Cepat tanggap, cermat mengelola keuangan, berkawan luas.", "jv": "Rikat tanggap, cermat ngelola keuangan, berkawan wiyar." }, "negatif": { "id": "Cenderung oportunis dan terkadang terlalu perhitungan.", "jv": "Cenderung oportunis lan kadhangkala terlalu perhitungan." }, "karir": { "id": "Pengusaha, akuntan, kritikus, peneliti.", "jv": "Pengusaha, akuntan, kritikus, peneliti." }, "jodoh": "Kerbau, Naga, Monyet", "pantangan": "Angka sial (5, 9), arah utara, tahun Kuda" },
-    { "urutan": 2, "nama": "Kerbau", "elemen_tetap": "Tanah", "sifat_dasar": { "id": "Jujur, sabar, pekerja keras, teguh", "jv": "Jujur, sabar, pekerja keras, teguh" }, "positif": { "id": "Sabar, dapat dipercaya, tekun, fisik & mental kuat.", "jv": "Sabar, bisa dipercaya, tekun, fisik & mental kiyat." }, "negatif": { "id": "Keras kepala, kolot, sulit menerima perubahan.", "jv": "Keras kepala, kolot, angel nampi owah-owahan." }, "karir": { "id": "Pertanian, manufaktur, hukum, manajemen, teknik.", "jv": "Pertanian, manufaktur, hukum, manajemen, teknik." }, "jodoh": "Tikus, Ular, Ayam", "pantangan": "Warna merah terang, angka sial (3, 4), tahun Kambing" },
-    { "urutan": 3, "nama": "Macan", "elemen_tetap": "Kayu", "sifat_dasar": { "id": "Berani, kompetitif, percaya diri, dinamis", "jv": "Wani, kompetitif, percaya diri, dinamis" }, "positif": { "id": "Berani mengambil risiko, berjiwa pemimpin, murah hati.", "jv": "Wani njupuk risiko, berjiwa pemimpin, murah hati." }, "negatif": { "id": "Agresif, emosional, kurang sabar.", "jv": "Agresif, emosional, kurang sabar." }, "karir": { "id": "Militer, politik, CEO, atlet, entrepreneur.", "jv": "Militer, politik, CEO, atlet, entrepreneur." }, "jodoh": "Kuda, Anjing, Babi", "pantangan": "Angka sial (6, 7, 8), arah barat daya, tahun Monyet" },
-    { "urutan": 4, "nama": "Kelinci", "elemen_tetap": "Kayu", "sifat_dasar": { "id": "Lembut, elegan, penuh perhatian, diplomatis", "jv": "Lembut, elegan, penuh perhatian, diplomatis" }, "positif": { "id": "Tenang, cinta damai, sopan, estetika tinggi.", "jv": "Tenang, cinta damai, sopan, estetika inggil." }, "negatif": { "id": "Penakut, mudah menyerah, tertutup.", "jv": "Penakut, gampang nyerah, tertutup." }, "karir": { "id": "Seni, diplomat, desainer, sastra, perhotelan.", "jv": "Seni, diplomat, desainer, sastra, perhotelan." }, "jodoh": "Kambing, Babi, Anjing", "pantangan": "Angka sial (1, 7, 8), arah utara, tahun Ayam" },
-    { "urutan": 5, "nama": "Naga", "elemen_tetap": "Tanah", "sifat_dasar": { "id": "Karismatik, bersemangat, visioner, kuat", "jv": "Karismatik, bersemangat, visioner, kiyat" }, "positif": { "id": "Penuh energi, berwibawa, beruntung alami, visioner.", "jv": "Penuh energi, berwibawa, beruntung alami, visioner." }, "negatif": { "id": "Arogan, mudah mendikte, tidak sabaran.", "jv": "Arogan, gampang mendikte, mboten sabar." }, "karir": { "id": "Pemimpin perusahaan, inovator, arsitek, selebritas.", "jv": "Pemimpin perusahaan, inovator, arsitek, selebritas." }, "jodoh": "Tikus, Monyet, Ayam", "pantangan": "Angka sial (3, 8), arah barat laut, tahun Anjing" },
-    { "urutan": 6, "nama": "Ular", "elemen_tetap": "Api", "sifat_dasar": { "id": "Bijaksana, intuitif, analitis, misterius", "jv": "Bijaksana, intuitif, analitis, misterius" }, "positif": { "id": "Pemikir dalam, filosofis, sangat intuitif.", "jv": "Pemikir jero, filosofis, sanget intuitif." }, "negatif": { "id": "Pencemburu, posesif, penuh curiga.", "jv": "Pencemburu, posesif, penuh curiga." }, "karir": { "id": "Psikolog, peneliti, filsuf, astrolog, diplomat.", "jv": "Psikolog, peneliti, filsuf, astrolog, diplomat." }, "jodoh": "Kerbau, Ayam", "pantangan": "Angka sial (1, 6, 7), arah barat daya, tahun Babi" },
-    { "urutan": 7, "nama": "Kuda", "elemen_tetap": "Api", "sifat_dasar": { "id": "Enerjik, mandiri, suka kebebasan, sosial", "jv": "Enerjik, mandiri, remen kamardikan, sosial" }, "positif": { "id": "Energik, berjiwa bebas, antusias, ramah.", "jv": "Energik, berjiwa bebas, antusias, ramah." }, "negatif": { "id": "Boros, kurang konsisten, mudah bosan.", "jv": "Boros, kurang konsisten, gampang bosen." }, "karir": { "id": "Pariwisata, jurnalisme, pemasaran, hiburan.", "jv": "Pariwisata, jurnalisme, pemasaran, hiburan." }, "jodoh": "Macan, Kambing, Anjing", "pantangan": "Angka sial (1, 5, 6), arah utara, tahun Tikus" },
-    { "urutan": 8, "nama": "Kambing", "elemen_tetap": "Tanah", "sifat_dasar": { "id": "Kreatif, simpatik, tenang, artistik", "jv": "Kreatif, simpatik, tenang, artistik" }, "positif": { "id": "Lembut hati, pemaaf, sangat kreatif, berempati tinggi.", "jv": "Lembut ati, pemaaf, sanget kreatif, berempati inggil." }, "negatif": { "id": "Pesimis, pencemas, sering ragu-ragu.", "jv": "Pesimis, pencemas, kerep ragu-ragu." }, "karir": { "id": "Seniman, musisi, desainer interior, pekerja sosial.", "jv": "Seniman, musisi, desainer interior, pekerja sosial." }, "jodoh": "Kelinci, Kuda, Babi", "pantangan": "Angka sial (4, 9), arah barat, tahun Kerbau" },
-    { "urutan": 9, "nama": "Monyet", "elemen_tetap": "Logam", "sifat_dasar": { "id": "Jenaka, inovatif, lincah, problem solver", "jv": "Jenaka, inovatif, lincah, problem solver" }, "positif": { "id": "Cerdas, humoris, serba bisa, cepat beradaptasi.", "jv": "Cerdas, humoris, serba bisa, rikat beradaptasi." }, "negatif": { "id": "Licik, usil, tidak konsisten.", "jv": "Licik, usil, mboten konsisten." }, "karir": { "id": "Ilmuwan, programmer, analis keuangan, entertainer.", "jv": "Ilmuwan, programmer, analis keuangan, entertainer." }, "jodoh": "Tikus, Naga", "pantangan": "Angka sial (2, 7, 9), arah selatan, tahun Macan" },
-    { "urutan": 10, "nama": "Ayam", "elemen_tetap": "Logam", "sifat_dasar": { "id": "Rapi, teliti, pekerja keras, perfeksionis", "jv": "Rapi, teliti, pekerja keras, perfeksionis" }, "positif": { "id": "Rapi, terorganisir, tepat waktu, sangat mandiri.", "jv": "Rapi, terorganisir, tepat wekdal, sanget mandiri." }, "negatif": { "id": "Terlalu blak-blakan, kritis, egois.", "jv": "Terlalu blak-blakan, kritis, egois." }, "karir": { "id": "Keuangan, administrasi publik, kedokteran, koki.", "jv": "Keuangan, administrasi publik, kedokteran, koki." }, "jodoh": "Kerbau, Naga, Ular", "pantangan": "Angka sial (1, 3, 9), arah timur, tahun Kelinci" },
-    { "urutan": 11, "nama": "Anjing", "elemen_tetap": "Tanah", "sifat_dasar": { "id": "Setia, jujur, dapat diandalkan, adil", "jv": "Setia, jujur, bisa diandelaken, adil" }, "positif": { "id": "Sangat setia, jujur, pelindung adil, berintegritas.", "jv": "Sanget setia, jujur, pangayoman adil, berintegritas." }, "negatif": { "id": "Pesimis, mudah cemas, keras kepala.", "jv": "Pesimis, gampang cemas, keras kepala." }, "karir": { "id": "Penegak hukum, guru, konsultan, pekerja kemanusiaan.", "jv": "Penegak hukum, guru, konsultan, pekerja kemanusiaan." }, "jodoh": "Kelinci, Macan, Kuda", "pantangan": "Angka sial (1, 6, 7), arah tenggara, tahun Naga" },
-    { "urutan": 12, "nama": "Babi", "elemen_tetap": "Air", "sifat_dasar": { "id": "Dermawan, rajin, optimis, jujur", "jv": "Dermawan, rajin, optimis, jujur" }, "positif": { "id": "Jujur, toleran, berhati tulus, menikmati hidup.", "jv": "Jujur, toleran, ati tulus, nikmati gesang." }, "negatif": { "id": "Naif, mudah ditipu, kurang kontrol diri.", "jv": "Naif, gampang ditipu, kurang kontrol diri." }, "karir": { "id": "Perhotelan, kuliner, seni, filantropi.", "jv": "Perhotelan, kuliner, seni, filantropi." }, "jodoh": "Kelinci, Kambing, Macan", "pantangan": "Angka sial (3, 9), arah timur laut, tahun Ular" }
+    {
+      "urutan": 1,
+      "nama": {
+        "id": "Tikus",
+        "jv": "Tikus"
+      },
+      "elemen_tetap": {
+        "id": "Air",
+        "jv": "Tirta / Banyu"
+      },
+      "sifat_dasar": {
+        "id": "Cerdas, cerdik, adaptif, ambisius",
+        "jv": "Cerdas, cerdik, adaptif, ambisius"
+      },
+      "positif": {
+        "id": "Cepat tanggap, cermat mengelola keuangan, berkawan luas.",
+        "jv": "Rikat tanggap, cermat ngelola keuangan, berkawan wiyar."
+      },
+      "negatif": {
+        "id": "Cenderung oportunis dan terkadang terlalu perhitungan.",
+        "jv": "Cenderung oportunis lan kadhangkala terlalu perhitungan."
+      },
+      "karir": {
+        "id": "Pengusaha, akuntan, kritikus, peneliti.",
+        "jv": "Pengusaha, akuntan, kritikus, peneliti."
+      },
+      "jodoh": "Kerbau, Naga, Monyet",
+      "pantangan": "Angka sial (5, 9), arah utara, tahun Kuda"
+    },
+    {
+      "urutan": 2,
+      "nama": {
+        "id": "Kerbau",
+        "jv": "Kebo"
+      },
+      "elemen_tetap": {
+        "id": "Tanah",
+        "jv": "Bumi / Siti"
+      },
+      "sifat_dasar": {
+        "id": "Jujur, sabar, pekerja keras, teguh",
+        "jv": "Jujur, sabar, pekerja keras, teguh"
+      },
+      "positif": {
+        "id": "Sabar, dapat dipercaya, tekun, fisik & mental kuat.",
+        "jv": "Sabar, bisa dipercaya, tekun, fisik & mental kiyat."
+      },
+      "negatif": {
+        "id": "Keras kepala, kolot, sulit menerima perubahan.",
+        "jv": "Keras kepala, kolot, angel nampi owah-owahan."
+      },
+      "karir": {
+        "id": "Pertanian, manufaktur, hukum, manajemen, teknik.",
+        "jv": "Pertanian, manufaktur, hukum, manajemen, teknik."
+      },
+      "jodoh": "Tikus, Ular, Ayam",
+      "pantangan": "Warna merah terang, angka sial (3, 4), tahun Kambing"
+    },
+    {
+      "urutan": 3,
+      "nama": {
+        "id": "Macan",
+        "jv": "Macan"
+      },
+      "elemen_tetap": {
+        "id": "Kayu",
+        "jv": "Kayu / Wana"
+      },
+      "sifat_dasar": {
+        "id": "Berani, kompetitif, percaya diri, dinamis",
+        "jv": "Wani, kompetitif, percaya diri, dinamis"
+      },
+      "positif": {
+        "id": "Berani mengambil risiko, berjiwa pemimpin, murah hati.",
+        "jv": "Wani njupuk risiko, berjiwa pemimpin, murah hati."
+      },
+      "negatif": {
+        "id": "Agresif, emosional, kurang sabar.",
+        "jv": "Agresif, emosional, kurang sabar."
+      },
+      "karir": {
+        "id": "Militer, politik, CEO, atlet, entrepreneur.",
+        "jv": "Militer, politik, CEO, atlet, entrepreneur."
+      },
+      "jodoh": "Kuda, Anjing, Babi",
+      "pantangan": "Angka sial (6, 7, 8), arah barat daya, tahun Monyet"
+    },
+    {
+      "urutan": 4,
+      "nama": {
+        "id": "Kelinci",
+        "jv": "Kelinci"
+      },
+      "elemen_tetap": {
+        "id": "Kayu",
+        "jv": "Kayu / Wana"
+      },
+      "sifat_dasar": {
+        "id": "Lembut, elegan, penuh perhatian, diplomatis",
+        "jv": "Lembut, elegan, penuh perhatian, diplomatis"
+      },
+      "positif": {
+        "id": "Tenang, cinta damai, sopan, estetika tinggi.",
+        "jv": "Tenang, cinta damai, sopan, estetika inggil."
+      },
+      "negatif": {
+        "id": "Penakut, mudah menyerah, tertutup.",
+        "jv": "Penakut, gampang nyerah, tertutup."
+      },
+      "karir": {
+        "id": "Seni, diplomat, desainer, sastra, perhotelan.",
+        "jv": "Seni, diplomat, desainer, sastra, perhotelan."
+      },
+      "jodoh": "Kambing, Babi, Anjing",
+      "pantangan": "Angka sial (1, 7, 8), arah utara, tahun Ayam"
+    },
+    {
+      "urutan": 5,
+      "nama": {
+        "id": "Naga",
+        "jv": "Naga"
+      },
+      "elemen_tetap": {
+        "id": "Tanah",
+        "jv": "Bumi / Siti"
+      },
+      "sifat_dasar": {
+        "id": "Karismatik, bersemangat, visioner, kuat",
+        "jv": "Karismatik, bersemangat, visioner, kiyat"
+      },
+      "positif": {
+        "id": "Penuh energi, berwibawa, beruntung alami, visioner.",
+        "jv": "Penuh energi, berwibawa, beruntung alami, visioner."
+      },
+      "negatif": {
+        "id": "Arogan, mudah mendikte, tidak sabaran.",
+        "jv": "Arogan, gampang mendikte, mboten sabar."
+      },
+      "karir": {
+        "id": "Pemimpin perusahaan, inovator, arsitek, selebritas.",
+        "jv": "Pemimpin perusahaan, inovator, arsitek, selebritas."
+      },
+      "jodoh": "Tikus, Monyet, Ayam",
+      "pantangan": "Angka sial (3, 8), arah barat laut, tahun Anjing"
+    },
+    {
+      "urutan": 6,
+      "nama": {
+        "id": "Ular",
+        "jv": "Ula"
+      },
+      "elemen_tetap": {
+        "id": "Api",
+        "jv": "Geni / Dahana"
+      },
+      "sifat_dasar": {
+        "id": "Bijaksana, intuitif, analitis, misterius",
+        "jv": "Bijaksana, intuitif, analitis, misterius"
+      },
+      "positif": {
+        "id": "Pemikir dalam, filosofis, sangat intuitif.",
+        "jv": "Pemikir jero, filosofis, sanget intuitif."
+      },
+      "negatif": {
+        "id": "Pencemburu, posesif, penuh curiga.",
+        "jv": "Pencemburu, posesif, penuh curiga."
+      },
+      "karir": {
+        "id": "Psikolog, peneliti, filsuf, astrolog, diplomat.",
+        "jv": "Psikolog, peneliti, filsuf, astrolog, diplomat."
+      },
+      "jodoh": "Kerbau, Ayam",
+      "pantangan": "Angka sial (1, 6, 7), arah barat daya, tahun Babi"
+    },
+    {
+      "urutan": 7,
+      "nama": {
+        "id": "Kuda",
+        "jv": "Jaran"
+      },
+      "elemen_tetap": {
+        "id": "Api",
+        "jv": "Geni / Dahana"
+      },
+      "sifat_dasar": {
+        "id": "Enerjik, mandiri, suka kebebasan, sosial",
+        "jv": "Enerjik, mandiri, remen kamardikan, sosial"
+      },
+      "positif": {
+        "id": "Energik, berjiwa bebas, antusias, ramah.",
+        "jv": "Energik, berjiwa bebas, antusias, ramah."
+      },
+      "negatif": {
+        "id": "Boros, kurang konsisten, mudah bosan.",
+        "jv": "Boros, kurang konsisten, gampang bosen."
+      },
+      "karir": {
+        "id": "Pariwisata, jurnalisme, pemasaran, hiburan.",
+        "jv": "Pariwisata, jurnalisme, pemasaran, hiburan."
+      },
+      "jodoh": "Macan, Kambing, Anjing",
+      "pantangan": "Angka sial (1, 5, 6), arah utara, tahun Tikus"
+    },
+    {
+      "urutan": 8,
+      "nama": {
+        "id": "Kambing",
+        "jv": "Wedhus"
+      },
+      "elemen_tetap": {
+        "id": "Tanah",
+        "jv": "Bumi / Siti"
+      },
+      "sifat_dasar": {
+        "id": "Kreatif, simpatik, tenang, artistik",
+        "jv": "Kreatif, simpatik, tenang, artistik"
+      },
+      "positif": {
+        "id": "Lembut hati, pemaaf, sangat kreatif, berempati tinggi.",
+        "jv": "Lembut ati, pemaaf, sanget kreatif, berempati inggil."
+      },
+      "negatif": {
+        "id": "Pesimis, pencemas, sering ragu-ragu.",
+        "jv": "Pesimis, pencemas, kerep ragu-ragu."
+      },
+      "karir": {
+        "id": "Seniman, musisi, desainer interior, pekerja sosial.",
+        "jv": "Seniman, musisi, desainer interior, pekerja sosial."
+      },
+      "jodoh": "Kelinci, Kuda, Babi",
+      "pantangan": "Angka sial (4, 9), arah barat, tahun Kerbau"
+    },
+    {
+      "urutan": 9,
+      "nama": {
+        "id": "Monyet",
+        "jv": "Kethik / Rewanda"
+      },
+      "elemen_tetap": {
+        "id": "Logam",
+        "jv": "Logam / Wesi"
+      },
+      "sifat_dasar": {
+        "id": "Jenaka, inovatif, lincah, problem solver",
+        "jv": "Jenaka, inovatif, lincah, problem solver"
+      },
+      "positif": {
+        "id": "Cerdas, humoris, serba bisa, cepat beradaptasi.",
+        "jv": "Cerdas, humoris, serba bisa, rikat beradaptasi."
+      },
+      "negatif": {
+        "id": "Licik, usil, tidak konsisten.",
+        "jv": "Licik, usil, mboten konsisten."
+      },
+      "karir": {
+        "id": "Ilmuwan, programmer, analis keuangan, entertainer.",
+        "jv": "Ilmuwan, programmer, analis keuangan, entertainer."
+      },
+      "jodoh": "Tikus, Naga",
+      "pantangan": "Angka sial (2, 7, 9), arah selatan, tahun Macan"
+    },
+    {
+      "urutan": 10,
+      "nama": {
+        "id": "Ayam",
+        "jv": "Jago / Pitik"
+      },
+      "elemen_tetap": {
+        "id": "Logam",
+        "jv": "Logam / Wesi"
+      },
+      "sifat_dasar": {
+        "id": "Rapi, teliti, pekerja keras, perfeksionis",
+        "jv": "Rapi, teliti, pekerja keras, perfeksionis"
+      },
+      "positif": {
+        "id": "Rapi, terorganisir, tepat waktu, sangat mandiri.",
+        "jv": "Rapi, terorganisir, tepat wekdal, sanget mandiri."
+      },
+      "negatif": {
+        "id": "Terlalu blak-blakan, kritis, egois.",
+        "jv": "Terlalu blak-blakan, kritis, egois."
+      },
+      "karir": {
+        "id": "Keuangan, administrasi publik, kedokteran, koki.",
+        "jv": "Keuangan, administrasi publik, kedokteran, koki."
+      },
+      "jodoh": "Kerbau, Naga, Ular",
+      "pantangan": "Angka sial (1, 3, 9), arah timur, tahun Kelinci"
+    },
+    {
+      "urutan": 11,
+      "nama": {
+        "id": "Anjing",
+        "jv": "Asu / Segawon"
+      },
+      "elemen_tetap": {
+        "id": "Tanah",
+        "jv": "Bumi / Siti"
+      },
+      "sifat_dasar": {
+        "id": "Setia, jujur, dapat diandalkan, adil",
+        "jv": "Setia, jujur, bisa diandelaken, adil"
+      },
+      "positif": {
+        "id": "Sangat setia, jujur, pelindung adil, berintegritas.",
+        "jv": "Sanget setia, jujur, pangayoman adil, berintegritas."
+      },
+      "negatif": {
+        "id": "Pesimis, mudah cemas, keras kepala.",
+        "jv": "Pesimis, gampang cemas, keras kepala."
+      },
+      "karir": {
+        "id": "Penegak hukum, guru, konsultan, pekerja kemanusiaan.",
+        "jv": "Penegak hukum, guru, konsultan, pekerja kemanusiaan."
+      },
+      "jodoh": "Kelinci, Macan, Kuda",
+      "pantangan": "Angka sial (1, 6, 7), arah tenggara, tahun Naga"
+    },
+    {
+      "urutan": 12,
+      "nama": {
+        "id": "Babi",
+        "jv": "Celeng"
+      },
+      "elemen_tetap": {
+        "id": "Air",
+        "jv": "Tirta / Banyu"
+      },
+      "sifat_dasar": {
+        "id": "Dermawan, rajin, optimis, jujur",
+        "jv": "Dermawan, rajin, optimis, jujur"
+      },
+      "positif": {
+        "id": "Jujur, toleran, berhati tulus, menikmati hidup.",
+        "jv": "Jujur, toleran, ati tulus, nikmati gesang."
+      },
+      "negatif": {
+        "id": "Naif, mudah ditipu, kurang kontrol diri.",
+        "jv": "Naif, gampang ditipu, kurang kontrol diri."
+      },
+      "karir": {
+        "id": "Perhotelan, kuliner, seni, filantropi.",
+        "jv": "Perhotelan, kuliner, seni, filantropi."
+      },
+      "jodoh": "Kelinci, Kambing, Macan",
+      "pantangan": "Angka sial (3, 9), arah timur laut, tahun Ular"
+    }
   ],
   "wu_xing_5": [
-    { "digit_tahun": [0, 1], "elemen": "Logam (Metal)", "warna": "#94a3b8", "sifat": { "id": "Tegas, mandiri, berdisiplin tinggi, tekad kuat.", "jv": "Tegas, mandiri, berdisiplin inggil, tekad kiyat." } },
-    { "digit_tahun": [2, 3], "elemen": "Air (Water)", "warna": "#38bdf8", "sifat": { "id": "Pandai berkomunikasi, fleksibel, intuitif, mudah adaptasi.", "jv": "Pinter komunikasi, fleksibel, intuitif, gampang adaptasi." } },
-    { "digit_tahun": [4, 5], "elemen": "Kayu (Wood)", "warna": "#22c55e", "sifat": { "id": "Idealis, kolaboratif, bermoral tinggi, berkembang pesat.", "jv": "Idealis, kolaboratif, bermoral inggil, berkembang pesat." } },
-    { "digit_tahun": [6, 7], "elemen": "Api (Fire)", "warna": "#ef4444", "sifat": { "id": "Karismatik, penuh semangat, pemimpin alami, terkadang impulsif.", "jv": "Karismatik, penuh semangat, pemimpin alami, kadhang impulsif." } },
-    { "digit_tahun": [8, 9], "elemen": "Tanah (Earth)", "warna": "#eab308", "sifat": { "id": "Stabil, dapat diandalkan, praktis, berorientasi keamanan.", "jv": "Stabil, bisa diandelaken, praktis, berorientasi keamanan." } }
+    {
+      "digit_tahun": [
+        0,
+        1
+      ],
+      "elemen": {
+        "id": "Logam (Metal)",
+        "jv": "Logam (Metal)"
+      },
+      "warna": "#94a3b8",
+      "sifat": {
+        "id": "Tegas, mandiri, berdisiplin tinggi, tekad kuat.",
+        "jv": "Tegas, mandiri, berdisiplin inggil, tekad kiyat."
+      }
+    },
+    {
+      "digit_tahun": [
+        2,
+        3
+      ],
+      "elemen": {
+        "id": "Air (Water)",
+        "jv": "Air (Water)"
+      },
+      "warna": "#38bdf8",
+      "sifat": {
+        "id": "Pandai berkomunikasi, fleksibel, intuitif, mudah adaptasi.",
+        "jv": "Pinter komunikasi, fleksibel, intuitif, gampang adaptasi."
+      }
+    },
+    {
+      "digit_tahun": [
+        4,
+        5
+      ],
+      "elemen": {
+        "id": "Kayu (Wood)",
+        "jv": "Kayu (Wood)"
+      },
+      "warna": "#22c55e",
+      "sifat": {
+        "id": "Idealis, kolaboratif, bermoral tinggi, berkembang pesat.",
+        "jv": "Idealis, kolaboratif, bermoral inggil, berkembang pesat."
+      }
+    },
+    {
+      "digit_tahun": [
+        6,
+        7
+      ],
+      "elemen": {
+        "id": "Api (Fire)",
+        "jv": "Api (Fire)"
+      },
+      "warna": "#ef4444",
+      "sifat": {
+        "id": "Karismatik, penuh semangat, pemimpin alami, terkadang impulsif.",
+        "jv": "Karismatik, penuh semangat, pemimpin alami, kadhang impulsif."
+      }
+    },
+    {
+      "digit_tahun": [
+        8,
+        9
+      ],
+      "elemen": {
+        "id": "Tanah (Earth)",
+        "jv": "Tanah (Earth)"
+      },
+      "warna": "#eab308",
+      "sifat": {
+        "id": "Stabil, dapat diandalkan, praktis, berorientasi keamanan.",
+        "jv": "Stabil, bisa diandelaken, praktis, berorientasi keamanan."
+      }
+    }
   ]
 }

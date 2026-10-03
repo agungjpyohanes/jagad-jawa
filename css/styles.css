@@ -1,4 +1,7 @@
 /* Jagad Jawa — Portal Budaya Luhur Nusantara */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ========================================================================= */
 /* PENGAMAN RESPONSIF & OVERFLOW MOBILE GLOBAL                               */
@@ -137,7 +140,7 @@ svg {
 }
 
 /* ========================================================================= */
-/* NAVBAR KERATON MODERN / ROYAL HERITAGE GOLD                               */
+/* NAVBAR TRADISI MODERN / HERITAGE GOLD                               */
 /* ========================================================================= */
 
 /* Navbar Container - Antigravity Floating Card Header */
@@ -190,12 +193,12 @@ svg {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
 }
 
 @media (min-width: 1024px) {
   .nav-container {
-    gap: 16px;
+    gap: 14px;
   }
 }
 
@@ -298,12 +301,18 @@ svg {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   list-style: none;
   margin: 0;
   padding: 0 4px;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .nav-menu {
+    gap: 10px;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -316,14 +325,20 @@ svg {
 .nav-utility-cluster {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   flex-shrink: 0;
   flex-wrap: nowrap;
 }
 
+@media (min-width: 1024px) {
+  .nav-utility-cluster {
+    gap: 8px;
+  }
+}
+
 @media (min-width: 1280px) {
   .nav-utility-cluster {
-    gap: 14px;
+    gap: 12px;
   }
 }
 
@@ -407,16 +422,16 @@ svg {
   .mode-toggle-btn,
   .lang-toggle-btn,
   .nav-audio-btn {
-    height: 32px;
-    padding: 0 0.4rem;
-    font-size: 0.72rem;
+    height: 30px;
+    padding: 0 0.35rem;
+    font-size: 0.7rem;
     border-radius: 8px;
   }
 }
 
 @media (max-width: 380px) {
   .lang-toggle-btn {
-    padding: 0 0.3rem;
+    padding: 0 0.25rem;
   }
 }
 
@@ -443,14 +458,16 @@ svg {
 
 @media (max-width: 639px) {
   #themeToggleBtn {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 8px;
   }
 
   #mobileMenuBtn {
-    height: 32px;
-    padding: 0.25rem 0.5rem;
+    min-width: 30px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
     border-radius: 8px;
   }
 }
@@ -1203,7 +1220,7 @@ body.mode-pemula .mode-badge-pill {
     color: #000000 !important;
   }
 
-  /* Ornamen sudut dekoratif wajik/bunga keraton (❖) pada bingkai monokrom */
+  /* Ornamen sudut dekoratif wajik/bunga tradisi (❖) pada bingkai monokrom */
   .laporan-page::before,
   .laporan-page::after,
   .laporan-page .corner-tr,
@@ -1446,7 +1463,7 @@ body.mode-pemula .mode-badge-pill {
   }
 
   /* ========================================================================= */
-  /* TEMA ESTETIKA KERTAS KUNO (ROYAL PARCHMENT / HERITAGE KERATON)            */
+  /* TEMA ESTETIKA KERTAS KUNO (ROYAL PARCHMENT / HERITAGE TRADISI)            */
   /* ========================================================================= */
   body.print-theme-parchment {
     background-color: #fdf6e2 !important;
@@ -2055,7 +2072,7 @@ body.kelir-wayang-active::before {
 
 /* ========================================================================= */
 /* ========================================================================= */
-/* MODE PADHANG (LIGHT MODE) — PARCHEMIN & KERATON SOGAN                     */
+/* MODE PADHANG (LIGHT MODE) — PARCHEMIN & TRADISI SOGAN                     */
 /* ========================================================================= */
 
 body.theme-light,
@@ -3047,6 +3064,87 @@ body.light .text-amber-200 {
     }
   }
 }
+
+/* ==================== BREADCRUMB INTERACTIVE NAVIGATION ==================== */
+.breadcrumb-btn {
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+.breadcrumb-btn:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.breadcrumb-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
+}
+
+/* ==================== A11Y & MODERN UX ENHANCEMENTS (WCAG AA) ==================== */
+html, body {
+  font-size: 16px;
+}
+
+/* 1. Aksesibilitas Keyboard Focus Visible yang tegas */
+*:focus-visible {
+  outline: 2px solid #d4af37 !important;
+  outline-offset: 2px !important;
+}
+
+/* 2. Penghormatan prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 3. Peningkatan Kontras Warna WCAG AA untuk Status Ala & Becik */
+.badge-status-ala,
+.text-rose-400,
+.text-red-400 {
+  color: #f87171 !important;
+}
+
+.badge-status-becik,
+.text-emerald-400,
+.text-green-400 {
+  color: #4ade80 !important;
+}
+
+.text-amber-400,
+.text-yellow-400 {
+  color: #facc15 !important;
+}
+
+/* 4. Bottom Navigation Styling */
+#mobileBottomNav {
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.65);
+}
+
+#mobileBottomNav .mobile-nav-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mobileBottomNav .mobile-nav-btn.active {
+  color: #d4af37 !important;
+}
+
+#mobileBottomNav .mobile-nav-btn.active i {
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.6));
+}
+
+/* 5. Sticky TOC Link Highlighting */
+.toc-item-link {
+  transition: all 0.2s ease-in-out;
+}
+
+
 
 
 

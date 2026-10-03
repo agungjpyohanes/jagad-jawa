@@ -9,6 +9,7 @@ import { hitungSelametanDates, TEMPLAT_DONGA_KEYAKINAN } from './selametan-engin
 import { saveBookmark } from '../kalender/bookmark-service.js';
 import { showToast } from '../../ui/toast.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
+import { loadDomainData } from '../../services/dbLoader.js';
 
 let currentSelametanKeyakinan = 'universal';
 
@@ -40,7 +41,12 @@ export function gantiKeyakinanSelametan(keyakinanKey) {
 /**
  * Menghitung dan merender seluruh hasil selametan tilar donyo.
  */
-export function hitungSelametan() {
+export async function hitungSelametan() {
+  try {
+    await loadDomainData('selametan');
+  } catch (e) {
+    console.warn('[selametan-ui] loadDomainData fallback:', e);
+  }
   const inputEl = document.getElementById('tglWafatInput');
   if (inputEl && !inputEl.value) {
     inputEl.value = new Date().toISOString().slice(0, 10);
@@ -295,7 +301,7 @@ export function simpanSelametanKeBookmark(dateStr, namaTahap, weton, namaAlmarhu
 
 /**
  * Ekspor / Cetak Dokumen Serat Pengetan Tilar Donyo (PDF Resmi).
- * Menggunakan format kertas kuno keraton seragam dengan data lengkap 7 milestone.
+ * Menggunakan format kertas kuno tradisi luhur seragam dengan data lengkap 7 milestone.
  * @param {'parchment' | 'monochrome'} theme 
  */
 export function printLaporanSelametan(theme = 'parchment') {
@@ -336,7 +342,7 @@ export function printLaporanSelametan(theme = 'parchment') {
         <span class="corner-tr" aria-hidden="true" style="position: absolute; top: 4px; right: 5px; color: ${isParchment ? '#8c6224' : '#111827'}; font-size: 14pt;">❖</span>
         <span class="corner-bl" aria-hidden="true" style="position: absolute; bottom: 4px; left: 5px; color: ${isParchment ? '#8c6224' : '#111827'}; font-size: 14pt;">❖</span>
 
-        <!-- Kop Serat Karaton -->
+        <!-- Kop Serat Tradisi Luhur -->
         <div class="doc-header-kop" style="border-bottom: 2px solid ${isParchment ? '#8c6224' : '#111827'}; padding-bottom: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-end;">
           <div>
             <div style="font-size: 15pt; font-weight: bold; font-family: 'Cinzel Decorative', Georgia, serif; letter-spacing: 0.12em; color: ${isParchment ? '#724117' : '#111827'}; text-transform: uppercase;">
@@ -428,7 +434,7 @@ export function printLaporanSelametan(theme = 'parchment') {
         <!-- Tanda Tangan & Cap Kasampurnan -->
         <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 8.5pt; border-top: 1px solid ${isParchment ? '#8c6224' : '#9ca3af'}; padding-top: 6px;">
           <div>
-            <div style="font-size: 7.5pt; color: ${isParchment ? '#8c6224' : '#6b7280'}; font-style: italic;">Jagad Jawa &bull; Sistem Kasampurnan Salira &bull; Pananggalan Adat Karaton</div>
+            <div style="font-size: 7.5pt; color: ${isParchment ? '#8c6224' : '#6b7280'}; font-style: italic;">Jagad Jawa &bull; Sistem Kasampurnan Salira &bull; Pananggalan Adat Tradisi Luhur</div>
           </div>
           <div style="text-align: center;">
             <div style="font-weight: bold; font-family: 'Cinzel Decorative', Georgia, serif; font-size: 9pt; color: ${isParchment ? '#724117' : '#111827'};">JAGAD JAWA NUSANTARA</div>

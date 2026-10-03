@@ -35,3 +35,6 @@ js/main.legacy.js
 
 # Vercel
 .vercel/
+
+# Local non-public asset duplicates
+assets/audio/

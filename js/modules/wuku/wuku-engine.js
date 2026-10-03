@@ -16,15 +16,38 @@ import {
   getWukuPetenget,
   WUKU_PETENGET_LIST
 } from '../../data/wuku-petenget-db.js';
+import { loadDomainData, mapWukuItem, extractText } from '../../services/dbLoader.js';
+
+let currentWukuList = Array.isArray(PAWUKON_LIST) ? PAWUKON_LIST.map(mapWukuItem) : [];
+
+/**
+ * Memuat database ensiklopedia wuku secara asinkron dari dbLoader
+ * @returns {Promise<Array<Object>>}
+ */
+export async function loadWukuData() {
+  try {
+    const domainData = await loadDomainData('wuku');
+    if (domainData && Array.isArray(domainData.pawukonList) && domainData.pawukonList.length > 0) {
+      currentWukuList = domainData.pawukonList;
+      if (typeof window !== 'undefined') {
+        window.PAWUKON_LIST = currentWukuList;
+      }
+    }
+  } catch (err) {
+    console.warn('[wuku-engine] loadWukuData fallback:', err);
+  }
+  return currentWukuList;
+}
 
 /**
  * Mendapatkan daftar seluruh 30 wuku.
  * @returns {Array<Object>}
  */
 export function getAllWuku() {
+  if (currentWukuList && currentWukuList.length > 0) return currentWukuList;
   const list = PAWUKON_LIST || (typeof window !== 'undefined' && window.PAWUKON_LIST) || 
                (typeof globalThis !== 'undefined' && globalThis.PAWUKON_LIST) || [];
-  return list;
+  return list.map(mapWukuItem);
 }
 
 /**
@@ -192,10 +215,10 @@ export function getWukuDetailSummary(wukuInput) {
     watak:    data.watek_budi_pangerti || '-',
     bilahi:   data.bilahi_bebaya || '-',
     sesaji:   data.sesaji_ruwat || '-',
-    tindih:   data.tindih_ruwat || '-',
+    tindih:   extractText(data.tindih_ruwat || data.tindih) || '-',
     sega:     data.selamatan_sega || '-',
     iwak:     data.selamatan_iwak || '-',
-    salawat:  data.salawat || '-',
+    salawat:  extractText(data.salawat) || '-',
     donga:    data.donga_slamet || '-',
     pangupaya: data.pangupaya_jiwa || '-',
     tamba:    data.tamba_yen_lara || '-',
