@@ -3065,6 +3065,24 @@ body.light .text-amber-200 {
   }
 }
 
+/* ==================== BREADCRUMB INTERACTIVE NAVIGATION ==================== */
+.breadcrumb-btn {
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  text-decoration: none;
+}
+
+.breadcrumb-btn:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.breadcrumb-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
+}
+
+
 
 
 

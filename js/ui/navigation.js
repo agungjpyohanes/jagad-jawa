@@ -278,6 +278,12 @@ const BREADCRUMB_MAP = {
     icon: 'fa-solid fa-shield-halved',
     sub: 'Kompas Danyang 360°'
   },
+  'tumpeng': {
+    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
+    title: 'Tumpeng Tombak Rojo',
+    icon: 'fa-solid fa-bowl-rice',
+    sub: 'Ubarampe Sesaji & Filosofi'
+  },
   'laporan': {
     category: { label: 'Laporan & Ekspor', icon: 'fa-solid fa-file-pdf' },
     title: 'Pusat Laporan Keraton',
@@ -285,6 +291,41 @@ const BREADCRUMB_MAP = {
     sub: 'Dokumen Resmi & Piagam'
   }
 };
+
+const CATEGORY_DEFAULT_TAB = {
+  'Wektu & Penanggalan': 'kalender',
+  'Nujum & Primbon': 'kepribadian',
+  'Seni & Budaya': 'wuku',
+  'Laporan & Ekspor': 'laporan'
+};
+
+/**
+ * Resolves the primary default tab for a given category label
+ * @param {string|null} categoryLabel
+ * @returns {string}
+ */
+function getCategoryDefaultTab(categoryLabel) {
+  if (!categoryLabel) return 'beranda';
+  if (CATEGORY_DEFAULT_TAB[categoryLabel]) {
+    return CATEGORY_DEFAULT_TAB[categoryLabel];
+  }
+  for (const [key, val] of Object.entries(BREADCRUMB_MAP)) {
+    if (val.category && val.category.label === categoryLabel) {
+      return key;
+    }
+  }
+  return 'beranda';
+}
+
+/**
+ * Global handler for breadcrumb item click navigation
+ * @param {string} tabId
+ */
+function handleBreadcrumbNav(tabId) {
+  if (tabId && typeof switchTab === 'function') {
+    switchTab(tabId);
+  }
+}
 
 /**
  * Merender Breadcrumb bergaya Windows Explorer berdasarkan tab aktif dan sub-level opsional
@@ -309,16 +350,19 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   segments.push({
     label: 'Beranda',
     icon: 'fa-solid fa-house',
+    tabId: 'beranda',
     action: () => switchTab('beranda'),
     isCurrent: tabId === 'beranda' && !subTitle
   });
 
   // Category Level (jika ada grup induknya, misal "Wektu & Penanggalan")
   if (info.category && tabId !== 'beranda') {
+    const targetCatTab = getCategoryDefaultTab(info.category.label);
     segments.push({
       label: info.category.label,
       icon: info.category.icon,
-      action: null, // Virtual category folder
+      tabId: targetCatTab,
+      action: () => switchTab(targetCatTab),
       isCurrent: false
     });
   }
@@ -328,8 +372,9 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
     segments.push({
       label: info.title,
       icon: info.icon,
-      action: subTitle ? () => switchTab(tabId) : null,
-      isCurrent: !subTitle
+      tabId: tabId,
+      action: () => switchTab(tabId),
+      isCurrent: !subTitle && !info.sub
     });
   }
 
@@ -339,6 +384,7 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
     segments.push({
       label: activeSub,
       icon: 'fa-solid fa-file-lines',
+      tabId: tabId,
       action: null,
       isCurrent: true
     });
@@ -356,16 +402,19 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
         ${isClickable ? `
           <button
             type="button"
-            onclick="(${seg.action.toString()})()"
-            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg hover:bg-sogan-900/90 hover:text-prada transition duration-150 cursor-pointer focus:outline-none focus:ring-1 focus:ring-prada/40 group"
+            data-breadcrumb-idx="${idx}"
+            data-tab="${seg.tabId || ''}"
+            onclick="window.handleBreadcrumbNav('${seg.tabId || ''}')"
+            class="breadcrumb-btn inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-sogan-300 hover:text-amber-200 hover:bg-sogan-900/90 hover:underline underline-offset-2 decoration-prada/60 transition-all duration-150 cursor-pointer focus:outline-none focus:ring-1 focus:ring-prada/50 group"
             title="Lompat ke ${seg.label}"
+            aria-label="Lompat ke ${seg.label}"
           >
-            <i class="${seg.icon} text-[10px] text-sogan-400 group-hover:text-amber-300 transition-colors"></i>
-            <span class="hover:underline underline-offset-2">${seg.label}</span>
+            <i class="${seg.icon} text-[10px] text-sogan-400 group-hover:text-amber-300 transition-colors" aria-hidden="true"></i>
+            <span class="font-medium hover:text-amber-200">${seg.label}</span>
           </button>
         ` : `
-          <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-lg ${isLast ? 'bg-prada/15 text-amber-200 border border-prada/30' : 'text-sogan-400'}">
-            <i class="${seg.icon} text-[10px] ${isLast ? 'text-amber-300' : 'text-sogan-500'}"></i>
+          <span class="breadcrumb-current inline-flex items-center gap-1.5 px-1.5 py-0.5 rounded-lg ${isLast ? 'bg-prada/15 text-amber-200 border border-prada/30 font-semibold' : 'text-sogan-400'}" ${isLast ? 'aria-current="page"' : ''}>
+            <i class="${seg.icon} text-[10px] ${isLast ? 'text-amber-300' : 'text-sogan-500'}" aria-hidden="true"></i>
             <span class="truncate max-w-[200px] sm:max-w-none">${seg.label}</span>
           </span>
         `}
@@ -374,6 +423,20 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   });
 
   container.innerHTML = html;
+
+  // Pasang event listener interaktif pada setiap tombol segmen breadcrumb
+  container.querySelectorAll('.breadcrumb-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const idx = parseInt(btn.dataset.breadcrumbIdx, 10);
+      const seg = segments[idx];
+      if (seg && typeof seg.action === 'function') {
+        seg.action();
+      } else if (btn.dataset.tab && typeof switchTab === 'function') {
+        switchTab(btn.dataset.tab);
+      }
+    });
+  });
 
   // Update Windows Explorer path summary: JagadJawa:\Wektu\Kalender Jawa
   if (summaryEl) {
@@ -706,6 +769,7 @@ if (typeof window !== 'undefined') {
   window.toggleNavDropdown = toggleNavDropdown;
   window.closeAllNavDropdowns = closeAllNavDropdowns;
   window.renderBreadcrumb = renderBreadcrumb;
+  window.handleBreadcrumbNav = handleBreadcrumbNav;
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
@@ -718,7 +782,8 @@ if (typeof module !== 'undefined' && module.exports) {
     downloadElementAsPng,
     toggleNavDropdown,
     closeAllNavDropdowns,
-    renderBreadcrumb
+    renderBreadcrumb,
+    handleBreadcrumbNav
   };
 }
 
@@ -732,7 +797,8 @@ export {
   downloadElementAsPng,
   toggleNavDropdown,
   closeAllNavDropdowns,
-  renderBreadcrumb
+  renderBreadcrumb,
+  handleBreadcrumbNav
 };
 
 export default {
@@ -745,5 +811,6 @@ export default {
   downloadElementAsPng,
   toggleNavDropdown,
   closeAllNavDropdowns,
-  renderBreadcrumb
+  renderBreadcrumb,
+  handleBreadcrumbNav
 };
