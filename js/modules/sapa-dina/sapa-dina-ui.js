@@ -67,6 +67,29 @@ function clearDismissState() {
  */
 export function buildSapaDinaShareText(data) {
   const { wetonDisplay, neptu, wukuDisplay, pranata, dinoStatus, pitutur, hariTanggalStr, tanggalMasehiStr, petungTetanen, arahKolo } = data;
+  const isJv = getLanguage() === 'jv';
+
+  if (isJv) {
+    return (
+      `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
+      `_Ringkesan Padintenan Kalendher Jawi_\n\n` +
+      `📅 *${hariTanggalStr}*\n` +
+      `⭐ *Weton:* ${wetonDisplay}\n` +
+      `🔢 *Neptu:* ${neptu} (${data.neptuBreakdown})\n` +
+      `🪐 *Wuku:* ${wukuDisplay} (${data.wukuNo}/30)\n` +
+      (arahKolo ? `🧭 *Dununge Kala:* ${arahKolo.arahJawa} — ${arahKolo.pantangan}\n` : '') +
+      `🌾 *Pranata Mangsa:* ${pranata.nama} — ${pranata.musimTani}\n` +
+      (petungTetanen ? `🌱 *Pétung Tetanèn (Petung Tetanen):* ${petungTetanen.kategoriLabel} (${petungTetanen.kangBecik}) — ${petungTetanen.tegese}\n` : '') +
+      `🪶 *Candrasangkala:* "${pranata.candrasangkala}"\n` +
+      `${dinoStatus.isIjo ? '🟢' : '🔴'} *Status Dina:* ${dinoStatus.statusText}` +
+      `${dinoStatus.specialLabel ? ' · ' + dinoStatus.specialLabel : ''}\n\n` +
+      `💬 *Piwulang Luhur Dinten Punika:*\n` +
+      `"${pitutur.jawa}"\n` +
+      `_${pitutur.artiHarfiah}_\n\n` +
+      `Njajah kalendher Jawi & kabudayan Nuswantara:\nhttps://jagad-jawa.vercel.app`
+    );
+  }
+
   return (
     `🌟 *SAPA DINA — JAGAD JAWA* 🌟\n` +
     `_Ringkasan Harian Kalender Jawa_\n\n` +
@@ -92,6 +115,7 @@ export function buildSapaDinaShareText(data) {
  * @param {Object} data — SapaDinaPayload
  */
 export async function shareSapaDina(data) {
+  const isJv = getLanguage() === 'jv';
   const text = buildSapaDinaShareText(data);
 
   if (navigator.share) {
@@ -100,15 +124,15 @@ export async function shareSapaDina(data) {
         title: `Sapa Dina — ${data.wetonDisplay}`,
         text
       });
-      showToast('Sapa Dina berhasil dibagikan! ✨');
+      showToast(isJv ? 'Sapa Dina kasil kabagekaken! ✨' : 'Sapa Dina berhasil dibagikan! ✨');
     } catch (err) {
       // User membatalkan share — tidak perlu tampil error
       if (err.name !== 'AbortError') {
-        copyToClipboard(text, 'Teks Sapa Dina disalin ke clipboard!');
+        copyToClipboard(text, isJv ? 'Teks Sapa Dina kasalin dhateng clipboard!' : 'Teks Sapa Dina disalin ke clipboard!');
       }
     }
   } else {
-    copyToClipboard(text, 'Teks Sapa Dina disalin ke clipboard!');
+    copyToClipboard(text, isJv ? 'Teks Sapa Dina kasalin dhateng clipboard!' : 'Teks Sapa Dina disalin ke clipboard!');
   }
 }
 

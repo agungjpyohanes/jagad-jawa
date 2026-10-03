@@ -80,7 +80,8 @@ export function resetKalenderToday() {
   if (inpTahun) inpTahun.value = now.getFullYear();
   renderKalender();
   if (typeof showToast === 'function') {
-    showToast('Kalender kasil kabikak malih ing sasi & dinten saiki ✨');
+    const msg = (typeof t === 'function') ? t('toast_kalender_reset') : 'Kalender kondur dhateng sasi & dinten punika ✨';
+    showToast(msg);
   }
 }
 

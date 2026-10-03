@@ -53,7 +53,8 @@ export function renderHeroTodayCard() {
     // 3. Tanggal Jawa
     const jawaEl = document.getElementById('heroTanggalJawaLengkap');
     if (jawaEl) {
-      jawaEl.textContent = `${data.tglJawa} ${data.bulanJawa} ${data.tahunAJ} AJ · Tahun ${data.tahunSiklus}, Windu ${data.namaWindu}`;
+      const tahunLabel = isJv ? 'Taun' : 'Tahun';
+      jawaEl.textContent = `${data.tglJawa} ${data.bulanJawa} ${data.tahunAJ} AJ · ${tahunLabel} ${data.tahunSiklus}, Windu ${data.namaWindu}`;
     }
 
     // 4. Neptu Badge
@@ -74,13 +75,19 @@ export function renderHeroTodayCard() {
       const dinoStatus = data.dinoStatus;
       if (dinoStatus.isGede) {
         statusEl.className = 'px-3.5 py-1.5 rounded-xl border border-amber-500/50 bg-amber-500/15 text-amber-300 font-bold text-xs shadow-sm inline-flex items-center gap-1.5';
-        statusEl.innerHTML = '<i class="fa-solid fa-crown text-amber-300"></i> Dino Gede (Sakral)';
+        statusEl.innerHTML = isJv
+          ? '<i class="fa-solid fa-crown text-amber-300"></i> Dino Gede (Sakral)'
+          : '<i class="fa-solid fa-crown text-amber-300"></i> Hari Besar (Sakral)';
       } else if (dinoStatus.isIjo) {
         statusEl.className = 'px-3.5 py-1.5 rounded-xl border border-emerald-500/50 bg-emerald-500/15 text-emerald-300 font-bold text-xs shadow-sm inline-flex items-center gap-1.5';
-        statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i> Dina Becik (Rahayu)';
+        statusEl.innerHTML = isJv
+          ? '<i class="fa-solid fa-circle-check text-emerald-400"></i> Dina Becik (Rahayu)'
+          : '<i class="fa-solid fa-circle-check text-emerald-400"></i> Hari Baik (Rahayu)';
       } else {
         statusEl.className = 'px-3.5 py-1.5 rounded-xl border border-rose-500/50 bg-rose-500/15 text-rose-300 font-bold text-xs shadow-sm inline-flex items-center gap-1.5';
-        statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Dina Ala (Prayitna)';
+        statusEl.innerHTML = isJv
+          ? '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Dina Ala (Prayitna)'
+          : '<i class="fa-solid fa-triangle-exclamation text-rose-400"></i> Hari Pantangan (Waspada)';
       }
     }
 
@@ -103,7 +110,7 @@ export function renderHeroTodayCard() {
     }
     const pituturSumberEl = document.getElementById('heroPituturSumber');
     if (pituturSumberEl && data.pitutur) {
-      pituturSumberEl.textContent = data.pitutur.sumber || 'Falsafah Luhur Jawa';
+      pituturSumberEl.textContent = data.pitutur.sumber || (isJv ? 'Falsafah Luhur Jawi' : 'Falsafah Luhur Jawa');
     }
 
     // 8. Rincian Akordeon: Pranata Mangsa Box
