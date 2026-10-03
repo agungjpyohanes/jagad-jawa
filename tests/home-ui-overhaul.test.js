@@ -69,15 +69,24 @@ test('Home UI Overhaul - Penyatuan Kartu Hari Ini & Akordeon Sapa Dina', () => {
   assert.ok(html.includes('id="heroTetanenKategori"'), 'Petung tetanen harus ada di panel');
 });
 
-test('Home UI Overhaul - 4 Chip Aksi Cepat Thumb-Friendly', () => {
+test('Home UI Overhaul - Alur Beranda Mengalir Langsung ke Grid Menu Tanpa Duplikasi', () => {
   const indexPath = path.resolve('index.html');
   const html = fs.readFileSync(indexPath, 'utf-8');
 
-  // Verifikasi 4 aksi cepat utama
-  assert.ok(html.includes('switchTab(\'kalender\')'), 'Chip Cek Weton harus ada');
-  assert.ok(html.includes('switchTab(\'perjodohan\')'), 'Chip Petung Jodoh harus ada');
-  assert.ok(html.includes('switchTab(\'ijab\')'), 'Chip Hari Baik Ijab harus ada');
-  assert.ok(html.includes('switchTab(\'selametan\')'), 'Chip Selametan harus ada');
+  // Ambil isi khusus tab-beranda
+  const berandaMatch = html.match(/<section id="tab-beranda"[\s\S]*?<\/section>/);
+  assert.ok(berandaMatch, 'Section tab-beranda harus ada');
+  const berandaHtml = berandaMatch[0];
+
+  // 1. Verifikasi baris chip aksi cepat yang tumpang tindih sudah dihapus dari Beranda
+  assert.ok(!berandaHtml.includes('hero_quick_actions_title'), 'Bilah chip aksi cepat tumpang tindih harus sudah disingkirkan');
+  assert.ok(!berandaHtml.includes('Aksi Cepat &middot; Pilihan Populer'), 'Judul Aksi Cepat harus sudah dihapus dari Beranda');
+
+  // 2. Verifikasi 4 modul utama tetap terwakili secara lengkap di dalam Grid Menu Utama
+  assert.ok(berandaHtml.includes('switchTab(\'kalender\')'), 'Modul Kalender Jawa harus ada di grid');
+  assert.ok(berandaHtml.includes('switchTab(\'perjodohan\')'), 'Modul Petung Perjodohan harus ada di grid');
+  assert.ok(berandaHtml.includes('switchTab(\'ijab\')'), 'Modul Petung Ijab harus ada di grid');
+  assert.ok(berandaHtml.includes('switchTab(\'selametan\')'), 'Modul Selametan / Pengeten Tilar Donyo harus ada di grid');
 });
 
 test('Home UI Overhaul - Kalkulasi Weton & Sapa Dina Bebas Undefined', () => {
