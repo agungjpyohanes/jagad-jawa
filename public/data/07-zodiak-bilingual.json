@@ -1,14 +1,422 @@
 [
-  { "id": 1, "nama": { "id": "Aries", "jv": "Aries" }, "rentang": "21 Maret – 19 April", "elemen": { "id": "Api (Domba)", "jv": "Geni (Domba)" }, "watak": { "id": "Berani, kompetitif, penuh energi, egois, tidak sabaran.", "jv": "Wani, kompetitif, kebak energi, egois, mboten sabar." }, "peruntungan": { "id": "Keberuntungan datang saat berani mengambil inisiatif dan memimpin.", "jv": "Keberuntungan rawuh menawi wani njupuk inisiatif lan mimpin." }, "resiko": { "id": "Rentan celaka kecil akibat ceroboh atau terburu-buru.", "jv": "Rentan celaka alit amargi ceroboh utawi terburu-buru." }, "jodoh": "Leo, Sagitarius, Gemini", "karir": { "id": "Pengusaha, atlet, militer, pemimpin proyek.", "jv": "Pengusaha, atlet, militer, pemimpin proyek." } },
-  { "id": 2, "nama": { "id": "Taurus", "jv": "Taurus" }, "rentang": "20 April – 20 Mei", "elemen": { "id": "Tanah (Banteng)", "jv": "Lemah (Banteng)" }, "watak": { "id": "Stabil, sabar, pekerja keras, keras kepala, materialistis.", "jv": "Stabil, sabar, pekerja keras, keras kepala, materialistis." }, "peruntungan": { "id": "Keuangan dan investasi jangka panjang membuahkan hasil manis.", "jv": "Keuangan lan investasi jangka panjang mbuahkan asil manis." }, "resiko": { "id": "Terjebak di zona nyaman terlalu lama atau rugi investasi kaku.", "jv": "Terjebak ing zona nyaman kakehan lami utawi rugi investasi kaku." }, "jodoh": "Virgo, Capricorn, Cancer", "karir": { "id": "Perbankan, keuangan, seni/kuliner, properti.", "jv": "Perbankan, keuangan, seni/kuliner, properti." } },
-  { "id": 3, "nama": { "id": "Gemini", "jv": "Gemini" }, "rentang": "21 Mei – 20 Juni", "elemen": { "id": "Angin (Kembar)", "jv": "Angin (Kembar)" }, "watak": { "id": "Cerdas, komunikatif, mudah adaptasi, inkonsisten, mudah bosan.", "jv": "Cerdas, komunikatif, gampang adaptasi, inkonsisten, gampang bosen." }, "peruntungan": { "id": "Beruntung dalam relasi, jaringan pertemanan, dan peluang dinamis.", "jv": "Beruntung ing relasi, jaringan pertemanan, lan peluang dinamis." }, "resiko": { "id": "Salah komunikasi atau kehilangan fokus karena multitasking.", "jv": "Salah komunikasi utawi kelangan fokus amargi multitasking." }, "jodoh": "Libra, Aquarius, Aries", "karir": { "id": "Jurnalis, PR, marketing, penulis.", "jv": "Jurnalis, PR, marketing, penulis." } },
-  { "id": 4, "nama": { "id": "Cancer", "jv": "Cancer" }, "rentang": "21 Juni – 22 Juli", "elemen": { "id": "Air (Kepiting)", "jv": "Banyu (Kepiting)" }, "watak": { "id": "Intuitif, penuh empati, protektif, moody, pendendam.", "jv": "Intuitif, penuh empati, protektif, moody, pendendam." }, "peruntungan": { "id": "Berkah besar dari usaha keluarga atau bisnis berbasis hunian.", "jv": "Berkah ageng saking usaha kulawarga utawi bisnis basis hunian." }, "resiko": { "id": "Kecemasan berlebih dan mudah diperdaya rasa iba.", "jv": "Kecemasan berlebih lan gampang diperdaya rasa iba." }, "jodoh": "Scorpio, Pisces, Taurus", "karir": { "id": "Psikolog, hospitality/kuliner, pendidikan, perawat.", "jv": "Psikolog, hospitality/kuliner, pendidikan, perawat." } },
-  { "id": 5, "nama": { "id": "Leo", "jv": "Leo" }, "rentang": "23 Juli – 22 Agustus", "elemen": { "id": "Api (Singa)", "jv": "Geni (Singa)" }, "watak": { "id": "Karismatik, percaya diri, dermawan, haus perhatian, angkuh.", "jv": "Karismatik, percaya diri, dermawan, haus perhatian, angkuh." }, "peruntungan": { "id": "Mudah meraih posisi puncak, kehormatan, dan pengakuan publik.", "jv": "Gampang nggayuh posisi puncak, kehormatan, lan pengakuan publik." }, "resiko": { "id": "Jatuh karena gengsi, gaya hidup boros, atau intrik bawahan.", "jv": "Ambruk amargi gengsi, gaya hidup boros, utawi intrik bawahan." }, "jodoh": "Aries, Sagitarius, Libra", "karir": { "id": "Direktur/CEO, entertainer, politisi, manajer seni.", "jv": "Direktur/CEO, entertainer, politisi, manajer seni." } },
-  { "id": 6, "nama": { "id": "Virgo", "jv": "Virgo" }, "rentang": "23 Agustus – 22 September", "elemen": { "id": "Tanah (Gadis)", "jv": "Lemah (Gadis)" }, "watak": { "id": "Analitis, perfeksionis, teliti, kritis berlebihan, mudah cemas.", "jv": "Analitis, perfeksionis, teliti, kritis berlebihan, gampang cemas." }, "peruntungan": { "id": "Kemampuan memecahkan masalah rumit mendatangkan rezeki stabil.", "jv": "Kemampuan mecahaken masalah rumit ndatengaken rezeki stabil." }, "resiko": { "id": "Kelelahan mental (burnout) akibat memikirkan detail kecil.", "jv": "Kelelahan mental (burnout) amargi mikiraken detail alit." }, "jodoh": "Taurus, Capricorn, Scorpio", "karir": { "id": "Peneliti, analis data, dokter/apoteker, akuntan.", "jv": "Peneliti, analis data, dokter/apoteker, akuntan." } },
-  { "id": 7, "nama": { "id": "Libra", "jv": "Libra" }, "rentang": "23 September – 22 Oktober", "elemen": { "id": "Angin (Timbangan)", "jv": "Angin (Timbangan)" }, "watak": { "id": "Adil, diplomatis, ramah, ragu-ragu, benci konflik.", "jv": "Adil, diplomatis, ramah, ragu-ragu, benci konflik." }, "peruntungan": { "id": "Sukses besar melalui kemitraan bisnis dan diplomasi sosial.", "jv": "Sukses ageng lumantar kemitraan bisnis lan diplomasi sosial." }, "resiko": { "id": "Mengalami kerugian karena kesulitan berkata 'tidak'.", "jv": "Ngalami kerugian amargi kangelan ngendika 'mboten'." }, "jodoh": "Gemini, Aquarius, Leo", "karir": { "id": "Pengacara/hakim, diplomat, desainer, konsultan.", "jv": "Pengacara/hakim, diplomat, desainer, konsultan." } },
-  { "id": 8, "nama": { "id": "Scorpio", "jv": "Scorpio" }, "rentang": "23 Oktober – 21 November", "elemen": { "id": "Air (Kalajengking)", "jv": "Banyu (Kalajengking)" }, "watak": { "id": "Fokus, misterius, berdaya juang tinggi, cemburu ekstrem, obsesif.", "jv": "Fokus, misterius, berdaya juang inggil, cemburu ekstrem, obsesif." }, "peruntungan": { "id": "Piawai mengelola sumber daya krisis dan membongkar peluang rahasia.", "jv": "Piawai ngelola sumber daya krisis lan mbongkar peluang rahasia." }, "resiko": { "id": "Konflik sengit akibat dendam atau rahasia masa lalu terbongkar.", "jv": "Konflik sengit amargi dendam utawi rahasia masa lalu terbongkar." }, "jodoh": "Cancer, Pisces, Virgo", "karir": { "id": "Detektif/investigator, bedah/kedokteran, investor.", "jv": "Detektif/investigator, bedah/kedokteran, investor." } },
-  { "id": 9, "nama": { "id": "Sagitarius", "jv": "Sagitarius" }, "rentang": "22 November – 21 Desember", "elemen": { "id": "Api (Pemanah)", "jv": "Geni (Pemanah)" }, "watak": { "id": "Optimis, petualang, berwawasan luas, ceroboh, ceplas-ceplos.", "jv": "Optimis, petualang, berwawasan wiyar, ceroboh, ceplas-ceplos." }, "peruntungan": { "id": "Keberuntungan luar biasa dalam ekspansi global, ekspor, atau pendidikan.", "jv": "Keberuntungan luar biyasa ing ekspansi global, ekspor, utawi pendidikan." }, "resiko": { "id": "Kerugian akibat spekulasi tanpa perhitungan matang.", "jv": "Kerugian amargi spekulasi tanpa perhitungan matang." }, "jodoh": "Aries, Leo, Aquarius", "karir": { "id": "Akademisi, travel/ekspedisi, penerbitan, ekspor-impor.", "jv": "Akademisi, travel/ekspedisi, penerbitan, ekspor-impor." } },
-  { "id": 10, "nama": { "id": "Capricorn", "jv": "Capricorn" }, "rentang": "22 Desember – 19 Januari", "elemen": { "id": "Tanah (Kambing Laut)", "jv": "Lemah (Kambing Laut)" }, "watak": { "id": "Disiplin tinggi, ambisius, realistis, kaku, dingin.", "jv": "Disiplin inggil, ambisius, realistis, kaku, dingin." }, "peruntungan": { "id": "Meraih puncak karir dan kepemilikan aset tangguh di usia matang.", "jv": "Nggayuh puncak karir lan kepemilikan aset tangguh ing usia matang." }, "resiko": { "id": "Krisis relasi keluarga akibat mengabaikan kehidupan personal.", "jv": "Krisis relasi kulawarga amargi ngabaikan kehidupan personal." }, "jodoh": "Taurus, Virgo, Pisces", "karir": { "id": "Birokrat, arsitek, eksekutif korporasi, pengembang.", "jv": "Birokrat, arsitek, eksekutif korporasi, pengembang." } },
-  { "id": 11, "nama": { "id": "Aquarius", "jv": "Aquarius" }, "rentang": "20 Januari – 18 Februari", "elemen": { "id": "Angin (Pembawa Air)", "jv": "Angin (Pembawa Air)" }, "watak": { "id": "Visioner, inovatif, independen, pemberontak, sulit ditebak.", "jv": "Visioner, inovatif, independen, pemberontak, angel ditebak." }, "peruntungan": { "id": "Berkah besar dari temuan inovatif, teknologi, atau komunitas sosial.", "jv": "Berkah ageng saking temuan inovatif, teknologi, utawi komunitas sosial." }, "resiko": { "id": "Diasingkan dari kelompok karena ide terlalu radikal.", "jv": "Diasingkan saking kelompok amargi ide terlalu radikal." }, "jodoh": "Gemini, Libra, Sagitarius", "karir": { "id": "Programmer/IT, ilmuwan, penemu, aktivis kemanusiaan.", "jv": "Programmer/IT, ilmuwan, penemu, aktivis kemanusiaan." } },
-  { "id": 12, "nama": { "id": "Pisces", "jv": "Pisces" }, "rentang": "19 Februari – 20 Maret", "elemen": { "id": "Air (Ikan)", "jv": "Banyu (Ikan)" }, "watak": { "id": "Empatis, artistik, spiritual, mudah dipengaruhi, naif.", "jv": "Empatis, artistik, spiritual, gampang dipengaruhi, naif." }, "peruntungan": { "id": "Karya seni, daya cipta imajinatif, dan intuisi tajam mendatangkan rezeki.", "jv": "Karya seni, daya cipta imajinatif, lan intuisi tajam ndatengaken rezeki." }, "resiko": { "id": "Sering dimanfaatkan secara finansial oleh orang manipulatif.", "jv": "Sering dimanfaataken secara finansial dening tiyang manipulatif." }, "jodoh": "Cancer, Scorpio, Capricorn", "karir": { "id": "Musisi/seniman, spiritualis, psikoterapis, relawan.", "jv": "Musisi/seniman, spiritualis, psikoterapis, relawan." } }
+  {
+    "id": 1,
+    "nama": {
+      "id": "Aries",
+      "jv": "Aries"
+    },
+    "rentang": {
+      "id": "21 Maret – 19 April",
+      "jv": "21 Maret – 19 April"
+    },
+    "elemen": {
+      "id": "Api (Domba)",
+      "jv": "Geni (Domba)"
+    },
+    "watak": {
+      "id": "Berani, kompetitif, penuh energi, egois, tidak sabaran.",
+      "jv": "Wani, kompetitif, kebak energi, egois, mboten sabar."
+    },
+    "peruntungan": {
+      "id": "Keberuntungan datang saat berani mengambil inisiatif dan memimpin.",
+      "jv": "Keberuntungan rawuh menawi wani njupuk inisiatif lan mimpin."
+    },
+    "resiko": {
+      "id": "Rentan celaka kecil akibat ceroboh atau terburu-buru.",
+      "jv": "Rentan celaka alit amargi ceroboh utawi terburu-buru."
+    },
+    "jodoh": {
+      "id": "Leo, Sagitarius, Gemini",
+      "jv": "Leo, Sagitarius, Gemini"
+    },
+    "karir": {
+      "id": "Pengusaha, atlet, militer, pemimpin proyek.",
+      "jv": "Pengusaha, atlet, militer, pemimpin proyek."
+    }
+  },
+  {
+    "id": 2,
+    "nama": {
+      "id": "Taurus",
+      "jv": "Taurus"
+    },
+    "rentang": {
+      "id": "20 April – 20 Mei",
+      "jv": "20 April – 20 Mei"
+    },
+    "elemen": {
+      "id": "Tanah (Banteng)",
+      "jv": "Lemah (Banteng)"
+    },
+    "watak": {
+      "id": "Stabil, sabar, pekerja keras, keras kepala, materialistis.",
+      "jv": "Stabil, sabar, pekerja keras, keras kepala, materialistis."
+    },
+    "peruntungan": {
+      "id": "Keuangan dan investasi jangka panjang membuahkan hasil manis.",
+      "jv": "Keuangan lan investasi jangka panjang mbuahkan asil manis."
+    },
+    "resiko": {
+      "id": "Terjebak di zona nyaman terlalu lama atau rugi investasi kaku.",
+      "jv": "Terjebak ing zona nyaman kakehan lami utawi rugi investasi kaku."
+    },
+    "jodoh": {
+      "id": "Virgo, Capricorn, Cancer",
+      "jv": "Virgo, Capricorn, Cancer"
+    },
+    "karir": {
+      "id": "Perbankan, keuangan, seni/kuliner, properti.",
+      "jv": "Perbankan, keuangan, seni/kuliner, properti."
+    }
+  },
+  {
+    "id": 3,
+    "nama": {
+      "id": "Gemini",
+      "jv": "Gemini"
+    },
+    "rentang": {
+      "id": "21 Mei – 20 Juni",
+      "jv": "21 Mei – 20 Juni"
+    },
+    "elemen": {
+      "id": "Angin (Kembar)",
+      "jv": "Angin (Kembar)"
+    },
+    "watak": {
+      "id": "Cerdas, komunikatif, mudah adaptasi, inkonsisten, mudah bosan.",
+      "jv": "Cerdas, komunikatif, gampang adaptasi, inkonsisten, gampang bosen."
+    },
+    "peruntungan": {
+      "id": "Beruntung dalam relasi, jaringan pertemanan, dan peluang dinamis.",
+      "jv": "Beruntung ing relasi, jaringan pertemanan, lan peluang dinamis."
+    },
+    "resiko": {
+      "id": "Salah komunikasi atau kehilangan fokus karena multitasking.",
+      "jv": "Salah komunikasi utawi kelangan fokus amargi multitasking."
+    },
+    "jodoh": {
+      "id": "Libra, Aquarius, Aries",
+      "jv": "Libra, Aquarius, Aries"
+    },
+    "karir": {
+      "id": "Jurnalis, PR, marketing, penulis.",
+      "jv": "Jurnalis, PR, marketing, penulis."
+    }
+  },
+  {
+    "id": 4,
+    "nama": {
+      "id": "Cancer",
+      "jv": "Cancer"
+    },
+    "rentang": {
+      "id": "21 Juni – 22 Juli",
+      "jv": "21 Juni – 22 Juli"
+    },
+    "elemen": {
+      "id": "Air (Kepiting)",
+      "jv": "Banyu (Kepiting)"
+    },
+    "watak": {
+      "id": "Intuitif, penuh empati, protektif, moody, pendendam.",
+      "jv": "Intuitif, penuh empati, protektif, moody, pendendam."
+    },
+    "peruntungan": {
+      "id": "Berkah besar dari usaha keluarga atau bisnis berbasis hunian.",
+      "jv": "Berkah ageng saking usaha kulawarga utawi bisnis basis hunian."
+    },
+    "resiko": {
+      "id": "Kecemasan berlebih dan mudah diperdaya rasa iba.",
+      "jv": "Kecemasan berlebih lan gampang diperdaya rasa iba."
+    },
+    "jodoh": {
+      "id": "Scorpio, Pisces, Taurus",
+      "jv": "Scorpio, Pisces, Taurus"
+    },
+    "karir": {
+      "id": "Psikolog, hospitality/kuliner, pendidikan, perawat.",
+      "jv": "Psikolog, hospitality/kuliner, pendidikan, perawat."
+    }
+  },
+  {
+    "id": 5,
+    "nama": {
+      "id": "Leo",
+      "jv": "Leo"
+    },
+    "rentang": {
+      "id": "23 Juli – 22 Agustus",
+      "jv": "23 Juli – 22 Agustus"
+    },
+    "elemen": {
+      "id": "Api (Singa)",
+      "jv": "Geni (Singa)"
+    },
+    "watak": {
+      "id": "Karismatik, percaya diri, dermawan, haus perhatian, angkuh.",
+      "jv": "Karismatik, percaya diri, dermawan, haus perhatian, angkuh."
+    },
+    "peruntungan": {
+      "id": "Mudah meraih posisi puncak, kehormatan, dan pengakuan publik.",
+      "jv": "Gampang nggayuh posisi puncak, kehormatan, lan pengakuan publik."
+    },
+    "resiko": {
+      "id": "Jatuh karena gengsi, gaya hidup boros, atau intrik bawahan.",
+      "jv": "Ambruk amargi gengsi, gaya hidup boros, utawi intrik bawahan."
+    },
+    "jodoh": {
+      "id": "Aries, Sagitarius, Libra",
+      "jv": "Aries, Sagitarius, Libra"
+    },
+    "karir": {
+      "id": "Direktur/CEO, entertainer, politisi, manajer seni.",
+      "jv": "Direktur/CEO, entertainer, politisi, manajer seni."
+    }
+  },
+  {
+    "id": 6,
+    "nama": {
+      "id": "Virgo",
+      "jv": "Virgo"
+    },
+    "rentang": {
+      "id": "23 Agustus – 22 September",
+      "jv": "23 Agustus – 22 September"
+    },
+    "elemen": {
+      "id": "Tanah (Gadis)",
+      "jv": "Lemah (Gadis)"
+    },
+    "watak": {
+      "id": "Analitis, perfeksionis, teliti, kritis berlebihan, mudah cemas.",
+      "jv": "Analitis, perfeksionis, teliti, kritis berlebihan, gampang cemas."
+    },
+    "peruntungan": {
+      "id": "Kemampuan memecahkan masalah rumit mendatangkan rezeki stabil.",
+      "jv": "Kemampuan mecahaken masalah rumit ndatengaken rezeki stabil."
+    },
+    "resiko": {
+      "id": "Kelelahan mental (burnout) akibat memikirkan detail kecil.",
+      "jv": "Kelelahan mental (burnout) amargi mikiraken detail alit."
+    },
+    "jodoh": {
+      "id": "Taurus, Capricorn, Scorpio",
+      "jv": "Taurus, Capricorn, Scorpio"
+    },
+    "karir": {
+      "id": "Peneliti, analis data, dokter/apoteker, akuntan.",
+      "jv": "Peneliti, analis data, dokter/apoteker, akuntan."
+    }
+  },
+  {
+    "id": 7,
+    "nama": {
+      "id": "Libra",
+      "jv": "Libra"
+    },
+    "rentang": {
+      "id": "23 September – 22 Oktober",
+      "jv": "23 September – 22 Oktober"
+    },
+    "elemen": {
+      "id": "Angin (Timbangan)",
+      "jv": "Angin (Timbangan)"
+    },
+    "watak": {
+      "id": "Adil, diplomatis, ramah, ragu-ragu, benci konflik.",
+      "jv": "Adil, diplomatis, ramah, ragu-ragu, benci konflik."
+    },
+    "peruntungan": {
+      "id": "Sukses besar melalui kemitraan bisnis dan diplomasi sosial.",
+      "jv": "Sukses ageng lumantar kemitraan bisnis lan diplomasi sosial."
+    },
+    "resiko": {
+      "id": "Mengalami kerugian karena kesulitan berkata 'tidak'.",
+      "jv": "Ngalami kerugian amargi kangelan ngendika 'mboten'."
+    },
+    "jodoh": {
+      "id": "Gemini, Aquarius, Leo",
+      "jv": "Gemini, Aquarius, Leo"
+    },
+    "karir": {
+      "id": "Pengacara/hakim, diplomat, desainer, konsultan.",
+      "jv": "Pengacara/hakim, diplomat, desainer, konsultan."
+    }
+  },
+  {
+    "id": 8,
+    "nama": {
+      "id": "Scorpio",
+      "jv": "Scorpio"
+    },
+    "rentang": {
+      "id": "23 Oktober – 21 November",
+      "jv": "23 Oktober – 21 November"
+    },
+    "elemen": {
+      "id": "Air (Kalajengking)",
+      "jv": "Banyu (Kalajengking)"
+    },
+    "watak": {
+      "id": "Fokus, misterius, berdaya juang tinggi, cemburu ekstrem, obsesif.",
+      "jv": "Fokus, misterius, berdaya juang inggil, cemburu ekstrem, obsesif."
+    },
+    "peruntungan": {
+      "id": "Piawai mengelola sumber daya krisis dan membongkar peluang rahasia.",
+      "jv": "Piawai ngelola sumber daya krisis lan mbongkar peluang rahasia."
+    },
+    "resiko": {
+      "id": "Konflik sengit akibat dendam atau rahasia masa lalu terbongkar.",
+      "jv": "Konflik sengit amargi dendam utawi rahasia masa lalu terbongkar."
+    },
+    "jodoh": {
+      "id": "Cancer, Pisces, Virgo",
+      "jv": "Cancer, Pisces, Virgo"
+    },
+    "karir": {
+      "id": "Detektif/investigator, bedah/kedokteran, investor.",
+      "jv": "Detektif/investigator, bedah/kedokteran, investor."
+    }
+  },
+  {
+    "id": 9,
+    "nama": {
+      "id": "Sagitarius",
+      "jv": "Sagitarius"
+    },
+    "rentang": {
+      "id": "22 November – 21 Desember",
+      "jv": "22 November – 21 Desember"
+    },
+    "elemen": {
+      "id": "Api (Pemanah)",
+      "jv": "Geni (Pemanah)"
+    },
+    "watak": {
+      "id": "Optimis, petualang, berwawasan luas, ceroboh, ceplas-ceplos.",
+      "jv": "Optimis, petualang, berwawasan wiyar, ceroboh, ceplas-ceplos."
+    },
+    "peruntungan": {
+      "id": "Keberuntungan luar biasa dalam ekspansi global, ekspor, atau pendidikan.",
+      "jv": "Keberuntungan luar biyasa ing ekspansi global, ekspor, utawi pendidikan."
+    },
+    "resiko": {
+      "id": "Kerugian akibat spekulasi tanpa perhitungan matang.",
+      "jv": "Kerugian amargi spekulasi tanpa perhitungan matang."
+    },
+    "jodoh": {
+      "id": "Aries, Leo, Aquarius",
+      "jv": "Aries, Leo, Aquarius"
+    },
+    "karir": {
+      "id": "Akademisi, travel/ekspedisi, penerbitan, ekspor-impor.",
+      "jv": "Akademisi, travel/ekspedisi, penerbitan, ekspor-impor."
+    }
+  },
+  {
+    "id": 10,
+    "nama": {
+      "id": "Capricorn",
+      "jv": "Capricorn"
+    },
+    "rentang": {
+      "id": "22 Desember – 19 Januari",
+      "jv": "22 Desember – 19 Januari"
+    },
+    "elemen": {
+      "id": "Tanah (Kambing Laut)",
+      "jv": "Lemah (Kambing Laut)"
+    },
+    "watak": {
+      "id": "Disiplin tinggi, ambisius, realistis, kaku, dingin.",
+      "jv": "Disiplin inggil, ambisius, realistis, kaku, dingin."
+    },
+    "peruntungan": {
+      "id": "Meraih puncak karir dan kepemilikan aset tangguh di usia matang.",
+      "jv": "Nggayuh puncak karir lan kepemilikan aset tangguh ing usia matang."
+    },
+    "resiko": {
+      "id": "Krisis relasi keluarga akibat mengabaikan kehidupan personal.",
+      "jv": "Krisis relasi kulawarga amargi ngabaikan kehidupan personal."
+    },
+    "jodoh": {
+      "id": "Taurus, Virgo, Pisces",
+      "jv": "Taurus, Virgo, Pisces"
+    },
+    "karir": {
+      "id": "Birokrat, arsitek, eksekutif korporasi, pengembang.",
+      "jv": "Birokrat, arsitek, eksekutif korporasi, pengembang."
+    }
+  },
+  {
+    "id": 11,
+    "nama": {
+      "id": "Aquarius",
+      "jv": "Aquarius"
+    },
+    "rentang": {
+      "id": "20 Januari – 18 Februari",
+      "jv": "20 Januari – 18 Februari"
+    },
+    "elemen": {
+      "id": "Angin (Pembawa Air)",
+      "jv": "Angin (Pembawa Air)"
+    },
+    "watak": {
+      "id": "Visioner, inovatif, independen, pemberontak, sulit ditebak.",
+      "jv": "Visioner, inovatif, independen, pemberontak, angel ditebak."
+    },
+    "peruntungan": {
+      "id": "Berkah besar dari temuan inovatif, teknologi, atau komunitas sosial.",
+      "jv": "Berkah ageng saking temuan inovatif, teknologi, utawi komunitas sosial."
+    },
+    "resiko": {
+      "id": "Diasingkan dari kelompok karena ide terlalu radikal.",
+      "jv": "Diasingkan saking kelompok amargi ide terlalu radikal."
+    },
+    "jodoh": {
+      "id": "Gemini, Libra, Sagitarius",
+      "jv": "Gemini, Libra, Sagitarius"
+    },
+    "karir": {
+      "id": "Programmer/IT, ilmuwan, penemu, aktivis kemanusiaan.",
+      "jv": "Programmer/IT, ilmuwan, penemu, aktivis kemanusiaan."
+    }
+  },
+  {
+    "id": 12,
+    "nama": {
+      "id": "Pisces",
+      "jv": "Pisces"
+    },
+    "rentang": {
+      "id": "19 Februari – 20 Maret",
+      "jv": "19 Februari – 20 Maret"
+    },
+    "elemen": {
+      "id": "Air (Ikan)",
+      "jv": "Banyu (Ikan)"
+    },
+    "watak": {
+      "id": "Empatis, artistik, spiritual, mudah dipengaruhi, naif.",
+      "jv": "Empatis, artistik, spiritual, gampang dipengaruhi, naif."
+    },
+    "peruntungan": {
+      "id": "Karya seni, daya cipta imajinatif, dan intuisi tajam mendatangkan rezeki.",
+      "jv": "Karya seni, daya cipta imajinatif, lan intuisi tajam ndatengaken rezeki."
+    },
+    "resiko": {
+      "id": "Sering dimanfaatkan secara finansial oleh orang manipulatif.",
+      "jv": "Sering dimanfaataken secara finansial dening tiyang manipulatif."
+    },
+    "jodoh": {
+      "id": "Cancer, Scorpio, Capricorn",
+      "jv": "Cancer, Scorpio, Capricorn"
+    },
+    "karir": {
+      "id": "Musisi/seniman, spiritualis, psikoterapis, relawan.",
+      "jv": "Musisi/seniman, spiritualis, psikoterapis, relawan."
+    }
+  }
 ]

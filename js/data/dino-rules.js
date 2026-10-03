@@ -5,7 +5,7 @@
  * Rujukan resmi:
  * - database_nujum - dino_gede.csv (71 kombinasi resmi)
  * - database_nujum - dino_ijo.csv (74 kombinasi resmi)
- * - Primbon Pawukon Keraton Surakarta & Ngayogyakarta Hadiningrat
+ * - Primbon Pawukon Tradisi Kasampurnan Jawa
  */
 
 (function (root) {

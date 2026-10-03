@@ -1542,7 +1542,7 @@ export function renderPustakaReferensiView(container) {
       <!-- Info Row -->
       <div class="flex items-center justify-between text-xs text-sogan-400 px-1">
         <span>Nampilaken <strong class="text-prada-light">${list.length}</strong> Dokumen Paugeran Resmi</span>
-        <span class="text-amber-300/80 font-mono text-[11px]">Standar Pakem Keraton Surakarta &amp; Yogyakarta</span>
+        <span class="text-amber-300/80 font-mono text-[11px]">Standar Pakem Tradisi Leluhur Jawa</span>
       </div>
 
       <!-- Grid Cards Dokumen Referensi -->
@@ -1718,7 +1718,7 @@ export function openPustakaReferensiReader(docId) {
       ${doc.kategori === 'busana-batik' ? `
         <div class="space-y-5">
           <h4 class="font-marcellus text-base font-bold text-amber-200 border-b border-sogan-800/80 pb-2">
-            Motif Batik Larangan Keraton &amp; Busana Adat
+            Motif Batik Adiluhung &amp; Busana Adat Tradisi
           </h4>
 
           <!-- Motif Batik Larangan -->

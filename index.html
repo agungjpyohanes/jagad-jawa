@@ -202,13 +202,10 @@
                   </div>
                   <div class="text-left">
                     <div class="font-bold text-amber-100 group-hover/item:text-prada-light">
-                      <span class="pemula-only">Petung Wiwit Ternak</span>
-                      <span class="ahli-only">Petung Kehidupan</span>
+                      <span class="pemula-only" data-i18n="nav_ternak_pemula">Petung Wiwit Ternak</span>
+                      <span class="ahli-only" data-i18n="nav_ternak">Petung Kehidupan</span>
                     </div>
-                    <div class="text-[10px] text-sogan-400">
-                      <span class="pemula-only">Pitedah Ternak Gajah/Suku</span>
-                      <span class="ahli-only">Ternak, Loro, &amp; Geblak</span>
-                    </div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_ternak_sub">Ternak, Loro, &amp; Geblak</div>
                   </div>
                 </button>
                 <button onclick="switchTab('sasmitha')" class="nav-sublink group/item" data-tab="sasmitha">
@@ -217,13 +214,10 @@
                   </div>
                   <div class="text-left">
                     <div class="font-bold text-amber-100 group-hover/item:text-prada-light">
-                      <span class="pemula-only">Sasmitha (Impen &amp; Kedut)</span>
-                      <span class="ahli-only">Sasmitha (Tanda Alam &amp; Awak)</span>
+                      <span class="pemula-only" data-i18n="nav_sasmitha_pemula">Sasmitha (Impen &amp; Kedut)</span>
+                      <span class="ahli-only" data-i18n="nav_sasmitha_ahli">Sasmitha (Tanda Alam &amp; Tubuh)</span>
                     </div>
-                    <div class="text-[10px] text-sogan-400">
-                      <span class="pemula-only">Tafsir Impen &amp; Pratanda Kedutan</span>
-                      <span class="ahli-only">Impen, Kedut, Gerhana, Lindu, Tejo</span>
-                    </div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_sasmitha_sub">Impen, Kedut, Gerhana, Lindu</div>
                   </div>
                 </button>
               </div>
@@ -585,13 +579,13 @@
               </button>
               <button onclick="switchTab('ternak')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="ternak">
                 <i class="fa-solid fa-paw w-4 text-prada"></i>
-                <span class="pemula-only">Petung Wiwit Ternak</span>
-                <span class="ahli-only">Petung Kehidupan (Ternak, Loro, Geblak)</span>
+                <span class="pemula-only" data-i18n="nav_ternak_pemula">Petung Wiwit Ternak</span>
+                <span class="ahli-only" data-i18n="nav_ternak_ahli">Petung Kehidupan (Ternak, Loro, Geblak)</span>
               </button>
               <button onclick="switchTab('sasmitha')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="sasmitha">
                 <i class="fa-solid fa-eye w-4 text-prada"></i>
-                <span class="pemula-only">Sasmitha (Impen &amp; Kedut)</span>
-                <span class="ahli-only">Sasmitha (Tanda Alam &amp; Tubuh)</span>
+                <span class="pemula-only" data-i18n="nav_sasmitha_pemula">Sasmitha (Impen &amp; Kedut)</span>
+                <span class="ahli-only" data-i18n="nav_sasmitha_ahli">Sasmitha (Tanda Alam &amp; Tubuh)</span>
               </button>
             </div>
           </div>
@@ -623,7 +617,7 @@
           <!-- 5. Seni & Sastra -->
           <div class="pt-1">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-masks-theater text-[9px]"></i> <span>Seni &amp; Sastra</span>
+              <i class="fa-solid fa-masks-theater text-[9px]"></i> <span data-i18n="nav_budaya">Seni &amp; Sastra</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('aksara')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="aksara">
@@ -647,12 +641,14 @@
           <!-- 6. Laporan & Ekspor Dokumen -->
           <div class="pt-1 ahli-only">
             <div class="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-prada/80 flex items-center gap-2 border-b border-sogan-800/60 pb-1 mb-1">
-              <i class="fa-solid fa-file-pdf text-[9px]"></i> Laporan &amp; Ekspor Dokumen
+              <i class="fa-solid fa-file-pdf text-[9px]"></i> <span data-i18n="nav_laporan_sub">Laporan &amp; Ekspor Dokumen</span>
             </div>
             <div class="space-y-0.5 pl-1">
               <button onclick="switchTab('laporan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="laporan">
-                <i class="fa-solid fa-file-pdf w-4 text-prada"></i> <span>Pusat Laporan Keraton</span>
+                <i class="fa-solid fa-file-pdf w-4 text-prada"></i> <span data-i18n="nav_laporan">Pusat Laporan Tradisi Luhur</span>
               </button>
+            </div>
+          </div>
             </div>
           </div>
         </div>
@@ -660,7 +656,7 @@
         <!-- Drawer Footer -->
         <div class="px-4 py-2.5 border-t border-sogan-800/80 bg-keraton/95 flex items-center justify-between text-[11px] text-sogan-400">
           <span>Jagad Jawa &bull; 2026</span>
-          <span class="font-mono text-[10px] text-prada/80">Keraton v4</span>
+          <span class="font-mono text-[10px] text-prada/80">Tradisi v4</span>
         </div>
       </aside>
     </div>
@@ -747,14 +743,14 @@
         <div class="relative z-10 text-center space-y-4 max-w-4xl mx-auto px-4">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-prada/50 bg-sogan-950/80 text-xs font-semibold text-prada float-badge shadow-lg shadow-prada/15">
             <i class="fa-solid fa-feather-pointed"></i>
-            <span>Warisan Adiluhung</span>
+            <span data-i18n="hero_badge">Warisan Adiluhung</span>
           </div>
 
-          <h1 class="font-marcellus text-3xl sm:text-5xl lg:text-6xl font-bold tracking-widest gold-gradient-text amber-glow-text leading-tight uppercase">
+          <h1 class="font-marcellus text-3xl sm:text-5xl lg:text-6xl font-bold tracking-widest gold-gradient-text amber-glow-text leading-tight uppercase" data-i18n="hero_title">
             MENYELAMI KEARIFAN LOKAL
           </h1>
 
-          <p class="font-sans font-light text-sm sm:text-base lg:text-lg text-sogan-200/90 leading-relaxed max-w-2xl mx-auto">
+          <p class="font-sans font-light text-sm sm:text-base lg:text-lg text-sogan-200/90 leading-relaxed max-w-2xl mx-auto" data-i18n="hero_desc">
             Menjelajahi Kebudayaan Luhur Nusantara dalam ruang kosmik berestetika adiluhung — komputasi kalender Jawa, primbon petungan, studio aksara, kelir wayang, dan alunan gamelan.
           </p>
         </div>
@@ -775,16 +771,16 @@
               <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-prada/20 to-sogan-950 border border-prada/40 flex items-center justify-center text-prada text-xl group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
                 <i class="fa-solid fa-book-open-reader"></i>
               </div>
-              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider">STORIES</span>
+              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider" data-i18n="card_stories_tag">STORIES</span>
             </div>
-            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition">
+            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition" data-i18n="card_stories_title">
               Explore Stories
             </h3>
-            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed">
+            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed" data-i18n="card_stories_desc">
               Falsafah hidup, pitutur luhur para leluhur Jawa, serat piwulang, serta panggung kelir wayang purwa.
             </p>
             <div class="mt-5 flex items-center gap-2 text-xs text-prada font-medium">
-              <span>Buka Falsafah</span>
+              <span data-i18n="card_stories_action">Buka Falsafah</span>
               <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
             </div>
           </div>
@@ -796,16 +792,16 @@
               <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-prada/20 to-sogan-950 border border-prada/40 flex items-center justify-center text-prada text-xl group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
                 <i class="fa-solid fa-compass"></i>
               </div>
-              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider">ARCHIVE</span>
+              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider" data-i18n="card_archive_tag">ARCHIVE</span>
             </div>
-            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition">
+            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition" data-i18n="card_archive_title">
               Cultural Archive
             </h3>
-            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed">
+            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed" data-i18n="card_archive_desc">
               Arsip komputasi kalender Jawa, siklus Pranata Mangsa, nujum weton kepribadian, serta pitung perjodohan.
             </p>
             <div class="mt-5 flex items-center gap-2 text-xs text-prada font-medium">
-              <span>Buka Arsip</span>
+              <span data-i18n="card_archive_action">Buka Arsip</span>
               <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
             </div>
           </div>
@@ -817,16 +813,16 @@
               <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-prada/20 to-sogan-950 border border-prada/40 flex items-center justify-center text-prada text-xl group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.4)] transition-all">
                 <i class="fa-solid fa-users-viewfinder"></i>
               </div>
-              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider">COMMUNITY</span>
+              <span class="text-[9px] font-mono text-prada/90 bg-sogan-950/90 px-2 py-0.5 rounded border border-prada/30 tracking-wider" data-i18n="card_community_tag">COMMUNITY</span>
             </div>
-            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition">
+            <h3 class="font-marcellus text-xl font-bold text-prada mt-4 group-hover:text-prada-light transition" data-i18n="card_community_title">
               Community
             </h3>
-            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed">
+            <p class="font-sans font-light text-xs text-sogan-300 mt-1.5 leading-relaxed" data-i18n="card_community_desc">
               Pawiyatan gamelan maya interaktif, studio transliterasi aksara Hanacaraka, dan ruang kawruh budaya.
             </p>
             <div class="mt-5 flex items-center gap-2 text-xs text-prada font-medium">
-              <span>Masuk Pawiyatan</span>
+              <span data-i18n="card_community_action">Masuk Pawiyatan</span>
               <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1.5 transition-transform"></i>
             </div>
           </div>
@@ -1035,18 +1031,18 @@
       <!-- Controls Panel -->
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Kalender Jawa &middot; Pranata Mangsa</h2>
-          <p class="text-xs text-sogan-300 mt-0.5">Dihitung otomatis berbasis siklus Pasaran (5), Wuku (210), dan Tahun Jawa/Hijriyah.</p>
+          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_kalender_title">Kalender Jawa &middot; Pranata Mangsa</h2>
+          <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_kalender_desc">Dihitung otomatis berbasis siklus Pasaran (5), Wuku (210), dan Tahun Jawa/Hijriyah.</p>
         </div>
 
         <!-- Filter Form -->
         <div class="flex flex-wrap items-center gap-3 text-xs">
           <div class="flex flex-col gap-1">
-            <label class="font-mono text-[10px] uppercase text-prada">Bulan</label>
+            <label class="font-mono text-[10px] uppercase text-prada" data-i18n="cal_label_bulan">Bulan</label>
             <select id="bulanSel" onchange="renderKalender()" class="bg-keraton border border-sogan-700 rounded-lg px-3 py-2 text-sogan-100 font-semibold focus:border-prada outline-none"></select>
           </div>
           <div class="flex flex-col gap-1">
-            <label class="font-mono text-[10px] uppercase text-prada">Tahun Masehi</label>
+            <label class="font-mono text-[10px] uppercase text-prada" data-i18n="cal_label_tahun">Tahun Masehi</label>
             <input type="number" id="tahunInput" value="2026" min="1900" max="2200" onchange="renderKalender()" class="bg-keraton border border-sogan-700 rounded-lg px-3 py-2 text-sogan-100 font-semibold w-24 focus:border-prada outline-none">
           </div>
           <button type="button" id="btnResetKalenderToday" onclick="resetKalenderToday()" class="mt-4 px-3.5 py-2 rounded-lg bg-sogan-900/90 border border-sogan-700/80 hover:border-prada text-sogan-200 hover:text-white font-semibold hover:brightness-110 transition shadow flex items-center gap-1.5 cursor-pointer" title="Kondur dhateng sasi lan dinten saiki (Reset Current Date)">
@@ -1203,8 +1199,8 @@
 
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Konversi &amp; Penjelajah Tanggal Jawa</h2>
-        <p class="text-xs text-sogan-300 mt-0.5">Konversi otomatis kalender Masehi ke penanggalan Sultan Agungan (Saka Jawa / Anno Javanico - AJ): Tanggal, Sasi, Taun Siklus 8 (Windu), Weton, Wuku, Pranata Mangsa, dan Zodiak Surya.</p>
+        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_konversi_title">Konversi Tanggal Jawa (Sultan Agungan &amp; Masehi)</h2>
+        <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_konversi_desc">Konversi otomatis kalender Masehi ke penanggalan Sultan Agungan (Saka Jawa / Anno Javanico - AJ): Tanggal, Sasi, Taun Siklus 8 (Windu), Weton, Wuku, Pranata Mangsa, dan Zodiak Surya.</p>
       </div>
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 space-y-4 text-xs">
@@ -1235,10 +1231,11 @@
       
 
 
+
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Kepribadian &amp; Literasi Budaya</h2>
-          <p class="text-xs text-sogan-300 mt-0.5">Analisis 6 Dimensi Bincil Jawa, Siklus Tahunan, Karakter Dasar 9 Tipe, Faalakiah 12 Nabi, serta Komparasi Sinergi Relasi Non-Jodoh.</p>
+          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_nujum_title">Nujum Kepribadian &amp; Primbon</h2>
+          <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_nujum_desc">Analisis 6 Dimensi Bincil Jawa, Siklus Tahunan, Karakter Dasar 9 Tipe, Faalakiah 12 Nabi, serta Komparasi Sinergi Relasi Non-Jodoh.</p>
         </div>
         <button onclick="openGlosariumNujumModal()" class="px-3.5 py-2 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada text-xs font-semibold flex items-center gap-2 transition shadow-sm">
           <i class="fa-solid fa-book-bookmark text-amber-400"></i>
@@ -1427,8 +1424,8 @@
 
       
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Nujum Perjodohan Jawa &middot; Pitung Jawa</h2>
-        <p class="text-xs text-sogan-300 mt-0.5">Perhitungan kecocokan pasangan berdasarkan 7 metode (Neptu I/II/III, Aksara IV/V/VI, dan Kombinasi Hari VII).</p>
+        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_jodoh_title">Petung Perjodohan (Pitung Jawa)</h2>
+        <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_jodoh_desc">Kesesuaian pernikahan berdasarkan neptu, babon wuku, aksara lintang, dan sisa modulo 4/5/7/8.</p>
       </div>
 
       <!-- Pemilih Status Hubungan (Belum Menikah vs Sudah Menikah) -->
@@ -1551,7 +1548,7 @@
         <button onclick="hitungNujumPerjodohan()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
           <i class="fa-solid fa-heart mr-1"></i> Hitung Nujum Perjodohan
         </button>
-        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="ahli-only px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pitung Perjodohan Kertas Kuno Keraton">
+        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="ahli-only px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pitung Perjodohan Kertas Kuno Tradisi Luhur">
           <i class="fa-solid fa-scroll"></i> <span>Ekspor PDF</span>
         </button>
         <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -1642,12 +1639,8 @@
             <i class="fa-solid fa-clock text-prada"></i> Pergantian Dino Jam 18.00 (Surup)
           </span>
         </div>
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">
-          Pengetan Tilar Donyo &amp; Peringatan Arwah
-        </h2>
-        <p class="text-xs text-sogan-300">
-          Kalkulator dan panduan praktis 7 milestone haul leluhur: Dina Geblak, Nelung Dina (3), Mitung Dina (7), Matangpuluh (40), Nyatus (100), Pendhak Pisan (1 thn), Pendhak Pindho (2 thn), dumugi Nyewu (1000 dina).
-        </p>
+        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text"><span data-i18n="tab_selametan_title">Peringatan Wafat (Selametan)</span></h2>
+        <p class="text-xs text-sogan-300"><span data-i18n="tab_selametan_desc">Perhitungan hari geblak, 3 hari, 7 hari, 40 hari, 100 hari, pendak 1, pendak 2, hingga nyewu (1000 hari).</span></p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1701,7 +1694,7 @@
             <button onclick="hitungSelametan()" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm">
               Hitung Selametan
             </button>
-            <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="ahli-only px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pengetan Tilar Donyo Kertas Kuno Keraton">
+            <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="ahli-only px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pengetan Tilar Donyo Kertas Kuno Tradisi Luhur">
               <i class="fa-solid fa-scroll"></i> <span>Ekspor PDF</span>
             </button>
             <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -1763,12 +1756,8 @@
                 Paugeran Palakrama
               </span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
-              Petung Ijab <span class="text-prada">Kabul</span>
-            </h2>
-            <p class="text-xs text-sogan-300">
-              Pétungan dinten ijab adhedhasar sistem Neptu Khusus Ijab, babon wuku, surasa weton, lan panjampet sasi/windu.
-            </p>
+            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5"><span data-i18n="tab_ijab_title">Petung Ijab (Palakrama)</span></h2>
+            <p class="text-xs text-sogan-300"><span data-i18n="tab_ijab_desc">Sistem Neptu Khusus Ijab, babon wuku pernikahan, surasa weton, dan keselarasan sasi/tahun.</span></p>
           </div>
         </div>
 
@@ -1861,12 +1850,8 @@
                 Kearifan Arsitektur Tradisional
               </span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
-              Petung Omah &amp; <span class="text-prada">Cempuri</span>
-            </h2>
-            <p class="text-xs text-sogan-300">
-              Paugeran ngedekake omah, boyongan, larangan arah, lawangan cempuri (9 posisi), sarta pamilihing siti/lemah.
-            </p>
+            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5"><span data-i18n="tab_omah_title">Petung Omah &amp; Cempuri</span></h2>
+            <p class="text-xs text-sogan-300"><span data-i18n="tab_omah_desc">Pedoman mendirikan rumah, boyongan, sembilan posisi pintu cempuri, dan larangan arah.</span></p>
           </div>
         </div>
 
@@ -2015,13 +2000,10 @@
                 <span class="ahli-only">Petung Kehidupan Padintenan</span>
               </span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
-              <span class="pemula-only">Petung Wiwit <span class="text-prada">Ternak</span></span>
-              <span class="ahli-only">Petung Kehidupan <span class="text-prada">(Ternak, Loro, &amp; Geblak)</span></span>
-            </h2>
+            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5"><span data-i18n="tab_kehidupan_title">Petung Kehidupan (Ternak, Penyakit, Geblak)</span></h2>
             <p class="text-xs text-sogan-300">
-              <span class="pemula-only">Pétungan wiwit ngingu raja-kaya miturut 4 kategori tradisi (Gajah, Suku, Watu, Buto).</span>
-              <span class="ahli-only">Pétungan wiwit ternak, jaluran loro lan tombo, sarta wiradat 40 dina geblak kanthi paugeran Neptu App.</span>
+              <span class="pemula-only" data-i18n="tab_kehidupan_desc">Pétungan wiwit ngingu raja-kaya miturut 4 kategori tradisi (Gajah, Suku, Watu, Buto).</span>
+              <span class="ahli-only" data-i18n="tab_kehidupan_desc">Pétungan wiwit ternak, jaluran loro lan tombo, sarta wiradat 40 dina geblak kanthi paugeran Neptu App.</span>
             </p>
           </div>
         </div>
@@ -2101,7 +2083,7 @@
             <label class="block text-xs font-mono uppercase tracking-wider text-sogan-300 mb-1">Kategori / Kriteria</label>
             <select id="ternakSearchKategori" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition">
               <option value="becik" selected>Dino Becik: Gajah &amp; Suku</option>
-              <option value="gajah">Kategori Gajah (Kraton / Luhur)</option>
+              <option value="gajah">Kategori Gajah (Agung / Luhur)</option>
               <option value="suku">Kategori Suku (Sugih / Mulyo)</option>
               <option value="watu">Kategori Watu (Netral / Prihatin)</option>
               <option value="buto">Kategori Buto (Waspada)</option>
@@ -2139,13 +2121,10 @@
                 <span class="ahli-only">Sasmitha Tanda Alam &amp; Raga</span>
               </span>
             </div>
-            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
-              <span class="pemula-only">Sasmitha <span class="text-prada">Impen &amp; Kedut</span></span>
-              <span class="ahli-only">Sasmitha <span class="text-prada">(Tanda Alam &amp; Tubuh)</span></span>
-            </h2>
+            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5"><span data-i18n="tab_sasmitha_title">Sasmitha (Tanda Alam &amp; Tubuh)</span></h2>
             <p class="text-xs text-sogan-300">
-              <span class="pemula-only">Waosan pralambang ngimpi (99 impen) lan kedutan perangan badan miturut sastra primbon Jawa.</span>
-              <span class="ahli-only">Kawruh pratanda impen, kedutan, sasmitha gerhana rembulan/srengenge, lindu sasi, sarta tejo langit 7 arah.</span>
+              <span class="pemula-only" data-i18n="tab_sasmitha_desc">Waosan pralambang ngimpi (99 impen) lan kedutan perangan badan miturut sastra primbon Jawa.</span>
+              <span class="ahli-only" data-i18n="tab_sasmitha_desc">Kawruh pratanda impen, kedutan, sasmitha gerhana rembulan/srengenge, lindu sasi, sarta tejo langit 7 arah.</span>
             </p>
           </div>
         </div>
@@ -2178,10 +2157,8 @@
               </span>
             </div>
 
-            <h2 class="font-marcellus text-2xl sm:text-4xl font-bold gold-gradient-text">
-              Pawiyatan Karawitan &amp; Tembang Macapat
-            </h2>
-            <p class="text-xs sm:text-sm text-sogan-200 max-w-3xl leading-relaxed">
+            <h2 class="font-marcellus text-2xl sm:text-4xl font-bold gold-gradient-text"><span data-i18n="tab_gamelan_title">Gamelan Maya Interaktif</span></h2>
+            <p class="text-xs sm:text-sm text-sogan-200 max-w-3xl leading-relaxed" data-i18n="tab_gamelan_desc">
               Karawitan asalipun saking tembung <em>rawit</em> ingkang tegesipun alus, njeret, endah, lan rumit. Alunan gangsa gamelan Jawa karonce ing laras Slendro sarta Pelog minangka panyelarasing swasana jiwa manungsa kaliyan irama kosmis jagad raya.
             </p>
           </div>
@@ -2436,8 +2413,8 @@
 
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800">
-        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Studio Aksara Jawa (Hanacaraka)</h2>
-        <p class="text-xs text-sogan-300 mt-0.5">Transliterasi teks Latin ke Aksara Jawa otomatis, bagan sandhangan, serta kanvas interaktif belajar menulis aksara.</p>
+        <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_aksara_title">Studio Aksara Jawa</h2>
+        <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_aksara_desc">Transliterasi teks Latin ke Aksara Jawa otomatis, bagan sandhangan, serta kanvas interaktif belajar menulis aksara.</p>
       </div>
 
       <!-- ==================== NARASI SEJARAH: LEGENDA AJI SAKA, DORA & SEMBADA ==================== -->
@@ -2713,7 +2690,7 @@
           <h4 class="font-marcellus text-xl font-bold text-prada">Pasinaon Aksara Rampung!</h4>
           <p id="aksaraQuizFinalText" class="text-xs text-sogan-200">Skor Panjenengan: 100 / 100</p>
           <div id="aksaraQuizRankBadge" class="inline-block px-4 py-1.5 rounded-full bg-sogan-900 border border-prada text-xs font-bold text-prada">
-            Gelar: Carik Keraton Linuwih
+            Gelar: Pujangga Utama Linuwih
           </div>
           <div class="pt-2">
             <button onclick="restartAksaraQuiz()" class="px-5 py-2 rounded-xl bg-prada text-keraton font-bold text-xs hover:bg-prada-light transition cursor-pointer">
@@ -2734,8 +2711,8 @@
 
       <div class="bg-wulung p-5 rounded-2xl border border-sogan-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text">Panggung Kelir Wayang Purwa</h2>
-          <p class="text-xs text-sogan-300 mt-0.5">Simulasi pementasan wayang dengan cahaya blencong, pergerakan tokoh, dan bebunyian dalang.</p>
+          <h2 class="font-marcellus text-xl sm:text-2xl font-bold gold-gradient-text" data-i18n="tab_wayang_title">Panggung Kelir Wayang Kulit</h2>
+          <p class="text-xs text-sogan-300 mt-0.5" data-i18n="tab_wayang_desc">Simulasi interaktif pementasan wayang kulit dengan blencong temaram, efek kepyak, dan tokoh wayang.</p>
         </div>
 
         <div class="flex items-center gap-2">
@@ -2821,7 +2798,7 @@
       <!-- Generator Pitutur Luhur Harian -->
       <div class="bg-gradient-to-b from-sogan-950 via-wulung to-keraton p-6 sm:p-10 rounded-3xl border border-sogan-700 shadow-2xl text-center space-y-5">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sogan-900 border border-prada/40 text-xs font-semibold text-prada">
-          <i class="fa-solid fa-quote-left"></i> <span id="pituturSumberBadge">Falsafah Luhur Jawa</span>
+          <i class="fa-solid fa-quote-left"></i> <span id="pituturSumberBadge" data-i18n="tab_pitutur_title">Falsafah Luhur Jawa</span>
         </div>
 
         <div class="space-y-4 max-w-3xl mx-auto">
@@ -2923,9 +2900,7 @@
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-bowl-rice"></i> Seni, Tradisi, &amp; Filosofi Jawa
             </span>
-            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
-              Tumpeng Tombak Rojo
-            </h2>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_tumpeng_title">Tumpeng Tombak Rojo &amp; Ubarampe Sesaji</span></h2>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -2941,7 +2916,7 @@
         <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-prada/10 blur-3xl pointer-events-none"></div>
         <div class="relative z-10 max-w-4xl space-y-3">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
-            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Karaton
+            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Leluhur
           </div>
           <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100 leading-snug">
             Keseimbangan Kiblat Papat Limo Pancer &amp; Ketajaman Spiritual Manungsa
@@ -3222,7 +3197,7 @@
         </div>
 
         <div class="pt-2 flex flex-wrap justify-between items-center gap-3 text-xs text-sogan-400">
-          <span class="italic">Dipetik saking Serat Centhini &amp; Wewarah Sesaji Ageng Karaton Surakarta / Ngayogyakarta</span>
+          <span class="italic">Dipetik saking Serat Centhini &amp; Wewarah Sesaji Ageng Tradisi Luhur Jawa</span>
         </div>
       </div>
 
@@ -3240,9 +3215,7 @@
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-compass"></i> Pawukon Jawi &bull; 210 Dinten Satunggal Siklus
             </span>
-            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
-              Ensiklopedia 30 Wuku Nusantara
-            </h2>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_wuku_title">Ensiklopedia 30 Wuku Nusantara</span></h2>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -3359,9 +3332,7 @@
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-scroll"></i> Sastra &amp; Mitologi Kuno
             </span>
-            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
-              Mitologi Nusantara
-            </h2>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_mitologi_title">Mitologi Nusantara</span></h2>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -3393,7 +3364,7 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- TAB 13: PUSAT LAPORAN & ARSIP KERATON -->
+    <!-- TAB 13: PUSAT LAPORAN & ARSIP TRADISI LUHUR -->
     <!-- ========================================================================= -->
     <section id="tab-laporan" class="tab-content hidden space-y-8">
       
@@ -3404,9 +3375,7 @@
             <span class="text-[10px] uppercase font-bold tracking-widest text-prada flex items-center gap-1.5">
               <i class="fa-solid fa-scroll"></i> Arsip &amp; Penerbitan Resmi
             </span>
-            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide">
-              Pusat Laporan Keraton
-            </h2>
+            <h2 class="font-marcellus text-2xl sm:text-3xl font-bold gold-gradient-text tracking-wide"><span data-i18n="tab_laporan_title">Pusat Laporan Tradisi Luhur &amp; Ekspor Dokumen</span></h2>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -3425,8 +3394,8 @@
         <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100">
           Penerbitan Dokumen Resmi, Piagam Budaya &amp; Laporan Analisis
         </h3>
-        <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed max-w-4xl">
-          Pusat Laporan Jagad Jawa nyediakaken fasilitas cetak dokumen PDF kanthi tata letak kraton, kop piagam berornamen prada emas, stempel weton, sarta rincian etis pandom gesang. Saben laporan saged dipun-undhuh minangka PDF utawi gambar PNG resolusi inggil kanggé kaperluan arsip kulawarga.
+        <p class="text-xs sm:text-sm text-sogan-200 leading-relaxed max-w-4xl" data-i18n="tab_laporan_desc">
+          Pusat Laporan Jagad Jawa nyediakaken fasilitas cetak dokumen PDF kanthi tata letak tradisi adiluhung, kop piagam berornamen prada emas, stempel weton, sarta rincian etis pandom gesang. Saben laporan saged dipun-undhuh minangka PDF utawi gambar PNG resolusi inggil kanggé kaperluan arsip kulawarga.
         </p>
       </div>
 
@@ -3452,7 +3421,7 @@
               </p>
             </div>
             <div class="pt-3 border-t border-sogan-800/80 space-y-2">
-              <button onclick="printLaporanNujum('parchment', 'lengkap')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold text-xs hover:brightness-110 transition shadow flex items-center justify-center gap-2 cursor-pointer" title="Ekspor PDF Dokumen Nujum Kertas Kuno Keraton">
+              <button onclick="printLaporanNujum('parchment', 'lengkap')" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold text-xs hover:brightness-110 transition shadow flex items-center justify-center gap-2 cursor-pointer" title="Ekspor PDF Dokumen Nujum Kertas Kuno Tradisi Luhur">
                 <i class="fa-solid fa-scroll"></i> <span>Ekspor PDF</span>
               </button>
             </div>
@@ -3522,7 +3491,7 @@
             </div>
             <h5 class="font-marcellus text-sm font-bold text-amber-100">Piagam Weton Aksara Jawa Berpigura Emas</h5>
             <p class="text-xs text-sogan-400 leading-relaxed">
-              Penerbitan sertifikat weton kelahiran berornamen prada emas kraton dengan transliterasi aksara Jawa kaligrafi untuk arsip keluarga &amp; cinderamata pigura.
+              Penerbitan sertifikat weton kelahiran berornamen prada emas adiluhung dengan transliterasi aksara Jawa kaligrafi untuk arsip keluarga &amp; cinderamata pigura.
             </p>
           </div>
 
@@ -4420,7 +4389,7 @@
               Mode Lengkap (Ahli)
             </h3>
             <p class="font-sans text-xs text-sogan-300 leading-relaxed">
-              Sadaya komputasi jangkep: analisis 6 dimensi bincil, faalakiah 12 nabi, komparasi relasi non-jodoh, paugeran kode ala/becik, lan ekspor dokumen resmi keraton.
+              Sadaya komputasi jangkep: analisis 6 dimensi bincil, faalakiah 12 nabi, komparasi relasi non-jodoh, paugeran kode ala/becik, lan ekspor dokumen resmi tradisi luhur.
             </p>
           </div>
           <div class="mt-4 pt-3 border-t border-sogan-800/80 flex items-center justify-between text-xs text-prada font-bold">

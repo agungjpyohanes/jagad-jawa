@@ -115,33 +115,38 @@ describe('Fase H — UX: Toggle Label Indonesia & Basa Jawa (Tanpa Mutasi Data)'
     assert.strictEqual(tglSetelahGantiBahasa.bulanJawa, tglAwal.bulanJawa);
   });
 
-  it('jawa-v11: menu navigasi utama wajib dikunci tetap Bahasa Indonesia (ID) bahkan dalam mode Basa Jawi (JV)', () => {
+  it('jawa-v11: perombakan full bilingual - toggle bahasa memengaruhi menu navigasi utama, sub-menu, dan konten secara menyeluruh', () => {
     // Mode ID awal
     setLanguage('id');
     assert.strictEqual(getLanguage(), 'id');
     assert.strictEqual(t('nav_beranda'), 'Beranda');
     assert.strictEqual(t('nav_kalender'), 'Kalender Jawa');
     assert.strictEqual(t('nav_nujum'), 'Nujum & Primbon');
+    assert.strictEqual(t('nav_budaya'), 'Seni & Budaya');
+    assert.strictEqual(t('nav_aksara'), 'Studio Aksara Jawa');
+    assert.strictEqual(t('nav_wayang'), 'Panggung Kelir Wayang');
     assert.strictEqual(t('cal_saring_label'), 'Saring Hari:');
 
     // Switch ke Mode JV
     setLanguage('jv');
     assert.strictEqual(getLanguage(), 'jv');
 
-    // ATURAN KETAT: Label Menu Navigasi Utama TETAP Bahasa Indonesia (ID)
-    assert.strictEqual(t('nav_beranda'), 'Beranda');
-    assert.strictEqual(t('nav_kalender'), 'Kalender Jawa');
+    // PEROMBAKAN FULL BILINGUAL: Seluruh label menu & sub-menu beralih ke Basa Jawi
+    assert.strictEqual(t('nav_beranda'), 'Pambuka');
+    assert.strictEqual(t('nav_kalender'), 'Kalendher Jawi');
     assert.strictEqual(t('nav_nujum'), 'Nujum & Primbon');
-    assert.strictEqual(t('nav_budaya'), 'Seni & Budaya');
-    assert.strictEqual(t('nav_aksara'), 'Studio Aksara Jawa');
+    assert.strictEqual(t('nav_budaya'), 'Seni & Kabudayan');
+    assert.strictEqual(t('nav_aksara'), 'Papan Aksara Jawa');
     assert.strictEqual(t('nav_wayang'), 'Panggung Kelir Wayang');
+    assert.strictEqual(t('nav_jodoh'), 'Pitung Salaki Rabi');
+    assert.strictEqual(t('nav_selametan'), 'Pengetan Tilar Donyo');
 
-    // Namun deskripsi & isi konten modul beralih ke Basa Jawi yang otentik
+    // Deskripsi & isi konten modul juga beralih ke Basa Jawi yang otentik
     assert.strictEqual(t('cal_saring_label'), 'Saring Dina:');
     assert.strictEqual(t('cal_filter_ijo'), 'Dino Ijo (Becik)');
     assert.strictEqual(t('tab_wuku_desc'), 'Njlajahi siklus 30 wuku wiwit Sinta dumugi Watugunung sesarengan Bathara Pangayom lan 4 pilar petenget.');
 
-    // Verifikasi pemisahan kamus dan isMenuKey
+    // Verifikasi pemisahan kamus dan isMenuKey tetap konsisten
     assert.strictEqual(isMenuKey('nav_beranda'), true);
     assert.strictEqual(isMenuKey('nav_kalender'), true);
     assert.strictEqual(isMenuKey('cal_saring_label'), false);

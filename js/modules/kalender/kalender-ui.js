@@ -1369,7 +1369,7 @@ export function renderLaporanKalenderPrintHtml(bulan, tahun, theme = 'parchment'
   return `
     <div class="laporan-page kalender-print-page print-container theme-${theme}" style="width: 1200px; min-width: 1120px; max-width: 1200px; padding: 10px 14px; font-family: 'Times New Roman', Georgia, serif; color: ${textPrimary}; background-color: ${primaryBg}; border: ${docBorder}; margin: 0 auto; box-sizing: border-box; overflow: visible; word-wrap: break-word;">
       
-      <!-- KOP RESMI KERATON (TEGAK / PORTRAIT) -->
+      <!-- KOP RESMI TRADISI LUHUR (TEGAK / PORTRAIT) -->
       <div style="border-bottom: ${headerUnderline}; padding: 2px 4px 4px 4px; text-align: center; margin-bottom: 4px; background-color: ${primaryBg};">
         <div style="font-size: 17px; font-weight: 800; font-family: 'Times New Roman', Georgia, serif; letter-spacing: 1.5px; text-transform: uppercase; color: ${isParchment ? '#4a2800' : (isMonochrome ? '#000000' : '#0f172a')}; line-height: 1.15; margin: 0 0 2px 0;">
           KALENDER JAWA SULTAN AGUNGAN
@@ -1455,7 +1455,7 @@ export function renderLaporanKalenderPrintHtml(bulan, tahun, theme = 'parchment'
             <div>
               <strong style="color: ${isMonochrome ? '#000000' : '#a16207'}; font-size: 8.5px; display: block; line-height: 1.1;">Border Emas &amp; Bintang ★</strong>
               <div style="font-size: 8px; font-weight: 800; color: ${textPrimary}; margin-top: 1px;">Dino Gede</div>
-              <div style="font-size: 7px; font-weight: 600; color: ${textMuted}; line-height: 1.15; margin-top: 1px;">71 Pasangan Sakral Pawukon Keraton kanthi prabawa ageng, prayogi tirakat.</div>
+              <div style="font-size: 7px; font-weight: 600; color: ${textMuted}; line-height: 1.15; margin-top: 1px;">71 Pasangan Sakral Pawukon Tradisi Leluhur kanthi prabawa ageng, prayogi tirakat.</div>
             </div>
           </div>
           <!-- Tinta Merah Angka Masehi -->
@@ -1896,7 +1896,7 @@ async function captureKalenderCanvas(fullHtml, theme = 'parchment', scale = 2) {
 /**
  * Unduh / Cetak Kalender Jawa langsung menggunakan Native Browser Print (window.print())
  * Menghasilkan dokumen cetak / PDF Portrait 1 Halaman Utuh (Fit to 1 Single Page A4)
- * Estetika Keraton Kertas Kuno klasik, teks vektor tajam asli (selectable), margin 10mm, dan posisi center presisi
+ * Estetika Kertas Kuno Tradisi Leluhur klasik, teks vektor tajam asli (selectable), margin 10mm, dan posisi center presisi
  * @param {'parchment'|'monochrome'|'standard'} theme 
  */
 export async function downloadKalenderPdf(theme = 'parchment') {

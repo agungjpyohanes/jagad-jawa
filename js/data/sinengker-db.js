@@ -455,7 +455,7 @@ export const SINENGKER_DATA = {
     paragraf_ajaran: [
       "Ingsun Dzating Gusti kang Asifat Esa, angliputi ing kawulaningsun tunggal dadi sakahanan sampurna, saka ing kodratingsun.",
       "Ingsun Dzating Gusti kang Suci Asifat Langgeng, kang amurba amisesa kang kawasa, kang sampurna nirmala waluya ing jatiningsun, saka ing kodratingsun.",
-      "Ingsun Dzat Kang Maha Luhur Jumeneng Ratu Agung, kang amisesa kang kawasa, andadeake ing karaton ing kang Agung kang maha mulya, Ingsun wengku sampurna sakapraboningsun, sangkep saisen – isening karatoningsun, pepak sabalaningsun kabeh ora ono kang kekurangan, byar gumelar dadi sak ciptaningsun, ana sak sedyaningsun, teka sakarsa – karsaningsun kabeh, saka ing kodratingsun.",
+      "Ingsun Dzat Kang Maha Luhur Jumeneng Ratu Agung, kang amisesa kang kawasa, andadeake ing sasana ing kang Agung kang maha mulya, Ingsun wengku sampurna sakapraboningsun, sangkep saisen – isening sasananingsun, pepak sabalaningsun kabeh ora ono kang kekurangan, byar gumelar dadi sak ciptaningsun, ana sak sedyaningsun, teka sakarsa – karsaningsun kabeh, saka ing kodratingsun.",
       "Jisimingsun kang kari ana ing alam donya, yen wis ana ing jaman karamat kang maha mulya, wulu kulit daging getih balung sungsum sapanuggalane kabeh, asale saka cahya muliha maring cahya, sampurna bali marang Ingsun maneh, saka ing kodratingsun.",
       "Yoganingsun sapanduwur sapangisor kabeh, kang pada mulih ing jaman karamating alame dewe – dewe pada suci mulya sampurna kaya Ingsun, saka ing kodratingsun.",
       "Ingsun andadekake alam donya saisen – isene kabeh iki, yes wis tutug ing wewangene, Ingsun kukud mulih mulya sampurna dadi sawija kalawan kahaningsung maneh, saka ing kodratingsun.",

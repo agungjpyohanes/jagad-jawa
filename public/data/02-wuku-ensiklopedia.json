@@ -18,30 +18,36 @@
       "id": "Saat setengah dewasa tidak sayang serta agak banyak kelalaiannya"
     },
     "sesaji_ruwat": {
-      "jv": "GEDANG MORO SEBO kang tuwuh saktundun lan ARESARESAN (pala kependem, kasampar lan gumantung) sarta DAGING karo WOHINGNDAMI",
-      "id": "GEDANG MORO SEBO kang tuwuh saktundun lan ARESARESAN (pala kependem, kasampar lan gumantung) sarta DAGING karo WOHINGNDAMI"
+      "id": "Pisang MORO SEBO yang tumbuh setandan dan Ares-aresan (umbi-umbian, merambat, dan bergantung) (umbi-umbian, merambat dan bergantung) serta Daging dan buah nangka muda (tewel)",
+      "jv": "GEDANG MORO SEBO kang tuwuh saktundun lan ARESARESAN (pala kependem, kasampar lan gumantung) sarta DAGING karo WOHINGNDAMI"
     },
-    "tindih_ruwat": "21 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 21 PICIS",
+      "jv": "21 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PULEN dangdangan",
-      "id": "SEGA PULEN dangdangan"
+      "id": "Nasi Pulen kukus dandang",
+      "jv": "SEGA PULEN dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "KEBO tukon 21 KETENG tanpa nganyang diolah pindang",
-      "id": "KEBO tukon 21 KETENG tanpa nganyang diolah pindang"
+      "id": "Kerbau seharga 21 keteng tanpa ditawar dimasak pindang",
+      "jv": "KEBO tukon 21 KETENG tanpa nganyang diolah pindang"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Tolak Bilahi",
-      "id": "Tolak Bilahi"
+      "id": "Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "ANDERES",
-      "id": "ANDERES"
+      "id": "Menyadap Nira (Penyadap Aren/Kelapa)",
+      "jv": "Anderes (Nderes Nira)"
     },
     "tamba_yen_lara": {
-      "jv": "GODONG LUNTAS, utawa GODONG WALUH lan ASEM winor jamu",
-      "id": "GODONG LUNTAS, utawa GODONG WALUH lan ASEM winor jamu"
+      "id": "Daun Beluntas, atau Daun Labu dan Asam Jawa diramu jamu",
+      "jv": "GODONG LUNTAS, utawa GODONG WALUH lan ASEM winor jamu"
     }
   },
   {
@@ -63,30 +69,36 @@
       "id": "Karena tertimbun kayu serta kurang penerimaan"
     },
     "sesaji_ruwat": {
-      "jv": "MOJO 30 Glundung lan ARESARESAN",
-      "id": "MOJO 30 Glundung lan ARESARESAN"
+      "id": "MOJO 30 butir/gelondong dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "MOJO 30 Glundung lan ARESARESAN"
     },
-    "tindih_ruwat": "4 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 4 PICIS",
+      "jv": "4 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "MENJANGAN kinalak ginecok bakar",
-      "id": "MENJANGAN kinalak ginecok bakar"
+      "id": "Rusa (Menjangan) dipotong dibakar gecok",
+      "jv": "MENJANGAN kinalak ginecok bakar"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "ANDERES",
-      "id": "ANDERES"
+      "id": "Menyadap Nira (Penyadap Aren/Kelapa)",
+      "jv": "Anderes (Nderes Nira)"
     },
     "tamba_yen_lara": {
-      "jv": "GODONG LUNTAS, utawa KEMBANG PULU winor jamu",
-      "id": "GODONG LUNTAS, utawa KEMBANG PULU winor jamu"
+      "id": "Daun Beluntas, atau Bunga Pulu diramu jamu",
+      "jv": "GODONG LUNTAS, utawa KEMBANG PULU winor jamu"
     }
   },
   {
@@ -108,30 +120,36 @@
       "id": "Karena dianiaya oleh sesamanya serta kesusahan hatinya sendiri"
     },
     "sesaji_ruwat": {
-      "jv": "KERAMBIL saktabone 4 Glundung lan ARESARESAN",
-      "id": "KERAMBIL saktabone 4 Glundung lan ARESARESAN"
+      "id": "Kelapa selengkapnya 4 butir/gelondong dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KERAMBIL saktabone 4 Glundung lan ARESARESAN"
     },
-    "tindih_ruwat": "5 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 5 PICIS",
+      "jv": "5 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK PUTIH sakwayahe linembaran kuluban warna 5",
-      "id": "PITIK PUTIH sakwayahe linembaran kuluban warna 5"
+      "id": "Ayam PUTIH utuh matang dialasi sayuran rebus 5",
+      "jv": "PITIK PUTIH sakwayahe linembaran kuluban warna 5"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rajukna",
-      "id": "Rajukna"
+      "id": "Doa Penolak Rintangan & Bahaya",
+      "jv": "Rajukna"
     },
     "pangupaya_jiwa": {
-      "jv": "UNDAGIYA(suwita)",
-      "id": "UNDAGIYA(suwita)"
+      "id": "Keahlian Tukang / Undagi Kayu",
+      "jv": "Undagiya (Tukang Kayu/Kriya)"
     },
     "tamba_yen_lara": {
-      "jv": "GODONG PAKIS binakar winor jamu",
-      "id": "GODONG PAKIS binakar winor jamu"
+      "id": "Daun Pakis dibakar diramu jamu",
+      "jv": "GODONG PAKIS binakar winor jamu"
     }
   },
   {
@@ -153,30 +171,36 @@
       "id": "Karena jatuh dari memanjat serta difitnah oleh orang besar"
     },
     "sesaji_ruwat": {
-      "jv": "NANAS sakkuncunge 7 Iji lan ARESARESAN",
-      "id": "NANAS sakkuncunge 7 Iji lan ARESARESAN"
+      "id": "NANAS sakkuncunge 7 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "NANAS sakkuncunge 7 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "7 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 7 PICIS",
+      "jv": "7 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK sakwayahe dipecel",
-      "id": "PITIK sakwayahe dipecel"
+      "id": "Ayam utuh matang dipecel",
+      "jv": "PITIK sakwayahe dipecel"
     },
-    "salawat": "7 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 7 keteng",
+      "jv": "7 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rajukna",
-      "id": "Rajukna"
+      "id": "Doa Penolak Rintangan & Bahaya",
+      "jv": "Rajukna"
     },
     "pangupaya_jiwa": {
-      "jv": "LAKU DAGANG",
-      "id": "LAKU DAGANG"
+      "id": "Perniagaan / Pedagang",
+      "jv": "Dagang (Bakul / Saudagar)"
     },
     "tamba_yen_lara": {
-      "jv": "GODONG TERONG winor jamu",
-      "id": "GODONG TERONG winor jamu"
+      "id": "Daun TERONG diramu jamu",
+      "jv": "GODONG TERONG winor jamu"
     }
   },
   {
@@ -198,30 +222,36 @@
       "id": "Karena tersengat atau tersenggol serta terlalu banyak yang dipikirkan"
     },
     "sesaji_ruwat": {
-      "jv": "SEMANGKA wutuhan 7 gelundung lan ARESARESAN",
-      "id": "SEMANGKA wutuhan 7 gelundung lan ARESARESAN"
+      "id": "SEMANGKA wutuhan 7 gelundung dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "SEMANGKA wutuhan 7 gelundung lan ARESARESAN"
     },
-    "tindih_ruwat": "3 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 3 PICIS",
+      "jv": "3 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK",
-      "id": "PITIK"
+      "id": "Ayam",
+      "jv": "PITIK"
     },
-    "salawat": "3 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 3 keteng",
+      "jv": "3 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "NGINGU BEBEK",
-      "id": "NGINGU BEBEK"
+      "id": "NGINGU BEBEK",
+      "jv": "NGINGU BEBEK"
     },
     "tamba_yen_lara": {
-      "jv": "BABAKAN SUWEG utawa KUNCI lan KEN CUR binakar",
-      "id": "BABAKAN SUWEG utawa KUNCI lan KEN CUR binakar"
+      "id": "BABAKAN SUWEG atau KUNCI dan KEN CUR dibakar",
+      "jv": "BABAKAN SUWEG utawa KUNCI lan KEN CUR binakar"
     }
   },
   {
@@ -243,30 +273,36 @@
       "id": "Karena terpelanting atau tercebur air serta dimarahi orang besar"
     },
     "sesaji_ruwat": {
-      "jv": "BENEMAN GEMBILI 10 Iji lan ARESARESAN",
-      "id": "BENEMAN GEMBILI 10 Iji lan ARESARESAN"
+      "id": "BENEMAN GEMBILI 10 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "BENEMAN GEMBILI 10 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "4 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 4 PICIS",
+      "jv": "4 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PERA dangdangan",
-      "id": "SEGA PERA dangdangan"
+      "id": "Nasi PERA kukus dandang",
+      "jv": "SEGA PERA dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK BARUMBUN kang lumancur dipindang",
-      "id": "PITIK BARUMBUN kang lumancur dipindang"
+      "id": "Ayam BARUMBUN kang lumancur dipindang",
+      "jv": "PITIK BARUMBUN kang lumancur dipindang"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rajukna",
-      "id": "Rajukna"
+      "id": "Doa Penolak Rintangan & Bahaya",
+      "jv": "Rajukna"
     },
     "pangupaya_jiwa": {
-      "jv": "NGUKIRUKIRA",
-      "id": "NGUKIRUKIRA"
+      "id": "NGUKIRUKIRA",
+      "jv": "NGUKIRUKIRA"
     },
     "tamba_yen_lara": {
-      "jv": "BABAKAN SUWEG utawa GODONG SUWEG winor jamu",
-      "id": "BABAKAN SUWEG utawa GODONG SUWEG winor jamu"
+      "id": "BABAKAN SUWEG atau Daun SUWEG diramu jamu",
+      "jv": "BABAKAN SUWEG utawa GODONG SUWEG winor jamu"
     }
   },
   {
@@ -288,30 +324,36 @@
       "id": "Karena dilibatkan dalam perkara orang lain serta kelalaian"
     },
     "sesaji_ruwat": {
-      "jv": "GEDANG GARAITA kang suluh satundun lan ARESARESAN",
-      "id": "GEDANG GARAITA kang suluh satundun lan ARESARESAN"
+      "id": "Pisang GARAITA kang suluh satundun dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "GEDANG GARAITA kang suluh satundun lan ARESARESAN"
     },
-    "tindih_ruwat": "4 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 4 PICIS",
+      "jv": "4 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA URA dangdangan",
-      "id": "SEGA URA dangdangan"
+      "id": "Nasi URA kukus dandang",
+      "jv": "SEGA URA dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "KEBO RAJAPAN tukon brandon digecok",
-      "id": "KEBO RAJAPAN tukon brandon digecok"
+      "id": "Kerbau RAJAPAN seharga brandon digecok",
+      "jv": "KEBO RAJAPAN tukon brandon digecok"
     },
-    "salawat": "8 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 8 keteng",
+      "jv": "8 keteng"
+    },
     "donga_slamet": {
-      "jv": "Tolak Bilahi",
-      "id": "Tolak Bilahi"
+      "id": "Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "MANGUNMANGUNA",
-      "id": "MANGUNMANGUNA"
+      "id": "MANGUNMANGUNA",
+      "jv": "MANGUNMANGUNA"
     },
     "tamba_yen_lara": {
-      "jv": "KAPAS SAWIT utawa GODONGKAPAS binenema winor jamu",
-      "id": "KAPAS SAWIT utawa GODONGKAPAS binenema winor jamu"
+      "id": "KAPAS SAWIT atau DaunKAPAS binenema diramu jamu",
+      "jv": "KAPAS SAWIT utawa GODONGKAPAS binenema winor jamu"
     }
   },
   {
@@ -333,30 +375,36 @@
       "id": "Karena dimarahi kerabat serta putus kasih dari yang memberi sandang pangan"
     },
     "sesaji_ruwat": {
-      "jv": "UWI WUTUHAN ingedang lan ARESARESAN",
-      "id": "UWI WUTUHAN ingedang lan ARESARESAN"
+      "id": "UWI WUTUHAN ingedang dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "UWI WUTUHAN ingedang lan ARESARESAN"
     },
-    "tindih_ruwat": "5 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 5 PICIS",
+      "jv": "5 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "BEBEK PUTIH diolah gegurihan lan kuluban 5 warna",
-      "id": "BEBEK PUTIH diolah gegurihan lan kuluban 5 warna"
+      "id": "Bebek PUTIH diolah gegurihan lan kuluban 5 warna",
+      "jv": "BEBEK PUTIH diolah gegurihan lan kuluban 5 warna"
     },
-    "salawat": "5 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 5 keteng",
+      "jv": "5 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rasul",
-      "id": "Rasul"
+      "id": "Rasul",
+      "jv": "Rasul"
     },
     "pangupaya_jiwa": {
-      "jv": "TEMEN SEMBARANG GAWE",
-      "id": "TEMEN SEMBARANG GAWE"
+      "id": "TEMEN SEMBARANG GAWE",
+      "jv": "TEMEN SEMBARANG GAWE"
     },
     "tamba_yen_lara": {
-      "jv": "KAPAS SAWIT utawa GODONG KAPAS binakar",
-      "id": "KAPAS SAWIT utawa GODONG KAPAS binakar"
+      "id": "KAPAS SAWIT atau Daun KAPAS dibakar",
+      "jv": "KAPAS SAWIT utawa GODONG KAPAS binakar"
     }
   },
   {
@@ -378,30 +426,36 @@
       "id": "Karena diterkam harimau serta karena hati besar tapi keinginannya tidak tercapai"
     },
     "sesaji_ruwat": {
-      "jv": "DUREN 7 glundung lan ARESARESAN",
-      "id": "DUREN 7 glundung lan ARESARESAN"
+      "id": "DUREN 7 glundung dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "DUREN 7 glundung lan ARESARESAN"
     },
-    "tindih_ruwat": "KUCING",
+    "tindih_ruwat": {
+      "id": "Uang tindih KUCING",
+      "jv": "KUCING"
+    },
     "selamatan_sega": {
-      "jv": "SEGA KABULI dangdangan",
-      "id": "SEGA KABULI dangdangan"
+      "id": "Nasi KABULI kukus dandang",
+      "jv": "SEGA KABULI dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK ABANG winor ing sega",
-      "id": "PITIK ABANG winor ing sega"
+      "id": "Ayam ABANG winor ing sega",
+      "jv": "PITIK ABANG winor ing sega"
     },
-    "salawat": "-",
+    "salawat": {
+      "id": "Salawat sedekah -",
+      "jv": "-"
+    },
     "donga_slamet": {
-      "jv": "Tolak Bilahi",
-      "id": "Tolak Bilahi"
+      "id": "Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOL TIMAH",
-      "id": "ADOL TIMAH"
+      "id": "ADOL TIMAH",
+      "jv": "ADOL TIMAH"
     },
     "tamba_yen_lara": {
-      "jv": "KEMANGI SAWIT utawa GODONG SERE",
-      "id": "KEMANGI SAWIT utawa GODONG SERE"
+      "id": "KEMANGI SAWIT atau Daun SERE",
+      "jv": "KEMANGI SAWIT utawa GODONG SERE"
     }
   },
   {
@@ -423,30 +477,36 @@
       "id": "Karena kena senjata (besi) serta karena bingung hati karena sering mengingkari janji"
     },
     "sesaji_ruwat": {
-      "jv": "JAGUNG 40 ontong, lan ARESARESAN",
-      "id": "JAGUNG 40 ontong, lan ARESARESAN"
+      "id": "JAGUNG 40 ontong, dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "JAGUNG 40 ontong, lan ARESARESAN"
     },
-    "tindih_ruwat": "10 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 10 PICIS",
+      "jv": "10 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA MEGANA dangdangan",
-      "id": "SEGA MEGANA dangdangan"
+      "id": "Nasi Megana (sayur) kukus dandang",
+      "jv": "SEGA MEGANA dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "BEBEK lan PITIK sakarepe kang olah, lan janganan warna 9",
-      "id": "BEBEK lan PITIK sakarepe kang olah, lan janganan warna 9"
+      "id": "Bebek lan Ayam sakarepe kang olah, lan janganan warna 9",
+      "jv": "BEBEK lan PITIK sakarepe kang olah, lan janganan warna 9"
     },
-    "salawat": "10 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 10 keteng",
+      "jv": "10 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "KLITIKKLITIKA",
-      "id": "KLITIKKLITIKA"
+      "id": "KLITIKKLITIKA",
+      "jv": "KLITIKKLITIKA"
     },
     "tamba_yen_lara": {
-      "jv": "TEMU SAWIT utawa BONGGOL GEDANG",
-      "id": "TEMU SAWIT utawa BONGGOL GEDANG"
+      "id": "Temulawak SAWIT atau BONGGOL pisang",
+      "jv": "TEMU SAWIT utawa BONGGOL GEDANG"
     }
   },
   {
@@ -468,30 +528,36 @@
       "id": "Karena pertengkaran (perkelahian) serta karena jarang anak"
     },
     "sesaji_ruwat": {
-      "jv": "JERUK GEDE 4 glundung lan ARESARESAN",
-      "id": "JERUK GEDE 4 glundung lan ARESARESAN"
+      "id": "JERUK GEDE 4 glundung dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "JERUK GEDE 4 glundung lan ARESARESAN"
     },
-    "tindih_ruwat": "9 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 9 PICIS",
+      "jv": "9 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA dangdangan",
-      "id": "SEGA dangdangan"
+      "id": "Nasi kukus dandang",
+      "jv": "SEGA dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "WEDUS saulesulese lan PITIK IRENG MULUS dipindang",
-      "id": "WEDUS saulesulese lan PITIK IRENG MULUS dipindang"
+      "id": "WEDUS saulesulese lan Ayam hitam mulus dipindang",
+      "jv": "WEDUS saulesulese lan PITIK IRENG MULUS dipindang"
     },
-    "salawat": "saketeng",
+    "salawat": {
+      "id": "Salawat sedekah saketeng",
+      "jv": "saketeng"
+    },
     "donga_slamet": {
-      "jv": "Slamet Pina",
-      "id": "Slamet Pina"
+      "id": "Doa Keselamatan (Slamet) Pina",
+      "jv": "Slamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "DADI JAGAL",
-      "id": "DADI JAGAL"
+      "id": "DADI JAGAL",
+      "jv": "DADI JAGAL"
     },
     "tamba_yen_lara": {
-      "jv": "LAOS SAWIT",
-      "id": "LAOS SAWIT"
+      "id": "LAOS SAWIT",
+      "jv": "LAOS SAWIT"
     }
   },
   {
@@ -513,30 +579,36 @@
       "id": "Karena digigit serta karena ditinggal pembantu dan pakaian"
     },
     "sesaji_ruwat": {
-      "jv": "GEDANG EMAS satundun lan ARESARESAN",
-      "id": "GEDANG EMAS satundun lan ARESARESAN"
+      "id": "Pisang EMAS satundun dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "GEDANG EMAS satundun lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PUNAR dangdangan",
-      "id": "SEGA PUNAR dangdangan"
+      "id": "Nasi PUNAR kukus dandang",
+      "jv": "SEGA PUNAR dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "KEBO RANJAPAN digoreng",
-      "id": "KEBO RANJAPAN digoreng"
+      "id": "Kerbau RANJAPAN digoreng",
+      "jv": "KEBO RANJAPAN digoreng"
     },
-    "salawat": "11 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 11 keteng",
+      "jv": "11 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOL EMAS",
-      "id": "ADOL EMAS"
+      "id": "ADOL EMAS",
+      "jv": "ADOL EMAS"
     },
     "tamba_yen_lara": {
-      "jv": "KUNIR winor jamu utawa EMPU KUNIR",
-      "id": "KUNIR winor jamu utawa EMPU KUNIR"
+      "id": "Kunyit diramu jamu atau EMPU Kunyit",
+      "jv": "KUNIR winor jamu utawa EMPU KUNIR"
     }
   },
   {
@@ -558,30 +630,36 @@
       "id": "Karena pencurian dan pertengkaran serta karena membuat perkara sendiri"
     },
     "sesaji_ruwat": {
-      "jv": "BENDA 6 Glintir lan ARESARESAN",
-      "id": "BENDA 6 Glintir lan ARESARESAN"
+      "id": "BENDA 6 Glintir dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "BENDA 6 Glintir lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "WEDUS lan iwak LOH linembaran, janganan kang pepak",
-      "id": "WEDUS lan iwak LOH linembaran, janganan kang pepak"
+      "id": "WEDUS lan iwak LOH dialasi, janganan kang pepak",
+      "jv": "WEDUS lan iwak LOH linembaran, janganan kang pepak"
     },
-    "salawat": "5 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 5 keteng",
+      "jv": "5 keteng"
+    },
     "donga_slamet": {
-      "jv": "Selamet Pina",
-      "id": "Selamet Pina"
+      "id": "Selamet Pina",
+      "jv": "Selamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA KROWODAN",
-      "id": "ADOLA KROWODAN"
+      "id": "ADOLA KROWODAN",
+      "jv": "ADOLA KROWODAN"
     },
     "tamba_yen_lara": {
-      "jv": "GODONG CABE SAWIT utawa BENGLE SAWIT",
-      "id": "GODONG CABE SAWIT utawa BENGLE SAWIT"
+      "id": "Daun CABE SAWIT atau BENGLE SAWIT",
+      "jv": "GODONG CABE SAWIT utawa BENGLE SAWIT"
     }
   },
   {
@@ -603,30 +681,36 @@
       "id": "Karena kena api serta karena direnggut orang besar"
     },
     "sesaji_ruwat": {
-      "jv": "JAMBU KLUTHUK 100 Iji lan ARESARESAN",
-      "id": "JAMBU KLUTHUK 100 Iji lan ARESARESAN"
+      "id": "JAMBU KLUTHUK 100 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "JAMBU KLUTHUK 100 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "10 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 10 PICIS",
+      "jv": "10 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA AMBENGAN beras abang, JANGANAN BAYEM ABANG",
-      "id": "SEGA AMBENGAN beras abang, JANGANAN BAYEM ABANG"
+      "id": "Nasi AMBENGAN beras abang, JANGANAN BAYEM Merah",
+      "jv": "SEGA AMBENGAN beras abang, JANGANAN BAYEM ABANG"
     },
     "selamatan_iwak": {
-      "jv": "PITIK ABANG dipindang, amongamongane KEMBANG SETAMAN",
-      "id": "PITIK ABANG dipindang, amongamongane KEMBANG SETAMAN"
+      "id": "Ayam ABANG dipindang, amongamongane KEMBANG SETAMAN",
+      "jv": "PITIK ABANG dipindang, amongamongane KEMBANG SETAMAN"
     },
-    "salawat": "40 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 40 keteng",
+      "jv": "40 keteng"
+    },
     "donga_slamet": {
-      "jv": "Selamet Pina",
-      "id": "Selamet Pina"
+      "id": "Selamet Pina",
+      "jv": "Selamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "CRAKIYA",
-      "id": "CRAKIYA"
+      "id": "CRAKIYA",
+      "jv": "CRAKIYA"
     },
     "tamba_yen_lara": {
-      "jv": "BAWANG utawa GODONG JAMBE winor jamu",
-      "id": "BAWANG utawa GODONG JAMBE winor jamu"
+      "id": "Bawang Putih atau Daun JAMBE diramu jamu",
+      "jv": "BAWANG utawa GODONG JAMBE winor jamu"
     }
   },
   {
@@ -648,30 +732,36 @@
       "id": "Karena diguna-guna dan kena fitnah serta karena kena ucapan buruk"
     },
     "sesaji_ruwat": {
-      "jv": "GEDANG BECICI kang suluh satundun, lan ARESARESAN",
-      "id": "GEDANG BECICI kang suluh satundun, lan ARESARESAN"
+      "id": "Pisang BECICI kang suluh satundun, dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "GEDANG BECICI kang suluh satundun, lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK ABANG kapanggang, kulubane warna 9",
-      "id": "PITIK ABANG kapanggang, kulubane warna 9"
+      "id": "Ayam ABANG kapanggang, kulubane warna 9",
+      "jv": "PITIK ABANG kapanggang, kulubane warna 9"
     },
-    "salawat": "-",
+    "salawat": {
+      "id": "Salawat sedekah -",
+      "jv": "-"
+    },
     "donga_slamet": {
-      "jv": "Balasrewu lan Kunut",
-      "id": "Balasrewu lan Kunut"
+      "id": "Balasrewu lan Kunut",
+      "jv": "Balasrewu lan Kunut"
     },
     "pangupaya_jiwa": {
-      "jv": "MALANDANGA",
-      "id": "MALANDANGA"
+      "id": "MALANDANGA",
+      "jv": "MALANDANGA"
     },
     "tamba_yen_lara": {
-      "jv": "ALANGALANG lan KEMANGI winor jamu utawa GODONG SERE",
-      "id": "ALANGALANG lan KEMANGI winor jamu utawa GODONG SERE"
+      "id": "AdanGAdanG dan KEMANGI diramu jamu atau Daun SERE",
+      "jv": "ALANGALANG lan KEMANGI winor jamu utawa GODONG SERE"
     }
   },
   {
@@ -693,30 +783,36 @@
       "id": "Karena dianiaya serta karena kena pasangan"
     },
     "sesaji_ruwat": {
-      "jv": "JAMBU KAMPLOK 100 Iji lan ARESARESAN",
-      "id": "JAMBU KAMPLOK 100 Iji lan ARESARESAN"
+      "id": "JAMBU KAMPLOK 100 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "JAMBU KAMPLOK 100 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "7 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 7 PICIS",
+      "jv": "7 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK PUTIH MULUS linembarang kuluban warna 11",
-      "id": "PITIK PUTIH MULUS linembarang kuluban warna 11"
+      "id": "Ayam putih mulus dialasig sayuran rebus 11",
+      "jv": "PITIK PUTIH MULUS linembarang kuluban warna 11"
     },
-    "salawat": "9 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 9 keteng",
+      "jv": "9 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rasul",
-      "id": "Rasul"
+      "id": "Rasul",
+      "jv": "Rasul"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA POLO WIJO",
-      "id": "ADOLA POLO WIJO"
+      "id": "ADOLA POLO WIJO",
+      "jv": "ADOLA POLO WIJO"
     },
     "tamba_yen_lara": {
-      "jv": "WHO KUDU utawa GODONG PACE WOH KUDU sarta DUREN",
-      "id": "WHO KUDU utawa GODONG PACE WOH KUDU sarta DUREN"
+      "id": "WHO KUDU atau Daun PACE WOH KUDU sarta DUREN",
+      "jv": "WHO KUDU utawa GODONG PACE WOH KUDU sarta DUREN"
     }
   },
   {
@@ -738,30 +834,36 @@
       "id": "Karena kesusahan dan dianiaya penjahat"
     },
     "sesaji_ruwat": {
-      "jv": "TEBU IRENG 4 Lonjor lan ARESARESAN",
-      "id": "TEBU IRENG 4 Lonjor lan ARESARESAN"
+      "id": "TEBU IRENG 4 Lonjor dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "TEBU IRENG 4 Lonjor lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "WEDUS TRUJAH kaolah kang pepak",
-      "id": "WEDUS TRUJAH kaolah kang pepak"
+      "id": "WEDUS TRUJAH kaolah kang pepak",
+      "jv": "WEDUS TRUJAH kaolah kang pepak"
     },
     "selamatan_iwak": {
-      "jv": "-",
-      "id": "-"
+      "id": "-",
+      "jv": "-"
     },
-    "salawat": "100 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 100 keteng",
+      "jv": "100 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "DADIYA CARIK",
-      "id": "DADIYA CARIK"
+      "id": "DADIYA CARIK",
+      "jv": "DADIYA CARIK"
     },
     "tamba_yen_lara": {
-      "jv": "BLIGO winor jamu, utawa GODONG BLIGO lan OYODE",
-      "id": "BLIGO winor jamu, utawa GODONG BLIGO lan OYODE"
+      "id": "BLIGO diramu jamu, atau Daun BLIGO dan OYODE",
+      "jv": "BLIGO winor jamu, utawa GODONG BLIGO lan OYODE"
     }
   },
   {
@@ -783,30 +885,36 @@
       "id": "Karena terpelanting serta karena dijelek-jelekkan banyak orang dan sering ditipu"
     },
     "sesaji_ruwat": {
-      "jv": "KEMIRI 100 Iji lan ARESARESAN",
-      "id": "KEMIRI 100 Iji lan ARESARESAN"
+      "id": "KEMIRI 100 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KEMIRI 100 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "100 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 100 PICIS",
+      "jv": "100 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK PUTIH MULUS linembaran lan JUWADAH warna-warna",
-      "id": "PITIK PUTIH MULUS linembaran lan JUWADAH warna-warna"
+      "id": "Ayam putih mulus dialasi lan JUWADAH warna-warna",
+      "jv": "PITIK PUTIH MULUS linembaran lan JUWADAH warna-warna"
     },
-    "salawat": "100 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 100 keteng",
+      "jv": "100 keteng"
+    },
     "donga_slamet": {
-      "jv": "Tolak Bilahi",
-      "id": "Tolak Bilahi"
+      "id": "Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "NANDUR GEDANG",
-      "id": "NANDUR GEDANG"
+      "id": "NANDUR GEDANG",
+      "jv": "NANDUR GEDANG"
     },
     "tamba_yen_lara": {
-      "jv": "LERI BUNGKAK utawa BRAMBANG lan KUNCI",
-      "id": "LERI BUNGKAK utawa BRAMBANG lan KUNCI"
+      "id": "LERI BUNGKAK atau Bawang Merah dan KUNCI",
+      "jv": "LERI BUNGKAK utawa BRAMBANG lan KUNCI"
     }
   },
   {
@@ -828,30 +936,36 @@
       "id": "Karena kena pasangan serta karena ditinggal sandang pangannya"
     },
     "sesaji_ruwat": {
-      "jv": "TIMUN 25 Iji lan ARESARESAN",
-      "id": "TIMUN 25 Iji lan ARESARESAN"
+      "id": "TIMUN 25 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "TIMUN 25 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "DOM 100 Iji lan PANGOT WAJA SARAKIT",
+    "tindih_ruwat": {
+      "id": "Uang tindih DOM 100 Iji lan PANGOT WAJA SARAKIT",
+      "jv": "DOM 100 Iji lan PANGOT WAJA SARAKIT"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PULEN dangdangan",
-      "id": "SEGA PULEN dangdangan"
+      "id": "Nasi Pulen kukus dandang",
+      "jv": "SEGA PULEN dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "BEBEK LAN PITIK dipindang duduh putih lan duduh abang nganggo AMBENGAN TIMUN WATANG 25 Iji",
-      "id": "BEBEK LAN PITIK dipindang duduh putih lan duduh abang nganggo AMBENGAN TIMUN WATANG 25 Iji"
+      "id": "Bebek LAN Ayam dipindang duduh putih lan duduh abang nganggo AMBENGAN TIMUN WATANG 25 Iji",
+      "jv": "BEBEK LAN PITIK dipindang duduh putih lan duduh abang nganggo AMBENGAN TIMUN WATANG 25 Iji"
     },
-    "salawat": "-",
+    "salawat": {
+      "id": "Salawat sedekah -",
+      "jv": "-"
+    },
     "donga_slamet": {
-      "jv": "Selamet Pina",
-      "id": "Selamet Pina"
+      "id": "Selamet Pina",
+      "jv": "Selamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "NGUNGGAHNA BANYU",
-      "id": "NGUNGGAHNA BANYU"
+      "id": "NGUNGGAHNA BANYU",
+      "jv": "NGUNGGAHNA BANYU"
     },
     "tamba_yen_lara": {
-      "jv": "SUNTI winor jamu, utawa GODHONG RANTI",
-      "id": "SUNTI winor jamu, utawa GODHONG RANTI"
+      "id": "SUNTI diramu jamu, atau GODHONG RANTI",
+      "jv": "SUNTI winor jamu, utawa GODHONG RANTI"
     }
   },
   {
@@ -873,30 +987,36 @@
       "id": "Karena dikhianati di malam hari, dengan cara ditusuk serta karena sombong kepada orang"
     },
     "sesaji_ruwat": {
-      "jv": "KLAYU Satampah lan ARESARESAN",
-      "id": "KLAYU Satampah lan ARESARESAN"
+      "id": "KLAYU Satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KLAYU Satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "10 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 10 PICIS",
+      "jv": "10 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PUNAR dangdangan",
-      "id": "SEGA PUNAR dangdangan"
+      "id": "Nasi PUNAR kukus dandang",
+      "jv": "SEGA PUNAR dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK WIRING KUNING lan JENANG ABANG",
-      "id": "PITIK WIRING KUNING lan JENANG ABANG"
+      "id": "Ayam WIRING KUNING lan JENANG ABANG",
+      "jv": "PITIK WIRING KUNING lan JENANG ABANG"
     },
-    "salawat": "5 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 5 keteng",
+      "jv": "5 keteng"
+    },
     "donga_slamet": {
-      "jv": "Umur",
-      "id": "Umur"
+      "id": "Umur",
+      "jv": "Umur"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA KAYU",
-      "id": "ADOLA KAYU"
+      "id": "ADOLA KAYU",
+      "jv": "ADOLA KAYU"
     },
     "tamba_yen_lara": {
-      "jv": "JAHE winor jamu utawa JAHE lan SUNTI",
-      "id": "JAHE winor jamu utawa JAHE lan SUNTI"
+      "id": "JAHE diramu jamu atau JAHE dan SUNTI",
+      "jv": "JAHE winor jamu utawa JAHE lan SUNTI"
     }
   },
   {
@@ -918,30 +1038,36 @@
       "id": "Karena pertengkaran serta karena disaingi orang besar"
     },
     "sesaji_ruwat": {
-      "jv": "MANGGIS 30 Iji lan ARESARESAN",
-      "id": "MANGGIS 30 Iji lan ARESARESAN"
+      "id": "MANGGIS 30 Iji dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "MANGGIS 30 Iji lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA WUDUK dangdangan",
-      "id": "SEGA WUDUK dangdangan"
+      "id": "Nasi Uduk (Gurih) kukus dandang",
+      "jv": "SEGA WUDUK dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK lan BEBEK diolah warna loro pinindang",
-      "id": "PITIK lan BEBEK diolah warna loro pinindang"
+      "id": "Ayam lan Bebek diolah warna loro pinindang",
+      "jv": "PITIK lan BEBEK diolah warna loro pinindang"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rasul",
-      "id": "Rasul"
+      "id": "Rasul",
+      "jv": "Rasul"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA SALAKA",
-      "id": "ADOLA SALAKA"
+      "id": "ADOLA SALAKA",
+      "jv": "ADOLA SALAKA"
     },
     "tamba_yen_lara": {
-      "jv": "TALES winor ing jamu",
-      "id": "TALES winor ing jamu"
+      "id": "TALES winor ing jamu",
+      "jv": "TALES winor ing jamu"
     }
   },
   {
@@ -963,30 +1089,36 @@
       "id": "Karena diguna-guna dan kena fitnah serta karena terlalu besar pengaruh"
     },
     "sesaji_ruwat": {
-      "jv": "KACANG DUNDUNGAN 6 tekem lan ARESARESAN",
-      "id": "KACANG DUNDUNGAN 6 tekem lan ARESARESAN"
+      "id": "KACANG DUNDUNGAN 6 tekem dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KACANG DUNDUNGAN 6 tekem lan ARESARESAN"
     },
-    "tindih_ruwat": "7 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 7 PICIS",
+      "jv": "7 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "TUKON PASAR sawarnane lan sakehing JUWADAHAN",
-      "id": "TUKON PASAR sawarnane lan sakehing JUWADAHAN"
+      "id": "TUKON PASAR sawarnane dan sakehing JUWADAHAN",
+      "jv": "TUKON PASAR sawarnane lan sakehing JUWADAHAN"
     },
     "selamatan_iwak": {
-      "jv": "-",
-      "id": "-"
+      "id": "-",
+      "jv": "-"
     },
-    "salawat": "-",
+    "salawat": {
+      "id": "Salawat sedekah -",
+      "jv": "-"
+    },
     "donga_slamet": {
-      "jv": "Tolak Bilahi",
-      "id": "Tolak Bilahi"
+      "id": "Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA SALAKA",
-      "id": "ADOLA SALAKA"
+      "id": "ADOLA SALAKA",
+      "jv": "ADOLA SALAKA"
     },
     "tamba_yen_lara": {
-      "jv": "BAYEM winor ing jamu",
-      "id": "BAYEM winor ing jamu"
+      "id": "BAYEM winor ing jamu",
+      "jv": "BAYEM winor ing jamu"
     }
   },
   {
@@ -1008,30 +1140,36 @@
       "id": "Karena kena senjata serta saat tubuhnya baik terkena musibah"
     },
     "sesaji_ruwat": {
-      "jv": "KAPUNDUNG saktampah lan ARESARESAN",
-      "id": "KAPUNDUNG saktampah lan ARESARESAN"
+      "id": "KAPUNDUNG saktampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KAPUNDUNG saktampah lan ARESARESAN"
     },
-    "tindih_ruwat": "9 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 9 PICIS",
+      "jv": "9 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA LIWET dangdangan",
-      "id": "SEGA LIWET dangdangan"
+      "id": "Nasi Liwet kukus dandang",
+      "jv": "SEGA LIWET dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK sakwayahe lan IWAK LOH, janganan kang pepak sambel gepeng",
-      "id": "PITIK sakwayahe lan IWAK LOH, janganan kang pepak sambel gepeng"
+      "id": "Ayam utuh matang lan Ikan LOH, janganan kang pepak sambel gepeng",
+      "jv": "PITIK sakwayahe lan IWAK LOH, janganan kang pepak sambel gepeng"
     },
-    "salawat": "9 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 9 keteng",
+      "jv": "9 keteng"
+    },
     "donga_slamet": {
-      "jv": "Selamet Tolak Bilahi",
-      "id": "Selamet Tolak Bilahi"
+      "id": "Selamet Doa Tolak Bala (Penangkal Kemalangan)",
+      "jv": "Selamet Tolak Bilahi"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA PADANG utawa KERIS",
-      "id": "ADOLA PADANG utawa KERIS"
+      "id": "ADOLA PADANG utawa KERIS",
+      "jv": "ADOLA PADANG utawa KERIS"
     },
     "tamba_yen_lara": {
-      "jv": "KACANG winor ing jamu",
-      "id": "KACANG winor ing jamu"
+      "id": "KACANG winor ing jamu",
+      "jv": "KACANG winor ing jamu"
     }
   },
   {
@@ -1053,30 +1191,36 @@
       "id": "Karena memanjat atau perbuatannya sendiri serta karena dijelek-jelekkan saudara temannya"
     },
     "sesaji_ruwat": {
-      "jv": "RAMBUTAN satampah lan ARESARESAN",
-      "id": "RAMBUTAN satampah lan ARESARESAN"
+      "id": "RAMBUTAN satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "RAMBUTAN satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "WESI GLIGEN",
+    "tindih_ruwat": {
+      "id": "Uang tindih WESI GLIGEN",
+      "jv": "WESI GLIGEN"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "SAPI diolah jajatah (sate) bumbu manis, janganan kang pepak",
-      "id": "SAPI diolah jajatah (sate) bumbu manis, janganan kang pepak"
+      "id": "SAPI diolah jajatah (sate) bumbu manis, janganan kang pepak",
+      "jv": "SAPI diolah jajatah (sate) bumbu manis, janganan kang pepak"
     },
-    "salawat": "-",
+    "salawat": {
+      "id": "Salawat sedekah -",
+      "jv": "-"
+    },
     "donga_slamet": {
-      "jv": "Selamet Pina",
-      "id": "Selamet Pina"
+      "id": "Selamet Pina",
+      "jv": "Selamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "AHLIYA MEMARANG",
-      "id": "AHLIYA MEMARANG"
+      "id": "AHLIYA MEMARANG",
+      "jv": "AHLIYA MEMARANG"
     },
     "tamba_yen_lara": {
-      "jv": "BENGUK winor ing jamu",
-      "id": "BENGUK winor ing jamu"
+      "id": "BENGUK winor ing jamu",
+      "jv": "BENGUK winor ing jamu"
     }
   },
   {
@@ -1098,30 +1242,36 @@
       "id": "Karena diguna-guna dan kena racun serta jika aibnya terbuka"
     },
     "sesaji_ruwat": {
-      "jv": "KARA satampah lan ARESARESAN",
-      "id": "KARA satampah lan ARESARESAN"
+      "id": "KARA satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KARA satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "7 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 7 PICIS",
+      "jv": "7 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan, janganan warna 7",
-      "id": "SEGA TUMPENG dangdangan, janganan warna 7"
+      "id": "Nasi Tumpeng kukus dandang, janganan warna 7",
+      "jv": "SEGA TUMPENG dangdangan, janganan warna 7"
     },
     "selamatan_iwak": {
-      "jv": "PITIK IRENG MULUS dipanggang",
-      "id": "PITIK IRENG MULUS dipanggang"
+      "id": "Ayam hitam mulus dipanggang",
+      "jv": "PITIK IRENG MULUS dipanggang"
     },
-    "salawat": "40 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 40 keteng",
+      "jv": "40 keteng"
+    },
     "donga_slamet": {
-      "jv": "Rajukna",
-      "id": "Rajukna"
+      "id": "Doa Penolak Rintangan & Bahaya",
+      "jv": "Rajukna"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA SEGA",
-      "id": "ADOLA SEGA"
+      "id": "ADOLA SEGA",
+      "jv": "ADOLA SEGA"
     },
     "tamba_yen_lara": {
-      "jv": "WIJEN SAWIT winor ing jamu",
-      "id": "WIJEN SAWIT winor ing jamu"
+      "id": "WIJEN SAWIT winor ing jamu",
+      "jv": "WIJEN SAWIT winor ing jamu"
     }
   },
   {
@@ -1143,30 +1293,36 @@
       "id": "Karena digigit ular atau karena pertengkaran dan saudara kerabatnya"
     },
     "sesaji_ruwat": {
-      "jv": "KIMPUL satampah lan ARESARESAN",
-      "id": "KIMPUL satampah lan ARESARESAN"
+      "id": "KIMPUL satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "KIMPUL satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "10 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 10 PICIS",
+      "jv": "10 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA PULEN dangdangan lan JUWADAH sawarnane, tukon pasar",
-      "id": "SEGA PULEN dangdangan lan JUWADAH sawarnane, tukon pasar"
+      "id": "Nasi Pulen kukus dandang dan JUWADAH sawarnane, tukon pasar",
+      "jv": "SEGA PULEN dangdangan lan JUWADAH sawarnane, tukon pasar"
     },
     "selamatan_iwak": {
-      "jv": "BEBEK PUTIH sajodo linembaran",
-      "id": "BEBEK PUTIH sajodo linembaran"
+      "id": "Bebek PUTIH sajodo dialasi",
+      "jv": "BEBEK PUTIH sajodo linembaran"
     },
-    "salawat": "10 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 10 keteng",
+      "jv": "10 keteng"
+    },
     "donga_slamet": {
-      "jv": "Selamet Kabula",
-      "id": "Selamet Kabula"
+      "id": "Selamet Doa Pengabulan Hajat (Kabul)",
+      "jv": "Selamet Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "BLANTIK JARAN",
-      "id": "BLANTIK JARAN"
+      "id": "BLANTIK JARAN",
+      "jv": "BLANTIK JARAN"
     },
     "tamba_yen_lara": {
-      "jv": "TEBU IRENG winor ing jamu",
-      "id": "TEBU IRENG winor ing jamu"
+      "id": "TEBU IRENG winor ing jamu",
+      "jv": "TEBU IRENG winor ing jamu"
     }
   },
   {
@@ -1188,30 +1344,36 @@
       "id": "Karena dikhianati serta karena gelap hati karena terbebani saudara kerabat"
     },
     "sesaji_ruwat": {
-      "jv": "PELEM kang manis satampah lan ARESARESAN",
-      "id": "PELEM kang manis satampah lan ARESARESAN"
+      "id": "PELEM kang manis satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "PELEM kang manis satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "8 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 8 PICIS",
+      "jv": "8 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "WEDUS KENDIT diolah kang samekta, JUWADAH lan PITIK diolah kang samekta, janganan pepak",
-      "id": "WEDUS KENDIT diolah kang samekta, JUWADAH lan PITIK diolah kang samekta, janganan pepak"
+      "id": "WEDUS KENDIT diolah kang samekta, JUWADAH lan Ayam diolah kang samekta, janganan pepak",
+      "jv": "WEDUS KENDIT diolah kang samekta, JUWADAH lan PITIK diolah kang samekta, janganan pepak"
     },
-    "salawat": "4 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 4 keteng",
+      "jv": "4 keteng"
+    },
     "donga_slamet": {
-      "jv": "Bumi",
-      "id": "Bumi"
+      "id": "Bumi",
+      "jv": "Bumi"
     },
     "pangupaya_jiwa": {
-      "jv": "DADIYA JOGET",
-      "id": "DADIYA JOGET"
+      "id": "DADIYA JOGET",
+      "jv": "DADIYA JOGET"
     },
     "tamba_yen_lara": {
-      "jv": "KECIPIR",
-      "id": "KECIPIR"
+      "id": "Kecipir",
+      "jv": "KECIPIR"
     }
   },
   {
@@ -1233,30 +1395,36 @@
       "id": "Karena kena racun dan digigit ular"
     },
     "sesaji_ruwat": {
-      "jv": "WALUH 2 Iji ingedang jeroning ginulan lan ARESARESAN",
-      "id": "WALUH 2 Iji ingedang jeroning ginulan lan ARESARESAN"
+      "id": "WALUH 2 Iji ingedang jeroning ginudan dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "WALUH 2 Iji ingedang jeroning ginulan lan ARESARESAN"
     },
-    "tindih_ruwat": "4 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 4 PICIS",
+      "jv": "4 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA GOLONG dangdangan",
-      "id": "SEGA GOLONG dangdangan"
+      "id": "Nasi Golong (bulat) kukus dandang",
+      "jv": "SEGA GOLONG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK lan BEBEK pada ules abange sarta IWAK LOH diolah sakarepe",
-      "id": "PITIK lan BEBEK pada ules abange sarta IWAK LOH diolah sakarepe"
+      "id": "Ayam lan Bebek pada ules abange sarta Ikan LOH diolah sakarepe",
+      "jv": "PITIK lan BEBEK pada ules abange sarta IWAK LOH diolah sakarepe"
     },
-    "salawat": "5 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 5 keteng",
+      "jv": "5 keteng"
+    },
     "donga_slamet": {
-      "jv": "Kabula",
-      "id": "Kabula"
+      "id": "Doa Pengabulan Hajat (Kabul)",
+      "jv": "Kabula"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA DOM",
-      "id": "ADOLA DOM"
+      "id": "ADOLA DOM",
+      "jv": "ADOLA DOM"
     },
     "tamba_yen_lara": {
-      "jv": "SABARANG WALUH",
-      "id": "SABARANG WALUH"
+      "id": "SABARANG Labu",
+      "jv": "SABARANG WALUH"
     }
   },
   {
@@ -1278,30 +1446,36 @@
       "id": "Karena berada di tengah peperangan serta karena ditinggal tuan dan orang tua"
     },
     "sesaji_ruwat": {
-      "jv": "PARE WELUT wutuhan kinulup satampah lan ARESARESAN",
-      "id": "PARE WELUT wutuhan kinulup satampah lan ARESARESAN"
+      "id": "PARE WELUT wutuhan kinulup satampah dan Ares-aresan (umbi-umbian, merambat, dan bergantung)",
+      "jv": "PARE WELUT wutuhan kinulup satampah lan ARESARESAN"
     },
-    "tindih_ruwat": "6 PICIS",
+    "tindih_ruwat": {
+      "id": "Uang tindih 6 PICIS",
+      "jv": "6 PICIS"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "PITIK PUTIH MULUS lan PITIK BARUMBUN dipanggang",
-      "id": "PITIK PUTIH MULUS lan PITIK BARUMBUN dipanggang"
+      "id": "Ayam putih mulus lan Ayam BARUMBUN dipanggang",
+      "jv": "PITIK PUTIH MULUS lan PITIK BARUMBUN dipanggang"
     },
-    "salawat": "satak sawe keteng",
+    "salawat": {
+      "id": "Salawat sedekah satak sawe keteng",
+      "jv": "satak sawe keteng"
+    },
     "donga_slamet": {
-      "jv": "Selamet Pina",
-      "id": "Selamet Pina"
+      "id": "Selamet Pina",
+      "jv": "Selamet Pina"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA GEGODONGAN",
-      "id": "ADOLA GEGODONGAN"
+      "id": "ADOLA GEGODONGAN",
+      "jv": "ADOLA GEGODONGAN"
     },
     "tamba_yen_lara": {
-      "jv": "LAMPES SAWIT",
-      "id": "LAMPES SAWIT"
+      "id": "LAMPES SAWIT",
+      "jv": "LAMPES SAWIT"
     }
   },
   {
@@ -1323,30 +1497,36 @@
       "id": "Karena disakiti dan dianiaya serta kena kutukan karena tekadnya sendiri"
     },
     "sesaji_ruwat": {
-      "jv": "GEDANG RAJA kang suluh satundun lan MUNDU kang kuning satampah sarta ARESARESAN kang pepak sakehing pala kapendem, kasempar lan gumantung",
-      "id": "GEDANG RAJA kang suluh satundun lan MUNDU kang kuning satampah sarta ARESARESAN kang pepak sakehing pala kapendem, kasempar lan gumantung"
+      "id": "Pisang RAJA kang suluh satundun dan MUNDU kang kuning satampah serta Ares-aresan (umbi-umbian, merambat, dan bergantung) kang pepak sakehing pala kapendem, kasempar dan bergantung",
+      "jv": "GEDANG RAJA kang suluh satundun lan MUNDU kang kuning satampah sarta ARESARESAN kang pepak sakehing pala kapendem, kasempar lan gumantung"
     },
-    "tindih_ruwat": "SATAK SAWE",
+    "tindih_ruwat": {
+      "id": "Uang tindih SATAK SAWE",
+      "jv": "SATAK SAWE"
+    },
     "selamatan_sega": {
-      "jv": "SEGA TUMPENG dangdangan",
-      "id": "SEGA TUMPENG dangdangan"
+      "id": "Nasi Tumpeng kukus dandang",
+      "jv": "SEGA TUMPENG dangdangan"
     },
     "selamatan_iwak": {
-      "jv": "BURON DARAT, BURON MABUR lan BURON LENG, kang pada khalal kabeh, wowohan, juwadah kang papak, kuluban warna 7",
-      "id": "BURON DARAT, BURON MABUR lan BURON LENG, kang pada khalal kabeh, wowohan, juwadah kang papak, kuluban warna 7"
+      "id": "BURON DARAT, BURON MABUR lan BURON LENG, kang pada khalal kabeh, wowohan, juwadah kang papak, sayuran rebus 7",
+      "jv": "BURON DARAT, BURON MABUR lan BURON LENG, kang pada khalal kabeh, wowohan, juwadah kang papak, kuluban warna 7"
     },
-    "salawat": "19 keteng",
+    "salawat": {
+      "id": "Salawat sedekah 19 keteng",
+      "jv": "19 keteng"
+    },
     "donga_slamet": {
-      "jv": "Mubarak",
-      "id": "Mubarak"
+      "id": "Doa Berkah & Keberlimpahan",
+      "jv": "Mubarak"
     },
     "pangupaya_jiwa": {
-      "jv": "ADOLA BATA",
-      "id": "ADOLA BATA"
+      "id": "ADOLA BATA",
+      "jv": "ADOLA BATA"
     },
     "tamba_yen_lara": {
-      "jv": "RANTI SAWIT",
-      "id": "RANTI SAWIT"
+      "id": "RANTI SAWIT",
+      "jv": "RANTI SAWIT"
     }
   }
 ]

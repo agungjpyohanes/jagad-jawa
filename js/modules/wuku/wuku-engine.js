@@ -16,7 +16,7 @@ import {
   getWukuPetenget,
   WUKU_PETENGET_LIST
 } from '../../data/wuku-petenget-db.js';
-import { loadDomainData, mapWukuItem } from '../../services/dbLoader.js';
+import { loadDomainData, mapWukuItem, extractText } from '../../services/dbLoader.js';
 
 let currentWukuList = Array.isArray(PAWUKON_LIST) ? PAWUKON_LIST.map(mapWukuItem) : [];
 
@@ -215,10 +215,10 @@ export function getWukuDetailSummary(wukuInput) {
     watak:    data.watek_budi_pangerti || '-',
     bilahi:   data.bilahi_bebaya || '-',
     sesaji:   data.sesaji_ruwat || '-',
-    tindih:   data.tindih_ruwat || '-',
+    tindih:   extractText(data.tindih_ruwat || data.tindih) || '-',
     sega:     data.selamatan_sega || '-',
     iwak:     data.selamatan_iwak || '-',
-    salawat:  data.salawat || '-',
+    salawat:  extractText(data.salawat) || '-',
     donga:    data.donga_slamet || '-',
     pangupaya: data.pangupaya_jiwa || '-',
     tamba:    data.tamba_yen_lara || '-',

@@ -40,33 +40,63 @@
   "kategori": [
     {
       "id": "wirid-harian",
-      "nama": "Wirid & Doa Harian",
+      "nama": {
+        "id": "Wirid & Doa Harian",
+        "jv": "Wirid & Donga Padintenan"
+      },
       "urutan": 1,
-      "deskripsi": "Wirid menurut hari dan pasaran serta doa yang dibaca sehari-hari."
+      "deskripsi": {
+        "id": "Wirid menurut hari dan pasaran serta doa yang dibaca sehari-hari.",
+        "jv": "Wirid miturut dinten lan pasaran sarta donga padintenan."
+      }
     },
     {
       "id": "sesuci",
-      "nama": "Sesuci & Penyucian Diri",
+      "nama": {
+        "id": "Sesuci & Penyucian Diri",
+        "jv": "Sesuci & Panyucening Raga"
+      },
       "urutan": 2,
-      "deskripsi": "Niyat dan tata cara penyucian badan (adus keramas)."
+      "deskripsi": {
+        "id": "Niat dan tata cara penyucian badan (mandi keramas).",
+        "jv": "Niyat lan tatacara panyucening raga (adus jamas keramas)."
+      }
     },
     {
       "id": "semedi",
-      "nama": "Semedi & Mantra",
+      "nama": {
+        "id": "Semedi & Mantra",
+        "jv": "Semedi & Rapal Mantra"
+      },
       "urutan": 3,
-      "deskripsi": "Rangkaian semedi berbentuk mantra suku kata, dilanjutkan doa."
+      "deskripsi": {
+        "id": "Rangkaian semedi berbentuk mantra suku kata, dilanjutkan doa.",
+        "jv": "Reroncen semedi wujud rapal mantra suku kata, kalajengaken donga."
+      }
     },
     {
       "id": "ruwatan",
-      "nama": "Ruwatan & Panglebur Dosa",
+      "nama": {
+        "id": "Ruwatan & Panglebur Dosa",
+        "jv": "Ruwatan & Panglebur Dosa"
+      },
       "urutan": 4,
-      "deskripsi": "Donga ruwatan weton dan panglebur dosa untuk sadulur papat kalima pancer."
+      "deskripsi": {
+        "id": "Doa ruwatan weton dan panglebur dosa untuk sadulur papat kalima pancer.",
+        "jv": "Donga ruwatan weton lan panglebur dosa kanggé sadulur papat kalima pancer."
+      }
     },
     {
       "id": "wulan-suro",
-      "nama": "Wulan Suro",
+      "nama": {
+        "id": "Bulan Suro",
+        "jv": "Wulan Sura"
+      },
       "urutan": 5,
-      "deskripsi": "Wirid dan donga untuk malam 1 Suro dan sepanjang bulan Suro."
+      "deskripsi": {
+        "id": "Wirid dan doa untuk malam 1 Suro dan sepanjang bulan Suro.",
+        "jv": "Wirid lan donga kanggé malem 1 Sura sarta sedangunipun wulan Sura."
+      }
     }
   ],
   "entri": [
@@ -75,7 +105,10 @@
       "kategori": "wirid-harian",
       "judul": "Wirid Puji Dina",
       "subjudul": "Wiridan kang kudu diwaca miturut dina lan pasaran",
-      "ringkasan": "Wirid tujuh hari lengkap dengan jumlah bacaan, arah menghadap menurut pasaran, jam baca, dan nabi pemilik tiap hari.",
+      "ringkasan": {
+        "id": "Wirid tujuh hari lengkap dengan jumlah bacaan, arah menghadap menurut pasaran, jam baca, dan nabi pemilik tiap hari.",
+        "jv": "Wirid pitung dinten jangkep mawi gunggunging waosan, arah adhep miturut pasaran, wekdal waosan, lan nabi panuntun saben dinten."
+      },
       "bahasa": [
         "jw"
       ],
@@ -164,7 +197,10 @@
       "kategori": "wirid-harian",
       "judul": "Dongo Padinan",
       "subjudul": "Doa harian",
-      "ringkasan": "Tiga doa harian: Doa Damai (bahasa Indonesia), Rama Kawula, dan Salam Maria (bahasa Jawa).",
+      "ringkasan": {
+        "id": "Tiga doa harian: Doa Damai (bahasa Indonesia), Rama Kawula, dan Salam Maria (bahasa Jawa).",
+        "jv": "Tiga doa harian: Doa Damai (bahasa Indonesia), Rama Kawula, dan Salam Maria (bahasa Jawa)."
+      },
       "bahasa": [
         "id",
         "jw"
@@ -203,7 +239,7 @@
           "baris": [
             "Rama kawula ing swarga",
             "Asma Dalem kaluhurna",
-            "Kraton Dalem mugi rawuha",
+            "Karajan Dalem mugi rawuha",
             "Karsa Dalem kalampahana",
             "wonten ing donya kados ing swarga",
             "kawula nyuwun rejeki kangge sapunika",
@@ -239,14 +275,17 @@
         "kristiani"
       ],
       "sumber_file": "DONGO_PADINAN_pocket.docx",
-      "teks_cari": "dongo padinan doa harian doa damai fransiskus asisi tuhan, jadikanlah aku pembawa damai, bila terjadi kebencian, jadikanlah aku pembawa cinta kasih, bila terjadi penghinaan, jadikanlah aku pembawa pengampunan, bila terjadi perselisihan, jadikanlah aku pembawa kerukunan, bila terjadi kebimbangan, jadikanlah aku pembawa kepastian, bila terjadi kesesatan, jadikanlah aku pembawa kebenaran, bila terjadi kecemasan, jadikanlah aku pembawa harapan, bila terjadi kesedihan, jadikanlah aku sumber kegembiraan, bila terjadi kegelapan, jadikanlah aku pembawa terang, tuhan semoga aku ingin menghibur daripada dihibur, memahami daripada dipahami, mencintai daripada dicintai, sebab dengan memberi aku menerima, dengan mengampuni aku diampuni, dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya. aamiin. rama kawula rama kawula ing swarga asma dalem kaluhurna kraton dalem mugi rawuha karsa dalem kalampahana wonten ing donya kados ing swarga kawula nyuwun rejeki kangge sapunika sakathahing lepat nyuwun pangapunten dalem kados dene anggen kawula ugi ngapunten dhateng sesami kawula nyuwun tinebihna saking panggodha saha linuwarna saking piawon aamiin salam maria sembah bekti kawula, dèwi maria, kekasihing allah. pangéran nunggil ing panjenengan dalem. sami-sami wanita sang dèwi pinuji piyambak, saha pinuji ugi wohing salira dalem, sri yésus. dèwi maria, ibuning allah, kawula tiyang dosa sami nyuwun pangèstu dalem, samangké tuwin bénjing dumugining pejah. aamiin."
+      "teks_cari": "dongo padinan doa harian doa damai fransiskus asisi tuhan, jadikanlah aku pembawa damai, bila terjadi kebencian, jadikanlah aku pembawa cinta kasih, bila terjadi penghinaan, jadikanlah aku pembawa pengampunan, bila terjadi perselisihan, jadikanlah aku pembawa kerukunan, bila terjadi kebimbangan, jadikanlah aku pembawa kepastian, bila terjadi kesesatan, jadikanlah aku pembawa kebenaran, bila terjadi kecemasan, jadikanlah aku pembawa harapan, bila terjadi kesedihan, jadikanlah aku sumber kegembiraan, bila terjadi kegelapan, jadikanlah aku pembawa terang, tuhan semoga aku ingin menghibur daripada dihibur, memahami daripada dipahami, mencintai daripada dicintai, sebab dengan memberi aku menerima, dengan mengampuni aku diampuni, dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya. aamiin. rama kawula rama kawula ing swarga asma dalem kaluhurna karajan dalem mugi rawuha karsa dalem kalampahana wonten ing donya kados ing swarga kawula nyuwun rejeki kangge sapunika sakathahing lepat nyuwun pangapunten dalem kados dene anggen kawula ugi ngapunten dhateng sesami kawula nyuwun tinebihna saking panggodha saha linuwarna saking piawon aamiin salam maria sembah bekti kawula, dèwi maria, kekasihing allah. pangéran nunggil ing panjenengan dalem. sami-sami wanita sang dèwi pinuji piyambak, saha pinuji ugi wohing salira dalem, sri yésus. dèwi maria, ibuning allah, kawula tiyang dosa sami nyuwun pangèstu dalem, samangké tuwin bénjing dumugining pejah. aamiin."
     },
     {
       "id": "sesuci-badan-adus-keramas",
       "kategori": "sesuci",
       "judul": "Sesuci Badan / Adus Keramas",
       "subjudul": null,
-      "ringkasan": "Dua niyat penyucian saat mandi dan keramas, ditambah catatan cara menyawuk air.",
+      "ringkasan": {
+        "id": "Dua niyat penyucian saat mandi dan keramas, ditambah catatan cara menyawuk air.",
+        "jv": "Dua niyat penyucian saat mandi dan keramas, ditambah catatan cara menyawuk air."
+      },
       "bahasa": [
         "jw"
       ],
@@ -302,7 +341,10 @@
       "kategori": "semedi",
       "judul": "Semedi Kanggo Mangerteni Wujud",
       "subjudul": "Panguripaning sadulur papat minangaka utusaning Gusti",
-      "ringkasan": "Semedi berupa satu rangkaian mantra suku kata untuk mengenali wujud; tanpa bagian lanjutan.",
+      "ringkasan": {
+        "id": "Semedi berupa satu rangkaian mantra suku kata untuk mengenali wujud; tanpa bagian lanjutan.",
+        "jv": "Semedi berupa satu rangkaian mantra suku kata untuk mengenali wujud; tanpa bagian lanjutan."
+      },
       "bahasa": [
         "mantra"
       ],
@@ -337,7 +379,10 @@
       "kategori": "semedi",
       "judul": "Semedi Mangerteni Sadulure Papat Kalima Pancer",
       "subjudul": null,
-      "ringkasan": "Semedi mantra untuk mengenali sadulur papat kalima pancer, dilanjutkan donga.",
+      "ringkasan": {
+        "id": "Semedi mantra untuk mengenali sadulur papat kalima pancer, dilanjutkan donga.",
+        "jv": "Semedi mantra untuk mengenali sadulur papat kalima pancer, dilanjutkan donga."
+      },
       "bahasa": [
         "mantra"
       ],
@@ -395,7 +440,10 @@
       "kategori": "semedi",
       "judul": "Semedi Nyampurnake Wujud",
       "subjudul": "Nalika ingsun mampan ing bumi suci",
-      "ringkasan": "Semedi mantra untuk menyempurnakan wujud saat berada di bumi suci, dilanjutkan donga berpola 'YOHO'.",
+      "ringkasan": {
+        "id": "Semedi mantra untuk menyempurnakan wujud saat berada di bumi suci, dilanjutkan donga berpola 'YOHO'.",
+        "jv": "Semedi mantra untuk menyempurnakan wujud saat berada di bumi suci, dilanjutkan donga berpola 'YOHO'."
+      },
       "bahasa": [
         "mantra"
       ],
@@ -447,7 +495,10 @@
       "kategori": "semedi",
       "judul": "Semedi Panetepan Kapercayan Marang Gusti Kang Maha Kuwasa",
       "subjudul": null,
-      "ringkasan": "Semedi mantra penetapan kepercayaan kepada Gusti, dilanjutkan donga singkat.",
+      "ringkasan": {
+        "id": "Semedi mantra penetapan kepercayaan kepada Gusti, dilanjutkan donga singkat.",
+        "jv": "Semedi mantra penetapan kepercayaan kepada Gusti, dilanjutkan donga singkat."
+      },
       "bahasa": [
         "mantra"
       ],
@@ -489,7 +540,10 @@
       "kategori": "ruwatan",
       "judul": "Donga Ruwatan Weton",
       "subjudul": "Untuk diri sendiri (pribadi) dan untuk keluarga",
-      "ringkasan": "Dua varian donga ruwatan weton: pribadi, dan keluarga dengan titik isian untuk nama.",
+      "ringkasan": {
+        "id": "Dua varian donga ruwatan weton: pribadi, dan keluarga dengan titik isian untuk nama.",
+        "jv": "Donga sakral ruwatan weton lair kanggé nglebur sukerta, sengkala, lan bebaya tumrap diri pribadi lan kaluwarga."
+      },
       "bahasa": [
         "jw"
       ],
@@ -555,7 +609,10 @@
       "kategori": "ruwatan",
       "judul": "Dongo Pangleburing Dosa",
       "subjudul": "Kanggo ngruwat sadulur papat",
-      "ringkasan": "Doa peleburan dosa dan kesalahan dalam rangka meruwat sadulur papat.",
+      "ringkasan": {
+        "id": "Doa peleburan dosa dan kesalahan dalam rangka meruwat sadulur papat.",
+        "jv": "Panyuwunan agung pangaksama leburipun sedaya kalepatan lahir batin tumrap badan lan sadulur batin."
+      },
       "bahasa": [
         "jw"
       ],
@@ -596,7 +653,10 @@
       "kategori": "wulan-suro",
       "judul": "Wirid ing Malem 1 (Siji) Suro",
       "subjudul": "Semedi ing pinggir samodra",
-      "ringkasan": "Wirid tiga nama Gusti yang dibaca 33 kali, dilanjutkan donga panyuwunan panjang umur yang dibaca 100 kali.",
+      "ringkasan": {
+        "id": "Wirid tiga nama Gusti yang dibaca 33 kali, dilanjutkan donga panyuwunan panjang umur yang dibaca 100 kali.",
+        "jv": "Wirid agung malem 1 Sura kanggé ngreksa katentreman lahir batin lan panyuwunan berkah karaharjan."
+      },
       "bahasa": [
         "jw",
         "mantra"
@@ -668,7 +728,10 @@
       "kategori": "wulan-suro",
       "judul": "Donga Sajroning Wulan Suro",
       "subjudul": "Semedi ing pinggir samodra / bengawan",
-      "ringkasan": "Doa panjang berbahasa Jawa krama berisi syukur, permohonan ampun, dan penyerahan diri, dibaca sepanjang bulan Suro.",
+      "ringkasan": {
+        "id": "Doa panjang berbahasa Jawa krama berisi syukur, permohonan ampun, dan penyerahan diri, dibaca sepanjang bulan Suro.",
+        "jv": "Doa panjang berbahasa Jawa krama berisi syukur, permohonan ampun, dan penyerahan diri, dibaca sepanjang bulan Suro."
+      },
       "bahasa": [
         "jw"
       ],
@@ -696,7 +759,7 @@
             "Mboten Katalumpen Dumateng Leluhur Agung Ing Tanah Jawa",
             "Mugi Gusti Tansah Paring Pangapunten Sadaya Dosa Tuwin Kalepatanipun",
             "Sarta Linuwarana Saking Bebenduning Allah",
-            "Lan Pinaringan Gesang Langgeng Wonten Keraton Dalem Ing Suwarga",
+            "Lan Pinaringan Gesang Langgeng Wonten Kaswargan Dalem Ing Suwarga",
             "Duh Gusti Ingkang Maha Kuwasa",
             "Kawula Pitados Dumateng Sadaya Panguwaos Sarta Kawicaksanan Dalem Gusti",
             "Pramila Sadaya Lampah Sarta Gesang Kawula Sakanca Rowang",
@@ -724,14 +787,17 @@
         }
       ],
       "sumber_file": "DONGA_SAJRONING_WULAN_SURO_pocket.docx",
-      "teks_cari": "donga sajroning wulan suro semedi ing pinggir samodra / bengawan donga duh gusti ingkang maha suci ingkang tansah kawula sembah rina kalawan wengi kawula ngaturaken agunging panuwun ingkang tanpa pepindan awit sadaya berkah rahmat sarta nugraha dalem gusti ingkang sampun pinaringaken dumateng kawula sakanca rowang duh gusti ingkang maha pangaksama kawula nyuwun sih lumunturing pangaksama ingkang agung mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatan kawula sakanca rowang dalah kulawarga sabrayat sakukuban sarta leluhur kawula mboten katalumpen dumateng leluhur agung ing tanah jawa mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatanipun sarta linuwarana saking bebenduning allah lan pinaringan gesang langgeng wonten keraton dalem ing suwarga duh gusti ingkang maha kuwasa kawula pitados dumateng sadaya panguwaos sarta kawicaksanan dalem gusti pramila sadaya lampah sarta gesang kawula sakanca rowang tansah sumarah wonten ngarsa dalem gusti duh gusti ingkang maha asih kawula nyadong berkah dalem, mugi gusti tansah paring teguh rahayu slamet tansah manggih bagya mulya bejo basuki widodo kalis nir ing sambikala sarta tambahing daya kekiyatan mugi sadaya ingkang kawula sedya teka kawula cipto dadi, ngertos sakderengipun winarah saking kersaning allah hu allah hu allah hu allah"
+      "teks_cari": "donga sajroning wulan suro semedi ing pinggir samodra / bengawan donga duh gusti ingkang maha suci ingkang tansah kawula sembah rina kalawan wengi kawula ngaturaken agunging panuwun ingkang tanpa pepindan awit sadaya berkah rahmat sarta nugraha dalem gusti ingkang sampun pinaringaken dumateng kawula sakanca rowang duh gusti ingkang maha pangaksama kawula nyuwun sih lumunturing pangaksama ingkang agung mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatan kawula sakanca rowang dalah kulawarga sabrayat sakukuban sarta leluhur kawula mboten katalumpen dumateng leluhur agung ing tanah jawa mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatanipun sarta linuwarana saking bebenduning allah lan pinaringan gesang langgeng wonten kaswargan dalem ing suwarga duh gusti ingkang maha kuwasa kawula pitados dumateng sadaya panguwaos sarta kawicaksanan dalem gusti pramila sadaya lampah sarta gesang kawula sakanca rowang tansah sumarah wonten ngarsa dalem gusti duh gusti ingkang maha asih kawula nyadong berkah dalem, mugi gusti tansah paring teguh rahayu slamet tansah manggih bagya mulya bejo basuki widodo kalis nir ing sambikala sarta tambahing daya kekiyatan mugi sadaya ingkang kawula sedya teka kawula cipto dadi, ngertos sakderengipun winarah saking kersaning allah hu allah hu allah hu allah"
     },
     {
       "id": "nyingkirake-sengkala-1-suro",
       "kategori": "wulan-suro",
       "judul": "Nyingkirake Sengkala ing Tanggal 1 Suro",
       "subjudul": null,
-      "ringkasan": "Doa singkat menyingkirkan sengkala pada 1 Suro, dengan titik isian nama.",
+      "ringkasan": {
+        "id": "Doa singkat menyingkirkan sengkala pada 1 Suro, dengan titik isian nama.",
+        "jv": "Rapalan panyingkir sengkala lan balak ing malem wiwitan wulan Sura supados widada nir ing sambekala."
+      },
       "bahasa": [
         "jw"
       ],

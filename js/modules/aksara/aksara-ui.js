@@ -633,7 +633,7 @@ export function showAksaraQuizResult() {
   }
 
   let rank = 'Penyalin Hanacaraka';
-  if (aksaraQuizState.score === 100) rank = 'Gelar: Carik Keraton Linuwih';
+  if (aksaraQuizState.score === 100) rank = 'Gelar: Pujangga Utama Linuwih';
   else if (aksaraQuizState.score >= 80) rank = 'Gelar: Juru Serat Sastra';
   else if (aksaraQuizState.score >= 60) rank = 'Gelar: Siswa Sinau Aksara';
 

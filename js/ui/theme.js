@@ -1,5 +1,5 @@
 /**
- * Jagad Jawa — Fitur Tema: Dark Mode & Light Mode (Parchemin & Keraton Night)
+ * Jagad Jawa — Fitur Tema: Dark Mode & Light Mode (Parchemin & Tradisi Wulung)
  * 
  * Tanggung Jawab:
  * 1. Mengelola preferensi tema di localStorage key 'jagad_jawa_theme'.

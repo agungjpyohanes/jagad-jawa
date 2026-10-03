@@ -160,158 +160,163 @@ if (typeof document !== 'undefined') {
 const BREADCRUMB_MAP = {
   'beranda': {
     category: null,
-    title: 'Beranda',
+    title: { id: 'Beranda', jv: 'Pambuka' },
     icon: 'fa-solid fa-house',
     sub: null
   },
   'kalender': {
-    category: { label: 'Wektu & Penanggalan', icon: 'fa-solid fa-calendar-days' },
-    title: 'Kalender Jawa',
+    category: { label: { id: 'Waktu & Penanggalan', jv: 'Wektu & Penanggalan' }, icon: 'fa-solid fa-calendar-days' },
+    title: { id: 'Kalender Jawa', jv: 'Kalendher Jawi' },
     icon: 'fa-solid fa-calendar-days',
-    sub: 'Pranata Mangsa & Weton'
+    sub: { id: 'Pranata Mangsa & Weton', jv: 'Pranata Mangsa & Weton' }
   },
   'tanggal-jawa': {
-    category: { label: 'Wektu & Penanggalan', icon: 'fa-solid fa-calendar-days' },
-    title: 'Konversi Tanggal Jawa',
+    category: { label: { id: 'Waktu & Penanggalan', jv: 'Wektu & Penanggalan' }, icon: 'fa-solid fa-calendar-days' },
+    title: { id: 'Konversi Tanggal Jawa', jv: 'Konversi Tanggal Jawa' },
     icon: 'fa-solid fa-moon',
-    sub: 'Sultan Agungan & Anno Javanico'
+    sub: { id: 'Sultan Agungan & Anno Javanico', jv: 'Sultan Agungan & Anno Javanico' }
   },
   'kepribadian': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Nujum Pribadi',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Nujum Pribadi', jv: 'Nujum Pribadhi' },
     icon: 'fa-solid fa-wand-magic-sparkles',
-    sub: '6 Dimensi Bincil & Karakter'
+    sub: { id: '6 Dimensi Bincil & Karakter', jv: '6 Dhimènsi Bincil & Watak' }
   },
   'perjodohan': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Perjodohan (Pitung Jawa)',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Perjodohan (Pitung Jawa)', jv: 'Pitung Salaki Rabi' },
     icon: 'fa-solid fa-heart',
-    sub: 'Salaki Rabi & Neptu Pasangan'
+    sub: { id: 'Salaki Rabi & Neptu Pasangan', jv: 'Salaki Rabi & Neptu Penganten' }
   },
   'selametan': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Pengetan Tilar Donyo',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Peringatan Wafat', jv: 'Pengetan Tilar Donyo' },
     icon: 'fa-solid fa-hourglass-half',
-    sub: 'Haul Leluhur Geblak - Nyewu'
+    sub: { id: 'Haul Leluhur Geblak - Nyewu', jv: 'Haul Leluhur Geblak - Nyewu' }
   },
   'ijab': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Petung Ijab (Palakrama)',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Petung Ijab (Palakrama)', jv: 'Petung Ijab (Palakrama)' },
     icon: 'fa-solid fa-ring',
-    sub: 'Neptu Khusus Nikah'
+    sub: { id: 'Neptu Khusus Nikah', jv: 'Neptu Mirunggan Nikah' }
   },
   'omah': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Petung Omah & Cempuri',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Petung Omah & Cempuri', jv: 'Petung Omah & Cempuri' },
     icon: 'fa-solid fa-house-chimney',
-    sub: 'Pembangunan & Lawangan'
+    sub: { id: 'Pembangunan & Lawangan', jv: 'Pambangunan & Lawangan' }
   },
   'ternak': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Petung Kehidupan',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Petung Kehidupan', jv: 'Petung Panguripan' },
     icon: 'fa-solid fa-paw',
-    sub: 'Ternak, Loro, & Geblak'
+    sub: { id: 'Ternak, Loro, & Geblak', jv: 'Ingon-ingon, Gerah, & Geblak' }
   },
   'sasmitha': {
-    category: { label: 'Nujum & Primbon', icon: 'fa-solid fa-wand-magic-sparkles' },
-    title: 'Sasmitha (Tanda Alam & Tubuh)',
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Sasmitha (Tanda Alam & Tubuh)', jv: 'Sasmitha (Pratandha Alam & Badan)' },
     icon: 'fa-solid fa-eye',
-    sub: 'Impen, Kedut, & Fenomena Langit'
+    sub: { id: 'Impen, Kedut, & Fenomena Langit', jv: 'Impen, Kedut, & Pratandha Langit' }
   },
   'wuku': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Ensiklopedia 30 Wuku',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Ensiklopedia 30 Wuku', jv: 'Pawukon 30 Wuku' },
     icon: 'fa-solid fa-compass',
-    sub: 'Pawukon Sinta - Watugunung'
+    sub: { id: 'Pawukon Sinta - Watugunung', jv: 'Pawukon Sinta - Watugunung' }
   },
   'tripurusa': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Telur Jagad (Tripurusa)',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Telur Jagad (Tripurusa)', jv: 'Endhog Wisesa (Tripurusa)' },
     icon: 'fa-solid fa-egg',
-    sub: 'Mitologi Kosmologi Wayang'
+    sub: { id: 'Mitologi Kosmologi Wayang', jv: 'Mitologi Kosmologi Wayang' }
   },
   'ensiklopedia-budaya': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Ensiklopedia Budaya & Primbon',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Ensiklopedia Budaya & Primbon', jv: 'Kawruh Kabudayan & Primbon' },
     icon: 'fa-solid fa-book-journal-whills',
-    sub: 'Falakiah & Referensi Lengkap'
+    sub: { id: 'Falakiah & Referensi Lengkap', jv: 'Falakiah & Kawruh Jangkep' }
   },
   'mitologi': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Mitologi Nusantara',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Mitologi Nusantara', jv: 'Mitologi Nuswantara' },
     icon: 'fa-solid fa-scroll',
-    sub: 'Sastra & Cerita Kuno'
+    sub: { id: 'Sastra & Cerita Kuno', jv: 'Sastra & Cariyos Kuna' }
   },
   'gamelan': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Gamelan Maya',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Gamelan Maya', jv: 'Gamelan Jawa' },
     icon: 'fa-solid fa-drum',
-    sub: 'Karawitan Pelog & Slendro'
+    sub: { id: 'Karawitan Pelog & Slendro', jv: 'Karawitan Pelog & Slendro' }
   },
   'aksara': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Studio Aksara Jawa',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Studio Aksara Jawa', jv: 'Papan Aksara Jawa' },
     icon: 'fa-solid fa-feather-pointed',
-    sub: 'Papan Ketik & Transliterasi'
+    sub: { id: 'Papan Ketik & Transliterasi', jv: 'Papan Ketik & Transliterasi' }
   },
   'wayang': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Panggung Kelir Wayang',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Panggung Kelir Wayang', jv: 'Panggung Kelir Wayang' },
     icon: 'fa-solid fa-masks-theater',
-    sub: 'Wayang Kulit Purwa Surakarta'
+    sub: { id: 'Wayang Kulit Purwa Surakarta', jv: 'Wayang Kulit Purwa Surakarta' }
   },
   'pitutur': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Pitutur Luhur & Kuis',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Pitutur Luhur & Kuis', jv: 'Piwulang Luhur & Cangkriman' },
     icon: 'fa-solid fa-quote-left',
-    sub: 'Falsafah Luhur & Uji Wawasan'
+    sub: { id: 'Falsafah Luhur & Uji Wawasan', jv: 'Falsafah Luhur & Uji Kawruh' }
   },
   'pustaka': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Pustaka Digital',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Pustaka Digital', jv: 'Pustaka Jawa' },
     icon: 'fa-solid fa-book-bookmark',
-    sub: 'Serat Kuno & Usada Tradisi'
+    sub: { id: 'Serat Kuno & Usada Tradisi', jv: 'Serat Kuno & Usada Tradhisi' }
   },
   'sinengker': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Pustaka Sinengker',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Pustaka Sinengker', jv: 'Pustaka Sinengker' },
     icon: 'fa-solid fa-shield-halved',
-    sub: 'Kompas Danyang 360°'
+    sub: { id: 'Kompas Danyang 360°', jv: 'Kompas Danyang 360°' }
   },
   'tumpeng': {
-    category: { label: 'Seni & Budaya', icon: 'fa-solid fa-masks-theater' },
-    title: 'Tumpeng Tombak Rojo',
+    category: { label: { id: 'Seni & Budaya', jv: 'Seni & Kabudayan' }, icon: 'fa-solid fa-masks-theater' },
+    title: { id: 'Tumpeng Tombak Rojo', jv: 'Tumpeng Tombak Rojo' },
     icon: 'fa-solid fa-bowl-rice',
-    sub: 'Ubarampe Sesaji & Filosofi'
+    sub: { id: 'Ubarampe Sesaji & Filosofi', jv: 'Ubarampe Sesaji & Filosofi' }
   },
   'laporan': {
-    category: { label: 'Laporan & Ekspor', icon: 'fa-solid fa-file-pdf' },
-    title: 'Pusat Laporan Keraton',
+    category: { label: { id: 'Laporan & Ekspor', jv: 'Laporan & Cithak' }, icon: 'fa-solid fa-file-pdf' },
+    title: { id: 'Pusat Laporan Tradisi Luhur', jv: 'Pusat Serat Laporan Tradhisi Luhur' },
     icon: 'fa-solid fa-file-pdf',
-    sub: 'Dokumen Resmi & Piagam'
+    sub: { id: 'Dokumen Resmi & Piagam', jv: 'Serat Resmi & Piagam' }
   }
 };
 
 const CATEGORY_DEFAULT_TAB = {
+  'Waktu & Penanggalan': 'kalender',
   'Wektu & Penanggalan': 'kalender',
   'Nujum & Primbon': 'kepribadian',
   'Seni & Budaya': 'wuku',
-  'Laporan & Ekspor': 'laporan'
+  'Seni & Kabudayan': 'wuku',
+  'Laporan & Ekspor': 'laporan',
+  'Laporan & Cithak': 'laporan'
 };
 
 /**
  * Resolves the primary default tab for a given category label
- * @param {string|null} categoryLabel
+ * @param {string|object|null} categoryLabel
  * @returns {string}
  */
 function getCategoryDefaultTab(categoryLabel) {
   if (!categoryLabel) return 'beranda';
-  if (CATEGORY_DEFAULT_TAB[categoryLabel]) {
-    return CATEGORY_DEFAULT_TAB[categoryLabel];
+  const labelStr = typeof categoryLabel === 'object' ? (categoryLabel.id || categoryLabel.jv) : categoryLabel;
+  if (CATEGORY_DEFAULT_TAB[labelStr]) {
+    return CATEGORY_DEFAULT_TAB[labelStr];
   }
   for (const [key, val] of Object.entries(BREADCRUMB_MAP)) {
-    if (val.category && val.category.label === categoryLabel) {
-      return key;
+    if (val.category) {
+      const catStr = typeof val.category.label === 'object' ? (val.category.label.id || val.category.label.jv) : val.category.label;
+      if (catStr === labelStr) return key;
     }
   }
   return 'beranda';
@@ -328,9 +333,22 @@ function handleBreadcrumbNav(tabId) {
 }
 
 /**
+ * Helper dwibahasa untuk teks label breadcrumb
+ */
+function getNavBilingualText(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  const lang = (typeof window !== 'undefined' && window.getLanguage) ? window.getLanguage() : 'id';
+  if (typeof val === 'object') {
+    return val[lang] || val.id || val.jv || '';
+  }
+  return String(val);
+}
+
+/**
  * Merender Breadcrumb bergaya Windows Explorer berdasarkan tab aktif dan sub-level opsional
  * @param {string} tabId 
- * @param {string|null} subTitle 
+ * @param {string|object|null} subTitle 
  */
 function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   const container = document.getElementById('breadcrumbTrail');
@@ -345,10 +363,11 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   };
 
   const segments = [];
+  const homeLabel = getNavBilingualText({ id: 'Beranda', jv: 'Pambuka' });
 
   // Root / Home Segment (Selalu ada, bisa diklik untuk pulang ke Beranda)
   segments.push({
-    label: 'Beranda',
+    label: homeLabel,
     icon: 'fa-solid fa-house',
     tabId: 'beranda',
     action: () => switchTab('beranda'),
@@ -357,9 +376,10 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
 
   // Category Level (jika ada grup induknya, misal "Wektu & Penanggalan")
   if (info.category && tabId !== 'beranda') {
+    const catLabel = getNavBilingualText(info.category.label);
     const targetCatTab = getCategoryDefaultTab(info.category.label);
     segments.push({
-      label: info.category.label,
+      label: catLabel,
       icon: info.category.icon,
       tabId: targetCatTab,
       action: () => switchTab(targetCatTab),
@@ -369,8 +389,9 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
 
   // Module / Tab Level
   if (tabId !== 'beranda') {
+    const tabLabel = getNavBilingualText(info.title);
     segments.push({
-      label: info.title,
+      label: tabLabel,
       icon: info.icon,
       tabId: tabId,
       action: () => switchTab(tabId),
@@ -381,8 +402,9 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   // Deep Sub-level (jika ada sub-fitur atau kalkulasi aktif)
   const activeSub = subTitle || info.sub;
   if (activeSub && tabId !== 'beranda') {
+    const subLabel = getNavBilingualText(activeSub);
     segments.push({
-      label: activeSub,
+      label: subLabel,
       icon: 'fa-solid fa-file-lines',
       tabId: tabId,
       action: null,
@@ -441,9 +463,9 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
   // Update Windows Explorer path summary: JagadJawa:\Wektu\Kalender Jawa
   if (summaryEl) {
     const pathParts = ['JagadJawa:'];
-    if (info.category) pathParts.push(info.category.label.split('&')[0].trim());
-    if (tabId !== 'beranda') pathParts.push(info.title);
-    if (activeSub && tabId !== 'beranda') pathParts.push(activeSub.split('&')[0].trim());
+    if (info.category) pathParts.push(getNavBilingualText(info.category.label).split('&')[0].trim());
+    if (tabId !== 'beranda') pathParts.push(getNavBilingualText(info.title));
+    if (activeSub && tabId !== 'beranda') pathParts.push(getNavBilingualText(activeSub).split('&')[0].trim());
     summaryEl.textContent = pathParts.join('\\');
   }
 }
@@ -514,7 +536,7 @@ if (typeof window !== 'undefined') {
 
 /**
  * Ekspor / Cetak Dokumen PDF Laporan Resmi
- * @param {'parchment'|'monochrome'} theme Estetika: 'parchment' (Kertas Kuno Keraton) atau 'monochrome'
+ * @param {'parchment'|'monochrome'} theme Estetika: 'parchment' (Kertas Kuno Tradisi Leluhur) atau 'monochrome'
  * @param {string|null} customTitle Judul dokumen cetak kustom
  */
 function printLaporan(theme = 'parchment', customTitle = null) {

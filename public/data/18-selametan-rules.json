@@ -1,21 +1,126 @@
 {
   "jenis": [
-    { "idx": 0, "nama": "3 Harian", "hari_ke": 3 },
-    { "idx": 1, "nama": "7 Harian", "hari_ke": 7 },
-    { "idx": 2, "nama": "40 Harian", "hari_ke": 40 },
-    { "idx": 3, "nama": "100 Harian", "hari_ke": 100 },
-    { "idx": 4, "nama": "Pendak Pisan (1 Tahun)", "hari_ke": 354 },
-    { "idx": 5, "nama": "Pendak Pindho (2 Tahun)", "hari_ke": 710 },
-    { "idx": 6, "nama": "Nyewu (1000 Hari)", "hari_ke": 1000 }
+    {
+      "idx": 0,
+      "nama": {
+        "id": "3 Harian (Nelu Dinani)",
+        "jv": "3 Dinani"
+      },
+      "hari_ke": 3
+    },
+    {
+      "idx": 1,
+      "nama": {
+        "id": "7 Harian (Ngitu Dinani)",
+        "jv": "7 Dinani"
+      },
+      "hari_ke": 7
+    },
+    {
+      "idx": 2,
+      "nama": {
+        "id": "40 Harian (Matang Puluh)",
+        "jv": "Matang Puluh"
+      },
+      "hari_ke": 40
+    },
+    {
+      "idx": 3,
+      "nama": {
+        "id": "100 Harian (Nyatus)",
+        "jv": "Nyatus"
+      },
+      "hari_ke": 100
+    },
+    {
+      "idx": 4,
+      "nama": {
+        "id": "Pendak Pisan (1 Tahun)",
+        "jv": "Pendhak Pisan (1 Taun)"
+      },
+      "hari_ke": 354
+    },
+    {
+      "idx": 5,
+      "nama": {
+        "id": "Pendak Pindho (2 Tahun)",
+        "jv": "Pendhak Pindho (2 Taun)"
+      },
+      "hari_ke": 710
+    },
+    {
+      "idx": 6,
+      "nama": {
+        "id": "Nyewu (1000 Hari)",
+        "jv": "Nyewu (1000 Dinten)"
+      },
+      "hari_ke": 1000
+    }
   ],
   "target_hari_berdasarkan_wafat": {
-    "Minggu": ["Selasa", "Sabtu", "Kamis", "Senin", "Rabu", "Selasa", "Jumat"],
-    "Senin": ["Rabu", "Minggu", "Jumat", "Selasa", "Kamis", "Rabu", "Sabtu"],
-    "Selasa": ["Kamis", "Senin", "Sabtu", "Rabu", "Jumat", "Kamis", "Minggu"],
-    "Rabu": ["Jumat", "Selasa", "Minggu", "Kamis", "Sabtu", "Jumat", "Senin"],
-    "Kamis": ["Sabtu", "Rabu", "Senin", "Jumat", "Minggu", "Sabtu", "Selasa"],
-    "Jumat": ["Minggu", "Kamis", "Selasa", "Sabtu", "Senin", "Minggu", "Rabu"],
-    "Sabtu": ["Senin", "Jumat", "Rabu", "Minggu", "Selasa", "Senin", "Kamis"]
+    "Minggu": [
+      "Selasa",
+      "Sabtu",
+      "Kamis",
+      "Senin",
+      "Rabu",
+      "Selasa",
+      "Jumat"
+    ],
+    "Senin": [
+      "Rabu",
+      "Minggu",
+      "Jumat",
+      "Selasa",
+      "Kamis",
+      "Rabu",
+      "Sabtu"
+    ],
+    "Selasa": [
+      "Kamis",
+      "Senin",
+      "Sabtu",
+      "Rabu",
+      "Jumat",
+      "Kamis",
+      "Minggu"
+    ],
+    "Rabu": [
+      "Jumat",
+      "Selasa",
+      "Minggu",
+      "Kamis",
+      "Sabtu",
+      "Jumat",
+      "Senin"
+    ],
+    "Kamis": [
+      "Sabtu",
+      "Rabu",
+      "Senin",
+      "Jumat",
+      "Minggu",
+      "Sabtu",
+      "Selasa"
+    ],
+    "Jumat": [
+      "Minggu",
+      "Kamis",
+      "Selasa",
+      "Sabtu",
+      "Senin",
+      "Minggu",
+      "Rabu"
+    ],
+    "Sabtu": [
+      "Senin",
+      "Jumat",
+      "Rabu",
+      "Minggu",
+      "Selasa",
+      "Senin",
+      "Kamis"
+    ]
   },
   "aturan_magrib": {
     "id": "Jika wafat setelah Maghrib (Jam 18.00), hitungan hari (Geblak) digeser +1 hari.",

@@ -5,13 +5,16 @@
  * Tanggung Jawab:
  * 1. Mengatur mode dwibahasa antarmuka (Bahasa Indonesia / 'id' & Basa Jawi / 'jv').
  * 2. Menyimpan preferensi bahasa pengguna di localStorage ('jagad_jawa_lang').
- * 3. ATURAN KETAT MENU UTAMA:
- *    Bagian Menu Navigasi Utama (NAV_DICTIONARY) SELALU dipertahankan tetap dalam
- *    Bahasa Indonesia ('id') meskipun aplikasi sedang berada dalam Mode JV,
- *    agar pengguna tidak bingung saat berpindah menu.
+ * 3. FULL BILINGUAL (ID & JV) MENYELURUH:
+ *    Tombol switch bahasa memengaruhi SELURUH bagian aplikasi secara menyeluruh:
+ *    - Menu Navigasi Utama & Sub-menu
+ *    - Judul modul, header, dan label tombol
+ *    - Seluruh isi konten, narasi, dan deskripsi dinamis
  * 4. KONTEN & DESKRIPSI (CONTENT_DICTIONARY):
  *    - Mode ID: Bahasa Indonesia penuh yang formal, jelas, dan baku.
  *    - Mode JV: Basa Jawi otentik yang luwes, kaya rasa, dan berbobot budaya.
+ *    - Istilah budaya/teknis baku (seperti Weton, Wuku, Neptu, Pasaran, Jawa)
+ *      tetap dipertahankan aslinya dengan pengantar & penjelas dwibahasa penuh.
  * 5. Menjaga integritas data matematis:
  *    Semua key kalkulasi (dino, pas, wuku, neptu, formula JDN) 100% tidak diubah.
  */
@@ -19,17 +22,15 @@
 const STORAGE_KEY = 'jagad_jawa_lang';
 
 /**
- * ─── 1. NAV_DICTIONARY (MENU NAVIGASI UTAMA) ─────────────────────────────────
- * Seluruh string menu navigasi utama aplikasi.
- * Catatan: Objek tetap menyediakan properti .id dan .jv demi backward compatibility
- * dan pengujian unit, namun saat dirender ke DOM di applyLanguage() atau melalui
- * lookup navigasi, label menu ini DIKUNCI tetap dalam Bahasa Indonesia ('id').
+ * ─── 1. NAV_DICTIONARY (MENU NAVIGASI UTAMA & SUB-MENU) ──────────────────────
+ * Seluruh string menu navigasi utama dan sub-menu aplikasi.
+ * Berpindah penuh antara Bahasa Indonesia ('id') dan Basa Jawi ('jv').
  */
 export const NAV_DICTIONARY = {
   // Brand & Header
   brand_subtitle: {
     id: 'Portal Budaya Nusantara',
-    jv: 'Portal Budaya Nusantara'
+    jv: 'Portal Budaya Nuswantara'
   },
   lang_toggle_badge: {
     id: 'ID',
@@ -55,11 +56,11 @@ export const NAV_DICTIONARY = {
   },
   nav_kalender_sub: {
     id: 'Pasaran, Dino Ala/Becik & Weton',
-    jv: 'Pasaran, Dino Ala/Becik & Weton'
+    jv: 'Pasaran, Dina Awon/Becik & Weton'
   },
   nav_konversi: {
     id: 'Konversi Tanggal',
-    jv: 'Komersi Surya Jawi'
+    jv: 'Konversi Tanggal Jawa'
   },
   nav_konversi_sub: {
     id: 'Masehi ke Jawa & Pranata Mangsa',
@@ -103,7 +104,7 @@ export const NAV_DICTIONARY = {
   },
   nav_omah: {
     id: 'Petung Omah & Cempuri',
-    jv: 'Petung Griya & Cempuri'
+    jv: 'Petung Omah & Cempuri'
   },
   nav_omah_sub: {
     id: 'Pembangunan, Boyongan, & Lawang',
@@ -117,6 +118,14 @@ export const NAV_DICTIONARY = {
     id: 'Ternak, Loro, & Geblak',
     jv: 'Ingon-ingon, Gerah, & Geblak'
   },
+  nav_ternak_pemula: {
+    id: 'Petung Wiwit Ternak',
+    jv: 'Petung Wiwit Ingon-ingon'
+  },
+  nav_ternak_ahli: {
+    id: 'Petung Kehidupan (Ternak, Loro, Geblak)',
+    jv: 'Petung Panguripan (Ingon-ingon, Gerah, Geblak)'
+  },
   nav_sasmitha: {
     id: 'Sasmitha (Tanda Alam)',
     jv: 'Sasmitha (Pratandha Alam)'
@@ -124,6 +133,14 @@ export const NAV_DICTIONARY = {
   nav_sasmitha_sub: {
     id: 'Impen, Kedut, Gerhana, Lindu',
     jv: 'Impen, Kedut, Grahana, Lindhu'
+  },
+  nav_sasmitha_pemula: {
+    id: 'Sasmitha (Impen & Kedut)',
+    jv: 'Sasmitha (Impen & Kedut)'
+  },
+  nav_sasmitha_ahli: {
+    id: 'Sasmitha (Tanda Alam & Tubuh)',
+    jv: 'Sasmitha (Pratandha Alam & Badan)'
   },
   nav_budaya: {
     id: 'Seni & Budaya',
@@ -135,7 +152,7 @@ export const NAV_DICTIONARY = {
   },
   nav_wuku_sub: {
     id: 'Pawukon Jawa: Sinta hingga Watugunung',
-    jv: 'Pawukon Jawi: Sinta dumugi Watugunung'
+    jv: 'Pawukon Jawa: Sinta dumugi Watugunung'
   },
   nav_tripurusa: {
     id: 'Telur Jagad (Tripurusa)',
@@ -208,6 +225,14 @@ export const NAV_DICTIONARY = {
   nav_sinengker_sub: {
     id: 'Kompas Danyang & Aji Wingit',
     jv: 'Kompas Danyang & Aji Wingit'
+  },
+  nav_laporan: {
+    id: 'Pusat Laporan Tradisi Luhur',
+    jv: 'Pusat Serat Laporan Tradhisi Luhur'
+  },
+  nav_laporan_sub: {
+    id: 'Dokumen Resmi & Cetak PDF',
+    jv: 'Serat Resmi & Cithak PDF'
   }
 };
 
@@ -485,6 +510,14 @@ export const CONTENT_DICTIONARY = {
   },
 
   // Judul & Deskripsi Modul Tab
+  tab_kalender_title: {
+    id: 'Kalender Jawa · Pranata Mangsa',
+    jv: 'Kalendher Jawi · Pranata Mangsa'
+  },
+  tab_kalender_desc: {
+    id: 'Dihitung otomatis berbasis siklus Pasaran (5), Wuku (210), dan Tahun Jawa/Hijriyah.',
+    jv: 'Kaitung otomatis linambaran siklus Pasaran (5), Wuku (210), lan Taun Jawi/Hijriyah.'
+  },
   tab_nujum_title: {
     id: 'Nujum Kepribadian & Primbon',
     jv: 'Nujum Pribadhi & Kawruh Primbon'
@@ -564,6 +597,86 @@ export const CONTENT_DICTIONARY = {
   tab_wayang_desc: {
     id: 'Simulasi interaktif pementasan wayang kulit dengan blencong temaram, efek kepyak, dan tokoh wayang.',
     jv: 'Pentas wayang kulit interaktif mawi soroting blencong, kepyak, lan para paraga wayang.'
+  },
+  tab_konversi_title: {
+    id: 'Konversi Tanggal Jawa (Sultan Agungan & Masehi)',
+    jv: 'Komersi Tanggal Jawi (Sultan Agungan & Masehi)'
+  },
+  tab_konversi_desc: {
+    id: 'Transformasi matematis akurat antara kalender Masehi (Gregorian) dengan Kalender Jawa Sultan Agungan sejak 1555 Saka.',
+    jv: 'Transformasi matematis premati antawisipun kalendher Masehi (Gregorian) kaliyan Kalendher Jawi Sultan Agungan wiwit 1555 Saka.'
+  },
+  tab_tripurusa_title: {
+    id: 'Telur Jagad (Tripurusa)',
+    jv: 'Endhog Wisesa (Tripurusa)'
+  },
+  tab_tripurusa_desc: {
+    id: 'Mitologi penciptaan semesta dan asal mula Batara Manikmaya, Ismaya, serta Antaga.',
+    jv: 'Mitologi dumadining jagad raya lan mulabukaning Bathara Manikmaya, Ismaya, sarta Antaga.'
+  },
+  tab_ensiklo_budaya_title: {
+    id: 'Ensiklopedia Budaya & Kosmologi Jawa',
+    jv: 'Kawruh Kabudayan & Kosmologi Jawi'
+  },
+  tab_ensiklo_budaya_desc: {
+    id: 'Rujukan mendalam 6 dimensi Bincil, zodiak pranata, shio wuxing, dan siklus padewan.',
+    jv: 'Pawitan jero 6 dhimènsi Bincil, zodiak pranata, shio wuxing, lan siklus padewan.'
+  },
+  tab_mitologi_title: {
+    id: 'Mitologi Nusantara & Dongeng Kuna',
+    jv: 'Mitologi Nuswantara & Dongeng Kuna'
+  },
+  tab_mitologi_desc: {
+    id: 'Asal-usul pawukon Watugunung, legenda Dewi Sri, dan cerita mistis tanah Jawa.',
+    jv: 'Mulabuka pawukon Watugunung, cariyos Dewi Sri, lan dongeng mistis tanah Jawi.'
+  },
+  tab_gamelan_title: {
+    id: 'Gamelan Maya Interaktif',
+    jv: 'Gamelan Maya Interaktif'
+  },
+  tab_gamelan_desc: {
+    id: 'Alunan karawitan gamelan Jawa maya pelog & slendro dengan synthesizer audio autentik.',
+    jv: 'Ungeling karawitan gamelan Jawi maya pelog & slendro mawi audio autentik.'
+  },
+  tab_pitutur_title: {
+    id: 'Pitutur Luhur & Kuis Wawasan Budaya',
+    jv: 'Piwulang Luhur & Cangkriman Kawruh Budaya'
+  },
+  tab_pitutur_desc: {
+    id: 'Mutiara falsafah leluhur Jawa dan cangkriman untuk menguji wawasan kebudayaan.',
+    jv: 'Mutiara falsafah leluhur Jawi lan cangkriman kanggé ngudi kawruh kabudayan.'
+  },
+  tab_tumpeng_title: {
+    id: 'Tumpeng Tombak Rojo & Ubarampe Sesaji',
+    jv: 'Tumpeng Tombak Rojo & Ubarampe Sesaji'
+  },
+  tab_tumpeng_desc: {
+    id: 'Makna filosofis ubarampe sesaji, tumpeng tradisi Jawa, dan doa keselamatan Jawa.',
+    jv: 'Makna filosofis ubarampe sesaji, tumpeng tradhisi Jawi, lan donga karaharjan Jawi.'
+  },
+  tab_pustaka_title: {
+    id: 'Pustaka Digital Jawa & Serat Kuno',
+    jv: 'Pustaka Digital Jawi & Serat Kuno'
+  },
+  tab_pustaka_desc: {
+    id: 'Koleksi digital manuskrip kuno, usada rempah jamu tradisional, doa, dan serat piwulang luhur.',
+    jv: 'Koleksi digital naskah kuna, usada empon-empon jamu tradhisional, donga, lan serat piwulang luhur.'
+  },
+  tab_sinengker_title: {
+    id: 'Pustaka Sinengker & Rahasia Gaib',
+    jv: 'Pustaka Sinengker & Kawruh Wingit'
+  },
+  tab_sinengker_desc: {
+    id: 'Pengetahuan wingit tradisi leluhur Jawa, kompas danyang 360°, aji rajah kalacakra, dan ruwatan.',
+    jv: 'Kawruh wingit tradhisi leluhur Jawi, kompas danyang 360°, aji rajah kalacakra, lan ruwatan.'
+  },
+  tab_laporan_title: {
+    id: 'Pusat Laporan Tradisi Luhur & Ekspor Dokumen',
+    jv: 'Pusat Serat Laporan Tradhisi Luhur & Cithak Serat'
+  },
+  tab_laporan_desc: {
+    id: 'Cetak piagam weton berpigura emas, ringkasan nujum pribadi, dan dokumen pawiwahan.',
+    jv: 'Cithak piagam weton bingkai prada, ringkesan nujum pribadhi, lan serat pawiwahan.'
   }
 };
 
@@ -608,10 +721,9 @@ export function getLanguage() {
 
 /**
  * Menerapkan terjemahan pada seluruh elemen DOM.
- * ATURAN KETAT:
- * Menu Navigasi Utama selalu dikunci tetap dalam Bahasa Indonesia ('id')
- * agar pengguna tidak bingung saat berpindah menu.
- * Konten halaman, deskripsi modul, dan tombol aksi mengikuti mode 'id' atau 'jv'.
+ * FULL BILINGUAL (ID / JV):
+ * Menyeluruh ke Menu Navigasi Utama, Sub-menu, Judul Modul, Header,
+ * Label Tombol, serta Deskripsi Dinamis mengikuti preferensi bahasa.
  *
  * @param {'id'|'jv'} [lang=currentLang]
  */
@@ -634,8 +746,8 @@ export function applyLanguage(lang = currentLang) {
     const key = el.getAttribute('data-i18n');
     if (!key || !DICTIONARY[key]) return;
 
-    // Aturan Spesifik: Menu Navigasi Utama SELALU dikunci tetap Bahasa Indonesia ('id')
-    const targetLang = isMenuKey(key) ? 'id' : currentLang;
+    // Full Bilingual: Menggunakan bahasa aktif (currentLang) secara menyeluruh
+    const targetLang = currentLang;
     if (DICTIONARY[key][targetLang] !== undefined) {
       el.textContent = DICTIONARY[key][targetLang];
     } else if (DICTIONARY[key].id !== undefined) {
@@ -648,7 +760,7 @@ export function applyLanguage(lang = currentLang) {
   titleElements.forEach((el) => {
     const key = el.getAttribute('data-i18n-title');
     if (!key || !DICTIONARY[key]) return;
-    const targetLang = isMenuKey(key) ? 'id' : currentLang;
+    const targetLang = currentLang;
     const txt = DICTIONARY[key][targetLang] || DICTIONARY[key].id;
     if (txt) el.setAttribute('title', txt);
   });
@@ -658,9 +770,19 @@ export function applyLanguage(lang = currentLang) {
   placeholderElements.forEach((el) => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (!key || !DICTIONARY[key]) return;
-    const targetLang = isMenuKey(key) ? 'id' : currentLang;
+    const targetLang = currentLang;
     const txt = DICTIONARY[key][targetLang] || DICTIONARY[key].id;
     if (txt) el.setAttribute('placeholder', txt);
+  });
+
+  // 4. Perbarui atribut aria-label elemen bertanda data-i18n-aria-label
+  const ariaElements = document.querySelectorAll('[data-i18n-aria-label]');
+  ariaElements.forEach((el) => {
+    const key = el.getAttribute('data-i18n-aria-label');
+    if (!key || !DICTIONARY[key]) return;
+    const targetLang = currentLang;
+    const txt = DICTIONARY[key][targetLang] || DICTIONARY[key].id;
+    if (txt) el.setAttribute('aria-label', txt);
   });
 
   // 4. Update indikator tombol switch bahasa di header & mobile drawer
@@ -765,18 +887,16 @@ export function resolveBilingualRecord(record, lang = null) {
 
 /**
  * Menerjemahkan key kamus DICTIONARY ke bahasa aktif.
- * Untuk key menu navigasi (NAV_DICTIONARY / isMenuKey), jika parameter lang
- * tidak ditentukan secara eksplisit, hasilnya selalu dikembalikan dalam Bahasa Indonesia ('id').
+ * Mengembalikan teks sesuai bahasa target ('id' atau 'jv') atau bahasa aktif.
  *
  * @param {string} key
  * @param {'id'|'jv'} [lang]
  * @returns {string}
  */
 export function t(key, lang = null) {
-  const isNav = isMenuKey(key);
   const targetLang = (lang === 'jv' || lang === 'id')
     ? lang
-    : (isNav ? 'id' : getLanguage());
+    : getLanguage();
 
   if (DICTIONARY[key] && DICTIONARY[key][targetLang] !== undefined) {
     return DICTIONARY[key][targetLang];

@@ -381,7 +381,7 @@ export function drawNujumPokemonCard(canvas, data, options = DEFAULT_OPTIONS, sc
   const monthNum = parseInt(data.m, 10) || 1;
   const pranata = data.mangsaRes || getPranataMangsaLengkap(dayNum, monthNum);
 
-  // ─── 1. BACKGROUND METALLIC & COSMIC KERATON ───
+  // ─── 1. BACKGROUND METALLIC & COSMIC TRADISI ───
   const outerGrad = ctx.createLinearGradient(0, 0, width, height);
   outerGrad.addColorStop(0, '#f5d77f');
   outerGrad.addColorStop(0.2, '#d4af37');
@@ -818,7 +818,7 @@ export function drawNujumPokemonCard(canvas, data, options = DEFAULT_OPTIONS, sc
   const barY = movesY + 2;
   const barH = 70;
 
-  // Outer container dengan kontras bingkai emas keraton yang tegas
+  // Outer container dengan kontras bingkai emas tradisi yang tegas
   ctx.fillStyle = 'rgba(12, 17, 29, 0.96)';
   ctx.beginPath();
   ctx.roundRect(headerX, barY, headerW, barH, 10);
@@ -993,7 +993,7 @@ export function drawNujumPokemonCard(canvas, data, options = DEFAULT_OPTIONS, sc
   const flavorH = 68;
 
   if (options.pitutur) {
-    // Background sogan tua keraton dengan bingkai emas ganda
+    // Background sogan tua tradisi dengan bingkai emas ganda
     ctx.fillStyle = 'rgba(26, 20, 16, 0.95)';
     ctx.beginPath();
     ctx.roundRect(headerX, flavorY, headerW, flavorH, 10);
@@ -1034,7 +1034,7 @@ export function drawNujumPokemonCard(canvas, data, options = DEFAULT_OPTIONS, sc
   ctx.textAlign = 'left';
   ctx.fillStyle = '#eab308';
   ctx.font = 'bold 11px monospace';
-  ctx.fillText('★★★★★  PUSAKA KERATON (ULTRA RARE)', headerX, footY);
+  ctx.fillText('★★★★★  PUSAKA ADILUHUNG (ULTRA RARE)', headerX, footY);
 
   ctx.textAlign = 'right';
   ctx.fillStyle = '#94a3b8';
@@ -1405,7 +1405,7 @@ export function printKartuKarakterPdf(theme = 'parchment') {
   const printHtml = `
     <div style="font-family: 'Plus Jakarta Sans', Georgia, serif; max-width: 780px; margin: 0 auto; padding: 24px; color: ${isParchment ? '#2d1808' : '#111827'}; background: ${isParchment ? '#fcf8f0' : '#ffffff'}; border: 2px solid ${isParchment ? '#b87c24' : '#374151'}; border-radius: 12px;">
       
-      <!-- Kop Dokumen Cetak Karakter Keraton -->
+      <!-- Kop Dokumen Cetak Karakter Tradisi Luhur -->
       <div style="text-align: center; border-bottom: 2px solid ${isParchment ? '#b87c24' : '#111827'}; padding-bottom: 12px; margin-bottom: 18px;">
         <div style="font-family: 'Cinzel Decorative', Georgia, serif; font-size: 15pt; font-weight: bold; letter-spacing: 0.12em; color: ${isParchment ? '#945c1a' : '#111827'};">
           JAGAD JAWA &bull; KASULTANAN NUSANTARA

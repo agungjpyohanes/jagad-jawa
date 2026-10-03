@@ -31,7 +31,7 @@ test('Navigasi & Menu - Integritas Tab dan Section (C1 & C2)', () => {
     'wayang',
     'pitutur',
     'tumpeng',
-    'laporan'      // Pusat Laporan Keraton PDF (C2)
+    'laporan'      // Pusat Laporan Tradisi Luhur PDF (C2)
   ];
 
   requiredTabs.forEach(tabId => {

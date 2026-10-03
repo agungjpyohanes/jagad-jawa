@@ -134,7 +134,7 @@ function renderSinengkerLockedGate(container) {
             <i class="fa-solid fa-key mr-1 text-amber-400"></i> Sandi Pambuka Sinengker:
           </label>
           <span class="text-[11px] text-sogan-400 block">
-            Ketik sandi keraton utawi konfirmasi rahasia kagem mbikak wewengkon.
+            Ketik sandi rahasia utawi konfirmasi kagem mbikak wewengkon.
           </span>
         </div>
 
@@ -142,7 +142,7 @@ function renderSinengkerLockedGate(container) {
           <input
             type="password"
             id="sinengkerPinInput"
-            placeholder="Ketik sandi keraton..."
+            placeholder="Ketik sandi wadi..."
             onkeydown="if(event.key === 'Enter') window.submitSinengkerPin && window.submitSinengkerPin(this.value)"
             class="w-full pl-4 pr-11 py-3 rounded-xl bg-keraton border border-sogan-700 focus:border-prada text-sm text-sogan-100 placeholder-sogan-500 outline-none transition font-mono tracking-wider text-center"
           />
@@ -1678,7 +1678,7 @@ async function renderSinengkerTumpengView(container) {
         <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-prada/10 blur-3xl pointer-events-none"></div>
         <div class="relative z-10 max-w-4xl space-y-3">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sogan-950/80 border border-prada/40 text-[11px] text-prada font-semibold">
-            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Karaton
+            <i class="fa-solid fa-crown text-amber-400"></i> Pusaka Wiwitan Leluhur
           </div>
           <h3 class="font-marcellus text-xl sm:text-2xl font-bold text-amber-100 leading-snug">
             Keseimbangan Kiblat Papat Limo Pancer &amp; Ketajaman Spiritual Manungsa

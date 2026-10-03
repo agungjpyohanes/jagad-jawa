@@ -127,7 +127,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   canvas.width = width;
   canvas.height = height;
 
-  // 1. Background Gradient Gelap Keraton
+  // 1. Background Gradient Gelap Tradisi
   const grad = ctx.createLinearGradient(0, 0, width, height);
   grad.addColorStop(0, '#0c1018');
   grad.addColorStop(0.35, '#131b29');
@@ -138,7 +138,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   ctx.roundRect(0, 0, width, height, 24);
   ctx.fill();
 
-  // 2. Ornamen Bingkai Emas (Dual Border Keraton)
+  // 2. Ornamen Bingkai Emas (Dual Border Tradisi)
   ctx.strokeStyle = '#d4af37';
   ctx.lineWidth = 4;
   ctx.strokeRect(20, 20, width - 40, height - 40);
@@ -147,7 +147,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(28, 28, width - 56, height - 56);
 
-  // Ornate Corner Brackets (Sudut Mahkota Keraton)
+  // Ornate Corner Brackets (Sudut Mahkota Tradisi)
   const drawCornerFlourish = (cx, cy, flipX, flipY) => {
     ctx.save();
     ctx.translate(cx, cy);
@@ -180,7 +180,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   drawCornerFlourish(20, height - 20, false, true);
   drawCornerFlourish(width - 20, height - 20, true, true);
 
-  // 3. Header Kop Keraton
+  // 3. Header Kop Tradisi Jawa
   ctx.fillStyle = '#eedc9a';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';
@@ -557,7 +557,7 @@ function renderExpandedCard(containerId, data) {
   const labelArahKolo = isJv ? 'Arah Kolo (Dununge Kala)' : 'Arah Kala (Letak Kala)';
 
   container.innerHTML = `
-    <!-- Sapa Dina Card (Royal Keraton Adiluhung) -->
+    <!-- Sapa Dina Card (Tradisi Luhur Adiluhung) -->
     <article
       class="relative w-full rounded-2xl overflow-hidden
              bg-gradient-to-br from-sogan-950/95 via-wulung/90 to-keraton/95
@@ -566,7 +566,7 @@ function renderExpandedCard(containerId, data) {
       role="region"
       aria-label="Sapa Dina — Ringkasan Harian">
 
-      <!-- Ornamen Pojok Keraton (4 Sudut Tradisi Adiluhung) -->
+      <!-- Ornamen Pojok Tradisi (4 Sudut Tradisi Adiluhung) -->
       <div class="absolute top-2 left-2 w-8 h-8 pointer-events-none text-prada/40 select-none z-20" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M 2 24 L 2 2 L 24 2" />
@@ -669,7 +669,7 @@ function renderExpandedCard(containerId, data) {
         <!-- Kolom Kiri: Weton & Kalender Jawa -->
         <div class="px-4 sm:px-6 py-5 space-y-4">
 
-          <!-- Badge Weton Utama (Royal Keraton Medallion) -->
+          <!-- Badge Weton Utama (Medali Tradisi Luhur) -->
           <div class="flex items-start gap-4">
             <div class="flex-shrink-0 w-16 h-16 rounded-2xl
                         bg-gradient-to-br from-prada/25 via-sogan-900 to-keraton

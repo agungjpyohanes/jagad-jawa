@@ -22,7 +22,7 @@ export const MITOLOGI_NUSANTARA_DATA = [
     babList: [
       {
         subjudul: '1. Asal-Usul Raden Watu & Tatu Ing Mustaka',
-        teks: `Ing zaman purwa, wonten permaisuri ing Krajan Medang Gana nama Dewi Sinta. Nalika kagungan putra taksih timur (Raden Watu), sang putra nangis nyuwun dhahar sekul pulen ingkang taksih benter wonten ing kwali. Amargi sang putra mboten sabar lan rewel, Dewi Sinta ingkang saweg kesel kanthi mboten sengaja nggepuk mustakanipun sang putra ngagem enthong kayu ngantos getihen lan nuwuhaken bekas tatu ingkang jero.\n\nKanthi manah tatu lan kuciwa, Raden Watu lolos kesah saking kraton, njajah desa milangkori, lajeng tapa brata ing pucuking Redi (Gunung) kanthi tapa ngalong ngantos pikantuk kanugrahan kesakten tanpa tanding saking Sang Hyang Batara Guru. Sang putra lajeng ngrasuk asma Prabu Watugunung.`
+        teks: `Ing zaman purwa, wonten permaisuri ing Krajan Medang Gana nama Dewi Sinta. Nalika kagungan putra taksih timur (Raden Watu), sang putra nangis nyuwun dhahar sekul pulen ingkang taksih benter wonten ing kwali. Amargi sang putra mboten sabar lan rewel, Dewi Sinta ingkang saweg kesel kanthi mboten sengaja nggepuk mustakanipun sang putra ngagem enthong kayu ngantos getihen lan nuwuhaken bekas tatu ingkang jero.\n\nKanthi manah tatu lan kuciwa, Raden Watu lolos kesah saking praja, njajah desa milangkori, lajeng tapa brata ing pucuking Redi (Gunung) kanthi tapa ngalong ngantos pikantuk kanugrahan kesakten tanpa tanding saking Sang Hyang Batara Guru. Sang putra lajeng ngrasuk asma Prabu Watugunung.`
       },
       {
         subjudul: '2. Krajan Gilingwesi & Palakrama Tanpa Nyadari',
@@ -64,7 +64,7 @@ export const MITOLOGI_NUSANTARA_DATA = [
       },
       {
         subjudul: '3. Fase Madya: Galungan dumugi Maktal',
-        teks: `- Wuku 11 (Galungan): Batara Kamajaya (Kamulyan rupa lan kajayan tekad)\n- Wuku 12 (Kuningan): Batara Indra (Kamulyan kraton lan rejeki melimpah)\n- Wuku 13 (Langkir): Batara Kala (Kewaspadaan lan pangujian nyawa)\n- Wuku 14 (Mandasiya): Batara Brama (Pamoring wibawa pangaribawa)\n- Wuku 15 (Julungpujut): Batara Guritna (Pangripta kidung lan seni adi)\n- Wuku 16 (Pahang): Batara Tantra (Kekiyatan tapa brata)\n- Wuku 17 (Kuruwelut): Batara Wisnu (Pangreksa katentreman jagad)\n- Wuku 18 (Marakeh): Batara Surenggana (Wani getih lan patriotik)\n- Wuku 19 (Tambir): Batara Siwa (Pambasmi durangkara)\n- Wuku 20 (Medangkungan): Batara Basuki (Kasuburan tetanen lan banyu)`
+        teks: `- Wuku 11 (Galungan): Batara Kamajaya (Kamulyan rupa lan kajayan tekad)\n- Wuku 12 (Kuningan): Batara Indra (Kamulyan luhur lan rejeki melimpah)\n- Wuku 13 (Langkir): Batara Kala (Kewaspadaan lan pangujian nyawa)\n- Wuku 14 (Mandasiya): Batara Brama (Pamoring wibawa pangaribawa)\n- Wuku 15 (Julungpujut): Batara Guritna (Pangripta kidung lan seni adi)\n- Wuku 16 (Pahang): Batara Tantra (Kekiyatan tapa brata)\n- Wuku 17 (Kuruwelut): Batara Wisnu (Pangreksa katentreman jagad)\n- Wuku 18 (Marakeh): Batara Surenggana (Wani getih lan patriotik)\n- Wuku 19 (Tambir): Batara Siwa (Pambasmi durangkara)\n- Wuku 20 (Medangkungan): Batara Basuki (Kasuburan tetanen lan banyu)`
       },
       {
         subjudul: '4. Fase Wasana: Maktal dumugi Watugunung',
@@ -112,7 +112,7 @@ export const MITOLOGI_NUSANTARA_DATA = [
     babList: [
       {
         subjudul: '1. Sajarah Kodifikasi Pranata Mangsa',
-        teks: `Sanajan kawruh mangsa sampun dipun-cakaken ewonan taun dening para among tani Jawa kuna, Pranata Mangsa resmi dipun-standarisasi lan dipun-undhangaken dening Sri Susuhunan Pakubuwana VII ing Karaton Surakarta Hadiningrat tanggal 22 Juni 1855 Masehi.\n\nSistem punika ngitung peredaran semu srengenge (deklinasi surya) ingkang dipun-gabungaken kaliyan tandha-tandha alam (sasmita alam), kados luruhing godhong, swanten kewan (garengpung, tonggeret), mekaring sekar, lan arah angin mangsa.`
+        teks: `Sanajan kawruh mangsa sampun dipun-cakaken ewonan taun dening para among tani Jawa kuna, Pranata Mangsa resmi dipun-standarisasi lan dipun-undhangaken dening Sri Susuhunan Pakubuwana VII ing Tanah Jawa tanggal 22 Juni 1855 Masehi.\n\nSistem punika ngitung peredaran semu srengenge (deklinasi surya) ingkang dipun-gabungaken kaliyan tandha-tandha alam (sasmita alam), kados luruhing godhong, swanten kewan (garengpung, tonggeret), mekaring sekar, lan arah angin mangsa.`
       },
       {
         subjudul: '2. Siklus Katiga (Musim Kemarau / Kering)',
@@ -154,7 +154,7 @@ export const MITOLOGI_NUSANTARA_DATA = [
       },
       {
         subjudul: '4. Makna Esoterik Kasampurnan Jiwa (Sangkan Paraning Dumadi)',
-        teks: `Para Pujangga Kraton njlentrehaken bilih 20 aksara Hanacaraka inggih punika peta lampahing sukma manungsa:\n\n- HA: Hurip / Hayat (Urip iku paringaning Gusti)\n- NA: Niat (Tekad suci ngudi kabecikan)\n- CA: Cipta (Pikiran ingkang wening)\n- RA: Rasa (Kepekaan batin)\n- KA: Karya (Tindak tanduk amal nyata)\n\nNalika manungsa ngliwati pacoban perang batin (Data Sawala) lan nggayuh kasantosan spiritual (Padha Jayanya), ing pungkasaning lampah sedaya titah kedah pejah raganipun (Maga Bathanga) supados suksmanipun manunggal malih ing pangayunaning Gusti Kang Maha Suci (Manunggaling Kawula Gusti).`
+        teks: `Para Pujangga Leluhur njlentrehaken bilih 20 aksara Hanacaraka inggih punika peta lampahing sukma manungsa:\n\n- HA: Hurip / Hayat (Urip iku paringaning Gusti)\n- NA: Niat (Tekad suci ngudi kabecikan)\n- CA: Cipta (Pikiran ingkang wening)\n- RA: Rasa (Kepekaan batin)\n- KA: Karya (Tindak tanduk amal nyata)\n\nNalika manungsa ngliwati pacoban perang batin (Data Sawala) lan nggayuh kasantosan spiritual (Padha Jayanya), ing pungkasaning lampah sedaya titah kedah pejah raganipun (Maga Bathanga) supados suksmanipun manunggal malih ing pangayunaning Gusti Kang Maha Suci (Manunggaling Kawula Gusti).`
       }
     ],
     pesanMoral: 'Aksara Jawa sanes namung aksara tulis, nanging falsafah gesang babagan integritas amanah, kasetyan luhur, lan eling bilih samukawis bakal sowan marang Kang Maha Kuwasa.'

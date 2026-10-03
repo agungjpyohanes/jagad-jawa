@@ -1,37 +1,326 @@
 {
-  "metadata": { "catatan": "Sistem Neptu di sini KHUSUS untuk Ijab, terpisah dari Neptu Kalender standar." },
+  "metadata": {
+    "catatan": {
+      "id": "Sistem Neptu di sini KHUSUS untuk Ijab, terpisah dari Neptu Kalender standar.",
+      "jv": "Sistem Neptu ing ngriki KHUSUS kanggé Ijab, kapisah saking Neptu Kalendher standar."
+    }
+  },
   "neptu_dina_ijab": [
-    { "dina": "Minggu", "neptu": 5 }, { "dina": "Senin", "neptu": 4 }, { "dina": "Selasa", "neptu": 1 },
-    { "dina": "Rabu", "neptu": 6 }, { "dina": "Kamis", "neptu": 7 }, { "dina": "Jumat", "neptu": 3 }, { "dina": "Sabtu", "neptu": 2 }
+    {
+      "dina": "Minggu",
+      "neptu": 5
+    },
+    {
+      "dina": "Senin",
+      "neptu": 4
+    },
+    {
+      "dina": "Selasa",
+      "neptu": 1
+    },
+    {
+      "dina": "Rabu",
+      "neptu": 6
+    },
+    {
+      "dina": "Kamis",
+      "neptu": 7
+    },
+    {
+      "dina": "Jumat",
+      "neptu": 3
+    },
+    {
+      "dina": "Sabtu",
+      "neptu": 2
+    }
   ],
   "neptu_pasaran_ijab": [
-    { "pasaran": "Legi", "neptu": 2 }, { "pasaran": "Pahing", "neptu": 3 }, { "pasaran": "Pon", "neptu": 4 },
-    { "pasaran": "Wage", "neptu": 5 }, { "pasaran": "Kliwon", "neptu": 6 }
+    {
+      "pasaran": "Legi",
+      "neptu": 2
+    },
+    {
+      "pasaran": "Pahing",
+      "neptu": 3
+    },
+    {
+      "pasaran": "Pon",
+      "neptu": 4
+    },
+    {
+      "pasaran": "Wage",
+      "neptu": 5
+    },
+    {
+      "pasaran": "Kliwon",
+      "neptu": 6
+    }
   ],
   "wuku_ijab": [
-    { "wuku": "Sinta", "status": "Becik" }, { "wuku": "Landep", "status": "Ala" }, { "wuku": "Wukir", "status": "Becik" },
-    { "wuku": "Kurantil", "status": "Ala" }, { "wuku": "Tolu", "status": "Becik" }, { "wuku": "Gumbreg", "status": "Becik" },
-    { "wuku": "Warigalit", "status": "Becik" }, { "wuku": "Warigagung", "status": "Becik" }, { "wuku": "Julungwangi", "status": "Ala" },
-    { "wuku": "Sungsang", "status": "Becik" }, { "wuku": "Galungan", "status": "Ala" }, { "wuku": "Kuningan", "status": "Ala" },
-    { "wuku": "Langkir", "status": "Becik" }, { "wuku": "Mandasiya", "status": "Becik" }, { "wuku": "Julungpujut", "status": "Normal" },
-    { "wuku": "Pahang", "status": "Normal" }, { "wuku": "Kuruwelut", "status": "Normal" }, { "wuku": "Marakeh", "status": "Ala" },
-    { "wuku": "Tambir", "status": "Ala" }, { "wuku": "Medangkungan", "status": "Normal" }, { "wuku": "Maktal", "status": "Becik" },
-    { "wuku": "Wuye", "status": "Normal" }, { "wuku": "Manahil", "status": "Ala" }, { "wuku": "Prangbakat", "status": "Normal" },
-    { "wuku": "Bala", "status": "Normal" }, { "wuku": "Wugu", "status": "Becik" }, { "wuku": "Wayang", "status": "Normal" },
-    { "wuku": "Kulawu", "status": "Normal" }, { "wuku": "Dukut", "status": "Normal" }, { "wuku": "Watugunung", "status": "Becik" }
+    {
+      "wuku": "Sinta",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Landep",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Wukir",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Kurantil",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Tolu",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Gumbreg",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Warigalit",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Warigagung",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Julungwangi",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Sungsang",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Galungan",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Kuningan",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Langkir",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Mandasiya",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Julungpujut",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Pahang",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Kuruwelut",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Marakeh",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Tambir",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Medangkungan",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Maktal",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Wuye",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Manahil",
+      "status": "Ala"
+    },
+    {
+      "wuku": "Prangbakat",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Bala",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Wugu",
+      "status": "Becik"
+    },
+    {
+      "wuku": "Wayang",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Kulawu",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Dukut",
+      "status": "Normal"
+    },
+    {
+      "wuku": "Watugunung",
+      "status": "Becik"
+    }
   ],
   "sasi_ijab": [
-    { "sasi": "Sura", "arti": "Rusak ing Tembemburine" }, { "sasi": "Sapar", "arti": "Kekurangan lan Sugih Utang" },
-    { "sasi": "Mulud", "arti": "Mati Salah Siji" }, { "sasi": "Bakda Mulud", "arti": "Nemu Ujar Kang Alal ing Tembemburine" },
-    { "sasi": "Jumadilawal", "arti": "Kerep Kemalingan lan Kapusan" }, { "sasi": "Jumadilakir", "arti": "Sugih Emas Salaka" },
-    { "sasi": "Rejeb", "arti": "Sugih Anak" }, { "sasi": "Ruwah", "arti": "Rahayu Sakabehe" },
-    { "sasi": "Pasa", "arti": "Rahayu Sakabehe" }, { "sasi": "Sawal", "arti": "Kekurangan lan Sugih Utang" },
-    { "sasi": "Sela", "arti": "Geringen lan Kerep Padudon karo Sanak Kadange" }, { "sasi": "Besar", "arti": "Bisa Sugih lan Nemu Karaharjan" }
+    {
+      "sasi": "Sura",
+      "arti": {
+        "id": "Rusak di kemudian hari",
+        "jv": "Rusak ing Tembemburine"
+      }
+    },
+    {
+      "sasi": "Sapar",
+      "arti": {
+        "id": "Kekurangan dan banyak utang",
+        "jv": "Kekurangan lan Sugih Utang"
+      }
+    },
+    {
+      "sasi": "Mulud",
+      "arti": {
+        "id": "Mati salah satu",
+        "jv": "Mati Salah Siji"
+      }
+    },
+    {
+      "sasi": "Bakda Mulud",
+      "arti": {
+        "id": "Mendapat ujar yang buruk di kemudian hari",
+        "jv": "Nemu Ujar Kang Alal ing Tembemburine"
+      }
+    },
+    {
+      "sasi": "Jumadilawal",
+      "arti": {
+        "id": "Sering kecurian dan tertipu",
+        "jv": "Kerep Kemalingan lan Kapusan"
+      }
+    },
+    {
+      "sasi": "Jumadilakir",
+      "arti": {
+        "id": "Kaya emas perak",
+        "jv": "Sugih Emas Salaka"
+      }
+    },
+    {
+      "sasi": "Rejeb",
+      "arti": {
+        "id": "Banyak anak",
+        "jv": "Sugih Anak"
+      }
+    },
+    {
+      "sasi": "Ruwah",
+      "arti": {
+        "id": "Selamat semuanya",
+        "jv": "Rahayu Sakabehe"
+      }
+    },
+    {
+      "sasi": "Pasa",
+      "arti": {
+        "id": "Selamat semuanya",
+        "jv": "Rahayu Sakabehe"
+      }
+    },
+    {
+      "sasi": "Sawal",
+      "arti": {
+        "id": "Kekurangan dan banyak utang",
+        "jv": "Kekurangan lan Sugih Utang"
+      }
+    },
+    {
+      "sasi": "Sela",
+      "arti": {
+        "id": "Sakit dan sering bertengkar dengan sanak saudara",
+        "jv": "Geringen lan Kerep Padudon karo Sanak Kadange"
+      }
+    },
+    {
+      "sasi": "Besar",
+      "arti": {
+        "id": "Bisa kaya dan menemukan kebahagiaan",
+        "jv": "Bisa Sugih lan Nemu Karaharjan"
+      }
+    }
   ],
   "tahun_windu_ijab": [
-    { "tahun": "Alip", "arti": "Jumadilakir lan Sela bakal Kalebo Wisa" }, { "tahun": "Ehe", "arti": "Bakda Mulud lan Pasa bakal kena Lara Balung" },
-    { "tahun": "Jimawal", "arti": "Mulud lan Besar bakal kena lara Edan" }, { "tahun": "Je", "arti": "Sura lan Sawal bakal Keli ing Banyu" },
-    { "tahun": "Dal", "arti": "Ruwah bakal kena lara Basah" }, { "tahun": "Be", "arti": "Sapar lan Rejeb bakal kena lara Rumat" },
-    { "tahun": "Wawu", "arti": "Jumadilawal bakal kena Prakara kang Gedhe" }, { "tahun": "Jimakir", "arti": "Mulud lan Besar bakal kesinungan lara" }
+    {
+      "tahun": "Alip",
+      "arti": {
+        "id": "Jumadilakir dan Sela akan terkena racun",
+        "jv": "Jumadilakir lan Sela bakal Kalebo Wisa"
+      }
+    },
+    {
+      "tahun": "Ehe",
+      "arti": {
+        "id": "Bakda Mulud dan Pasa akan terkena sakit tulang",
+        "jv": "Bakda Mulud lan Pasa bakal kena Lara Balung"
+      }
+    },
+    {
+      "tahun": "Jimawal",
+      "arti": {
+        "id": "Mulud dan Besar akan terkena sakit gila",
+        "jv": "Mulud lan Besar bakal kena lara Edan"
+      }
+    },
+    {
+      "tahun": "Je",
+      "arti": {
+        "id": "Sura dan Sawal akan tenggelam di air",
+        "jv": "Sura lan Sawal bakal Keli ing Banyu"
+      }
+    },
+    {
+      "tahun": "Dal",
+      "arti": {
+        "id": "Ruwah akan terkena sakit basah",
+        "jv": "Ruwah bakal kena lara Basah"
+      }
+    },
+    {
+      "tahun": "Be",
+      "arti": {
+        "id": "Sapar dan Rejeb akan terkena sakit rematik",
+        "jv": "Sapar lan Rejeb bakal kena lara Rumat"
+      }
+    },
+    {
+      "tahun": "Wawu",
+      "arti": {
+        "id": "Jumadilawal akan terkena perkara besar",
+        "jv": "Jumadilawal bakal kena Prakara kang Gedhe"
+      }
+    },
+    {
+      "tahun": "Jimakir",
+      "arti": {
+        "id": "Mulud dan Besar akan diberi sakit",
+        "jv": "Mulud lan Besar bakal kesinungan lara"
+      }
+    }
   ]
 }

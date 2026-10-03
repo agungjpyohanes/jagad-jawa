@@ -408,11 +408,11 @@ export function mapWukuItem(item) {
     bilahi: typeof item.bilahi === 'object' ? item.bilahi : bilahiStr,
     pangupaya_jiwa: typeof item.pangupaya_jiwa === 'object' ? item.pangupaya_jiwa : pangupayaStr,
     donga_slamet: typeof item.donga_slamet === 'object' ? item.donga_slamet : dongaStr,
-    sesaji_ruwat: typeof item.sesaji_ruwat === 'object' ? item.sesaji_ruwat : sesajiStr,
-    tindih_ruwat: item.tindih_ruwat || '',
+    tindih_ruwat: typeof item.tindih_ruwat === 'object' ? item.tindih_ruwat : (item.tindih_ruwat || ''),
+    tindih: extractText(item.tindih_ruwat || ''),
     selamatan_sega: typeof item.selamatan_sega === 'object' ? item.selamatan_sega : segaStr,
     selamatan_iwak: typeof item.selamatan_iwak === 'object' ? item.selamatan_iwak : iwakStr,
-    salawat: item.salawat || '',
+    salawat: typeof item.salawat === 'object' ? item.salawat : (item.salawat || ''),
     tamba_yen_lara: typeof item.tamba_yen_lara === 'object' ? item.tamba_yen_lara : tambaStr,
     keterangan_barang_salawat: item.keterangan_barang_salawat || ''
   };

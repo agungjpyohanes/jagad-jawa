@@ -207,7 +207,7 @@ export const PUSTAKA_DATA = {
           "baris": [
             "Rama kawula ing swarga",
             "Asma Dalem kaluhurna",
-            "Kraton Dalem mugi rawuha",
+            "Karajan Dalem mugi rawuha",
             "Karsa Dalem kalampahana",
             "wonten ing donya kados ing swarga",
             "kawula nyuwun rejeki kangge sapunika",
@@ -243,7 +243,7 @@ export const PUSTAKA_DATA = {
         "kristiani"
       ],
       "sumber_file": "DONGO_PADINAN_pocket.docx",
-      "teks_cari": "dongo padinan doa harian doa damai fransiskus asisi tuhan, jadikanlah aku pembawa damai, bila terjadi kebencian, jadikanlah aku pembawa cinta kasih, bila terjadi penghinaan, jadikanlah aku pembawa pengampunan, bila terjadi perselisihan, jadikanlah aku pembawa kerukunan, bila terjadi kebimbangan, jadikanlah aku pembawa kepastian, bila terjadi kesesatan, jadikanlah aku pembawa kebenaran, bila terjadi kecemasan, jadikanlah aku pembawa harapan, bila terjadi kesedihan, jadikanlah aku sumber kegembiraan, bila terjadi kegelapan, jadikanlah aku pembawa terang, tuhan semoga aku ingin menghibur daripada dihibur, memahami daripada dipahami, mencintai daripada dicintai, sebab dengan memberi aku menerima, dengan mengampuni aku diampuni, dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya. aamiin. rama kawula rama kawula ing swarga asma dalem kaluhurna kraton dalem mugi rawuha karsa dalem kalampahana wonten ing donya kados ing swarga kawula nyuwun rejeki kangge sapunika sakathahing lepat nyuwun pangapunten dalem kados dene anggen kawula ugi ngapunten dhateng sesami kawula nyuwun tinebihna saking panggodha saha linuwarna saking piawon aamiin salam maria sembah bekti kawula, dèwi maria, kekasihing allah. pangéran nunggil ing panjenengan dalem. sami-sami wanita sang dèwi pinuji piyambak, saha pinuji ugi wohing salira dalem, sri yésus. dèwi maria, ibuning allah, kawula tiyang dosa sami nyuwun pangèstu dalem, samangké tuwin bénjing dumugining pejah. aamiin."
+      "teks_cari": "dongo padinan doa harian doa damai fransiskus asisi tuhan, jadikanlah aku pembawa damai, bila terjadi kebencian, jadikanlah aku pembawa cinta kasih, bila terjadi penghinaan, jadikanlah aku pembawa pengampunan, bila terjadi perselisihan, jadikanlah aku pembawa kerukunan, bila terjadi kebimbangan, jadikanlah aku pembawa kepastian, bila terjadi kesesatan, jadikanlah aku pembawa kebenaran, bila terjadi kecemasan, jadikanlah aku pembawa harapan, bila terjadi kesedihan, jadikanlah aku sumber kegembiraan, bila terjadi kegelapan, jadikanlah aku pembawa terang, tuhan semoga aku ingin menghibur daripada dihibur, memahami daripada dipahami, mencintai daripada dicintai, sebab dengan memberi aku menerima, dengan mengampuni aku diampuni, dengan mati suci aku bangkit lagi, untuk hidup selama-lamanya. aamiin. rama kawula rama kawula ing swarga asma dalem kaluhurna karajan dalem mugi rawuha karsa dalem kalampahana wonten ing donya kados ing swarga kawula nyuwun rejeki kangge sapunika sakathahing lepat nyuwun pangapunten dalem kados dene anggen kawula ugi ngapunten dhateng sesami kawula nyuwun tinebihna saking panggodha saha linuwarna saking piawon aamiin salam maria sembah bekti kawula, dèwi maria, kekasihing allah. pangéran nunggil ing panjenengan dalem. sami-sami wanita sang dèwi pinuji piyambak, saha pinuji ugi wohing salira dalem, sri yésus. dèwi maria, ibuning allah, kawula tiyang dosa sami nyuwun pangèstu dalem, samangké tuwin bénjing dumugining pejah. aamiin."
     },
     {
       "id": "sesuci-badan-adus-keramas",
@@ -700,7 +700,7 @@ export const PUSTAKA_DATA = {
             "Mboten Katalumpen Dumateng Leluhur Agung Ing Tanah Jawa",
             "Mugi Gusti Tansah Paring Pangapunten Sadaya Dosa Tuwin Kalepatanipun",
             "Sarta Linuwarana Saking Bebenduning Allah",
-            "Lan Pinaringan Gesang Langgeng Wonten Keraton Dalem Ing Suwarga",
+            "Lan Pinaringan Gesang Langgeng Wonten Kaswargan Dalem Ing Suwarga",
             "Duh Gusti Ingkang Maha Kuwasa",
             "Kawula Pitados Dumateng Sadaya Panguwaos Sarta Kawicaksanan Dalem Gusti",
             "Pramila Sadaya Lampah Sarta Gesang Kawula Sakanca Rowang",
@@ -728,7 +728,7 @@ export const PUSTAKA_DATA = {
         }
       ],
       "sumber_file": "DONGA_SAJRONING_WULAN_SURO_pocket.docx",
-      "teks_cari": "donga sajroning wulan suro semedi ing pinggir samodra / bengawan donga duh gusti ingkang maha suci ingkang tansah kawula sembah rina kalawan wengi kawula ngaturaken agunging panuwun ingkang tanpa pepindan awit sadaya berkah rahmat sarta nugraha dalem gusti ingkang sampun pinaringaken dumateng kawula sakanca rowang duh gusti ingkang maha pangaksama kawula nyuwun sih lumunturing pangaksama ingkang agung mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatan kawula sakanca rowang dalah kulawarga sabrayat sakukuban sarta leluhur kawula mboten katalumpen dumateng leluhur agung ing tanah jawa mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatanipun sarta linuwarana saking bebenduning allah lan pinaringan gesang langgeng wonten keraton dalem ing suwarga duh gusti ingkang maha kuwasa kawula pitados dumateng sadaya panguwaos sarta kawicaksanan dalem gusti pramila sadaya lampah sarta gesang kawula sakanca rowang tansah sumarah wonten ngarsa dalem gusti duh gusti ingkang maha asih kawula nyadong berkah dalem, mugi gusti tansah paring teguh rahayu slamet tansah manggih bagya mulya bejo basuki widodo kalis nir ing sambikala sarta tambahing daya kekiyatan mugi sadaya ingkang kawula sedya teka kawula cipto dadi, ngertos sakderengipun winarah saking kersaning allah hu allah hu allah hu allah"
+      "teks_cari": "donga sajroning wulan suro semedi ing pinggir samodra / bengawan donga duh gusti ingkang maha suci ingkang tansah kawula sembah rina kalawan wengi kawula ngaturaken agunging panuwun ingkang tanpa pepindan awit sadaya berkah rahmat sarta nugraha dalem gusti ingkang sampun pinaringaken dumateng kawula sakanca rowang duh gusti ingkang maha pangaksama kawula nyuwun sih lumunturing pangaksama ingkang agung mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatan kawula sakanca rowang dalah kulawarga sabrayat sakukuban sarta leluhur kawula mboten katalumpen dumateng leluhur agung ing tanah jawa mugi gusti tansah paring pangapunten sadaya dosa tuwin kalepatanipun sarta linuwarana saking bebenduning allah lan pinaringan gesang langgeng wonten kaswargan dalem ing suwarga duh gusti ingkang maha kuwasa kawula pitados dumateng sadaya panguwaos sarta kawicaksanan dalem gusti pramila sadaya lampah sarta gesang kawula sakanca rowang tansah sumarah wonten ngarsa dalem gusti duh gusti ingkang maha asih kawula nyadong berkah dalem, mugi gusti tansah paring teguh rahayu slamet tansah manggih bagya mulya bejo basuki widodo kalis nir ing sambikala sarta tambahing daya kekiyatan mugi sadaya ingkang kawula sedya teka kawula cipto dadi, ngertos sakderengipun winarah saking kersaning allah hu allah hu allah hu allah"
     },
     {
       "id": "nyingkirake-sengkala-1-suro",

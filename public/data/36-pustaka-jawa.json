@@ -5,74 +5,122 @@
     "sumber": "database_pustaka_jawa.json"
   },
   "kautamaning_laku": {
-    "judul": "KAUTAMANING LAKU",
-    "deskripsi": "Filsafat, ajaran moral, dan laku batin Jawa berdasarkan naskah klasik.",
+    "judul": {
+      "id": "KAUTAMANING LAKU",
+      "jv": "KAUTAMANING LAKU"
+    },
+    "deskripsi": {
+      "id": "Filsafat, ajaran moral, dan laku batin Jawa berdasarkan naskah klasik.",
+      "jv": "Falsafah, piwulang budi pakerti, lan laku batin Jawi adhedhasar serat kuna."
+    },
     "butir_ajaran": [
       {
         "id": 1,
         "teks_jawa": "Wong eling ing ilmu sarak dalil sinung kamurahaning Pangeran",
-        "makna": "Orang yang ingat pada hukum/ajaran agama serta dalil akan dikaruniai kemurahan oleh Tuhan."
+        "makna": {
+          "id": "Orang yang ingat pada hukum/ajaran agama serta dalil akan dikaruniai kemurahan oleh Tuhan.",
+          "jv": "Wong eling ing ilmu sarak dalil sinung kamurahaning Pangeran"
+        }
       },
       {
         "id": 2,
         "teks_jawa": "Wong amrih rahayuning sesaminira sinung ayating Pangeran",
-        "makna": "Orang yang mengusahakan keselamatan sesamanya akan dianugerahi tanda-tanda kebesaran/rahmat Tuhan."
+        "makna": {
+          "id": "Orang yang mengusahakan keselamatan sesamanya akan dianugerahi tanda-tanda kebesaran/rahmat Tuhan.",
+          "jv": "Wong amrih rahayuning sesaminira sinung ayating Pangeran"
+        }
       },
       {
         "id": 3,
         "teks_jawa": "Angrawuhana Ngilmu Gaib, nanging aja tinggal Ngilmu Sarak iku paraboting urip kang utama",
-        "makna": "Pahamilah ilmu batin/gaib, namun jangan tinggalkan ilmu syariat/agama karena itulah sarana hidup yang utama."
+        "makna": {
+          "id": "Pahamilah ilmu batin/gaib, namun jangan tinggalkan ilmu syariat/agama karena itulah sarana hidup yang utama.",
+          "jv": "Angrawuhana Ngilmu Gaib, nanging aja tinggal Ngilmu Sarak iku paraboting urip kang utama"
+        }
       },
       {
         "id": 4,
         "teks_jawa": "Aja kurang pamariksanira lan den agung pangapuranira",
-        "makna": "Jangan kurang introspeksi/ketelitian dan perbesarlah sifat pemaaf."
+        "makna": {
+          "id": "Jangan kurang introspeksi/ketelitian dan perbesarlah sifat pemaaf.",
+          "jv": "Aja kurang pamariksanira lan den agung pangapuranira"
+        }
       },
       {
         "id": 5,
         "teks_jawa": "Agaweya kabecikan marang sesamanira tumitah, agaweya sukaning manahe sesamaning jalma",
-        "makna": "Berbuatlah kebaikan kepada sesama makhluk hidup, buatlah hati sesama manusia merasa senang dan bahagia."
+        "makna": {
+          "id": "Berbuatlah kebaikan kepada sesama makhluk hidup, buatlah hati sesama manusia merasa senang dan bahagia.",
+          "jv": "Agaweya kabecikan marang sesamanira tumitah, agaweya sukaning manahe sesamaning jalma"
+        }
       },
       {
         "id": 6,
         "teks_jawa": "Aja duwe rumasa bener sarta becik, rumasaa ala lan luput, den agung panalangsanira ing Pangeran Kang Maha Mulya, lamun sira ngarasa bener lawan becik, ginantungan bebenduning Pangeran",
-        "makna": "Jangan merasa paling benar dan baik, rumahtanggalah bahwa diri ini banyak salah dan dosa, perbesarlah permohonan ampun kepada Tuhan Yang Maha Mulya; jika seseorang merasa paling benar dan baik, ia akan digantung oleh murka Tuhan."
+        "makna": {
+          "id": "Jangan merasa paling benar dan baik, rumahtanggalah bahwa diri ini banyak salah dan dosa, perbesarlah permohonan ampun kepada Tuhan Yang Maha Mulya; jika seseorang merasa paling benar dan baik, ia akan digantung oleh murka Tuhan.",
+          "jv": "Aja duwe rumasa bener sarta becik, rumasaa ala lan luput, den agung panalangsanira ing Pangeran Kang Maha Mulya, lamun sira ngarasa bener lawan becik, ginantungan bebenduning Pangeran"
+        }
       },
       {
         "id": 7,
         "teks_jawa": "Angenakena sarira, anyem-anyemna nalanira, aja anggrangsang samubarang kang senedya, den prayitna barang karya",
-        "makna": "Tenteramkan raga, tenangkan hati, jangan bernafsu serakah/gegabah terhadap segala keinginan, dan tetaplah waspada dalam setiap pekerjaan."
+        "makna": {
+          "id": "Tenteramkan raga, tenangkan hati, jangan bernafsu serakah/gegabah terhadap segala keinginan, dan tetaplah waspada dalam setiap pekerjaan.",
+          "jv": "Angenakena sarira, anyem-anyemna nalanira, aja anggrangsang samubarang kang senedya, den prayitna barang karya"
+        }
       },
       {
         "id": 8,
         "teks_jawa": "Elinga marang Kang Murbehing Jagat, aja pegat rina lawan wengi",
-        "makna": "Ingatlah selalu kepada Sang Pencipta dan Penguasa Alam, jangan terputus siang dan malam."
+        "makna": {
+          "id": "Ingatlah selalu kepada Sang Pencipta dan Penguasa Alam, jangan terputus siang dan malam.",
+          "jv": "Elinga marang Kang Murbehing Jagat, aja pegat rina lawan wengi"
+        }
       },
       {
         "id": 9,
         "teks_jawa": "Atapna Geniara, tegese den teguh yen krungu ujar ala",
-        "makna": "Terapkan Geniara (laku api), artinya tetap teguh pendirian dan sabar meskipun mendengar perkataan buruk."
+        "makna": {
+          "id": "Terapkan Geniara (laku api), artinya tetap teguh pendirian dan sabar meskipun mendengar perkataan buruk.",
+          "jv": "Atapna Geniara, tegese den teguh yen krungu ujar ala"
+        }
       },
       {
         "id": 10,
         "teks_jawa": "Atapna Banyuara, tegese Ngeli, iku nurut saujaring liyan, datan nyulayani",
-        "makna": "Terapkan Banyuara (laku air), artinya mengalir mengikuti dinamika keadaan demi kebaikan tanpa harus berselisih."
+        "makna": {
+          "id": "Terapkan Banyuara (laku air), artinya mengalir mengikuti dinamika keadaan demi kebaikan tanpa harus berselisih.",
+          "jv": "Atapna Banyuara, tegese Ngeli, iku nurut saujaring liyan, datan nyulayani"
+        }
       },
       {
         "id": 11,
         "teks_jawa": "Tapa Ngluwat tegese Mendhem atine aja ngatonake kabecikane dhewe",
-        "makna": "Tapa Ngluwat artinya memendam atau menyembunyikan kebaikan diri sendiri, tidak pamer."
+        "makna": {
+          "id": "Tapa Ngluwat artinya memendam atau menyembunyikan kebaikan diri sendiri, tidak pamer.",
+          "jv": "Tapa Ngluwat tegese Mendhem atine aja ngatonake kabecikane dhewe"
+        }
       },
       {
         "id": 12,
         "teks_jawa": "Aprang Sabil tegese perang sajroning jajanira priyangga ana perang bratayuda perang ati ala lan ati becik samangsa sira bisa nyegah sabarang cipta ala, pratanda menang perang Sabil",
-        "makna": "Perang Sabil adalah perang di dalam dada sendiri (perang bratayuda antara hawa nafsu buruk dan niat baik); bilamana seseorang mampu mencegah segala niat buruk, itulah tanda kemenangan Perang Sabil."
+        "makna": {
+          "id": "Perang Sabil adalah perang di dalam dada sendiri (perang bratayuda antara hawa nafsu buruk dan niat baik); bilamana seseorang mampu mencegah segala niat buruk, itulah tanda kemenangan Perang Sabil.",
+          "jv": "Aprang Sabil tegese perang sajroning jajanira priyangga ana perang bratayuda perang ati ala lan ati becik samangsa sira bisa nyegah sabarang cipta ala, pratanda menang perang Sabil"
+        }
       }
     ]
   },
   "ramuan_obat": {
-    "judul": "RAMUAN OBAT TRADISIONAL",
-    "deskripsi": "Kumpulan resep ramuan herbal tradisional Jawa untuk berbagai jenis penyakit.",
+    "judul": {
+      "id": "RAMUAN OBAT TRADISIONAL (USADA JAWA)",
+      "jv": "RACIKAN JAMPI TRADHISIONAL (USADA JAWI)"
+    },
+    "deskripsi": {
+      "id": "Resep racikan herbal jamu tradisional Jawa warisan leluhur untuk berbagai penyakit.",
+      "jv": "Resep racikan empon-empon jampi tradhisional Jawi warisan leluhur kanggé mawarni lelara."
+    },
     "kategori_pengobatan": [
       {
         "id": "jantung",
@@ -88,7 +136,10 @@
           "Adas Pulowaras",
           "Gula Aren / Jawa"
         ],
-        "keterangan_aplikasi": "Direbus bersama air secukupnya hingga mendidih dan menyusut, saring lalu diminum selagi hangat."
+        "keterangan_aplikasi": {
+          "id": "Direbus bersama air secukupnya hingga mendidih dan menyusut, saring lalu diminum selagi hangat.",
+          "jv": "Direbus bersama air secukupnya hingga mendidih dan menyusut, saring lalu diminum selagi hangat."
+        }
       },
       {
         "id": "paru-paru",
@@ -101,12 +152,18 @@
           "Adas Pulowaras",
           "Gula Aren / Jawa"
         ],
-        "keterangan_aplikasi": "Direbus dengan api kecil hingga sari bahan keluar, diminum teratur pagi dan sore."
+        "keterangan_aplikasi": {
+          "id": "Direbus dengan api kecil hingga sari bahan keluar, diminum teratur pagi dan sore.",
+          "jv": "Direbus dengan api kecil hingga sari bahan keluar, diminum teratur pagi dan sore."
+        }
       },
       {
         "id": "kulit-kudis",
         "penyakit": "PENYAKIT KULIT / KUDIS",
-        "keterangan_aplikasi": "Dipipis halus lalu dioleskan pada bagian kulit yang terkena luka/kudis.",
+        "keterangan_aplikasi": {
+          "id": "Dipipis halus lalu dioleskan pada bagian kulit yang terkena luka/kudis.",
+          "jv": "Dipipis halus lalu dioleskan pada bagian kulit yang terkena luka/kudis."
+        },
         "bahan": [
           "Daun Awar – Awar",
           "Daun dan Biji Mahkota Dewa",
@@ -120,7 +177,10 @@
       {
         "id": "syaraf-tulang-minum",
         "penyakit": "SYARAF TULANG (YANG DIMINUM)",
-        "keterangan_aplikasi": "Direbus dengan air bersih hingga mendidih, diminum hangat untuk meredakan nyeri syaraf dan persendian.",
+        "keterangan_aplikasi": {
+          "id": "Direbus dengan air bersih hingga mendidih, diminum hangat untuk meredakan nyeri syaraf dan persendian.",
+          "jv": "Direbus dengan air bersih hingga mendidih, diminum hangat untuk meredakan nyeri syaraf dan persendian."
+        },
         "bahan": [
           "Daun Alpukat",
           "Ceplukan Komplit",
@@ -134,7 +194,10 @@
       {
         "id": "syaraf-tulang-oles",
         "penyakit": "SYARAF TULANG (YANG DIOLESKAN)",
-        "keterangan_aplikasi": "Ditumbuk/dipipis halus dicampur minyak kelapa, dibalurkan pada bagian tulang/persendian yang sakit.",
+        "keterangan_aplikasi": {
+          "id": "Ditumbuk/dipipis halus dicampur minyak kelapa, dibalurkan pada bagian tulang/persendian yang sakit.",
+          "jv": "Ditumbuk/dipipis halus dicampur minyak kelapa, dibalurkan pada bagian tulang/persendian yang sakit."
+        },
         "bahan": [
           "Akar dan Ranting Patah Tulang",
           "Ginseng Jawa / Akar Bayam Duri Merah",
@@ -147,7 +210,10 @@
       {
         "id": "kulit-jerawatan",
         "penyakit": "PENYAKIT KULIT JERAWATAN",
-        "keterangan_aplikasi": "Dipipis halus lalu dioleskan merata pada wajah atau area kulit berjerawat.",
+        "keterangan_aplikasi": {
+          "id": "Dipipis halus lalu dioleskan merata pada wajah atau area kulit berjerawat.",
+          "jv": "Dipipis halus lalu dioleskan merata pada wajah atau area kulit berjerawat."
+        },
         "bahan": [
           "Buah Blimbing Wuluh Diparut",
           "Tepung Biji Bunga Pukul Empat",
@@ -161,8 +227,14 @@
       {
         "id": "jampi-telat-ngomong",
         "penyakit": "JAMPI TELAT NGOMONG",
-        "catatan": "Air rebusan pakai air rendaman fosil",
-        "keterangan_aplikasi": "Bahan direbus menggunakan air rendaman fosil, diminumkan secara bertahap kepada anak.",
+        "catatan": {
+          "id": "Air rebusan pakai air rendaman fosil",
+          "jv": "Air rebusan pakai air rendaman fosil"
+        },
+        "keterangan_aplikasi": {
+          "id": "Bahan direbus menggunakan air rendaman fosil, diminumkan secara bertahap kepada anak.",
+          "jv": "Bahan direbus menggunakan air rendaman fosil, diminumkan secara bertahap kepada anak."
+        },
         "bahan": [
           "Godhong klengkeng yg pernah berbuah",
           "Tamba wuku"
@@ -171,8 +243,14 @@
       {
         "id": "jampi-kanker",
         "penyakit": "JAMPI KANKER",
-        "catatan": "Air rebusan pakai air rendaman fosil",
-        "keterangan_aplikasi": "Direbus dengan air rendaman fosil dengan api stabil hingga tersisa separuh, disaring lalu diminum.",
+        "catatan": {
+          "id": "Air rebusan pakai air rendaman fosil",
+          "jv": "Air rebusan pakai air rendaman fosil"
+        },
+        "keterangan_aplikasi": {
+          "id": "Direbus dengan air rendaman fosil dengan api stabil hingga tersisa separuh, disaring lalu diminum.",
+          "jv": "Direbus dengan air rendaman fosil dengan api stabil hingga tersisa separuh, disaring lalu diminum."
+        },
         "bahan": [
           "Kemladean jeruk pecel",
           "Oyot alang2",
@@ -189,8 +267,14 @@
       {
         "id": "jampi-ginjal",
         "penyakit": "JAMPI GINJAL",
-        "catatan": "Air rebusan pakai air rendaman fosil",
-        "keterangan_aplikasi": "Bahan-bahan segar direbus perlahan dengan air rendaman fosil dan pemanis gula aren, disaring.",
+        "catatan": {
+          "id": "Air rebusan pakai air rendaman fosil",
+          "jv": "Air rebusan pakai air rendaman fosil"
+        },
+        "keterangan_aplikasi": {
+          "id": "Bahan-bahan segar direbus perlahan dengan air rendaman fosil dan pemanis gula aren, disaring.",
+          "jv": "Bahan-bahan segar direbus perlahan dengan air rendaman fosil dan pemanis gula aren, disaring."
+        },
         "bahan": [
           "5 ontong janten jagung dirajang",
           "Segenggam daun semanggi",
@@ -206,7 +290,10 @@
       {
         "id": "jampi-koreng",
         "penyakit": "JAMPI KORENG",
-        "keterangan_aplikasi": "Godhong nongko lumah kurep 5 jodo dibakar dipendet arenge dipun kecek ngangge iler bekicot lalu dibalurkan pada koreng.",
+        "keterangan_aplikasi": {
+          "id": "Godhong nongko lumah kurep 5 jodo dibakar dipendet arenge dipun kecek ngangge iler bekicot lalu dibalurkan pada koreng.",
+          "jv": "Godhong nongko lumah kurep 5 jodo dibakar dipendet arenge dipun kecek ngangge iler bekicot lalu dibalurkan pada koreng."
+        },
         "bahan": [
           "Godhong nongko lumah kurep 5 jodo (dibakar diambil arangnya)",
           "Iler bekicot (cairan lendir bekicot)"
@@ -215,41 +302,74 @@
     ]
   },
   "aji_rajah_kalacakra": {
-    "judul": "AJI RAJAH KALACAKRA",
-    "keterangan": "Rajah yang ada di dada Batara Kala, yang mampu membaca adalah Sang Hyang Batara Wisnu.",
-    "filosofi": "Rajah Kalacakra merupakan rajah sakral pembalik marabahaya dan penangkal segala sengkala. Pola mantranya membentuk palindrom mistik di mana setiap baris membalikkan energi negatif menjadi kebajikan dan keselamatan.",
+    "judul": {
+      "id": "AJI RAJAH KALACAKRA (YAMARAJA)",
+      "jv": "AJI RAJAH KALACAKRA (YAMARAJA)"
+    },
+    "keterangan": {
+      "id": "Rajah yang ada di dada Batara Kala, yang mampu membaca adalah Sang Hyang Batara Wisnu.",
+      "jv": "Rajah ingkang dumunung ing jajaning Bathara Kala, ingkang kuwawa maos namung Sang Hyang Bathara Wisnu."
+    },
+    "filosofi": {
+      "id": "Rajah Kalacakra merupakan rajah sakral pembalik marabahaya dan penangkal segala sengkala. Pola mantranya membentuk palindrom mistik di mana setiap baris membalikkan energi negatif menjadi kebajikan dan keselamatan.",
+      "jv": "Rajah Kalacakra minangka rajah sakral panulak bebaya lan panangkal sakathahing sambekala. Pola mantranipun mbentuk palindrom mistik ing pundi saben larik mbalèkaken ènèrgi négatif dados kautaman lan karaharjan."
+    },
     "mantra_bait": [
       {
         "baris": "YA MARAJA JARAMAYA",
-        "arti": "Heh Pangrancana Mariya Luwih (Siapa yang menyerang berbalik menjadi berbelas kasihan)"
+        "arti": {
+          "id": "Heh Pangrancana Mariya Luwih (Siapa yang menyerang berbalik menjadi berbelas kasihan)",
+          "jv": "Heh Pangrancana Mariya Luwih (Siapa yang menyerang berbalik menjadi berbelas kasihan)"
+        }
       },
       {
         "baris": "YA MARANI NIRAMAYA",
-        "arti": "Heh Kang Anekani Ilanga Kaluwihanira (Siapa yang datang dengan niat buruk akan malah menjauhinya)"
+        "arti": {
+          "id": "Heh Kang Anekani Ilanga Kaluwihanira (Siapa yang datang dengan niat buruk akan malah menjauhinya)",
+          "jv": "Heh Kang Anekani Ilanga Kaluwihanira (Siapa yang datang dengan niat buruk akan malah menjauhinya)"
+        }
       },
       {
         "baris": "YA SILAPA PALASIYA",
-        "arti": "Heh Kang Aweh Luwe Amaregana (Siapa yang membuat lapar berbalik memberikan makan)"
+        "arti": {
+          "id": "Heh Kang Aweh Luwe Amaregana (Siapa yang membuat lapar berbalik memberikan makan)",
+          "jv": "Heh Kang Aweh Luwe Amaregana (Siapa yang membuat lapar berbalik memberikan makan)"
+        }
       },
       {
         "baris": "YA MIRODO DOROMIYA",
-        "arti": "Heh Kang Aweh Mlarat Anyukupena (Siapa memaksa berbalik memberikan keleluasaan dan kebebasan)"
+        "arti": {
+          "id": "Heh Kang Aweh Mlarat Anyukupena (Siapa memaksa berbalik memberikan keleluasaan dan kebebasan)",
+          "jv": "Heh Kang Aweh Mlarat Anyukupena (Siapa memaksa berbalik memberikan keleluasaan dan kebebasan)"
+        }
       },
       {
         "baris": "YA MIDOSA SADOMIYA",
-        "arti": "Heh Kang Anyikara Mariya Nangsaya (Siapa yang berbuat dosa berbalik berbuat jasa)"
+        "arti": {
+          "id": "Heh Kang Anyikara Mariya Nangsaya (Siapa yang berbuat dosa berbalik berbuat jasa)",
+          "jv": "Heh Kang Anyikara Mariya Nangsaya (Siapa yang berbuat dosa berbalik berbuat jasa)"
+        }
       },
       {
         "baris": "YA DAYUDA DAYUDAYA",
-        "arti": "Heh Kang Amerangi Laruta Kuwatira (Siapa yang memerangi berbalik membawa kedamaian)"
+        "arti": {
+          "id": "Heh Kang Amerangi Laruta Kuwatira (Siapa yang memerangi berbalik membawa kedamaian)",
+          "jv": "Heh Kang Amerangi Laruta Kuwatira (Siapa yang memerangi berbalik membawa kedamaian)"
+        }
       },
       {
         "baris": "YA SIYACA CAYASIYA",
-        "arti": "Heh Kang Pracidra Kogel - Welasa (Siapa yang membuat celaka berbalik membuat sehat dan sejahtera)"
+        "arti": {
+          "id": "Heh Kang Pracidra Kogel - Welasa (Siapa yang membuat celaka berbalik membuat sehat dan sejahtera)",
+          "jv": "Heh Kang Pracidra Kogel - Welasa (Siapa yang membuat celaka berbalik membuat sehat dan sejahtera)"
+        }
       },
       {
         "baris": "YA SIHAMA MAHASIYA",
-        "arti": "Heh Kang Dadi Hama Yogya Asiha (Siapa yang berbuat merusak berbalik membangun dan sayang)"
+        "arti": {
+          "id": "Heh Kang Dadi Hama Yogya Asiha (Siapa yang berbuat merusak berbalik membangun dan sayang)",
+          "jv": "Heh Kang Dadi Hama Yogya Asiha (Siapa yang berbuat merusak berbalik membangun dan sayang)"
+        }
       }
     ]
   }

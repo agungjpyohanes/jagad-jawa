@@ -2,7 +2,7 @@
  * Jagad Jawa — Modul Domain: Nujum UI (Enhanced Tahap 3)
  * Pengendali DOM untuk kartu Nujum Kepribadian, Mode Ringkas vs Mode Mendalam,
  * Glosarium Konseptual Literasi Budaya, Komparasi Non-Jodoh (Side-by-Side),
- * Laporan Resmi Cetak PDF Keraton, dan Disclaimer Etis Kultural.
+ * Laporan Resmi Cetak PDF Tradisi Luhur, dan Disclaimer Etis Kultural.
  * jawa-v2 – single source nujum, exact lookup
  */
 
@@ -545,8 +545,8 @@ function renderHasilNujumContent() {
           <i class="fa-solid fa-id-card-clip text-sm"></i> <span>Kartu Karakter</span>
         </button>
 
-        <!-- 2. Ekspor PDF (Kertas Kuno Keraton) — Otomatis sesuaikan data aktif -->
-        <button onclick="window.printLaporanNujumAuto()" id="btnPrintNujumPdf" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer" title="Ekspor PDF Kertas Kuno Keraton (Otomatis Menyesuaikan Data Aktif)">
+        <!-- 2. Ekspor PDF (Kertas Kuno Tradisi Luhur) — Otomatis sesuaikan data aktif -->
+        <button onclick="window.printLaporanNujumAuto()" id="btnPrintNujumPdf" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton hover:brightness-110 text-xs font-bold flex items-center gap-1.5 shadow-md transition cursor-pointer" title="Ekspor PDF Kertas Kuno Tradisi Luhur (Otomatis Menyesuaikan Data Aktif)">
           <i class="fa-solid fa-scroll text-keraton"></i> <span>Ekspor PDF</span>
         </button>
 
@@ -2134,7 +2134,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
           <div>
             <div style="font-size: 14pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 0 0 2px 0; letter-spacing: 0.15em;">JAGAD JAWA</div>
             <div style="font-size: 11pt; font-weight: bold; font-family: 'Times New Roman', serif; text-transform: uppercase; margin: 2px 0;">LAPORAN PETUNG NUJUM KEPRIBADIAN (MODE LENGKAP)</div>
-            <div style="font-size: 7.5pt; font-style: italic;">Transkripsi Petungan Pawukon, 6 Dimensi Bincil, Faalakiah, Palenggahan &amp; Karakter Kelahiran Kasultanan &amp; Karaton</div>
+            <div style="font-size: 7.5pt; font-style: italic;">Transkripsi Petungan Pawukon, 6 Dimensi Bincil, Faalakiah, Palenggahan &amp; Karakter Kelahiran Tradisi Luhur Jawa</div>
           </div>
           <div style="text-align: right;">
             <div style="font-size: 8pt; font-weight: bold;">ARSIP FORMAL PENELITIAN</div>
@@ -2575,7 +2575,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
                 <td style="width: 55%; border: none; vertical-align: top; padding: 4px 6px;">
                   <p style="margin: 0; font-weight: bold;">Catatan Panaliten:</p>
                   <p style="margin: 2px 0 0 0; font-style: italic; font-size: 7.5pt; line-height: 1.35;">
-                    Laporan petung punika minangka piwulang luhur kanggé tepa slira, nuntun mawas dhiri, saha mbudidaya ikhtiar lahir batin nggayuh karaharjaning gesang. Kaarsipaken adhedhasar paugeran Primbon Kasultanan Ngayogyakarta saha Karaton Surakarta Hadiningrat.
+                    Laporan petung punika minangka piwulang luhur kanggé tepa slira, nuntun mawas dhiri, saha mbudidaya ikhtiar lahir batin nggayuh karaharjaning gesang. Kaarsipaken adhedhasar paugeran Primbon Tradisi Kasampurnan saha Kawruh Luhur Jawa.
                   </p>
                 </td>
                 <td style="width: 45%; border: none; vertical-align: top; text-align: right; padding: 4px 6px;">

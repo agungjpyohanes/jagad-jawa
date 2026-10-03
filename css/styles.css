@@ -140,7 +140,7 @@ svg {
 }
 
 /* ========================================================================= */
-/* NAVBAR KERATON MODERN / ROYAL HERITAGE GOLD                               */
+/* NAVBAR TRADISI MODERN / HERITAGE GOLD                               */
 /* ========================================================================= */
 
 /* Navbar Container - Antigravity Floating Card Header */
@@ -1220,7 +1220,7 @@ body.mode-pemula .mode-badge-pill {
     color: #000000 !important;
   }
 
-  /* Ornamen sudut dekoratif wajik/bunga keraton (❖) pada bingkai monokrom */
+  /* Ornamen sudut dekoratif wajik/bunga tradisi (❖) pada bingkai monokrom */
   .laporan-page::before,
   .laporan-page::after,
   .laporan-page .corner-tr,
@@ -1463,7 +1463,7 @@ body.mode-pemula .mode-badge-pill {
   }
 
   /* ========================================================================= */
-  /* TEMA ESTETIKA KERTAS KUNO (ROYAL PARCHMENT / HERITAGE KERATON)            */
+  /* TEMA ESTETIKA KERTAS KUNO (ROYAL PARCHMENT / HERITAGE TRADISI)            */
   /* ========================================================================= */
   body.print-theme-parchment {
     background-color: #fdf6e2 !important;
@@ -2072,7 +2072,7 @@ body.kelir-wayang-active::before {
 
 /* ========================================================================= */
 /* ========================================================================= */
-/* MODE PADHANG (LIGHT MODE) — PARCHEMIN & KERATON SOGAN                     */
+/* MODE PADHANG (LIGHT MODE) — PARCHEMIN & TRADISI SOGAN                     */
 /* ========================================================================= */
 
 body.theme-light,

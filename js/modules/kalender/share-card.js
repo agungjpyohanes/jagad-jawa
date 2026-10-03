@@ -82,7 +82,7 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
   canvas.width = width;
   canvas.height = height;
 
-  // 1. Background Gradient Gelap Keraton
+  // 1. Background Gradient Gelap Tradisi
   const grad = ctx.createLinearGradient(0, 0, width, height);
   grad.addColorStop(0, '#0f141d');
   grad.addColorStop(0.5, '#182030');
@@ -99,7 +99,7 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '') {
   ctx.lineWidth = 1.5;
   ctx.strokeRect(28, 28, width - 56, height - 56);
 
-  // 3. Header Kop Keraton
+  // 3. Header Kop Tradisi Jawa
   ctx.fillStyle = '#fdf0cd';
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px monospace';

@@ -6,8 +6,14 @@
     "sumber": "database_sinengker_khusus.json"
   },
   "petung_kompas_danyang": {
-    "judul": "PETUNG KOMPAS DANYANG",
-    "deskripsi": "Panduan arah mata angin dan aksara Jawa dalam kompas spiritual Danyang desa/kelurahan.",
+    "judul": {
+      "id": "PETUNG KOMPAS DANYANG",
+      "jv": "PETUNG KOMPAS DANYANG"
+    },
+    "deskripsi": {
+      "id": "Panduan arah mata angin dan aksara Jawa dalam kompas spiritual Danyang desa/kelurahan.",
+      "jv": "Pandoming arah kiblat lan aksara Jawi sajroning kompas spiritual Danyang desa/kalurahan."
+    },
     "gambar_aset": "/assets/illustrations/kompas_danyang.jpg",
     "arah_utama": {
       "lor": [
@@ -52,9 +58,18 @@
           "BA"
         ],
         "aksara_display": "Tha, Nga, Ga, Ba (lan aksara swara A, I, U, E, O)",
-        "sifat": "Kasantosan, Kateguhan, lan Kasedan Jati",
-        "danyang_pitedah": "Wewengkon ingkang kapayungan dening Danyang Arah Lor gadhah hawa adhem, mantep, lan santosa. Prayogi kangge laku tirakat, ngudi kawruh batin, sarta nyenyuwun ketenteraman kaluwarga.",
-        "sesaji_ubarampe": "Sekar setaman telon, jenang petak (putih), toya wening, lan kemenyan madu."
+        "sifat": {
+          "id": "Kasantosan, Kateguhan, lan Kasedan Jati",
+          "jv": "Kasantosan, Kateguhan, lan Kasedan Jati"
+        },
+        "danyang_pitedah": {
+          "id": "Wewengkon ingkang kapayungan dening Danyang Arah Lor gadhah hawa adhem, mantep, lan santosa. Prayogi kangge laku tirakat, ngudi kawruh batin, sarta nyenyuwun ketenteraman kaluwarga.",
+          "jv": "Wewengkon ingkang kapayungan dening Danyang Arah Lor gadhah hawa adhem, mantep, lan santosa. Prayogi kangge laku tirakat, ngudi kawruh batin, sarta nyenyuwun ketenteraman kaluwarga."
+        },
+        "sesaji_ubarampe": {
+          "id": "Sekar setaman telon, jenang petak (putih), toya wening, lan kemenyan madu.",
+          "jv": "Sekar setaman telon, jenang petak (putih), toya wening, lan kemenyan madu."
+        }
       },
       "wetan": {
         "nama_jawa": "Wetan",
@@ -70,9 +85,18 @@
           "DA"
         ],
         "aksara_display": "Ha, Na, Ca, Ra, Ka, Da",
-        "sifat": "Wiwitan, Pepadhang, Kawelasan, lan Kamulyan",
-        "danyang_pitedah": "Wewengkon ingkang kapayungan dening Danyang Arah Wetan dados sumber pepadhang, pambuka rejeki, lan paseduluran luhur. Prayogi kangge miwiti usaha, pambangunan griya anyar, lan pambuka dalan gesang.",
-        "sesaji_ubarampe": "Jenang abrit-petak, sekar boreh wangi, dupa arum, lan godhong suruh temu rose."
+        "sifat": {
+          "id": "Wiwitan, Pepadhang, Kawelasan, lan Kamulyan",
+          "jv": "Wiwitan, Pepadhang, Kawelasan, lan Kamulyan"
+        },
+        "danyang_pitedah": {
+          "id": "Wewengkon ingkang kapayungan dening Danyang Arah Wetan dados sumber pepadhang, pambuka rejeki, lan paseduluran luhur. Prayogi kangge miwiti usaha, pambangunan griya anyar, lan pambuka dalan gesang.",
+          "jv": "Wewengkon ingkang kapayungan dening Danyang Arah Wetan dados sumber pepadhang, pambuka rejeki, lan paseduluran luhur. Prayogi kangge miwiti usaha, pambangunan griya anyar, lan pambuka dalan gesang."
+        },
+        "sesaji_ubarampe": {
+          "id": "Jenang abrit-petak, sekar boreh wangi, dupa arum, lan godhong suruh temu rose.",
+          "jv": "Jenang abrit-petak, sekar boreh wangi, dupa arum, lan godhong suruh temu rose."
+        }
       },
       "kidul": {
         "nama_jawa": "Kidul",
@@ -86,9 +110,18 @@
           "LA"
         ],
         "aksara_display": "Ta, Sa, Wa, La",
-        "sifat": "Kakuwatan Samodra, Kawicaksanan, lan Kamakmuran",
-        "danyang_pitedah": "Wewengkon ingkang kapayungan dening Danyang Arah Kidul ngemot kakuwatan toya agung samodra, lambang kamakmuran lan keluberan rejeki. Prayogi kangge dagang ageng, tetanen lebet, lan njagi kawilujengan.",
-        "sesaji_ubarampe": "Ketan kolak kencana, gedhang raja satangkep, sekar mlathi, lan wedang kopi pait."
+        "sifat": {
+          "id": "Kakuwatan Samodra, Kawicaksanan, lan Kamakmuran",
+          "jv": "Kakuwatan Samodra, Kawicaksanan, lan Kamakmuran"
+        },
+        "danyang_pitedah": {
+          "id": "Wewengkon ingkang kapayungan dening Danyang Arah Kidul ngemot kakuwatan toya agung samodra, lambang kamakmuran lan keluberan rejeki. Prayogi kangge dagang ageng, tetanen lebet, lan njagi kawilujengan.",
+          "jv": "Wewengkon ingkang kapayungan dening Danyang Arah Kidul ngemot kakuwatan toya agung samodra, lambang kamakmuran lan keluberan rejeki. Prayogi kangge dagang ageng, tetanen lebet, lan njagi kawilujengan."
+        },
+        "sesaji_ubarampe": {
+          "id": "Ketan kolak kencana, gedhang raja satangkep, sekar mlathi, lan wedang kopi pait.",
+          "jv": "Ketan kolak kencana, gedhang raja satangkep, sekar mlathi, lan wedang kopi pait."
+        }
       },
       "kulon": {
         "nama_jawa": "Kulon",
@@ -104,9 +137,18 @@
           "MA"
         ],
         "aksara_display": "Pa, Dha, Ja, Ya, Nya, Ma",
-        "sifat": "Kawiryan, Panguwasa, Panutuping Sengkala, lan Kasantikan",
-        "danyang_pitedah": "Wewengkon ingkang kapayungan dening Danyang Arah Kulon mranani ing babagan kawiryan, pangreksa saking sambikala, lan kadigdayan batin. Prayogi kangge pager pekarangan lan ngicali sambikala.",
-        "sesaji_ubarampe": "Jenang abang gurih, rujak degan kelapa ijo, kembang kantil kuning, lan lawe wenang."
+        "sifat": {
+          "id": "Kawiryan, Panguwasa, Panutuping Sengkala, lan Kasantikan",
+          "jv": "Kawiryan, Panguwasa, Panutuping Sengkala, lan Kasantikan"
+        },
+        "danyang_pitedah": {
+          "id": "Wewengkon ingkang kapayungan dening Danyang Arah Kulon mranani ing babagan kawiryan, pangreksa saking sambikala, lan kadigdayan batin. Prayogi kangge pager pekarangan lan ngicali sambikala.",
+          "jv": "Wewengkon ingkang kapayungan dening Danyang Arah Kulon mranani ing babagan kawiryan, pangreksa saking sambikala, lan kadigdayan batin. Prayogi kangge pager pekarangan lan ngicali sambikala."
+        },
+        "sesaji_ubarampe": {
+          "id": "Jenang abang gurih, rujak degan kelapa ijo, kembang kantil kuning, lan lawe wenang.",
+          "jv": "Jenang abang gurih, rujak degan kelapa ijo, kembang kantil kuning, lan lawe wenang."
+        }
       }
     },
     "peta_aksara_derajat": [
@@ -569,7 +611,7 @@
     "paragraf_ajaran": [
       "Ingsun Dzating Gusti kang Asifat Esa, angliputi ing kawulaningsun tunggal dadi sakahanan sampurna, saka ing kodratingsun.",
       "Ingsun Dzating Gusti kang Suci Asifat Langgeng, kang amurba amisesa kang kawasa, kang sampurna nirmala waluya ing jatiningsun, saka ing kodratingsun.",
-      "Ingsun Dzat Kang Maha Luhur Jumeneng Ratu Agung, kang amisesa kang kawasa, andadeake ing karaton ing kang Agung kang maha mulya, Ingsun wengku sampurna sakapraboningsun, sangkep saisen – isening karatoningsun, pepak sabalaningsun kabeh ora ono kang kekurangan, byar gumelar dadi sak ciptaningsun, ana sak sedyaningsun, teka sakarsa – karsaningsun kabeh, saka ing kodratingsun.",
+      "Ingsun Dzat Kang Maha Luhur Jumeneng Ratu Agung, kang amisesa kang kawasa, andadeake ing sasana ing kang Agung kang maha mulya, Ingsun wengku sampurna sakapraboningsun, sangkep saisen – isening sasananingsun, pepak sabalaningsun kabeh ora ono kang kekurangan, byar gumelar dadi sak ciptaningsun, ana sak sedyaningsun, teka sakarsa – karsaningsun kabeh, saka ing kodratingsun.",
       "Jisimingsun kang kari ana ing alam donya, yen wis ana ing jaman karamat kang maha mulya, wulu kulit daging getih balung sungsum sapanuggalane kabeh, asale saka cahya muliha maring cahya, sampurna bali marang Ingsun maneh, saka ing kodratingsun.",
       "Yoganingsun sapanduwur sapangisor kabeh, kang pada mulih ing jaman karamating alame dewe – dewe pada suci mulya sampurna kaya Ingsun, saka ing kodratingsun.",
       "Ingsun andadekake alam donya saisen – isene kabeh iki, yes wis tutug ing wewangene, Ingsun kukud mulih mulya sampurna dadi sawija kalawan kahaningsung maneh, saka ing kodratingsun.",

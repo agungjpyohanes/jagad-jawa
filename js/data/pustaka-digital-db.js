@@ -78,7 +78,7 @@ export const NASKAH_KUNO_LIST = [
     tahun: 'Abad XVII–XVIII M',
     kategori: 'Naskah Sejarah & Genealogi Nusantara',
     aksaraJawa: 'ꦧꦧꦢ꧀ꦠꦤꦃꦗꦮꦶ',
-    deskripsi: 'Kronik sejarah tradisional ingkang nyariosaken asal-usul tanah Jawa, pamuncaking gunung Tidar minangka pakuning tanah Jawi, dumugi lelampahan kraton Demak, Pajang, lan Mataram.',
+    deskripsi: 'Kronik sejarah tradisional ingkang nyariosaken asal-usul tanah Jawa, pamuncaking gunung Tidar minangka pakuning tanah Jawi, dumugi lelampahan jaman Demak, Pajang, lan Mataram.',
     isiRingkas: 'Babad lelampahan tanah Jawa wiwit Sang Hyang Bathara Guru tumurun ing jagad mayapada, Prabu Watugunung lan 30 Wuku, dumugi trahing Mataram.',
     babList: [
       {
@@ -119,7 +119,7 @@ export const KAMUS_JAWA_INDONESIA = [
   { jawa: 'Anak', krama: 'Putra / Atmaja', id: 'Anak', contoh: 'Putra kinasihipun sampun ngancik diwasa.' },
   { jawa: 'Anyar', krama: 'Enggal', id: 'Baru', contoh: 'Mangsa enggal sampun tumiba.' },
   { jawa: 'Apik', krama: 'Sae', id: 'Bagus / Baik', contoh: 'Paugeran punika sae sanget kangge tetuladan.' },
-  { jawa: 'Arep', krama: 'Badhe', id: 'Akan / Hendak', contoh: 'Kula badhe sowan dhateng karaton.' },
+  { jawa: 'Arep', krama: 'Badhe', id: 'Akan / Hendak', contoh: 'Kula badhe sowan dhateng sasana tradisi.' },
   { jawa: 'Asu', krama: 'Segawon', id: 'Anjing', contoh: 'Swanten segawon njegug ing wanci dalu minangka sasmitha pènget.' },
   { jawa: 'Ati', krama: 'Manah / Penggalih', id: 'Hati / Kalbu', contoh: 'Njagi resiking penggalih saking pamrih.' },
   { jawa: 'Banyu', krama: 'Toya', id: 'Air', contoh: 'Toya wening suci kangge panyucen raga.' },
@@ -139,7 +139,7 @@ export const KAMUS_JAWA_INDONESIA = [
   { jawa: 'Eling', krama: 'Emut', id: 'Ingat / Sadar', contoh: 'Tansah emut marang Hyang Widhi.' },
   { jawa: 'Entek', krama: 'Telas', id: 'Habis', contoh: 'Ubarampe sampun telas kaginakaken.' },
   { jawa: 'Gajah', krama: 'Liman / Dirgantara', id: 'Gajah', contoh: 'Watak gajah ing petung ternak tegesipun kuwat sentosa.' },
-  { jawa: 'Gedhe', krama: 'Ageng', id: 'Besar / Agung', contoh: 'Kraton Ageng Kasultanan Ngayogyakarta.' },
+  { jawa: 'Gedhe', krama: 'Ageng', id: 'Besar / Agung', contoh: 'Sasana Ageng ing Tanah Jawa.' },
   { jawa: 'Golek', krama: 'Pados', id: 'Mencari', contoh: 'Pados ngelmu kasampurnan gesang.' },
   { jawa: 'Ilang', krama: 'Ical', id: 'Hilang / Lenyap', contoh: 'Sengkala sampun ical lebur dening donga.' },
   { jawa: 'Iwak', krama: 'Ulam', id: 'Ikan / Daging lauk', contoh: 'Ulam pitik cemani kangge sedekah ruwatan.' },
@@ -231,9 +231,9 @@ export const DOKUMEN_REFERENSI_BUDAYA = [
   },
   {
     id: 'filosofi-busana-jarik-batik',
-    judul: 'Paugeran Busana Adat Keraton & Makna Batik',
+    judul: 'Paugeran Busana Adat Klasik & Makna Batik',
     kategori: 'Adat Istiadat & Busana Tradisional',
-    deskripsi: 'Makna filosofis busana Surjan, Beskap, Kebaya, Blangkon, sarta motif jarik batik larangan Keraton (Parang Rusak, Sidomukti, Truntum, Sawat).',
-    kontenTeks: `PAUGERAN BUSANA KERATON & FILOSOFI JARIK BATIK\n\nA. BUSANA ADAT:\n1. Surjan: Busana takwa peninggalan Sunan Kalijaga kanthi kancing 6 (Rukun Iman) lan 2 ing dhadha (Kalimah Syahadat).\n2. Blangkon: Tutup sirah kanthi mondholan ing wingking minangka pralambang nyimpen rahasia lan ngendhaleni wicara.\n3. Stagen & Sabuk: Nyingseti raga supados tansah jejeg tekade lan mawas dhiri.\n\nB. FILOSOFI MOTIF BATIK:\n1. Parang Rusak Barong: Motif larangan para Nata/Raja, nggambaraken ombak samodra ingkang tan kendhat mukul karang, tegesipun pantang menyerah nglawan hawa nafsu.\n2. Sidomukti: Kaginakaken ing temanten, pralambang donga supados gesangipun mukti wibawa lair batin.\n3. Truntum: Diciptakaken Kanjeng Ratu Kencana, motif lintang sumebar ing langit wengi, tegesipun katresnan ingkang tuwuh malih (tumuntum) tulus langgeng.\n4. Kawung: Motif papat bunderan lonjong nengah setunggal, pralambang Sedulur Papat Lima Pancer lan resiking manah.\n5. Sekar Jagad: Keberagaman kembang ing donya, pralambang kaendahan bhinneka tunggal ika.`
+    deskripsi: 'Makna filosofis busana Surjan, Beskap, Kebaya, Blangkon, sarta motif jarik batik adiluhung tradisi Jawa (Parang Rusak, Sidomukti, Truntum, Sawat).',
+    kontenTeks: `PAUGERAN BUSANA TRADISI & FILOSOFI JARIK BATIK\n\nA. BUSANA ADAT:\n1. Surjan: Busana takwa peninggalan Sunan Kalijaga kanthi kancing 6 (Rukun Iman) lan 2 ing dhadha (Kalimah Syahadat).\n2. Blangkon: Tutup sirah kanthi mondholan ing wingking minangka pralambang nyimpen rahasia lan ngendhaleni wicara.\n3. Stagen & Sabuk: Nyingseti raga supados tansah jejeg tekade lan mawas dhiri.\n\nB. FILOSOFI MOTIF BATIK:\n1. Parang Rusak Barong: Motif larangan para Nata/Raja, nggambaraken ombak samodra ingkang tan kendhat mukul karang, tegesipun pantang menyerah nglawan hawa nafsu.\n2. Sidomukti: Kaginakaken ing temanten, pralambang donga supados gesangipun mukti wibawa lair batin.\n3. Truntum: Diciptakaken Kanjeng Ratu Kencana, motif lintang sumebar ing langit wengi, tegesipun katresnan ingkang tuwuh malih (tumuntum) tulus langgeng.\n4. Kawung: Motif papat bunderan lonjong nengah setunggal, pralambang Sedulur Papat Lima Pancer lan resiking manah.\n5. Sekar Jagad: Keberagaman kembang ing donya, pralambang kaendahan bhinneka tunggal ika.`
   }
 ];
