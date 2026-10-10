@@ -31,6 +31,7 @@ import {
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
@@ -1653,6 +1654,27 @@ async function renderSinengkerPustakaView(container) {
  * @param {HTMLElement} container 
  */
 async function renderSinengkerTumpengView(container) {
+  let tumpengData = null;
+  try {
+    tumpengData = await loadDomainData('tumpeng');
+  } catch (e) {
+    console.warn('[sinengker-ui] loadDomainData tumpeng error:', e);
+  }
+
+  const isNode = typeof window === 'undefined' && typeof process !== 'undefined' && Boolean(process.versions?.node);
+  if (!tumpengData && !isNode) {
+    container.innerHTML = `
+      <div id="tumpengErrorBox" class="py-4"></div>
+    `;
+    const box = container.querySelector('#tumpengErrorBox');
+    renderDataErrorState(box, {
+      domain: 'tumpeng',
+      isSupplemental: true,
+      onRetry: () => renderSinengkerTumpengView(container)
+    });
+    return;
+  }
+
   container.innerHTML = `
     <div class="space-y-6">
       <!-- Top Title & Badge -->

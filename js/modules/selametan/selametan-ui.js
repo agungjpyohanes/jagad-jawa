@@ -10,8 +10,162 @@ import { saveBookmark } from '../kalender/bookmark-service.js';
 import { showToast } from '../../ui/toast.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 let currentSelametanKeyakinan = 'universal';
+let selametanCurrentStep = 1;
+
+/**
+ * Mengatur langkah stepper wizard formulir Selametan (1..3)
+ * Langkah 1: Tanggal Wafat (Wajib tervalidasi)
+ * Langkah 2: Waktu Berpulang (Sebelum vs Bakda Maghrib, wajib dipilih secara eksplisit)
+ * Langkah 3: Jadwal 7 Milestone Pengetan
+ *
+ * @param {number} targetStep
+ * @param {boolean} [validateCurrent=true]
+ * @returns {boolean}
+ */
+export function setSelametanWizardStep(targetStep, validateCurrent = true) {
+  const step = Math.max(1, Math.min(3, parseInt(targetStep, 10) || 1));
+  const tglInput = document.getElementById('tglWafatInput')?.value || '';
+  const radioWaktu = document.querySelector('input[name="waktuWafatRadio"]:checked')?.value;
+
+  if (validateCurrent && step > selametanCurrentStep) {
+    // Validasi Langkah 1: Tanggal Wafat
+    if (step >= 2) {
+      if (!tglInput) {
+        showToast('Pilih tanggal wafat terlebih dahulu.');
+        const el = document.getElementById('tglWafatInput');
+        if (el) el.focus();
+        return false;
+      }
+    }
+    // Validasi Langkah 2: Waktu Berpulang
+    if (step >= 3) {
+      if (!tglInput) {
+        showToast('Pilih tanggal wafat terlebih dahulu.');
+        setSelametanWizardStep(1, false);
+        return false;
+      }
+      if (!radioWaktu) {
+        showToast('Pilih waktu wafat (sebelum Maghrib atau bakda Maghrib) terlebih dahulu.');
+        return false;
+      }
+      // Eksekusi kalkulasi sebelum menampilkan Langkah 3
+      hitungSelametan();
+      return true;
+    }
+  }
+
+  selametanCurrentStep = step;
+  applySelametanWizardStepUI(step);
+  return true;
+}
+
+/**
+ * Menerapkan visibilitas DOM & indikator navigasi langkah Selametan
+ * @param {number} step
+ */
+export function applySelametanWizardStepUI(step) {
+  if (typeof document === 'undefined') return;
+
+  const container1 = document.getElementById('selametanStepContainer1');
+  const container2 = document.getElementById('selametanStepContainer2');
+  const container3 = document.getElementById('selametanStepContainer3');
+  const stepBadge = document.getElementById('selametanStepBadge');
+  const stepIndicator = document.getElementById('selametanStepIndicator');
+  const progressBar = document.getElementById('selametanProgressBar');
+  const progressContainer = document.getElementById('selametanProgressBarContainer');
+
+  const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
+    ? window.getLanguage()
+    : 'id';
+  const isJv = (lang === 'jv');
+
+  // Update progress bar
+  const pct = step === 1 ? '33.33%' : (step === 2 ? '66.66%' : '100%');
+  if (progressBar) progressBar.style.width = pct;
+  if (progressContainer) progressContainer.setAttribute('aria-valuenow', String(step));
+  if (stepBadge) stepBadge.textContent = String(step);
+
+  // Update indicator text
+  if (stepIndicator) {
+    let txt = '';
+    if (step === 1) {
+      txt = isJv ? 'Langkah 1 saking 3: Tanggal Tilar Donyo / Geblak' : 'Langkah 1 dari 3: Tanggal Wafat / Geblak';
+    } else if (step === 2) {
+      txt = isJv ? 'Langkah 2 saking 3: Wektu Tilar Donyo (Sadèrèng / Bakda Maghrib)' : 'Langkah 2 dari 3: Waktu Berpulang (Sebelum / Bakda Maghrib)';
+    } else {
+      txt = isJv ? 'Langkah 3 saking 3: Jadwal 7 Milestone Pengetan' : 'Langkah 3 dari 3: Jadwal 7 Milestone Pengetan';
+    }
+    stepIndicator.textContent = txt;
+  }
+
+  // Update nav buttons highlight (1..3)
+  for (let i = 1; i <= 3; i++) {
+    const btn = document.getElementById(`selametanNavBtn${i}`);
+    if (btn) {
+      if (i === step) {
+        btn.classList.add('border-prada', 'text-prada', 'bg-sogan-950');
+        btn.classList.remove('border-sogan-700', 'text-sogan-300');
+        btn.setAttribute('aria-current', 'step');
+      } else {
+        btn.classList.remove('border-prada', 'text-prada', 'bg-sogan-950');
+        btn.classList.add('border-sogan-700', 'text-sogan-300');
+        btn.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  // Visibilitas container per langkah
+  if (container1) container1.classList.toggle('hidden', step !== 1);
+  if (container2) container2.classList.toggle('hidden', step !== 2);
+  if (container3) container3.classList.toggle('hidden', step !== 3);
+
+  if (step === 3 && container3) {
+    container3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/**
+ * Toggle accordion rincian tabel lengkap 7 milestone
+ */
+export function toggleAccordionSelametan() {
+  const content = document.getElementById('rincianSelametanContent');
+  const btn = document.getElementById('btnToggleAccordionSelametan');
+  const icon = document.getElementById('iconAccordionSelametan');
+  if (!content || !btn) return;
+
+  const isHidden = content.classList.contains('hidden');
+  if (isHidden) {
+    content.classList.remove('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+    if (icon) icon.style.transform = 'rotate(180deg)';
+  } else {
+    content.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+    if (icon) icon.style.transform = 'rotate(0deg)';
+  }
+}
+
+/**
+ * Toggle detail kultural (ubarampe, doa) pada kartu timeline milestone
+ * @param {string} detailId
+ */
+export function toggleMilestoneDetail(detailId) {
+  const el = document.getElementById(detailId);
+  const icon = document.getElementById(`icon_${detailId}`);
+  if (!el) return;
+
+  const isHidden = el.classList.contains('hidden');
+  if (isHidden) {
+    el.classList.remove('hidden');
+    if (icon) icon.style.transform = 'rotate(180deg)';
+  } else {
+    el.classList.add('hidden');
+    if (icon) icon.style.transform = 'rotate(0deg)';
+  }
+}
 
 /**
  * Mengganti tradisi/keyakinan doa secara interaktif dari timeline
@@ -42,18 +196,33 @@ export function gantiKeyakinanSelametan(keyakinanKey) {
  * Menghitung dan merender seluruh hasil selametan tilar donyo.
  */
 export async function hitungSelametan() {
+  let domainData = null;
   try {
-    await loadDomainData('selametan');
+    domainData = await loadDomainData('selametan');
   } catch (e) {
-    console.warn('[selametan-ui] loadDomainData fallback:', e);
+    console.warn('[selametan-ui] loadDomainData error:', e);
+  }
+
+  if (!domainData) {
+    const timelineContainer = document.getElementById('timelineSelametanBox') || document.getElementById('geblakInfoBox');
+    if (timelineContainer) {
+      timelineContainer.style.display = 'block';
+      const step3 = document.getElementById('selametanStepContainer3');
+      if (step3 && step3.classList.contains('hidden')) {
+        step3.classList.remove('hidden');
+      }
+      renderDataErrorState(timelineContainer, {
+        domain: 'selametan',
+        onRetry: () => hitungSelametan()
+      });
+    }
+    return;
   }
   const inputEl = document.getElementById('tglWafatInput');
-  if (inputEl && !inputEl.value) {
-    inputEl.value = new Date().toISOString().slice(0, 10);
-  }
   const input = inputEl?.value;
   if (!input) {
     showToast('Pilih tanggal wafat terlebih dahulu.');
+    if (inputEl) inputEl.focus();
     return;
   }
 
@@ -61,8 +230,15 @@ export async function hitungSelametan() {
   if (isNaN(yy) || isNaN(mm) || isNaN(dd)) return;
 
   // Baca opsi waktu wafat (siang vs malam setelah maghrib)
+  // Utamakan radio button eksplisit dari formulir wizard
+  const radioWaktu = document.querySelector('input[name="waktuWafatRadio"]:checked');
   const waktuWafatSelect = document.getElementById('waktuWafatSelect');
-  const waktuWafat = waktuWafatSelect ? waktuWafatSelect.value : 'siang';
+  let waktuWafat = radioWaktu ? radioWaktu.value : (waktuWafatSelect ? waktuWafatSelect.value : '');
+
+  if (!waktuWafat) {
+    showToast('Pilih waktu wafat (sebelum Maghrib atau bakda Maghrib) terlebih dahulu.');
+    return;
+  }
 
   // Baca input nama almarhum (opsional)
   const namaAlmarhumInput = document.getElementById('namaAlmarhumInput');
@@ -73,7 +249,7 @@ export async function hitungSelametan() {
   const keyakinan = keyakinanSelect ? keyakinanSelect.value : currentSelametanKeyakinan;
   currentSelametanKeyakinan = keyakinan;
 
-  const data = hitungSelametanDates(yy, mm, dd, waktuWafat, namaAlmarhum, keyakinan);
+  const data = hitungSelametanDates(yy, mm, dd, waktuWafat, namaAlmarhum, keyakinan, domainData);
   const { geblak, items } = data;
 
   // Render info Geblak
@@ -242,8 +418,16 @@ export function renderTimelineSelametan(geblak, items, namaAlmarhum = '', keyaki
               </div>
             </div>
 
-            <!-- Rincian Kultural Ubarampe & Makna Inklusif -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] pt-1">
+            <!-- Tombol Toggle Rincian Makna & Ubarampe (Ringkas Dahulu) -->
+            <div class="pt-1">
+              <button type="button" onclick="window.toggleMilestoneDetail('detail_milestone_${idx}')" class="text-[11px] font-medium text-prada hover:text-amber-300 flex items-center gap-1.5 transition cursor-pointer min-h-[36px] py-1">
+                <span>Makna Kultural, Ubarampe &amp; Donga</span>
+                <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200" id="icon_detail_milestone_${idx}"></i>
+              </button>
+            </div>
+
+            <!-- Rincian Kultural Ubarampe & Makna Inklusif (Collapsible) -->
+            <div id="detail_milestone_${idx}" class="hidden grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] pt-1">
               <div class="p-2.5 rounded-lg bg-sogan-950/60 border border-sogan-800/50 space-y-1">
                 <span class="text-[9.5px] uppercase font-bold text-prada flex items-center gap-1">
                   <i class="fa-solid fa-bowl-rice"></i> Ubarampe Sedekah:

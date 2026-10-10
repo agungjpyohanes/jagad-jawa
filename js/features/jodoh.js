@@ -25,7 +25,11 @@ import {
   loadRiwayatPerjodohan,
   hapusRiwayatPerjodohan,
   clearAllRiwayatPerjodohan,
-  printLaporanPerjodohan
+  printLaporanPerjodohan,
+  onStatusHubunganChange,
+  setJodohWizardStep,
+  toggleAccordion7Metode,
+  navigateToIjabDariMantu
 } from '../modules/jodoh/jodoh-ui.js';
 
 import {
@@ -62,6 +66,10 @@ export function wireJodohFeature() {
   window.getJodohHistory = getJodohHistory;
   window.deleteJodohHistoryItem = deleteJodohHistoryItem;
   window.clearAllJodohHistory = clearAllJodohHistory;
+  window.onStatusHubunganChange = onStatusHubunganChange;
+  window.setJodohWizardStep = setJodohWizardStep;
+  window.toggleAccordion7Metode = toggleAccordion7Metode;
+  window.navigateToIjabDariMantu = navigateToIjabDariMantu;
 }
 
 export {

@@ -68,8 +68,21 @@ function switchTab(tabId, pushState = true) {
   if (mobileHeaderBar) {
     if (tabId === 'beranda') {
       mobileHeaderBar.classList.add('hidden');
+      mobileHeaderBar.classList.remove('flex');
     } else {
       mobileHeaderBar.classList.remove('hidden');
+      mobileHeaderBar.classList.add('flex');
+    }
+  }
+
+  const mobileBackBtn = document.getElementById('mobileHeaderBackBtn');
+  if (mobileBackBtn) {
+    if (tabId === 'beranda') {
+      mobileBackBtn.classList.add('hidden');
+      mobileBackBtn.classList.remove('inline-flex');
+    } else {
+      mobileBackBtn.classList.remove('hidden');
+      mobileBackBtn.classList.add('inline-flex');
     }
   }
 
@@ -516,13 +529,13 @@ function renderBreadcrumb(tabId = 'beranda', subTitle = null) {
     });
   });
 
-  // Update Windows Explorer path summary: JagadJawa:\Wektu\Kalender Jawa
+  // Update ringkasan lokasi navigasi produk: Jagad Jawa • Waktu / Kalender
   if (summaryEl) {
-    const pathParts = ['JagadJawa:'];
+    const pathParts = ['Jagad Jawa'];
     if (info.category) pathParts.push(getNavBilingualText(info.category.label).split('&')[0].trim());
     if (tabId !== 'beranda') pathParts.push(getNavBilingualText(info.title));
     if (activeSub && tabId !== 'beranda') pathParts.push(getNavBilingualText(activeSub).split('&')[0].trim());
-    summaryEl.textContent = pathParts.join('\\');
+    summaryEl.textContent = pathParts.join(' • ');
   }
 }
 
@@ -916,6 +929,63 @@ if (typeof window !== 'undefined') {
   window.closeAllNavDropdowns = closeAllNavDropdowns;
   window.renderBreadcrumb = renderBreadcrumb;
   window.handleBreadcrumbNav = handleBreadcrumbNav;
+  window.filterBerandaFeatures = filterBerandaFeatures;
+  window.selectBerandaCategory = selectBerandaCategory;
+}
+
+// ─── PENCARIAN & FILTER KATEGORI FITUR BERANDA ─────────────────────────────
+let currentBerandaCategory = 'all';
+
+export function selectBerandaCategory(categoryKey) {
+  currentBerandaCategory = categoryKey || 'all';
+  if (typeof document === 'undefined') return;
+
+  const chipButtons = document.querySelectorAll('#berandaCategoryChips .cat-chip-btn');
+  chipButtons.forEach(btn => {
+    const isTarget = btn.dataset.cat === currentBerandaCategory;
+    if (isTarget) {
+      btn.className = 'cat-chip-btn active px-3 py-1 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-xs transition shrink-0 cursor-pointer';
+    } else {
+      btn.className = 'cat-chip-btn px-3 py-1 rounded-lg bg-sogan-900/80 hover:bg-sogan-800 text-sogan-200 hover:text-prada border border-sogan-800 font-medium transition shrink-0 cursor-pointer';
+    }
+  });
+
+  const searchInput = document.getElementById('featureQuickSearchInput');
+  filterBerandaFeatures(searchInput ? searchInput.value : '');
+}
+
+export function filterBerandaFeatures(keyword = '') {
+  if (typeof document === 'undefined') return;
+  const normalizedKeyword = String(keyword || '').trim().toLowerCase();
+  const grid = document.getElementById('berandaFeatureGrid');
+  if (!grid) return;
+
+  const cards = grid.children;
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i];
+    const onclickAttr = card.getAttribute('onclick') || '';
+    const match = onclickAttr.match(/switchTab\(['"]([^'"]+)['"]\)/);
+    const tabKey = match ? match[1] : '';
+
+    let catGroup = 'budaya';
+    if (['kalender', 'tanggal-jawa'].includes(tabKey)) {
+      catGroup = 'wektu';
+    } else if (['kepribadian', 'perjodohan', 'selametan', 'ijab', 'omah', 'ternak', 'sasmitha', 'sinengker'].includes(tabKey)) {
+      catGroup = 'nujum';
+    } else if (['aksara', 'wayang', 'gamelan', 'pitutur', 'pustaka'].includes(tabKey)) {
+      catGroup = 'sastra';
+    }
+
+    const matchesCategory = (currentBerandaCategory === 'all' || currentBerandaCategory === catGroup);
+    const cardText = (card.textContent || '').toLowerCase();
+    const matchesKeyword = !normalizedKeyword || cardText.includes(normalizedKeyword) || tabKey.toLowerCase().includes(normalizedKeyword);
+
+    if (matchesCategory && matchesKeyword) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  }
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {

@@ -43,6 +43,7 @@ import {
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { downloadTextFile } from '../../ui/download-helper.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 let currentPustakaSubtab = 'kamus'; // 'kamus' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'naskah' | 'referensi'
 let currentPustakaContainerId = 'pustakaContainer';
@@ -1085,6 +1086,19 @@ export function onNaskahSearch(query) {
 export function renderPustakaNaskahView(container) {
   const list = searchNaskahKuno(currentNaskahQuery);
 
+  if ((!list || list.length === 0) && !currentNaskahQuery) {
+    container.innerHTML = `
+      <div id="pustakaNaskahErrorBox" class="py-4"></div>
+    `;
+    const box = container.querySelector('#pustakaNaskahErrorBox');
+    renderDataErrorState(box, {
+      domain: 'pustaka-digital',
+      isSupplemental: true,
+      onRetry: () => renderPustakaNaskahView(container)
+    });
+    return;
+  }
+
   container.innerHTML = `
     <div class="space-y-5">
       <!-- Search Bar -->
@@ -1347,6 +1361,19 @@ export function renderPustakaKamusView(container) {
   const allJwSa = getAllKamusJawaSanskerta();
   const list = isSanskerta ? searchKamusJawaSanskerta(currentKamusQuery) : searchKamusJawaIndonesia(currentKamusQuery);
 
+  if (allJwId.length === 0 && allJwSa.length === 0 && !currentKamusQuery) {
+    container.innerHTML = `
+      <div id="pustakaKamusErrorBox" class="py-4"></div>
+    `;
+    const box = container.querySelector('#pustakaKamusErrorBox');
+    renderDataErrorState(box, {
+      domain: 'pustaka-digital',
+      isSupplemental: true,
+      onRetry: () => renderPustakaKamusView(container)
+    });
+    return;
+  }
+
   container.innerHTML = `
     <div class="space-y-5">
       <!-- Search Bar -->
@@ -1517,6 +1544,19 @@ export function onReferensiSearch(query) {
 
 export function renderPustakaReferensiView(container) {
   const list = searchDokumenReferensi(currentReferensiQuery);
+
+  if ((!list || list.length === 0) && !currentReferensiQuery) {
+    container.innerHTML = `
+      <div id="pustakaReferensiErrorBox" class="py-4"></div>
+    `;
+    const box = container.querySelector('#pustakaReferensiErrorBox');
+    renderDataErrorState(box, {
+      domain: 'pustaka-digital',
+      isSupplemental: true,
+      onRetry: () => renderPustakaReferensiView(container)
+    });
+    return;
+  }
 
   container.innerHTML = `
     <div class="space-y-5">

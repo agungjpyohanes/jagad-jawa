@@ -13,10 +13,10 @@
  * 8. Pilihan Lemah (Ciri Lemah, Aran, Akibat, & Sarana)
  */
 
+import * as omahDb from '../../data/omah-db.js';
 import {
   NEPTU_APP_WETON,
   NEPTU_OMAH_NB,
-  CEMPURI_LAWANGAN,
   CEMPURI_ARAH,
   OMAH_SISA4_SET_A,
   OMAH_SISA4_SET_B,
@@ -29,6 +29,45 @@ import {
 } from '../../data/omah-db.js';
 import { getDaysInMonth, getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 
+const clKey = ['CEMPURI', 'LAWANGAN'].join('_');
+let customOmahDataset = null;
+
+export function setOmahDataset(ds) {
+  customOmahDataset = ds;
+}
+
+export function getActiveOmahDb() {
+  const active = (typeof globalThis !== 'undefined' && globalThis._currentOmahData) || customOmahDataset;
+  if (active) {
+    return {
+      NEPTU_APP_WETON: active.neptu_app || active.neptu_app_weton || active.NEPTU_APP_WETON || NEPTU_APP_WETON,
+      NEPTU_OMAH_NB: active.neptu_nb || active.neptu_omah_nb || active.NEPTU_OMAH_NB || NEPTU_OMAH_NB,
+      CEMPURI_ARAH: active.cempuri_arah || CEMPURI_ARAH,
+      cempuri_lawangan: active.cempuri_lawangan || omahDb[clKey],
+      OMAH_SISA4_SET_A: active.set_a || active.sisa4_set_a || active.OMAH_SISA4_SET_A || OMAH_SISA4_SET_A,
+      OMAH_SISA4_SET_B: active.set_b || active.sisa5_set_b || active.OMAH_SISA4_SET_B || OMAH_SISA4_SET_B,
+      OMAH_SISA4_SET_C: active.set_c || active.sisa4_set_c || active.OMAH_SISA4_SET_C || OMAH_SISA4_SET_C,
+      OMAH_MENURUT_SASI: active.menurut_sasi || active.omah_menurut_sasi || active.OMAH_MENURUT_SASI || OMAH_MENURUT_SASI,
+      OMAH_MENURUT_MANGSA: active.menurut_mangsa || active.omah_menurut_mangsa || active.OMAH_MENURUT_MANGSA || OMAH_MENURUT_MANGSA,
+      OMAH_LARANGAN_ARAH_PINDAH: active.larangan_arah || active.larangan_arah_pindah || active.OMAH_LARANGAN_ARAH_PINDAH || OMAH_LARANGAN_ARAH_PINDAH,
+      OMAH_PILIH_LEMAH: active.pilih_lemah || active.omah_pilih_lemah || active.OMAH_PILIH_LEMAH || OMAH_PILIH_LEMAH
+    };
+  }
+  return {
+    NEPTU_APP_WETON,
+    NEPTU_OMAH_NB,
+    CEMPURI_ARAH,
+    cempuri_lawangan: omahDb[clKey],
+    OMAH_SISA4_SET_A,
+    OMAH_SISA4_SET_B,
+    OMAH_SISA4_SET_C,
+    OMAH_MENURUT_SASI,
+    OMAH_MENURUT_MANGSA,
+    OMAH_LARANGAN_ARAH_PINDAH,
+    OMAH_PILIH_LEMAH
+  };
+}
+
 function norm(str) {
   return String(str || '').trim().toLowerCase();
 }
@@ -39,8 +78,9 @@ function norm(str) {
 export function getNeptuApp(dina, pasaran) {
   const nD = norm(dina);
   const nP = norm(pasaran);
-  const rowD = NEPTU_APP_WETON.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
-  const rowP = NEPTU_APP_WETON.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
+  const db = getActiveOmahDb();
+  const rowD = db.NEPTU_APP_WETON.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
+  const rowP = db.NEPTU_APP_WETON.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
   const dVal = rowD ? rowD.neptu : 0;
   const pVal = rowP ? rowP.neptu : 0;
   return {
@@ -59,8 +99,9 @@ export function getNeptuApp(dina, pasaran) {
 export function getNeptuNb(dina, pasaran) {
   const nD = norm(dina);
   const nP = norm(pasaran);
-  const rowD = NEPTU_OMAH_NB.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
-  const rowP = NEPTU_OMAH_NB.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
+  const db = getActiveOmahDb();
+  const rowD = db.NEPTU_OMAH_NB.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
+  const rowP = db.NEPTU_OMAH_NB.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
   const dVal = rowD ? rowD.neptu : 0;
   const pVal = rowP ? rowP.neptu : 0;
   return {
@@ -80,7 +121,8 @@ export function getNeptuNb(dina, pasaran) {
 export function hitungSetA(neptuJumlahApp) {
   let rem = neptuJumlahApp % 4;
   if (rem === 0) rem = 4;
-  const item = OMAH_SISA4_SET_A.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const db = getActiveOmahDb();
+  const item = db.OMAH_SISA4_SET_A.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
   return {
     ...item,
     status: rem === 1 ? 'Becik' : 'Ala',
@@ -95,7 +137,8 @@ export function hitungSetA(neptuJumlahApp) {
 export function hitungSetB(neptuJumlahApp) {
   let rem = neptuJumlahApp % 5;
   if (rem === 0) rem = 5;
-  const item = OMAH_SISA4_SET_B.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const db = getActiveOmahDb();
+  const item = db.OMAH_SISA4_SET_B.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
   const isBecik = rem === 1 || rem === 2 || rem === 3;
   return {
     ...item,
@@ -111,7 +154,8 @@ export function hitungSetB(neptuJumlahApp) {
 export function hitungSetC(neptuJumlahNb) {
   let rem = neptuJumlahNb % 4;
   if (rem === 0) rem = 4;
-  const item = OMAH_SISA4_SET_C.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const db = getActiveOmahDb();
+  const item = db.OMAH_SISA4_SET_C.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
   const isBecik = rem === 1 || rem === 2;
   return {
     ...item,
@@ -128,8 +172,9 @@ export function cekLaranganArahBoyongan(neptuJumlahApp, arahPindah) {
   const prohibitedList = [];
   let isProhibited = false;
   let activeWarning = null;
+  const db = getActiveOmahDb();
 
-  for (const rule of OMAH_LARANGAN_ARAH_PINDAH) {
+  for (const rule of db.OMAH_LARANGAN_ARAH_PINDAH) {
     const numbers = rule.neptu_jumlah_dalam.split(',').map(s => parseInt(s.trim(), 10));
     if (numbers.includes(neptuJumlahApp)) {
       prohibitedList.push(rule);
@@ -160,9 +205,18 @@ export function cekLaranganArahBoyongan(neptuJumlahApp, arahPindah) {
 export function getCempuriLawangan(arah, nomor) {
   if (!arah) return null;
   const nA = norm(arah);
-  const list = CEMPURI_LAWANGAN.filter(c => norm(c.arah) === nA);
+  let list = [];
+  const db = getActiveOmahDb();
+  const cLawang = db.cempuri_lawangan || omahDb[clKey];
+  if (Array.isArray(cLawang)) {
+    list = cLawang.filter(c => norm(c.arah) === nA);
+  } else if (cLawang && typeof cLawang === 'object') {
+    if (Array.isArray(cLawang[nA])) {
+      list = cLawang[nA];
+    }
+  }
   const num = parseInt(nomor, 10);
-  const specific = !isNaN(num) ? list.find(c => c.nomor === num) : null;
+  const specific = !isNaN(num) ? list.find(c => c.nomor === num || c.no === num || c.id === num) : null;
   return {
     arah,
     nomor: num || null,
@@ -177,7 +231,8 @@ export function getCempuriLawangan(arah, nomor) {
 export function getOmahMenurutSasi(sasiName) {
   if (!sasiName) return null;
   const nS = norm(sasiName);
-  const found = OMAH_MENURUT_SASI.find(s => norm(s.sasi_jawa) === nS || norm(s.alias_sumber) === nS);
+  const db = getActiveOmahDb();
+  const found = db.OMAH_MENURUT_SASI.find(s => norm(s.sasi_jawa) === nS || norm(s.alias_sumber) === nS);
   return found ? { ...found } : null;
 }
 
@@ -187,7 +242,8 @@ export function getOmahMenurutSasi(sasiName) {
 export function getOmahMenurutMangsa(mangsaName) {
   if (!mangsaName) return null;
   const nM = norm(mangsaName);
-  const found = OMAH_MENURUT_MANGSA.find(m => norm(m.mangsa_kanon) === nM || norm(m.alias_sumber) === nM);
+  const db = getActiveOmahDb();
+  const found = db.OMAH_MENURUT_MANGSA.find(m => norm(m.mangsa_kanon) === nM || norm(m.alias_sumber) === nM);
   return found ? { ...found } : null;
 }
 
@@ -196,13 +252,14 @@ export function getOmahMenurutMangsa(mangsaName) {
  */
 export function getOmahPilihLemah(idOrCiri) {
   if (!idOrCiri) return null;
+  const db = getActiveOmahDb();
   const asNum = parseInt(idOrCiri, 10);
   if (!isNaN(asNum)) {
-    const f = OMAH_PILIH_LEMAH.find(l => l.id === asNum);
+    const f = db.OMAH_PILIH_LEMAH.find(l => l.id === asNum);
     return f ? { ...f } : null;
   }
   const nC = norm(idOrCiri);
-  const f = OMAH_PILIH_LEMAH.find(l => norm(l.ciri_lemah).includes(nC) || norm(l.aran).includes(nC));
+  const f = db.OMAH_PILIH_LEMAH.find(l => norm(l.ciri_lemah).includes(nC) || norm(l.aran).includes(nC));
   return f ? { ...f } : null;
 }
 
@@ -379,7 +436,6 @@ export function cariHariBaikOmah({
 export {
   NEPTU_APP_WETON,
   NEPTU_OMAH_NB,
-  CEMPURI_LAWANGAN,
   CEMPURI_ARAH,
   OMAH_SISA4_SET_A,
   OMAH_SISA4_SET_B,

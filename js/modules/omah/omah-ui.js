@@ -4,7 +4,7 @@
  * komparasi dual neptu, serta visualisasi 3 set rumus sisa.
  */
 
-import { hitungPetungOmah, getCempuriLawangan, cariHariBaikOmah } from './omah-engine.js';
+import { hitungPetungOmah, getCempuriLawangan, cariHariBaikOmah, setOmahDataset } from './omah-engine.js';
 import {
   CEMPURI_ARAH,
   OMAH_MENURUT_SASI,
@@ -15,10 +15,105 @@ import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
 import { getBilingualText } from '../../ui/i18n.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
+
+import { WizardStepper } from '../../ui/wizard-stepper.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
 const ARAH_LIST = ['Utara', 'Timur', 'Selatan', 'Barat'];
+
+let isOmahFullFormMode = false;
+
+export const omahStepper = new WizardStepper({
+  namespace: 'omah',
+  totalSteps: 4,
+  steps: {
+    1: {
+      containerId: 'omahStepContainer1',
+      navBtnId: 'omahNavBtn1',
+      labelId: 'Tujuan, Tanggal & Arah Pintu Utama',
+      labelJv: 'Ancas, Tanggal & Arah Lawang Utama'
+    },
+    2: {
+      containerId: 'omahStepContainer2',
+      navBtnId: 'omahNavBtn2',
+      labelId: 'Posisi Pintu Cempuri (1-9)',
+      labelJv: 'Posisi Lawang Cempuri (1-9)'
+    },
+    3: {
+      containerId: 'omahStepContainer3',
+      navBtnId: 'omahNavBtn3',
+      labelId: 'Karakteristik Lahan & Musim',
+      labelJv: 'Karakteristik Siti & Mangsa'
+    },
+    4: {
+      containerId: 'omahStepContainer4',
+      navBtnId: 'omahNavBtn4',
+      labelId: 'Hasil Evaluasi & Rekomendasi',
+      labelJv: 'Asil Pametung & Rekomendasi'
+    }
+  },
+  onValidateStep: (fromStep, toStep) => {
+    const dateInput = document.getElementById('omahDatePicker');
+    const selDina = document.getElementById('omahSelDina');
+    const selPasaran = document.getElementById('omahSelPasaran');
+
+    if (toStep >= 2) {
+      if (!dateInput || !dateInput.value) {
+        showToast('Pilih tanggal ngedekake / boyongan omah rumiyin.');
+        if (dateInput) dateInput.focus();
+        return false;
+      }
+      const parts = dateInput.value.split('-').map(Number);
+      if (parts.length !== 3 || isNaN(parts[0]) || isNaN(parts[1]) || isNaN(parts[2]) || parts[0] < 1900 || parts[0] > 2100) {
+        showToast('Format tanggal omah mboten leres.');
+        if (dateInput) dateInput.focus();
+        return false;
+      }
+    }
+    if (toStep >= 4) {
+      if (!selDina?.value || !selPasaran?.value) {
+        showToast('Piliha Dina lan Pasaran langkung rumiyin.');
+        return false;
+      }
+      hitungOmahDariUI(false);
+    }
+    return true;
+  }
+});
+
+export function setOmahWizardStep(step, validate = true) {
+  return omahStepper.goToStep(step, validate);
+}
+
+/**
+ * Toggle antara Mode Stepper Ringkas dan Mode Form Lengkap Power-User
+ */
+export function toggleOmahFormMode() {
+  isOmahFullFormMode = !isOmahFullFormMode;
+  const nav = document.getElementById('omahWizardNav');
+  const step1 = document.getElementById('omahStepContainer1');
+  const step2 = document.getElementById('omahStepContainer2');
+  const step3 = document.getElementById('omahStepContainer3');
+  const step4 = document.getElementById('omahStepContainer4');
+  const label = document.getElementById('labelToggleOmahMode');
+
+  if (isOmahFullFormMode) {
+    if (nav) nav.classList.add('hidden');
+    if (step1) step1.classList.remove('hidden');
+    if (step2) step2.classList.remove('hidden');
+    if (step3) step3.classList.remove('hidden');
+    if (step4) step4.classList.remove('hidden');
+    if (label) label.textContent = 'Mode Stepper Ringkas';
+    showToast('Mode Form Lengkap aktif.');
+  } else {
+    if (nav) nav.classList.remove('hidden');
+    omahStepper.applyUI(omahStepper.getCurrentStep());
+    if (label) label.textContent = 'Mode Form Lengkap';
+    showToast('Mode Stepper Ringkas aktif.');
+  }
+}
 
 /**
  * Inisialisasi komponen UI Petung Omah
@@ -40,6 +135,9 @@ export function initOmahUI() {
     dateInput.value = `${y}-${m}-${d}`;
     syncOmahDariTanggal();
   }
+
+  // Terapkan state UI stepper awal
+  omahStepper.applyUI(1);
 }
 
 function populateSelects() {
@@ -143,7 +241,17 @@ function setupEventListeners() {
       const m = String(today.getMonth() + 1).padStart(2, '0');
       const d = String(today.getDate()).padStart(2, '0');
       if (datePicker) datePicker.value = `${y}-${m}-${d}`;
+      const radioMbangun = document.getElementById('omahTujuanMbangun');
+      if (radioMbangun) radioMbangun.checked = true;
+      const container = document.getElementById('omahResultContainer');
+      if (container) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+      }
       syncOmahDariTanggal();
+      if (!isOmahFullFormMode) {
+        omahStepper.goToStep(1, false);
+      }
       showToast('Tanggal kasinkronaken dhateng dinten punika.');
     });
   }
@@ -155,6 +263,15 @@ function setupEventListeners() {
       el.addEventListener('change', () => hitungOmahDariUI(false));
     }
   });
+
+  const radioMbangun = document.getElementById('omahTujuanMbangun');
+  const radioBoyongan = document.getElementById('omahTujuanBoyongan');
+  if (radioMbangun) {
+    radioMbangun.addEventListener('change', () => hitungOmahDariUI(false));
+  }
+  if (radioBoyongan) {
+    radioBoyongan.addEventListener('change', () => hitungOmahDariUI(false));
+  }
 }
 
 /**
@@ -188,7 +305,32 @@ export function syncOmahDariTanggal() {
 /**
  * Baca input dan jalankan perhitungan Petung Omah & Cempuri
  */
-export function hitungOmahDariUI(showNotification = false) {
+export async function hitungOmahDariUI(showNotification = false) {
+  let omahData = null;
+  try {
+    omahData = await loadDomainData('omah');
+  } catch (e) {
+    console.warn('[omah-ui] loadDomainData error:', e);
+  }
+
+  const container = document.getElementById('omahResultContainer') || document.getElementById('omahSelDina')?.parentElement;
+
+  if (!omahData) {
+    if (container) {
+      container.style.display = 'block';
+      const step4 = document.getElementById('omahStepContainer4');
+      if (step4 && step4.classList.contains('hidden')) {
+        step4.classList.remove('hidden');
+      }
+      renderDataErrorState(container, {
+        domain: 'omah',
+        onRetry: () => hitungOmahDariUI(showNotification)
+      });
+    }
+    return;
+  }
+  setOmahDataset(omahData);
+
   const selDina = document.getElementById('omahSelDina');
   const selPasaran = document.getElementById('omahSelPasaran');
   const selArahLawang = document.getElementById('omahSelArahLawang');
@@ -224,6 +366,9 @@ export function hitungOmahDariUI(showNotification = false) {
       ciriLemahId
     });
     renderOmahResult(res);
+    if (!isOmahFullFormMode) {
+      omahStepper.goToStep(4, false);
+    }
     if (showNotification) {
       showToast(`Petung Omah kanggé ${dina} ${pasaran} sampun kababar.`);
     }
@@ -594,4 +739,6 @@ export function pilihTanggalHasilCariOmah(isoDate) {
 if (typeof window !== 'undefined') {
   window.cariHariBaikOmahUI = cariHariBaikOmahUI;
   window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
+  window.setOmahWizardStep = setOmahWizardStep;
+  window.toggleOmahFormMode = toggleOmahFormMode;
 }

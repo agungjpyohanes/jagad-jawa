@@ -515,20 +515,44 @@
 
   /**
    * Mengambil data petung pertanian berdasarkan hari dan pasaran.
+   * Mendukung dataset injection untuk pemuatan data dinamis dari KV.
    * @param {string} dino - Contoh: "Senin", "Jumat", "Ahad"
    * @param {string} pasaran - Contoh: "Legi", "Pahing", "Pon", "Wage", "Kliwon"
+   * @param {Array|Object} [customDataset] - Opsional dataset dari KV
    * @returns {Object|null}
    */
-  function getPetungTetanen(dino, pasaran) {
+  function getPetungTetanen(dino, pasaran, customDataset = null) {
     if (!dino || !pasaran) return null;
     const cleanDino = String(dino).trim().toLowerCase().replace(/\s+/g, '');
     const cleanPas = String(pasaran).trim().toLowerCase().replace(/\s+/g, '');
     const key = cleanDino + '_' + cleanPas;
-    if (PETUNG_TETANEN_MAP[key]) return PETUNG_TETANEN_MAP[key];
-
-    // Coba fallback dengan mengganti ahad <-> minggu
     const altDino = (cleanDino === 'ahad') ? 'minggu' : (cleanDino === 'minggu' ? 'ahad' : cleanDino);
     const altKey = altDino + '_' + cleanPas;
+
+    const activeData = customDataset || (typeof globalThis !== 'undefined' && globalThis._currentTetanenData) || null;
+    if (activeData) {
+      const list = Array.isArray(activeData) ? activeData : (activeData.petungTetanen || activeData.list || []);
+      if (Array.isArray(list) && list.length > 0) {
+        const found = list.find(item => {
+          const idD = String(item.dino || item.dina || '').trim().toLowerCase().replace(/\s+/g, '');
+          const idP = String(item.pasaran || item.pas || '').trim().toLowerCase().replace(/\s+/g, '');
+          return (idD === cleanDino || idD === altDino) && idP === cleanPas;
+        });
+        if (found) {
+          return {
+            ...found,
+            dino: found.dino || found.dina || dino,
+            pasaran: found.pasaran || found.pas || pasaran,
+            kategoriLabel: typeof found.kategori === 'object' ? (found.kategori.id || found.kategori.jv || found.kategoriLabel) : (found.kategoriLabel || found.kategori || ''),
+            tegese: typeof found.makna === 'object' ? (found.makna.jv || found.makna.id || found.tegese) : (found.tegese || found.makna || ''),
+            contone: typeof found.contoh === 'object' ? (found.contoh.jv || found.contoh.id || found.contone) : (found.contone || found.contoh || ''),
+            kangBecik: found.kangBecik || (typeof found.kategori === 'string' ? found.kategori.toLowerCase() : 'uwoh')
+          };
+        }
+      }
+    }
+
+    if (PETUNG_TETANEN_MAP[key]) return PETUNG_TETANEN_MAP[key];
     return PETUNG_TETANEN_MAP[altKey] || null;
   }
 

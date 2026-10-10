@@ -36,5 +36,10 @@ js/main.legacy.js
 # Vercel
 .vercel/
 
+# Cloudflare & KV Exports
+.wrangler/
+kv-export/
+dist-kv/
+
 # Local non-public asset duplicates
 assets/audio/

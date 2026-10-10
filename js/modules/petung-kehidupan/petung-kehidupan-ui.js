@@ -5,12 +5,14 @@
  * serta adaptasi Mode Pemula (Ringkas) vs Mode Ahli (Lengkap).
  */
 
-import { getPetungKehidupanByDate, getPetungKehidupanByWeton, cariHariPetungKehidupan } from './petung-kehidupan-engine.js';
+import { getPetungKehidupanByDate, getPetungKehidupanByWeton, cariHariPetungKehidupan, setTernakDataset } from './petung-kehidupan-engine.js';
 import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
 import { getBilingualText } from '../../ui/i18n.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
+import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
@@ -37,7 +39,7 @@ export function initTernakUI() {
   const dateInput = document.getElementById('ternakDatePicker');
   if (dateInput && !dateInput.value) {
     dateInput.value = `${y}-${m}-${d}`;
-    syncTernakDariTanggal();
+    syncTernakDariTanggal(false);
   }
 }
 
@@ -80,35 +82,213 @@ function populateSelects() {
 function setupEventListeners() {
   const datePicker = document.getElementById('ternakDatePicker');
   if (datePicker) {
-    datePicker.addEventListener('change', syncTernakDariTanggal);
+    datePicker.addEventListener('change', () => {
+      // Saat tanggal berubah, perbarui nilai dropdown dina/pasaran otomatis dan bersihkan error
+      syncTernakDariTanggal(false);
+    });
+  }
+
+  const radioTujuan = document.querySelectorAll('input[name="ternakTujuanRadio"]');
+  radioTujuan.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const targetSubtab = e.target.value;
+      switchTernakSubtab(targetSubtab);
+    });
+  });
+
+  const btnHitung = document.getElementById('btnHitungTernak');
+  if (btnHitung) {
+    btnHitung.addEventListener('click', () => {
+      hitungTernakDariUI();
+    });
   }
 
   const btnReset = document.getElementById('btnResetTernakToday');
   if (btnReset) {
     btnReset.addEventListener('click', () => {
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = String(today.getMonth() + 1).padStart(2, '0');
-      const d = String(today.getDate()).padStart(2, '0');
-      if (datePicker) datePicker.value = `${y}-${m}-${d}`;
-      syncTernakDariTanggal();
-      showToast('Tanggal kasinkronaken dhateng dinten punika.');
+      resetTernakUI();
     });
   }
 
   const selDina = document.getElementById('ternakSelDina');
   const selPasaran = document.getElementById('ternakSelPasaran');
-  if (selDina) selDina.addEventListener('change', hitungTernakDariSelect);
-  if (selPasaran) selPasaran.addEventListener('change', hitungTernakDariSelect);
+  if (selDina) {
+    selDina.addEventListener('change', () => {
+      sembunyikanFeedbackError();
+    });
+  }
+  if (selPasaran) {
+    selPasaran.addEventListener('change', () => {
+      sembunyikanFeedbackError();
+    });
+  }
+}
+
+/**
+ * Tampilkan pesan kesalahan inline pada formulir Petung Kehidupan
+ */
+function tampilkanFeedbackError(pesan) {
+  const feedbackBox = document.getElementById('ternakFormFeedback');
+  const feedbackText = document.getElementById('ternakFormFeedbackText');
+  if (feedbackBox && feedbackText) {
+    feedbackText.textContent = pesan;
+    feedbackBox.classList.remove('hidden');
+  }
+}
+
+/**
+ * Sembunyikan pesan kesalahan inline
+ */
+function sembunyikanFeedbackError() {
+  const feedbackBox = document.getElementById('ternakFormFeedback');
+  if (feedbackBox) {
+    feedbackBox.classList.add('hidden');
+  }
+}
+
+/**
+ * Reset seluruh keadaan formulir dan artefak hasil kalkulasi
+ */
+export function resetTernakUI() {
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth() + 1).padStart(2, '0');
+  const d = String(today.getDate()).padStart(2, '0');
+  const datePicker = document.getElementById('ternakDatePicker');
+  if (datePicker) {
+    datePicker.value = `${y}-${m}-${d}`;
+  }
+
+  // Kembalikan pilihan aktivitas ke 'ternak'
+  const radioTernak = document.querySelector('input[name="ternakTujuanRadio"][value="ternak"]');
+  if (radioTernak) {
+    radioTernak.checked = true;
+  }
+  currentActiveSubtab = 'ternak';
+  isGeblakUnlocked = false;
+  currentResultData = null;
+
+  // Bersihkan artefak hasil lama
+  const container = document.getElementById('ternakResultContainer');
+  if (container) {
+    container.innerHTML = '';
+  }
+
+  sembunyikanFeedbackError();
+
+  // Sinkronkan kembali dina & pasaran sesuai hari ini tanpa memunculkan kartu hasil otomatis
+  syncTernakDariTanggal(false);
+  showToast('Formulir kasinkronaken dhateng dinten punika.');
+}
+
+/**
+ * Atur aktivitas tujuan secara terprogram
+ */
+export function setTernakTujuan(tujuan) {
+  if (!['ternak', 'tetanen', 'loro', 'geblak'].includes(tujuan)) return;
+  const radio = document.querySelector(`input[name="ternakTujuanRadio"][value="${tujuan}"]`);
+  if (radio) {
+    radio.checked = true;
+  }
+  switchTernakSubtab(tujuan);
 }
 
 /**
  * Sinkronkan input tanggal Masehi ke weton
+ * @param {boolean} triggerRender Bila true, akan langsung merender kartu hasil jika data siap
  */
-export function syncTernakDariTanggal() {
+export async function syncTernakDariTanggal(triggerRender = false) {
   const dateInput = document.getElementById('ternakDatePicker');
-  if (!dateInput || !dateInput.value) return;
+  if (!dateInput || !dateInput.value) {
+    return;
+  }
 
+  sembunyikanFeedbackError();
+
+  const resTgl = getTanggalJawaLengkap(dateInput.value);
+  if (resTgl) {
+    const selDina = document.getElementById('ternakSelDina');
+    const selPasaran = document.getElementById('ternakSelPasaran');
+    if (selDina) selDina.value = resTgl.dina;
+    if (selPasaran) selPasaran.value = resTgl.pasaran;
+  }
+
+  if (triggerRender) {
+    return hitungTernakDariUI();
+  }
+}
+
+/**
+ * Eksekusi hitung utama dari UI dengan validasi lengkap
+ */
+export async function hitungTernakDariUI() {
+  const dateInput = document.getElementById('ternakDatePicker');
+  const container = document.getElementById('ternakResultContainer');
+
+  // 1. Validasi tanggal wajib
+  if (!dateInput || !dateInput.value) {
+    const errText = getBilingualText({
+      id: 'Tanggal peristiwa atau memulai wajib diisi terlebih dahulu.',
+      jv: 'Tanggal kedadosan utawi wiwitan kedah dipunisi rumiyin.'
+    });
+    tampilkanFeedbackError(errText);
+    if (dateInput) dateInput.focus();
+    return false;
+  }
+
+  sembunyikanFeedbackError();
+
+  // Ambil pilihan subtab aktif dari radio jika ada
+  const activeRadio = document.querySelector('input[name="ternakTujuanRadio"]:checked');
+  if (activeRadio) {
+    currentActiveSubtab = activeRadio.value;
+  }
+
+  // 2. Muat dataset domain dengan error state jika gagal
+  if (currentActiveSubtab === 'tetanen') {
+    let tetanenData = null;
+    try {
+      tetanenData = await loadDomainData('kalender');
+      if (!tetanenData?.petungTetanen) {
+        tetanenData = await loadDomainData('sapa-dina');
+      }
+    } catch (e) {
+      console.warn('[petung-kehidupan-ui] loadDomainData tetanen error:', e);
+    }
+
+    if (!tetanenData || !tetanenData.petungTetanen) {
+      if (container) {
+        renderDataErrorState(container, {
+          domain: 'petung-tetanen',
+          onRetry: () => hitungTernakDariUI()
+        });
+      }
+      return false;
+    }
+    if (typeof globalThis !== 'undefined' && tetanenData.petungTetanen) {
+      globalThis._currentTetanenData = tetanenData.petungTetanen;
+    }
+  } else {
+    let ternakData = null;
+    try {
+      ternakData = await loadDomainData('petung-kehidupan');
+    } catch (e) {
+      console.warn('[petung-kehidupan-ui] loadDomainData error:', e);
+    }
+
+    if (!ternakData) {
+      if (container) {
+        renderDataErrorState(container, {
+          domain: 'petung-kehidupan',
+          onRetry: () => hitungTernakDariUI()
+        });
+      }
+      return false;
+    }
+    setTernakDataset(ternakData);
+  }
+
+  // 3. Hitung hasil
   const res = getPetungKehidupanByDate(dateInput.value);
   if (res) {
     currentResultData = res;
@@ -118,25 +298,86 @@ export function syncTernakDariTanggal() {
     if (selPasaran) selPasaran.value = res.pasaran;
 
     renderTernakResult(res);
+    return true;
   }
+  return false;
 }
 
 /**
  * Hitung berdasarkan perubahan dropdown manual Dina & Pasaran
  */
-export function hitungTernakDariSelect() {
+export async function hitungTernakDariSelect() {
   const selDina = document.getElementById('ternakSelDina');
   const selPasaran = document.getElementById('ternakSelPasaran');
   const dina = selDina?.value;
   const pasaran = selPasaran?.value;
 
-  if (dina && pasaran) {
-    const res = getPetungKehidupanByWeton(dina, pasaran);
-    if (res) {
-      currentResultData = res;
-      renderTernakResult(res);
-    }
+  if (!dina || !pasaran) {
+    tampilkanFeedbackError(getBilingualText({
+      id: 'Dina dan Pasaran wajib dipilih terlebih dahulu.',
+      jv: 'Dina lan Pasaran kedah dipunpilih rumiyin.'
+    }));
+    return false;
   }
+
+  sembunyikanFeedbackError();
+
+  const container = document.getElementById('ternakResultContainer');
+  const activeRadio = document.querySelector('input[name="ternakTujuanRadio"]:checked');
+  if (activeRadio) {
+    currentActiveSubtab = activeRadio.value;
+  }
+
+  if (currentActiveSubtab === 'tetanen') {
+    let tetanenData = null;
+    try {
+      tetanenData = await loadDomainData('kalender');
+      if (!tetanenData?.petungTetanen) {
+        tetanenData = await loadDomainData('sapa-dina');
+      }
+    } catch (e) {
+      console.warn('[petung-kehidupan-ui] loadDomainData tetanen error:', e);
+    }
+
+    if (!tetanenData || !tetanenData.petungTetanen) {
+      if (container) {
+        renderDataErrorState(container, {
+          domain: 'petung-tetanen',
+          onRetry: () => hitungTernakDariSelect()
+        });
+      }
+      return false;
+    }
+    if (typeof globalThis !== 'undefined' && tetanenData.petungTetanen) {
+      globalThis._currentTetanenData = tetanenData.petungTetanen;
+    }
+  } else {
+    let ternakData = null;
+    try {
+      ternakData = await loadDomainData('petung-kehidupan');
+    } catch (e) {
+      console.warn('[petung-kehidupan-ui] loadDomainData error:', e);
+    }
+
+    if (!ternakData) {
+      if (container) {
+        renderDataErrorState(container, {
+          domain: 'petung-kehidupan',
+          onRetry: () => hitungTernakDariSelect()
+        });
+      }
+      return false;
+    }
+    setTernakDataset(ternakData);
+  }
+
+  const res = getPetungKehidupanByWeton(dina, pasaran);
+  if (res) {
+    currentResultData = res;
+    renderTernakResult(res);
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -144,6 +385,10 @@ export function hitungTernakDariSelect() {
  */
 export function switchTernakSubtab(subtab) {
   currentActiveSubtab = subtab;
+  const radio = document.querySelector(`input[name="ternakTujuanRadio"][value="${subtab}"]`);
+  if (radio && !radio.checked) {
+    radio.checked = true;
+  }
   if (currentResultData) {
     renderTernakResult(currentResultData);
   }
@@ -192,6 +437,10 @@ export function renderTernakResult(data) {
     ? 'bg-prada text-keraton font-bold shadow'
     : 'bg-keraton/70 text-sogan-200 hover:bg-sogan-900/60 border border-sogan-800';
 
+  const btnTetanenActive = currentActiveSubtab === 'tetanen'
+    ? 'bg-emerald-500 text-keraton font-bold shadow'
+    : 'bg-keraton/70 text-sogan-200 hover:bg-sogan-900/60 border border-sogan-800';
+
   const btnLoroActive = currentActiveSubtab === 'loro'
     ? 'bg-amber-500 text-keraton font-bold shadow'
     : 'bg-keraton/70 text-sogan-200 hover:bg-sogan-900/60 border border-sogan-800';
@@ -199,6 +448,9 @@ export function renderTernakResult(data) {
   const btnGeblakActive = currentActiveSubtab === 'geblak'
     ? 'bg-stone-300 text-keraton font-bold shadow'
     : 'bg-keraton/70 text-sogan-200 hover:bg-sogan-900/60 border border-sogan-800';
+
+  // Ambil data tetanen untuk weton ini
+  const tetanenInfo = getPetungTetanen(dina, pasaran);
 
   // Subtab navigation HTML
   const subtabsHtml = `
@@ -210,14 +462,21 @@ export function renderTernakResult(data) {
         <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-black/20">${ternak.kode}</span>
       </button>
 
-      <!-- 2. Jaluran Loro (Ahli Only) -->
+      <!-- 2. Wiwit Tetanen (Kabeh mode) -->
+      <button onclick="switchTernakSubtab('tetanen')" class="px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition ${btnTetanenActive}">
+        <i class="fa-solid fa-wheat-awn"></i>
+        <span>Wiwit Tetanèn</span>
+        <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-black/20">${tetanenInfo ? (tetanenInfo.kangBecik || 'Tani') : 'Tani'}</span>
+      </button>
+
+      <!-- 3. Jaluran Loro (Ahli Only) -->
       <button onclick="switchTernakSubtab('loro')" class="ahli-only px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition ${btnLoroActive}">
         <i class="fa-solid fa-heart-pulse"></i>
         <span>Jaluran Loro</span>
         <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-black/20">${loro.kode}</span>
       </button>
 
-      <!-- 3. Petung Geblak (Ahli Only) -->
+      <!-- 4. Petung Geblak (Ahli Only) -->
       <button onclick="switchTernakSubtab('geblak')" class="ahli-only px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition ${btnGeblakActive}">
         <i class="fa-solid fa-dove"></i>
         <span>Petung Geblak</span>
@@ -361,8 +620,58 @@ export function renderTernakResult(data) {
     `;
   }
 
+  // Content 2: TETANEN CARD
+  let tetanenCardHtml = '';
+  if (tetanenInfo) {
+    tetanenCardHtml = `
+      <div class="p-5 sm:p-6 rounded-2xl bg-emerald-950/40 border border-emerald-600/40 shadow-xl backdrop-blur-md relative overflow-hidden mb-4">
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-8xl text-emerald-300 pointer-events-none">
+          <i class="fa-solid fa-wheat-awn"></i>
+        </div>
+        <div class="relative z-10">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${tetanenInfo.badgeClass || 'bg-emerald-900/80 text-emerald-200 border-emerald-500/30'} border">
+                <i class="${tetanenInfo.icon || 'fa-solid fa-wheat-awn'} mr-1"></i> Kang Becik: ${tetanenInfo.kategoriLabel}
+              </span>
+            </div>
+            <div class="text-xs text-sogan-200 font-mono">
+              Golongan: <strong class="text-emerald-300 capitalize">${tetanenInfo.kangBecik}</strong>
+            </div>
+          </div>
+
+          <div class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 mb-2">
+            Pituduh Wiwit Tetanèn &amp; Palawija: ${dina} ${pasaran}
+          </div>
+          <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed mb-4">
+            ${tetanenInfo.tegese}
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+            <div class="p-3.5 rounded-xl bg-keraton/70 border border-sogan-800 text-xs">
+              <div class="text-emerald-300 font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
+                <i class="fa-solid fa-seedling"></i> Tuladha Tetanduran Ingkang Cocog:
+              </div>
+              <p class="leading-relaxed text-[11.5px] text-emerald-100 font-medium">${tetanenInfo.contone}</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-keraton/70 border border-sogan-800 text-xs">
+              <div class="text-prada font-bold flex items-center gap-1.5 mb-1 text-[11.5px] uppercase font-mono">
+                <i class="fa-solid fa-sun-plant-wilt"></i> Pranata Budidaya:
+              </div>
+              <p class="leading-relaxed text-[11.5px] text-sogan-200">
+                Pilih dinten nalika oyot, wit, utawa uwoh selaras kaliyan watak dinten weton supados subur lan mupangati.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   // Active subtab rendering logic
   let activeContentHtml = ternakCardHtml;
+  if (currentActiveSubtab === 'tetanen') activeContentHtml = tetanenCardHtml;
   if (currentActiveSubtab === 'loro') activeContentHtml = loroCardHtml;
   if (currentActiveSubtab === 'geblak') activeContentHtml = geblakCardHtml;
 
@@ -407,7 +716,7 @@ function lookupNeptuPasaran(pasaran) {
 /**
  * Eksekusi pencarian interaktif kecocokan hari Petung Kehidupan dari UI
  */
-export function cariHariPetungKehidupanUI() {
+export async function cariHariPetungKehidupanUI() {
   const selTahun = document.getElementById('ternakSearchTahun');
   const selBulan = document.getElementById('ternakSearchBulan');
   const selJenis = document.getElementById('ternakSearchJenis');
@@ -418,6 +727,24 @@ export function cariHariPetungKehidupanUI() {
   const bulan = parseInt(selBulan?.value, 10) || (new Date().getMonth() + 1);
   const jenis = selJenis?.value || currentActiveSubtab || 'ternak';
   const filterKategori = selKategori?.value || 'becik';
+
+  let ternakData = null;
+  try {
+    ternakData = await loadDomainData('petung-kehidupan');
+  } catch (e) {
+    console.warn('[petung-kehidupan-ui] loadDomainData error:', e);
+  }
+
+  if (!ternakData) {
+    if (container) {
+      renderDataErrorState(container, {
+        domain: 'petung-kehidupan',
+        onRetry: () => cariHariPetungKehidupanUI()
+      });
+    }
+    return;
+  }
+  setTernakDataset(ternakData);
 
   try {
     const res = cariHariPetungKehidupan({
@@ -527,6 +854,9 @@ export function pilihTanggalHasilCariTernak(isoDate) {
 }
 
 if (typeof window !== 'undefined') {
+  window.hitungTernakDariUI = hitungTernakDariUI;
+  window.resetTernakUI = resetTernakUI;
+  window.setTernakTujuan = setTernakTujuan;
   window.cariHariPetungKehidupanUI = cariHariPetungKehidupanUI;
   window.pilihTanggalHasilCariTernak = pilihTanggalHasilCariTernak;
 }

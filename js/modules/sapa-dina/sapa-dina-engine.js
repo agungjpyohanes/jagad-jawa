@@ -33,8 +33,24 @@ import {
   getDinoWarnaStatus
 } from '../kalender/kalender-engine.js';
 
-import { PITUTUR_LIST } from '../../data/pitutur.js';
-import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
+function resolvePetungTetanen(dino, pasaran) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getPetungTetanen === 'function') {
+    return globalThis.getPetungTetanen(dino, pasaran);
+  }
+  const active = typeof globalThis !== 'undefined' ? globalThis._currentTetanenData : null;
+  if (active) {
+    const list = Array.isArray(active) ? active : (active.petungTetanen || active.list || []);
+    const cleanDino = String(dino || '').trim().toLowerCase();
+    const cleanPas = String(pasaran || '').trim().toLowerCase();
+    const altDino = cleanDino === 'ahad' ? 'minggu' : (cleanDino === 'minggu' ? 'ahad' : cleanDino);
+    return list.find(item => {
+      const idD = String(item.dino || item.dina || '').trim().toLowerCase();
+      const idP = String(item.pasaran || item.pas || '').trim().toLowerCase();
+      return (idD === cleanDino || idD === altDino) && idP === cleanPas;
+    }) || null;
+  }
+  return null;
+}
 
 // ─── NAMA HARI LENGKAP (Bahasa Indonesia, display-friendly) ──────────────────
 const HARI_DISPLAY = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -60,12 +76,12 @@ export function getDayOfYear(date = new Date()) {
  * Ambil pitutur harian secara deterministik berdasarkan seed.
  * Tidak bergantung pada Math.random() agar konsisten antar session.
  * @param {number} seed
- * @returns {Object} entry dari PITUTUR_LIST
+ * @param {Array} [customList=null]
+ * @returns {Object} entry pitutur
  */
-export function getPituturHarian(seed) {
-  const list = (typeof PITUTUR_LIST !== 'undefined' && Array.isArray(PITUTUR_LIST))
-    ? PITUTUR_LIST
-    : [];
+export function getPituturHarian(seed, customList = null) {
+  const active = customList || (typeof globalThis !== 'undefined' && (globalThis._currentPituturList || globalThis._currentPituturData?.pitutur_list)) || [];
+  const list = Array.isArray(active) ? active : [];
   if (!list.length) {
     return {
       jawa: 'Urip iku urup.',
@@ -271,7 +287,7 @@ export function getSapaDinaData(date = new Date()) {
     },
 
     // Petung Tetanen Tradisional (CSV Baru)
-    petungTetanen: getPetungTetanen(tglLengkap.dino, tglLengkap.pas),
+    petungTetanen: resolvePetungTetanen(tglLengkap.dino, tglLengkap.pas),
 
     // Arah Kolo (Kosmologi Pawukon / Dununge Kala)
     arahKolo: getArahKolo(wukuId),

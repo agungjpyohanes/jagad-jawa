@@ -245,3 +245,16 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
 
+const _gTumpeng = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : {});
+export const TUMPENG_UBARAMPE = _gTumpeng.TUMPENG_UBARAMPE;
+export const TUMPENG_WARNA = _gTumpeng.TUMPENG_WARNA;
+export const selectTumpengHotspot = _gTumpeng.selectTumpengHotspot;
+export const selectTumpengWarna = _gTumpeng.selectTumpengWarna;
+
+export default {
+  TUMPENG_UBARAMPE: _gTumpeng.TUMPENG_UBARAMPE,
+  TUMPENG_WARNA: _gTumpeng.TUMPENG_WARNA,
+  selectTumpengHotspot: _gTumpeng.selectTumpengHotspot,
+  selectTumpengWarna: _gTumpeng.selectTumpengWarna
+};
+

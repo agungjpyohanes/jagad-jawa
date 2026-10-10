@@ -62,13 +62,27 @@ import {
 import { wireSapaDinaFeature, initSapaDina } from './features/sapa-dina.js';
 
 // ─── PETUNG IJAB & PETUNG OMAH (NEW MODULES) ──────────────────────────────
-import { initIjabUI, syncIjabDariTanggal, hitungIjabDariUI } from './modules/ijab/ijab-ui.js';
-import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI, cariHariBaikOmahUI, pilihTanggalHasilCariOmah } from './modules/omah/omah-ui.js';
+import {
+  initIjabUI,
+  syncIjabDariTanggal,
+  hitungIjabDariUI,
+  setIjabWizardStep,
+  toggleIjabFormMode,
+  terapkanPrefillJodohKeIjab,
+  tutupBannerPrefillJodoh,
+  periksaPrefillJodoh
+} from './modules/ijab/ijab-ui.js';
+import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI, cariHariBaikOmahUI, pilihTanggalHasilCariOmah, toggleOmahFormMode } from './modules/omah/omah-ui.js';
+import { setOmahDataset } from './modules/omah/omah-engine.js';
+import { invalidateDomainData } from './services/dbLoader.js';
 
 // ─── PETUNG TERNAK, LORO, & GEBLAK (PETUNG KEHIDUPAN) ──────────────────────
 import {
   initTernakUI,
   syncTernakDariTanggal,
+  hitungTernakDariUI,
+  resetTernakUI,
+  setTernakTujuan,
   hitungTernakDariSelect,
   switchTernakSubtab,
   konfirmasiBukaGeblak,
@@ -281,15 +295,26 @@ if (typeof window !== 'undefined') {
   window.initIjabUI = initIjabUI;
   window.syncIjabDariTanggal = syncIjabDariTanggal;
   window.hitungIjabDariUI = hitungIjabDariUI;
+  window.setIjabWizardStep = setIjabWizardStep;
+  window.toggleIjabFormMode = toggleIjabFormMode;
+  window.terapkanPrefillJodohKeIjab = terapkanPrefillJodohKeIjab;
+  window.tutupBannerPrefillJodoh = tutupBannerPrefillJodoh;
+  window.periksaPrefillJodoh = periksaPrefillJodoh;
   window.initOmahUI = initOmahUI;
   window.syncOmahDariTanggal = syncOmahDariTanggal;
   window.hitungOmahDariUI = hitungOmahDariUI;
   window.cariHariBaikOmahUI = cariHariBaikOmahUI;
   window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
+  window.toggleOmahFormMode = toggleOmahFormMode;
+  window.setOmahDataset = setOmahDataset;
+  window.invalidateDomainData = invalidateDomainData;
 
   // Ternak, Loro, & Geblak bindings
   window.initTernakUI = initTernakUI;
   window.syncTernakDariTanggal = syncTernakDariTanggal;
+  window.hitungTernakDariUI = hitungTernakDariUI;
+  window.resetTernakUI = resetTernakUI;
+  window.setTernakTujuan = setTernakTujuan;
   window.hitungTernakDariSelect = hitungTernakDariSelect;
   window.switchTernakSubtab = switchTernakSubtab;
   window.konfirmasiBukaGeblak = konfirmasiBukaGeblak;
@@ -581,6 +606,12 @@ export function bootstrap() {
         const container = document.getElementById('ijabResultContainer');
         if (container && container.innerHTML.trim()) {
           try { window.hitungIjabDariUI(false); } catch (e) { /* ignore */ }
+        }
+        if (typeof window.setIjabWizardStep === 'function') {
+          try {
+            const curStep = document.getElementById('ijabStepBadge')?.textContent || 1;
+            window.setIjabWizardStep(curStep, false);
+          } catch (e) { /* ignore */ }
         }
       }
       if (typeof window.syncTernakDariTanggal === 'function') {

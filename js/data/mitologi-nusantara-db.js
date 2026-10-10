@@ -161,24 +161,31 @@ export const MITOLOGI_NUSANTARA_DATA = [
   }
 ];
 
-export function getAllMitologiNusantara() {
+export function getAllMitologiNusantara(customDataset = null) {
+  const active = customDataset || (typeof globalThis !== 'undefined' && globalThis._currentMitologiData) || null;
+  if (active) {
+    if (Array.isArray(active) && active.length > 0) return active;
+    if (Array.isArray(active.mitologi_list) && active.mitologi_list.length > 0) return active.mitologi_list;
+  }
   return [...MITOLOGI_NUSANTARA_DATA];
 }
 
-export function getMitologiById(id) {
+export function getMitologiById(id, customDataset = null) {
   if (!id) return null;
-  return MITOLOGI_NUSANTARA_DATA.find(m => m.id === id) || null;
+  const list = getAllMitologiNusantara(customDataset);
+  return list.find(m => m.id === id) || null;
 }
 
-export function searchMitologiNusantara(query = '') {
+export function searchMitologiNusantara(query = '', customDataset = null) {
+  const list = getAllMitologiNusantara(customDataset);
   const q = String(query).toLowerCase().trim();
-  if (!q) return getAllMitologiNusantara();
-  return MITOLOGI_NUSANTARA_DATA.filter(m =>
-    m.judul.toLowerCase().includes(q) ||
-    m.judulJawa.toLowerCase().includes(q) ||
-    m.kategori.toLowerCase().includes(q) ||
-    m.ringkasan.toLowerCase().includes(q) ||
-    (m.babList && m.babList.some(b => b.subjudul.toLowerCase().includes(q) || b.teks.toLowerCase().includes(q)))
+  if (!q) return list;
+  return list.filter(m =>
+    (m.judul && m.judul.toLowerCase().includes(q)) ||
+    (m.judulJawa && m.judulJawa.toLowerCase().includes(q)) ||
+    (m.kategori && m.kategori.toLowerCase().includes(q)) ||
+    (m.ringkasan && m.ringkasan.toLowerCase().includes(q)) ||
+    (m.babList && m.babList.some(b => (b.subjudul && b.subjudul.toLowerCase().includes(q)) || (b.teks && b.teks.toLowerCase().includes(q))))
   );
 }
 

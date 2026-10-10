@@ -12,11 +12,20 @@ import {
   wukuIllustrationPath,
   normalizeDewaName
 } from '../../data/dewa-kanon.js';
-import {
-  getWukuPetenget,
-  WUKU_PETENGET_LIST
-} from '../../data/wuku-petenget-db.js';
 import { loadDomainData, mapWukuItem, extractText } from '../../services/dbLoader.js';
+
+let currentPetengetList = (typeof globalThis !== 'undefined' && Array.isArray(globalThis._currentWukuPetengetData)) ? globalThis._currentWukuPetengetData : [];
+
+function getWukuPetenget(wukuNoOrName) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getWukuPetenget === 'function' && globalThis.getWukuPetenget !== getWukuPetenget) {
+    return globalThis.getWukuPetenget(wukuNoOrName);
+  }
+  const active = (typeof globalThis !== 'undefined' && globalThis._currentWukuPetengetData) ? globalThis._currentWukuPetengetData : currentPetengetList;
+  const list = Array.isArray(active) ? active : (active?.wukuPetenget || active?.list || []);
+  const parsed = parseInt(wukuNoOrName, 10);
+  const clean = String(wukuNoOrName || '').trim().toLowerCase();
+  return list.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean) || null;
+}
 
 let currentWukuList = Array.isArray(PAWUKON_LIST) ? PAWUKON_LIST.map(mapWukuItem) : [];
 
@@ -240,6 +249,5 @@ export {
   dewaneIllustrationPath,
   wukuIllustrationPath,
   normalizeDewaName,
-  getWukuPetenget,
-  WUKU_PETENGET_LIST
+  getWukuPetenget
 };

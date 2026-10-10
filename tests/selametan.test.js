@@ -1,11 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  hitungSelametanDates,
+  hitungSelametanDates
+} from '../js/modules/selametan/selametan-engine.js';
+import {
   TARGET_HARI_SELAMETAN,
   TARGET_PASARAN_SELAMETAN,
   JENIS_SELAMETAN
-} from '../js/modules/selametan/selametan-engine.js';
+} from '../js/data/selametan.js';
 
 test('Selametan Engine - hitungSelametanDates verifikasi 7 target pengetan', () => {
   // Misal wafat pada: 1 Januari 2024 (Senin Pahing)

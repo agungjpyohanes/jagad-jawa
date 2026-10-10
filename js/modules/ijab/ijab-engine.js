@@ -19,6 +19,40 @@ import {
   REF_DUA_SISTEM_NEPTU
 } from '../../data/ijab-db.js';
 
+let customIjabDataset = null;
+
+export function setIjabDataset(ds) {
+  customIjabDataset = ds;
+}
+
+export function getActiveIjabDb() {
+  const active = (typeof globalThis !== 'undefined' && globalThis._currentIjabData) || customIjabDataset;
+  if (active) {
+    return {
+      NEPTU_IJAB_DINA: active.neptu_dina || active.neptu_ijab_dina || active.NEPTU_IJAB_DINA || NEPTU_IJAB_DINA,
+      NEPTU_IJAB_PASARAN: active.neptu_pasaran || active.neptu_ijab_pasaran || active.NEPTU_IJAB_PASARAN || NEPTU_IJAB_PASARAN,
+      IJAB_WUKU: active.wuku || active.wuku_ijab || active.IJAB_WUKU || IJAB_WUKU,
+      IJAB_SASI: active.sasi || active.sasi_ijab || active.IJAB_SASI || IJAB_SASI,
+      IJAB_TAHUN_WINDU: active.tahun_windu || active.tahun_windu_ijab || active.IJAB_TAHUN_WINDU || IJAB_TAHUN_WINDU,
+      IJAB_WETON: active.weton || active.weton_ijab || active.IJAB_WETON || IJAB_WETON,
+      KAMUS_SURASA_IJAB: active.surasa || active.kamus_surasa_ijab || active.KAMUS_SURASA_IJAB || KAMUS_SURASA_IJAB,
+      IJAB_TANGGAL_JAWA: active.tanggal_jawa || active.ijab_tanggal_jawa || active.IJAB_TANGGAL_JAWA || IJAB_TANGGAL_JAWA,
+      REF_DUA_SISTEM_NEPTU: active.ref_sistem || active.REF_DUA_SISTEM_NEPTU || REF_DUA_SISTEM_NEPTU
+    };
+  }
+  return {
+    NEPTU_IJAB_DINA,
+    NEPTU_IJAB_PASARAN,
+    IJAB_WUKU,
+    IJAB_SASI,
+    IJAB_TAHUN_WINDU,
+    IJAB_WETON,
+    KAMUS_SURASA_IJAB,
+    IJAB_TANGGAL_JAWA,
+    REF_DUA_SISTEM_NEPTU
+  };
+}
+
 // Normalisasi nama teks (lowercase tanpa spasi ekstra)
 function norm(str) {
   return String(str || '').trim().toLowerCase();
@@ -31,8 +65,10 @@ function norm(str) {
  */
 export function getNeptuIjabDina(dina) {
   const target = norm(dina);
-  const found = NEPTU_IJAB_DINA.find(d => norm(d.dina) === target);
-  return found ? found.neptu_dina_ijab : null;
+  const db = getActiveIjabDb();
+  const found = db.NEPTU_IJAB_DINA.find(d => norm(d.dina || d.dino) === target);
+  if (!found) return null;
+  return found.neptu_dina_ijab !== undefined ? found.neptu_dina_ijab : (found.neptu !== undefined ? found.neptu : null);
 }
 
 /**
@@ -42,8 +78,10 @@ export function getNeptuIjabDina(dina) {
  */
 export function getNeptuIjabPasaran(pasaran) {
   const target = norm(pasaran);
-  const found = NEPTU_IJAB_PASARAN.find(p => norm(p.pasaran) === target);
-  return found ? found.neptu_pasaran_ijab : null;
+  const db = getActiveIjabDb();
+  const found = db.NEPTU_IJAB_PASARAN.find(p => norm(p.pasaran) === target);
+  if (!found) return null;
+  return found.neptu_pasaran_ijab !== undefined ? found.neptu_pasaran_ijab : (found.neptu !== undefined ? found.neptu : null);
 }
 
 /**
@@ -68,7 +106,8 @@ export function hitungNeptuIjab(dina, pasaran) {
 export function getIjabWeton(dina, pasaran) {
   const nDina = norm(dina);
   const nPasaran = norm(pasaran);
-  const found = IJAB_WETON.find(w => norm(w.dina) === nDina && norm(w.pasaran) === nPasaran);
+  const db = getActiveIjabDb();
+  const found = db.IJAB_WETON.find(w => norm(w.dina) === nDina && norm(w.pasaran) === nPasaran);
   if (!found) return null;
   return { ...found };
 }
@@ -79,7 +118,8 @@ export function getIjabWeton(dina, pasaran) {
 export function getIjabWuku(wukuName) {
   if (!wukuName) return null;
   const nWuku = norm(wukuName);
-  const found = IJAB_WUKU.find(w => norm(w.wuku) === nWuku);
+  const db = getActiveIjabDb();
+  const found = db.IJAB_WUKU.find(w => norm(w.wuku) === nWuku);
   return found ? { ...found } : null;
 }
 
@@ -89,7 +129,8 @@ export function getIjabWuku(wukuName) {
 export function getIjabSasi(sasiName) {
   if (!sasiName) return null;
   const nSasi = norm(sasiName);
-  const found = IJAB_SASI.find(s => norm(s.sasi_jawa) === nSasi || norm(s.alias_sumber) === nSasi);
+  const db = getActiveIjabDb();
+  const found = db.IJAB_SASI.find(s => norm(s.sasi_jawa) === nSasi || norm(s.alias_sumber) === nSasi);
   return found ? { ...found } : null;
 }
 
@@ -99,7 +140,8 @@ export function getIjabSasi(sasiName) {
 export function getIjabTahunWindu(tahunName) {
   if (!tahunName) return null;
   const nTahun = norm(tahunName);
-  const found = IJAB_TAHUN_WINDU.find(t => norm(t.tahun_jawa) === nTahun);
+  const db = getActiveIjabDb();
+  const found = db.IJAB_TAHUN_WINDU.find(t => norm(t.tahun_jawa) === nTahun);
   return found ? { ...found } : null;
 }
 
@@ -109,7 +151,8 @@ export function getIjabTahunWindu(tahunName) {
 export function getIjabTanggalJawa(tanggalNum) {
   const tgl = parseInt(tanggalNum, 10);
   if (isNaN(tgl) || tgl < 1 || tgl > 30) return null;
-  const found = IJAB_TANGGAL_JAWA.find(t => t.tanggal_jawa === tgl);
+  const db = getActiveIjabDb();
+  const found = db.IJAB_TANGGAL_JAWA.find(t => t.tanggal_jawa === tgl);
   return found ? { ...found } : null;
 }
 

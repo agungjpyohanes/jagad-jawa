@@ -3,7 +3,3 @@ compatibility_date = "2026-10-02"
 
 [assets]
 directory = "./dist"
-
-[[kv_namespaces]]
-binding = "JAGAD_JAWA_DATA"
-id = "ab767d14bb984c94962bef52b9d8"

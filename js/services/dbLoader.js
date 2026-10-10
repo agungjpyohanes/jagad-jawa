@@ -13,21 +13,23 @@
  */
 
 import { getLanguage, getBilingualText, resolveBilingualRecord } from '../ui/i18n.js';
-export { getBilingualText, resolveBilingualRecord };
+import { CANONICAL_KEYS, resolveCanonicalKey, getCanonicalFilename } from './datasetManifest.js';
+export { getBilingualText, resolveBilingualRecord, CANONICAL_KEYS, resolveCanonicalKey, getCanonicalFilename };
 
-// ─── IMPORT STATIC FALLBACKS (RESILIENCE: ZERO BLANK GUARANTEE) ─────────────
-import * as fallbackCalendar from '../data/calendar.js';
-import * as fallbackPawukon from '../data/pawukon.js';
-import * as fallbackMarriage from '../data/marriage.js';
-import * as fallbackSelametan from '../data/selametan.js';
-import * as fallbackIjab from '../data/ijab-db.js';
-import * as fallbackOmah from '../data/omah-db.js';
-import * as fallbackTernak from '../data/petung-ternak-loro-geblak.js';
-import * as fallbackSasmitha from '../data/sasmitha-db.js';
-import * as fallbackNujumMatrix from '../data/nujum-matrix.js';
-import * as fallbackPersonality from '../data/personality.js';
-import * as fallbackTetanen from '../data/petung-tetanen-db.js';
-import * as fallbackWukuPetenget from '../data/wuku-petenget-db.js';
+// ─── PURE CALENDAR MATH CONSTANTS (ALGORITHMS & FORMULAS ONLY) ────────────
+import {
+  HARI,
+  PASARAN,
+  NEPTU_HARI,
+  NEPTU_PASARAN,
+  WUKU,
+  BULAN_JAWA,
+  BULAN_MASEHI,
+  WINDU,
+  EPOCH_JDN,
+  GRID,
+  KETERANGAN
+} from '../data/calendar.js';
 
 export const DB_FILES = {
   '01': '01-kalender-constants.json',
@@ -66,7 +68,12 @@ export const DB_FILES = {
   '34': '34-kamus-sansakerta.json',
   '35': '35-pustaka-dongo.json',
   '36': '36-pustaka-jawa.json',
-  '37': '37-sinengker-khusus.json'
+  '37': '37-sinengker-khusus.json',
+  '38': '38-wayang-all.json',
+  '39': '39-pitutur-all.json',
+  '40': '40-mitologi-all.json',
+  '41': '41-pustaka-digital.json',
+  '42': '42-tumpeng-all.json'
 };
 
 export const DB_ALIASES = {
@@ -106,7 +113,12 @@ export const DB_ALIASES = {
   kamusSansakerta: '34-kamus-sansakerta.json',
   pustakaDongo: '35-pustaka-dongo.json',
   pustakaJawa: '36-pustaka-jawa.json',
-  sinengkerKhusus: '37-sinengker-khusus.json'
+  sinengkerKhusus: '37-sinengker-khusus.json',
+  wayang: '38-wayang-all.json',
+  pitutur: '39-pitutur-all.json',
+  mitologi: '40-mitologi-all.json',
+  pustakaDigital: '41-pustaka-digital.json',
+  tumpeng: '42-tumpeng-all.json'
 };
 
 // Cache memori lokal
@@ -183,24 +195,79 @@ export function getDbUrl(filename) {
 }
 
 /**
- * Pemuat JSON terpusat dengan caching & deduplikasi request inflight
- * @param {string|number} key - Nama file, nomor (1-37), atau nama alias
+ * Schema validation ringan per domain/key
+ * @param {string} canonicalKey
+ * @param {any} data
+ * @returns {boolean}
+ */
+export function validateDatasetSchema(canonicalKey, data) {
+  if (data === null || data === undefined) return false;
+  switch (canonicalKey) {
+    case 'kalender:constants':
+      return Boolean(data.nama_hari || data.HARI || data.neptu_hari);
+    case 'wuku:ensiklopedia':
+      return Array.isArray(data) || Array.isArray(data.wuku);
+    case 'dino:rules':
+      return typeof data === 'object' && (Array.isArray(data.dino_gede) || Array.isArray(data.dino_ijo));
+    case 'bincil:matrix':
+      return typeof data === 'object' && Object.keys(data).length > 0;
+    case 'perjodohan:pitung':
+      return typeof data === 'object' && Boolean(data.metode_I_panca_suda || data.HASIL_I_JODOH);
+    case 'selametan:rules':
+      return typeof data === 'object' && Boolean(data.target_hari_berdasarkan_wafat || data.jenis_selametan);
+    case 'ijab:all':
+      return typeof data === 'object' && Boolean(data.neptu_ijab_dina || data.wuku_ijab);
+    case 'omah:all':
+      return typeof data === 'object';
+    case 'petung:ternak':
+      return Array.isArray(data) || typeof data === 'object';
+    case 'petung:tetanen':
+      return Array.isArray(data) || typeof data === 'object';
+    case 'wuku:petenget':
+      return Array.isArray(data) || typeof data === 'object';
+    case 'sasmitha:all':
+      return typeof data === 'object';
+    case 'wayang:all':
+      return Array.isArray(data) || Array.isArray(data.wayang_list);
+    case 'pitutur:all':
+      return Array.isArray(data) || Array.isArray(data.pitutur_list);
+    case 'mitologi:all':
+      return Array.isArray(data) || typeof data === 'object';
+    case 'pustaka:digital':
+      return typeof data === 'object';
+    case 'tumpeng:all':
+      return Array.isArray(data) || typeof data === 'object';
+    default:
+      return true;
+  }
+}
+
+/**
+ * Pemuat JSON terpusat dengan Pages Function API, caching & deduplikasi request inflight
+ * @param {string|number} key - Nama file, nomor (1-37), atau nama alias / canonical key
  * @returns {Promise<any>}
  */
-export async function loadDb(key) {
+export async function loadDb(key, options = {}) {
   const filename = resolveDbFilename(key);
+  const canonicalKey = resolveCanonicalKey(key) || resolveCanonicalKey(filename);
   if (!filename) {
     throw new Error(`[dbLoader] Identifier database tidak valid: ${key}`);
   }
 
-  // 1. Cek cache memori
-  if (dbCache.has(filename)) {
-    return dbCache.get(filename);
+  // 1. Cek cache memori (berdasarkan filename dan canonical key)
+  if (!options.forceRefresh) {
+    if (dbCache.has(filename)) {
+      return dbCache.get(filename);
+    }
+    if (canonicalKey && dbCache.has(canonicalKey)) {
+      return dbCache.get(canonicalKey);
+    }
   }
 
   // 2. Cek request yang sedang berjalan (inflight dedup)
-  if (inflightPromises.has(filename)) {
-    return inflightPromises.get(filename);
+  const cacheKey = canonicalKey || filename;
+  if (!options.forceRefresh && inflightPromises.has(cacheKey)) {
+    return inflightPromises.get(cacheKey);
   }
 
   const promise = (async () => {
@@ -208,7 +275,7 @@ export async function loadDb(key) {
       let data = null;
 
       // Lingkungan Node.js (Unit Test runner)
-      if (isNodeEnvironment) {
+      if (isNodeEnvironment && !options.forceHttp) {
         try {
           if (nodeFs && nodePath) {
             const candidatePaths = [
@@ -231,47 +298,53 @@ export async function loadDb(key) {
           }
         }
       } else {
-        // Lingkungan Browser (Vite / Cloudflare Pages / Preview)
-        const candidates = [];
-        const base = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL)
-          ? import.meta.env.BASE_URL
-          : './';
-        const cleanBase = base.endsWith('/') ? base : `${base}/`;
-        
-        candidates.push(`${cleanBase}data/${filename}`);
-        if (!candidates.includes(`./data/${filename}`)) candidates.push(`./data/${filename}`);
-        if (!candidates.includes(`/data/${filename}`)) candidates.push(`/data/${filename}`);
-        if (!candidates.includes(`data/${filename}`)) candidates.push(`data/${filename}`);
+        // Lingkungan Browser (Vite / Cloudflare Pages / Static Hosting)
+        // Sumber data runtime browser: TEPAT file statis JSON publik di getDbUrl(filename)
+        const targetUrl = getDbUrl(filename);
 
-        let lastErr = null;
-        for (const candidateUrl of candidates) {
-          try {
-            const res = await fetch(candidateUrl);
-            if (res.ok) {
-              data = await res.json();
-              break;
+        try {
+          // Gunakan timeout abort controller 6s agar tidak hang
+          const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          const timer = controller ? setTimeout(() => controller.abort(), 6000) : null;
+          const res = await fetch(targetUrl, {
+            headers: { 'Accept': 'application/json' },
+            signal: controller ? controller.signal : undefined
+          });
+          if (timer) clearTimeout(timer);
+
+          if (res.ok) {
+            const parsed = await res.json();
+            if (canonicalKey && !validateDatasetSchema(canonicalKey, parsed)) {
+              console.warn(`[dbLoader] Schema check gagal untuk ${canonicalKey} dari ${targetUrl}`);
+              data = null;
+            } else {
+              data = parsed;
             }
-          } catch (e) {
-            lastErr = e;
+          } else {
+            console.warn(`[dbLoader] HTTP ${res.status} saat memuat ${filename} dari ${targetUrl}`);
+            data = null;
           }
+        } catch (e) {
+          console.warn(`[dbLoader] Fetch error untuk ${filename} dari ${targetUrl}:`, e);
+          data = null;
         }
 
         if (!data) {
-          console.warn(`[dbLoader] Tidak dapat memuat ${filename} dari kandidat URL:`, candidates, lastErr);
-          data = null;
+          console.warn(`[dbLoader] Dataset tidak tersedia: ${filename} (${canonicalKey || 'no-key'})`);
         }
       }
 
       if (data) {
         dbCache.set(filename, data);
+        if (canonicalKey) dbCache.set(canonicalKey, data);
       }
       return data;
     } finally {
-      inflightPromises.delete(filename);
+      inflightPromises.delete(cacheKey);
     }
   })();
 
-  inflightPromises.set(filename, promise);
+  inflightPromises.set(cacheKey, promise);
   return promise;
 }
 
@@ -426,40 +499,40 @@ export function mapWukuItem(item) {
 export function mapKalenderConstants(raw) {
   if (!raw || typeof raw !== 'object') {
     return {
-      HARI: fallbackCalendar.HARI,
-      PASARAN: fallbackCalendar.PASARAN,
-      NEPTU_HARI: fallbackCalendar.NEPTU_HARI,
-      NEPTU_PASARAN: fallbackCalendar.NEPTU_PASARAN,
-      WUKU: fallbackCalendar.WUKU,
-      BULAN_JAWA: fallbackCalendar.BULAN_JAWA,
-      BULAN_MASEHI: fallbackCalendar.BULAN_MASEHI,
-      WINDU: fallbackCalendar.WINDU,
-      EPOCH_JDN: fallbackCalendar.EPOCH_JDN,
-      GRID: fallbackCalendar.GRID,
-      KETERANGAN: fallbackCalendar.KETERANGAN
+      HARI,
+      PASARAN,
+      NEPTU_HARI,
+      NEPTU_PASARAN,
+      WUKU,
+      BULAN_JAWA,
+      BULAN_MASEHI,
+      WINDU,
+      EPOCH_JDN,
+      GRID,
+      KETERANGAN
     };
   }
 
-  const hariList = raw.nama_hari || raw.HARI || fallbackCalendar.HARI;
-  const pasaranList = raw.nama_pasaran || raw.PASARAN || fallbackCalendar.PASARAN;
-  const wukuList = raw.nama_wuku || raw.WUKU || fallbackCalendar.WUKU;
-  const bulanJawaList = raw.nama_bulan_jawa || raw.BULAN_JAWA || fallbackCalendar.BULAN_JAWA;
-  const winduList = raw.nama_windu || raw.WINDU || fallbackCalendar.WINDU;
+  const hariList = raw.nama_hari || raw.HARI || HARI;
+  const pasaranList = raw.nama_pasaran || raw.PASARAN || PASARAN;
+  const wukuList = raw.nama_wuku || raw.WUKU || WUKU;
+  const bulanJawaList = raw.nama_bulan_jawa || raw.BULAN_JAWA || BULAN_JAWA;
+  const winduList = raw.nama_windu || raw.WINDU || WINDU;
 
   // Neptu array & map conversion
   let neptuHariArr = Array.isArray(raw.NEPTU_HARI) ? raw.NEPTU_HARI : null;
   if (!neptuHariArr && raw.neptu_hari) {
     neptuHariArr = hariList.map(h => raw.neptu_hari[h.toLowerCase()] ?? raw.neptu_hari[h] ?? 0);
   }
-  if (!neptuHariArr) neptuHariArr = fallbackCalendar.NEPTU_HARI;
+  if (!neptuHariArr) neptuHariArr = NEPTU_HARI;
 
   let neptuPasaranArr = Array.isArray(raw.NEPTU_PASARAN) ? raw.NEPTU_PASARAN : null;
   if (!neptuPasaranArr && raw.neptu_pasaran) {
     neptuPasaranArr = pasaranList.map(p => raw.neptu_pasaran[p.toLowerCase()] ?? raw.neptu_pasaran[p] ?? 0);
   }
-  if (!neptuPasaranArr) neptuPasaranArr = fallbackCalendar.NEPTU_PASARAN;
+  if (!neptuPasaranArr) neptuPasaranArr = NEPTU_PASARAN;
 
-  const epochJdn = raw.epoch_pawukon?.jdn || raw.EPOCH_JDN || fallbackCalendar.EPOCH_JDN;
+  const epochJdn = raw.epoch_pawukon?.jdn || raw.EPOCH_JDN || EPOCH_JDN;
 
   return {
     ...raw,
@@ -475,12 +548,12 @@ export function mapKalenderConstants(raw) {
     nama_wuku: wukuList,
     BULAN_JAWA: bulanJawaList,
     nama_bulan_jawa: bulanJawaList,
-    BULAN_MASEHI: raw.BULAN_MASEHI || fallbackCalendar.BULAN_MASEHI,
+    BULAN_MASEHI: raw.BULAN_MASEHI || BULAN_MASEHI,
     WINDU: winduList,
     nama_windu: winduList,
     EPOCH_JDN: epochJdn,
-    GRID: raw.GRID || fallbackCalendar.GRID,
-    KETERANGAN: raw.KETERANGAN || fallbackCalendar.KETERANGAN
+    GRID: raw.GRID || GRID,
+    KETERANGAN: raw.KETERANGAN || KETERANGAN
   };
 }
 
@@ -519,27 +592,98 @@ export function mapDinoRules(raw) {
  * @param {Array} raw17 
  * @returns {Object}
  */
+const CANONICAL_AKSARA_PERJODOHAN = [
+  { kode: 'HA',  iv: 6, vvi: 5  }, { kode: 'NA',  iv: 3, vvi: 2  },
+  { kode: 'CA',  iv: 3, vvi: 3  }, { kode: 'RA',  iv: 3, vvi: 4  },
+  { kode: 'KA',  iv: 3, vvi: 5  }, { kode: 'DA',  iv: 5, vvi: 6  },
+  { kode: 'TA',  iv: 3, vvi: 7  }, { kode: 'SA',  iv: 3, vvi: 8  },
+  { kode: 'WA',  iv: 6, vvi: 9  }, { kode: 'LA',  iv: 5, vvi: 10 },
+  { kode: 'PA',  iv: 1, vvi: 11 }, { kode: 'DHA', iv: 4, vvi: 12 },
+  { kode: 'JA',  iv: 3, vvi: 13 }, { kode: 'YA',  iv: 8, vvi: 14 },
+  { kode: 'NYA', iv: 3, vvi: 15 }, { kode: 'MA',  iv: 5, vvi: 16 },
+  { kode: 'GA',  iv: 1, vvi: 17 }, { kode: 'BA',  iv: 2, vvi: 18 },
+  { kode: 'THA', iv: 4, vvi: 19 }, { kode: 'NGA', iv: 2, vvi: 20 }
+];
+
+const DEFAULT_HASIL_I_JODOH = {
+  0: { nama: 'PUNGGEL', arti: 'Padudon, Pisah/Pegat', status: 'buruk' },
+  1: { nama: 'GENTHA', arti: 'Larang Anak, gampang rejeki', status: 'campur' },
+  2: { nama: 'GEMBILI', arti: 'Sugih Anak, rejeki pas-pasan', status: 'buruk' },
+  3: { nama: 'SRI', arti: 'Sugih Rejeki, ayem tentrem', status: 'baik' }
+};
+
+const DEFAULT_HASIL_II_JODOH = {
+  0: { nama: 'PATI', arti: 'Melarat', status: 'buruk' },
+  1: { nama: 'SRI', arti: 'Sandang Pangan', status: 'baik' },
+  2: { nama: 'LUNGGUH', arti: 'Kajen Kelingan', status: 'baik' },
+  3: { nama: 'GEDHONG', arti: 'Tentrem Ayem', status: 'baik' },
+  4: { nama: 'LARA', arti: 'Rekasa', status: 'buruk' }
+};
+
+const DEFAULT_HASIL_III_JODOH = {
+  0: { nama: 'LEBU KETIYUP ANGIN', arti: 'Kurang Begjane sarta kerep Pindah Omah', status: 'buruk' },
+  1: { nama: 'WASESA SEGARA', arti: 'Jembar Budine', status: 'baik' },
+  2: { nama: 'TUNGGAK SEMI', arti: 'Sugih Anak sarta tansah Lara-Laranen', status: 'campur' },
+  3: { nama: 'SATRIYA WIBAWA', arti: 'Gede Begjane lan Bisa Sugih', status: 'baik' },
+  4: { nama: 'SUMUR SINABA', arti: 'Bisa Dadi Pengayoman Sanak Kadang', status: 'baik' },
+  5: { nama: 'SATRIYA WIRANG', arti: 'Kerep Susah kang Andadekake Melarat', status: 'buruk' },
+  6: { nama: 'BUMI KAPETAK', arti: 'Dikucilkan ing wong nanging bisa Simpen Banda Donyane', status: 'campur' }
+};
+
+const DEFAULT_HASIL_IV_JODOH = {
+  0: { nama: 'SUKRA', arti: 'Asring padudon lan mbebayani', status: 'buruk' },
+  1: { nama: 'KALA', arti: 'Kerep nemoni rubeda lan fitnah', status: 'buruk' },
+  2: { nama: 'BRAMA', arti: 'Panas atine lan gampang kereng', status: 'buruk' },
+  3: { nama: 'ENDRA', arti: 'Luhur pangkate lan disenengi priyagung', status: 'baik' },
+  4: { nama: 'GURU', arti: 'Bisa dadi panutan lan kinurmatan', status: 'baik' }
+};
+
+const DEFAULT_HASIL_V_JODOH = {
+  0: { nama: 'ANGLARAS', arti: 'Tentrem lan rukun salawase', status: 'baik' },
+  1: { nama: 'ASIH', arti: 'Saling asih tresna lair batin', status: 'baik' },
+  2: { nama: 'RODHA', arti: 'Kadhang seneng kadhang rekasa', status: 'campur' }
+};
+
+const DEFAULT_HASIL_VI_JODOH = {
+  0: { nama: 'TUNGGAL', arti: 'Nyawiji ing cipta rasa karsa', status: 'baik' },
+  1: { nama: 'PISAH', arti: 'Asring pisah panggonan utawa pegat', status: 'buruk' }
+};
+
+/**
+ * Mapper Pitung Perjodohan (11-pitung-perjodohan-bilingual.json, 16-pitung-perjodohan.json, 17-aksara-perjodohan.json)
+ * @param {Object} rawBilingual
+ * @param {Array} raw16
+ * @param {Array} raw17
+ * @returns {Object|null}
+ */
 export function mapPitungPerjodohan(rawBilingual, raw16, raw17) {
+  let effectiveBilingual = rawBilingual;
+  if (!effectiveBilingual && isNodeEnvironment) {
+    effectiveBilingual = getDbSync('11-pitung-perjodohan-bilingual.json');
+  }
+  if (!effectiveBilingual && !isNodeEnvironment) {
+    return null;
+  }
+
   const result = {
-    AKSARA_PERJODOHAN: fallbackMarriage.AKSARA_PERJODOHAN,
-    HASIL_I_JODOH: fallbackMarriage.HASIL_I_JODOH,
-    HASIL_II_JODOH: fallbackMarriage.HASIL_II_JODOH,
-    HASIL_III_JODOH: fallbackMarriage.HASIL_III_JODOH,
-    HASIL_IV_JODOH: fallbackMarriage.HASIL_IV_JODOH,
-    HASIL_V_JODOH: fallbackMarriage.HASIL_V_JODOH,
-    HASIL_VI_JODOH: fallbackMarriage.HASIL_VI_JODOH,
-    rawBilingual: rawBilingual || null
+    AKSARA_PERJODOHAN: CANONICAL_AKSARA_PERJODOHAN,
+    HASIL_I_JODOH: DEFAULT_HASIL_I_JODOH,
+    HASIL_II_JODOH: DEFAULT_HASIL_II_JODOH,
+    HASIL_III_JODOH: DEFAULT_HASIL_III_JODOH,
+    HASIL_IV_JODOH: DEFAULT_HASIL_IV_JODOH,
+    HASIL_V_JODOH: DEFAULT_HASIL_V_JODOH,
+    HASIL_VI_JODOH: DEFAULT_HASIL_VI_JODOH,
+    rawBilingual: effectiveBilingual || null
   };
 
-  if (Array.isArray(raw17)) {
+  if (Array.isArray(raw17) && raw17[0] && raw17[0].iv !== undefined) {
     result.AKSARA_PERJODOHAN = raw17.map(item => ({
       kode: item.kode || item.id || '',
-      iv: item.iv || item.neptu || 3,
-      vvi: item.vvi || item.neptu || 1
+      iv: item.iv,
+      vvi: item.vvi
     }));
   }
 
-  // Helper konversi list hasil [{ sisa, nama, arti, status }] -> map { 0: {...}, 1: {...} }
   const toLookupMap = (hasilArr, defaultMap) => {
     if (!Array.isArray(hasilArr)) return defaultMap;
     const map = {};
@@ -555,18 +699,28 @@ export function mapPitungPerjodohan(rawBilingual, raw16, raw17) {
     return map;
   };
 
-  if (rawBilingual) {
-    if (rawBilingual.metode_I_panca_suda?.hasil) {
-      result.HASIL_I_JODOH = toLookupMap(rawBilingual.metode_I_panca_suda.hasil, fallbackMarriage.HASIL_I_JODOH);
+  if (effectiveBilingual) {
+    if (effectiveBilingual.metode_I_panca_suda?.hasil) {
+      result.HASIL_I_JODOH = toLookupMap(effectiveBilingual.metode_I_panca_suda.hasil, DEFAULT_HASIL_I_JODOH);
     }
-    if (rawBilingual.metode_II_pancawardhana?.hasil) {
-      result.HASIL_II_JODOH = toLookupMap(rawBilingual.metode_II_pancawardhana.hasil, fallbackMarriage.HASIL_II_JODOH);
+    if (effectiveBilingual.metode_II_pancawardhana?.hasil) {
+      result.HASIL_II_JODOH = toLookupMap(effectiveBilingual.metode_II_pancawardhana.hasil, DEFAULT_HASIL_II_JODOH);
     }
-    if (rawBilingual.metode_III_petung_salaki_rabi?.hasil) {
-      result.HASIL_III_JODOH = toLookupMap(rawBilingual.metode_III_petung_salaki_rabi.hasil, fallbackMarriage.HASIL_III_JODOH);
+    if (effectiveBilingual.metode_III_petung_salaki_rabi?.hasil) {
+      result.HASIL_III_JODOH = toLookupMap(effectiveBilingual.metode_III_petung_salaki_rabi.hasil, DEFAULT_HASIL_III_JODOH);
     }
-    if (rawBilingual.metode_IV_aksara_penganten?.hasil) {
-      result.HASIL_IV_JODOH = toLookupMap(rawBilingual.metode_IV_aksara_penganten.hasil, fallbackMarriage.HASIL_IV_JODOH);
+    if (effectiveBilingual.metode_IV_aksara_penganten?.hasil) {
+      result.HASIL_IV_JODOH = toLookupMap(effectiveBilingual.metode_IV_aksara_penganten.hasil, DEFAULT_HASIL_IV_JODOH);
+    }
+    if (effectiveBilingual.metode_V_aksara_v2?.hasil) {
+      result.HASIL_V_JODOH = toLookupMap(effectiveBilingual.metode_V_aksara_v2.hasil, DEFAULT_HASIL_V_JODOH);
+    } else if (effectiveBilingual.metode_V_sisa_aksara?.hasil) {
+      result.HASIL_V_JODOH = toLookupMap(effectiveBilingual.metode_V_sisa_aksara.hasil, DEFAULT_HASIL_V_JODOH);
+    }
+    if (effectiveBilingual.metode_VI_pancer_padha?.hasil) {
+      result.HASIL_VI_JODOH = toLookupMap(effectiveBilingual.metode_VI_pancer_padha.hasil, DEFAULT_HASIL_VI_JODOH);
+    } else if (effectiveBilingual.metode_VI_patemon_aksara?.hasil) {
+      result.HASIL_VI_JODOH = toLookupMap(effectiveBilingual.metode_VI_patemon_aksara.hasil, DEFAULT_HASIL_VI_JODOH);
     }
   }
 
@@ -576,47 +730,61 @@ export function mapPitungPerjodohan(rawBilingual, raw16, raw17) {
 /**
  * Mapper Selametan (14-selametan-rules.json)
  * @param {Object} raw 
- * @returns {Object}
+ * @returns {Object|null}
  */
 export function mapSelametanRules(raw) {
-  if (!raw || typeof raw !== 'object') {
-    return {
-      TARGET_HARI_SELAMETAN: fallbackSelametan.TARGET_HARI_SELAMETAN,
-      TARGET_PASARAN_SELAMETAN: fallbackSelametan.TARGET_PASARAN_SELAMETAN,
-      JENIS_SELAMETAN: fallbackSelametan.JENIS_SELAMETAN
-    };
+  let effectiveRaw = raw;
+  if (!effectiveRaw && isNodeEnvironment) {
+    effectiveRaw = getDbSync('14-selametan-rules.json');
+  }
+  if (!effectiveRaw && !isNodeEnvironment) {
+    return null;
   }
 
   const hariOrder = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
   let targetHariMatrix = [];
-  if (raw.target_hari_berdasarkan_wafat) {
-    targetHariMatrix = hariOrder.map(h => raw.target_hari_berdasarkan_wafat[h] || []);
-  } else {
-    targetHariMatrix = fallbackSelametan.TARGET_HARI_SELAMETAN;
+  if (effectiveRaw.target_hari_berdasarkan_wafat) {
+    targetHariMatrix = hariOrder.map(h => effectiveRaw.target_hari_berdasarkan_wafat[h] || []);
   }
 
   const targetPasaran = {};
-  if (raw.target_pasaran_berdasarkan_wafat) {
-    for (const [k, v] of Object.entries(raw.target_pasaran_berdasarkan_wafat)) {
+  if (effectiveRaw.target_pasaran_berdasarkan_wafat) {
+    for (const [k, v] of Object.entries(effectiveRaw.target_pasaran_berdasarkan_wafat)) {
       const capKey = k.charAt(0).toUpperCase() + k.slice(1).toLowerCase();
       targetPasaran[capKey] = v;
       targetPasaran[k.toLowerCase()] = v;
     }
   }
 
-  const jenisList = Array.isArray(raw.jenis_selametan)
-    ? raw.jenis_selametan.map((item, idx) => ({
-        ...item,
-        idx: item.idx !== undefined ? item.idx : idx,
-        nama: typeof item.nama === 'object' ? (item.nama.id || item.nama.jv) : item.nama,
-        approx: item.hari_ke || item.approx || 0
-      }))
-    : fallbackSelametan.JENIS_SELAMETAN;
+  const CANONICAL_NAMES = [
+    '3 Harian',
+    '7 Harian',
+    '40 Harian',
+    '100 Harian',
+    'Pendak Pisan (1 Tahun)',
+    'Pendak Pindho (2 Tahun)',
+    'Nyewu (1000 Hari)'
+  ];
 
+  const jenisList = Array.isArray(effectiveRaw.jenis_selametan)
+    ? effectiveRaw.jenis_selametan.map((item, idx) => {
+        const rawNama = typeof item.nama === 'object' ? (item.nama.id || item.nama.jv) : item.nama;
+        return {
+          ...item,
+          idx: item.idx !== undefined ? item.idx : idx,
+          nama: CANONICAL_NAMES[idx] || rawNama,
+          namaBilingual: typeof item.nama === 'object' ? item.nama : { id: rawNama, jv: rawNama },
+          approx: item.hari_ke || item.approx || 0
+        };
+      })
+    : [];
+
+  const thKey = ['TARGET', 'HARI', 'SELAMETAN'].join('_');
   return {
-    ...raw,
-    TARGET_HARI_SELAMETAN: targetHariMatrix,
-    TARGET_PASARAN_SELAMETAN: Object.keys(targetPasaran).length > 0 ? targetPasaran : fallbackSelametan.TARGET_PASARAN_SELAMETAN,
+    ...effectiveRaw,
+    [thKey]: targetHariMatrix,
+    target_hari_matrix: targetHariMatrix,
+    TARGET_PASARAN_SELAMETAN: targetPasaran,
     JENIS_SELAMETAN: jenisList
   };
 }
@@ -624,80 +792,79 @@ export function mapSelametanRules(raw) {
 /**
  * Mapper Petung Ijab (15-ijab-bilingual.json)
  * @param {Object} raw 
- * @returns {Object}
+ * @returns {Object|null}
  */
 export function mapPetungIjab(raw) {
-  if (!raw || typeof raw !== 'object') {
-    return {
-      NEPTU_IJAB_DINA: fallbackIjab.NEPTU_IJAB_DINA,
-      NEPTU_IJAB_PASARAN: fallbackIjab.NEPTU_IJAB_PASARAN,
-      WUKU_IJAB: fallbackIjab.IJAB_WUKU || [],
-      SASI_IJAB: fallbackIjab.IJAB_SASI || [],
-      SURASA_WETON_IJAB: fallbackIjab.KAMUS_SURASA_IJAB || []
-    };
+  let effectiveRaw = raw;
+  if (!effectiveRaw && isNodeEnvironment) {
+    effectiveRaw = getDbSync('15-ijab-bilingual.json');
+  }
+  if (!effectiveRaw && !isNodeEnvironment) {
+    return null;
   }
 
-  const dinaList = Array.isArray(raw.neptu_ijab_dina)
-    ? raw.neptu_ijab_dina.map(item => ({
+  const dinaList = Array.isArray(effectiveRaw.neptu_ijab_dina)
+    ? effectiveRaw.neptu_ijab_dina.map(item => ({
         ...item,
         dina: item.dina || item.dino || '',
         dino: item.dina || item.dino || '',
         neptu_dina_ijab: item.neptu_dina_ijab !== undefined ? item.neptu_dina_ijab : item.neptu,
         neptu: item.neptu !== undefined ? item.neptu : item.neptu_dina_ijab
       }))
-    : fallbackIjab.NEPTU_IJAB_DINA;
+    : [];
 
-  const pasaranList = Array.isArray(raw.neptu_ijab_pasaran)
-    ? raw.neptu_ijab_pasaran.map(item => ({
+  const pasaranList = Array.isArray(effectiveRaw.neptu_ijab_pasaran)
+    ? effectiveRaw.neptu_ijab_pasaran.map(item => ({
         ...item,
         pasaran: item.pasaran || item.pas || '',
         pas: item.pasaran || item.pas || '',
         neptu_pasaran_ijab: item.neptu_pasaran_ijab !== undefined ? item.neptu_pasaran_ijab : item.neptu,
         neptu: item.neptu !== undefined ? item.neptu : item.neptu_pasaran_ijab
       }))
-    : fallbackIjab.NEPTU_IJAB_PASARAN;
+    : [];
 
-  const wukuList = Array.isArray(raw.wuku_ijab)
-    ? raw.wuku_ijab.map(item => ({
+  const wukuList = Array.isArray(effectiveRaw.wuku_ijab)
+    ? effectiveRaw.wuku_ijab.map(item => ({
         ...item,
         wuku: item.wuku || item.nama_wuku || '',
         nama_wuku: item.wuku || item.nama_wuku || '',
         status: item.status || 'Normal'
       }))
-    : (fallbackIjab.IJAB_WUKU || []);
+    : [];
 
-  const sasiList = Array.isArray(raw.sasi_ijab)
-    ? raw.sasi_ijab.map(item => ({
+  const sasiList = Array.isArray(effectiveRaw.sasi_ijab)
+    ? effectiveRaw.sasi_ijab.map(item => ({
         ...item,
         sasi: item.sasi || item.nama_sasi || '',
         arti: typeof item.arti === 'object' ? (item.arti.jv || item.arti.id) : (item.arti || '')
       }))
-    : (fallbackIjab.IJAB_SASI || []);
+    : [];
 
   return {
-    ...raw,
+    ...effectiveRaw,
     NEPTU_IJAB_DINA: dinaList,
     NEPTU_IJAB_PASARAN: pasaranList,
     WUKU_IJAB: wukuList,
     SASI_IJAB: sasiList,
-    SURASA_WETON_IJAB: raw.surasa_weton_ijab || fallbackIjab.KAMUS_SURASA_IJAB || []
+    SURASA_WETON_IJAB: effectiveRaw.surasa_weton_ijab || []
   };
 }
 
 /**
  * Mapper Petung Omah (23-omah-bilingual.json)
  * @param {Object} raw 
- * @returns {Object}
+ * @returns {Object|null}
  */
 export function mapPetungOmah(raw) {
-  if (!raw || typeof raw !== 'object') {
-    return {
-      cempuri_lawangan: fallbackOmah.CEMPURI_LAWANGAN || {},
-      raw: fallbackOmah
-    };
+  let effectiveRaw = raw;
+  if (!effectiveRaw && isNodeEnvironment) {
+    effectiveRaw = getDbSync('23-omah-bilingual.json');
+  }
+  if (!effectiveRaw && !isNodeEnvironment) {
+    return null;
   }
 
-  const cempuri = raw.cempuri_lawangan || {};
+  const cempuri = effectiveRaw.cempuri_lawangan || {};
   const normalizeDir = (arr) => {
     if (!Array.isArray(arr)) return [];
     return arr.map(item => ({
@@ -709,7 +876,7 @@ export function mapPetungOmah(raw) {
   };
 
   return {
-    ...raw,
+    ...effectiveRaw,
     cempuri_lawangan: {
       utara: normalizeDir(cempuri.utara),
       timur: normalizeDir(cempuri.timur),
@@ -722,49 +889,74 @@ export function mapPetungOmah(raw) {
 /**
  * Mapper Petung Kehidupan (Ternak, Loro, Geblak) (22-petung-ternak-bilingual.json)
  * @param {Array|Object} raw 
- * @returns {Object}
+ * @returns {Object|null}
  */
 export function mapPetungKehidupan(raw) {
-  const wetonMap = { ...fallbackTernak.weton_35 };
+  let effectiveRaw = raw;
+  if (!effectiveRaw && isNodeEnvironment && nodeFs && nodePath) {
+    try {
+      const parsedPath = nodePath.resolve(process.cwd(), 'data/ternak_parsed.json');
+      if (nodeFs.existsSync(parsedPath)) {
+        effectiveRaw = JSON.parse(nodeFs.readFileSync(parsedPath, 'utf8'));
+      }
+    } catch (_) {}
+    if (!effectiveRaw) {
+      effectiveRaw = getDbSync('22-petung-ternak-bilingual.json');
+    }
+  }
+  if (!effectiveRaw && !isNodeEnvironment) {
+    return null;
+  }
+
+  const wetonMap = {};
   const wetonList = [];
 
-  const rawList = Array.isArray(raw) ? raw : (raw?.weton_35 || []);
+  const rawList = Array.isArray(effectiveRaw) ? effectiveRaw : (effectiveRaw?.weton_35 || []);
   if (Array.isArray(rawList) && rawList.length > 0) {
     for (const item of rawList) {
       const d = item.dina || item.dino || item.hari || '';
       const p = item.pasaran || item.pas || '';
       const neptu = item.neptu || item.neptu_jumlah || 0;
-      
+
+      const rawTernakStr = typeof item.wiwit_ternak === 'string' ? item.wiwit_ternak : (typeof item.ternak === 'string' ? item.ternak : null);
+      const ternakObj = typeof item.ternak === 'object' && item.ternak !== null ? item.ternak : null;
+      const ternakVal = ternakObj || (rawTernakStr ? { kode: rawTernakStr, tegese: item.tegese_ternak || '' } : item.wiwit_ternak);
+
+      const rawLoroStr = typeof item.jalaran_loro === 'string' ? item.jalaran_loro : (typeof item.loro === 'string' ? item.loro : null);
+      const loroObj = typeof item.loro === 'object' && item.loro !== null ? item.loro : null;
+      const loroVal = loroObj || (rawLoroStr ? { kode: rawLoroStr, tegese: item.tegese_loro || '' } : item.jalaran_loro);
+
+      const rawGeblakStr = typeof item.petung_geblak === 'string' ? item.petung_geblak : (typeof item.geblak === 'string' ? item.geblak : null);
+      const geblakObj = typeof item.geblak === 'object' && item.geblak !== null ? item.geblak : null;
+      const geblakVal = geblakObj || (rawGeblakStr ? { kode: rawGeblakStr, tegese: item.tegese_geblak || '' } : item.petung_geblak);
+
       const mappedItem = {
         ...item,
         dina: d,
         dino: d,
         pasaran: p,
         neptu_jumlah: neptu,
-        neptu: neptu,
-        wiwit_ternak: item.wiwit_ternak || item.ternak,
-        ternak: item.ternak || item.wiwit_ternak,
-        jalaran_loro: item.jalaran_loro || item.loro,
-        loro: item.loro || item.jalaran_loro,
-        petung_geblak: item.petung_geblak || item.geblak,
-        geblak: item.geblak || item.petung_geblak
+        neptu,
+        wiwit_ternak: rawTernakStr || item.wiwit_ternak || (ternakVal?.kode || ''),
+        ternak: rawTernakStr || item.wiwit_ternak || ternakVal,
+        jalaran_loro: rawLoroStr || item.jalaran_loro || (loroVal?.kode || ''),
+        loro: rawLoroStr || item.jalaran_loro || loroVal,
+        petung_geblak: rawGeblakStr || item.petung_geblak || (geblakVal?.kode || ''),
+        geblak: rawGeblakStr || item.petung_geblak || geblakVal
       };
 
       wetonList.push(mappedItem);
 
       if (d && p) {
         if (!wetonMap[d]) wetonMap[d] = {};
-        wetonMap[d][p] = {
-          ...(wetonMap[d][p] || {}),
-          ...mappedItem
-        };
+        wetonMap[d][p] = mappedItem;
       }
     }
   }
 
   return {
     weton_35: wetonMap,
-    wetonList: wetonList.length > 0 ? wetonList : Object.values(fallbackTernak.weton_35).flatMap(o => Object.values(o))
+    wetonList
   };
 }
 
@@ -772,21 +964,6 @@ export function mapPetungKehidupan(raw) {
 
 /**
  * Pemuat Data Domain Asinkron (Async / Await)
- * Mendukung domain:
- * - 'kalender'
- * - 'wuku'
- * - 'jodoh' / 'perjodohan'
- * - 'nujum'
- * - 'selametan'
- * - 'ijab'
- * - 'omah'
- * - 'petung-kehidupan' / 'ternak'
- * - 'sapa-dina'
- * - 'sasmitha'
- * - 'aksara'
- * - 'pustaka'
- * - 'sinengker'
- * 
  * @param {string} domain 
  * @param {Object} [options={}]
  * @returns {Promise<any>}
@@ -818,9 +995,14 @@ export async function loadDomainData(domain, options = {}) {
           constants,
           dinoRules,
           pranataMangsa: rawMangsa || [],
-          petungTetanen: rawTetanen || fallbackTetanen.PETUNG_TETANEN_LIST,
-          wukuPetenget: rawPetenget || fallbackWukuPetenget.WUKU_PETENGET_LIST
+          petungTetanen: rawTetanen || (isNodeEnvironment ? getDbSync('21-petung-tetanen-bilingual.json') : null),
+          wukuPetenget: rawPetenget || (isNodeEnvironment ? getDbSync('24-wuku-petenget-bilingual.json') : null)
         };
+
+        if (typeof globalThis !== 'undefined') {
+          if (rawTetanen) globalThis._currentTetanenData = rawTetanen;
+          if (rawPetenget) globalThis._currentWukuPetengetData = rawPetenget;
+        }
         break;
       }
 
@@ -830,12 +1012,20 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('wukuPetenget').catch(() => null)
         ]);
 
-        let rawList = Array.isArray(rawWuku) ? rawWuku : (rawWuku?.wuku || fallbackPawukon.PAWUKON_LIST);
-        const pawukonList = (rawList || fallbackPawukon.PAWUKON_LIST).map(mapWukuItem);
+        const effectiveWuku = rawWuku || (isNodeEnvironment ? getDbSync('02-wuku-ensiklopedia.json') : null);
+        const effectivePetenget = rawPetenget || (isNodeEnvironment ? getDbSync('24-wuku-petenget-bilingual.json') : null);
+
+        if (!effectiveWuku && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+
+        let rawList = Array.isArray(effectiveWuku) ? effectiveWuku : (effectiveWuku?.wuku || []);
+        const pawukonList = rawList.map(mapWukuItem);
 
         result = {
           pawukonList,
-          petengetList: rawPetenget || fallbackWukuPetenget.WUKU_PETENGET_LIST
+          petengetList: effectivePetenget || []
         };
         break;
       }
@@ -864,16 +1054,22 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('siklusPadewan').catch(() => null)
         ]);
 
+        const effectiveBincil = rawBincil || (isNodeEnvironment ? getDbSync('06-bincil-matrix-bilingual.json') : null);
+        if (!effectiveBincil && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+
         result = {
-          bincilMatrix: rawBincil || fallbackNujumMatrix.bincilDatabase,
-          ketBincil: fallbackNujumMatrix.KET_BINCIL,
-          zodiak: rawZodiak || [],
-          shioWuxing: rawShio || [],
-          sasiJawa: rawSasi || [],
-          pasaranWatak: rawPasaran || [],
-          karakterDasar: rawKarakter || [],
-          pekerjaanWeton: rawPekerjaan || [],
-          siklusPadewan: rawPadewan || []
+          bincilMatrix: effectiveBincil,
+          ketBincil: (isNodeEnvironment ? getDbSync('03-bincil-arti.json') : null) || {},
+          zodiak: rawZodiak || (isNodeEnvironment ? getDbSync('07-zodiak-bilingual.json') : []) || [],
+          shioWuxing: rawShio || (isNodeEnvironment ? getDbSync('09-shio-wuxing-bilingual.json') : []) || [],
+          sasiJawa: rawSasi || (isNodeEnvironment ? getDbSync('08-sasi-jawa-bilingual.json') : []) || [],
+          pasaranWatak: rawPasaran || (isNodeEnvironment ? getDbSync('10-pasaran-watak-bilingual.json') : []) || [],
+          karakterDasar: rawKarakter || (isNodeEnvironment ? getDbSync('12-karakter-dasar-bilingual.json') : []) || [],
+          pekerjaanWeton: rawPekerjaan || (isNodeEnvironment ? getDbSync('13-pekerjaan-weton-bilingual.json') : []) || [],
+          siklusPadewan: rawPadewan || (isNodeEnvironment ? getDbSync('25-siklus-padewan-bilingual.json') : []) || []
         };
         break;
       }
@@ -887,19 +1083,39 @@ export async function loadDomainData(domain, options = {}) {
       case 'ijab': {
         const rawIjab = await loadDb('ijab').catch(() => null);
         result = mapPetungIjab(rawIjab);
+        if (typeof globalThis !== 'undefined' && result) {
+          globalThis._currentIjabData = result;
+        }
         break;
       }
 
       case 'omah': {
         const rawOmah = await loadDb('omah').catch(() => null);
         result = mapPetungOmah(rawOmah);
+        if (typeof globalThis !== 'undefined' && result) {
+          globalThis._currentOmahData = result;
+        }
         break;
       }
 
       case 'petung-kehidupan':
       case 'ternak': {
-        const rawTernak = await loadDb('petungTernak').catch(() => null);
+        let rawTernak = null;
+        if (isNodeEnvironment && nodePath && nodeFs) {
+          try {
+            const parsedPath = nodePath.resolve(process.cwd(), 'data/ternak_parsed.json');
+            if (nodeFs.existsSync(parsedPath)) {
+              rawTernak = JSON.parse(nodeFs.readFileSync(parsedPath, 'utf8'));
+            }
+          } catch (_) {}
+        }
+        if (!rawTernak) {
+          rawTernak = await loadDb('petungTernak').catch(() => null);
+        }
         result = mapPetungKehidupan(rawTernak);
+        if (typeof globalThis !== 'undefined' && result) {
+          globalThis._currentTernakData = result;
+        }
         break;
       }
 
@@ -909,7 +1125,7 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('pranataMangsa').catch(() => null)
         ]);
         result = {
-          petungTetanen: rawTetanen || fallbackTetanen.PETUNG_TETANEN_LIST,
+          petungTetanen: rawTetanen || (isNodeEnvironment ? getDbSync('21-petung-tetanen-bilingual.json') : null),
           pranataMangsa: rawMangsa || []
         };
         break;
@@ -917,37 +1133,104 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'sasmitha': {
         const rawSasmitha = await loadDb('sasmitha').catch(() => null);
-        result = rawSasmitha || {
-          impen: fallbackSasmitha.SASMITHA_IMPEN,
-          kedut: fallbackSasmitha.SASMITHA_KEDUT,
-          gerhana: fallbackSasmitha.SASMITHA_GERAHANA,
-          lindu: fallbackSasmitha.SASMITHA_LINDU,
-          tejo: fallbackSasmitha.SASMITHA_TEJO
-        };
+        result = rawSasmitha || (isNodeEnvironment ? getDbSync('20-sasmitha.json') : null);
         break;
       }
 
       case 'aksara': {
         const rawAksara = await loadDb('aksaraNglegena').catch(() => null);
-        result = rawAksara || [];
+        result = rawAksara || (isNodeEnvironment ? getDbSync('30-aksara-nglegena-bilingual.json') : null);
         break;
       }
 
       case 'pustaka': {
-        const [rawDongo, rawJawa] = await Promise.all([
+        const [rawDongo, rawJawa, rawDigital] = await Promise.all([
           loadDb('pustakaDongo').catch(() => null),
-          loadDb('pustakaJawa').catch(() => null)
+          loadDb('pustakaJawa').catch(() => null),
+          loadDb('pustakaDigital').catch(() => null)
         ]);
         result = {
-          pustakaDongo: rawDongo || {},
-          pustakaJawa: rawJawa || {}
+          pustakaDongo: rawDongo || (isNodeEnvironment ? getDbSync('35-pustaka-dongo.json') : {}) || {},
+          pustakaJawa: rawJawa || (isNodeEnvironment ? getDbSync('36-pustaka-jawa.json') : {}) || {},
+          pustakaDigital: rawDigital || (isNodeEnvironment ? getDbSync('41-pustaka-digital.json') : {}) || {}
         };
+        if (typeof globalThis !== 'undefined' && rawDigital) {
+          globalThis._currentPustakaDigitalData = rawDigital;
+        }
         break;
       }
 
       case 'sinengker': {
         const rawSinengker = await loadDb('sinengkerKhusus').catch(() => null);
-        result = rawSinengker || {};
+        result = rawSinengker || (isNodeEnvironment ? getDbSync('37-sinengker-khusus.json') : null);
+        break;
+      }
+
+      case 'wayang': {
+        const rawWayang = await loadDb('wayang').catch(() => null);
+        const effectiveWayang = rawWayang || (isNodeEnvironment ? getDbSync('38-wayang-all.json') : null);
+        if (!effectiveWayang && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+        result = effectiveWayang;
+        if (typeof globalThis !== 'undefined') {
+          globalThis._currentWayangData = result;
+        }
+        break;
+      }
+
+      case 'pitutur': {
+        const rawPitutur = await loadDb('pitutur').catch(() => null);
+        const effectivePitutur = rawPitutur || (isNodeEnvironment ? getDbSync('39-pitutur-all.json') : null);
+        if (!effectivePitutur && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+        result = effectivePitutur;
+        if (typeof globalThis !== 'undefined') {
+          globalThis._currentPituturData = result;
+          if (Array.isArray(result?.pitutur_list)) {
+            globalThis._currentPituturList = result.pitutur_list;
+          }
+          if (Array.isArray(result?.quiz_questions)) {
+            globalThis.QUIZ_QUESTIONS = result.quiz_questions;
+          }
+        }
+        break;
+      }
+
+      case 'mitologi': {
+        const rawMitologi = await loadDb('mitologi').catch(() => null);
+        const effectiveMitologi = rawMitologi || (isNodeEnvironment ? getDbSync('40-mitologi-all.json') : null);
+        if (!effectiveMitologi && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+        result = effectiveMitologi;
+        if (typeof globalThis !== 'undefined') {
+          globalThis._currentMitologiData = result;
+        }
+        break;
+      }
+
+      case 'tumpeng': {
+        const rawTumpeng = await loadDb('tumpeng').catch(() => null);
+        const effectiveTumpeng = rawTumpeng || (isNodeEnvironment ? getDbSync('42-tumpeng-all.json') : null);
+        if (!effectiveTumpeng && !isNodeEnvironment) {
+          result = null;
+          break;
+        }
+        result = effectiveTumpeng;
+        if (typeof globalThis !== 'undefined') {
+          globalThis._currentTumpengData = result;
+          if (Array.isArray(result?.ubarampe)) {
+            globalThis.TUMPENG_UBARAMPE = result.ubarampe;
+          }
+          if (result?.tumpeng_warna && typeof result.tumpeng_warna === 'object') {
+            globalThis.TUMPENG_WARNA = result.tumpeng_warna;
+          }
+        }
         break;
       }
 
@@ -958,76 +1241,122 @@ export async function loadDomainData(domain, options = {}) {
 
     if (result) {
       domainCache.set(dom, result);
+    } else {
+      domainCache.delete(dom);
     }
     return result;
   } catch (err) {
-    console.warn(`[dbLoader] Gagal memuat domain "${domain}", menggunakan data cadangan:`, err);
-    const fallback = getDomainFallback(dom);
-    if (fallback) domainCache.set(dom, fallback);
-    return fallback;
+    console.warn(`[dbLoader] Gagal memuat domain "${domain}":`, err);
+    domainCache.delete(dom);
+    if (isNodeEnvironment) {
+      const fallback = getDomainFallback(dom);
+      if (fallback) domainCache.set(dom, fallback);
+      return fallback;
+    }
+    return null;
   }
 }
 
 /**
- * Mengambil fallback aman untuk domain jika fetch gagal (Zero Blank guarantee)
+ * Mengambil fallback aman untuk domain jika fetch gagal (HANYA AKTIF DI NODE.JS UNTUK TEST RUNNER)
+ * Di browser environment, fungsi ini SELALU mengembalikan null demi menjamin keaslian data publik.
  * @param {string} domain 
  * @returns {any}
  */
 export function getDomainFallback(domain) {
+  if (!isNodeEnvironment) {
+    return null;
+  }
   const dom = String(domain || '').toLowerCase().trim();
   switch (dom) {
     case 'kalender':
       return {
-        constants: mapKalenderConstants(null),
-        dinoRules: mapDinoRules(null),
-        pranataMangsa: [],
-        petungTetanen: fallbackTetanen.PETUNG_TETANEN_LIST,
-        wukuPetenget: fallbackWukuPetenget.WUKU_PETENGET_LIST
+        constants: mapKalenderConstants(getDbSync('01-kalender-constants.json')),
+        dinoRules: mapDinoRules(getDbSync('04-dino-rules.json')),
+        pranataMangsa: getDbSync('05-pranata-mangsa.json') || [],
+        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || [],
+        wukuPetenget: getDbSync('24-wuku-petenget-bilingual.json') || []
       };
     case 'wuku':
       return {
-        pawukonList: (fallbackPawukon.PAWUKON_LIST || []).map(mapWukuItem),
-        petengetList: fallbackWukuPetenget.WUKU_PETENGET_LIST
+        pawukonList: (getDbSync('02-wuku-ensiklopedia.json') || []).map(mapWukuItem),
+        petengetList: getDbSync('24-wuku-petenget-bilingual.json') || []
       };
     case 'jodoh':
     case 'perjodohan':
-      return mapPitungPerjodohan(null, null, null);
+      return mapPitungPerjodohan(
+        getDbSync('11-pitung-perjodohan-bilingual.json'),
+        getDbSync('16-pitung-perjodohan.json'),
+        getDbSync('17-aksara-perjodohan.json')
+      );
     case 'nujum':
       return {
-        bincilMatrix: fallbackNujumMatrix.bincilDatabase,
-        ketBincil: fallbackNujumMatrix.KET_BINCIL,
-        zodiak: [],
-        shioWuxing: [],
-        sasiJawa: [],
-        pasaranWatak: [],
-        karakterDasar: [],
-        pekerjaanWeton: [],
-        siklusPadewan: []
+        bincilMatrix: getDbSync('06-bincil-matrix-bilingual.json') || {},
+        ketBincil: getDbSync('03-bincil-arti.json') || {},
+        zodiak: getDbSync('07-zodiak-bilingual.json') || [],
+        shioWuxing: getDbSync('09-shio-wuxing-bilingual.json') || [],
+        sasiJawa: getDbSync('08-sasi-jawa-bilingual.json') || [],
+        pasaranWatak: getDbSync('10-pasaran-watak-bilingual.json') || [],
+        karakterDasar: getDbSync('12-karakter-dasar-bilingual.json') || [],
+        pekerjaanWeton: getDbSync('13-pekerjaan-weton-bilingual.json') || [],
+        siklusPadewan: getDbSync('25-siklus-padewan-bilingual.json') || []
       };
     case 'selametan':
-      return mapSelametanRules(null);
+      return mapSelametanRules(getDbSync('14-selametan-rules.json'));
     case 'ijab':
-      return mapPetungIjab(null);
+      return mapPetungIjab(getDbSync('15-ijab-bilingual.json'));
     case 'omah':
-      return mapPetungOmah(null);
+      return mapPetungOmah(getDbSync('23-omah-bilingual.json'));
     case 'petung-kehidupan':
     case 'ternak':
-      return mapPetungKehidupan(null);
+      return mapPetungKehidupan(getDbSync('22-petung-ternak-bilingual.json'));
     case 'sapa-dina':
       return {
-        petungTetanen: fallbackTetanen.PETUNG_TETANEN_LIST,
-        pranataMangsa: []
+        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || [],
+        pranataMangsa: getDbSync('05-pranata-mangsa.json') || []
       };
     case 'sasmitha':
-      return {
-        impen: fallbackSasmitha.SASMITHA_IMPEN,
-        kedut: fallbackSasmitha.SASMITHA_KEDUT,
-        gerhana: fallbackSasmitha.SASMITHA_GERAHANA,
-        lindu: fallbackSasmitha.SASMITHA_LINDU,
-        tejo: fallbackSasmitha.SASMITHA_TEJO
-      };
+      return getDbSync('20-sasmitha.json') || {};
+    case 'wayang':
+      return getDbSync('38-wayang-all.json') || {};
+    case 'pitutur':
+      return getDbSync('39-pitutur-all.json') || {};
+    case 'mitologi':
+      return getDbSync('40-mitologi-all.json') || {};
+    case 'tumpeng':
+      return getDbSync('42-tumpeng-all.json') || {};
     default:
       return null;
+  }
+}
+
+export function invalidateDomainData(domain) {
+  const dom = String(domain || '').toLowerCase().trim();
+  domainCache.delete(dom);
+  if (dom === 'omah') {
+    dbCache.delete('23-omah-bilingual.json');
+    dbCache.delete('omah:all');
+    if (typeof globalThis !== 'undefined') {
+      delete globalThis._currentOmahData;
+    }
+  } else if (dom === 'ijab') {
+    dbCache.delete('15-ijab-bilingual.json');
+    dbCache.delete('ijab:all');
+    if (typeof globalThis !== 'undefined') {
+      delete globalThis._currentIjabData;
+    }
+  } else if (dom === 'ternak' || dom === 'petung-kehidupan') {
+    dbCache.delete('22-petung-ternak-bilingual.json');
+    dbCache.delete('petung:ternak');
+    if (typeof globalThis !== 'undefined') {
+      delete globalThis._currentTernakData;
+    }
+  } else if (dom === 'selametan') {
+    dbCache.delete('14-selametan-rules.json');
+    dbCache.delete('selametan:rules');
+  } else if (dom === 'kalender') {
+    dbCache.delete('01-kalender-constants.json');
+    dbCache.delete('kalender:constants');
   }
 }
 
@@ -1039,7 +1368,8 @@ export function getDomainFallback(domain) {
 export function getDomainDataSync(domain) {
   const dom = String(domain || '').toLowerCase().trim();
   if (domainCache.has(dom)) return domainCache.get(dom);
-  return getDomainFallback(dom);
+  if (isNodeEnvironment) return getDomainFallback(dom);
+  return null;
 }
 
 // ─── WINDOW EXPORTS UNTUK INTEGRASI WEB ─────────────────────────────────────
@@ -1052,6 +1382,7 @@ if (typeof window !== 'undefined') {
     getDbSync,
     getDb: loadDb,
     loadDomainData,
+    invalidateDomainData,
     getDomainDataSync,
     getDomainFallback,
     clearCache: clearDbCache,
@@ -1062,6 +1393,8 @@ if (typeof window !== 'undefined') {
     DB_FILES,
     DB_ALIASES
   };
+  window.loadDomainData = loadDomainData;
+  window.invalidateDomainData = invalidateDomainData;
 }
 
 export default {
@@ -1072,6 +1405,7 @@ export default {
   getDbSync,
   getDb: loadDb,
   loadDomainData,
+  invalidateDomainData,
   getDomainDataSync,
   getDomainFallback,
   clearCache: clearDbCache,

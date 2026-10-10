@@ -9,7 +9,12 @@ import {
   renderTimelineSelametan,
   simpanSelametanKeBookmark,
   printLaporanSelametan,
-  downloadSelametanPng
+  downloadSelametanPng,
+  setSelametanWizardStep,
+  applySelametanWizardStepUI,
+  toggleAccordionSelametan,
+  toggleMilestoneDetail,
+  gantiKeyakinanSelametan
 } from '../modules/selametan/selametan-ui.js';
 
 /**
@@ -25,6 +30,11 @@ export function wireSelametanFeature() {
   window.simpanSelametanKeBookmark = simpanSelametanKeBookmark;
   window.printLaporanSelametan = printLaporanSelametan;
   window.downloadSelametanPng = downloadSelametanPng;
+  window.setSelametanWizardStep = setSelametanWizardStep;
+  window.applySelametanWizardStepUI = applySelametanWizardStepUI;
+  window.toggleAccordionSelametan = toggleAccordionSelametan;
+  window.toggleMilestoneDetail = toggleMilestoneDetail;
+  window.gantiKeyakinanSelametan = gantiKeyakinanSelametan;
 }
 
 export {
@@ -34,5 +44,10 @@ export {
   renderTimelineSelametan,
   simpanSelametanKeBookmark,
   printLaporanSelametan,
-  downloadSelametanPng
+  downloadSelametanPng,
+  setSelametanWizardStep,
+  applySelametanWizardStepUI,
+  toggleAccordionSelametan,
+  toggleMilestoneDetail,
+  gantiKeyakinanSelametan
 };

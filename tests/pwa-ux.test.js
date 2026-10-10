@@ -52,17 +52,16 @@ describe('Fase H — PWA & Service Worker Cache Integrity', () => {
     assert.ok(content.includes('<svg'), 'icon.svg harus memuat tag SVG');
   });
 
-  it('harus memiliki sw.js yang mencakup shell, data nujum-matrix, dan kalender', () => {
+  it('harus memiliki sw.js yang mencakup shell, manifest, dan penanganan cache API dataset', () => {
     const swPath = path.join(rootDir, 'sw.js');
     assert.ok(fs.existsSync(swPath), 'File sw.js harus ada di root');
 
     const content = fs.readFileSync(swPath, 'utf8');
-    assert.ok(content.includes('PRECACHE_ASSETS'), 'sw.js harus mendefinisikan PRECACHE_ASSETS');
-    assert.ok(content.includes('./js/data/nujum-matrix.js'), 'Cache harus memuat nujum-matrix.js');
-    assert.ok(content.includes('./js/data/calendar.js'), 'Cache harus memuat calendar.js');
-    assert.ok(content.includes('./js/data/pawukon.js'), 'Cache harus memuat pawukon.js');
-    assert.ok(content.includes('./js/main.js'), 'Cache harus memuat main.js');
-    assert.ok(content.includes('./manifest.webmanifest'), 'Cache harus memuat manifest');
+    assert.ok(content.includes('PRECACHE_SHELL') || content.includes('PRECACHE_ASSETS'), 'sw.js harus mendefinisikan cache shell');
+    assert.ok(content.includes('manifest.webmanifest'), 'Cache harus memuat manifest');
+    assert.ok(content.includes('/data/') && content.includes('.json'), 'sw.js harus menangani caching endpoint /data/*.json');
+    assert.ok(!content.includes('./data/01-kalender-constants.json'), 'sw.js tidak boleh mem-precache file JSON statis lokal secara naif di precache shell');
+    assert.ok(content.includes('jagad-jawa-'), 'sw.js harus menggunakan versioning cache');
   });
 });
 
@@ -199,6 +198,27 @@ describe('Fase H — UX: Layout Kalender Mobile & Mode List Minggu', () => {
     assert.strictEqual(typeof kalenderUI.setKalenderViewMode, 'function');
     assert.strictEqual(typeof kalenderUI.toggleKalenderViewMode, 'function');
     assert.strictEqual(typeof kalenderUI.renderKalenderListView, 'function');
+    assert.strictEqual(typeof kalenderUI.getInitialKalenderViewMode, 'function');
+  });
+
+  it('getInitialKalenderViewMode mendeteksi mobile viewport (<640px) menjadi list', async () => {
+    const kalenderUI = await import('../js/modules/kalender/kalender-ui.js');
+    const originalWindow = globalThis.window;
+    try {
+      globalThis.window = {
+        innerWidth: 390,
+        matchMedia: (q) => ({ matches: q.includes('max-width: 639px') })
+      };
+      assert.strictEqual(kalenderUI.getInitialKalenderViewMode(), 'list');
+
+      globalThis.window = {
+        innerWidth: 1024,
+        matchMedia: () => ({ matches: false })
+      };
+      assert.strictEqual(kalenderUI.getInitialKalenderViewMode(), 'grid');
+    } finally {
+      globalThis.window = originalWindow;
+    }
   });
 
   it('data hari pada Mode List Minggu terbukti 100% konsisten dengan perhitungan JDN & Weton baku', () => {
@@ -218,3 +238,27 @@ describe('Fase H — UX: Layout Kalender Mobile & Mode List Minggu', () => {
   });
 });
 
+describe('Fase H — UX: Discovery, Breadcrumb & A11y Modal', () => {
+  it('semua breadcrumb menggunakan label produk dwibahasa, bukan path direktori atau URL file', async () => {
+    const navModule = await import('../js/ui/navigation.js');
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+
+    // Breadcrumb summary default
+    assert.ok(indexHtml.includes('Jagad Jawa • Beranda'), 'Breadcrumb summary default harus berlabel Jagad Jawa • Beranda');
+    assert.ok(!indexHtml.includes('/d:/'), 'Breadcrumb tidak boleh memuat path direktori OS');
+    assert.ok(!indexHtml.includes('C:\\'), 'Breadcrumb tidak boleh memuat path direktori Windows');
+  });
+
+  it('modal controller mengekspor trapFocusInModal dan closeAnyActiveModal yang valid', async () => {
+    const modalModule = await import('../js/ui/modal.js');
+    assert.strictEqual(typeof modalModule.trapFocusInModal, 'function');
+    assert.strictEqual(typeof modalModule.closeAnyActiveModal, 'function');
+    assert.strictEqual(typeof modalModule.initModalListeners, 'function');
+  });
+
+  it('navigasi mengekspor selectBerandaCategory dan filterBerandaFeatures', async () => {
+    const navModule = await import('../js/ui/navigation.js');
+    assert.strictEqual(typeof navModule.selectBerandaCategory, 'function');
+    assert.strictEqual(typeof navModule.filterBerandaFeatures, 'function');
+  });
+});

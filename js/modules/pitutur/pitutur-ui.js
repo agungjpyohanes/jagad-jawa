@@ -5,7 +5,24 @@
  */
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
-import { PITUTUR_LIST, QUIZ_QUESTIONS } from '../../data/pitutur.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
+
+// Top-level Node environment preloader for headless test runners (outside Vite bundle)
+if (typeof window === 'undefined' && typeof process !== 'undefined' && Boolean(process.versions?.node)) {
+  try {
+    const dynamicFn = new Function('specifier', 'return import(specifier)');
+    const { createRequire } = await dynamicFn('node:module');
+    const req = createRequire(process.cwd() + '/package.json');
+    const nodeFs = req('fs');
+    const nodePath = req('path');
+    const p = nodePath.resolve(process.cwd(), 'public/data/39-pitutur-all.json');
+    if (nodeFs.existsSync(p)) {
+      const parsed = JSON.parse(nodeFs.readFileSync(p, 'utf8'));
+      if (Array.isArray(parsed.pitutur_list)) globalThis._currentPituturList = parsed.pitutur_list;
+      if (Array.isArray(parsed.quiz_questions)) globalThis.QUIZ_QUESTIONS = parsed.quiz_questions;
+    }
+  } catch (_) {}
+}
 
 let currentPitutur = null;
 let quizQuestionsList = [];
@@ -14,22 +31,39 @@ let quizScore = 0;
 let quizAnswered = false;
 
 /**
- * Mendapatkan daftar pitutur dari data global.
+ * Mendapatkan daftar pitutur dari data runtime / global.
  * @returns {Array<Object>}
  */
 export function getPituturList() {
-  return PITUTUR_LIST || (typeof window !== 'undefined' && window.PITUTUR_LIST) || 
-         (typeof globalThis !== 'undefined' && globalThis.PITUTUR_LIST) || [];
+  if (typeof globalThis !== 'undefined') {
+    if (Array.isArray(globalThis._currentPituturList)) return globalThis._currentPituturList;
+    if (globalThis._currentPituturData && Array.isArray(globalThis._currentPituturData.pitutur_list)) {
+      return globalThis._currentPituturData.pitutur_list;
+    }
+  }
+  if (typeof window !== 'undefined' && Array.isArray(window._currentPituturList)) {
+    return window._currentPituturList;
+  }
+  return [];
 }
 
 /**
- * Mendapatkan daftar soal kuis dari data global.
+ * Mendapatkan daftar soal kuis dari data runtime / global.
  * @returns {Array<Object>}
  */
 export function getQuizQuestions() {
-  return QUIZ_QUESTIONS || (typeof window !== 'undefined' && window.QUIZ_QUESTIONS) || 
-         (typeof globalThis !== 'undefined' && globalThis.QUIZ_QUESTIONS) || [];
+  if (typeof globalThis !== 'undefined') {
+    if (Array.isArray(globalThis.QUIZ_QUESTIONS)) return globalThis.QUIZ_QUESTIONS;
+    if (globalThis._currentPituturData && Array.isArray(globalThis._currentPituturData.quiz_questions)) {
+      return globalThis._currentPituturData.quiz_questions;
+    }
+  }
+  if (typeof window !== 'undefined' && Array.isArray(window.QUIZ_QUESTIONS)) {
+    return window.QUIZ_QUESTIONS;
+  }
+  return [];
 }
+
 
 /**
  * Mengacak dan menampilkan kutipan Pitutur Luhur.
@@ -64,7 +98,21 @@ export function getPituturHariIni(date = new Date()) {
  */
 export function generatePituturHariIni() {
   const item = getPituturHariIni();
-  if (!item) return;
+  if (!item) {
+    const cardContainer = document.getElementById('pituturCardContent') || document.getElementById('pituturAksaraText')?.parentElement;
+    if (cardContainer) {
+      renderDataErrorState(cardContainer, {
+        domain: 'pitutur',
+        isSupplemental: true,
+        onRetry: () => {
+          if (typeof window.generatePituturHariIni === 'function') {
+            return window.generatePituturHariIni();
+          }
+        }
+      });
+    }
+    return;
+  }
   currentPitutur = item;
   renderPituturCard(currentPitutur);
   const badgeEl = document.getElementById('pituturSumberBadge');
@@ -130,7 +178,21 @@ export function sharePituturWhatsApp() {
  */
 export function restartQuiz() {
   const allQ = getQuizQuestions();
-  if (!allQ || allQ.length === 0) return;
+  if (!allQ || allQ.length === 0) {
+    const quizBox = document.getElementById('quizBox') || document.getElementById('quizQuestion')?.parentElement;
+    if (quizBox) {
+      renderDataErrorState(quizBox, {
+        domain: 'pitutur',
+        isSupplemental: true,
+        onRetry: () => {
+          if (typeof window.restartQuiz === 'function') {
+            return window.restartQuiz();
+          }
+        }
+      });
+    }
+    return;
+  }
 
   // Acak urutan 5 soal terpilih
   const shuffled = [...allQ].sort(() => Math.random() - 0.5);

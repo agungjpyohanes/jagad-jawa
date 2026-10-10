@@ -12,6 +12,8 @@ import {
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { getLanguage } from '../../ui/i18n.js';
+import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 let activeReadingFontSize = 'normal'; // 'normal' | 'large'
 
@@ -20,11 +22,34 @@ let activeReadingFontSize = 'normal'; // 'normal' | 'large'
  * @param {string} [gridContainerId='mitologiPillarsGrid']
  */
 export function initMitologiUI(gridContainerId = 'mitologiPillarsGrid') {
+  if (typeof loadDomainData === 'function') {
+    loadDomainData('mitologi')
+      .then(() => {
+        const g = document.getElementById(gridContainerId);
+        if (g) renderMitologiGrid(g, (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv', gridContainerId);
+      })
+      .catch((e) => {
+        console.warn('[mitologi-ui] loadDomainData fallback:', e);
+      });
+  }
+
   const grid = document.getElementById(gridContainerId);
   if (!grid) return;
 
   const isJv = (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv';
+  renderMitologiGrid(grid, isJv, gridContainerId);
+}
+
+function renderMitologiGrid(grid, isJv, gridContainerId = 'mitologiPillarsGrid') {
   const list = getAllMitologiNusantara();
+  if (!list || list.length === 0) {
+    renderDataErrorState(grid, {
+      domain: 'mitologi',
+      isSupplemental: true,
+      onRetry: () => initMitologiUI(gridContainerId)
+    });
+    return;
+  }
 
   grid.innerHTML = list.map(item => {
     let iconBg = 'bg-amber-500/20 border-amber-400/50 text-amber-300';

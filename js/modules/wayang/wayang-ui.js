@@ -5,8 +5,9 @@
  * serta penegasan etika alegori moral kesatria (non-stereotipe).
  */
 
-import { WAYANG_LIST, getWayangById } from './wayang-engine.js';
+import { getWayangById, getActiveWayangList } from './wayang-engine.js';
 import { showToast } from '../../ui/toast.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 export const DISCLAIMER_ETIS_WAYANG = 
   "Amanat Etis & Kultural: Paraga wayang purwa punika minangka alegori moral, pralambang budi pakarti luhur, sarta kaca benggala watak kesatria ing salebeting gesang manungsa (kados déné piwulang Asta Brata). Sanès piranti kanggé matesi utawi paring cap stereotip kaku marang kepribadian manungsa adhedhasar weton lair.";
@@ -36,14 +37,28 @@ export function renderWayangEthicsBanner() {
 
 /**
  * Merender daftar seluruh tokoh wayang ke grid.
+ * @param {Array<Object>} [customList=null]
  */
-export function renderWayangGrid() {
+export function renderWayangGrid(customList = null) {
   const container = document.getElementById('wayangCharacterGrid');
   if (!container) return;
 
   renderWayangEthicsBanner();
 
-  container.innerHTML = WAYANG_LIST.map(char => `
+  const list = customList || getActiveWayangList();
+  if (!list || list.length === 0) {
+    renderDataErrorState(container, {
+      domain: 'wayang',
+      isSupplemental: true,
+      onRetry: () => {
+        if (typeof window.renderWayangGrid === 'function') {
+          return window.renderWayangGrid();
+        }
+      }
+    });
+    return;
+  }
+  container.innerHTML = list.map(char => `
     <button onclick="window.selectWayangCharacter('${char.id}')" 
       class="wayang-card-item p-2.5 rounded-xl bg-keraton border border-sogan-800 text-left transition hover:border-prada hover:scale-[1.02] group flex flex-col items-center text-center cursor-pointer"
       data-id="${char.id}" data-kategori="${char.kategori}">

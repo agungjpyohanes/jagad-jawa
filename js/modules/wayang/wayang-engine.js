@@ -5,43 +5,48 @@
  * Bebas dari ketergantungan DOM.
  */
 
-import { WAYANG_LIST, WAYANG_MAP, KATEGORI_LIST } from '../../data/wayang.js';
+import { WAYANG_MAP, KATEGORI_LIST, getActiveWayangList, getActiveKategoriList } from '../../data/wayang.js';
 
 /**
  * Mencari karakter wayang berdasarkan ID.
  * @param {string} id 
+ * @param {Array|Object} [customDataset=null]
  * @returns {Object|null}
  */
-export function getWayangById(id) {
+export function getWayangById(id, customDataset = null) {
   if (!id) return null;
-  return WAYANG_MAP[id.toLowerCase()] || WAYANG_LIST.find(w => w.id === id) || null;
+  const list = getActiveWayangList(customDataset);
+  const cleanId = String(id).toLowerCase().trim();
+  return list.find(w => w.id && w.id.toLowerCase() === cleanId) || WAYANG_MAP[cleanId] || null;
 }
 
 /**
  * Menyaring daftar wayang berdasarkan kategori dan kata kunci pencarian.
  * @param {string} kategori 
  * @param {string} query 
+ * @param {Array|Object} [customDataset=null]
  * @returns {Array}
  */
-export function filterWayangList(kategori = 'semua', query = '') {
-  let list = WAYANG_LIST;
+export function filterWayangList(kategori = 'semua', query = '', customDataset = null) {
+  let list = getActiveWayangList(customDataset);
   if (kategori && kategori !== 'semua') {
-    list = list.filter(w => w.kategori.toLowerCase() === kategori.toLowerCase());
+    list = list.filter(w => w.kategori && w.kategori.toLowerCase() === kategori.toLowerCase());
   }
   if (query && query.trim()) {
     const q = query.trim().toLowerCase();
     list = list.filter(w =>
-      w.nama.toLowerCase().includes(q) ||
-      w.watak.toLowerCase().includes(q) ||
-      w.kasatriyan.toLowerCase().includes(q) ||
-      w.pusaka.toLowerCase().includes(q)
+      (w.nama && w.nama.toLowerCase().includes(q)) ||
+      (w.watak && w.watak.toLowerCase().includes(q)) ||
+      (w.kasatriyan && w.kasatriyan.toLowerCase().includes(q)) ||
+      (w.pusaka && w.pusaka.toLowerCase().includes(q))
     );
   }
   return list;
 }
 
 export {
-  WAYANG_LIST,
   WAYANG_MAP,
-  KATEGORI_LIST
+  KATEGORI_LIST,
+  getActiveWayangList,
+  getActiveKategoriList
 };

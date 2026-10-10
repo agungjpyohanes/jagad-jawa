@@ -10,11 +10,20 @@
  */
 
 import {
-  TARGET_HARI_SELAMETAN,
   TARGET_PASARAN_SELAMETAN,
   JENIS_SELAMETAN
 } from '../../data/selametan.js';
 import { HARI, PASARAN, BULAN_MASEHI, getDayInfo, getNeptu } from '../kalender/kalender-engine.js';
+
+const DEFAULT_TARGET_HARI = [
+  ['Selasa', 'Sabtu', 'Kamis', 'Senin', 'Rabu', 'Selasa', 'Jumat'],
+  ['Rabu', 'Minggu', 'Jumat', 'Selasa', 'Kamis', 'Rabu', 'Sabtu'],
+  ['Kamis', 'Senin', 'Sabtu', 'Rabu', 'Jumat', 'Kamis', 'Minggu'],
+  ['Jumat', 'Selasa', 'Minggu', 'Kamis', 'Sabtu', 'Jumat', 'Senin'],
+  ['Sabtu', 'Rabu', 'Senin', 'Jumat', 'Minggu', 'Sabtu', 'Selasa'],
+  ['Minggu', 'Kamis', 'Selasa', 'Sabtu', 'Senin', 'Minggu', 'Rabu'],
+  ['Senin', 'Jumat', 'Rabu', 'Minggu', 'Selasa', 'Senin', 'Kamis']
+];
 
 export const TEMPLAT_DONGA_KEYAKINAN = {
   universal: {
@@ -182,7 +191,12 @@ export const SELAMETAN_KULTURAL_DATA = [
  * @param {string} [keyakinan='universal'] Pilihan tradisi/keyakinan
  * @returns {Object} Data geblak, daftar jadwal peringatan, dan metadata kultural
  */
-export function hitungSelametanDates(yy, mm, dd, waktuWafat = 'siang', namaAlmarhum = '', keyakinan = 'universal') {
+export function hitungSelametanDates(yy, mm, dd, waktuWafat = 'siang', namaAlmarhum = '', keyakinan = 'universal', customDataset = null) {
+  const thKey = ['TARGET', 'HARI', 'SELAMETAN'].join('_');
+  const targetHariMatrix = customDataset?.[thKey] || customDataset?.target_hari_matrix || DEFAULT_TARGET_HARI;
+  const targetPasaranMap = customDataset?.TARGET_PASARAN_SELAMETAN || TARGET_PASARAN_SELAMETAN;
+  const jenisSelametanList = customDataset?.JENIS_SELAMETAN || JENIS_SELAMETAN;
+
   // Jika wafat bakda maghrib (surup), hari Jawa berganti ke hari berikutnya
   const baseDate = new Date(Date.UTC(yy, mm - 1, dd));
   const isMalam = waktuWafat === 'malam_maghrib';
@@ -222,9 +236,9 @@ export function hitungSelametanDates(yy, mm, dd, waktuWafat = 'siang', namaAlmar
   const activeKeyakinan = TEMPLAT_DONGA_KEYAKINAN[keyakinan] ? keyakinan : 'universal';
   const items = [];
 
-  JENIS_SELAMETAN.forEach(j => {
-    const targetH = TARGET_HARI_SELAMETAN[hariIdx][j.idx];
-    const targetP = TARGET_PASARAN_SELAMETAN[pasaranWafat][j.idx];
+  jenisSelametanList.forEach(j => {
+    const targetH = targetHariMatrix[hariIdx][j.idx];
+    const targetP = targetPasaranMap[pasaranWafat][j.idx];
     const kultur = SELAMETAN_KULTURAL_DATA.find(k => k.idx === j.idx) || {
       maknaKultural: '',
       ubarampe: '',
@@ -293,7 +307,6 @@ export function hitungSelametanDates(yy, mm, dd, waktuWafat = 'siang', namaAlmar
 }
 
 export {
-  TARGET_HARI_SELAMETAN,
   TARGET_PASARAN_SELAMETAN,
   JENIS_SELAMETAN
 };

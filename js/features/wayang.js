@@ -16,13 +16,26 @@ import {
   DISCLAIMER_ETIS_WAYANG
 } from '../modules/wayang/wayang-ui.js';
 
+import { loadDomainData } from '../services/dbLoader.js';
+
 /**
  * Mengikat fungsi domain Wayang ke window untuk kompatibilitas inline HTML
  */
 export function wireWayangFeature() {
   if (typeof window === 'undefined') return;
 
-  window.renderWayangGrid = renderWayangGrid;
+  const asyncRenderWayangGrid = async function (customList = null) {
+    if (!customList && typeof loadDomainData === 'function') {
+      try {
+        await loadDomainData('wayang');
+      } catch (e) {
+        console.warn('[wayang] loadDomainData fallback:', e);
+      }
+    }
+    renderWayangGrid(customList);
+  };
+
+  window.renderWayangGrid = asyncRenderWayangGrid;
   window.filterWayang = filterWayang;
   window.filterWayangCategory = filterWayangCategory;
   window.selectWayangCharacter = selectWayangCharacter;

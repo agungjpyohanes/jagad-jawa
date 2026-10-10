@@ -4,7 +4,7 @@
  * sinkronisasi penanggalan, dan visualisasi hasil budaya luhur.
  */
 
-import { hitungPetungIjab } from './ijab-engine.js';
+import { hitungPetungIjab, setIjabDataset } from './ijab-engine.js';
 import {
   IJAB_WUKU,
   IJAB_SASI,
@@ -17,9 +17,151 @@ import { getTanggalJawaLengkap } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
 import { getBilingualText } from '../../ui/i18n.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
+
+import { WizardStepper } from '../../ui/wizard-stepper.js';
 
 const DINA_LIST = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const PASARAN_LIST = ['Legi', 'Pahing', 'Pon', 'Wage', 'Kliwon'];
+
+let isIjabFullFormMode = false;
+
+export const ijabStepper = new WizardStepper({
+  namespace: 'ijab',
+  totalSteps: 4,
+  steps: {
+    1: {
+      containerId: 'ijabStepContainer1',
+      navBtnId: 'ijabNavBtn1',
+      labelId: 'Sumber Data & Tanggal Akad',
+      labelJv: 'Sumber Data & Tanggal Akad'
+    },
+    2: {
+      containerId: 'ijabStepContainer2',
+      navBtnId: 'ijabNavBtn2',
+      labelId: 'Keselarasan Weton & Wuku',
+      labelJv: 'Kaselarasan Weton & Wuku'
+    },
+    3: {
+      containerId: 'ijabStepContainer3',
+      navBtnId: 'ijabNavBtn3',
+      labelId: 'Paramèter Panjampet Pilihan',
+      labelJv: 'Paramèter Panjampet Pilihan'
+    },
+    4: {
+      containerId: 'ijabStepContainer4',
+      navBtnId: 'ijabNavBtn4',
+      labelId: 'Rekomendasi & Hasil Evaluasi',
+      labelJv: 'Rekomendasi & Asil Pambiji'
+    }
+  },
+  onValidateStep: (fromStep, toStep) => {
+    const dateInput = document.getElementById('ijabDatePicker');
+    const selDina = document.getElementById('ijabSelDina');
+    const selPasaran = document.getElementById('ijabSelPasaran');
+
+    if (toStep >= 2) {
+      if (!dateInput || !dateInput.value) {
+        showToast('Pilih tanggal akad nikah terlebih dahulu.');
+        if (dateInput) dateInput.focus();
+        return false;
+      }
+      const parts = dateInput.value.split('-').map(Number);
+      if (parts.length !== 3 || isNaN(parts[0]) || isNaN(parts[1]) || isNaN(parts[2]) || parts[0] < 1900 || parts[0] > 2100) {
+        showToast('Format tanggal akad tidak valid.');
+        if (dateInput) dateInput.focus();
+        return false;
+      }
+    }
+    if (toStep >= 4) {
+      if (!selDina?.value || !selPasaran?.value) {
+        showToast('Pilih Dina dan Pasaran terlebih dahulu.');
+        return false;
+      }
+      hitungIjabDariUI(false);
+    }
+    return true;
+  }
+});
+
+export function setIjabWizardStep(step, validate = true) {
+  return ijabStepper.goToStep(step, validate);
+}
+
+/**
+ * Toggle antara Mode Stepper Ringkas dan Mode Form Lengkap Power-User
+ */
+export function toggleIjabFormMode() {
+  isIjabFullFormMode = !isIjabFullFormMode;
+  const nav = document.getElementById('ijabWizardNav');
+  const step1 = document.getElementById('ijabStepContainer1');
+  const step2 = document.getElementById('ijabStepContainer2');
+  const step3 = document.getElementById('ijabStepContainer3');
+  const step4 = document.getElementById('ijabStepContainer4');
+  const label = document.getElementById('labelToggleIjabMode');
+
+  if (isIjabFullFormMode) {
+    if (nav) nav.classList.add('hidden');
+    if (step1) step1.classList.remove('hidden');
+    if (step2) step2.classList.remove('hidden');
+    if (step3) step3.classList.remove('hidden');
+    if (step4) step4.classList.remove('hidden');
+    if (label) label.textContent = 'Mode Stepper Ringkas';
+    showToast('Mode Form Lengkap aktif.');
+  } else {
+    if (nav) nav.classList.remove('hidden');
+    ijabStepper.applyUI(ijabStepper.getCurrentStep());
+    if (label) label.textContent = 'Mode Form Lengkap';
+    showToast('Mode Stepper Ringkas aktif.');
+  }
+}
+
+/**
+ * Cek apakah ada riwayat/data Jodoh yang relevan (hanya untuk yang belum menikah / planning / engaged)
+ */
+export function periksaPrefillJodoh() {
+  if (typeof window === 'undefined') return;
+
+  const jodohData = window.LAST_PERJODOHAN_DATA;
+  const status = window.LAST_STATUS_HUBUNGAN || 'planning';
+
+  // Jangan rekomendasikan / prefill otomatis jika statusnya sudah menikah (married) tanpa intent eksplisit
+  if (status === 'married' || status === 'sudah_menikah') {
+    return;
+  }
+
+  const banner = document.getElementById('ijabJodohPrefillBanner');
+  const bannerText = document.getElementById('ijabJodohPrefillText');
+  const mantuList = window.LAST_MANTU_DATA;
+
+  if (jodohData && mantuList && mantuList.length > 0) {
+    if (banner) banner.classList.remove('hidden');
+    if (bannerText) {
+      const topMantu = mantuList[0];
+      bannerText.innerHTML = `Terdeteksi pasangan <strong>${jodohData.wanita.nama || 'Wanita'}</strong> &amp; <strong>${jodohData.pria.nama || 'Pria'}</strong>. Rekomendasi terdekat: <strong>${topMantu.formattedDate}</strong> (${topMantu.weton}).`;
+    }
+  }
+}
+
+export function terapkanPrefillJodohKeIjab() {
+  const mantuList = window.LAST_MANTU_DATA;
+  if (!mantuList || mantuList.length === 0) return;
+
+  const topMantu = mantuList[0];
+  const dateInput = document.getElementById('ijabDatePicker');
+  if (dateInput && topMantu.dateStr) {
+    dateInput.value = topMantu.dateStr;
+    syncIjabDariTanggal();
+    showToast(`Tanggal ${topMantu.formattedDate} diterapkan. Silakan lanjutkan verifikasi.`);
+    tutupBannerPrefillJodoh();
+    setIjabWizardStep(2);
+  }
+}
+
+export function tutupBannerPrefillJodoh() {
+  const banner = document.getElementById('ijabJodohPrefillBanner');
+  if (banner) banner.classList.add('hidden');
+}
 
 /**
  * Inisialisasi komponen UI Petung Ijab
@@ -30,8 +172,10 @@ export function initIjabUI() {
   });
   populateSelects();
   setupEventListeners();
+  ijabStepper.applyUI(1);
+  periksaPrefillJodoh();
 
-  // Set default ke hari ini
+  // Set default ke hari ini bila kosong
   const today = new Date();
   const y = today.getFullYear();
   const m = String(today.getMonth() + 1).padStart(2, '0');
@@ -103,8 +247,33 @@ function setupEventListeners() {
       const m = String(today.getMonth() + 1).padStart(2, '0');
       const d = String(today.getDate()).padStart(2, '0');
       if (datePicker) datePicker.value = `${y}-${m}-${d}`;
+      const container = document.getElementById('ijabResultContainer');
+      if (container) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+      }
       syncIjabDariTanggal();
+      if (!isIjabFullFormMode) {
+        ijabStepper.goToStep(1, false);
+      }
       showToast('Tanggal kasinkronaken dhateng dinten punika.');
+    });
+  }
+
+  // Radio source mode listener
+  const radioJodoh = document.getElementById('ijabSourceJodoh');
+  const radioManual = document.getElementById('ijabSourceManual');
+  if (radioJodoh) {
+    radioJodoh.addEventListener('change', () => {
+      if (radioJodoh.checked) {
+        const mantuList = window.LAST_MANTU_DATA;
+        if (mantuList && mantuList.length > 0) {
+          terapkanPrefillJodohKeIjab();
+        } else {
+          showToast('Belum ada rekomendasi dari Pitung Jodoh. Silakan isi tanggal manual.');
+          if (radioManual) radioManual.checked = true;
+        }
+      }
     });
   }
 
@@ -154,7 +323,28 @@ export function syncIjabDariTanggal() {
 /**
  * Baca input dan jalankan perhitungan Petung Ijab
  */
-export function hitungIjabDariUI(showNotification = false) {
+export async function hitungIjabDariUI(showNotification = false) {
+  let ijabData = null;
+  try {
+    ijabData = await loadDomainData('ijab');
+  } catch (e) {
+    console.warn('[ijab-ui] loadDomainData error:', e);
+  }
+
+  const container = document.getElementById('ijabResultContainer');
+
+  if (!ijabData) {
+    if (container) {
+      container.style.display = 'block';
+      renderDataErrorState(container, {
+        domain: 'ijab',
+        onRetry: () => hitungIjabDariUI(showNotification)
+      });
+    }
+    return;
+  }
+  setIjabDataset(ijabData);
+
   const selDina = document.getElementById('ijabSelDina');
   const selPasaran = document.getElementById('ijabSelPasaran');
   const selWuku = document.getElementById('ijabSelWuku');

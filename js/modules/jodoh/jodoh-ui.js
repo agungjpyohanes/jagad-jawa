@@ -23,6 +23,7 @@ import { saveBookmark } from '../kalender/bookmark-service.js';
 import { HARI, PASARAN, NEPTU_HARI, NEPTU_PASARAN, getDayInfo } from '../kalender/kalender-engine.js';
 import { showToast } from '../../ui/toast.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+import { renderDataErrorState } from '../../ui/data-error-state.js';
 
 export function initPerjodohanSelects() {
   loadDomainData('jodoh').catch((e) => {
@@ -58,14 +59,62 @@ export function initPerjodohanSelects() {
 }
 
 /**
+ * State wizard aktif untuk formulir Perjodohan (1..4)
+ */
+let jodohCurrentStep = 1;
+
+/**
+ * Normalisasi nilai status hubungan
+ * @param {string} status
+ * @returns {'planning'|'engaged'|'married'}
+ */
+export function normalizeStatusHubungan(status) {
+  if (!status) return 'planning';
+  if (status === 'sudah_menikah' || status === 'married') return 'married';
+  if (status === 'engaged') return 'engaged';
+  return 'planning';
+}
+
+/**
+ * Memeriksa apakah status hubungan tergolong sudah menikah
+ * @param {string} status
+ * @returns {boolean}
+ */
+export function isStatusMarried(status) {
+  return normalizeStatusHubungan(status) === 'married';
+}
+
+/**
+ * Dapatkan label status hubungan dwibahasa
+ * @param {string} status
+ * @returns {string}
+ */
+export function getStatusHubunganLabel(status) {
+  const norm = normalizeStatusHubungan(status);
+  const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
+    ? window.getLanguage()
+    : 'id';
+  const isJv = (lang === 'jv');
+
+  if (norm === 'married') {
+    return isJv ? 'Sampun Palakrama (Pasangan)' : 'Sudah Menikah (Pasutri)';
+  }
+  if (norm === 'engaged') {
+    return isJv ? 'Lamaran / Pacangan' : 'Lamaran / Tunangan';
+  }
+  return isJv ? 'Rancangan Palakrama (Calon Pengantèn)' : 'Rencana Menikah (Calon Pengantin)';
+}
+
+/**
  * Handle perubahan radio button status hubungan secara real-time
- * @param {'belum_menikah'|'sudah_menikah'} newStatus 
+ * @param {'planning'|'engaged'|'married'|'belum_menikah'|'sudah_menikah'} newStatus
  */
 export function onStatusHubunganChange(newStatus) {
-  const isSudah = (newStatus === 'sudah_menikah');
-  window.LAST_STATUS_HUBUNGAN = newStatus;
+  const normalized = normalizeStatusHubungan(newStatus);
+  window.LAST_STATUS_HUBUNGAN = normalized;
+
   if (window.LAST_PERJODOHAN_DATA) {
-    if (isSudah) {
+    if (normalized === 'married') {
       window.LAST_MANTU_DATA = [];
       renderPanduanKeharmonisanPasutri(window.LAST_PERJODOHAN_DATA);
     } else {
@@ -75,7 +124,7 @@ export function onStatusHubunganChange(newStatus) {
     }
     const pairInfo = document.getElementById('perjodohanPairInfo');
     if (pairInfo) {
-      const statusLabel = isSudah ? 'Pasutri (Sampun Nikah)' : 'Calon Penganten';
+      const statusLabel = getStatusHubunganLabel(normalized);
       const p = window.LAST_PERJODOHAN_DATA.pria;
       const w = window.LAST_PERJODOHAN_DATA.wanita;
       pairInfo.innerHTML = `${w.nama} (${w.neptu}) &middot; ${p.nama} (${p.neptu}) &bull; Jumlah Neptu: <strong class="text-prada font-mono">${window.LAST_PERJODOHAN_DATA.totalNeptu}</strong> &bull; Status: <span class="text-amber-300 font-semibold">${statusLabel}</span>`;
@@ -84,16 +133,207 @@ export function onStatusHubunganChange(newStatus) {
 }
 
 /**
- * Inisialisasi event listener radio status hubungan
+ * Inisialisasi event listener radio status hubungan (mencegah duplikasi listener)
  */
+let isStatusHubunganEventsBound = false;
 export function initStatusHubunganPerjodohanEvents() {
   if (typeof document === 'undefined') return;
+  if (isStatusHubunganEventsBound) return;
+
   const radios = document.querySelectorAll('input[name="statusHubunganPerjodohan"]');
   radios.forEach(radio => {
     radio.addEventListener('change', () => {
       onStatusHubunganChange(radio.value);
     });
   });
+  isStatusHubunganEventsBound = true;
+}
+
+/**
+ * Mengatur langkah wizard formulir Perjodohan (1..4) dengan validasi
+ * Langkah 1: Status Hubungan Pasangan
+ * Langkah 2: Data Calon Pengantin Wanita (Tanggal Lahir wajib)
+ * Langkah 3: Data Calon Pengantin Pria (Tanggal Lahir wajib)
+ * Langkah 4: Ringkasan Hasil Nujum (Hanya dapat diakses jika kedua tanggal valid)
+ *
+ * @param {number} targetStep
+ * @param {boolean} [validateCurrent=true]
+ * @returns {boolean} Sukses berpindah atau terblokir validasi
+ */
+export function setJodohWizardStep(targetStep, validateCurrent = true) {
+  const step = Math.max(1, Math.min(4, parseInt(targetStep, 10) || 1));
+  const tglP = document.getElementById('tglP')?.value || '';
+  const tglL = document.getElementById('tglL')?.value || '';
+
+  // Validasi saat maju ke langkah berikutnya
+  if (validateCurrent && step > jodohCurrentStep) {
+    if (step >= 3 && !tglP) {
+      showToast('Isi tanggal lahir calon pengantin wanita terlebih dahulu.');
+      const inputP = document.getElementById('tglP');
+      if (inputP) inputP.focus();
+      return false;
+    }
+    if (step >= 4) {
+      if (!tglP) {
+        showToast('Isi tanggal lahir calon pengantin wanita terlebih dahulu.');
+        const inputP = document.getElementById('tglP');
+        if (inputP) inputP.focus();
+        return false;
+      }
+      if (!tglL) {
+        showToast('Isi tanggal lahir calon pengantin pria terlebih dahulu.');
+        const inputL = document.getElementById('tglL');
+        if (inputL) inputL.focus();
+        return false;
+      }
+      // Otomatis hitung jika belum dihitung atau data baru
+      if (!window.LAST_PERJODOHAN_DATA) {
+        hitungNujumPerjodohan();
+      }
+    }
+  }
+
+  jodohCurrentStep = step;
+  applyJodohWizardStepUI(step);
+  return true;
+}
+
+/**
+ * Terapkan visibilitas UI dan state tombol stepper
+ * @param {number} step
+ */
+export function applyJodohWizardStepUI(step) {
+  if (typeof document === 'undefined') return;
+
+  const isModeRingkas = (typeof window !== 'undefined' && typeof window.isPemula === 'function')
+    ? window.isPemula()
+    : false;
+
+  const stepContainer1 = document.getElementById('jodohStepContainer1');
+  const step1 = document.getElementById('jodohStep1');
+  const step2 = document.getElementById('jodohStep2');
+  const formsWrapper = document.getElementById('jodohFormsWrapper');
+  const cardBox = document.getElementById('hasilPerjodohanCard');
+  const emptyBox = document.getElementById('emptyPerjodohanBox');
+  const stepIndicator = document.getElementById('jodohStepIndicator');
+  const stepBadge = document.getElementById('jodohStepBadge');
+  const progressBar = document.getElementById('jodohProgressBar');
+  const progressContainer = document.getElementById('jodohProgressBarContainer');
+
+  const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
+    ? window.getLanguage()
+    : 'id';
+  const isJv = (lang === 'jv');
+
+  // Perbarui progress bar
+  const pct = step === 1 ? '25%' : (step === 2 ? '50%' : (step === 3 ? '75%' : '100%'));
+  if (progressBar) progressBar.style.width = pct;
+  if (progressContainer) progressContainer.setAttribute('aria-valuenow', String(step));
+  if (stepBadge) stepBadge.textContent = String(step);
+
+  // Perbarui teks indikator langkah
+  if (stepIndicator) {
+    let stepText = '';
+    if (step === 1) {
+      stepText = isJv ? 'Langkah 1 saking 4: Status Sesambetan Pasangan' : 'Langkah 1 dari 4: Status Hubungan Pasangan';
+    } else if (step === 2) {
+      stepText = isJv ? 'Langkah 2 saking 4: Data Calon Pengantèn Putri' : 'Langkah 2 dari 4: Data Calon Pengantin Wanita';
+    } else if (step === 3) {
+      stepText = isJv ? 'Langkah 3 saking 4: Data Calon Pengantèn Kakung' : 'Langkah 3 dari 4: Data Calon Pengantin Pria';
+    } else {
+      stepText = isJv ? 'Langkah 4 saking 4: Ringkesan Asil Nujum' : 'Langkah 4 dari 4: Ringkasan Hasil Nujum';
+    }
+    stepIndicator.textContent = stepText;
+  }
+
+  // Perbarui highlight tombol tab navigasi (1..4)
+  for (let i = 1; i <= 4; i++) {
+    const btn = document.getElementById(`jodohNavBtn${i}`);
+    if (btn) {
+      if (i === step) {
+        btn.classList.add('border-prada', 'text-prada', 'bg-sogan-950');
+        btn.classList.remove('border-sogan-700', 'text-sogan-300');
+        btn.setAttribute('aria-current', 'step');
+      } else {
+        btn.classList.remove('border-prada', 'text-prada', 'bg-sogan-950');
+        btn.classList.add('border-sogan-700', 'text-sogan-300');
+        btn.removeAttribute('aria-current');
+      }
+    }
+  }
+
+  // Pengaturan visibilitas section
+  if (isModeRingkas) {
+    // Mode Ringkas (Mobile-first Stepper ketat 1 layar)
+    if (stepContainer1) stepContainer1.classList.toggle('hidden', step !== 1);
+    if (formsWrapper) formsWrapper.classList.toggle('hidden', step !== 2 && step !== 3);
+    if (step1) step1.classList.toggle('hidden', step !== 2);
+    if (step2) step2.classList.toggle('hidden', step !== 3);
+
+    if (step === 4) {
+      if (window.LAST_PERJODOHAN_DATA) {
+        if (cardBox) cardBox.classList.remove('hidden');
+        if (emptyBox) emptyBox.classList.add('hidden');
+      } else {
+        if (cardBox) cardBox.classList.add('hidden');
+        if (emptyBox) emptyBox.classList.remove('hidden');
+      }
+    } else {
+      if (cardBox) cardBox.classList.add('hidden');
+    }
+  } else {
+    // Mode Ahli / Desktop: Form tetap mudah diakses, namun stepper tetap memandu fokus
+    if (stepContainer1) stepContainer1.classList.remove('hidden');
+    if (formsWrapper) formsWrapper.classList.remove('hidden');
+    if (step1) step1.classList.remove('hidden');
+    if (step2) step2.classList.remove('hidden');
+
+    if (step === 4 && window.LAST_PERJODOHAN_DATA) {
+      if (cardBox) cardBox.classList.remove('hidden');
+      if (emptyBox) emptyBox.classList.add('hidden');
+      cardBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+}
+
+/**
+ * Toggle accordion rincian 7 metode pitung pada Langkah 4
+ */
+export function toggleAccordion7Metode() {
+  const content = document.getElementById('rincian7MetodeContent');
+  const btn = document.getElementById('btnToggleAccordion7Metode');
+  const icon = document.getElementById('iconAccordion7Metode');
+  if (!content || !btn) return;
+
+  const isHidden = content.classList.contains('hidden');
+  if (isHidden) {
+    content.classList.remove('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+    if (icon) icon.style.transform = 'rotate(180deg)';
+  } else {
+    content.classList.add('hidden');
+    btn.setAttribute('aria-expanded', 'false');
+    if (icon) icon.style.transform = 'rotate(0deg)';
+  }
+}
+
+/**
+ * Navigasi CTA ke Tab Ijab dari Rekomendasi Mantu
+ * @param {string} [tglStr] Tanggal rekomendasi yang dipilih
+ */
+export function navigateToIjabDariMantu(tglStr = '') {
+  if (typeof window !== 'undefined' && typeof window.switchTab === 'function') {
+    window.switchTab('ijab');
+  }
+  if (tglStr) {
+    const ijabInput = document.getElementById('tglIjabInput') || document.getElementById('ijabTanggal');
+    if (ijabInput) {
+      ijabInput.value = tglStr;
+      if (typeof window.syncIjabDariTanggal === 'function') {
+        window.syncIjabDariTanggal();
+      }
+    }
+  }
 }
 
 export function autoDetectAksaraUI(side) {
@@ -170,22 +410,53 @@ export async function hitungNujumPerjodohan() {
   const tglP = document.getElementById('tglP')?.value || '';
   const tglL = document.getElementById('tglL')?.value || '';
 
+  if (!tglP || !tglL) {
+    showToast('Tanggal lahir kedua calon pasangan wajib diisi sebelum melakukan perhitungan.');
+    if (!tglP) {
+      document.getElementById('tglP')?.focus();
+    } else {
+      document.getElementById('tglL')?.focus();
+    }
+    return;
+  }
+
   const akDP = document.getElementById('aksaraDepanP')?.value || 'HA';
   const akBP = document.getElementById('aksaraBelakangP')?.value || 'HA';
   const akDL = document.getElementById('aksaraDepanL')?.value || 'HA';
   const akBL = document.getElementById('aksaraBelakangL')?.value || 'HA';
 
+  let domainData = null;
+  try {
+    domainData = await loadDomainData('jodoh');
+  } catch (e) {
+    console.warn('[jodoh-ui] hitungNujumPerjodohan error:', e);
+  }
+
+  if (!domainData) {
+    const errorTarget = document.getElementById('hasilPerjodohanBody') || document.getElementById('perjodohanPairInfo');
+    if (errorTarget) {
+      const container = errorTarget.closest('.overflow-x-auto') || errorTarget.parentElement;
+      renderDataErrorState(container, {
+        domain: 'jodoh',
+        onRetry: () => hitungNujumPerjodohan()
+      });
+    }
+    return;
+  }
+
   const hasil = hitungPitung7Metode(
     { nama: namaP, hari: hariP, pasaran: pasaranP, neptu: neptuP, aksaraDepan: akDP, aksaraBelakang: akBP },
-    { nama: namaL, hari: hariL, pasaran: pasaranL, neptu: neptuL, aksaraDepan: akDL, aksaraBelakang: akBL }
+    { nama: namaL, hari: hariL, pasaran: pasaranL, neptu: neptuL, aksaraDepan: akDL, aksaraBelakang: akBL },
+    domainData
   );
 
-  // Periksa Status Hubungan (Belum Menikah vs Sudah Menikah)
+  // Periksa Status Hubungan (planning / engaged / married)
   const statusEl = document.querySelector('input[name="statusHubunganPerjodohan"]:checked') || document.getElementById('statusHubunganPerjodohan');
-  const statusHubungan = statusEl ? statusEl.value : 'belum_menikah';
+  const statusHubungan = normalizeStatusHubungan(statusEl ? statusEl.value : 'planning');
+  const isMarried = (statusHubungan === 'married');
 
-  // Cari 5 usulan tanggal mantu rahayu (hanya jika belum menikah)
-  const mantuList = (statusHubungan === 'belum_menikah') ? cariRekomendasiTanggalMantu(hasil.totalNeptu) : [];
+  // Cari 5 usulan tanggal mantu rahayu (hanya jika planning atau engaged)
+  const mantuList = (!isMarried) ? cariRekomendasiTanggalMantu(hasil.totalNeptu) : [];
 
   // Simpan ke riwayat lokal (Tahap 4.3)
   saveJodohHistory(hasil, { tglP, tglL, statusHubungan });
@@ -226,15 +497,15 @@ export async function hitungNujumPerjodohan() {
 
   const pairInfo = document.getElementById('perjodohanPairInfo');
   if (pairInfo) {
-    const statusLabel = (statusHubungan === 'sudah_menikah') ? 'Pasutri (Sampun Nikah)' : 'Calon Penganten';
+    const statusLabel = getStatusHubunganLabel(statusHubungan);
     pairInfo.innerHTML = `${namaP} (${neptuP}) &middot; ${namaL} (${neptuL}) &bull; Jumlah Neptu: <strong class="text-prada font-mono">${hasil.totalNeptu}</strong> &bull; Status: <span class="text-amber-300 font-semibold">${statusLabel}</span>`;
   }
 
   // Render Visual Score Bar & Hero Gauge (Tahap 4.1)
   renderVisualScoreBar(hasil.summary);
 
-  // Render Usulan 5 Tanggal Mantu (Belum Menikah) ATAU Panduan Keharmonisan Pasutri (Sudah Menikah)
-  if (statusHubungan === 'sudah_menikah') {
+  // Render Usulan 5 Tanggal Mantu (Belum Menikah / Engaged) ATAU Panduan Keharmonisan Pasutri (Sudah Menikah)
+  if (isMarried) {
     renderPanduanKeharmonisanPasutri(hasil);
   } else {
     renderRekomendasiMantu(mantuList);
@@ -266,6 +537,9 @@ export async function hitungNujumPerjodohan() {
   if (btnParchment) btnParchment.style.display = 'inline-flex';
   const btnLegacy = document.getElementById('btnPrintPerjodohan');
   if (btnLegacy) btnLegacy.style.display = 'inline-flex';
+
+  // Bawa stepper ke Langkah 4
+  applyJodohWizardStepUI(4);
 
   showToast('Pitung perjodohan kasil kapetung kanthi jangkep!');
 }
@@ -471,11 +745,31 @@ export function renderRekomendasiMantu(mantuList) {
               <p class="text-amber-100 text-[11px] italic leading-relaxed">${m.makna}</p>
             </div>
 
-            <button onclick="simpanMantuKeBookmark('${m.dateStr}', '${m.weton}', '${m.predikat}')" class="w-full py-1.5 px-2 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-prada text-[11px] font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer">
-              <i class="fa-solid fa-bookmark text-[10px]"></i> Tandai ing Kalender
-            </button>
+            <div class="grid grid-cols-2 gap-1.5 pt-1">
+              <button onclick="simpanMantuKeBookmark('${m.dateStr}', '${m.weton}', '${m.predikat}')" class="min-h-[44px] py-1.5 px-2 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-prada/40 hover:border-prada text-prada text-[11px] font-semibold flex items-center justify-center gap-1 transition cursor-pointer">
+                <i class="fa-solid fa-bookmark text-[10px]"></i> Tandai
+              </button>
+              <button onclick="navigateToIjabDariMantu('${m.dateStr}')" class="min-h-[44px] py-1.5 px-2 rounded-lg bg-teal-950/80 hover:bg-teal-900 border border-teal-600/60 text-teal-300 text-[11px] font-semibold flex items-center justify-center gap-1 transition cursor-pointer" title="Periksa keselarasan lengkap di modul Petung Ijab">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Buka Ijab
+              </button>
+            </div>
           </div>
         `).join('')}
+      </div>
+
+      <!-- Banner CTA Navigasi ke Petung Ijab -->
+      <div class="p-3.5 rounded-xl bg-teal-950/60 border border-teal-700/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-start gap-2.5">
+          <i class="fa-solid fa-ring text-teal-400 text-base mt-0.5"></i>
+          <div>
+            <strong class="text-teal-200 block font-semibold text-xs">Butuh Analisis Hari Akad / Ijab Komprehensif?</strong>
+            <p class="text-[11px] text-teal-100/80 leading-relaxed">Gunakan modul Petung Ijab Nikah untuk memeriksa kecocokan mendalam terhadap wuku penganten dan pantangan adat sakral.</p>
+          </div>
+        </div>
+        <button onclick="navigateToIjabDariMantu()" class="min-h-[44px] px-4 py-2 rounded-xl bg-teal-800 hover:bg-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition flex-shrink-0 shadow">
+          <span data-i18n="jodoh_cta_buka_ijab">Buka Rekomendasi Hari Baik di Petung Ijab</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
       </div>
     </div>
   `;
@@ -569,15 +863,21 @@ export function loadRiwayatPerjodohan(id) {
   if (elTglP && item.wanita.tglLahir) elTglP.value = item.wanita.tglLahir;
   if (elTglL && item.pria.tglLahir) elTglL.value = item.pria.tglLahir;
 
-  // Pulihkan status hubungan radio button
+  // Pulihkan status hubungan radio button (planning / engaged / married)
   if (item.statusHubungan) {
-    const radioBelum = document.getElementById('statusBelumMenikah');
-    const radioSudah = document.getElementById('statusSudahMenikah');
-    if (item.statusHubungan === 'sudah_menikah') {
-      if (radioSudah) radioSudah.checked = true;
+    const norm = normalizeStatusHubungan(item.statusHubungan);
+    const radioPlanning = document.getElementById('statusBelumMenikah');
+    const radioEngaged = document.getElementById('statusEngaged');
+    const radioMarried = document.getElementById('statusSudahMenikah');
+
+    if (norm === 'married') {
+      if (radioMarried) radioMarried.checked = true;
+    } else if (norm === 'engaged') {
+      if (radioEngaged) radioEngaged.checked = true;
     } else {
-      if (radioBelum) radioBelum.checked = true;
+      if (radioPlanning) radioPlanning.checked = true;
     }
+    window.LAST_STATUS_HUBUNGAN = norm;
   }
 
   autoDetectAksaraUI('P');

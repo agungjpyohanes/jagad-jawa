@@ -41,11 +41,42 @@ import {
 import { openWetonShareModal } from './share-card.js';
 import { showToast } from '../../ui/toast.js';
 import { illustrationPath } from '../../data/dewa-kanon.js';
-import { getPetungTetanen } from '../../data/petung-tetanen-db.js';
-import { getWukuPetenget } from '../../data/wuku-petenget-db.js';
 import { downloadCanvasAsPng } from '../../ui/download-helper.js';
 import { getLanguage, getBilingualText, t } from '../../ui/i18n.js';
 import { loadDomainData } from '../../services/dbLoader.js';
+
+function getPetungTetanen(dino, pasaran) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getPetungTetanen === 'function' && globalThis.getPetungTetanen !== getPetungTetanen) {
+    return globalThis.getPetungTetanen(dino, pasaran);
+  }
+  const active = typeof globalThis !== 'undefined' ? globalThis._currentTetanenData : null;
+  if (active) {
+    const list = Array.isArray(active) ? active : (active.petungTetanen || active.list || []);
+    const cleanDino = String(dino || '').trim().toLowerCase();
+    const cleanPas = String(pasaran || '').trim().toLowerCase();
+    const altDino = cleanDino === 'ahad' ? 'minggu' : (cleanDino === 'minggu' ? 'ahad' : cleanDino);
+    return list.find(item => {
+      const idD = String(item.dino || item.dina || '').trim().toLowerCase();
+      const idP = String(item.pasaran || item.pas || '').trim().toLowerCase();
+      return (idD === cleanDino || idD === altDino) && idP === cleanPas;
+    }) || null;
+  }
+  return null;
+}
+
+function getWukuPetenget(wukuNoOrName) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getWukuPetenget === 'function' && globalThis.getWukuPetenget !== getWukuPetenget) {
+    return globalThis.getWukuPetenget(wukuNoOrName);
+  }
+  const active = typeof globalThis !== 'undefined' ? globalThis._currentWukuPetengetData : null;
+  if (active) {
+    const list = Array.isArray(active) ? active : (active.wukuPetenget || active.list || []);
+    const parsed = parseInt(wukuNoOrName, 10);
+    const clean = String(wukuNoOrName || '').trim().toLowerCase();
+    return list.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean) || null;
+  }
+  return null;
+}
 
 let currentFilterType = 'all';
 
@@ -262,7 +293,19 @@ export function renderKalender() {
   renderBookmarkListPanel();
 }
 
-let currentViewMode = 'grid';
+/**
+ * Deteksi preferensi tampilan awal berdasarkan lebar layar perangkat
+ * Mobile (< 640px) default ke 'list' (List Minggu), desktop/tablet (>= 640px) ke 'grid'.
+ */
+export function getInitialKalenderViewMode() {
+  if (typeof window !== 'undefined') {
+    const isMobile = window.innerWidth < 640 || (window.matchMedia && window.matchMedia('(max-width: 639px)').matches);
+    return isMobile ? 'list' : 'grid';
+  }
+  return 'grid';
+}
+
+let currentViewMode = getInitialKalenderViewMode();
 
 /**
  * Mengatur mode tampilan kalender: 'grid' (Tabel Bulanan) atau 'list' (List Minggu)
@@ -270,28 +313,38 @@ let currentViewMode = 'grid';
  */
 export function setKalenderViewMode(mode) {
   currentViewMode = (mode === 'list') ? 'list' : 'grid';
+  if (typeof window !== 'undefined') {
+    window.currentKalenderViewMode = currentViewMode;
+  }
 
   const tableContainer = document.getElementById('kalenderTableContainer') || document.getElementById('calTable')?.parentElement;
   const listView = document.getElementById('kalenderListView');
   const btnGrid = document.getElementById('btnCalModeGrid');
   const btnList = document.getElementById('btnCalModeList');
+  const scrollHint = document.getElementById('kalenderScrollHint');
 
   if (currentViewMode === 'list') {
     if (tableContainer) tableContainer.classList.add('hidden');
     if (listView) listView.classList.remove('hidden');
+    if (scrollHint) scrollHint.classList.add('hidden');
     if (btnList) {
+      btnList.setAttribute('aria-pressed', 'true');
       btnList.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer';
     }
     if (btnGrid) {
+      btnGrid.setAttribute('aria-pressed', 'false');
       btnGrid.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5 cursor-pointer';
     }
   } else {
     if (tableContainer) tableContainer.classList.remove('hidden');
     if (listView) listView.classList.add('hidden');
+    if (scrollHint) scrollHint.classList.remove('hidden');
     if (btnGrid) {
+      btnGrid.setAttribute('aria-pressed', 'true');
       btnGrid.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold shadow-md text-xs transition flex items-center gap-1.5 cursor-pointer';
     }
     if (btnList) {
+      btnList.setAttribute('aria-pressed', 'false');
       btnList.className = 'cal-view-btn px-3 py-1.5 rounded-lg bg-sogan-900/80 text-sogan-200 hover:text-prada border border-sogan-800 text-xs transition flex items-center gap-1.5 cursor-pointer';
     }
   }
@@ -380,8 +433,12 @@ export function renderKalenderListView(tahun, bulan, daysInMonth, totalWeeks, gr
       const isToday = (today.getFullYear() === tahun && today.getMonth() + 1 === bulan && today.getDate() === dayNum);
 
       listBuffer.push(`
-        <div class="cal-day-list-item bg-keraton/90 border ${isToday ? 'border-amber-400 ring-1 ring-amber-400/50' : 'border-sogan-800/70'} hover:border-prada/60"
+        <div class="cal-day-list-item min-h-[48px] p-2.5 sm:p-3 rounded-xl bg-keraton/90 border ${isToday ? 'border-amber-400 ring-1 ring-amber-400/50' : 'border-sogan-800/70'} hover:border-prada/60 cursor-pointer flex items-center justify-between gap-2 transition active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-amber-400/80"
+             role="button"
+             tabindex="0"
+             aria-label="${HARI[d]} ${PASARAN[pasaranId]}, ${dayNum} ${dateObj.bulanJawa} ${dateObj.tahunAJ} AJ, ${dinoWarna.isIjo ? 'Dino Becik' : (dinoWarna.isGede ? 'Dino Gede' : 'Dino Biasa')}"
              onclick="window.bukaDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum})"
+             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.bukaDetailTanggalJawa(${tahun}, ${bulan}, ${dayNum});}"
              data-day="${dayNum}" data-is-ijo="${dinoWarna.isIjo}" data-is-gede="${dinoWarna.isGede}" data-is-bookmarked="${isBookmarked}">
           <div class="flex items-center gap-3 min-w-0">
             <div class="w-10 text-center flex-shrink-0">

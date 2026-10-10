@@ -429,48 +429,17 @@ if (typeof document !== 'undefined') {
 
 // ─── 3. WIZARD FORMULIR MODE RINGKAS (STEPPER) ──────────────────────────────
 
-let jodohWizardStep = 1;
-
 export function initJodohWizard() {
-  const wizardContainer = document.getElementById('jodohWizardNav');
-  if (!wizardContainer) return;
-
-  const isModeRingkas = (typeof window !== 'undefined' && typeof window.isPemula === 'function') 
-    ? window.isPemula() 
-    : false;
-
-  const step1 = document.getElementById('jodohStep1');
-  const step2 = document.getElementById('jodohStep2');
-  const stepIndicator = document.getElementById('jodohStepIndicator');
-  const progressBar = document.getElementById('jodohProgressBar');
-
-  if (!isModeRingkas) {
-    // Mode Lengkap: Tampilkan semua dalam 1 halaman
-    if (step1) step1.classList.remove('hidden');
-    if (step2) step2.classList.remove('hidden');
-    wizardContainer.classList.add('hidden');
-    return;
-  }
-
-  // Mode Ringkas: Terapkan stepper
-  wizardContainer.classList.remove('hidden');
-
-  if (jodohWizardStep === 1) {
-    if (step1) step1.classList.remove('hidden');
-    if (step2) step2.classList.add('hidden');
-    if (stepIndicator) stepIndicator.textContent = 'Langkah 1 dari 2: Data Calon Suami';
-    if (progressBar) progressBar.style.width = '50%';
-  } else {
-    if (step1) step1.classList.add('hidden');
-    if (step2) step2.classList.remove('hidden');
-    if (stepIndicator) stepIndicator.textContent = 'Langkah 2 dari 2: Data Calon Istri';
-    if (progressBar) progressBar.style.width = '100%';
+  if (typeof window !== 'undefined' && typeof window.setJodohWizardStep === 'function') {
+    window.setJodohWizardStep(1, false);
   }
 }
 
 export function setJodohWizardStep(step) {
-  jodohWizardStep = step;
-  initJodohWizard();
+  if (typeof window !== 'undefined' && typeof window.setJodohWizardStep === 'function') {
+    return window.setJodohWizardStep(step, true);
+  }
+  return false;
 }
 
 // ─── 4. QR CODE GENERATOR VISUAL PADA CANVAS ────────────────────────────────

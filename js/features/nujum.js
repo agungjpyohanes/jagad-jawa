@@ -115,7 +115,17 @@ let pituturLoaded = false;
 export async function ensurePituturLoaded() {
   if (pituturLoaded) return;
   try {
-    const pituturUI = await import('../modules/pitutur/pitutur-ui.js');
+    const [pituturUI, { loadDomainData }] = await Promise.all([
+      import('../modules/pitutur/pitutur-ui.js'),
+      import('../services/dbLoader.js')
+    ]);
+    if (typeof loadDomainData === 'function') {
+      try {
+        await loadDomainData('pitutur');
+      } catch (e) {
+        console.warn('[pitutur] loadDomainData fallback:', e);
+      }
+    }
     if (typeof window !== 'undefined') {
       window.generateRandomPitutur = pituturUI.generateRandomPitutur;
       window.generatePituturHariIni = pituturUI.generatePituturHariIni;
@@ -170,7 +180,14 @@ let tumpengLoaded = false;
 export async function ensureTumpengLoaded() {
   if (tumpengLoaded) return;
   try {
-    await import('../data/tumpeng.js');
+    const { loadDomainData } = await import('../services/dbLoader.js');
+    if (typeof loadDomainData === 'function') {
+      try {
+        await loadDomainData('tumpeng');
+      } catch (e) {
+        console.warn('[tumpeng] loadDomainData fallback:', e);
+      }
+    }
     tumpengLoaded = true;
   } catch (err) {
     console.error('Gagal memuat modul Tumpeng:', err);

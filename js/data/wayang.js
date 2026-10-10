@@ -334,14 +334,43 @@ const WAYANG_CHARACTERS = WAYANG_LIST.reduce((acc, item) => {
 const WAYANG_MAP = WAYANG_CHARACTERS;
 const KATEGORI_LIST = ['Pandawa', 'Punakawan', 'Anak Pandawa', 'Dewa', 'Pelengkap'];
 
+/**
+ * Mengambil daftar wayang aktif (mendukung reactive sync dari KV)
+ * @param {Array|Object} [customDataset=null]
+ * @returns {Array<Object>}
+ */
+export function getActiveWayangList(customDataset = null) {
+  const active = customDataset || (typeof globalThis !== 'undefined' && globalThis._currentWayangData) || null;
+  if (active) {
+    if (Array.isArray(active) && active.length > 0) return active;
+    if (Array.isArray(active.wayang_list) && active.wayang_list.length > 0) return active.wayang_list;
+  }
+  return WAYANG_LIST;
+}
+
+/**
+ * Mengambil kategori wayang aktif
+ * @param {Array|Object} [customDataset=null]
+ * @returns {Array<string>}
+ */
+export function getActiveKategoriList(customDataset = null) {
+  const active = customDataset || (typeof globalThis !== 'undefined' && globalThis._currentWayangData) || null;
+  if (active && Array.isArray(active.kategori_list) && active.kategori_list.length > 0) {
+    return active.kategori_list;
+  }
+  return KATEGORI_LIST;
+}
+
 const root = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this);
 root.WAYANG_LIST = WAYANG_LIST;
 root.WAYANG_CHARACTERS = WAYANG_CHARACTERS;
 root.WAYANG_MAP = WAYANG_MAP;
 root.KATEGORI_LIST = KATEGORI_LIST;
+root.getActiveWayangList = getActiveWayangList;
+root.getActiveKategoriList = getActiveKategoriList;
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { WAYANG_LIST, WAYANG_CHARACTERS, WAYANG_MAP, KATEGORI_LIST };
+  module.exports = { WAYANG_LIST, WAYANG_CHARACTERS, WAYANG_MAP, KATEGORI_LIST, getActiveWayangList, getActiveKategoriList };
 }
 
 export {

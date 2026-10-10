@@ -18,6 +18,37 @@ import {
 } from '../../data/petung-ternak-loro-geblak.js';
 import { getTanggalJawaLengkap, getDaysInMonth } from '../kalender/kalender-engine.js';
 
+let customTernakDataset = null;
+
+export function setTernakDataset(ds) {
+  customTernakDataset = ds;
+}
+
+export function getActiveTernakDb() {
+  const active = (typeof globalThis !== 'undefined' && globalThis._currentTernakData) || customTernakDataset;
+  if (active) {
+    const w35 = active.weton_35 || active;
+    return {
+      weton_35: w35,
+      wetonList: active.wetonList || WETON_35_LIST,
+      lookupWetonTernakLoroGeblak: (dina, pasaran) => {
+        if (!dina || !pasaran) return null;
+        if (!w35) return null;
+        const dNorm = Object.keys(w35).find(k => k.toLowerCase() === String(dina).trim().toLowerCase());
+        if (!dNorm) return null;
+        const pNorm = Object.keys(w35[dNorm]).find(k => k.toLowerCase() === String(pasaran).trim().toLowerCase());
+        if (!pNorm) return null;
+        return w35[dNorm][pNorm];
+      }
+    };
+  }
+  return {
+    weton_35,
+    wetonList: WETON_35_LIST,
+    lookupWetonTernakLoroGeblak
+  };
+}
+
 /**
  * Mengambil data petung kehidupan lengkap berdasarkan tanggal Masehi
  * @param {Date|string|number} arg1 - Date object, tanggal YYYY-MM-DD, atau tahun (number)
@@ -64,8 +95,26 @@ export function getPetungKehidupanByDate(arg1, arg2, arg3) {
   const pasaran = tglJawa.pas;
   const neptu = tglJawa.neptu;
 
-  const dataWeton = lookupWetonTernakLoroGeblak(dina, pasaran);
+  const activeDb = getActiveTernakDb();
+  const dataWeton = activeDb.lookupWetonTernakLoroGeblak(dina, pasaran);
   if (!dataWeton) return null;
+
+  const normSub = (val, rawKode) => {
+    if (val && typeof val === 'object' && val.badge && val.badge.color) return val;
+    const kode = (typeof val === 'string' ? val : (val?.id || val?.jv || val?.kode || rawKode || ''));
+    const tegese = val?.tegese || (typeof val === 'object' ? (val.id || val.jv || '') : '');
+    const isBecik = (kode === 'Gajah' || kode === 'Suku' || kode === 'Kambing' || kode === 'Sapi' || kode === 'Kerbau');
+    return {
+      ...(typeof val === 'object' ? val : {}),
+      kode,
+      tegese,
+      status_ringkas: isBecik ? 'Becik' : 'Ala',
+      badge: {
+        color: isBecik ? 'teal' : 'amber',
+        label: val?.badge?.label || kode
+      }
+    };
+  };
 
   return {
     date: {
@@ -78,9 +127,9 @@ export function getPetungKehidupanByDate(arg1, arg2, arg3) {
     dina,
     pasaran,
     neptu,
-    ternak: dataWeton.ternak,
-    loro: dataWeton.loro,
-    geblak: dataWeton.geblak
+    ternak: normSub(dataWeton.ternak, dataWeton.wiwit_ternak),
+    loro: normSub(dataWeton.loro, dataWeton.jalaran_loro),
+    geblak: normSub(dataWeton.geblak, dataWeton.petung_geblak)
   };
 }
 
@@ -91,16 +140,34 @@ export function getPetungKehidupanByDate(arg1, arg2, arg3) {
  * @returns {object|null}
  */
 export function getPetungKehidupanByWeton(dina, pasaran) {
-  const dataWeton = lookupWetonTernakLoroGeblak(dina, pasaran);
+  const activeDb = getActiveTernakDb();
+  const dataWeton = activeDb.lookupWetonTernakLoroGeblak(dina, pasaran);
   if (!dataWeton) return null;
+
+  const normSub = (val, rawKode) => {
+    if (val && typeof val === 'object' && val.badge && val.badge.color) return val;
+    const kode = (typeof val === 'string' ? val : (val?.id || val?.jv || val?.kode || rawKode || ''));
+    const tegese = val?.tegese || (typeof val === 'object' ? (val.id || val.jv || '') : '');
+    const isBecik = (kode === 'Gajah' || kode === 'Suku' || kode === 'Kambing' || kode === 'Sapi' || kode === 'Kerbau');
+    return {
+      ...(typeof val === 'object' ? val : {}),
+      kode,
+      tegese,
+      status_ringkas: isBecik ? 'Becik' : 'Ala',
+      badge: {
+        color: isBecik ? 'teal' : 'amber',
+        label: val?.badge?.label || kode
+      }
+    };
+  };
 
   return {
     dina: dataWeton.dina,
     pasaran: dataWeton.pasaran,
     neptu: dataWeton.neptu_jumlah,
-    ternak: dataWeton.ternak,
-    loro: dataWeton.loro,
-    geblak: dataWeton.geblak
+    ternak: normSub(dataWeton.ternak, dataWeton.wiwit_ternak),
+    loro: normSub(dataWeton.loro, dataWeton.jalaran_loro),
+    geblak: normSub(dataWeton.geblak, dataWeton.petung_geblak)
   };
 }
 

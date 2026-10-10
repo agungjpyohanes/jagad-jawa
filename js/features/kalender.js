@@ -69,8 +69,38 @@ import {
   buildWhatsAppShareText
 } from '../modules/kalender/share-card.js';
 
-import { getPetungTetanen } from '../data/petung-tetanen-db.js';
-import { getWukuPetenget } from '../data/wuku-petenget-db.js';
+export function getPetungTetanen(dino, pasaran) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getPetungTetanen === 'function' && globalThis.getPetungTetanen !== getPetungTetanen) {
+    return globalThis.getPetungTetanen(dino, pasaran);
+  }
+  const active = typeof globalThis !== 'undefined' ? globalThis._currentTetanenData : null;
+  if (active) {
+    const list = Array.isArray(active) ? active : (active.petungTetanen || active.list || []);
+    const cleanDino = String(dino || '').trim().toLowerCase();
+    const cleanPas = String(pasaran || '').trim().toLowerCase();
+    const altDino = cleanDino === 'ahad' ? 'minggu' : (cleanDino === 'minggu' ? 'ahad' : cleanDino);
+    return list.find(item => {
+      const idD = String(item.dino || item.dina || '').trim().toLowerCase();
+      const idP = String(item.pasaran || item.pas || '').trim().toLowerCase();
+      return (idD === cleanDino || idD === altDino) && idP === cleanPas;
+    }) || null;
+  }
+  return null;
+}
+
+export function getWukuPetenget(wukuNoOrName) {
+  if (typeof globalThis !== 'undefined' && typeof globalThis.getWukuPetenget === 'function' && globalThis.getWukuPetenget !== getWukuPetenget) {
+    return globalThis.getWukuPetenget(wukuNoOrName);
+  }
+  const active = typeof globalThis !== 'undefined' ? globalThis._currentWukuPetengetData : null;
+  if (active) {
+    const list = Array.isArray(active) ? active : (active.wukuPetenget || active.list || []);
+    const parsed = parseInt(wukuNoOrName, 10);
+    const clean = String(wukuNoOrName || '').trim().toLowerCase();
+    return list.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean) || null;
+  }
+  return null;
+}
 
 /**
  * Inisialisasi Badge Cepat Weton Hari Ini di Navbar/Header
@@ -212,7 +242,5 @@ export {
   closeWetonShareModal,
   shareWetonViaWhatsApp,
   downloadShareCardPng,
-  buildWhatsAppShareText,
-  getPetungTetanen,
-  getWukuPetenget
+  buildWhatsAppShareText
 };

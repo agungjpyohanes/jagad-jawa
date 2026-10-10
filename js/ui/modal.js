@@ -25,6 +25,29 @@ export function closeAnyActiveModal() {
   }
 }
 
+export function trapFocusInModal(modalEl, event) {
+  if (!modalEl || event.key !== 'Tab') return;
+  const focusableEls = modalEl.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+  );
+  if (!focusableEls || focusableEls.length === 0) return;
+
+  const firstEl = focusableEls[0];
+  const lastEl = focusableEls[focusableEls.length - 1];
+
+  if (event.shiftKey) {
+    if (document.activeElement === firstEl) {
+      event.preventDefault();
+      lastEl.focus();
+    }
+  } else {
+    if (document.activeElement === lastEl) {
+      event.preventDefault();
+      firstEl.focus();
+    }
+  }
+}
+
 export function initModalListeners() {
   const modalConfigs = [
     { id: 'modalDetailKalender', close: () => { if (typeof window.tutupDetailTanggalJawa === 'function') window.tutupDetailTanggalJawa(); } },
@@ -45,6 +68,11 @@ export function initModalListeners() {
           close();
         }
       });
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+          trapFocusInModal(el, e);
+        }
+      });
     }
   });
 
@@ -59,4 +87,5 @@ export function initModalListeners() {
 
 if (typeof window !== 'undefined') {
   window.closeAnyActiveModal = closeAnyActiveModal;
+  window.trapFocusInModal = trapFocusInModal;
 }

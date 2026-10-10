@@ -94,10 +94,12 @@ export function autoDetectAksara(nama) {
  * Mendapatkan bobot aksara numerik untuk metode IV dan V/VI.
  * @param {string} code Kode aksara (misal "HA", "NA")
  * @param {'iv'|'vvi'} type Tipe metode aksara
+ * @param {Array} [customAksaraList]
  * @returns {number}
  */
-export function getAksaraVal(code, type = 'iv') {
-  const found = AKSARA_PERJODOHAN.find(a => a.kode === code);
+export function getAksaraVal(code, type = 'iv', customAksaraList = null) {
+  const list = customAksaraList || AKSARA_PERJODOHAN;
+  const found = list.find(a => a.kode === code);
   return found ? (type === 'iv' ? found.iv : found.vvi) : 1;
 }
 
@@ -105,9 +107,18 @@ export function getAksaraVal(code, type = 'iv') {
  * Hitung Pitung Jawa 7 Metode Perjodohan.
  * @param {Object} p Data calon wanita { nama, hari, pasaran, neptu, aksaraDepan, aksaraBelakang }
  * @param {Object} l Data calon pria { nama, hari, pasaran, neptu, aksaraDepan, aksaraBelakang }
+ * @param {Object} [options={}] Optional injected dataset { HASIL_I_JODOH, HASIL_II_JODOH, HASIL_III_JODOH, HASIL_IV_JODOH, HASIL_V_JODOH, HASIL_VI_JODOH, AKSARA_PERJODOHAN }
  * @returns {Object} Hasil perhitungan 7 metode, ringkasan skor, dan evaluasi
  */
-export function hitungPitung7Metode(p, l) {
+export function hitungPitung7Metode(p, l, options = {}) {
+  const lookupI = options.HASIL_I_JODOH || HASIL_I_JODOH;
+  const lookupII = options.HASIL_II_JODOH || HASIL_II_JODOH;
+  const lookupIII = options.HASIL_III_JODOH || HASIL_III_JODOH;
+  const lookupIV = options.HASIL_IV_JODOH || HASIL_IV_JODOH;
+  const lookupV = options.HASIL_V_JODOH || HASIL_V_JODOH;
+  const lookupVI = options.HASIL_VI_JODOH || HASIL_VI_JODOH;
+  const aksaraList = options.AKSARA_PERJODOHAN || AKSARA_PERJODOHAN;
+
   const neptuP = Number(p.neptu) || getNeptu(p.hari, p.pasaran);
   const neptuL = Number(l.neptu) || getNeptu(l.hari, l.pasaran);
 
@@ -121,20 +132,20 @@ export function hitungPitung7Metode(p, l) {
   const sisaII = totalNeptu % 5;
   const sisaIII = totalNeptu % 7;
 
-  const totalAksaraIV = getAksaraVal(akDP, 'iv') + getAksaraVal(akBP, 'iv') +
-                        getAksaraVal(akDL, 'iv') + getAksaraVal(akBL, 'iv');
+  const totalAksaraIV = getAksaraVal(akDP, 'iv', aksaraList) + getAksaraVal(akBP, 'iv', aksaraList) +
+                        getAksaraVal(akDL, 'iv', aksaraList) + getAksaraVal(akBL, 'iv', aksaraList);
   const sisaIV = totalAksaraIV % 7;
 
-  const totalAksaraVVI = getAksaraVal(akDP, 'vvi') + getAksaraVal(akDL, 'vvi');
+  const totalAksaraVVI = getAksaraVal(akDP, 'vvi', aksaraList) + getAksaraVal(akDL, 'vvi', aksaraList);
   const sisaV = totalAksaraVVI % 7;
   const sisaVI = totalAksaraVVI % 6;
 
-  const hasilI = HASIL_I_JODOH[sisaI] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilII = HASIL_II_JODOH[sisaII] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilIII = HASIL_III_JODOH[sisaIII] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilIV = HASIL_IV_JODOH[sisaIV] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilV = HASIL_V_JODOH[sisaV] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilVI = HASIL_VI_JODOH[sisaVI] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilI = lookupI[sisaI] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilII = lookupII[sisaII] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilIII = lookupIII[sisaIII] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilIV = lookupIV[sisaIV] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilV = lookupV[sisaV] || { nama: '-', arti: '-', status: 'campur' };
+  const hasilVI = lookupVI[sisaVI] || { nama: '-', arti: '-', status: 'campur' };
   const hasilVII = { nama: 'Yuwana / Becik', arti: 'Kombinasi dina becik rahayu tumraping kulawarga', status: 'baik' };
 
   const rows = [

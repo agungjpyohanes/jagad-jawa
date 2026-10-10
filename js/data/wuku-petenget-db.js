@@ -625,19 +625,64 @@
     WUKU_PETENGET_MAP[item.wuku.toLowerCase()] = item;
   });
 
+  const CANON_WUKU_LIST = [
+    'Sinta', 'Landep', 'Wukir', 'Kurantil', 'Tolu', 'Gumbreg', 'Warigalit', 'Warigagung', 'Julungwangi', 'Sungsang',
+    'Galungan', 'Kuningan', 'Langkir', 'Mandasiya', 'Julungpujut', 'Pahang', 'Kuruwelut', 'Marakeh', 'Tambir', 'Medangkungan',
+    'Maktal', 'Wuye', 'Manahil', 'Prangbakat', 'Bala', 'Wugu', 'Wayang', 'Kulawu', 'Dukut', 'Watugunung'
+  ];
+
   /**
    * Mengambil data petenget wuku berdasarkan nomor wuku (1-30) atau nama wuku.
+   * Mendukung dataset injection untuk pemuatan data dinamis dari KV.
    * @param {number|string} wukuNoOrName
+   * @param {Array|Object} [customDataset]
    * @returns {Object|null}
    */
-  function getWukuPetenget(wukuNoOrName) {
+  function getWukuPetenget(wukuNoOrName, customDataset = null) {
     if (wukuNoOrName === undefined || wukuNoOrName === null) return null;
+    const clean = String(wukuNoOrName).trim().toLowerCase().replace(/\s+/g, '');
+    const parsed = parseInt(clean, 10);
+
+    const activeData = customDataset || (typeof globalThis !== 'undefined' && globalThis._currentWukuPetengetData) || null;
+    if (activeData) {
+      if (typeof activeData === 'object' && !Array.isArray(activeData)) {
+        // Objek keyed by wuku name
+        for (const [wKey, wVal] of Object.entries(activeData)) {
+          if (wKey.toLowerCase().replace(/\s+/g, '') === clean || (CANON_WUKU_LIST && !isNaN(parsed) && CANON_WUKU_LIST[parsed - 1]?.toLowerCase() === wKey.toLowerCase())) {
+            return {
+              wuku: wKey,
+              no: !isNaN(parsed) ? parsed : (CANON_WUKU_LIST ? CANON_WUKU_LIST.indexOf(wKey) + 1 : 1),
+              alaBecik: {
+                becik: typeof wVal.ala_becik?.becik === 'object' ? (wVal.ala_becik.becik.jv || wVal.ala_becik.becik.id) : (wVal.ala_becik?.becik || wVal.alaBecik?.becik || '-'),
+                ala: typeof wVal.ala_becik?.ala === 'object' ? (wVal.ala_becik.ala.jv || wVal.ala_becik.ala.id) : (wVal.ala_becik?.ala || wVal.alaBecik?.ala || '-')
+              },
+              nambani: {
+                becik: typeof wVal.nambani?.becik === 'object' ? (wVal.nambani.becik.jv || wVal.nambani.becik.id) : (wVal.nambani?.becik || '-'),
+                ala: typeof wVal.nambani?.ala === 'object' ? (wVal.nambani.ala.jv || wVal.nambani.ala.id) : (wVal.nambani?.ala || '-')
+              },
+              pangupajiwa: {
+                becik: typeof wVal.pangupajiwa?.becik === 'object' ? (wVal.pangupajiwa.becik.jv || wVal.pangupajiwa.becik.id) : (wVal.pangupajiwa?.becik || '-'),
+                ala: typeof wVal.pangupajiwa?.ala === 'object' ? (wVal.pangupajiwa.ala.jv || wVal.pangupajiwa.ala.id) : (wVal.pangupajiwa?.ala || '-')
+              },
+              tetanen: {
+                becik: typeof wVal.tetanen?.becik === 'object' ? (wVal.tetanen.becik.jv || wVal.tetanen.becik.id) : (wVal.tetanen?.becik || '-'),
+                ala: typeof wVal.tetanen?.ala === 'object' ? (wVal.tetanen.ala.jv || wVal.tetanen.ala.id) : (wVal.tetanen?.ala || '-')
+              }
+            };
+          }
+        }
+      } else if (Array.isArray(activeData)) {
+        const found = activeData.find(item => {
+          return item.no === parsed || String(item.wuku).toLowerCase().replace(/\s+/g, '') === clean;
+        });
+        if (found) return found;
+      }
+    }
+
     if (typeof wukuNoOrName === 'number') {
       return WUKU_PETENGET_MAP[wukuNoOrName] || null;
     }
-    const clean = String(wukuNoOrName).trim().toLowerCase().replace(/\s+/g, '');
     if (WUKU_PETENGET_MAP[clean]) return WUKU_PETENGET_MAP[clean];
-    const parsed = parseInt(clean, 10);
     if (!isNaN(parsed) && WUKU_PETENGET_MAP[parsed]) return WUKU_PETENGET_MAP[parsed];
     return null;
   }
