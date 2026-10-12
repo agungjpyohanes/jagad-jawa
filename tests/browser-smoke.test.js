@@ -605,6 +605,7 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
 
     // 6. File JSON gagal menampilkan retry / error (503 mock)
     mockedErrorFiles.add('14-selametan-rules.json');
+    await page.setCacheEnabled(false);
 
     await page.evaluate(async () => {
       if (window.dbLoader && typeof window.dbLoader.clearCache === 'function') {
@@ -654,6 +655,7 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
 
     // Bersihkan mock error dan verifikasi recovery via Retry
     mockedErrorFiles.delete('14-selametan-rules.json');
+    await page.setCacheEnabled(true);
 
     await page.evaluate(async () => {
       if (window.invalidateDomainData) {
@@ -1240,6 +1242,7 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
     // C. Reconnect / Retry Pulih:
     // Simulasi kegagalan 503 pada server lokal kemudian dipulihkan
     mockedErrorFiles.add('14-selametan-rules.json');
+    await page.setCacheEnabled(false);
     await page.evaluate(() => window.switchTab('selametan'));
     await page.waitForSelector('#tab-selametan', { visible: true });
 
@@ -1283,6 +1286,7 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
 
     // Pulihkan jaringan (hapus mock error)
     mockedErrorFiles.delete('14-selametan-rules.json');
+    await page.setCacheEnabled(true);
 
     // Klik tombol retry via page.evaluate
     await page.evaluate(async () => {

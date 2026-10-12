@@ -192,40 +192,58 @@ export function getPustakaRelatedEntri(entri) {
 
 // ─── 2. FITUR DIGITAL LIBRARY: NASKAH KUNO & BABAD ─────────────────────────
 
-export function getAllNaskahKuno() {
+function getRuntimeDigitalData(customDataset = null) {
+  if (customDataset && typeof customDataset === 'object') return customDataset;
+  if (typeof globalThis !== 'undefined' && globalThis._currentPustakaDigitalData) {
+    return globalThis._currentPustakaDigitalData;
+  }
+  return null;
+}
+
+export function getAllNaskahKuno(customDataset = null) {
+  const rt = getRuntimeDigitalData(customDataset);
+  if (rt && Array.isArray(rt.naskah_kuno) && rt.naskah_kuno.length > 0) {
+    return [...rt.naskah_kuno];
+  }
   return [...NASKAH_KUNO_LIST];
 }
 
-export function getNaskahKunoById(id) {
+export function getNaskahKunoById(id, customDataset = null) {
   if (!id) return null;
-  return NASKAH_KUNO_LIST.find(n => n.id === id) || null;
+  const list = getAllNaskahKuno(customDataset);
+  return list.find(n => n.id === id) || null;
 }
 
-export function searchNaskahKuno(query = '') {
+export function searchNaskahKuno(query = '', customDataset = null) {
+  const list = getAllNaskahKuno(customDataset);
   const q = String(query).toLowerCase().trim();
-  if (!q) return getAllNaskahKuno();
-  return NASKAH_KUNO_LIST.filter(n =>
-    n.judul.toLowerCase().includes(q) ||
-    n.pengarang.toLowerCase().includes(q) ||
-    n.deskripsi.toLowerCase().includes(q) ||
-    n.isiRingkas.toLowerCase().includes(q) ||
-    (n.babList && n.babList.some(b => b.namaBab.toLowerCase().includes(q) || b.teksJawa.toLowerCase().includes(q) || b.terjemahan.toLowerCase().includes(q)))
+  if (!q) return list;
+  return list.filter(n =>
+    (n.judul && n.judul.toLowerCase().includes(q)) ||
+    (n.pengarang && n.pengarang.toLowerCase().includes(q)) ||
+    (n.deskripsi && n.deskripsi.toLowerCase().includes(q)) ||
+    (n.isiRingkas && n.isiRingkas.toLowerCase().includes(q)) ||
+    (n.babList && n.babList.some(b => 
+      (b.namaBab && b.namaBab.toLowerCase().includes(q)) || 
+      (b.teksJawa && b.teksJawa.toLowerCase().includes(q)) || 
+      (b.terjemahan && b.terjemahan.toLowerCase().includes(q))
+    ))
   );
 }
 
 export function formatNaskahPlainText(naskah) {
   if (!naskah) return '';
-  let out = `📜 ${naskah.judul.toUpperCase()}\n`;
-  out += `Panganggit / Pujangga: ${naskah.pengarang} (${naskah.tahun})\n`;
-  out += `Kategori: ${naskah.kategori}\n`;
-  out += `Deskripsi: ${naskah.deskripsi}\n\n`;
+  let out = `📜 ${(naskah.judul || '').toUpperCase()}\n`;
+  out += `Panganggit / Pujangga: ${naskah.pengarang || '-'} (${naskah.tahun || '-'})\n`;
+  out += `Kategori: ${naskah.kategori || '-'}\n`;
+  out += `Deskripsi: ${naskah.deskripsi || '-'}\n\n`;
   out += `====================================================\n\n`;
 
   if (Array.isArray(naskah.babList)) {
     naskah.babList.forEach((bab, idx) => {
-      out += `[ ${bab.namaBab} ]\n\n`;
-      out += `Teks Basa Jawa:\n${bab.teksJawa}\n\n`;
-      out += `Terjemahan Basa Indonesia:\n${bab.terjemahan}\n\n`;
+      out += `[ ${bab.namaBab || `Bab ${idx + 1}`} ]\n\n`;
+      out += `Teks Basa Jawa:\n${bab.teksJawa || '-'}\n\n`;
+      out += `Terjemahan Basa Indonesia:\n${bab.terjemahan || '-'}\n\n`;
       out += `----------------------------------------------------\n\n`;
     });
   }
@@ -236,32 +254,42 @@ export function formatNaskahPlainText(naskah) {
 
 // ─── 3. FITUR DIGITAL LIBRARY: KAMUS JAWA-INDONESIA & SANSKERTA ───────────
 
-export function getAllKamusJawaIndo() {
+export function getAllKamusJawaIndo(customDataset = null) {
+  const rt = getRuntimeDigitalData(customDataset);
+  if (rt && Array.isArray(rt.kamus_jawa_indonesia) && rt.kamus_jawa_indonesia.length > 0) {
+    return [...rt.kamus_jawa_indonesia];
+  }
   return [...KAMUS_JAWA_INDONESIA];
 }
 
-export function searchKamusJawaIndo(query = '') {
+export function searchKamusJawaIndo(query = '', customDataset = null) {
+  const list = getAllKamusJawaIndo(customDataset);
   const q = String(query).toLowerCase().trim();
-  if (!q) return getAllKamusJawaIndo();
-  return KAMUS_JAWA_INDONESIA.filter(k =>
-    k.jawa.toLowerCase().includes(q) ||
-    k.krama.toLowerCase().includes(q) ||
-    k.id.toLowerCase().includes(q) ||
-    k.contoh.toLowerCase().includes(q)
+  if (!q) return list;
+  return list.filter(k =>
+    (k.jawa && k.jawa.toLowerCase().includes(q)) ||
+    (k.krama && k.krama.toLowerCase().includes(q)) ||
+    (k.id && k.id.toLowerCase().includes(q)) ||
+    (k.contoh && k.contoh.toLowerCase().includes(q))
   );
 }
 
-export function getAllKamusJawaSanskerta() {
+export function getAllKamusJawaSanskerta(customDataset = null) {
+  const rt = getRuntimeDigitalData(customDataset);
+  if (rt && Array.isArray(rt.kamus_jawa_sanskerta) && rt.kamus_jawa_sanskerta.length > 0) {
+    return [...rt.kamus_jawa_sanskerta];
+  }
   return [...KAMUS_JAWA_SANSKERTA];
 }
 
-export function searchKamusJawaSanskerta(query = '') {
+export function searchKamusJawaSanskerta(query = '', customDataset = null) {
+  const list = getAllKamusJawaSanskerta(customDataset);
   const q = String(query).toLowerCase().trim();
-  if (!q) return getAllKamusJawaSanskerta();
-  return KAMUS_JAWA_SANSKERTA.filter(k =>
-    k.sanskerta.toLowerCase().includes(q) ||
-    k.jawa.toLowerCase().includes(q) ||
-    k.makna.toLowerCase().includes(q)
+  if (!q) return list;
+  return list.filter(k =>
+    (k.sanskerta && k.sanskerta.toLowerCase().includes(q)) ||
+    (k.jawa && k.jawa.toLowerCase().includes(q)) ||
+    (k.makna && k.makna.toLowerCase().includes(q))
   );
 }
 
@@ -287,21 +315,27 @@ export function formatKamusPlainText(list, jenis = 'jawa-indo') {
 
 // ─── 4. FITUR DIGITAL LIBRARY: DOKUMEN REFERENSI KEBUDAYAAN ──────────────
 
-export function getAllDokumenReferensi() {
+export function getAllDokumenReferensi(customDataset = null) {
+  const rt = getRuntimeDigitalData(customDataset);
+  if (rt && Array.isArray(rt.dokumen_referensi) && rt.dokumen_referensi.length > 0) {
+    return [...rt.dokumen_referensi];
+  }
   return [...DOKUMEN_REFERENSI_BUDAYA];
 }
 
-export function getDokumenReferensiById(id) {
+export function getDokumenReferensiById(id, customDataset = null) {
   if (!id) return null;
-  return DOKUMEN_REFERENSI_BUDAYA.find(d => d.id === id) || null;
+  const list = getAllDokumenReferensi(customDataset);
+  return list.find(d => d.id === id) || null;
 }
 
-export function searchDokumenReferensi(query = '') {
+export function searchDokumenReferensi(query = '', customDataset = null) {
+  const list = getAllDokumenReferensi(customDataset);
   const q = String(query).toLowerCase().trim();
-  if (!q) return getAllDokumenReferensi();
-  return DOKUMEN_REFERENSI_BUDAYA.filter(d =>
-    d.judul.toLowerCase().includes(q) ||
-    d.kategori.toLowerCase().includes(q) ||
+  if (!q) return list;
+  return list.filter(d =>
+    (d.judul && d.judul.toLowerCase().includes(q)) ||
+    (d.kategori && d.kategori.toLowerCase().includes(q)) ||
     (d.deskripsi && d.deskripsi.toLowerCase().includes(q)) ||
     (d.ringkasan && d.ringkasan.toLowerCase().includes(q)) ||
     (d.kontenTeks && d.kontenTeks.toLowerCase().includes(q))

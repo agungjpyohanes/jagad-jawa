@@ -418,7 +418,12 @@ if (typeof window !== 'undefined') {
         break;
 
       case 'wayang':
-        if (typeof window.renderWayangGrid === 'function') window.renderWayangGrid();
+        if (typeof window.renderWayangGrid === 'function') {
+          const renderPromise = window.renderWayangGrid();
+          if (renderPromise && typeof renderPromise.then === 'function') {
+            await renderPromise;
+          }
+        }
         if (typeof window.initWayangDraggable === 'function') window.initWayangDraggable();
         if (typeof window.renderWayangEthicsBanner === 'function') window.renderWayangEthicsBanner();
         if (typeof window.selectWayangCharacter === 'function') window.selectWayangCharacter('arjuna');
@@ -460,7 +465,7 @@ if (typeof window !== 'undefined') {
 
       case 'pustaka':
         if (typeof window.initPustakaUI === 'function') {
-          window.initPustakaUI('pustakaContainer');
+          await window.initPustakaUI('pustakaContainer');
         }
         break;
 
@@ -472,7 +477,7 @@ if (typeof window !== 'undefined') {
 
       case 'mitologi':
         if (typeof window.initMitologiUI === 'function') {
-          window.initMitologiUI('mitologiPillarsGrid');
+          await window.initMitologiUI('mitologiPillarsGrid');
         }
         break;
     }

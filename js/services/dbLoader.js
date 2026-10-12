@@ -971,7 +971,17 @@ export function mapPetungKehidupan(raw) {
 export async function loadDomainData(domain, options = {}) {
   const dom = String(domain || '').toLowerCase().trim();
   if (!options.forceRefresh && domainCache.has(dom)) {
-    return domainCache.get(dom);
+    const cached = domainCache.get(dom);
+    if (dom === 'wayang' && typeof globalThis !== 'undefined' && cached) {
+      globalThis._currentWayangData = cached;
+    }
+    if (dom === 'mitologi' && typeof globalThis !== 'undefined' && cached) {
+      globalThis._currentMitologiData = cached;
+    }
+    if (dom === 'pustaka' && typeof globalThis !== 'undefined' && cached?.pustakaDigital) {
+      globalThis._currentPustakaDigitalData = cached.pustakaDigital;
+    }
+    return cached;
   }
 
   try {
@@ -1154,8 +1164,8 @@ export async function loadDomainData(domain, options = {}) {
           pustakaJawa: rawJawa || (isNodeEnvironment ? getDbSync('36-pustaka-jawa.json') : {}) || {},
           pustakaDigital: rawDigital || (isNodeEnvironment ? getDbSync('41-pustaka-digital.json') : {}) || {}
         };
-        if (typeof globalThis !== 'undefined' && rawDigital) {
-          globalThis._currentPustakaDigitalData = rawDigital;
+        if (typeof globalThis !== 'undefined' && result?.pustakaDigital) {
+          globalThis._currentPustakaDigitalData = result.pustakaDigital;
         }
         break;
       }

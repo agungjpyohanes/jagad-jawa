@@ -103,11 +103,17 @@ function formatBahasaBadges(bahasaList) {
  * Menghadirkan portal komprehensif naskah kuno, kamus Jawa-Indonesia & Sanskerta,
  * dongo & wiridan, kautamaning laku, usada tradisional, kalacakra, lan referensi budaya.
  * @param {string} [containerId='pustakaContainer']
+ * @param {Object} [options={}]
+ * @returns {Promise<void>}
  */
-export function initPustakaUI(containerId = 'pustakaContainer') {
-  loadDomainData('pustaka').catch((e) => {
-    console.warn('[pustaka-ui] loadDomainData fallback:', e);
-  });
+export async function initPustakaUI(containerId = 'pustakaContainer', options = {}) {
+  if (typeof loadDomainData === 'function') {
+    try {
+      await loadDomainData('pustaka', options);
+    } catch (e) {
+      console.warn('[pustaka-ui] loadDomainData fallback:', e);
+    }
+  }
   if (containerId) currentPustakaContainerId = containerId;
   const container = document.getElementById(containerId) ||
                     document.getElementById(currentPustakaContainerId) ||
@@ -1094,7 +1100,7 @@ export function renderPustakaNaskahView(container) {
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
-      onRetry: () => renderPustakaNaskahView(container)
+      onRetry: () => initPustakaUI(currentPustakaContainerId, { forceRefresh: true })
     });
     return;
   }
@@ -1369,7 +1375,7 @@ export function renderPustakaKamusView(container) {
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
-      onRetry: () => renderPustakaKamusView(container)
+      onRetry: () => initPustakaUI(currentPustakaContainerId, { forceRefresh: true })
     });
     return;
   }
@@ -1553,7 +1559,7 @@ export function renderPustakaReferensiView(container) {
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
-      onRetry: () => renderPustakaReferensiView(container)
+      onRetry: () => initPustakaUI(currentPustakaContainerId, { forceRefresh: true })
     });
     return;
   }

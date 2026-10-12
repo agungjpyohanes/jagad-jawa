@@ -20,22 +20,20 @@ let activeReadingFontSize = 'normal'; // 'normal' | 'large'
 /**
  * Inisialisasi tampilan Mitologi Nusantara di tab-mitologi
  * @param {string} [gridContainerId='mitologiPillarsGrid']
+ * @param {Object} [options={}]
+ * @returns {Promise<void>}
  */
-export function initMitologiUI(gridContainerId = 'mitologiPillarsGrid') {
+export async function initMitologiUI(gridContainerId = 'mitologiPillarsGrid', options = {}) {
+  const grid = document.getElementById(gridContainerId);
   if (typeof loadDomainData === 'function') {
-    loadDomainData('mitologi')
-      .then(() => {
-        const g = document.getElementById(gridContainerId);
-        if (g) renderMitologiGrid(g, (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv', gridContainerId);
-      })
-      .catch((e) => {
-        console.warn('[mitologi-ui] loadDomainData fallback:', e);
-      });
+    try {
+      await loadDomainData('mitologi', options);
+    } catch (e) {
+      console.warn('[mitologi-ui] loadDomainData fallback:', e);
+    }
   }
 
-  const grid = document.getElementById(gridContainerId);
   if (!grid) return;
-
   const isJv = (typeof getLanguage === 'function' ? getLanguage() : 'id') === 'jv';
   renderMitologiGrid(grid, isJv, gridContainerId);
 }
@@ -46,7 +44,7 @@ function renderMitologiGrid(grid, isJv, gridContainerId = 'mitologiPillarsGrid')
     renderDataErrorState(grid, {
       domain: 'mitologi',
       isSupplemental: true,
-      onRetry: () => initMitologiUI(gridContainerId)
+      onRetry: () => initMitologiUI(gridContainerId, { forceRefresh: true })
     });
     return;
   }

@@ -39,8 +39,19 @@ const STUB_FILES = {
     export const WAYANG_CHARACTERS = {};
     export const WAYANG_MAP = {};
     export const KATEGORI_LIST = ['Pandawa', 'Punakawan', 'Anak Pandawa', 'Dewa', 'Pelengkap'];
-    export const getActiveWayangList = (ds) => (ds && (ds.wayang_list || ds)) || [];
-    export const getActiveKategoriList = (ds) => (ds && ds.kategori_list) || ['Pandawa', 'Punakawan', 'Anak Pandawa', 'Dewa', 'Pelengkap'];
+    const _getWayangDs = (ds) => ds || (typeof globalThis !== 'undefined' && globalThis._currentWayangData) || null;
+    export const getActiveWayangList = (ds) => {
+      const d = _getWayangDs(ds);
+      if (!d) return [];
+      if (Array.isArray(d)) return d;
+      if (Array.isArray(d.wayang_list)) return d.wayang_list;
+      return [];
+    };
+    export const getActiveKategoriList = (ds) => {
+      const d = _getWayangDs(ds);
+      if (d && Array.isArray(d.kategori_list) && d.kategori_list.length > 0) return d.kategori_list;
+      return ['Pandawa', 'Punakawan', 'Anak Pandawa', 'Dewa', 'Pelengkap'];
+    };
   `,
   'pitutur.js': `
     export const QUIZ_QUESTIONS = [];
@@ -66,9 +77,49 @@ const STUB_FILES = {
     export const getPawukonDetail = () => null;
   `,
   'mitologi-nusantara-db.js': `
-    export const getAllMitologiNusantara = (ds) => (ds && (ds.mitologi_list || ds)) || [];
-    export const getMitologiById = () => null;
-    export const formatMitologiPlainText = () => '';
+    const _getMitoDs = (ds) => ds || (typeof globalThis !== 'undefined' && globalThis._currentMitologiData) || null;
+    export const getAllMitologiNusantara = (ds) => {
+      const d = _getMitoDs(ds);
+      if (!d) return [];
+      if (Array.isArray(d)) return d;
+      if (Array.isArray(d.mitologi_list)) return d.mitologi_list;
+      return [];
+    };
+    export const getMitologiById = (id, ds) => {
+      if (!id) return null;
+      const list = getAllMitologiNusantara(ds);
+      return list.find(m => m && m.id === id) || null;
+    };
+    export const formatMitologiPlainText = (item) => {
+      if (!item) return '';
+      let out = '📜 ' + (item.judul || '') + '\\n';
+      out += (item.judulJawa || '') + ' (' + (item.aksaraJawa || '') + ')\\n';
+      out += 'Kategori: ' + (item.kategori || '') + '\\n';
+      out += '====================================================\\n\\n';
+      out += 'Ringkasan:\\n' + (item.ringkasan || '') + '\\n\\n';
+      if (Array.isArray(item.babList)) {
+        item.babList.forEach(b => {
+          out += '[ ' + (b.subjudul || '') + ' ]\\n';
+          out += (b.teks || '') + '\\n\\n';
+        });
+      }
+      if (item.pesanMoral) {
+        out += '💡 Falsafah & Piwulang Luhur:\\n' + item.pesanMoral + '\\n\\n';
+      }
+      out += 'Kadhudhah saking Mitologi Nusantara — Jagad Jawa\\nhttps://jagad-jawa.web.app';
+      return out;
+    };
+    export const searchMitologiNusantara = (query = '', ds) => {
+      const list = getAllMitologiNusantara(ds);
+      const q = String(query).toLowerCase().trim();
+      if (!q) return list;
+      return list.filter(m =>
+        (m.judul && m.judul.toLowerCase().includes(q)) ||
+        (m.judulJawa && m.judulJawa.toLowerCase().includes(q)) ||
+        (m.kategori && m.kategori.toLowerCase().includes(q)) ||
+        (m.ringkasan && m.ringkasan.toLowerCase().includes(q))
+      );
+    };
     export const MITOLOGI_NUSANTARA_DB = [];
     export const KATEGORI_MITOLOGI = [];
     export const PULAU_LIST = [];
