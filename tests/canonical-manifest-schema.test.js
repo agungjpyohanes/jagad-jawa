@@ -166,6 +166,11 @@ describe('1. Canonical Manifest & Public JSON Integrity (42 Datasets)', () => {
     const kamusSanskertaRaw = fs.readFileSync(path.join(dataDir, 'kamus-sansakerta.json'), 'utf8');
     const canon34Raw = fs.readFileSync(path.join(dataDir, '34-kamus-sansakerta.json'), 'utf8');
     assert.equal(kamusSanskertaRaw, canon34Raw, 'kamus-sansakerta.json harus identik dengan 34-kamus-sansakerta.json');
+
+    // Pastikan file ekstra yang tidak dikenal tetap ditolak jika disimulasikan
+    const simulatedFiles = [...allJsonFiles, 'unexpected-file.json'];
+    const unknownFiles = simulatedFiles.filter(f => !canonicalFilenames.includes(f) && !DELIBERATE_EXTRA_FILES.includes(f));
+    assert.deepEqual(unknownFiles, ['unexpected-file.json'], 'File ekstra tak dikenal harus terdeteksi dan ditolak');
   });
 
   it('Mendukung dan memvalidasi tipe root Object maupun Array secara eksplisit, termasuk record bilingual', () => {
@@ -236,6 +241,38 @@ describe('1. Canonical Manifest & Public JSON Integrity (42 Datasets)', () => {
         );
       }
     }
+  });
+
+  it('validateDatasetSchema menolak key tak dikenal, JSON rusak/null, dan root/field penting yang salah', () => {
+    // 1. Key tak dikenal harus selalu ditolak (mengembalikan false)
+    assert.equal(validateDatasetSchema('unknown:canonical-key', { foo: 'bar' }), false);
+    assert.equal(validateDatasetSchema('random:key', [1, 2, 3]), false);
+    assert.equal(validateDatasetSchema('', {}), false);
+    assert.equal(validateDatasetSchema(null, {}), false);
+
+    // 2. Input null/undefined/non-object harus ditolak
+    assert.equal(validateDatasetSchema('kalender:constants', null), false);
+    assert.equal(validateDatasetSchema('kalender:constants', undefined), false);
+    assert.equal(validateDatasetSchema('kalender:constants', 'string'), false);
+    assert.equal(validateDatasetSchema('kalender:constants', 123), false);
+
+    // 3. Root salah (Array yang seharusnya Object, atau Object yang seharusnya Array)
+    assert.equal(validateDatasetSchema('kalender:constants', [{ HARI: [] }]), false);
+    assert.equal(validateDatasetSchema('wuku:ensiklopedia', { not_an_array: true }), false);
+    assert.equal(validateDatasetSchema('pranata:mangsa', { id: 1, nama: 'test' }), false);
+    assert.equal(validateDatasetSchema('dino:rules', [{ dino_gede: [] }]), false);
+    assert.equal(validateDatasetSchema('bincil:matrix', [1, 2, 3]), false);
+
+    // 4. Field penting hilang / salah
+    assert.equal(validateDatasetSchema('kalender:constants', { nama_hari: ['Minggu'] }), false); // neptu_hari hilang
+    assert.equal(validateDatasetSchema('dino:rules', { dino_gede: [] }), false); // dino_ijo hilang
+    assert.equal(validateDatasetSchema('bincil:arti', { padewan: {} }), false); // paringkelan, pancasuda hilang
+    assert.equal(validateDatasetSchema('shio:wuxing', { shio_12: [] }), false); // wu_xing_5 hilang
+    assert.equal(validateDatasetSchema('pranata:mangsa', [{ durasi_hari: 41 }]), false); // id & nama hilang
+    assert.equal(validateDatasetSchema('wuku:ensiklopedia', [{ dewa: 'Sang Hyang' }]), false); // no_wuku & nama hilang
+    assert.equal(validateDatasetSchema('perjodohan:pitung', { random: true }), false); // metode_I_panca_suda hilang
+    assert.equal(validateDatasetSchema('aksara:nglegena', [{ aksara: 'ꦲ' }]), false); // latin hilang
+    assert.equal(validateDatasetSchema('kamus:jawa', [{ jenis: 'kata' }]), false); // kata & jawa hilang
   });
 });
 

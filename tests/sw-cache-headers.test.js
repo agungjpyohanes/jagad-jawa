@@ -161,4 +161,110 @@ describe('Service Worker & Static JSON Cache/Revalidation Suite', () => {
       }, `Gagal mem-parsing JSON ${f}`);
     }
   });
+
+  it('8. Syarat Caching Dataset SW: JSON valid, HTML status 200, MIME salah, respons error, dan JSON rusak', async () => {
+    // Fungsi simulasi logika keputusan caching sw.js
+    async function simulateSwCacheDecision(response) {
+      if (!response || response.status !== 200) {
+        return { shouldCache: false, reason: 'status-not-200' };
+      }
+      const contentType = (response.headers.get('content-type') || '').toLowerCase();
+      const isJsonContentType = contentType.includes('application/json') || contentType.includes('text/json');
+      if (!isJsonContentType) {
+        return { shouldCache: false, reason: 'invalid-content-type' };
+      }
+
+      try {
+        const textContent = await response.clone().text();
+        const trimmed = textContent.trim();
+        if (
+          trimmed.startsWith('<!DOCTYPE') ||
+          trimmed.startsWith('<!doctype') ||
+          trimmed.startsWith('<html') ||
+          (!trimmed.startsWith('{') && !trimmed.startsWith('['))
+        ) {
+          return { shouldCache: false, reason: 'html-or-not-json-shape' };
+        }
+        const parsed = JSON.parse(textContent);
+        if (!parsed || typeof parsed !== 'object' || parsed.error) {
+          return { shouldCache: false, reason: 'invalid-json-body' };
+        }
+        return { shouldCache: true, parsed };
+      } catch (err) {
+        return { shouldCache: false, reason: 'json-parse-error' };
+      }
+    }
+
+    // 1. JSON valid (HTTP 200, application/json) -> HARUS DICACHE
+    const validRes = new Response(JSON.stringify({ nama_hari: ['Minggu'] }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    });
+    const validDecision = await simulateSwCacheDecision(validRes);
+    assert.equal(validDecision.shouldCache, true);
+
+    // 2. HTML dengan status 200 (SPA fallback) -> TIDAK BOLEH DICACHE
+    const html200Res = new Response('<!DOCTYPE html><html><body>SPA Fallback</body></html>', {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+    const htmlDecision = await simulateSwCacheDecision(html200Res);
+    assert.equal(htmlDecision.shouldCache, false);
+    assert.equal(htmlDecision.reason, 'invalid-content-type');
+
+    // 3. MIME salah (misal text/plain atau text/html dengan body JSON) -> TIDAK BOLEH DICACHE
+    const wrongMimeRes = new Response(JSON.stringify({ data: 123 }), {
+      status: 200,
+      headers: { 'Content-Type': 'text/plain' }
+    });
+    const wrongMimeDecision = await simulateSwCacheDecision(wrongMimeRes);
+    assert.equal(wrongMimeDecision.shouldCache, false);
+    assert.equal(wrongMimeDecision.reason, 'invalid-content-type');
+
+    // 4. Respons error (HTTP 404, 500, 503) -> TIDAK BOLEH DICACHE
+    const err404Res = new Response(JSON.stringify({ error: 'Not found' }), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const errDecision = await simulateSwCacheDecision(err404Res);
+    assert.equal(errDecision.shouldCache, false);
+    assert.equal(errDecision.reason, 'status-not-200');
+
+    // 5. JSON rusak (SyntaxError) dengan Content-Type JSON -> TIDAK BOLEH DICACHE
+    const corruptRes = new Response('{ invalid json: corrupt', {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const corruptDecision = await simulateSwCacheDecision(corruptRes);
+    assert.equal(corruptDecision.shouldCache, false);
+    assert.equal(corruptDecision.reason, 'json-parse-error');
+  });
+
+  it('9. Isolasi Cache Origin: Pembersihan cache saat aktivasi hanya menghapus cache milik jagad-jawa-', () => {
+    const swContent = fs.readFileSync(swPath, 'utf8');
+    // Memeriksa bahwa sw.js menyaring k.startsWith('jagad-jawa-')
+    assert.ok(
+      swContent.includes("k.startsWith('jagad-jawa-')") || swContent.includes('k.startsWith("jagad-jawa-")'),
+      'sw.js harus menyaring k.startsWith("jagad-jawa-") agar cache aplikasi lain pada origin tidak terhapus'
+    );
+
+    // Simulasi filter keys
+    const allOriginCacheKeys = [
+      'jagad-jawa-shell-v5',
+      'jagad-jawa-data-v5',
+      'jagad-jawa-shell-v6',
+      'jagad-jawa-data-v6',
+      'other-app-cache-v1',
+      'firebase-heartbeat-store'
+    ];
+    const CURRENT_CACHES = ['jagad-jawa-shell-v6', 'jagad-jawa-data-v6'];
+
+    const keysToDelete = allOriginCacheKeys.filter(
+      (k) => k.startsWith('jagad-jawa-') && !CURRENT_CACHES.includes(k)
+    );
+
+    assert.deepEqual(keysToDelete, ['jagad-jawa-shell-v5', 'jagad-jawa-data-v5']);
+    assert.ok(!keysToDelete.includes('other-app-cache-v1'), 'Cache aplikasi lain tidak boleh dihapus');
+    assert.ok(!keysToDelete.includes('firebase-heartbeat-store'), 'Cache pihak ketiga tidak boleh dihapus');
+  });
 });

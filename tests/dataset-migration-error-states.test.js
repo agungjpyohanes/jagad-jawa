@@ -103,6 +103,18 @@ test('2. Loader Failure Scenarios (404, 500, 503, Malformed JSON, Offline)', asy
     const resSchemaInvalid = await loadDb('kalenderConstants', { forceHttp: true, forceRefresh: true });
     assert.equal(resSchemaInvalid, null, 'Data dengan schema invalid harus ditolak (null)');
 
+    // 2h. Skenario Canonical Key Tidak Dikenal
+    const resUnknownKey = await loadDb('key_tidak_dikenal_xyz', { forceHttp: true, forceRefresh: true });
+    assert.equal(resUnknownKey, null, 'Key tidak dikenal harus ditolak (null)');
+
+    // 2i. Skenario Root atau Field Penting Salah (misal wuku berupa object bukan array)
+    globalThis.fetch = async () => new Response(JSON.stringify({ invalid: 'root' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const resWukuInvalid = await loadDb('wukuEnsiklopedia', { forceHttp: true, forceRefresh: true });
+    assert.equal(resWukuInvalid, null, 'Dataset wuku dengan bentuk bukan array harus ditolak (null)');
+
   } finally {
     globalThis.fetch = originalFetch;
     clearDbCache();

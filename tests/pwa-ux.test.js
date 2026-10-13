@@ -262,3 +262,72 @@ describe('Fase H — UX: Discovery, Breadcrumb & A11y Modal', () => {
     assert.strictEqual(typeof navModule.filterBerandaFeatures, 'function');
   });
 });
+
+describe('jawa-v13 — UI/UX Accessibility, Bilingual Integrity & 360px Layout', () => {
+  it('semua kartu fitur beranda adalah tombol semantik yang dapat difokuskan dan memiliki label jelas', () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    const featureGridMatch = indexHtml.match(/<div id="berandaFeatureGrid"[^>]*>([\s\S]*?)<\/div>\s*<\/section>/);
+    assert.ok(featureGridMatch, 'Elemen #berandaFeatureGrid harus ditemukan di index.html');
+
+    const gridContent = featureGridMatch[1];
+    // Tidak boleh ada kartu berupa div dengan onclick switchTab
+    assert.strictEqual(gridContent.includes('<div onclick="switchTab('), false, 'Tidak boleh ada div clickable tanpa keyboard focus');
+
+    // Semua item berupa <button type="button" onclick="switchTab(...)">
+    const buttonMatches = [...gridContent.matchAll(/<button[^>]*type="button"[^>]*onclick="switchTab\('([^']+)'\)"[^>]*>/g)];
+    assert.strictEqual(buttonMatches.length, 21, 'Harus ada 21 button modul fitur beranda');
+
+    // Setiap button harus memiliki aria-label dan kelas fokus keyboard
+    for (const match of buttonMatches) {
+      const tagStr = match[0];
+      assert.ok(tagStr.includes('aria-label='), `Button ${match[1]} harus memiliki aria-label`);
+      assert.ok(tagStr.includes('focus:outline-none') || tagStr.includes('focus:ring'), `Button ${match[1]} harus memiliki style focus keyboard`);
+    }
+  });
+
+  it('document lang attribute sinkron dengan bahasa yang dipilih (id vs jv)', () => {
+    // Simulasi lingkungan DOM sederhana
+    const originalDocument = globalThis.document;
+    try {
+      const attrs = { lang: 'id' };
+      globalThis.document = {
+        documentElement: {
+          setAttribute: (name, val) => { attrs[name] = val; },
+          getAttribute: (name) => attrs[name]
+        },
+        querySelectorAll: () => []
+      };
+
+      setLanguage('id');
+      assert.strictEqual(document.documentElement.getAttribute('lang'), 'id');
+
+      setLanguage('jv');
+      assert.strictEqual(document.documentElement.getAttribute('lang'), 'jv');
+
+      setLanguage('id');
+      assert.strictEqual(document.documentElement.getAttribute('lang'), 'id');
+    } finally {
+      globalThis.document = originalDocument;
+    }
+  });
+
+  it('locale bahasa Indonesia (id.js) bersih dari string bahasa Jawa yang tidak sengaja tercampur', async () => {
+    const { id } = await import('../src/locales/id.js');
+
+    assert.strictEqual(id.hero_today_tag, 'Hari Ini');
+    assert.strictEqual(id.hero_quick_selametan_desc, 'Geblak hingga Nyewu');
+    assert.strictEqual(id.nujum_nonjodoh_p1, 'Pihak Pertama (Orang 1)');
+    assert.strictEqual(id.nujum_nonjodoh_p2, 'Pihak Kedua (Orang 2)');
+    assert.strictEqual(id.cal_saring_label, 'Saring Hari:');
+    assert.strictEqual(id.cal_filter_all, 'Semua Hari');
+    assert.strictEqual(id.cal_filter_ijo, 'Hari Baik (Becik)');
+  });
+
+  it('wadah filter dan kontrol view mode kalender mendukung pembungkusan responsif untuk viewport 360px', () => {
+    const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    assert.ok(indexHtml.includes('id="calFilterGroup"'), 'Elemen #calFilterGroup harus ada');
+    assert.ok(indexHtml.includes('id="btnCalModeGrid"'), 'Elemen #btnCalModeGrid harus ada');
+    assert.ok(indexHtml.includes('id="btnCalModeList"'), 'Elemen #btnCalModeList harus ada');
+    assert.ok(indexHtml.includes('flex flex-col sm:flex-row'), 'Wadah filter kalender harus flex-col di mobile dan sm:flex-row');
+  });
+});

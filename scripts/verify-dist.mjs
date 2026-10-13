@@ -13,95 +13,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { CANONICAL_KEYS } from '../js/services/datasetManifest.js';
+import { validateDatasetSchema } from '../js/services/dbLoader.js';
+
 const distDir = path.resolve(process.cwd(), 'dist');
 
-// Definisi 42 canonical dataset keys dan file mappings
-const CANONICAL_DATASET_MAP = {
-  'kalender:constants': '01-kalender-constants.json',
-  'wuku:ensiklopedia': '02-wuku-ensiklopedia.json',
-  'bincil:arti': '03-bincil-arti.json',
-  'dino:rules': '04-dino-rules.json',
-  'pranata:mangsa': '05-pranata-mangsa.json',
-  'bincil:matrix': '06-bincil-matrix-bilingual.json',
-  'zodiak:all': '07-zodiak-bilingual.json',
-  'sasi:jawa': '08-sasi-jawa-bilingual.json',
-  'shio:wuxing': '09-shio-wuxing-bilingual.json',
-  'pasaran:watak': '10-pasaran-watak-bilingual.json',
-  'perjodohan:pitung': '11-pitung-perjodohan-bilingual.json',
-  'karakter:dasar': '12-karakter-dasar-bilingual.json',
-  'pekerjaan:weton': '13-pekerjaan-weton-bilingual.json',
-  'selametan:rules': '14-selametan-rules.json',
-  'ijab:all': '15-ijab-bilingual.json',
-  'perjodohan:klasik': '16-pitung-perjodohan.json',
-  'perjodohan:aksara': '17-aksara-perjodohan.json',
-  'selametan:klasik': '18-selametan-rules.json',
-  'ijab:klasik': '19-ijab.json',
-  'sasmitha:all': '20-sasmitha.json',
-  'petung:tetanen': '21-petung-tetanen-bilingual.json',
-  'petung:ternak': '22-petung-ternak-bilingual.json',
-  'omah:all': '23-omah-bilingual.json',
-  'wuku:petenget': '24-wuku-petenget-bilingual.json',
-  'siklus:padewan': '25-siklus-padewan-bilingual.json',
-  'palenggahan:all': '26-palenggahan-bilingual.json',
-  'bincil:arti:alt': '27-bincil-arti-bilingual.json',
-  'marriage:hasil': '28-marriage-hasil-bilingual.json',
-  'sasi:jawa:alt': '29-sasi-jawa-bilingual.json',
-  'aksara:nglegena': '30-aksara-nglegena-bilingual.json',
-  'dino:gede': '31-dino-gede-bilingual.json',
-  'dino:sirikan': '32-dino-sirikan-adhep-bilingual.json',
-  'kamus:jawa': '33-kamus-jawa.json',
-  'kamus:sansakerta': '34-kamus-sansakerta.json',
-  'pustaka:dongo': '35-pustaka-dongo.json',
-  'pustaka:jawa': '36-pustaka-jawa.json',
-  'sinengker:khusus': '37-sinengker-khusus.json',
-  'wayang:all': '38-wayang-all.json',
-  'pitutur:all': '39-pitutur-all.json',
-  'mitologi:all': '40-mitologi-all.json',
-  'pustaka:digital': '41-pustaka-digital.json',
-  'tumpeng:all': '42-tumpeng-all.json'
-};
-
-function validateSchema(key, data) {
-  if (data === null || data === undefined) return false;
-  switch (key) {
-    case 'kalender:constants':
-      return Boolean(data.nama_hari || data.HARI || data.neptu_hari);
-    case 'wuku:ensiklopedia':
-      return Array.isArray(data) || Array.isArray(data.wuku);
-    case 'dino:rules':
-      return typeof data === 'object' && (Array.isArray(data.dino_gede) || Array.isArray(data.dino_ijo));
-    case 'bincil:matrix':
-      return typeof data === 'object' && Object.keys(data).length > 0;
-    case 'perjodohan:pitung':
-      return typeof data === 'object' && Boolean(data.metode_I_panca_suda || data.HASIL_I_JODOH);
-    case 'selametan:rules':
-      return typeof data === 'object' && Boolean(data.target_hari_berdasarkan_wafat || data.jenis_selametan);
-    case 'ijab:all':
-      return typeof data === 'object' && Boolean(data.neptu_ijab_dina || data.wuku_ijab);
-    case 'omah:all':
-      return typeof data === 'object';
-    case 'petung:ternak':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'petung:tetanen':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'wuku:petenget':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'sasmitha:all':
-      return typeof data === 'object';
-    case 'wayang:all':
-      return Array.isArray(data) || Array.isArray(data.wayang_list);
-    case 'pitutur:all':
-      return Array.isArray(data) || Array.isArray(data.pitutur_list);
-    case 'mitologi:all':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'pustaka:digital':
-      return typeof data === 'object';
-    case 'tumpeng:all':
-      return Array.isArray(data) || typeof data === 'object';
-    default:
-      return typeof data === 'object';
-  }
-}
+// Menggunakan CANONICAL_KEYS dari datasetManifest.js sebagai sumber kebenaran tunggal
+const CANONICAL_DATASET_MAP = Object.fromEntries(
+  Object.entries(CANONICAL_KEYS).map(([key, meta]) => [key, meta.filename])
+);
 
 function runVerification() {
   console.log('🔍 [verify-dist] Memulai verifikasi artefak dist/ ...\n');
@@ -197,7 +117,7 @@ function runVerification() {
       try {
         const rawContent = fs.readFileSync(filePath, 'utf8');
         const parsed = JSON.parse(rawContent);
-        if (!validateSchema(canonicalKey, parsed)) {
+        if (!validateDatasetSchema(canonicalKey, parsed)) {
           errors.push(`File "${expectedFile}" (key: ${canonicalKey}) gagal validasi skema struktur`);
         } else {
           validDatasetCount++;

@@ -195,50 +195,108 @@ export function getDbUrl(filename) {
 }
 
 /**
- * Schema validation ringan per domain/key
+ * Schema validation eksplisit per canonical key (42 datasets).
+ * Key yang tidak dikenal akan mengembalikan false.
  * @param {string} canonicalKey
  * @param {any} data
  * @returns {boolean}
  */
 export function validateDatasetSchema(canonicalKey, data) {
   if (data === null || data === undefined) return false;
+  if (typeof data !== 'object') return false;
+
+  const isArr = Array.isArray(data);
+  const isObj = !isArr && typeof data === 'object';
+
   switch (canonicalKey) {
     case 'kalender:constants':
-      return Boolean(data.nama_hari || data.HARI || data.neptu_hari);
+      return isObj && Boolean(data.neptu_hari) && Boolean(data.nama_hari || data.HARI || data.epoch_jdn || data.epoch_pawukon);
     case 'wuku:ensiklopedia':
-      return Array.isArray(data) || Array.isArray(data.wuku);
+      return (isArr && data.length > 0 && data.every(item => item && (item.no_wuku !== undefined || item.id !== undefined) && item.nama)) ||
+             (isObj && Array.isArray(data.wuku) && data.wuku.length > 0);
+    case 'bincil:arti':
+      return isObj && Boolean(data.padewan) && Boolean(data.paringkelan) && Boolean(data.pancasuda);
     case 'dino:rules':
-      return typeof data === 'object' && (Array.isArray(data.dino_gede) || Array.isArray(data.dino_ijo));
+      return isObj && Array.isArray(data.dino_gede) && Array.isArray(data.dino_ijo);
+    case 'pranata:mangsa':
+      return isArr && data.length > 0 && data.every(item => item && (item.id !== undefined || item.no !== undefined) && item.nama);
     case 'bincil:matrix':
-      return typeof data === 'object' && Object.keys(data).length > 0;
+      return isObj && Object.keys(data).length >= 10 && Object.values(data).some(v => v && (v.wuku || v.no_wuku));
+    case 'zodiak:all':
+      return isArr && data.length > 0 && data.every(item => item && item.nama && (item.rentang || item.elemen));
+    case 'sasi:jawa':
+      return isArr && data.length > 0 && data.every(item => item && (item.sasi_jawa || item.nama) && item.watak);
+    case 'shio:wuxing':
+      return isObj && Array.isArray(data.shio_12) && Array.isArray(data.wu_xing_5);
+    case 'pasaran:watak':
+      return isArr && data.length > 0 && data.every(item => item && item.nama && (item.watak_utama || item.deskripsi || item.lambang));
     case 'perjodohan:pitung':
-      return typeof data === 'object' && Boolean(data.metode_I_panca_suda || data.HASIL_I_JODOH);
+      return isObj && Boolean(data.metode_I_panca_suda || data.HASIL_I_JODOH);
+    case 'karakter:dasar':
+      return isArr && data.length > 0 && data.every(item => item && (item.tipe || item.nama));
+    case 'pekerjaan:weton':
+      return isArr && data.length > 0 && data.every(item => item && (item.dino || item.dina) && (item.pasaran || item.pas));
     case 'selametan:rules':
-      return typeof data === 'object' && Boolean(data.target_hari_berdasarkan_wafat || data.jenis_selametan);
+      return isObj && Boolean(data.target_hari_berdasarkan_wafat || data.jenis_selametan);
     case 'ijab:all':
-      return typeof data === 'object' && Boolean(data.neptu_ijab_dina || data.wuku_ijab);
-    case 'omah:all':
-      return typeof data === 'object';
-    case 'petung:ternak':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'petung:tetanen':
-      return Array.isArray(data) || typeof data === 'object';
-    case 'wuku:petenget':
-      return Array.isArray(data) || typeof data === 'object';
+      return isObj && Boolean(data.neptu_ijab_dina || data.wuku_ijab);
+    case 'perjodohan:pitung-alt':
+      return isArr && data.length > 0 && data.every(item => item && item.metode && Array.isArray(item.hasil));
+    case 'aksara:perjodohan':
+      return isArr && data.length > 0 && data.every(item => item && (item.kode || item.aksara));
+    case 'selametan:rules-alt':
+      return isObj && Boolean(data.target_hari_berdasarkan_wafat || data.jenis);
+    case 'ijab:alt':
+      return isObj && Boolean(data.neptu_dina_ijab || data.wuku_ijab);
     case 'sasmitha:all':
-      return typeof data === 'object';
+      return isObj && Boolean(data.impen || data.kedut);
+    case 'petung:tetanen':
+      return isArr && data.length > 0 && data.every(item => item && (item.dino || item.dina) && (item.pasaran || item.pas) && (item.kategori || item.makna));
+    case 'petung:ternak':
+      return isArr && data.length > 0 && data.every(item => item && (item.dino || item.dina) && (item.pasaran || item.pas));
+    case 'omah:all':
+      return isObj && Boolean(data.cempuri_lawangan || data.omah_sisa);
+    case 'wuku:petenget':
+      return isObj && Object.keys(data).length >= 10 && Boolean(data.Sinta || data.Landep);
+    case 'siklus:padewan':
+      return isArr && data.length > 0 && data.every(item => item && (item.no !== undefined || item.id !== undefined) && item.nama);
+    case 'palenggahan:all':
+      return isArr && data.length > 0 && data.every(item => item && (item.no !== undefined || item.id !== undefined) && (item.surasa || item.arti));
+    case 'bincil:arti-bilingual':
+      return isObj && Boolean(data.padewan) && Boolean(data.paringkelan) && Boolean(data.pancasuda);
+    case 'marriage:hasil-bilingual':
+      return isArr && data.length > 0 && data.every(item => item && item.metode && item.nama);
+    case 'sasi:jawa-alt':
+      return isArr && data.length > 0 && data.every(item => item && (item.sasi || item.sasi_jawa) && item.watak);
+    case 'aksara:nglegena':
+      return isArr && data.length > 0 && data.every(item => item && item.latin && item.aksara);
+    case 'dino:gede':
+      return isArr && data.length > 0 && data.every(item => item && (item.dino || item.hari || item.dina) && (item.pasaran || item.pas));
+    case 'sirikan:adhep':
+      return isArr && data.length > 0 && data.every(item => item && (item.dina_lahir || item.hari) && item.sirikan_adhep);
+    case 'kamus:jawa':
+      return isArr && data.length > 0 && data.every(item => item && (item.kata || item.jawa));
+    case 'kamus:sanskerta':
+      return isArr && data.length > 0 && data.every(item => item && (item.kata || item.sanskerta));
+    case 'pustaka:dongo':
+      return isObj && Boolean(data.entri || data.kategori || data.meta);
+    case 'pustaka:jawa':
+      return isObj && Boolean(data.kautamaning_laku || data.ramuan_obat || data.aji_rajah_kalacakra || data.meta);
+    case 'sinengker:khusus':
+      return isObj && Boolean(data.petung_kompas_danyang || data.mendhem_ari_ari || data.meta);
     case 'wayang:all':
-      return Array.isArray(data) || Array.isArray(data.wayang_list);
+      return (isArr && data.length > 0) || (isObj && Array.isArray(data.wayang_list) && data.wayang_list.length > 0);
     case 'pitutur:all':
-      return Array.isArray(data) || Array.isArray(data.pitutur_list);
+      return (isArr && data.length > 0) || (isObj && Array.isArray(data.pitutur_list) && data.pitutur_list.length > 0);
     case 'mitologi:all':
-      return Array.isArray(data) || typeof data === 'object';
+      return (isArr && data.length > 0 && data.every(item => item && (item.id || item.judul))) ||
+             (isObj && Array.isArray(data.cerita) && data.cerita.length > 0);
     case 'pustaka:digital':
-      return typeof data === 'object';
+      return isObj && Boolean(data.naskah_kuno || data.dokumen_referensi || data.meta);
     case 'tumpeng:all':
-      return Array.isArray(data) || typeof data === 'object';
+      return (isArr && data.length > 0) || (isObj && Boolean(data.ubarampe || data.tumpeng_warna));
     default:
-      return true;
+      return false;
   }
 }
 
@@ -285,7 +343,13 @@ export async function loadDb(key, options = {}) {
             for (const p of candidatePaths) {
               if (nodeFs.existsSync(p)) {
                 const raw = nodeFs.readFileSync(p, 'utf8');
-                data = JSON.parse(raw);
+                const parsed = JSON.parse(raw);
+                if (!canonicalKey || !validateDatasetSchema(canonicalKey, parsed)) {
+                  console.warn(`[dbLoader] Schema check gagal untuk ${canonicalKey || 'unknown-key'} dari local file`);
+                  data = null;
+                } else {
+                  data = parsed;
+                }
                 break;
               }
             }
@@ -294,7 +358,14 @@ export async function loadDb(key, options = {}) {
           if (typeof fetch === 'function') {
             const url = getDbUrl(filename);
             const res = await fetch(url);
-            if (res.ok) data = await res.json();
+            if (res.ok) {
+              const parsed = await res.json();
+              if (!canonicalKey || !validateDatasetSchema(canonicalKey, parsed)) {
+                data = null;
+              } else {
+                data = parsed;
+              }
+            }
           }
         }
       } else {
@@ -314,8 +385,8 @@ export async function loadDb(key, options = {}) {
 
           if (res.ok) {
             const parsed = await res.json();
-            if (canonicalKey && !validateDatasetSchema(canonicalKey, parsed)) {
-              console.warn(`[dbLoader] Schema check gagal untuk ${canonicalKey} dari ${targetUrl}`);
+            if (!canonicalKey || !validateDatasetSchema(canonicalKey, parsed)) {
+              console.warn(`[dbLoader] Schema check gagal untuk ${canonicalKey || 'unknown-key'} dari ${targetUrl}`);
               data = null;
             } else {
               data = parsed;

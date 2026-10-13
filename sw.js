@@ -45,13 +45,13 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// 2. Activate Event: Bersihkan Seluruh Cache Versi Lama
+// 2. Activate Event: Bersihkan Seluruh Cache Versi Lama Milik jagad-jawa-
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys
-          .filter((k) => !CURRENT_CACHES.includes(k))
+          .filter((k) => k.startsWith('jagad-jawa-') && !CURRENT_CACHES.includes(k))
           .map((k) => {
             console.log(`[SW ${SW_VERSION}] Menghapus cache lawas:`, k);
             return caches.delete(k);
@@ -85,11 +85,16 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then(async (networkResponse) => {
-          // Hanya cache jika HTTP 200 OK murni
+          // Hanya cache jika HTTP 200 OK murni dan Content-Type adalah JSON
           if (networkResponse && networkResponse.status === 200) {
-            const contentType = networkResponse.headers.get('content-type') || '';
-            // Pastikan bukan respon HTML SPA fallback yang menyamar sebagai status 200
+            const contentType = (networkResponse.headers.get('content-type') || '').toLowerCase();
+            // Pastikan Content-Type menunjukkan JSON dan bukan respon HTML SPA fallback
             const isJsonContentType = contentType.includes('application/json') || contentType.includes('text/json');
+
+            if (!isJsonContentType) {
+              console.warn(`[SW ${SW_VERSION}] Content-Type untuk ${url.pathname} bukan JSON ("${contentType}"), lewati caching.`);
+              return networkResponse;
+            }
 
             try {
               const cloneForValidation = networkResponse.clone();
@@ -99,6 +104,7 @@ self.addEventListener('fetch', (event) => {
               // Verifikasi integritas: tidak boleh diawali tag HTML <!DOCTYPE atau <html
               if (
                 !trimmed.startsWith('<!DOCTYPE') &&
+                !trimmed.startsWith('<!doctype') &&
                 !trimmed.startsWith('<html') &&
                 (trimmed.startsWith('{') || trimmed.startsWith('['))
               ) {
