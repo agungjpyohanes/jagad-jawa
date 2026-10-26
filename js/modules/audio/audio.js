@@ -13,21 +13,21 @@ let puspawarnaAudio = null;
 
 export const saronScales = {
   slendro: [
-    { note: '1 (Ji)', freq: 261.63, key: 'A' },
-    { note: '2 (Ro)', freq: 293.66, key: 'S' },
-    { note: '3 (Lu)', freq: 329.63, key: 'D' },
-    { note: '5 (Ma)', freq: 392.00, key: 'F' },
-    { note: '6 (Nem)', freq: 440.00, key: 'G' },
-    { note: 'i (Ji Alit)', freq: 523.25, key: 'H' }
+    { note: '1 (Ji)', freq: 261.63, key: '1' },
+    { note: '2 (Ro)', freq: 293.66, key: '2' },
+    { note: '3 (Lu)', freq: 329.63, key: '3' },
+    { note: '5 (Ma)', freq: 392.00, key: '5' },
+    { note: '6 (Nem)', freq: 440.00, key: '6' },
+    { note: 'i (Ji Alit)', freq: 523.25, key: '7' }
   ],
   pelog: [
-    { note: '1 (Penunggul)', freq: 246.94, key: 'A' },
-    { note: '2 (Gulu)', freq: 277.18, key: 'S' },
-    { note: '3 (Dhadha)', freq: 311.13, key: 'D' },
-    { note: '4 (Pelog)', freq: 349.23, key: 'F' },
-    { note: '5 (Lima)', freq: 369.99, key: 'G' },
-    { note: '6 (Nem)', freq: 415.30, key: 'H' },
-    { note: '7 (Barang)', freq: 493.88, key: 'J' }
+    { note: '1 (Penunggul)', freq: 246.94, key: '1' },
+    { note: '2 (Gulu)', freq: 277.18, key: '2' },
+    { note: '3 (Dhadha)', freq: 311.13, key: '3' },
+    { note: '4 (Pelog)', freq: 349.23, key: '4' },
+    { note: '5 (Lima)', freq: 369.99, key: '5' },
+    { note: '6 (Nem)', freq: 415.30, key: '6' },
+    { note: '7 (Barang)', freq: 493.88, key: '7' }
   ]
 };
 
@@ -130,7 +130,116 @@ export function playDalangFX(type, showToastFn = showToast) {
   }
 }
 
+let isGamelanKeyboardInitialized = false;
+
+export function handleGamelanKeyDown(e) {
+  // Abaikan event jika pengguna sedang mengetik pada input/textarea/select/contenteditable
+  const activeEl = document.activeElement;
+  if (
+    activeEl &&
+    (activeEl.tagName === 'INPUT' ||
+     activeEl.tagName === 'TEXTAREA' ||
+     activeEl.tagName === 'SELECT' ||
+     activeEl.isContentEditable)
+  ) {
+    return;
+  }
+
+  const gamelanTab = document.getElementById('tab-gamelan');
+  const isGamelanVisible = gamelanTab && !gamelanTab.classList.contains('hidden');
+
+  // Spasi: Gong Ageng (Cegah scrolling halaman jika tab gamelan aktif)
+  if (e.code === 'Space' || e.key === ' ') {
+    if (isGamelanVisible) {
+      e.preventDefault();
+      playGamelanTone(65, 'gong');
+      const el = document.getElementById('gong-btn');
+      if (el) {
+        el.classList.add('hit-anim');
+        setTimeout(() => el.classList.remove('hit-anim'), 200);
+      }
+      showToast('GONG AGENG!');
+    }
+    return;
+  }
+
+  // Cek tombol lainnya (hanya jika tab gamelan aktif atau terlihat)
+  if (!isGamelanVisible && typeof document !== 'undefined') {
+    // Jika tidak di tab gamelan, jangan ganggu penekanan keyboard umum
+    return;
+  }
+
+  const key = (e.key || '').toUpperCase();
+
+  // Kempul: K
+  if (key === 'K') {
+    playGamelanTone(140, 'kempul');
+    const el = document.getElementById('kempul-btn');
+    if (el) {
+      el.classList.add('hit-anim');
+      setTimeout(() => el.classList.remove('hit-anim'), 150);
+    }
+    showToast('Kempul!');
+    return;
+  }
+
+  // Bonang: Q, W, E, R, T
+  const bonangMap = {
+    'Q': { num: 1, freq: 523.25, id: 'bonang-btn-1' },
+    'W': { num: 2, freq: 587.33, id: 'bonang-btn-2' },
+    'E': { num: 3, freq: 659.25, id: 'bonang-btn-3' },
+    'R': { num: 5, freq: 783.99, id: 'bonang-btn-5' },
+    'T': { num: 6, freq: 880.00, id: 'bonang-btn-6' }
+  };
+
+  if (bonangMap[key]) {
+    const b = bonangMap[key];
+    const el = document.getElementById(b.id);
+    hitBonang(b.num, b.freq, el);
+    return;
+  }
+
+  // Saron: [1-7] atau [A-J]
+  const list = saronScales[currentGamelanLaras] || [];
+  let saronIndex = -1;
+
+  if (currentGamelanLaras === 'slendro') {
+    if (key === '1' || key === 'A') saronIndex = 0;
+    else if (key === '2' || key === 'S') saronIndex = 1;
+    else if (key === '3' || key === 'D') saronIndex = 2;
+    else if (key === '4') saronIndex = 2;
+    else if (key === '5' || key === 'F') saronIndex = 3;
+    else if (key === '6' || key === 'G') saronIndex = 4;
+    else if (key === '7' || key === 'H') saronIndex = 5;
+  } else {
+    if (key === '1' || key === 'A') saronIndex = 0;
+    else if (key === '2' || key === 'S') saronIndex = 1;
+    else if (key === '3' || key === 'D') saronIndex = 2;
+    else if (key === '4' || key === 'F') saronIndex = 3;
+    else if (key === '5' || key === 'G') saronIndex = 4;
+    else if (key === '6' || key === 'H') saronIndex = 5;
+    else if (key === '7' || key === 'J') saronIndex = 6;
+  }
+
+  if (saronIndex >= 0 && saronIndex < list.length) {
+    const item = list[saronIndex];
+    playGamelanTone(item.freq, 'saron');
+    const el = document.getElementById(`saron-btn-${saronIndex}`);
+    if (el) {
+      el.classList.add('hit-anim');
+      setTimeout(() => el.classList.remove('hit-anim'), 150);
+    }
+  }
+}
+
+export function initGamelanKeyboardListener() {
+  if (isGamelanKeyboardInitialized || typeof window === 'undefined') return;
+  window.addEventListener('keydown', handleGamelanKeyDown);
+  isGamelanKeyboardInitialized = true;
+}
+
 export function renderGamelanKeys() {
+  initGamelanKeyboardListener();
   const container = document.getElementById('saronContainer');
   if (!container) return;
   container.innerHTML = '';

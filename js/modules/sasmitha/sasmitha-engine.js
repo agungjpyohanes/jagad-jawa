@@ -17,18 +17,31 @@ import {
 } from '../../data/sasmitha-db.js';
 
 function norm(str) {
+  if (typeof str === 'object' && str !== null) {
+    return (String(str.jv || '') + ' ' + String(str.id || '')).trim().toLowerCase();
+  }
   return String(str || '').trim().toLowerCase();
+}
+
+function getActiveDataset(sectionKey, fallback) {
+  if (typeof globalThis !== 'undefined' && globalThis._currentSasmithaData) {
+    const val = globalThis._currentSasmithaData[sectionKey];
+    if (Array.isArray(val) && val.length > 0) return val;
+  }
+  return fallback;
 }
 
 /**
  * Cari tanda impen (mimpi) berdasarkan kata kunci
  * @param {string} query
+ * @param {Array} [customDataset]
  * @returns {Array}
  */
-export function searchImpen(query = '') {
+export function searchImpen(query = '', customDataset = null) {
+  const activeImpen = customDataset || getActiveDataset('impen', SASMITHA_IMPEN);
   const q = norm(query);
-  if (!q) return [...SASMITHA_IMPEN];
-  return SASMITHA_IMPEN.filter(im =>
+  if (!q) return [...activeImpen];
+  return activeImpen.filter(im =>
     norm(im.yen_ngimpi).includes(q) || norm(im.pratanda).includes(q)
   );
 }
@@ -39,13 +52,15 @@ export function searchImpen(query = '') {
  * @param {string} [options.query]
  * @param {string} [options.kategori]
  * @param {boolean} [options.includeSensitive]
+ * @param {Array} [options.customDataset]
  * @returns {Array}
  */
-export function getKedutList({ query = '', kategori = '', includeSensitive = false } = {}) {
+export function getKedutList({ query = '', kategori = '', includeSensitive = false, customDataset = null } = {}) {
+  const activeKedut = customDataset || getActiveDataset('kedut', SASMITHA_KEDUT);
   const q = norm(query);
   const k = norm(kategori);
 
-  return SASMITHA_KEDUT.filter(kd => {
+  return activeKedut.filter(kd => {
     // Sembunyikan item sensitif jika includeSensitive false
     if (!includeSensitive && kd.is_sensitive) return false;
 
@@ -66,12 +81,14 @@ export function getKedutList({ query = '', kategori = '', includeSensitive = fal
 /**
  * Ambil sasmitha gerhana menurut sasi Jawa (12 Sasi)
  * @param {string} sasiName
+ * @param {Array} [customDataset]
  * @returns {object|null}
  */
-export function getGerhanaBySasi(sasiName) {
+export function getGerhanaBySasi(sasiName, customDataset = null) {
   if (!sasiName) return null;
+  const activeGerhana = customDataset || getActiveDataset('gerhana', SASMITHA_GERAHANA);
   const nS = norm(sasiName);
-  const found = SASMITHA_GERAHANA.find(g =>
+  const found = activeGerhana.find(g =>
     norm(g.sasi_jawa) === nS ||
     norm(g.alias_sumber) === nS ||
     norm(g.sasi_jawa).includes(nS)
@@ -83,14 +100,16 @@ export function getGerhanaBySasi(sasiName) {
  * Ambil sasmitha lindu (gempa) menurut sasi Jawa dan waktu (Awan vs Wengi)
  * @param {string} sasiName
  * @param {'awan'|'wengi'} waktu
+ * @param {Array} [customDataset]
  * @returns {object|null}
  */
-export function getLinduBySasi(sasiName, waktu = 'awan') {
+export function getLinduBySasi(sasiName, waktu = 'awan', customDataset = null) {
   if (!sasiName) return null;
+  const activeLindu = customDataset || getActiveDataset('lindu', SASMITHA_LINDU);
   const nS = norm(sasiName);
   const isWengi = norm(waktu) === 'wengi';
 
-  const found = SASMITHA_LINDU.find(l =>
+  const found = activeLindu.find(l =>
     norm(l.sasi_jawa) === nS ||
     norm(l.sasi_jawa).includes(nS)
   );
@@ -106,21 +125,25 @@ export function getLinduBySasi(sasiName, waktu = 'awan') {
 
 /**
  * Ambil semua data tejo arah (7 Arah)
+ * @param {Array} [customDataset]
  * @returns {Array}
  */
-export function getTejoList() {
-  return [...SASMITHA_TEJO];
+export function getTejoList(customDataset = null) {
+  const activeTejo = customDataset || getActiveDataset('tejo', SASMITHA_TEJO);
+  return [...activeTejo];
 }
 
 /**
  * Ambil data tejo berdasarkan arah
  * @param {string} arah
+ * @param {Array} [customDataset]
  * @returns {object|null}
  */
-export function getTejoByArah(arah) {
+export function getTejoByArah(arah, customDataset = null) {
   if (!arah) return null;
+  const list = getTejoList(customDataset);
   const nA = norm(arah);
-  const found = SASMITHA_TEJO.find(t =>
+  const found = list.find(t =>
     norm(t.arah_jawa) === nA ||
     norm(t.arah_id) === nA ||
     norm(t.arah_jawa).includes(nA) ||

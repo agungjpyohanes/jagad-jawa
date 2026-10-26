@@ -1263,13 +1263,21 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'sasmitha': {
         const rawSasmitha = await loadDb('sasmitha').catch(() => null);
-        result = rawSasmitha || (isNodeEnvironment ? getDbSync('20-sasmitha.json') : null) || {
-          impen: MASTER_SASMITHA_IMPEN,
-          kedut: MASTER_SASMITHA_KEDUT,
-          gerhana: MASTER_SASMITHA_GERAHANA,
-          lindu: MASTER_SASMITHA_LINDU,
-          tejo: MASTER_SASMITHA_TEJO
+        const effective = rawSasmitha || (isNodeEnvironment ? getDbSync('20-sasmitha.json') : null);
+        result = {
+          impen: effective?.impen || MASTER_SASMITHA_IMPEN,
+          kedut: effective?.kedut || MASTER_SASMITHA_KEDUT,
+          gerhana: effective?.gerhana || effective?.gerahana_sasi || MASTER_SASMITHA_GERAHANA,
+          gerahana_sasi: effective?.gerahana_sasi || effective?.gerhana || MASTER_SASMITHA_GERAHANA,
+          lindu: effective?.lindu || effective?.lindu_sasi || MASTER_SASMITHA_LINDU,
+          lindu_sasi: effective?.lindu_sasi || effective?.lindu || MASTER_SASMITHA_LINDU,
+          tejo: effective?.tejo || effective?.tejo_arah || MASTER_SASMITHA_TEJO,
+          tejo_arah: effective?.tejo_arah || effective?.tejo || MASTER_SASMITHA_TEJO,
+          ref_sasi_jawa: effective?.ref_sasi_jawa || REF_SASI_JAWA
         };
+        if (typeof globalThis !== 'undefined') {
+          globalThis._currentSasmithaData = result;
+        }
         break;
       }
 
@@ -1437,14 +1445,20 @@ export function getDomainFallback(domain) {
         petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || masterGetTetanen(),
         pranataMangsa: getDbSync('05-pranata-mangsa.json') || MASTER_PRANATA_MANGSA || []
       };
-    case 'sasmitha':
-      return getDbSync('20-sasmitha.json') || {
-        impen: MASTER_SASMITHA_IMPEN,
-        kedut: MASTER_SASMITHA_KEDUT,
-        gerhana: MASTER_SASMITHA_GERAHANA,
-        lindu: MASTER_SASMITHA_LINDU,
-        tejo: MASTER_SASMITHA_TEJO
+    case 'sasmitha': {
+      const d = getDbSync('20-sasmitha.json');
+      return {
+        impen: d?.impen || MASTER_SASMITHA_IMPEN,
+        kedut: d?.kedut || MASTER_SASMITHA_KEDUT,
+        gerhana: d?.gerhana || d?.gerahana_sasi || MASTER_SASMITHA_GERAHANA,
+        gerahana_sasi: d?.gerahana_sasi || d?.gerhana || MASTER_SASMITHA_GERAHANA,
+        lindu: d?.lindu || d?.lindu_sasi || MASTER_SASMITHA_LINDU,
+        lindu_sasi: d?.lindu_sasi || d?.lindu || MASTER_SASMITHA_LINDU,
+        tejo: d?.tejo || d?.tejo_arah || MASTER_SASMITHA_TEJO,
+        tejo_arah: d?.tejo_arah || d?.tejo || MASTER_SASMITHA_TEJO,
+        ref_sasi_jawa: d?.ref_sasi_jawa || REF_SASI_JAWA
       };
+    }
     case 'wayang':
       return getDbSync('38-wayang-all.json') || { wayang_list: masterGetWayangList(), kategori_list: masterGetWayangKat() };
     case 'pitutur':

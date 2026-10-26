@@ -84,11 +84,13 @@ const KEDUT_CATEGORIES = [
  * Inisialisasi komponen UI Sasmitha
  */
 export function initSasmithaUI() {
-  loadDomainData('sasmitha').catch((e) => {
-    console.warn('[sasmitha-ui] loadDomainData fallback:', e);
-  });
   setupEventListeners();
   renderSasmithaView();
+  loadDomainData('sasmitha').then(() => {
+    renderSasmithaView();
+  }).catch((e) => {
+    console.warn('[sasmitha-ui] loadDomainData fallback:', e);
+  });
 }
 
 function setupEventListeners() {
@@ -311,7 +313,8 @@ export function setKedutViewMode(mode) {
 export function pilihTitikAnatomiKedut(id) {
   const numId = Number(id);
   selectedAnatomiPointId = numId;
-  const item = SASMITHA_KEDUT.find(k => k.id === numId);
+  const activeKedut = (typeof globalThis !== 'undefined' && globalThis._currentSasmithaData?.kedut) || SASMITHA_KEDUT;
+  const item = activeKedut.find(k => k.id === numId);
   if (!item) return;
 
   // Update spotlight card if already rendered
@@ -550,10 +553,12 @@ function renderKedutContent() {
 
             <!-- SCROLLABLE LEGEND LIST -->
             <div class="overflow-y-auto space-y-2 pr-1 flex-1 custom-scrollbar">
-              ${TITIK_ANATOMI_KEDUT.map(p => {
-                const item = SASMITHA_KEDUT.find(k => k.id === p.id) || { bagian_badan: p.label, wahanane: '-', kategori: p.kategori };
-                const isSelected = p.id === selectedAnatomiPointId;
-                return `
+              ${(() => {
+                const activeKedut = (typeof globalThis !== 'undefined' && globalThis._currentSasmithaData?.kedut) || SASMITHA_KEDUT;
+                return TITIK_ANATOMI_KEDUT.map(p => {
+                  const item = activeKedut.find(k => k.id === p.id) || { bagian_badan: p.label, wahanane: '-', kategori: p.kategori };
+                  const isSelected = p.id === selectedAnatomiPointId;
+                  return `
                   <div onclick="window.pilihTitikAnatomiKedut(${p.id})" 
                     data-point-id="${p.id}"
                     class="anatomi-legend-item p-2.5 rounded-xl border transition cursor-pointer flex flex-col justify-between gap-1 ${isSelected ? 'border-prada bg-sogan-900/80 shadow-md' : 'border-sogan-800/80 bg-wulung/60 hover:border-prada/40'}">
@@ -571,7 +576,8 @@ function renderKedutContent() {
                     </div>
                   </div>
                 `;
-              }).join('')}
+              }).join('');
+            })()}
             </div>
 
             <div class="pt-2 border-t border-sogan-800/80 text-[10.5px] text-sogan-400 flex items-center justify-between">
@@ -1036,4 +1042,16 @@ function escapeHtml(str) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
+}
+
+if (typeof window !== 'undefined') {
+  window.switchSasmithaSubtab = switchSasmithaSubtab;
+  window.onImpenSearchInput = onImpenSearchInput;
+  window.setKedutViewMode = setKedutViewMode;
+  window.pilihTitikAnatomiKedut = pilihTitikAnatomiKedut;
+  window.onKedutCategorySelect = onKedutCategorySelect;
+  window.onKedutSearchInput = onKedutSearchInput;
+  window.onGerhanaSasiSelect = onGerhanaSasiSelect;
+  window.onLinduWaktuToggle = onLinduWaktuToggle;
+  window.onLinduSasiSelect = onLinduSasiSelect;
 }

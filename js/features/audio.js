@@ -10,7 +10,9 @@ import {
   toggleKetawangPuspawarna,
   renderGamelanKeys,
   setGamelanLaras,
-  hitBonang
+  hitBonang,
+  initGamelanKeyboardListener,
+  handleGamelanKeyDown
 } from '../modules/audio/audio.js';
 
 /**
@@ -26,6 +28,10 @@ export function wireAudioFeature() {
   window.renderGamelanKeys = renderGamelanKeys;
   window.setGamelanLaras = setGamelanLaras;
   window.hitBonang = hitBonang;
+  window.initGamelanKeyboardListener = initGamelanKeyboardListener;
+  window.handleGamelanKeyDown = handleGamelanKeyDown;
+
+  initGamelanKeyboardListener();
 }
 
 export {
@@ -35,5 +41,7 @@ export {
   toggleKetawangPuspawarna,
   renderGamelanKeys,
   setGamelanLaras,
-  hitBonang
+  hitBonang,
+  initGamelanKeyboardListener,
+  handleGamelanKeyDown
 };

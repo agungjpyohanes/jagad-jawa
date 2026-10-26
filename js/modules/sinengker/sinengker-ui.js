@@ -32,7 +32,7 @@ import {
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { loadDomainData } from '../../services/dbLoader.js';
 import { renderDataErrorState } from '../../ui/data-error-state.js';
-import { TUMPENG_UBARAMPE, TUMPENG_WARNA } from '../../data/tumpeng.js';
+import { TUMPENG_UBARAMPE, TUMPENG_WARNA, selectTumpengHotspot, selectTumpengWarna } from '../../data/tumpeng.js';
 
 let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
@@ -1950,7 +1950,9 @@ async function renderSinengkerTumpengView(container) {
   `;
 
   // Aktifkan hotspot pertama
-  if (typeof window.selectTumpengHotspot === 'function') {
+  if (typeof selectTumpengHotspot === 'function') {
+    selectTumpengHotspot(1);
+  } else if (typeof window !== 'undefined' && typeof window.selectTumpengHotspot === 'function') {
     window.selectTumpengHotspot(1);
   }
 }
@@ -2018,4 +2020,16 @@ if (typeof window !== 'undefined') {
   window.copyRuwatanMantra = copyRuwatanMantra;
   window.openKompasImageZoomModal = openKompasImageZoomModal;
   window.closeKompasImageZoomModal = closeKompasImageZoomModal;
+  window.onKompasDanyangSearch = onKompasDanyangSearch;
+  window.setKompasDanyangSample = setKompasDanyangSample;
+  window.switchKompasViewMode = switchKompasViewMode;
+  window.copyKompasDanyangResult = copyKompasDanyangResult;
+  window.copyMendhemAriAri = copyMendhemAriAri;
+  window.copyUbarampePager = copyUbarampePager;
+  window.copySastraJendra = copySastraJendra;
+  window.copyBodroSampir = copyBodroSampir;
+  window.copyKasedanJati = copyKasedanJati;
+  window.copyRosoSejati = copyRosoSejati;
+  window.selectTumpengHotspot = selectTumpengHotspot;
+  window.selectTumpengWarna = selectTumpengWarna;
 }

@@ -209,7 +209,11 @@ export function switchPustakaSubtab(subtab) {
  * Helper untuk mengambil kontainer subtab aktif (baik di Pustaka maupun Sinengker)
  */
 export function getActivePustakaContainer() {
-  return document.getElementById('sinengkerSubtabContent') || document.getElementById('pustakaSubtabContent');
+  const sinengker = document.getElementById('sinengkerSubtabContent');
+  const pustaka = document.getElementById('pustakaSubtabContent');
+  if (sinengker && !sinengker.closest('.hidden')) return sinengker;
+  if (pustaka && !pustaka.closest('.hidden')) return pustaka;
+  return sinengker || pustaka;
 }
 
 /**
@@ -254,7 +258,7 @@ export function renderPustakaDongoView(container) {
   if (!targetContainer) return;
   const kategoris = getPustakaKategoriList();
 
-  container.innerHTML = `
+  targetContainer.innerHTML = `
     <!-- Control Bar: Kategori & Search Bar -->
     <div class="space-y-4">
       <!-- Search Input -->
@@ -1090,13 +1094,15 @@ export function onNaskahSearch(query) {
 }
 
 export function renderPustakaNaskahView(container) {
+  const targetContainer = container || getActivePustakaContainer();
+  if (!targetContainer) return;
   const list = searchNaskahKuno(currentNaskahQuery);
 
   if ((!list || list.length === 0) && !currentNaskahQuery) {
-    container.innerHTML = `
+    targetContainer.innerHTML = `
       <div id="pustakaNaskahErrorBox" class="py-4"></div>
     `;
-    const box = container.querySelector('#pustakaNaskahErrorBox');
+    const box = targetContainer.querySelector('#pustakaNaskahErrorBox');
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
@@ -1105,7 +1111,7 @@ export function renderPustakaNaskahView(container) {
     return;
   }
 
-  container.innerHTML = `
+  targetContainer.innerHTML = `
     <div class="space-y-5">
       <!-- Search Bar -->
       <div class="relative">
@@ -1362,16 +1368,18 @@ export function switchKamusType(type) {
 }
 
 export function renderPustakaKamusView(container) {
+  const targetContainer = container || getActivePustakaContainer();
+  if (!targetContainer) return;
   const isSanskerta = (currentKamusType === 'jawa-sanskerta');
   const allJwId = getAllKamusJawaIndonesia();
   const allJwSa = getAllKamusJawaSanskerta();
   const list = isSanskerta ? searchKamusJawaSanskerta(currentKamusQuery) : searchKamusJawaIndonesia(currentKamusQuery);
 
   if (allJwId.length === 0 && allJwSa.length === 0 && !currentKamusQuery) {
-    container.innerHTML = `
+    targetContainer.innerHTML = `
       <div id="pustakaKamusErrorBox" class="py-4"></div>
     `;
-    const box = container.querySelector('#pustakaKamusErrorBox');
+    const box = targetContainer.querySelector('#pustakaKamusErrorBox');
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
@@ -1380,7 +1388,7 @@ export function renderPustakaKamusView(container) {
     return;
   }
 
-  container.innerHTML = `
+  targetContainer.innerHTML = `
     <div class="space-y-5">
       <!-- Search Bar -->
       <div class="relative">
@@ -1549,13 +1557,15 @@ export function onReferensiSearch(query) {
 }
 
 export function renderPustakaReferensiView(container) {
+  const targetContainer = container || getActivePustakaContainer();
+  if (!targetContainer) return;
   const list = searchDokumenReferensi(currentReferensiQuery);
 
   if ((!list || list.length === 0) && !currentReferensiQuery) {
-    container.innerHTML = `
+    targetContainer.innerHTML = `
       <div id="pustakaReferensiErrorBox" class="py-4"></div>
     `;
-    const box = container.querySelector('#pustakaReferensiErrorBox');
+    const box = targetContainer.querySelector('#pustakaReferensiErrorBox');
     renderDataErrorState(box, {
       domain: 'pustaka-digital',
       isSupplemental: true,
@@ -1564,7 +1574,7 @@ export function renderPustakaReferensiView(container) {
     return;
   }
 
-  container.innerHTML = `
+  targetContainer.innerHTML = `
     <div class="space-y-5">
       <!-- Search Bar -->
       <div class="relative">

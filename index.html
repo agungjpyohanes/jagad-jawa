@@ -2960,27 +2960,27 @@
         <!-- Bonang & Gong -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           <div class="md:col-span-8 p-4 rounded-xl bg-keraton border border-sogan-800 flex flex-wrap justify-center gap-3">
-            <button onclick="hitBonang(1, 523.25, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
+            <button id="bonang-btn-1" onclick="hitBonang(1, 523.25, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
               <div class="w-3.5 h-3.5 rounded-full bg-prada-light mb-0.5"></div>
               <span class="font-bold text-keraton text-xs">1 (Ji)</span>
               <span class="text-[8px] text-sogan-950">[Q]</span>
             </button>
-            <button onclick="hitBonang(2, 587.33, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
+            <button id="bonang-btn-2" onclick="hitBonang(2, 587.33, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
               <div class="w-3.5 h-3.5 rounded-full bg-prada-light mb-0.5"></div>
               <span class="font-bold text-keraton text-xs">2 (Ro)</span>
               <span class="text-[8px] text-sogan-950">[W]</span>
             </button>
-            <button onclick="hitBonang(3, 659.25, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
+            <button id="bonang-btn-3" onclick="hitBonang(3, 659.25, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
               <div class="w-3.5 h-3.5 rounded-full bg-prada-light mb-0.5"></div>
               <span class="font-bold text-keraton text-xs">3 (Lu)</span>
               <span class="text-[8px] text-sogan-950">[E]</span>
             </button>
-            <button onclick="hitBonang(5, 783.99, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
+            <button id="bonang-btn-5" onclick="hitBonang(5, 783.99, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
               <div class="w-3.5 h-3.5 rounded-full bg-prada-light mb-0.5"></div>
               <span class="font-bold text-keraton text-xs">5 (Ma)</span>
               <span class="text-[8px] text-sogan-950">[R]</span>
             </button>
-            <button onclick="hitBonang(6, 880.00, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
+            <button id="bonang-btn-6" onclick="hitBonang(6, 880.00, this)" class="w-16 h-16 rounded-full bg-gradient-to-br from-prada via-sogan-500 to-sogan-900 border-2 border-prada-light flex flex-col items-center justify-center shadow active:scale-95 transition">
               <div class="w-3.5 h-3.5 rounded-full bg-prada-light mb-0.5"></div>
               <span class="font-bold text-keraton text-xs">6 (Nem)</span>
               <span class="text-[8px] text-sogan-950">[T]</span>
@@ -2988,11 +2988,11 @@
           </div>
 
           <div class="md:col-span-4 flex justify-center gap-4">
-            <button onclick="playGamelanTone(140, 'kempul'); showToast('Kempul!');" class="w-20 h-20 rounded-full bg-gradient-to-br from-sogan-600 to-sogan-950 border-2 border-prada/60 flex flex-col items-center justify-center shadow hover:scale-105 active:scale-95 transition">
+            <button id="kempul-btn" onclick="playGamelanTone(140, 'kempul'); showToast('Kempul!');" class="w-20 h-20 rounded-full bg-gradient-to-br from-sogan-600 to-sogan-950 border-2 border-prada/60 flex flex-col items-center justify-center shadow hover:scale-105 active:scale-95 transition">
               <span class="text-xs font-bold text-prada">Kempul</span>
               <span class="text-[9px] text-sogan-400">[K]</span>
             </button>
-            <button onclick="playGamelanTone(65, 'gong'); showToast('GONG AGENG!');" class="w-24 h-24 rounded-full bg-gradient-to-br from-sogan-700 via-sogan-900 to-black border-4 border-prada flex flex-col items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition">
+            <button id="gong-btn" onclick="playGamelanTone(65, 'gong'); showToast('GONG AGENG!');" class="w-24 h-24 rounded-full bg-gradient-to-br from-sogan-700 via-sogan-900 to-black border-4 border-prada flex flex-col items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition">
               <span class="text-sm font-bold text-prada">GONG</span>
               <span class="text-[10px] text-sogan-400">[Spasi]</span>
             </button>
