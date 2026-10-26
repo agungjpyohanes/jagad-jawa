@@ -169,6 +169,22 @@ export default defineConfig({
   build: {
     target: 'esnext',
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          const nid = id.replace(/\\/g, '/');
+          if (nid.includes('/modules/sinengker/')) return 'sinengker-chunk';
+          if (nid.includes('/modules/pustaka/')) return 'pustaka-chunk';
+          if (nid.includes('/modules/sasmitha/')) return 'sasmitha-chunk';
+          if (nid.includes('/modules/omah/')) return 'omah-chunk';
+          if (nid.includes('/modules/petung-kehidupan/')) return 'petung-kehidupan-chunk';
+          if (nid.includes('/modules/ijab/')) return 'ijab-chunk';
+          if (nid.includes('/modules/budaya/')) return 'budaya-chunk';
+          if (nid.includes('/modules/nujum/')) return 'nujum-chunk';
+        }
+      }
+    }
   }
 });

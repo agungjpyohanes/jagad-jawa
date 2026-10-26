@@ -150,6 +150,7 @@ function toggleNavDropdown(btn, event) {
 }
 
 function closeAllNavDropdowns() {
+  if (typeof document === 'undefined' || typeof document.querySelectorAll !== 'function') return;
   document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
     menu.classList.remove('is-open');
   });
@@ -160,28 +161,32 @@ function closeAllNavDropdowns() {
 }
 
 function closeMobileMenu() {
-  const menu = document.getElementById('mobileMenu');
-  const btn = document.getElementById('mobileMenuBtn') || document.querySelector('[onclick*="toggleMobileMenu"]');
-  if (menu && !menu.classList.contains('hidden')) {
+  if (typeof document === 'undefined') return;
+  const menu = typeof document.getElementById === 'function' ? document.getElementById('mobileMenu') : null;
+  const btn = (typeof document.getElementById === 'function' ? document.getElementById('mobileMenuBtn') : null) || 
+              (typeof document.querySelector === 'function' ? document.querySelector('[onclick*="toggleMobileMenu"]') : null);
+  if (menu && menu.classList && !menu.classList.contains('hidden')) {
     menu.classList.add('hidden');
   }
-  if (btn) {
+  if (btn && typeof btn.setAttribute === 'function') {
     btn.setAttribute('aria-expanded', 'false');
   }
-  if (typeof document !== 'undefined' && document.body) {
+  if (document.body && document.body.style) {
     document.body.style.overflow = '';
   }
 }
 
 function toggleMobileMenu() {
-  const menu = document.getElementById('mobileMenu');
-  const btn = document.getElementById('mobileMenuBtn') || document.querySelector('[onclick*="toggleMobileMenu"]');
-  if (!menu) return;
+  if (typeof document === 'undefined') return;
+  const menu = typeof document.getElementById === 'function' ? document.getElementById('mobileMenu') : null;
+  const btn = (typeof document.getElementById === 'function' ? document.getElementById('mobileMenuBtn') : null) || 
+              (typeof document.querySelector === 'function' ? document.querySelector('[onclick*="toggleMobileMenu"]') : null);
+  if (!menu || !menu.classList) return;
   const isHidden = menu.classList.toggle('hidden');
-  if (btn) {
+  if (btn && typeof btn.setAttribute === 'function') {
     btn.setAttribute('aria-expanded', String(!isHidden));
   }
-  if (typeof document !== 'undefined' && document.body) {
+  if (document.body && document.body.style) {
     document.body.style.overflow = isHidden ? '' : 'hidden';
   }
 }

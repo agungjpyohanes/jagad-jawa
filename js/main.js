@@ -60,147 +60,68 @@ import {
 
 // ─── SAPA DINA (PHASE II) ───────────────────────────────────────────────────
 import { wireSapaDinaFeature, initSapaDina } from './features/sapa-dina.js';
-
-// ─── PETUNG IJAB & PETUNG OMAH (NEW MODULES) ──────────────────────────────
-import {
-  initIjabUI,
-  syncIjabDariTanggal,
-  hitungIjabDariUI,
-  setIjabWizardStep,
-  toggleIjabFormMode,
-  terapkanPrefillJodohKeIjab,
-  tutupBannerPrefillJodoh,
-  periksaPrefillJodoh
-} from './modules/ijab/ijab-ui.js';
-import { initOmahUI, syncOmahDariTanggal, hitungOmahDariUI, cariHariBaikOmahUI, pilihTanggalHasilCariOmah, toggleOmahFormMode } from './modules/omah/omah-ui.js';
-import { setOmahDataset } from './modules/omah/omah-engine.js';
 import { invalidateDomainData } from './services/dbLoader.js';
 
-// ─── PETUNG TERNAK, LORO, & GEBLAK (PETUNG KEHIDUPAN) ──────────────────────
-import {
-  initTernakUI,
-  syncTernakDariTanggal,
-  hitungTernakDariUI,
-  resetTernakUI,
-  setTernakTujuan,
-  hitungTernakDariSelect,
-  switchTernakSubtab,
-  konfirmasiBukaGeblak,
-  cariHariPetungKehidupanUI,
-  pilihTanggalHasilCariTernak
-} from './modules/petung-kehidupan/petung-kehidupan-ui.js';
+// ─── LAZY LOADERS & IN-MEMORY CACHE (HIGH PERFORMANCE & ANTI-OVERHEATING) ───
+const lazyModuleCache = new Map();
 
-// ─── SASMITHA (TANDA ALAM & TUBUH) ────────────────────────────────────────
-import {
-  initSasmithaUI,
-  switchSasmithaSubtab,
-  onImpenSearchInput,
-  onKedutSearchInput,
-  onKedutCategorySelect,
-  onGerhanaSasiSelect,
-  onLinduSasiSelect,
-  onLinduWaktuToggle,
-  pilihTitikAnatomiKedut,
-  setKedutViewMode
-} from './modules/sasmitha/sasmitha-ui.js';
+async function getOrImportModule(key, importPromiseFn) {
+  if (lazyModuleCache.has(key)) return lazyModuleCache.get(key);
+  const mod = await importPromiseFn();
+  lazyModuleCache.set(key, mod);
+  if (typeof window !== 'undefined') {
+    Object.assign(window, mod);
+  }
+  return mod;
+}
 
-// ─── PUSTAKA DONGO, USADA & KAUTAMAN ──────────────────────────────────────
-import {
-  initPustakaUI,
-  renderPustakaCards,
-  switchPustakaKategori,
-  onPustakaSearchInput,
-  clearPustakaSearch,
-  openPustakaReader,
-  closePustakaReader,
-  onPustakaNameChange,
-  copyPustakaCurrentDoa,
-  switchPustakaSubtab,
-  onKautamanSearch,
-  copyKautamanItem,
-  onUsadaSearch,
-  filterUsadaPenyakit,
-  copyUsadaItem,
-  copyKalacakraFull
-} from './modules/pustaka/pustaka-ui.js';
+export const ensureIjabLoaded = () => getOrImportModule('ijab', () => import('./modules/ijab/ijab-ui.js'));
+export const ensureOmahLoaded = () => getOrImportModule('omah', () => import('./modules/omah/omah-ui.js'));
+export const ensureTernakLoaded = () => getOrImportModule('ternak', () => import('./modules/petung-kehidupan/petung-kehidupan-ui.js'));
+export const ensureSasmithaLoaded = () => getOrImportModule('sasmitha', () => import('./modules/sasmitha/sasmitha-ui.js'));
+export const ensurePustakaLoaded = () => getOrImportModule('pustaka', () => import('./modules/pustaka/pustaka-ui.js'));
+export const ensureSinengkerLoaded = () => getOrImportModule('sinengker', () => import('./modules/sinengker/sinengker-ui.js'));
+export const ensureMitologiLoaded = () => getOrImportModule('mitologi', () => import('./modules/budaya/mitologi-ui.js'));
+export const ensurePadewanLoaded = () => getOrImportModule('padewan', () => import('./modules/budaya/padewan-ui.js'));
+export const ensureNujumCardLoaded = () => getOrImportModule('nujumCard', () => import('./modules/nujum/nujum-share-card.js'));
+export const ensureSapaDinaShareLoaded = () => getOrImportModule('sapaDinaShare', () => import('./modules/sapa-dina/sapa-dina-ui.js'));
 
-// ─── PUSTAKA SINENGKER KHUSUS & KOMPAS DANYANG ─────────────────────────────
-import {
-  initSinengkerUI,
-  submitSinengkerPin,
-  lockSinengkerUI,
-  switchSinengkerSubtab,
-  onKompasDanyangSearch,
-  setKompasDanyangSample,
-  copyKompasDanyangResult,
-  copyMendhemAriAri,
-  copyUbarampePager,
-  copySastraJendra,
-  copyBodroSampir,
-  copyKasedanJati,
-  copyRosoSejati,
-  copyAjiMantra,
-  copyRuwatanMantra,
-  openKompasImageZoomModal,
-  closeKompasImageZoomModal,
-  switchKompasViewMode
-} from './modules/sinengker/sinengker-ui.js';
-
-// ─── MITOLOGI NUSANTARA ───────────────────────────────────────────────────
-import {
-  initMitologiUI,
-  openMitologiModal,
-  closeMitologiModal,
-  copyMitologiStory,
-  toggleMitologiFontSize
-} from './modules/budaya/mitologi-ui.js';
-
-// ─── SAPA DINA & NUJUM VISUAL SHARE CARDS ──────────────────────────────────
-import {
-  openSapaDinaShareModal,
-  closeSapaDinaShareModal,
-  downloadSapaDinaCardPng,
-  shareSapaDinaVisual
-} from './modules/sapa-dina/sapa-dina-ui.js';
-
-import {
-  openNujumPokemonCardModal,
-  closeNujumPokemonCardModal,
-  downloadNujumPokemonCardPng,
-  shareNujumPokemonCard,
-  onNujumPokemonOptionChange,
-  onNujumPokemonNameInput,
-  generateDraftKartuKarakter,
-  drawKartuKarakter,
-  openKartuKarakterModal,
-  closeKartuKarakterModal,
-  downloadKartuKarakterPng,
-  shareKartuKarakter
-} from './modules/nujum/nujum-share-card.js';
-
-// ─── 12 BATARA-BATARI (PADEWAN SIKLUS) ────────────────────────────────────
-import {
-  openPadewanModal,
-  closePadewanModal,
-  selectPadewanCard,
-  renderPadewanGrid,
-  renderPadewanDetail
-} from './modules/budaya/padewan-ui.js';
+function makeLazyProxy(loaderFn, fnName) {
+  return async function(...args) {
+    const mod = await loaderFn();
+    if (mod && typeof mod[fnName] === 'function') {
+      return mod[fnName](...args);
+    }
+  };
+}
 
 // ─── INITIAL WIRING TO WINDOW (THIN WRAPPERS UNTUK INLINE HTML ONCLICK) ────
 if (typeof window !== 'undefined') {
-  window.openPadewanModal = openPadewanModal;
-  window.closePadewanModal = closePadewanModal;
-  window.selectPadewanCard = selectPadewanCard;
-  window.renderPadewanGrid = renderPadewanGrid;
-  window.renderPadewanDetail = renderPadewanDetail;
+  // Padewan
+  window.openPadewanModal = makeLazyProxy(ensurePadewanLoaded, 'openPadewanModal');
+  window.closePadewanModal = makeLazyProxy(ensurePadewanLoaded, 'closePadewanModal');
+  window.selectPadewanCard = makeLazyProxy(ensurePadewanLoaded, 'selectPadewanCard');
+  window.renderPadewanGrid = makeLazyProxy(ensurePadewanLoaded, 'renderPadewanGrid');
+  window.renderPadewanDetail = makeLazyProxy(ensurePadewanLoaded, 'renderPadewanDetail');
 
-  window.generateDraftKartuKarakter = generateDraftKartuKarakter;
-  window.drawKartuKarakter = drawKartuKarakter;
-  window.openKartuKarakterModal = openKartuKarakterModal;
-  window.closeKartuKarakterModal = closeKartuKarakterModal;
-  window.downloadKartuKarakterPng = downloadKartuKarakterPng;
-  window.shareKartuKarakter = shareKartuKarakter;
+  // Nujum Pokémon & Visual Share Cards
+  window.openSapaDinaShareModal = makeLazyProxy(ensureSapaDinaShareLoaded, 'openSapaDinaShareModal');
+  window.closeSapaDinaShareModal = makeLazyProxy(ensureSapaDinaShareLoaded, 'closeSapaDinaShareModal');
+  window.downloadSapaDinaCardPng = makeLazyProxy(ensureSapaDinaShareLoaded, 'downloadSapaDinaCardPng');
+  window.shareSapaDinaVisual = makeLazyProxy(ensureSapaDinaShareLoaded, 'shareSapaDinaVisual');
+  window.openNujumPokemonCardModal = makeLazyProxy(ensureNujumCardLoaded, 'openNujumPokemonCardModal');
+  window.closeNujumPokemonCardModal = makeLazyProxy(ensureNujumCardLoaded, 'closeNujumPokemonCardModal');
+  window.downloadNujumPokemonCardPng = makeLazyProxy(ensureNujumCardLoaded, 'downloadNujumPokemonCardPng');
+  window.shareNujumPokemonCard = makeLazyProxy(ensureNujumCardLoaded, 'shareNujumPokemonCard');
+  window.onNujumPokemonOptionChange = makeLazyProxy(ensureNujumCardLoaded, 'onNujumPokemonOptionChange');
+  window.onNujumPokemonNameInput = makeLazyProxy(ensureNujumCardLoaded, 'onNujumPokemonNameInput');
+  window.generateDraftKartuKarakter = makeLazyProxy(ensureNujumCardLoaded, 'generateDraftKartuKarakter');
+  window.drawKartuKarakter = makeLazyProxy(ensureNujumCardLoaded, 'drawKartuKarakter');
+  window.openKartuKarakterModal = makeLazyProxy(ensureNujumCardLoaded, 'openKartuKarakterModal');
+  window.closeKartuKarakterModal = makeLazyProxy(ensureNujumCardLoaded, 'closeKartuKarakterModal');
+  window.downloadKartuKarakterPng = makeLazyProxy(ensureNujumCardLoaded, 'downloadKartuKarakterPng');
+  window.shareKartuKarakter = makeLazyProxy(ensureNujumCardLoaded, 'shareKartuKarakter');
+
   window.showToast = showToast;
   window.copyToClipboard = copyToClipboard;
   window.toggleLanguage = toggleLanguage;
@@ -224,49 +145,49 @@ if (typeof window !== 'undefined') {
   window.resetKalenderToday = resetKalenderToday;
 
   // Pustaka Dongo, Usada & Kautaman bindings
-  window.initPustakaUI = initPustakaUI;
-  window.renderPustakaCards = renderPustakaCards;
-  window.switchPustakaKategori = switchPustakaKategori;
-  window.onPustakaSearchInput = onPustakaSearchInput;
-  window.clearPustakaSearch = clearPustakaSearch;
-  window.openPustakaReader = openPustakaReader;
-  window.closePustakaReader = closePustakaReader;
-  window.onPustakaNameChange = onPustakaNameChange;
-  window.copyPustakaCurrentDoa = copyPustakaCurrentDoa;
-  window.switchPustakaSubtab = switchPustakaSubtab;
-  window.onKautamanSearch = onKautamanSearch;
-  window.copyKautamanItem = copyKautamanItem;
-  window.onUsadaSearch = onUsadaSearch;
-  window.filterUsadaPenyakit = filterUsadaPenyakit;
-  window.copyUsadaItem = copyUsadaItem;
-  window.copyKalacakraFull = copyKalacakraFull;
+  window.initPustakaUI = makeLazyProxy(ensurePustakaLoaded, 'initPustakaUI');
+  window.renderPustakaCards = makeLazyProxy(ensurePustakaLoaded, 'renderPustakaCards');
+  window.switchPustakaKategori = makeLazyProxy(ensurePustakaLoaded, 'switchPustakaKategori');
+  window.onPustakaSearchInput = makeLazyProxy(ensurePustakaLoaded, 'onPustakaSearchInput');
+  window.clearPustakaSearch = makeLazyProxy(ensurePustakaLoaded, 'clearPustakaSearch');
+  window.openPustakaReader = makeLazyProxy(ensurePustakaLoaded, 'openPustakaReader');
+  window.closePustakaReader = makeLazyProxy(ensurePustakaLoaded, 'closePustakaReader');
+  window.onPustakaNameChange = makeLazyProxy(ensurePustakaLoaded, 'onPustakaNameChange');
+  window.copyPustakaCurrentDoa = makeLazyProxy(ensurePustakaLoaded, 'copyPustakaCurrentDoa');
+  window.switchPustakaSubtab = makeLazyProxy(ensurePustakaLoaded, 'switchPustakaSubtab');
+  window.onKautamanSearch = makeLazyProxy(ensurePustakaLoaded, 'onKautamanSearch');
+  window.copyKautamanItem = makeLazyProxy(ensurePustakaLoaded, 'copyKautamanItem');
+  window.onUsadaSearch = makeLazyProxy(ensurePustakaLoaded, 'onUsadaSearch');
+  window.filterUsadaPenyakit = makeLazyProxy(ensurePustakaLoaded, 'filterUsadaPenyakit');
+  window.copyUsadaItem = makeLazyProxy(ensurePustakaLoaded, 'copyUsadaItem');
+  window.copyKalacakraFull = makeLazyProxy(ensurePustakaLoaded, 'copyKalacakraFull');
 
   // Pustaka Sinengker bindings
-  window.initSinengkerUI = initSinengkerUI;
-  window.submitSinengkerPin = submitSinengkerPin;
-  window.lockSinengkerUI = lockSinengkerUI;
-  window.switchSinengkerSubtab = switchSinengkerSubtab;
-  window.onKompasDanyangSearch = onKompasDanyangSearch;
-  window.setKompasDanyangSample = setKompasDanyangSample;
-  window.copyKompasDanyangResult = copyKompasDanyangResult;
-  window.copyMendhemAriAri = copyMendhemAriAri;
-  window.copyUbarampePager = copyUbarampePager;
-  window.copySastraJendra = copySastraJendra;
-  window.copyBodroSampir = copyBodroSampir;
-  window.copyKasedanJati = copyKasedanJati;
-  window.copyRosoSejati = copyRosoSejati;
-  window.copyAjiMantra = copyAjiMantra;
-  window.copyRuwatanMantra = copyRuwatanMantra;
-  window.openKompasImageZoomModal = openKompasImageZoomModal;
-  window.closeKompasImageZoomModal = closeKompasImageZoomModal;
-  window.switchKompasViewMode = switchKompasViewMode;
+  window.initSinengkerUI = makeLazyProxy(ensureSinengkerLoaded, 'initSinengkerUI');
+  window.submitSinengkerPin = makeLazyProxy(ensureSinengkerLoaded, 'submitSinengkerPin');
+  window.lockSinengkerUI = makeLazyProxy(ensureSinengkerLoaded, 'lockSinengkerUI');
+  window.switchSinengkerSubtab = makeLazyProxy(ensureSinengkerLoaded, 'switchSinengkerSubtab');
+  window.onKompasDanyangSearch = makeLazyProxy(ensureSinengkerLoaded, 'onKompasDanyangSearch');
+  window.setKompasDanyangSample = makeLazyProxy(ensureSinengkerLoaded, 'setKompasDanyangSample');
+  window.copyKompasDanyangResult = makeLazyProxy(ensureSinengkerLoaded, 'copyKompasDanyangResult');
+  window.copyMendhemAriAri = makeLazyProxy(ensureSinengkerLoaded, 'copyMendhemAriAri');
+  window.copyUbarampePager = makeLazyProxy(ensureSinengkerLoaded, 'copyUbarampePager');
+  window.copySastraJendra = makeLazyProxy(ensureSinengkerLoaded, 'copySastraJendra');
+  window.copyBodroSampir = makeLazyProxy(ensureSinengkerLoaded, 'copyBodroSampir');
+  window.copyKasedanJati = makeLazyProxy(ensureSinengkerLoaded, 'copyKasedanJati');
+  window.copyRosoSejati = makeLazyProxy(ensureSinengkerLoaded, 'copyRosoSejati');
+  window.copyAjiMantra = makeLazyProxy(ensureSinengkerLoaded, 'copyAjiMantra');
+  window.copyRuwatanMantra = makeLazyProxy(ensureSinengkerLoaded, 'copyRuwatanMantra');
+  window.openKompasImageZoomModal = makeLazyProxy(ensureSinengkerLoaded, 'openKompasImageZoomModal');
+  window.closeKompasImageZoomModal = makeLazyProxy(ensureSinengkerLoaded, 'closeKompasImageZoomModal');
+  window.switchKompasViewMode = makeLazyProxy(ensureSinengkerLoaded, 'switchKompasViewMode');
 
   // Mitologi Nusantara bindings
-  window.initMitologiUI = initMitologiUI;
-  window.openMitologiModal = openMitologiModal;
-  window.closeMitologiModal = closeMitologiModal;
-  window.copyMitologiStory = copyMitologiStory;
-  window.toggleMitologiFontSize = toggleMitologiFontSize;
+  window.initMitologiUI = makeLazyProxy(ensureMitologiLoaded, 'initMitologiUI');
+  window.openMitologiModal = makeLazyProxy(ensureMitologiLoaded, 'openMitologiModal');
+  window.closeMitologiModal = makeLazyProxy(ensureMitologiLoaded, 'closeMitologiModal');
+  window.copyMitologiStory = makeLazyProxy(ensureMitologiLoaded, 'copyMitologiStory');
+  window.toggleMitologiFontSize = makeLazyProxy(ensureMitologiLoaded, 'toggleMitologiFontSize');
 
   // Wuku Category Filter dispatcher
   window.setWukuCategoryFilter = async function(category) {
@@ -277,61 +198,50 @@ if (typeof window !== 'undefined') {
     }
   };
 
-  // Sapa Dina Share bindings
-  window.openSapaDinaShareModal = openSapaDinaShareModal;
-  window.closeSapaDinaShareModal = closeSapaDinaShareModal;
-  window.downloadSapaDinaCardPng = downloadSapaDinaCardPng;
-  window.shareSapaDinaVisual = shareSapaDinaVisual;
-
-  // Nujum Pokémon Card bindings
-  window.openNujumPokemonCardModal = openNujumPokemonCardModal;
-  window.closeNujumPokemonCardModal = closeNujumPokemonCardModal;
-  window.downloadNujumPokemonCardPng = downloadNujumPokemonCardPng;
-  window.shareNujumPokemonCard = shareNujumPokemonCard;
-  window.onNujumPokemonOptionChange = onNujumPokemonOptionChange;
-  window.onNujumPokemonNameInput = onNujumPokemonNameInput;
-
   // Ijab & Omah bindings
-  window.initIjabUI = initIjabUI;
-  window.syncIjabDariTanggal = syncIjabDariTanggal;
-  window.hitungIjabDariUI = hitungIjabDariUI;
-  window.setIjabWizardStep = setIjabWizardStep;
-  window.toggleIjabFormMode = toggleIjabFormMode;
-  window.terapkanPrefillJodohKeIjab = terapkanPrefillJodohKeIjab;
-  window.tutupBannerPrefillJodoh = tutupBannerPrefillJodoh;
-  window.periksaPrefillJodoh = periksaPrefillJodoh;
-  window.initOmahUI = initOmahUI;
-  window.syncOmahDariTanggal = syncOmahDariTanggal;
-  window.hitungOmahDariUI = hitungOmahDariUI;
-  window.cariHariBaikOmahUI = cariHariBaikOmahUI;
-  window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
-  window.toggleOmahFormMode = toggleOmahFormMode;
-  window.setOmahDataset = setOmahDataset;
+  window.initIjabUI = makeLazyProxy(ensureIjabLoaded, 'initIjabUI');
+  window.syncIjabDariTanggal = makeLazyProxy(ensureIjabLoaded, 'syncIjabDariTanggal');
+  window.hitungIjabDariUI = makeLazyProxy(ensureIjabLoaded, 'hitungIjabDariUI');
+  window.setIjabWizardStep = makeLazyProxy(ensureIjabLoaded, 'setIjabWizardStep');
+  window.toggleIjabFormMode = makeLazyProxy(ensureIjabLoaded, 'toggleIjabFormMode');
+  window.terapkanPrefillJodohKeIjab = makeLazyProxy(ensureIjabLoaded, 'terapkanPrefillJodohKeIjab');
+  window.tutupBannerPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'tutupBannerPrefillJodoh');
+  window.periksaPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'periksaPrefillJodoh');
+  window.initOmahUI = makeLazyProxy(ensureOmahLoaded, 'initOmahUI');
+  window.syncOmahDariTanggal = makeLazyProxy(ensureOmahLoaded, 'syncOmahDariTanggal');
+  window.hitungOmahDariUI = makeLazyProxy(ensureOmahLoaded, 'hitungOmahDariUI');
+  window.cariHariBaikOmahUI = makeLazyProxy(ensureOmahLoaded, 'cariHariBaikOmahUI');
+  window.pilihTanggalHasilCariOmah = makeLazyProxy(ensureOmahLoaded, 'pilihTanggalHasilCariOmah');
+  window.toggleOmahFormMode = makeLazyProxy(ensureOmahLoaded, 'toggleOmahFormMode');
+  window.setOmahDataset = async (...args) => {
+    const mod = await import('./modules/omah/omah-engine.js');
+    return mod.setOmahDataset(...args);
+  };
   window.invalidateDomainData = invalidateDomainData;
 
   // Ternak, Loro, & Geblak bindings
-  window.initTernakUI = initTernakUI;
-  window.syncTernakDariTanggal = syncTernakDariTanggal;
-  window.hitungTernakDariUI = hitungTernakDariUI;
-  window.resetTernakUI = resetTernakUI;
-  window.setTernakTujuan = setTernakTujuan;
-  window.hitungTernakDariSelect = hitungTernakDariSelect;
-  window.switchTernakSubtab = switchTernakSubtab;
-  window.konfirmasiBukaGeblak = konfirmasiBukaGeblak;
-  window.cariHariPetungKehidupanUI = cariHariPetungKehidupanUI;
-  window.pilihTanggalHasilCariTernak = pilihTanggalHasilCariTernak;
+  window.initTernakUI = makeLazyProxy(ensureTernakLoaded, 'initTernakUI');
+  window.syncTernakDariTanggal = makeLazyProxy(ensureTernakLoaded, 'syncTernakDariTanggal');
+  window.hitungTernakDariUI = makeLazyProxy(ensureTernakLoaded, 'hitungTernakDariUI');
+  window.resetTernakUI = makeLazyProxy(ensureTernakLoaded, 'resetTernakUI');
+  window.setTernakTujuan = makeLazyProxy(ensureTernakLoaded, 'setTernakTujuan');
+  window.hitungTernakDariSelect = makeLazyProxy(ensureTernakLoaded, 'hitungTernakDariSelect');
+  window.switchTernakSubtab = makeLazyProxy(ensureTernakLoaded, 'switchTernakSubtab');
+  window.konfirmasiBukaGeblak = makeLazyProxy(ensureTernakLoaded, 'konfirmasiBukaGeblak');
+  window.cariHariPetungKehidupanUI = makeLazyProxy(ensureTernakLoaded, 'cariHariPetungKehidupanUI');
+  window.pilihTanggalHasilCariTernak = makeLazyProxy(ensureTernakLoaded, 'pilihTanggalHasilCariTernak');
 
   // Sasmitha bindings
-  window.initSasmithaUI = initSasmithaUI;
-  window.switchSasmithaSubtab = switchSasmithaSubtab;
-  window.onImpenSearchInput = onImpenSearchInput;
-  window.onKedutSearchInput = onKedutSearchInput;
-  window.onKedutCategorySelect = onKedutCategorySelect;
-  window.onGerhanaSasiSelect = onGerhanaSasiSelect;
-  window.onLinduSasiSelect = onLinduSasiSelect;
-  window.onLinduWaktuToggle = onLinduWaktuToggle;
-  window.pilihTitikAnatomiKedut = pilihTitikAnatomiKedut;
-  window.setKedutViewMode = setKedutViewMode;
+  window.initSasmithaUI = makeLazyProxy(ensureSasmithaLoaded, 'initSasmithaUI');
+  window.switchSasmithaSubtab = makeLazyProxy(ensureSasmithaLoaded, 'switchSasmithaSubtab');
+  window.onImpenSearchInput = makeLazyProxy(ensureSasmithaLoaded, 'onImpenSearchInput');
+  window.onKedutSearchInput = makeLazyProxy(ensureSasmithaLoaded, 'onKedutSearchInput');
+  window.onKedutCategorySelect = makeLazyProxy(ensureSasmithaLoaded, 'onKedutCategorySelect');
+  window.onGerhanaSasiSelect = makeLazyProxy(ensureSasmithaLoaded, 'onGerhanaSasiSelect');
+  window.onLinduSasiSelect = makeLazyProxy(ensureSasmithaLoaded, 'onLinduSasiSelect');
+  window.onLinduWaktuToggle = makeLazyProxy(ensureSasmithaLoaded, 'onLinduWaktuToggle');
+  window.pilihTitikAnatomiKedut = makeLazyProxy(ensureSasmithaLoaded, 'pilihTitikAnatomiKedut');
+  window.setKedutViewMode = makeLazyProxy(ensureSasmithaLoaded, 'setKedutViewMode');
 }
 
 wireKalenderFeature();
@@ -374,26 +284,30 @@ if (typeof window !== 'undefined') {
         break;
 
       case 'ijab':
-        if (typeof window.initIjabUI === 'function') {
-          window.initIjabUI();
+        {
+          const m = await ensureIjabLoaded();
+          if (m && typeof m.initIjabUI === 'function') m.initIjabUI();
         }
         break;
 
       case 'omah':
-        if (typeof window.initOmahUI === 'function') {
-          window.initOmahUI();
+        {
+          const m = await ensureOmahLoaded();
+          if (m && typeof m.initOmahUI === 'function') m.initOmahUI();
         }
         break;
 
       case 'ternak':
-        if (typeof window.initTernakUI === 'function') {
-          window.initTernakUI();
+        {
+          const m = await ensureTernakLoaded();
+          if (m && typeof m.initTernakUI === 'function') m.initTernakUI();
         }
         break;
 
       case 'sasmitha':
-        if (typeof window.initSasmithaUI === 'function') {
-          window.initSasmithaUI();
+        {
+          const m = await ensureSasmithaLoaded();
+          if (m && typeof m.initSasmithaUI === 'function') m.initSasmithaUI();
         }
         break;
 
@@ -464,20 +378,29 @@ if (typeof window !== 'undefined') {
         break;
 
       case 'pustaka':
-        if (typeof window.initPustakaUI === 'function') {
-          await window.initPustakaUI('pustakaContainer');
+        {
+          const m = await ensurePustakaLoaded();
+          if (m && typeof m.initPustakaUI === 'function') {
+            await m.initPustakaUI('pustakaContainer');
+          }
         }
         break;
 
       case 'sinengker':
-        if (typeof window.initSinengkerUI === 'function') {
-          window.initSinengkerUI('sinengkerContainer');
+        {
+          const m = await ensureSinengkerLoaded();
+          if (m && typeof m.initSinengkerUI === 'function') {
+            m.initSinengkerUI('sinengkerContainer');
+          }
         }
         break;
 
       case 'mitologi':
-        if (typeof window.initMitologiUI === 'function') {
-          await window.initMitologiUI('mitologiPillarsGrid');
+        {
+          const m = await ensureMitologiLoaded();
+          if (m && typeof m.initMitologiUI === 'function') {
+            await m.initMitologiUI('mitologiPillarsGrid');
+          }
         }
         break;
     }
