@@ -51,6 +51,22 @@ export function initPerjodohanSelects() {
     PASARAN.forEach(p => pSel.appendChild(new Option(p, p)));
   });
 
+  // Pasang listener reaktif untuk input nama lengkap (Calon Pengantin Pria & Wanita)
+  ['P', 'L'].forEach(side => {
+    const elNama = document.getElementById('nama' + side);
+    if (elNama) {
+      const handleNameInput = () => {
+        autoDetectAksaraUI(side);
+      };
+      elNama.addEventListener('input', handleNameInput);
+      elNama.addEventListener('keyup', handleNameInput);
+      elNama.addEventListener('change', handleNameInput);
+      if (elNama.value && elNama.value.trim()) {
+        autoDetectAksaraUI(side);
+      }
+    }
+  });
+
   // Pasang listener status hubungan (Belum Menikah vs Sudah Menikah)
   initStatusHubunganPerjodohanEvents();
 
@@ -340,13 +356,19 @@ export function autoDetectAksaraUI(side) {
   const elNama = document.getElementById('nama' + side);
   if (!elNama) return;
   const nama = elNama.value.trim();
+  const elDepan = document.getElementById('aksaraDepan' + side);
+  const elBelakang = document.getElementById('aksaraBelakang' + side);
   if (!nama) return;
 
   const res = autoDetectAksara(nama);
-  const elDepan = document.getElementById('aksaraDepan' + side);
-  const elBelakang = document.getElementById('aksaraBelakang' + side);
-  if (elDepan) elDepan.value = res.depan;
-  if (elBelakang) elBelakang.value = res.belakang;
+  if (elDepan && res.depan) {
+    elDepan.value = res.depan;
+    elDepan.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  if (elBelakang && res.belakang) {
+    elBelakang.value = res.belakang;
+    elBelakang.dispatchEvent(new Event('change', { bubbles: true }));
+  }
 }
 
 export function autoWetonPerjodohan(side) {
@@ -432,22 +454,10 @@ export async function hitungNujumPerjodohan() {
     console.warn('[jodoh-ui] hitungNujumPerjodohan error:', e);
   }
 
-  if (!domainData) {
-    const errorTarget = document.getElementById('hasilPerjodohanBody') || document.getElementById('perjodohanPairInfo');
-    if (errorTarget) {
-      const container = errorTarget.closest('.overflow-x-auto') || errorTarget.parentElement;
-      renderDataErrorState(container, {
-        domain: 'jodoh',
-        onRetry: () => hitungNujumPerjodohan()
-      });
-    }
-    return;
-  }
-
   const hasil = hitungPitung7Metode(
     { nama: namaP, hari: hariP, pasaran: pasaranP, neptu: neptuP, aksaraDepan: akDP, aksaraBelakang: akBP },
     { nama: namaL, hari: hariL, pasaran: pasaranL, neptu: neptuL, aksaraDepan: akDL, aksaraBelakang: akBL },
-    domainData
+    domainData || {}
   );
 
   // Periksa Status Hubungan (planning / engaged / married)

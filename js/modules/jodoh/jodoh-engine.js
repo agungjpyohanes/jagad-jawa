@@ -79,15 +79,36 @@ const AKSARA_MAP = {
  */
 export function autoDetectAksara(nama) {
   if (!nama || typeof nama !== 'string') return { depan: 'HA', belakang: 'HA' };
-  const parts = nama.trim().replace(/\s+/g, ' ').split(' ');
+  const clean = nama.trim().replace(/\s+/g, ' ');
+  const parts = clean.split(' ');
   if (parts.length === 0 || !parts[0]) return { depan: 'HA', belakang: 'HA' };
 
-  const first = parts[0].charAt(0).toUpperCase();
-  const last = parts[parts.length - 1].slice(-1).toUpperCase();
-  return {
-    depan: AKSARA_MAP[first] || 'HA',
-    belakang: AKSARA_MAP[last] || 'HA'
-  };
+  const firstWord = parts[0].toUpperCase();
+  const lastWord = parts[parts.length - 1].toUpperCase();
+
+  // Deteksi gugus konsonan ngarep (DHA, THA, NGA, NYA) utawa aksara nglegena tunggal
+  let depan = 'HA';
+  if (firstWord.startsWith('DHA') || firstWord.startsWith('DH')) depan = 'DHA';
+  else if (firstWord.startsWith('THA') || firstWord.startsWith('TH')) depan = 'THA';
+  else if (firstWord.startsWith('NGA') || firstWord.startsWith('NG')) depan = 'NGA';
+  else if (firstWord.startsWith('NYA') || firstWord.startsWith('NY')) depan = 'NYA';
+  else {
+    const firstChar = firstWord.charAt(0);
+    depan = AKSARA_MAP[firstChar] || 'HA';
+  }
+
+  // Deteksi aksara pungkasan (mburi)
+  let belakang = 'HA';
+  if (lastWord.endsWith('DHA') || lastWord.endsWith('DH')) belakang = 'DHA';
+  else if (lastWord.endsWith('THA') || lastWord.endsWith('TH')) belakang = 'THA';
+  else if (lastWord.endsWith('NGA') || lastWord.endsWith('NG')) belakang = 'NGA';
+  else if (lastWord.endsWith('NYA') || lastWord.endsWith('NY')) belakang = 'NYA';
+  else {
+    const lastChar = lastWord.slice(-1);
+    belakang = AKSARA_MAP[lastChar] || 'HA';
+  }
+
+  return { depan, belakang };
 }
 
 /**
@@ -146,7 +167,11 @@ export function hitungPitung7Metode(p, l, options = {}) {
   const hasilIV = lookupIV[sisaIV] || { nama: '-', arti: '-', status: 'campur' };
   const hasilV = lookupV[sisaV] || { nama: '-', arti: '-', status: 'campur' };
   const hasilVI = lookupVI[sisaVI] || { nama: '-', arti: '-', status: 'campur' };
-  const hasilVII = { nama: 'Yuwana / Becik', arti: 'Kombinasi dina becik rahayu tumraping kulawarga', status: 'baik' };
+  const hasilVII = options.HASIL_VII_JODOH || {
+    nama: 'Yuwana / Becik',
+    arti: 'Kombinasi dina becik rahayu tumraping kulawarga',
+    status: 'baik'
+  };
 
   const rows = [
     { no: 'I', namaMetode: 'Sisa Bagi 4', h: hasilI, rumus: `Neptu (${neptuP} + ${neptuL}) = ${totalNeptu} ÷ 4 sisa ${sisaI}` },
@@ -155,7 +180,7 @@ export function hitungPitung7Metode(p, l, options = {}) {
     { no: 'IV', namaMetode: 'Aksara Total Bagi 7', h: hasilIV, rumus: `Aksara total ${totalAksaraIV} ÷ 7 sisa ${sisaIV}` },
     { no: 'V', namaMetode: 'Aksara Depan Bagi 7', h: hasilV, rumus: `Aksara depan (${akDP} + ${akDL}) = ${totalAksaraVVI} ÷ 7 sisa ${sisaV}` },
     { no: 'VI', namaMetode: 'Aksara Depan Bagi 6', h: hasilVI, rumus: `Aksara depan ${totalAksaraVVI} ÷ 6 sisa ${sisaVI}` },
-    { no: 'VII', namaMetode: 'Kombinasi Dina & Pasaran', h: hasilVII, rumus: `${p.hari || '-'} + ${l.hari || '-'}` }
+    { no: 'VII', namaMetode: 'Kombinasi Dina & Pasaran (Yuwana/Becik)', h: hasilVII, rumus: `${p.hari || '-'} + ${l.hari || '-'}` }
   ];
 
   let baik = 0, buruk = 0, campur = 0;
@@ -186,20 +211,36 @@ export function hitungPitung7Metode(p, l, options = {}) {
 
 /**
  * Mendapatkan taksiran tingkat keharmonisan kearifan lokal berdasarkan skor keselarasan pitung.
- * @param {number} skor 
- * @returns {{ predikat: string, badgeClass: string, deskripsi: string, saranKultural: string }}
+ * Mendukung input berupa skor numerik (0-100) atau objek hasil summary pitung.
+ * @param {number|Object} skor 
+ * @returns {{ predikat: string, tingkat: string, badgeClass: string, deskripsi: string, saranKultural: string }}
  */
 export function getTingkatKeharmonisan(skor) {
-  if (skor >= 70) {
+  let numericScore = 0;
+  if (typeof skor === 'object' && skor !== null) {
+    if (typeof skor.skorKeselarasan === 'number') {
+      numericScore = skor.skorKeselarasan;
+    } else {
+      const b = Number(skor.baik) || 0;
+      const tot = Number(skor.total) || 7;
+      numericScore = Math.round((b / tot) * 100);
+    }
+  } else {
+    numericScore = Number(skor) || 0;
+  }
+
+  if (numericScore >= 70) {
     return {
       predikat: "Rahayu Utama (Sangat Selaras & Berkah)",
+      tingkat: "Rahayu Utama",
       badgeClass: "bg-emerald-950/80 text-emerald-300 border-emerald-500/70",
       deskripsi: "Kombinasi neptu dan aksara kedua mempelai dinaungi dominasi kebajikan, kelimpahan sandhang pangan, dan ketenteraman batin.",
       saranKultural: "Rawat komunikasi yang santun, saling menjaga kehormatan keluarga besar, dan senantiasa bersyukur."
     };
-  } else if (skor >= 45) {
+  } else if (numericScore >= 45) {
     return {
       predikat: "Madya Rahayu (Harmoni Berimbang)",
+      tingkat: "Madya Rahayu",
       badgeClass: "bg-amber-950/80 text-amber-300 border-amber-500/70",
       deskripsi: "Terdapat perpaduan antara aspek kemudahan rezeki dan tantangan dinamika watak yang menuntut kedewasaan bersikap.",
       saranKultural: "Kunci kelanggengan adalah 'tepa slira' (tenggang rasa), musyawarah saat menghadapi ujian, dan saling menguatkan tekad."
@@ -207,6 +248,7 @@ export function getTingkatKeharmonisan(skor) {
   } else {
     return {
       predikat: "Ujian & Ikhtiar Tolak Balak",
+      tingkat: "Ujian & Tolak Balak",
       badgeClass: "bg-rose-950/80 text-rose-300 border-rose-500/70",
       deskripsi: "Primbon mengindikasikan potensi gesekan watak atau ujian raga yang membutuhkan keikhlasan serta kesabaran ekstra.",
       saranKultural: "Dianjurkan memperbanyak sedekah, doa keselamatan, serta menggelar doa selamatan tolak balak menjelang hari ijab qobul."

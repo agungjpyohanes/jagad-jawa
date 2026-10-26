@@ -31,6 +31,46 @@ import {
   KETERANGAN
 } from '../data/calendar.js';
 
+// ─── HYBRID FALLBACK MASTER MODULES (PREVENT BLANK SCREENS ON KV OUTAGE) ───
+import { PAWUKON_LIST } from '../data/pawukon.js';
+import { getWukuPetenget as masterGetWukuPetenget } from '../data/wuku-petenget-db.js';
+import { bincilDatabase as MASTER_BINCIL_DB, KET_BINCIL as MASTER_KET_BINCIL } from '../data/nujum-matrix.js';
+import { MASTER_ZODIAK, MASTER_PRANATA_MANGSA } from '../data/pranata-zodiak-data.js';
+import { MASTER_SHIO_DETAIL } from '../data/shio-elemen-master-data.js';
+import { MASTER_KARAKTER_DASAR, MASTER_PEKERJAAN } from '../data/karakter-pekerjaan-master-data.js';
+import { MASTER_SASI_JAWA } from '../data/sasi-jawa-master-data.js';
+import { MASTER_SIKLUS_PADEWAN } from '../data/siklus-master-data.js';
+import {
+  AKSARA_PERJODOHAN as MASTER_AKSARA_PERJODOHAN,
+  HASIL_I_JODOH as MASTER_HASIL_I,
+  HASIL_II_JODOH as MASTER_HASIL_II,
+  HASIL_III_JODOH as MASTER_HASIL_III,
+  HASIL_IV_JODOH as MASTER_HASIL_IV,
+  HASIL_V_JODOH as MASTER_HASIL_V,
+  HASIL_VI_JODOH as MASTER_HASIL_VI
+} from '../data/marriage.js';
+import { getPetungTetanen as masterGetTetanen } from '../data/petung-tetanen-db.js';
+import {
+  SASMITHA_IMPEN as MASTER_SASMITHA_IMPEN,
+  SASMITHA_KEDUT as MASTER_SASMITHA_KEDUT,
+  SASMITHA_GERAHANA as MASTER_SASMITHA_GERAHANA,
+  SASMITHA_LINDU as MASTER_SASMITHA_LINDU,
+  SASMITHA_TEJO as MASTER_SASMITHA_TEJO
+} from '../data/sasmitha-db.js';
+import { SINENGKER_DATA as MASTER_SINENGKER } from '../data/sinengker-db.js';
+import { PUSTAKA_ENTRI as MASTER_PUSTAKA_ENTRI, PUSTAKA_KATEGORI as MASTER_PUSTAKA_KATEGORI } from '../data/pustaka-db.js';
+import { PUSTAKA_JAWA_DATA as MASTER_PUSTAKA_JAWA } from '../data/pustaka-jawa-db.js';
+import {
+  NASKAH_KUNO_LIST as MASTER_NASKAH_KUNO,
+  DOKUMEN_REFERENSI_BUDAYA as MASTER_DOKUMEN_BUDAYA,
+  KAMUS_JAWA_INDONESIA as MASTER_KAMUS_JAWA,
+  KAMUS_JAWA_SANSKERTA as MASTER_KAMUS_SANSKERTA
+} from '../data/pustaka-digital-db.js';
+import { getActiveWayangList as masterGetWayangList, getActiveKategoriList as masterGetWayangKat } from '../data/wayang.js';
+import { QUIZ_QUESTIONS as MASTER_QUIZ } from '../data/pitutur.js';
+import { getAllMitologiNusantara as masterGetMitologi } from '../data/mitologi-nusantara-db.js';
+import { TUMPENG_UBARAMPE as MASTER_TUMPENG_UBARAMPE, TUMPENG_WARNA as MASTER_TUMPENG_WARNA } from '../data/tumpeng.js';
+
 export const DB_FILES = {
   '01': '01-kalender-constants.json',
   '02': '02-wuku-ensiklopedia.json',
@@ -867,10 +907,10 @@ export function mapSelametanRules(raw) {
  */
 export function mapPetungIjab(raw) {
   let effectiveRaw = raw;
-  if (!effectiveRaw && isNodeEnvironment) {
+  if (!effectiveRaw) {
     effectiveRaw = getDbSync('15-ijab-bilingual.json');
   }
-  if (!effectiveRaw && !isNodeEnvironment) {
+  if (!effectiveRaw) {
     return null;
   }
 
@@ -928,10 +968,10 @@ export function mapPetungIjab(raw) {
  */
 export function mapPetungOmah(raw) {
   let effectiveRaw = raw;
-  if (!effectiveRaw && isNodeEnvironment) {
+  if (!effectiveRaw) {
     effectiveRaw = getDbSync('23-omah-bilingual.json');
   }
-  if (!effectiveRaw && !isNodeEnvironment) {
+  if (!effectiveRaw) {
     return null;
   }
 
@@ -975,7 +1015,10 @@ export function mapPetungKehidupan(raw) {
       effectiveRaw = getDbSync('22-petung-ternak-bilingual.json');
     }
   }
-  if (!effectiveRaw && !isNodeEnvironment) {
+  if (!effectiveRaw) {
+    effectiveRaw = getDbSync('22-petung-ternak-bilingual.json');
+  }
+  if (!effectiveRaw) {
     return null;
   }
 
@@ -1093,15 +1136,10 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('wukuPetenget').catch(() => null)
         ]);
 
-        const effectiveWuku = rawWuku || (isNodeEnvironment ? getDbSync('02-wuku-ensiklopedia.json') : null);
-        const effectivePetenget = rawPetenget || (isNodeEnvironment ? getDbSync('24-wuku-petenget-bilingual.json') : null);
+        const effectiveWuku = rawWuku || (isNodeEnvironment ? getDbSync('02-wuku-ensiklopedia.json') : null) || PAWUKON_LIST;
+        const effectivePetenget = rawPetenget || (isNodeEnvironment ? getDbSync('24-wuku-petenget-bilingual.json') : null) || [];
 
-        if (!effectiveWuku && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
-
-        let rawList = Array.isArray(effectiveWuku) ? effectiveWuku : (effectiveWuku?.wuku || []);
+        let rawList = Array.isArray(effectiveWuku) ? effectiveWuku : (effectiveWuku?.wuku || PAWUKON_LIST);
         const pawukonList = rawList.map(mapWukuItem);
 
         result = {
@@ -1120,6 +1158,21 @@ export async function loadDomainData(domain, options = {}) {
         ]);
 
         result = mapPitungPerjodohan(rawBilingual, rawAlt, rawAksara);
+        if (!result) {
+          result = mapPitungPerjodohan(
+            isNodeEnvironment ? getDbSync('11-pitung-perjodohan-bilingual.json') : null,
+            isNodeEnvironment ? getDbSync('16-pitung-perjodohan.json') : null,
+            isNodeEnvironment ? getDbSync('17-aksara-perjodohan.json') : null
+          ) || {
+            HASIL_I_JODOH: MASTER_HASIL_I,
+            HASIL_II_JODOH: MASTER_HASIL_II,
+            HASIL_III_JODOH: MASTER_HASIL_III,
+            HASIL_IV_JODOH: MASTER_HASIL_IV,
+            HASIL_V_JODOH: MASTER_HASIL_V,
+            HASIL_VI_JODOH: MASTER_HASIL_VI,
+            AKSARA_PERJODOHAN: MASTER_AKSARA_PERJODOHAN
+          };
+        }
         break;
       }
 
@@ -1135,35 +1188,31 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('siklusPadewan').catch(() => null)
         ]);
 
-        const effectiveBincil = rawBincil || (isNodeEnvironment ? getDbSync('06-bincil-matrix-bilingual.json') : null);
-        if (!effectiveBincil && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
+        const effectiveBincil = rawBincil || (isNodeEnvironment ? getDbSync('06-bincil-matrix-bilingual.json') : null) || MASTER_BINCIL_DB;
 
         result = {
           bincilMatrix: effectiveBincil,
-          ketBincil: (isNodeEnvironment ? getDbSync('03-bincil-arti.json') : null) || {},
-          zodiak: rawZodiak || (isNodeEnvironment ? getDbSync('07-zodiak-bilingual.json') : []) || [],
-          shioWuxing: rawShio || (isNodeEnvironment ? getDbSync('09-shio-wuxing-bilingual.json') : []) || [],
-          sasiJawa: rawSasi || (isNodeEnvironment ? getDbSync('08-sasi-jawa-bilingual.json') : []) || [],
+          ketBincil: (isNodeEnvironment ? getDbSync('03-bincil-arti.json') : null) || MASTER_KET_BINCIL || {},
+          zodiak: rawZodiak || (isNodeEnvironment ? getDbSync('07-zodiak-bilingual.json') : []) || MASTER_ZODIAK || [],
+          shioWuxing: rawShio || (isNodeEnvironment ? getDbSync('09-shio-wuxing-bilingual.json') : []) || { shio_12: MASTER_SHIO_DETAIL } || {},
+          sasiJawa: rawSasi || (isNodeEnvironment ? getDbSync('08-sasi-jawa-bilingual.json') : []) || Object.values(MASTER_SASI_JAWA) || [],
           pasaranWatak: rawPasaran || (isNodeEnvironment ? getDbSync('10-pasaran-watak-bilingual.json') : []) || [],
-          karakterDasar: rawKarakter || (isNodeEnvironment ? getDbSync('12-karakter-dasar-bilingual.json') : []) || [],
-          pekerjaanWeton: rawPekerjaan || (isNodeEnvironment ? getDbSync('13-pekerjaan-weton-bilingual.json') : []) || [],
-          siklusPadewan: rawPadewan || (isNodeEnvironment ? getDbSync('25-siklus-padewan-bilingual.json') : []) || []
+          karakterDasar: rawKarakter || (isNodeEnvironment ? getDbSync('12-karakter-dasar-bilingual.json') : []) || MASTER_KARAKTER_DASAR || [],
+          pekerjaanWeton: rawPekerjaan || (isNodeEnvironment ? getDbSync('13-pekerjaan-weton-bilingual.json') : []) || MASTER_PEKERJAAN || [],
+          siklusPadewan: rawPadewan || (isNodeEnvironment ? getDbSync('25-siklus-padewan-bilingual.json') : []) || MASTER_SIKLUS_PADEWAN || []
         };
         break;
       }
 
       case 'selametan': {
         const rawSelametan = await loadDb('selametanRules').catch(() => null);
-        result = mapSelametanRules(rawSelametan);
+        result = mapSelametanRules(rawSelametan) || mapSelametanRules(getDbSync('14-selametan-rules.json'));
         break;
       }
 
       case 'ijab': {
         const rawIjab = await loadDb('ijab').catch(() => null);
-        result = mapPetungIjab(rawIjab);
+        result = mapPetungIjab(rawIjab) || mapPetungIjab(getDbSync('15-ijab-bilingual.json'));
         if (typeof globalThis !== 'undefined' && result) {
           globalThis._currentIjabData = result;
         }
@@ -1172,7 +1221,7 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'omah': {
         const rawOmah = await loadDb('omah').catch(() => null);
-        result = mapPetungOmah(rawOmah);
+        result = mapPetungOmah(rawOmah) || mapPetungOmah(getDbSync('23-omah-bilingual.json'));
         if (typeof globalThis !== 'undefined' && result) {
           globalThis._currentOmahData = result;
         }
@@ -1193,7 +1242,7 @@ export async function loadDomainData(domain, options = {}) {
         if (!rawTernak) {
           rawTernak = await loadDb('petungTernak').catch(() => null);
         }
-        result = mapPetungKehidupan(rawTernak);
+        result = mapPetungKehidupan(rawTernak) || mapPetungKehidupan(getDbSync('22-petung-ternak-bilingual.json'));
         if (typeof globalThis !== 'undefined' && result) {
           globalThis._currentTernakData = result;
         }
@@ -1206,15 +1255,21 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('pranataMangsa').catch(() => null)
         ]);
         result = {
-          petungTetanen: rawTetanen || (isNodeEnvironment ? getDbSync('21-petung-tetanen-bilingual.json') : null),
-          pranataMangsa: rawMangsa || []
+          petungTetanen: rawTetanen || (isNodeEnvironment ? getDbSync('21-petung-tetanen-bilingual.json') : null) || masterGetTetanen(),
+          pranataMangsa: rawMangsa || (isNodeEnvironment ? getDbSync('05-pranata-mangsa.json') : null) || MASTER_PRANATA_MANGSA || []
         };
         break;
       }
 
       case 'sasmitha': {
         const rawSasmitha = await loadDb('sasmitha').catch(() => null);
-        result = rawSasmitha || (isNodeEnvironment ? getDbSync('20-sasmitha.json') : null);
+        result = rawSasmitha || (isNodeEnvironment ? getDbSync('20-sasmitha.json') : null) || {
+          impen: MASTER_SASMITHA_IMPEN,
+          kedut: MASTER_SASMITHA_KEDUT,
+          gerhana: MASTER_SASMITHA_GERAHANA,
+          lindu: MASTER_SASMITHA_LINDU,
+          tejo: MASTER_SASMITHA_TEJO
+        };
         break;
       }
 
@@ -1231,9 +1286,9 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('pustakaDigital').catch(() => null)
         ]);
         result = {
-          pustakaDongo: rawDongo || (isNodeEnvironment ? getDbSync('35-pustaka-dongo.json') : {}) || {},
-          pustakaJawa: rawJawa || (isNodeEnvironment ? getDbSync('36-pustaka-jawa.json') : {}) || {},
-          pustakaDigital: rawDigital || (isNodeEnvironment ? getDbSync('41-pustaka-digital.json') : {}) || {}
+          pustakaDongo: rawDongo || (isNodeEnvironment ? getDbSync('35-pustaka-dongo.json') : null) || { entri: MASTER_PUSTAKA_ENTRI, kategori: MASTER_PUSTAKA_KATEGORI },
+          pustakaJawa: rawJawa || (isNodeEnvironment ? getDbSync('36-pustaka-jawa.json') : null) || MASTER_PUSTAKA_JAWA || {},
+          pustakaDigital: rawDigital || (isNodeEnvironment ? getDbSync('41-pustaka-digital.json') : null) || { naskah_kuno: MASTER_NASKAH_KUNO, dokumen_referensi: MASTER_DOKUMEN_BUDAYA, kamus_jawa_indonesia: MASTER_KAMUS_JAWA, kamus_jawa_sanskerta: MASTER_KAMUS_SANSKERTA }
         };
         if (typeof globalThis !== 'undefined' && result?.pustakaDigital) {
           globalThis._currentPustakaDigitalData = result.pustakaDigital;
@@ -1243,17 +1298,13 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'sinengker': {
         const rawSinengker = await loadDb('sinengkerKhusus').catch(() => null);
-        result = rawSinengker || (isNodeEnvironment ? getDbSync('37-sinengker-khusus.json') : null);
+        result = rawSinengker || (isNodeEnvironment ? getDbSync('37-sinengker-khusus.json') : null) || MASTER_SINENGKER;
         break;
       }
 
       case 'wayang': {
         const rawWayang = await loadDb('wayang').catch(() => null);
-        const effectiveWayang = rawWayang || (isNodeEnvironment ? getDbSync('38-wayang-all.json') : null);
-        if (!effectiveWayang && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
+        const effectiveWayang = rawWayang || (isNodeEnvironment ? getDbSync('38-wayang-all.json') : null) || { wayang_list: masterGetWayangList(), kategori_list: masterGetWayangKat() };
         result = effectiveWayang;
         if (typeof globalThis !== 'undefined') {
           globalThis._currentWayangData = result;
@@ -1263,11 +1314,7 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'pitutur': {
         const rawPitutur = await loadDb('pitutur').catch(() => null);
-        const effectivePitutur = rawPitutur || (isNodeEnvironment ? getDbSync('39-pitutur-all.json') : null);
-        if (!effectivePitutur && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
+        const effectivePitutur = rawPitutur || (isNodeEnvironment ? getDbSync('39-pitutur-all.json') : null) || { pitutur_list: [], quiz_questions: MASTER_QUIZ || [] };
         result = effectivePitutur;
         if (typeof globalThis !== 'undefined') {
           globalThis._currentPituturData = result;
@@ -1283,11 +1330,7 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'mitologi': {
         const rawMitologi = await loadDb('mitologi').catch(() => null);
-        const effectiveMitologi = rawMitologi || (isNodeEnvironment ? getDbSync('40-mitologi-all.json') : null);
-        if (!effectiveMitologi && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
+        const effectiveMitologi = rawMitologi || (isNodeEnvironment ? getDbSync('40-mitologi-all.json') : null) || { cerita: masterGetMitologi() };
         result = effectiveMitologi;
         if (typeof globalThis !== 'undefined') {
           globalThis._currentMitologiData = result;
@@ -1297,11 +1340,7 @@ export async function loadDomainData(domain, options = {}) {
 
       case 'tumpeng': {
         const rawTumpeng = await loadDb('tumpeng').catch(() => null);
-        const effectiveTumpeng = rawTumpeng || (isNodeEnvironment ? getDbSync('42-tumpeng-all.json') : null);
-        if (!effectiveTumpeng && !isNodeEnvironment) {
-          result = null;
-          break;
-        }
+        const effectiveTumpeng = rawTumpeng || (isNodeEnvironment ? getDbSync('42-tumpeng-all.json') : null) || { ubarampe: MASTER_TUMPENG_UBARAMPE, tumpeng_warna: MASTER_TUMPENG_WARNA };
         result = effectiveTumpeng;
         if (typeof globalThis !== 'undefined') {
           globalThis._currentTumpengData = result;
@@ -1329,38 +1368,32 @@ export async function loadDomainData(domain, options = {}) {
   } catch (err) {
     console.warn(`[dbLoader] Gagal memuat domain "${domain}":`, err);
     domainCache.delete(dom);
-    if (isNodeEnvironment) {
-      const fallback = getDomainFallback(dom);
-      if (fallback) domainCache.set(dom, fallback);
-      return fallback;
-    }
-    return null;
+    const fallback = getDomainFallback(dom);
+    if (fallback) domainCache.set(dom, fallback);
+    return fallback;
   }
 }
 
 /**
- * Mengambil fallback aman untuk domain jika fetch gagal (HANYA AKTIF DI NODE.JS UNTUK TEST RUNNER)
- * Di browser environment, fungsi ini SELALU mengembalikan null demi menjamin keaslian data publik.
+ * Mengambil fallback aman untuk domain jika fetch gagal (Arsitektur Hybrid Data Lokal .js)
+ * Memastikan tidak ada data kosong atau gagal termuat di browser maupun Node.js.
  * @param {string} domain 
  * @returns {any}
  */
 export function getDomainFallback(domain) {
-  if (!isNodeEnvironment) {
-    return null;
-  }
   const dom = String(domain || '').toLowerCase().trim();
   switch (dom) {
     case 'kalender':
       return {
-        constants: mapKalenderConstants(getDbSync('01-kalender-constants.json')),
-        dinoRules: mapDinoRules(getDbSync('04-dino-rules.json')),
-        pranataMangsa: getDbSync('05-pranata-mangsa.json') || [],
-        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || [],
+        constants: mapKalenderConstants(getDbSync('01-kalender-constants.json') || { HARI, PASARAN, NEPTU_HARI, NEPTU_PASARAN, WUKU, BULAN_JAWA, BULAN_MASEHI, WINDU, EPOCH_JDN, GRID, KETERANGAN }),
+        dinoRules: mapDinoRules(getDbSync('04-dino-rules.json') || {}),
+        pranataMangsa: getDbSync('05-pranata-mangsa.json') || MASTER_PRANATA_MANGSA || [],
+        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || masterGetTetanen(),
         wukuPetenget: getDbSync('24-wuku-petenget-bilingual.json') || []
       };
     case 'wuku':
       return {
-        pawukonList: (getDbSync('02-wuku-ensiklopedia.json') || []).map(mapWukuItem),
+        pawukonList: (getDbSync('02-wuku-ensiklopedia.json') || PAWUKON_LIST).map(mapWukuItem),
         petengetList: getDbSync('24-wuku-petenget-bilingual.json') || []
       };
     case 'jodoh':
@@ -1369,18 +1402,26 @@ export function getDomainFallback(domain) {
         getDbSync('11-pitung-perjodohan-bilingual.json'),
         getDbSync('16-pitung-perjodohan.json'),
         getDbSync('17-aksara-perjodohan.json')
-      );
+      ) || {
+        HASIL_I_JODOH: MASTER_HASIL_I,
+        HASIL_II_JODOH: MASTER_HASIL_II,
+        HASIL_III_JODOH: MASTER_HASIL_III,
+        HASIL_IV_JODOH: MASTER_HASIL_IV,
+        HASIL_V_JODOH: MASTER_HASIL_V,
+        HASIL_VI_JODOH: MASTER_HASIL_VI,
+        AKSARA_PERJODOHAN: MASTER_AKSARA_PERJODOHAN
+      };
     case 'nujum':
       return {
-        bincilMatrix: getDbSync('06-bincil-matrix-bilingual.json') || {},
-        ketBincil: getDbSync('03-bincil-arti.json') || {},
-        zodiak: getDbSync('07-zodiak-bilingual.json') || [],
-        shioWuxing: getDbSync('09-shio-wuxing-bilingual.json') || [],
-        sasiJawa: getDbSync('08-sasi-jawa-bilingual.json') || [],
+        bincilMatrix: getDbSync('06-bincil-matrix-bilingual.json') || MASTER_BINCIL_DB,
+        ketBincil: getDbSync('03-bincil-arti.json') || MASTER_KET_BINCIL || {},
+        zodiak: getDbSync('07-zodiak-bilingual.json') || MASTER_ZODIAK || [],
+        shioWuxing: getDbSync('09-shio-wuxing-bilingual.json') || { shio_12: MASTER_SHIO_DETAIL } || {},
+        sasiJawa: getDbSync('08-sasi-jawa-bilingual.json') || Object.values(MASTER_SASI_JAWA) || [],
         pasaranWatak: getDbSync('10-pasaran-watak-bilingual.json') || [],
-        karakterDasar: getDbSync('12-karakter-dasar-bilingual.json') || [],
-        pekerjaanWeton: getDbSync('13-pekerjaan-weton-bilingual.json') || [],
-        siklusPadewan: getDbSync('25-siklus-padewan-bilingual.json') || []
+        karakterDasar: getDbSync('12-karakter-dasar-bilingual.json') || MASTER_KARAKTER_DASAR || [],
+        pekerjaanWeton: getDbSync('13-pekerjaan-weton-bilingual.json') || MASTER_PEKERJAAN || [],
+        siklusPadewan: getDbSync('25-siklus-padewan-bilingual.json') || MASTER_SIKLUS_PADEWAN || []
       };
     case 'selametan':
       return mapSelametanRules(getDbSync('14-selametan-rules.json'));
@@ -1393,19 +1434,25 @@ export function getDomainFallback(domain) {
       return mapPetungKehidupan(getDbSync('22-petung-ternak-bilingual.json'));
     case 'sapa-dina':
       return {
-        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || [],
-        pranataMangsa: getDbSync('05-pranata-mangsa.json') || []
+        petungTetanen: getDbSync('21-petung-tetanen-bilingual.json') || masterGetTetanen(),
+        pranataMangsa: getDbSync('05-pranata-mangsa.json') || MASTER_PRANATA_MANGSA || []
       };
     case 'sasmitha':
-      return getDbSync('20-sasmitha.json') || {};
+      return getDbSync('20-sasmitha.json') || {
+        impen: MASTER_SASMITHA_IMPEN,
+        kedut: MASTER_SASMITHA_KEDUT,
+        gerhana: MASTER_SASMITHA_GERAHANA,
+        lindu: MASTER_SASMITHA_LINDU,
+        tejo: MASTER_SASMITHA_TEJO
+      };
     case 'wayang':
-      return getDbSync('38-wayang-all.json') || {};
+      return getDbSync('38-wayang-all.json') || { wayang_list: masterGetWayangList(), kategori_list: masterGetWayangKat() };
     case 'pitutur':
-      return getDbSync('39-pitutur-all.json') || {};
+      return getDbSync('39-pitutur-all.json') || { pitutur_list: [], quiz_questions: MASTER_QUIZ || [] };
     case 'mitologi':
-      return getDbSync('40-mitologi-all.json') || {};
+      return getDbSync('40-mitologi-all.json') || { cerita: masterGetMitologi() };
     case 'tumpeng':
-      return getDbSync('42-tumpeng-all.json') || {};
+      return getDbSync('42-tumpeng-all.json') || { ubarampe: MASTER_TUMPENG_UBARAMPE, tumpeng_warna: MASTER_TUMPENG_WARNA };
     default:
       return null;
   }

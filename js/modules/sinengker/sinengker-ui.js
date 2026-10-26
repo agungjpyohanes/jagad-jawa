@@ -32,6 +32,7 @@ import {
 import { showToast, copyToClipboard } from '../../ui/toast.js';
 import { loadDomainData } from '../../services/dbLoader.js';
 import { renderDataErrorState } from '../../ui/data-error-state.js';
+import { TUMPENG_UBARAMPE, TUMPENG_WARNA } from '../../data/tumpeng.js';
 
 let currentSinengkerSubtab = 'kompas'; // 'kompas' | 'dongo' | 'kautaman' | 'usada' | 'kalacakra' | 'tumpeng' | 'ubarampe' | 'kawruh' | 'mantra'
 let kompasSearchQuery = 'Gatak'; // Default tuladha saking prompt
@@ -1659,6 +1660,11 @@ async function renderSinengkerTumpengView(container) {
     tumpengData = await loadDomainData('tumpeng');
   } catch (e) {
     console.warn('[sinengker-ui] loadDomainData tumpeng error:', e);
+  }
+
+  // Fallback lokal stabil dari tumpeng.js jika KV belum termuat / offline
+  if (!tumpengData && typeof TUMPENG_UBARAMPE !== 'undefined' && TUMPENG_UBARAMPE.length > 0) {
+    tumpengData = { ubarampe: TUMPENG_UBARAMPE, tumpeng_warna: TUMPENG_WARNA };
   }
 
   const isNode = typeof window === 'undefined' && typeof process !== 'undefined' && Boolean(process.versions?.node);
