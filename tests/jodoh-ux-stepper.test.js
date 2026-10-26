@@ -201,7 +201,7 @@ test('Jodoh History - Penyimpanan riwayat dengan status hubungan baru', () => {
   assert.equal(history[1].statusHubungan, 'planning');
 });
 
-test('Jodoh UX - Perubahan status hubungan tidak menghapus tanggal dan tidak meninggalkan hasil stale', () => {
+test('Jodoh UX - Perubahan status hubungan tidak menghapus tanggal dan tidak meninggalkan hasil stale', async () => {
   // Setup data hasil awal
   const mockHasil = {
     totalNeptu: 27,
@@ -229,22 +229,21 @@ test('Jodoh UX - Perubahan status hubungan tidak menghapus tanggal dan tidak men
   const inputL = '1994-08-20';
 
   // Ubah status ke married
-  import('../js/modules/jodoh/jodoh-ui.js').then(({ onStatusHubunganChange }) => {
-    onStatusHubunganChange('married');
+  const { onStatusHubunganChange } = await import('../js/modules/jodoh/jodoh-ui.js');
+  onStatusHubunganChange('married');
 
-    // Tanggal input tidak boleh hilang / berubah
-    assert.equal(inputP, '1995-05-12', 'Tanggal wanita tidak boleh terhapus');
-    assert.equal(inputL, '1994-08-20', 'Tanggal pria tidak boleh terhapus');
+  // Tanggal input tidak boleh hilang / berubah
+  assert.equal(inputP, '1995-05-12', 'Tanggal wanita tidak boleh terhapus');
+  assert.equal(inputL, '1994-08-20', 'Tanggal pria tidak boleh terhapus');
 
-    // Pada status married, data mantu dibersihkan (panjang 0) dan panduan pasutri aktif
-    assert.equal(globalThis.window.LAST_MANTU_DATA.length, 0, 'LAST_MANTU_DATA harus kosong saat married');
-    assert.ok(rekomendasiBox.innerHTML.includes('PASUTRI'), 'Harus menampilkan panduan pasutri');
-    assert.ok(!rekomendasiBox.innerHTML.includes('5 Usulan Tanggal Mantu'), 'Tidak boleh menampilkan saran mantu untuk married');
+  // Pada status married, data mantu dibersihkan (panjang 0) dan panduan pasutri aktif
+  assert.equal(globalThis.window.LAST_MANTU_DATA.length, 0, 'LAST_MANTU_DATA harus kosong saat married');
+  assert.ok(rekomendasiBox.innerHTML.includes('PASUTRI'), 'Harus menampilkan panduan pasutri');
+  assert.ok(!rekomendasiBox.innerHTML.includes('5 Usulan Tanggal Mantu'), 'Tidak boleh menampilkan saran mantu untuk married');
 
-    // Kembalikan ke engaged -> rekomendasi mantu aktif kembali tanpa perlu isi ulang tanggal
-    onStatusHubunganChange('engaged');
-    assert.ok(globalThis.window.LAST_MANTU_DATA.length > 0, 'LAST_MANTU_DATA aktif kembali untuk engaged');
-    assert.ok(rekomendasiBox.innerHTML.includes('5 Usulan Tanggal Mantu'), 'Harus menampilkan usulan mantu untuk engaged');
-  });
+  // Kembalikan ke engaged -> rekomendasi mantu aktif kembali tanpa perlu isi ulang tanggal
+  onStatusHubunganChange('engaged');
+  assert.ok(globalThis.window.LAST_MANTU_DATA.length > 0, 'LAST_MANTU_DATA aktif kembali untuk engaged');
+  assert.ok(rekomendasiBox.innerHTML.includes('5 Usulan Tanggal Mantu'), 'Harus menampilkan usulan mantu untuk engaged');
 });
 

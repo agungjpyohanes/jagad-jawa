@@ -257,29 +257,64 @@ export function getTingkatKeharmonisan(skor) {
 }
 
 /**
- * Mencari 5 tanggal mantu terbaik (rahayu) terdekat.
- * Kriteria:
- * 1. Dino Ijo (hari rahayu / becik).
- * 2. Bukan Dino Gede (hari nahas / sangar).
+ * Mencari rekomendasi tanggal mantu terbaik (rahayu) miturut tradisi Jawa.
+ * Mendukung rentang 1 tahun penuh, tahun berikutnya, serta penanda hari paling utama (Sri).
+ * 
+ * Kriteria Primbon Tradisi:
+ * 1. Dino Ijo (hari rahayu / becik miturut Wuku).
+ * 2. Bukan Dino Gede (bebas saking dino nahas / sangar).
  * 3. Panca Sudha Mantu: (totalNeptuPasangan + neptuHari) % 5 menghasilkan sisa 1 (Sri), 2 (Lungguh), atau 3 (Gedhong).
+ * 4. Paling Utama: Sisa 1 (Sri) minangka drajat paling utama lambang kemakmuran & sandhang pangan tiada putus.
  * 
  * @param {number} totalNeptuPasangan 
- * @param {Date|string} [startDate] Tanggal mulai (default: 30 hari ke depan)
- * @param {number} [count=5] Jumlah rekomendasi yang dicari
+ * @param {Date|string|Object} [startDateOrOptions] Tanggal mulai atau objek opsi { startDate, rentang, tahun, count, hanyaUtama }
+ * @param {number} [count=5] Jumlah rekomendasi yang dicari (bila dipanggil dengan signature lama)
  * @returns {Array<Object>}
  */
-export function cariRekomendasiTanggalMantu(totalNeptuPasangan, startDate = null, count = 5) {
+export function cariRekomendasiTanggalMantu(totalNeptuPasangan, startDateOrOptions = null, countLimit = null) {
   const tn = Number(totalNeptuPasangan) || 25;
-  let curr = startDate ? new Date(startDate) : new Date();
-  if (isNaN(curr.getTime())) curr = new Date();
 
-  // Jika tidak ditentukan tanggal mulai secara spesifik, mulai dari 30 hari ke depan untuk waktu persiapan praktis
-  if (!startDate) {
+  let startDate = null;
+  let rentang = '1-tahun'; // '1-tahun' | 'tahun-depan'
+  let count = 5;
+  let tahunKhusus = null;
+  let hanyaUtama = false;
+
+  if (startDateOrOptions && typeof startDateOrOptions === 'object' && !(startDateOrOptions instanceof Date)) {
+    startDate = startDateOrOptions.startDate || null;
+    rentang = startDateOrOptions.rentang || (startDateOrOptions.tahun ? 'tahun-khusus' : '1-tahun');
+    count = startDateOrOptions.count || countLimit || 12;
+    tahunKhusus = startDateOrOptions.tahun || null;
+    hanyaUtama = Boolean(startDateOrOptions.hanyaUtama);
+  } else {
+    startDate = startDateOrOptions;
+    if (countLimit !== null && countLimit !== undefined) {
+      count = countLimit;
+    } else {
+      count = 5;
+    }
+  }
+
+  let curr;
+  let maxDays = 365;
+
+  if (rentang === 'tahun-depan') {
+    const nextYear = new Date().getFullYear() + 1;
+    curr = new Date(nextYear, 0, 1);
+    maxDays = 366;
+  } else if (tahunKhusus) {
+    curr = new Date(Number(tahunKhusus), 0, 1);
+    maxDays = 366;
+  } else if (startDate) {
+    curr = new Date(startDate);
+    if (isNaN(curr.getTime())) curr = new Date();
+  } else {
+    curr = new Date();
+    // Default mulai dari 30 hari ke depan untuk waktu persiapan praktis
     curr.setDate(curr.getDate() + 30);
   }
 
   const results = [];
-  const maxDays = 365; // Cari hingga 1 tahun ke depan
 
   for (let i = 0; i < maxDays; i++) {
     const y = curr.getFullYear();
@@ -302,14 +337,30 @@ export function cariRekomendasiTanggalMantu(totalNeptuPasangan, startDate = null
 
       // Syarat 3: Panca Sudha Mantu = Sri (1), Lungguh (2), atau Gedhong (3)
       if (sisa === 1 || sisa === 2 || sisa === 3) {
+        const isPalingUtama = (sisa === 1);
+        const isUtama = (sisa === 1 || sisa === 2);
+
+        // Jika opsi hanyaUtama aktif, lewati sisa 2 dan 3
+        if (hanyaUtama && !isPalingUtama) {
+          curr.setDate(curr.getDate() + 1);
+          continue;
+        }
+
         const pancaInfo = PANCA_SUDHA_MANTU_DATA[sisa];
         const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const namaBulan = BULAN_MASEHI[m - 1];
         const formattedDate = `${dino}, ${d} ${namaBulan} ${y}`;
 
+        const tingkatKeutamaan = isPalingUtama ? 'Paling Utama' : (sisa === 2 ? 'Utama' : 'Sae');
+        const badgeUtama = isPalingUtama ? '⭐ Paling Utama (Sri)' : (sisa === 2 ? '✨ Utama (Lungguh)' : '🌿 Sae (Gedhong)');
+        const isAkhirPekan = (info.weekdayId === 0 || info.weekdayId === 5 || info.weekdayId === 6);
+
         results.push({
           dateStr,
           formattedDate,
+          year: y,
+          month: m,
+          day: d,
           dino,
           pas,
           weton: `${dino} ${pas}`,
@@ -321,10 +372,15 @@ export function cariRekomendasiTanggalMantu(totalNeptuPasangan, startDate = null
           kategoriLabel: pancaInfo.kategoriLabel,
           makna: pancaInfo.makna,
           isDinoIjo: true,
-          isDinoGede: false
+          isDinoGede: false,
+          isPalingUtama,
+          isUtama,
+          tingkatKeutamaan,
+          badgeUtama,
+          isAkhirPekan
         });
 
-        if (results.length >= count) break;
+        if (count && results.length >= count) break;
       }
     }
 

@@ -62,3 +62,44 @@ test('Jodoh Mantu - Disclaimer Etis & Kultural Perjodohan (Tahap 4.4)', () => {
   assert.ok(DISCLAIMER_ETIS_PERJODOHAN.includes('Gusti Kang Murbeng Dumadi'), 'Harus memuat penghormatan pada Sang Pencipta');
   assert.ok(DISCLAIMER_ETIS_PERJODOHAN.includes('welas asih'), 'Harus menekankan cinta kasih dan ikhtiar');
 });
+
+test('Jodoh Mantu - Perluasan Rentang 1 Tahun, Pilihan Tahun Berikutnya, dan Penanda Paling Utama', () => {
+  const totalNeptu = 29;
+
+  // 1. Uji rentang 1 tahun penuh dengan alternatif lebih banyak
+  const list1Tahun = cariRekomendasiTanggalMantu(totalNeptu, { rentang: '1-tahun', count: 12 });
+  assert.ok(Array.isArray(list1Tahun));
+  assert.ok(list1Tahun.length > 5, 'Harus dapat menghasilkan lebih dari 5 alternatif tanggal dalam 1 tahun');
+  
+  // Verifikasi penanda hari paling utama (Sri / sisa 1)
+  const hasPalingUtama = list1Tahun.some(m => m.isPalingUtama && m.sisaPancaSudha === 1);
+  assert.ok(hasPalingUtama, 'Harus memuat penanda isPalingUtama untuk sisa 1 (Sri)');
+  list1Tahun.forEach(m => {
+    if (m.isPalingUtama) {
+      assert.equal(m.sisaPancaSudha, 1);
+      assert.equal(m.predikat, 'Sri');
+      assert.ok(m.badgeUtama.includes('Paling Utama'));
+    }
+  });
+
+  // 2. Uji pilihan tahun berikutnya (next year)
+  const nextYear = new Date().getFullYear() + 1;
+  const listTahunDepan = cariRekomendasiTanggalMantu(totalNeptu, { rentang: 'tahun-depan', count: 8 });
+  assert.ok(Array.isArray(listTahunDepan));
+  assert.ok(listTahunDepan.length > 0, 'Harus menghasilkan tanggal untuk tahun depan');
+  listTahunDepan.forEach(m => {
+    assert.equal(m.year, nextYear, `Seluruh tanggal rekomendasi tahun depan harus berada di tahun ${nextYear}`);
+    assert.ok(m.isDinoIjo);
+    assert.ok(!m.isDinoGede);
+    assert.ok([1, 2, 3].includes(m.sisaPancaSudha));
+  });
+
+  // 3. Uji filter hanya hari paling utama (Sri)
+  const listHanyaUtama = cariRekomendasiTanggalMantu(totalNeptu, { rentang: '1-tahun', count: 6, hanyaUtama: true });
+  assert.ok(listHanyaUtama.length > 0);
+  listHanyaUtama.forEach(m => {
+    assert.equal(m.isPalingUtama, true);
+    assert.equal(m.sisaPancaSudha, 1);
+    assert.equal(m.predikat, 'Sri');
+  });
+});

@@ -20,6 +20,8 @@ import {
   hitungNujumPerjodohan,
   renderVisualScoreBar,
   renderRekomendasiMantu,
+  setMantuRentang,
+  toggleMantuHanyaUtama,
   simpanMantuKeBookmark,
   renderRiwayatPerjodohan,
   loadRiwayatPerjodohan,
@@ -56,6 +58,8 @@ export function wireJodohFeature() {
   window.DISCLAIMER_ETIS_PERJODOHAN = DISCLAIMER_ETIS_PERJODOHAN;
   window.renderVisualScoreBar = renderVisualScoreBar;
   window.renderRekomendasiMantu = renderRekomendasiMantu;
+  window.setMantuRentang = setMantuRentang;
+  window.toggleMantuHanyaUtama = toggleMantuHanyaUtama;
   window.simpanMantuKeBookmark = simpanMantuKeBookmark;
   window.renderRiwayatPerjodohan = renderRiwayatPerjodohan;
   window.loadRiwayatPerjodohan = loadRiwayatPerjodohan;
@@ -86,6 +90,8 @@ export {
   hitungNujumPerjodohan,
   renderVisualScoreBar,
   renderRekomendasiMantu,
+  setMantuRentang,
+  toggleMantuHanyaUtama,
   simpanMantuKeBookmark,
   renderRiwayatPerjodohan,
   loadRiwayatPerjodohan,

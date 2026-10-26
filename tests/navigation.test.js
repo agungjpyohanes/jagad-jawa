@@ -117,10 +117,11 @@ test('Navigasi & Menu - Aksesibilitas Mobile Drawer, Hash Routing, & Vercel Asse
   const drawerHtml = mobileMenuMatch[0];
   assert.ok(!drawerHtml.includes("toggleMobileMenu();"), 'Tombol item dalam drawer tidak boleh memanggil toggleMobileMenu() berlebih');
 
-  // 3. Modul navigasi memuat listener hashchange untuk routing langsung
+  // 3. Modul navigasi memuat listener hashchange untuk routing langsung dan auto-close mobile drawer
   const navPath = path.resolve('js/ui/navigation.js');
   const navJs = fs.readFileSync(navPath, 'utf-8');
   assert.ok(navJs.includes("hashchange"), 'navigation.js harus memiliki listener hashchange');
+  assert.ok(navJs.includes("closeMobileMenu();"), 'switchTab harus memanggil closeMobileMenu() untuk auto-close hamburger');
 
   // 4. vercel.json memuat handle: filesystem sebelum rewrite
   const vercelPath = path.resolve('vercel.json');

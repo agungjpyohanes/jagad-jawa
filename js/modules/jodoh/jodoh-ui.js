@@ -465,8 +465,8 @@ export async function hitungNujumPerjodohan() {
   const statusHubungan = normalizeStatusHubungan(statusEl ? statusEl.value : 'planning');
   const isMarried = (statusHubungan === 'married');
 
-  // Cari 5 usulan tanggal mantu rahayu (hanya jika planning atau engaged)
-  const mantuList = (!isMarried) ? cariRekomendasiTanggalMantu(hasil.totalNeptu) : [];
+  // Cari usulan tanggal mantu rahayu (hanya jika planning atau engaged)
+  const mantuList = (!isMarried) ? cariRekomendasiTanggalMantu(hasil.totalNeptu, { rentang: currentMantuRentang || '1-tahun', count: 15, hanyaUtama: currentMantuHanyaUtama }) : [];
 
   // Simpan ke riwayat lokal (Tahap 4.3)
   saveJodohHistory(hasil, { tglP, tglL, statusHubungan });
@@ -699,8 +699,39 @@ export function renderPanduanKeharmonisanPasutri(hasil) {
   `;
 }
 
+let currentMantuRentang = '1-tahun'; // '1-tahun' | 'tahun-depan'
+let currentMantuHanyaUtama = false;
+
+export function setMantuRentang(rentang) {
+  currentMantuRentang = rentang;
+  const totalNeptu = window.LAST_PERJODOHAN_DATA?.totalNeptu;
+  if (!totalNeptu) return;
+  const list = cariRekomendasiTanggalMantu(totalNeptu, {
+    rentang,
+    count: 15,
+    hanyaUtama: currentMantuHanyaUtama
+  });
+  window.LAST_MANTU_DATA = list;
+  renderRekomendasiMantu(list);
+}
+
+export function toggleMantuHanyaUtama() {
+  currentMantuHanyaUtama = !currentMantuHanyaUtama;
+  const totalNeptu = window.LAST_PERJODOHAN_DATA?.totalNeptu;
+  if (!totalNeptu) return;
+  const list = cariRekomendasiTanggalMantu(totalNeptu, {
+    rentang: currentMantuRentang,
+    count: 15,
+    hanyaUtama: currentMantuHanyaUtama
+  });
+  window.LAST_MANTU_DATA = list;
+  renderRekomendasiMantu(list);
+}
+
 /**
- * Render rekomendasi 5 tanggal mantu terdekat (Tahap 4.2).
+ * Render rekomendasi tanggal mantu rahayu (Tahap 4.2).
+ * Menampilkan pilihan alternatif 1 tahun penuh atau tahun depan,
+ * lengkap dengan penanda hari paling utama (Sri).
  * @param {Array<Object>} mantuList 
  */
 export function renderRekomendasiMantu(mantuList) {
@@ -716,41 +747,106 @@ export function renderRekomendasiMantu(mantuList) {
     return;
   }
 
+  const currentYear = new Date().getFullYear();
+  const nextYear = currentYear + 1;
+  const isTahunDepan = (currentMantuRentang === 'tahun-depan');
+
   container.innerHTML = `
     <div class="p-4 sm:p-5 rounded-2xl bg-wulung border border-prada/40 space-y-4">
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-sogan-800 pb-2.5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sogan-800 pb-3">
         <div>
           <span class="text-[10px] font-mono text-prada uppercase tracking-widest font-semibold block">REKOMENDASI PAWIWAHAN (4.2)</span>
-          <h4 class="font-marcellus text-lg font-bold text-prada-light">5 Usulan Tanggal Mantu Rahayu Terdekat</h4>
+          <h4 class="font-marcellus text-lg font-bold text-prada-light">5 Usulan Tanggal Mantu Rahayu &amp; Alternatif Pilihan</h4>
           <p class="text-[11px] text-sogan-300">Dipilih miturut kombinasi <strong>Dino Ijo</strong> (hari baik), non-Dino Gede, sarta predikat <strong>Panca Sudha Ijab Mantu</strong> (Sri / Lungguh / Gedhong).</p>
         </div>
-        <span class="text-[11px] px-3 py-1 rounded-full bg-teal-950/80 border border-teal-500/60 text-teal-300 font-mono">
-          <i class="fa-solid fa-calendar-check mr-1"></i> 5 Tanggal Utama
+        
+        <!-- Controls: Pilihan Rentang (1 Tahun vs Tahun Berikutnya) & Filter Hari Utama -->
+        <div class="flex flex-wrap items-center gap-1.5 shrink-0">
+          <div class="p-1 rounded-xl bg-sogan-950 border border-sogan-800 flex items-center gap-1">
+            <button
+              type="button"
+              onclick="setMantuRentang('1-tahun')"
+              class="px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${!isTahunDepan ? 'bg-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-amber-100'}"
+            >
+              1 Tahun Penuh
+            </button>
+            <button
+              type="button"
+              onclick="setMantuRentang('tahun-depan')"
+              class="px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${isTahunDepan ? 'bg-prada text-keraton font-bold shadow' : 'text-sogan-300 hover:text-amber-100'}"
+            >
+              Tahun ${nextYear}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onclick="toggleMantuHanyaUtama()"
+            class="px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition cursor-pointer flex items-center gap-1 ${currentMantuHanyaUtama ? 'bg-amber-500/20 text-amber-200 border-amber-400' : 'bg-sogan-950 text-sogan-300 border-sogan-800 hover:text-prada'}"
+            title="Saring hanya hari dengan predikat Paling Utama (Sri)"
+          >
+            <i class="fa-solid fa-star text-amber-400 text-[10px]"></i>
+            <span>Hanya Paling Utama (Sri)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-sogan-400">
+        <span>Menampilkan <strong>${mantuList.length}</strong> tanggal alternatif pilihan (${isTahunDepan ? `Tahun ${nextYear}` : '1 Tahun Kedepan'}):</span>
+        <span class="text-[11px] text-amber-300 font-mono flex items-center gap-1">
+          <i class="fa-solid fa-star text-amber-400"></i> Hari Paling Utama ditandai warna emas
         </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-        ${mantuList.map((m, idx) => `
-          <div class="p-3.5 rounded-xl bg-keraton border border-sogan-800 hover:border-prada/60 transition space-y-2.5 flex flex-col justify-between shadow">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
+        ${mantuList.map((m, idx) => {
+          const isTopPrime = m.isPalingUtama;
+          const cardBorder = isTopPrime
+            ? 'border-amber-400/80 bg-gradient-to-b from-[#1c160c] via-keraton to-keraton shadow-[0_0_15px_rgba(234,179,8,0.15)] ring-1 ring-amber-400/30'
+            : 'border-sogan-800 hover:border-prada/60 bg-keraton shadow';
+
+          return `
+          <div class="p-3.5 rounded-xl border ${cardBorder} transition space-y-2.5 flex flex-col justify-between">
             <div class="space-y-1">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sogan-900 border border-sogan-700 text-amber-300 font-bold">
-                  Usulan #${idx + 1}
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-600 text-emerald-300 font-semibold flex items-center gap-1">
-                  <i class="fa-solid fa-leaf text-[9px]"></i> Dino Ijo
-                </span>
+              <div class="flex items-center justify-between gap-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${isTopPrime ? 'bg-amber-400 text-keraton font-bold' : 'bg-sogan-900 border border-sogan-700 text-amber-300 font-bold'}">
+                    #${idx + 1}
+                  </span>
+                  ${isTopPrime ? `
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/25 to-yellow-500/30 text-amber-200 border border-amber-400 font-bold flex items-center gap-1">
+                      <i class="fa-solid fa-star text-amber-400 text-[9px]"></i> Paling Utama (Sri)
+                    </span>
+                  ` : (m.sisaPancaSudha === 2 ? `
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-600/60 font-semibold flex items-center gap-1">
+                      <i class="fa-solid fa-crown text-[9px]"></i> Utama (Lungguh)
+                    </span>
+                  ` : `
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-600/60 font-medium flex items-center gap-1">
+                      <i class="fa-solid fa-gem text-[9px]"></i> Sae (Gedhong)
+                    </span>
+                  `)}
+                </div>
+                ${m.isAkhirPekan ? `
+                  <span class="text-[9px] px-1.5 py-0.5 rounded bg-sogan-900 border border-sogan-700 text-amber-200/90 font-mono">
+                    Akhir Pekan
+                  </span>
+                ` : ''}
               </div>
-              <h5 class="font-marcellus text-sm font-bold text-amber-200">${m.formattedDate}</h5>
+              
+              <h5 class="font-marcellus text-sm font-bold ${isTopPrime ? 'text-amber-100' : 'text-amber-200'} pt-0.5">
+                ${m.formattedDate}
+              </h5>
+              
               <div class="text-[11px] text-amber-100/90 font-medium">
                 Weton: <strong class="text-prada-light font-bold">${m.weton}</strong> (Neptu: ${m.neptuHari}) &middot; Wuku ${m.wukuName}
               </div>
             </div>
 
-            <div class="p-2.5 rounded-lg bg-[#140e08]/95 border border-amber-900/60 space-y-1.5 text-[11px]">
+            <div class="p-2.5 rounded-lg bg-[#140e08]/95 border ${isTopPrime ? 'border-amber-700/60' : 'border-amber-900/60'} space-y-1.5 text-[11px]">
               <div class="flex items-center justify-between border-b border-amber-950/60 pb-1">
                 <span class="text-amber-200/80 font-medium">Panca Sudha:</span>
-                <strong class="text-amber-300 font-semibold">${m.kategoriLabel}</strong>
+                <strong class="${isTopPrime ? 'text-amber-300 font-bold' : 'text-amber-300 font-semibold'}">${m.kategoriLabel}</strong>
               </div>
               <p class="text-amber-100 text-[11px] italic leading-relaxed">${m.makna}</p>
             </div>
@@ -764,7 +860,8 @@ export function renderRekomendasiMantu(mantuList) {
               </button>
             </div>
           </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
 
       <!-- Banner CTA Navigasi ke Petung Ijab -->

@@ -5,6 +5,7 @@
  */
 
 import { hitungPetungIjab, setIjabDataset } from './ijab-engine.js';
+import { cariRekomendasiTanggalMantu } from '../jodoh/jodoh-engine.js';
 import {
   IJAB_WUKU,
   IJAB_SASI,
@@ -132,27 +133,46 @@ export function periksaPrefillJodoh() {
 
   const banner = document.getElementById('ijabJodohPrefillBanner');
   const bannerText = document.getElementById('ijabJodohPrefillText');
-  const mantuList = window.LAST_MANTU_DATA;
+  let mantuList = window.LAST_MANTU_DATA;
+
+  if (jodohData && (!mantuList || mantuList.length === 0) && jodohData.totalNeptu) {
+    mantuList = cariRekomendasiTanggalMantu(jodohData.totalNeptu, { rentang: '1-tahun', count: 12 });
+    window.LAST_MANTU_DATA = mantuList;
+  }
 
   if (jodohData && mantuList && mantuList.length > 0) {
     if (banner) banner.classList.remove('hidden');
     if (bannerText) {
-      const topMantu = mantuList[0];
-      bannerText.innerHTML = `Terdeteksi pasangan <strong>${jodohData.wanita.nama || 'Wanita'}</strong> &amp; <strong>${jodohData.pria.nama || 'Pria'}</strong>. Rekomendasi terdekat: <strong>${topMantu.formattedDate}</strong> (${topMantu.weton}).`;
+      const topMantu = mantuList.find(m => m.isPalingUtama) || mantuList[0];
+      const count = mantuList.length;
+      const namaW = jodohData.wanita?.nama || 'Wanita';
+      const namaP = jodohData.pria?.nama || 'Pria';
+      const badge = topMantu.badgeUtama || topMantu.predikat || 'Sri';
+      bannerText.innerHTML = `Terdeteksi pasangan <strong>${namaW}</strong> &amp; <strong>${namaP}</strong>. Rekomendasi utama: <strong>${topMantu.formattedDate}</strong> (${topMantu.weton} &middot; ${badge}). Tersedia ${count} alternatif rahayu.`;
     }
   }
 }
 
-export function terapkanPrefillJodohKeIjab() {
-  const mantuList = window.LAST_MANTU_DATA;
+export function terapkanPrefillJodohKeIjab(customDateStr = null) {
+  let mantuList = window.LAST_MANTU_DATA;
+  if (!mantuList || mantuList.length === 0) {
+    const jodohData = window.LAST_PERJODOHAN_DATA;
+    if (jodohData?.totalNeptu) {
+      mantuList = cariRekomendasiTanggalMantu(jodohData.totalNeptu, { rentang: '1-tahun', count: 12 });
+      window.LAST_MANTU_DATA = mantuList;
+    }
+  }
   if (!mantuList || mantuList.length === 0) return;
 
-  const topMantu = mantuList[0];
+  const topMantu = customDateStr
+    ? (mantuList.find(m => m.dateStr === customDateStr) || { dateStr: customDateStr, formattedDate: customDateStr })
+    : (mantuList.find(m => m.isPalingUtama) || mantuList[0]);
+
   const dateInput = document.getElementById('ijabDatePicker');
   if (dateInput && topMantu.dateStr) {
     dateInput.value = topMantu.dateStr;
     syncIjabDariTanggal();
-    showToast(`Tanggal ${topMantu.formattedDate} diterapkan. Silakan lanjutkan verifikasi.`);
+    showToast(`Tanggal ${topMantu.formattedDate || topMantu.dateStr} diterapkan. Silakan lanjutkan verifikasi.`);
     tutupBannerPrefillJodoh();
     setIjabWizardStep(2);
   }

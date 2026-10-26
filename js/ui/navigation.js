@@ -35,6 +35,7 @@ function switchTab(tabId, pushState = true) {
 
   // Close any open desktop dropdowns upon selection & close mobile menu
   closeAllNavDropdowns();
+  closeMobileMenu();
   
   // ─── BOTTOM NAVIGATION (5-ITEM) ACTIVE STATE UPDATE ───
   const primbonTabs = ['primbon', 'kepribadian', 'perjodohan', 'selametan', 'ijab', 'omah', 'ternak', 'sasmitha', 'sinengker'];
@@ -185,7 +186,7 @@ function toggleMobileMenu() {
   }
 }
 
-// Global click handler to close dropdowns and mobile menu when clicking outside
+// Global click handler to close dropdowns and mobile menu when clicking outside or selecting an item
 if (typeof document !== 'undefined') {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-dropdown-group')) {
@@ -193,8 +194,12 @@ if (typeof document !== 'undefined') {
     }
     const mobileMenu = document.getElementById('mobileMenu');
     const toggleBtn = e.target.closest('#mobileMenuBtn, [onclick*="toggleMobileMenu"]');
-    if (mobileMenu && !mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && !toggleBtn) {
-      closeMobileMenu();
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      // Tutup jika klik di luar drawer panel atau jika mengeklik salah satu menu pilihan
+      const menuItem = e.target.closest('#mobileMenu .nav-sublink, #mobileMenu button[onclick*="switchTab"], #mobileMenu a');
+      if (menuItem || (!mobileMenu.contains(e.target) && !toggleBtn)) {
+        closeMobileMenu();
+      }
     }
   });
 
