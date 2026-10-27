@@ -164,54 +164,19 @@ describe('Browser E2E Interaksi: Jodoh & Selametan (Harness Lokal + Baseline Pre
     const tabActive = await page.$eval('#tab-perjodohan', el => !el.classList.contains('hidden'));
     assert.equal(tabActive, true, 'Tab perjodohan harus aktif');
 
-    // 2. Navigasi Wizard Langkah 1 -> 2 (Status Hubungan ke Data Wanita)
+    // 2. Navigasi Wizard Langkah 1 -> 2 (Status Hubungan ke Data Pria)
     const step1Ok = await page.evaluate(() => {
       return window.setJodohWizardStep(2, true);
     });
     assert.equal(step1Ok, true, 'Transisi Langkah 1 ke Langkah 2 harus sukses');
 
-    // Coba lompat ke Langkah 3 tanpa mengisi tanggal wanita -> HARUS DITOLAK
+    // Coba lompat ke Langkah 3 tanpa mengisi tanggal pria -> HARUS DITOLAK
     const step3Blocked = await page.evaluate(() => {
       return window.setJodohWizardStep(3, true);
     });
-    assert.equal(step3Blocked, false, 'Harus memblokir ke Langkah 3 jika tanggal wanita belum diisi');
+    assert.equal(step3Blocked, false, 'Harus memblokir ke Langkah 3 jika tanggal pria belum diisi');
 
-    // 3. Input Data Wanita: Kamis Legi (2024-02-29 adalah Kamis Legi: Neptu 13, aksara DA - JA)
-    // Berdasarkan baseline: Dewi Sekartaji (Kamis Legi, Neptu 13)
-    await page.evaluate(() => {
-      const namaP = document.getElementById('namaP');
-      if (namaP) namaP.value = 'Dewi Sekartaji';
-
-      const tglP = document.getElementById('tglP');
-      if (tglP) {
-        tglP.value = '2024-02-29'; // Kamis Legi
-        tglP.dispatchEvent(new Event('change'));
-      }
-      const akDP = document.getElementById('aksaraDepanP');
-      if (akDP) akDP.value = 'DA';
-      const akBP = document.getElementById('aksaraBelakangP');
-      if (akBP) akBP.value = 'JA';
-    });
-
-    // Verifikasi neptu wanita terdeteksi 13
-    await page.waitForFunction(() => {
-      const b = document.getElementById('neptuPBadge');
-      return b && b.textContent.trim() === '13';
-    }, { timeout: 5000 });
-
-    // Sekarang transisi ke Langkah 3 (Data Pria) -> HARUS DIIZINKAN
-    const step3Allowed = await page.evaluate(() => {
-      return window.setJodohWizardStep(3, true);
-    });
-    assert.equal(step3Allowed, true, 'Transisi ke Langkah 3 harus diizinkan setelah tanggal wanita diisi');
-
-    // Coba lompat ke Langkah 4 tanpa mengisi tanggal pria -> HARUS DITOLAK
-    const step4Blocked = await page.evaluate(() => {
-      return window.setJodohWizardStep(4, true);
-    });
-    assert.equal(step4Blocked, false, 'Harus memblokir ke Langkah 4 jika tanggal pria belum diisi');
-
-    // 4. Input Data Pria: Jumat Kliwon (2024-03-29 adalah Jumat Kliwon: Neptu 14, aksara PA - NGA)
+    // 3. Input Data Pria: Jumat Kliwon (2024-03-29 adalah Jumat Kliwon: Neptu 14, aksara PA - NGA)
     // Berdasarkan baseline: Panji Asmorobangun (Jumat Kliwon, Neptu 14)
     await page.evaluate(() => {
       const namaL = document.getElementById('namaL');
@@ -237,11 +202,49 @@ describe('Browser E2E Interaksi: Jodoh & Selametan (Harness Lokal + Baseline Pre
       return b && b.textContent.trim() === '14';
     }, { timeout: 8000 });
 
+    // Sekarang transisi ke Langkah 3 (Data Wanita) -> HARUS DIIZINKAN
+    const step3Allowed = await page.evaluate(() => {
+      return window.setJodohWizardStep(3, true);
+    });
+    assert.equal(step3Allowed, true, 'Transisi ke Langkah 3 harus diizinkan setelah tanggal pria diisi');
+
+    // Coba lompat ke Langkah 4 tanpa mengisi tanggal wanita -> HARUS DITOLAK
+    const step4Blocked = await page.evaluate(() => {
+      return window.setJodohWizardStep(4, true);
+    });
+    assert.equal(step4Blocked, false, 'Harus memblokir ke Langkah 4 jika tanggal wanita belum diisi');
+
+    // 4. Input Data Wanita: Kamis Legi (2024-02-29 adalah Kamis Legi: Neptu 13, aksara DA - JA)
+    // Berdasarkan baseline: Dewi Sekartaji (Kamis Legi, Neptu 13)
+    await page.evaluate(() => {
+      const namaP = document.getElementById('namaP');
+      if (namaP) namaP.value = 'Dewi Sekartaji';
+
+      const tglP = document.getElementById('tglP');
+      if (tglP) {
+        tglP.value = '2024-02-29'; // Kamis Legi
+        tglP.dispatchEvent(new Event('change'));
+      }
+      if (typeof window.autoWetonPerjodohan === 'function') {
+        window.autoWetonPerjodohan('P');
+      }
+      const akDP = document.getElementById('aksaraDepanP');
+      if (akDP) akDP.value = 'DA';
+      const akBP = document.getElementById('aksaraBelakangP');
+      if (akBP) akBP.value = 'JA';
+    });
+
+    // Verifikasi neptu wanita terdeteksi 13
+    await page.waitForFunction(() => {
+      const b = document.getElementById('neptuPBadge');
+      return b && b.textContent.trim() === '13';
+    }, { timeout: 5000 });
+
     // 5. Verifikasi Navigasi Kembali Wizard (Langkah 3 -> 2 -> 1)
     const backTo2 = await page.evaluate(() => window.setJodohWizardStep(2, false));
     assert.equal(backTo2, true, 'Navigasi kembali ke langkah 2 harus sukses');
-    const isStep2Visible = await page.evaluate(() => !document.getElementById('jodohStep1').classList.contains('hidden'));
-    assert.equal(isStep2Visible, true, 'Container data wanita harus tampak saat di langkah 2');
+    const isStep2Visible = await page.evaluate(() => !document.getElementById('jodohStep2').classList.contains('hidden'));
+    assert.equal(isStep2Visible, true, 'Container data pria harus tampak saat di langkah 2');
 
     const backTo1 = await page.evaluate(() => window.setJodohWizardStep(1, false));
     assert.equal(backTo1, true, 'Navigasi kembali ke langkah 1 harus sukses');

@@ -178,28 +178,31 @@ export function initStatusHubunganPerjodohanEvents() {
  */
 export function setJodohWizardStep(targetStep, validateCurrent = true) {
   const step = Math.max(1, Math.min(4, parseInt(targetStep, 10) || 1));
-  const tglP = document.getElementById('tglP')?.value || '';
   const tglL = document.getElementById('tglL')?.value || '';
+  const tglP = document.getElementById('tglP')?.value || '';
 
-  // Validasi saat maju ke langkah berikutnya
+  // Validasi saat maju ke langkah berikutnya:
+  // Step 1 -> 2: Bebas
+  // Step 2 -> 3: Wajib tanggal lahir pria
+  // Step 3 -> 4: Wajib tanggal lahir pria & wanita
   if (validateCurrent && step > jodohCurrentStep) {
-    if (step >= 3 && !tglP) {
-      showToast('Isi tanggal lahir calon pengantin wanita terlebih dahulu.');
-      const inputP = document.getElementById('tglP');
-      if (inputP) inputP.focus();
+    if (step >= 3 && !tglL) {
+      showToast('Isi tanggal lahir calon pengantin pria terlebih dahulu.');
+      const inputL = document.getElementById('tglL');
+      if (inputL) inputL.focus();
       return false;
     }
     if (step >= 4) {
-      if (!tglP) {
-        showToast('Isi tanggal lahir calon pengantin wanita terlebih dahulu.');
-        const inputP = document.getElementById('tglP');
-        if (inputP) inputP.focus();
-        return false;
-      }
       if (!tglL) {
         showToast('Isi tanggal lahir calon pengantin pria terlebih dahulu.');
         const inputL = document.getElementById('tglL');
         if (inputL) inputL.focus();
+        return false;
+      }
+      if (!tglP) {
+        showToast('Isi tanggal lahir calon pengantin wanita terlebih dahulu.');
+        const inputP = document.getElementById('tglP');
+        if (inputP) inputP.focus();
         return false;
       }
       // Otomatis hitung jika belum dihitung atau data baru
@@ -216,14 +219,11 @@ export function setJodohWizardStep(targetStep, validateCurrent = true) {
 
 /**
  * Terapkan visibilitas UI dan state tombol stepper
+ * Mode Stepper Bertahap: Tampilkan hanya langkah aktif secara bersih
  * @param {number} step
  */
 export function applyJodohWizardStepUI(step) {
   if (typeof document === 'undefined') return;
-
-  const isModeRingkas = (typeof window !== 'undefined' && typeof window.isPemula === 'function')
-    ? window.isPemula()
-    : false;
 
   const stepContainer1 = document.getElementById('jodohStepContainer1');
   const step1 = document.getElementById('jodohStep1');
@@ -235,13 +235,14 @@ export function applyJodohWizardStepUI(step) {
   const stepBadge = document.getElementById('jodohStepBadge');
   const progressBar = document.getElementById('jodohProgressBar');
   const progressContainer = document.getElementById('jodohProgressBarContainer');
+  const actionButtons = document.getElementById('jodohActionButtons');
 
   const lang = (typeof window !== 'undefined' && typeof window.getLanguage === 'function')
     ? window.getLanguage()
     : 'id';
   const isJv = (lang === 'jv');
 
-  // Perbarui progress bar
+  // Perbarui progress bar (25% -> 50% -> 75% -> 100%)
   const pct = step === 1 ? '25%' : (step === 2 ? '50%' : (step === 3 ? '75%' : '100%'));
   if (progressBar) progressBar.style.width = pct;
   if (progressContainer) progressContainer.setAttribute('aria-valuenow', String(step));
@@ -253,11 +254,11 @@ export function applyJodohWizardStepUI(step) {
     if (step === 1) {
       stepText = isJv ? 'Langkah 1 saking 4: Status Sesambetan Pasangan' : 'Langkah 1 dari 4: Status Hubungan Pasangan';
     } else if (step === 2) {
-      stepText = isJv ? 'Langkah 2 saking 4: Data Calon Pengantèn Putri' : 'Langkah 2 dari 4: Data Calon Pengantin Wanita';
+      stepText = isJv ? 'Langkah 2 saking 4: Data Calon Pengantèn Kakung' : 'Langkah 2 dari 4: Data Calon Pengantin Pria (♂)';
     } else if (step === 3) {
-      stepText = isJv ? 'Langkah 3 saking 4: Data Calon Pengantèn Kakung' : 'Langkah 3 dari 4: Data Calon Pengantin Pria';
+      stepText = isJv ? 'Langkah 3 saking 4: Data Calon Pengantèn Putri' : 'Langkah 3 dari 4: Data Calon Pengantin Wanita (♀)';
     } else {
-      stepText = isJv ? 'Langkah 4 saking 4: Ringkesan Asil Nujum' : 'Langkah 4 dari 4: Ringkasan Hasil Nujum';
+      stepText = isJv ? 'Langkah 4 saking 4: Ringkesan Asil & 7 Metode Pitung' : 'Langkah 4 dari 4: Ringkasan Hasil & 7 Metode Pitung';
     }
     stepIndicator.textContent = stepText;
   }
@@ -278,43 +279,32 @@ export function applyJodohWizardStepUI(step) {
     }
   }
 
-  // Pengaturan visibilitas section
-  if (isModeRingkas) {
-    // Mode Ringkas (Mobile-first Stepper ketat 1 layar)
-    if (stepContainer1) stepContainer1.classList.toggle('hidden', step !== 1);
-    if (formsWrapper) formsWrapper.classList.toggle('hidden', step !== 2 && step !== 3);
-    if (step1) step1.classList.toggle('hidden', step !== 2);
-    if (step2) step2.classList.toggle('hidden', step !== 3);
+  // Sembunyikan floating hitung button karena aksi terintegrasi di dalam stepper
+  if (actionButtons) actionButtons.classList.add('hidden');
 
-    if (step === 4) {
-      if (window.LAST_PERJODOHAN_DATA) {
-        if (cardBox) cardBox.classList.remove('hidden');
-        if (emptyBox) emptyBox.classList.add('hidden');
-      } else {
-        if (cardBox) cardBox.classList.add('hidden');
-        if (emptyBox) emptyBox.classList.remove('hidden');
-      }
-    } else {
-      if (cardBox) cardBox.classList.add('hidden');
-    }
-  } else {
-    // Mode Ahli / Desktop: Form tetap mudah diakses, namun stepper tetap memandu fokus
-    if (stepContainer1) stepContainer1.classList.remove('hidden');
-    if (formsWrapper) formsWrapper.classList.remove('hidden');
-    if (step1) step1.classList.remove('hidden');
-    if (step2) step2.classList.remove('hidden');
+  // Pengaturan visibilitas stepper bertahap yang ketat (1 halaman per langkah)
+  if (stepContainer1) stepContainer1.classList.toggle('hidden', step !== 1);
+  if (formsWrapper) formsWrapper.classList.toggle('hidden', step !== 2 && step !== 3);
+  if (step2) step2.classList.toggle('hidden', step !== 2); // Step 2: Calon Pengantin Pria
+  if (step1) step1.classList.toggle('hidden', step !== 3); // Step 3: Calon Pengantin Wanita
 
-    if (step === 4 && window.LAST_PERJODOHAN_DATA) {
+  if (step === 4) {
+    if (window.LAST_PERJODOHAN_DATA) {
       if (cardBox) cardBox.classList.remove('hidden');
       if (emptyBox) emptyBox.classList.add('hidden');
+    } else {
+      if (cardBox) cardBox.classList.add('hidden');
+      if (emptyBox) emptyBox.classList.remove('hidden');
+    }
+    if (typeof cardBox?.scrollIntoView === 'function') {
       cardBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  } else {
+    if (cardBox) cardBox.classList.add('hidden');
+    if (emptyBox) emptyBox.classList.add('hidden');
   }
 }
 
-/**
- * Toggle accordion rincian 7 metode pitung pada Langkah 4
- */
 export function toggleAccordion7Metode() {
   const content = document.getElementById('rincian7MetodeContent');
   const btn = document.getElementById('btnToggleAccordion7Metode');

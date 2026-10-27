@@ -95,6 +95,8 @@ test('Selametan UX - Stepper State Machine & Validasi Input Kosong', () => {
   elements['waktuWafatSelectedRadio'] = { value: 'siang' };
   const resStep3WithSiang = setSelametanWizardStep(3, true);
   assert.equal(resStep3WithSiang, true, 'Harus mengizinkan ke langkah 3 saat radio waktu wafat sudah dipilih');
+  assert.equal(mockDoc.getElementById('selametanStepContainer3').classList.contains('hidden'), false, 'Container langkah 3 harus tampil');
+  assert.equal(mockDoc.getElementById('selametanStepContainer2').classList.contains('hidden'), true, 'Container langkah 2 harus disembunyikan');
 
   // Test 6: Navigasi mundur ke langkah 1 atau 2 tanpa validasi -> DIIZINKAN
   const resBackTo1 = setSelametanWizardStep(1, false);

@@ -305,6 +305,7 @@ export function initAllFormRealtimeCalculators() {
     { input: 'nujumTanggalLahir', container: 'nujumTglCalcBadge' },
     { input: 'inputTglNujum', container: 'nujumTglCalcBadgeAlt' },
     // Selametan / Surut
+    { input: 'tglWafatInput', container: 'selametanTglCalcBadge' },
     { input: 'selametanTanggal', container: 'selametanTglCalcBadge' },
     { input: 'inputTglWafat', container: 'selametanTglCalcBadgeAlt' },
     // Ijab Nikah

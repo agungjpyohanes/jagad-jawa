@@ -53,7 +53,6 @@ export function setSelametanWizardStep(targetStep, validateCurrent = true) {
       }
       // Eksekusi kalkulasi sebelum menampilkan Langkah 3
       hitungSelametan();
-      return true;
     }
   }
 
@@ -781,7 +780,43 @@ export async function downloadSelametanPng() {
   }
 }
 
+
+/**
+ * Inisialisasi event listener interaktif pada wizard Selametan
+ */
+export function initSelametanUI() {
+  if (typeof document === 'undefined') return;
+
+  const tglInput = document.getElementById('tglWafatInput');
+  if (tglInput) {
+    tglInput.addEventListener('change', () => {
+      const radio = document.querySelector('input[name="waktuWafatRadio"]:checked');
+      if (radio && selametanCurrentStep === 3) {
+        hitungSelametan();
+      }
+    });
+  }
+
+  const radioWaktuList = document.querySelectorAll('input[name="waktuWafatRadio"]');
+  radioWaktuList.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const tgl = document.getElementById('tglWafatInput')?.value;
+      if (tgl && selametanCurrentStep === 3) {
+        hitungSelametan();
+      }
+    });
+  });
+
+  const selKeyakinan = document.getElementById('keyakinanSelametanSelect');
+  if (selKeyakinan) {
+    selKeyakinan.addEventListener('change', (e) => {
+      gantiKeyakinanSelametan(e.target.value);
+    });
+  }
+}
+
 if (typeof window !== 'undefined') {
+  window.initSelametanUI = initSelametanUI;
   window.gantiKeyakinanSelametan = gantiKeyakinanSelametan;
   window.downloadSelametanPng = downloadSelametanPng;
   window.hitungSelametan = hitungSelametan;

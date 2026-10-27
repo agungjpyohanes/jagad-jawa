@@ -14,7 +14,8 @@ import {
   applySelametanWizardStepUI,
   toggleAccordionSelametan,
   toggleMilestoneDetail,
-  gantiKeyakinanSelametan
+  gantiKeyakinanSelametan,
+  initSelametanUI
 } from '../modules/selametan/selametan-ui.js';
 
 /**
@@ -35,6 +36,8 @@ export function wireSelametanFeature() {
   window.toggleAccordionSelametan = toggleAccordionSelametan;
   window.toggleMilestoneDetail = toggleMilestoneDetail;
   window.gantiKeyakinanSelametan = gantiKeyakinanSelametan;
+  window.initSelametanUI = initSelametanUI;
+  try { initSelametanUI(); } catch (e) { /* ignore */ }
 }
 
 export {
@@ -49,5 +52,6 @@ export {
   applySelametanWizardStepUI,
   toggleAccordionSelametan,
   toggleMilestoneDetail,
-  gantiKeyakinanSelametan
+  gantiKeyakinanSelametan,
+  initSelametanUI
 };

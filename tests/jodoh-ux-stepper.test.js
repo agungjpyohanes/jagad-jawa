@@ -96,27 +96,27 @@ test('Jodoh UX - Validasi Stepper State Machine (Pemblokiran jika tanggal kosong
   const step1Ok = setJodohWizardStep(1, true);
   assert.equal(step1Ok, true, 'Langkah 1 selalu valid');
 
-  // 2. Transisi ke Langkah 2 (Data Wanita) -> Valid
+  // 2. Transisi ke Langkah 2 (Data Pria) -> Valid
   const step2Ok = setJodohWizardStep(2, true);
   assert.equal(step2Ok, true, 'Langkah 2 bisa dibuka dari langkah 1');
 
-  // 3. Coba lompat ke Langkah 3 saat tanggal wanita masih kosong -> Harus TERBLOKIR
-  elements['tglP'].value = '';
-  const step3Blocked = setJodohWizardStep(3, true);
-  assert.equal(step3Blocked, false, 'Langkah 3 harus terblokir jika tanggal wanita kosong');
-
-  // 4. Isi tanggal wanita valid -> Sekarang harus lolos ke Langkah 3
-  elements['tglP'].value = '1995-05-12';
-  const step3Ok = setJodohWizardStep(3, true);
-  assert.equal(step3Ok, true, 'Langkah 3 berhasil dibuka jika tanggal wanita valid');
-
-  // 5. Coba lompat ke Langkah 4 saat tanggal pria masih kosong -> Harus TERBLOKIR
+  // 3. Coba lompat ke Langkah 3 saat tanggal pria masih kosong -> Harus TERBLOKIR
   elements['tglL'].value = '';
-  const step4Blocked = setJodohWizardStep(4, true);
-  assert.equal(step4Blocked, false, 'Langkah 4 harus terblokir jika tanggal pria kosong');
+  const step3Blocked = setJodohWizardStep(3, true);
+  assert.equal(step3Blocked, false, 'Langkah 3 harus terblokir jika tanggal pria kosong');
 
-  // 6. Isi tanggal pria valid -> Sekarang harus lolos ke Langkah 4
+  // 4. Isi tanggal pria valid -> Sekarang harus lolos ke Langkah 3
   elements['tglL'].value = '1994-08-20';
+  const step3Ok = setJodohWizardStep(3, true);
+  assert.equal(step3Ok, true, 'Langkah 3 berhasil dibuka jika tanggal pria valid');
+
+  // 5. Coba lompat ke Langkah 4 saat tanggal wanita masih kosong -> Harus TERBLOKIR
+  elements['tglP'].value = '';
+  const step4Blocked = setJodohWizardStep(4, true);
+  assert.equal(step4Blocked, false, 'Langkah 4 harus terblokir jika tanggal wanita kosong');
+
+  // 6. Isi tanggal wanita valid -> Sekarang harus lolos ke Langkah 4
+  elements['tglP'].value = '1995-05-12';
   const step4Ok = setJodohWizardStep(4, true);
   assert.equal(step4Ok, true, 'Langkah 4 berhasil dibuka jika kedua tanggal valid');
 });

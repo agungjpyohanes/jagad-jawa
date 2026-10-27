@@ -150,8 +150,24 @@ export {
   KARTU_KARAKTER_PRESETS
 };
 
-let currentNujumMode = 'ringkas'; // 'ringkas' | 'mendalam'
+let currentNujumMode = 'mendalam'; // 'ringkas' | 'mendalam'
 let lastCalculatedData = null;
+let nujumDebounceTimer = null;
+
+/**
+ * Handler reaktif untuk seluruh input Nujum:
+ * Tanggal Lahir, Nama untuk Falakiah, Alamat Kelurahan (Tinggal), Alamat Kantor (Kerja), Tahun Hitung.
+ */
+export function onNujumFormInputChanged() {
+  updateKepribadianQuickInfo();
+  const tglVal = document.getElementById('tglLahirKepribadian')?.value;
+  if (tglVal) {
+    clearTimeout(nujumDebounceTimer);
+    nujumDebounceTimer = setTimeout(() => {
+      hitungKepribadianLengkap();
+    }, 250);
+  }
+}
 
 export function initTahunHitungSelect() {
   const sel = document.getElementById('tahunHitungKepribadian');
@@ -274,6 +290,7 @@ export function switchNujumViewMode(mode) {
  * Menghitung Nujum Kepribadian Lengkap
  */
 export async function hitungKepribadianLengkap() {
+  currentNujumMode = 'mendalam';
   try {
     await loadDomainData('nujum');
   } catch (e) {
@@ -405,8 +422,13 @@ export async function hitungKepribadianLengkap() {
     sirikanRes = {
       neptu: { neptu, pantangan: 'Arah Kidul / Kulon', anjuran: 'Wetan & Lor', keterangan: `Neptu ${neptu} disirikan madhep Kidul` },
       dina: { hari: dino, pantangan: 'Arah Kidul Wetan', anjuran: 'Kulon & Lor', keterangan: `Dina ${dino} disirikan madhep Kidul Wetan` },
+      dino: dino,
+      sirikanNeptu: 'Kidul / Kulon',
+      sirikanDina: 'Kidul Wetan',
+      pantanganCombined: ['Kidul / Kulon', 'Kidul Wetan'],
       pantanganText: 'Kidul & Kidul Wetan',
-      arahAmanText: 'Wetan utawi Lor (Pintu Rejeki & Rahayu)'
+      arahAmanText: 'Wetan utawi Lor (Pintu Rejeki & Rahayu)',
+      catatan: 'Petungan sirikan arah hadap omah.'
     };
   }
 
@@ -661,6 +683,7 @@ function renderHasilNujumContent() {
           <div>
             <h3 class="font-marcellus text-xl text-prada font-bold">${data.nama}</h3>
             <span class="text-xs text-sogan-300">${data.dino} ${data.pas} · Neptu ${data.neptu} · Wuku ${data.wukuName} (${data.wukuNo}/30)</span>
+          </div>
           <div class="flex items-center gap-2 flex-wrap">
             <button onclick="window.openWetonShareModal(${data.y}, ${data.m}, ${data.d})" class="px-3.5 py-1.5 rounded-lg bg-sogan-900 border border-prada/40 hover:bg-sogan-800 text-prada text-xs font-semibold flex items-center gap-1.5 transition">
               <i class="fa-solid fa-share-nodes"></i> Bagikan Weton
@@ -2896,6 +2919,7 @@ if (typeof window !== 'undefined') {
   window.onTahunHitungChange = onTahunHitungChange;
   window.updateKepribadianQuickInfo = updateKepribadianQuickInfo;
   window.hitungKepribadianLengkap = hitungKepribadianLengkap;
+  window.onNujumFormInputChanged = onNujumFormInputChanged;
   window.switchNujumViewMode = switchNujumViewMode;
   window.openGlosariumNujumModal = openGlosariumNujumModal;
   window.closeGlosariumNujumModal = closeGlosariumNujumModal;

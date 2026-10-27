@@ -205,12 +205,17 @@ export async function syncTernakDariTanggal(triggerRender = false) {
 
   sembunyikanFeedbackError();
 
-  const resTgl = getTanggalJawaLengkap(dateInput.value);
-  if (resTgl) {
+  const res = getPetungKehidupanByDate(dateInput.value);
+  if (res) {
     const selDina = document.getElementById('ternakSelDina');
     const selPasaran = document.getElementById('ternakSelPasaran');
-    if (selDina) selDina.value = resTgl.dina;
-    if (selPasaran) selPasaran.value = resTgl.pasaran;
+    if (selDina) selDina.value = res.dina;
+    if (selPasaran) selPasaran.value = res.pasaran;
+
+    const lockedDina = document.getElementById('ternakLockedDinaText');
+    const lockedPasaran = document.getElementById('ternakLockedPasaranText');
+    if (lockedDina) lockedDina.textContent = res.dina;
+    if (lockedPasaran) lockedPasaran.textContent = `${res.pasaran} (Neptu ${res.neptu || ''})`;
   }
 
   if (triggerRender) {
@@ -853,7 +858,146 @@ export function pilihTanggalHasilCariTernak(isoDate) {
   }
 }
 
+
+/**
+ * Switch antara Mode Input Tanggal (Opsi A) dan Cari Berdasarkan Hari/Pasaran (Opsi B)
+ */
+export function switchTernakInputMode(mode) {
+  const containerTanggal = document.getElementById('ternakModeTanggalContainer');
+  const containerWeton = document.getElementById('ternakModeWetonContainer');
+  const btnA = document.getElementById('btnTernakModeTanggal');
+  const btnB = document.getElementById('btnTernakModeWeton');
+
+  if (mode === 'weton') {
+    if (containerTanggal) containerTanggal.classList.add('hidden');
+    if (containerWeton) containerWeton.classList.remove('hidden');
+
+    if (btnB) {
+      btnB.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-sogan-600 to-prada text-keraton shadow';
+    }
+    if (btnA) {
+      btnA.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-sogan-300 hover:text-amber-100 transition flex items-center justify-center gap-1.5';
+    }
+  } else {
+    if (containerWeton) containerWeton.classList.add('hidden');
+    if (containerTanggal) containerTanggal.classList.remove('hidden');
+
+    if (btnA) {
+      btnA.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 bg-gradient-to-r from-sogan-600 to-prada text-keraton shadow';
+    }
+    if (btnB) {
+      btnB.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-sogan-300 hover:text-amber-100 transition flex items-center justify-center gap-1.5';
+    }
+    syncTernakDariTanggal(false);
+  }
+}
+
+/**
+ * Cari daftar tanggal yang cocok dengan Dina & Pasaran dalam 1 bulan (35 hari) ke depan
+ */
+export function cariTanggalSesuai1Bulan() {
+  const selDina = document.getElementById('ternakSelDina');
+  const selPasaran = document.getElementById('ternakSelPasaran');
+  const dina = selDina?.value;
+  const pasaran = selPasaran?.value;
+
+  if (!dina || !pasaran) {
+    showToast('Pilih Dina dan Pasaran terlebih dahulu.');
+    return;
+  }
+
+  const container = document.getElementById('ternakJadwal1BulanBox');
+  if (!container) return;
+
+  const today = new Date();
+  const matches = [];
+
+  for (let i = 0; i <= 35; i++) {
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+    const yStr = d.getFullYear();
+    const mStr = String(d.getMonth() + 1).padStart(2, '0');
+    const dStr = String(d.getDate()).padStart(2, '0');
+    const isoDate = `${yStr}-${mStr}-${dStr}`;
+
+    const res = getPetungKehidupanByDate(isoDate);
+    if (res && res.dina === dina && res.pasaran === pasaran) {
+      matches.push({
+        isoDate,
+        dateObj: d,
+        dina: res.dina,
+        pasaran: res.pasaran,
+        res
+      });
+    }
+  }
+
+  if (matches.length === 0) {
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="p-3 bg-sogan-950/70 border border-sogan-800 rounded-xl text-center text-xs text-sogan-300">
+        Boten kepanggih dinten ${dina} ${pasaran} ing 35 dinten candhakipun.
+      </div>
+    `;
+    return;
+  }
+
+  const activeRadio = document.querySelector('input[name="ternakTujuanRadio"]:checked');
+  const tujuan = activeRadio ? activeRadio.value : currentActiveSubtab;
+
+  const html = `
+    <div class="space-y-2 p-3.5 bg-sogan-950/70 border border-sogan-800 rounded-xl">
+      <div class="flex items-center justify-between text-xs pb-1.5 border-b border-sogan-800">
+        <span class="font-bold text-prada flex items-center gap-1.5">
+          <i class="fa-solid fa-calendar-check text-amber-400"></i> Tanggal ${dina} ${pasaran} (1 Bulan ke Depan):
+        </span>
+        <span class="text-[11px] text-sogan-400">${matches.length} Tanggal Ditemukan</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+        ${matches.map(m => {
+          let kategoriLabel = '';
+          if (tujuan === 'ternak' && m.res?.ternak) {
+            const kat = m.res.ternak.kategori;
+            const isGood = kat === 'Gajah' || kat === 'Suku';
+            kategoriLabel = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${isGood ? 'bg-emerald-950 text-emerald-300 border border-emerald-600/50' : 'bg-amber-950 text-amber-300 border border-amber-600/50'}">${kat} (${m.res.ternak.kewan})</span>`;
+          } else if (tujuan === 'loro' && m.res?.loro) {
+            kategoriLabel = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950 text-rose-300 border border-rose-600/50">Jalaran: ${m.res.loro.kategori}</span>`;
+          } else if (tujuan === 'geblak' && m.res?.geblak) {
+            kategoriLabel = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-950 text-purple-300 border border-purple-600/50">${m.res.geblak.kategori}</span>`;
+          } else if (tujuan === 'tetanen') {
+            kategoriLabel = `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-600/50">Tetanèn: Neptu ${m.res?.neptu || ''}</span>`;
+          }
+
+          const y = m.dateObj.getFullYear();
+          const mo = String(m.dateObj.getMonth() + 1).padStart(2, '0');
+          const dt = String(m.dateObj.getDate()).padStart(2, '0');
+          const formattedDate = `${dt}-${mo}-${y}`;
+
+          return `
+            <div class="p-3 rounded-lg bg-keraton border border-sogan-800 hover:border-prada/50 transition flex flex-col justify-between gap-2 shadow-sm">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between">
+                  <strong class="text-xs text-amber-100 font-bold">${m.dina} ${m.pasaran}</strong>
+                  ${kategoriLabel}
+                </div>
+                <div class="text-[11px] text-prada font-mono">${formattedDate}</div>
+              </div>
+              <button type="button" onclick="window.pilihTanggalHasilCariTernak('${m.isoDate}')" class="w-full py-1.5 px-3 rounded-lg bg-sogan-900 hover:bg-sogan-850 border border-prada/40 hover:border-prada text-prada text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Pilih Tanggal Ini &amp; Hitung
+              </button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+  container.classList.remove('hidden');
+}
+
 if (typeof window !== 'undefined') {
+  window.switchTernakInputMode = switchTernakInputMode;
+  window.cariTanggalSesuai1Bulan = cariTanggalSesuai1Bulan;
   window.hitungTernakDariUI = hitungTernakDariUI;
   window.resetTernakUI = resetTernakUI;
   window.setTernakTujuan = setTernakTujuan;

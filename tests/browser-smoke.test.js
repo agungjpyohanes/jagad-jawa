@@ -373,36 +373,7 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
 
     // Coba lompat ke Langkah 3 tanpa mengisi tanggal wanita -> DITOLAK
     const step3Blocked = await page.evaluate(() => window.setJodohWizardStep(3, true));
-    assert.equal(step3Blocked, false, 'Harus memblokir ke Langkah 3 jika tanggal wanita kosong');
-
-    // Input data wanita (Kamis Legi - Dewi Sekartaji: 2024-02-29, neptu 13)
-    await page.evaluate(() => {
-      const namaP = document.getElementById('namaP');
-      if (namaP) namaP.value = 'Dewi Sekartaji';
-
-      const tglP = document.getElementById('tglP');
-      if (tglP) {
-        tglP.value = '2024-02-29';
-        tglP.dispatchEvent(new Event('change'));
-      }
-      const akDP = document.getElementById('aksaraDepanP');
-      if (akDP) akDP.value = 'DA';
-      const akBP = document.getElementById('aksaraBelakangP');
-      if (akBP) akBP.value = 'JA';
-    });
-
-    await page.waitForFunction(() => {
-      const b = document.getElementById('neptuPBadge');
-      return b && b.textContent.trim() === '13';
-    }, { timeout: 5000 });
-
-    // Sekarang ke Langkah 3 diizinkan
-    const step3Ok = await page.evaluate(() => window.setJodohWizardStep(3, true));
-    assert.equal(step3Ok, true, 'Langkah 3 harus diizinkan setelah tanggal wanita diisi');
-
-    // Coba lompat ke Langkah 4 tanpa mengisi tanggal pria -> DITOLAK
-    const step4Blocked = await page.evaluate(() => window.setJodohWizardStep(4, true));
-    assert.equal(step4Blocked, false, 'Harus memblokir ke Langkah 4 jika tanggal pria kosong');
+    assert.equal(step3Blocked, false, 'Harus memblokir ke Langkah 3 jika tanggal pria kosong');
 
     // Input data pria (Jumat Kliwon - Panji Asmorobangun: 2024-03-29, neptu 14)
     await page.evaluate(() => {
@@ -428,11 +399,43 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
       return b && b.textContent.trim() === '14';
     }, { timeout: 8000 });
 
+    // Sekarang ke Langkah 3 diizinkan
+    const step3Ok = await page.evaluate(() => window.setJodohWizardStep(3, true));
+    assert.equal(step3Ok, true, 'Langkah 3 harus diizinkan setelah tanggal pria diisi');
+
+    // Coba lompat ke Langkah 4 tanpa mengisi tanggal wanita -> DITOLAK
+    const step4Blocked = await page.evaluate(() => window.setJodohWizardStep(4, true));
+    assert.equal(step4Blocked, false, 'Harus memblokir ke Langkah 4 jika tanggal wanita kosong');
+
+    // Input data wanita (Dewi Sekartaji: Kamis Legi - 2024-02-29, neptu 13)
+    await page.evaluate(() => {
+      const namaP = document.getElementById('namaP');
+      if (namaP) namaP.value = 'Dewi Sekartaji';
+
+      const tglP = document.getElementById('tglP');
+      if (tglP) {
+        tglP.value = '2024-02-29';
+        tglP.dispatchEvent(new Event('change'));
+      }
+      if (typeof window.autoWetonPerjodohan === 'function') {
+        window.autoWetonPerjodohan('P');
+      }
+      const akDP = document.getElementById('aksaraDepanP');
+      if (akDP) akDP.value = 'DA';
+      const akBP = document.getElementById('aksaraBelakangP');
+      if (akBP) akBP.value = 'JA';
+    });
+
+    await page.waitForFunction(() => {
+      const b = document.getElementById('neptuPBadge');
+      return b && b.textContent.trim() === '13';
+    }, { timeout: 5000 });
+
     // Verifikasi navigasi kembali stepper (Langkah 3 -> 2 -> 1)
     const backTo2 = await page.evaluate(() => window.setJodohWizardStep(2, false));
     assert.equal(backTo2, true, 'Navigasi kembali ke langkah 2 harus sukses');
-    const isStep2Visible = await page.evaluate(() => !document.getElementById('jodohStep1').classList.contains('hidden'));
-    assert.equal(isStep2Visible, true, 'Container data wanita harus tampak saat langkah 2 aktif');
+    const isStep2Visible = await page.evaluate(() => !document.getElementById('jodohStep2').classList.contains('hidden'));
+    assert.equal(isStep2Visible, true, 'Container data pria harus tampak saat langkah 2 aktif');
 
     const backTo1 = await page.evaluate(() => window.setJodohWizardStep(1, false));
     assert.equal(backTo1, true, 'Navigasi kembali ke langkah 1 harus sukses');

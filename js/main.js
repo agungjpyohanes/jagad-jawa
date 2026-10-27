@@ -208,6 +208,8 @@ if (typeof window !== 'undefined') {
   window.tutupBannerPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'tutupBannerPrefillJodoh');
   window.periksaPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'periksaPrefillJodoh');
   window.initOmahUI = makeLazyProxy(ensureOmahLoaded, 'initOmahUI');
+  window.setOmahWizardStep = makeLazyProxy(ensureOmahLoaded, 'setOmahWizardStep');
+  window.populateOmahSelects = makeLazyProxy(ensureOmahLoaded, 'populateSelects');
   window.syncOmahDariTanggal = makeLazyProxy(ensureOmahLoaded, 'syncOmahDariTanggal');
   window.hitungOmahDariUI = makeLazyProxy(ensureOmahLoaded, 'hitungOmahDariUI');
   window.cariHariBaikOmahUI = makeLazyProxy(ensureOmahLoaded, 'cariHariBaikOmahUI');
@@ -230,6 +232,8 @@ if (typeof window !== 'undefined') {
   window.konfirmasiBukaGeblak = makeLazyProxy(ensureTernakLoaded, 'konfirmasiBukaGeblak');
   window.cariHariPetungKehidupanUI = makeLazyProxy(ensureTernakLoaded, 'cariHariPetungKehidupanUI');
   window.pilihTanggalHasilCariTernak = makeLazyProxy(ensureTernakLoaded, 'pilihTanggalHasilCariTernak');
+  window.switchTernakInputMode = makeLazyProxy(ensureTernakLoaded, 'switchTernakInputMode');
+  window.cariTanggalSesuai1Bulan = makeLazyProxy(ensureTernakLoaded, 'cariTanggalSesuai1Bulan');
 
   // Sasmitha bindings
   window.initSasmithaUI = makeLazyProxy(ensureSasmithaLoaded, 'initSasmithaUI');

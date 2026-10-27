@@ -4,7 +4,7 @@
  * komparasi dual neptu, serta visualisasi 3 set rumus sisa.
  */
 
-import { hitungPetungOmah, getCempuriLawangan, cariHariBaikOmah, setOmahDataset } from './omah-engine.js';
+import { hitungPetungOmah, getCempuriLawangan, cariHariBaikOmah, setOmahDataset, getActiveOmahDb } from './omah-engine.js';
 import {
   CEMPURI_ARAH,
   OMAH_MENURUT_SASI,
@@ -84,6 +84,7 @@ export const omahStepper = new WizardStepper({
 });
 
 export function setOmahWizardStep(step, validate = true) {
+  populateSelects();
   return omahStepper.goToStep(step, validate);
 }
 
@@ -137,69 +138,92 @@ export function initOmahUI() {
   }
 
   // Terapkan state UI stepper awal
-  omahStepper.applyUI(1);
+  if (!isOmahFullFormMode) {
+    omahStepper.applyUI(omahStepper.getCurrentStep() || 1);
+  }
 }
 
-function populateSelects() {
+export function populateSelects() {
+  const db = (typeof getActiveOmahDb === 'function') ? getActiveOmahDb() : null;
+  const sasiList = (db && db.OMAH_MENURUT_SASI && db.OMAH_MENURUT_SASI.length > 0) ? db.OMAH_MENURUT_SASI : OMAH_MENURUT_SASI;
+  const mangsaList = (db && db.OMAH_MENURUT_MANGSA && db.OMAH_MENURUT_MANGSA.length > 0) ? db.OMAH_MENURUT_MANGSA : OMAH_MENURUT_MANGSA;
+  const lemahList = (db && db.OMAH_PILIH_LEMAH && db.OMAH_PILIH_LEMAH.length > 0) ? db.OMAH_PILIH_LEMAH : OMAH_PILIH_LEMAH;
+
   // Dina
   const selDina = document.getElementById('omahSelDina');
-  if (selDina && selDina.children.length <= 1) {
+  if (selDina && (selDina.options?.length ?? selDina.children?.length ?? 0) <= 1) {
+    const curVal = selDina.value;
     selDina.innerHTML = DINA_LIST.map(d => `<option value="${d}">${d}</option>`).join('');
+    if (curVal) selDina.value = curVal;
   }
 
   // Pasaran
   const selPasaran = document.getElementById('omahSelPasaran');
-  if (selPasaran && selPasaran.children.length <= 1) {
+  if (selPasaran && (selPasaran.options?.length ?? selPasaran.children?.length ?? 0) <= 1) {
+    const curVal = selPasaran.value;
     selPasaran.innerHTML = PASARAN_LIST.map(p => `<option value="${p}">${p}</option>`).join('');
+    if (curVal) selPasaran.value = curVal;
   }
 
   // Arah Lawang
   const selArahLawang = document.getElementById('omahSelArahLawang');
-  if (selArahLawang && selArahLawang.children.length <= 1) {
+  if (selArahLawang && (selArahLawang.options?.length ?? selArahLawang.children?.length ?? 0) <= 1) {
+    const curVal = selArahLawang.value;
     selArahLawang.innerHTML = ARAH_LIST.map(a => `<option value="${a}">Madhep ${a}</option>`).join('');
+    if (curVal) selArahLawang.value = curVal;
   }
 
   // Nomor Posisi Lawang (1 - 9)
   const selNomorLawang = document.getElementById('omahSelNomorLawang');
-  if (selNomorLawang && selNomorLawang.children.length <= 1) {
+  if (selNomorLawang && (selNomorLawang.options?.length ?? selNomorLawang.children?.length ?? 0) <= 1) {
+    const curVal = selNomorLawang.value;
     let opts = '<option value="">-- Sedaya 9 Posisi --</option>';
     for (let i = 1; i <= 9; i++) {
       opts += `<option value="${i}">Posisi Kaping ${i}</option>`;
     }
     selNomorLawang.innerHTML = opts;
+    if (curVal) selNomorLawang.value = curVal;
   }
 
   // Arah Pindah / Boyongan
   const selArahPindah = document.getElementById('omahSelArahPindah');
-  if (selArahPindah && selArahPindah.children.length <= 1) {
+  if (selArahPindah && (selArahPindah.options?.length ?? selArahPindah.children?.length ?? 0) <= 1) {
+    const curVal = selArahPindah.value;
     selArahPindah.innerHTML = '<option value="">-- Boten Boyongan / Boten Dipunpilih --</option>' +
       ARAH_LIST.map(a => `<option value="${a}">Boyongan Arahe ${a}</option>`).join('');
+    if (curVal) selArahPindah.value = curVal;
   }
 
   // Sasi Jawa
   const selSasi = document.getElementById('omahSelSasi');
-  if (selSasi && selSasi.children.length <= 1) {
+  if (selSasi && (selSasi.options?.length ?? selSasi.children?.length ?? 0) <= 1) {
+    const curVal = selSasi.value;
     selSasi.innerHTML = '<option value="">-- Sedaya / Boten Dipunpilih --</option>' +
-      OMAH_MENURUT_SASI.map(s => `<option value="${s.sasi_jawa}">${s.id}. ${s.sasi_jawa}</option>`).join('');
+      sasiList.map(s => `<option value="${s.sasi_jawa}">${s.id}. ${s.sasi_jawa}</option>`).join('');
+    if (curVal) selSasi.value = curVal;
   }
 
   // Mangsa
   const selMangsa = document.getElementById('omahSelMangsa');
-  if (selMangsa && selMangsa.children.length <= 1) {
+  if (selMangsa && (selMangsa.options?.length ?? selMangsa.children?.length ?? 0) <= 1) {
+    const curVal = selMangsa.value;
     selMangsa.innerHTML = '<option value="">-- Sedaya / Boten Dipunpilih --</option>' +
-      OMAH_MENURUT_MANGSA.map(m => `<option value="${m.mangsa_kanon}">${m.id}. ${m.mangsa_kanon}</option>`).join('');
+      mangsaList.map(m => `<option value="${m.mangsa_kanon}">${m.id}. ${m.mangsa_kanon}</option>`).join('');
+    if (curVal) selMangsa.value = curVal;
   }
 
   // Ciri Lemah
   const selLemah = document.getElementById('omahSelLemah');
-  if (selLemah && selLemah.children.length <= 1) {
+  if (selLemah && (selLemah.options?.length ?? selLemah.children?.length ?? 0) <= 1) {
+    const curVal = selLemah.value;
     selLemah.innerHTML = '<option value="">-- Boten Dipunpilih --</option>' +
-      OMAH_PILIH_LEMAH.map(l => `<option value="${l.id}">${l.id}. ${l.ciri_lemah} (${l.aran})</option>`).join('');
+      lemahList.map(l => `<option value="${l.id}">${l.id}. ${l.ciri_lemah} (${l.aran})</option>`).join('');
+    if (curVal) selLemah.value = curVal;
   }
 
   // Search Bulan
   const selSearchBulan = document.getElementById('omahSearchBulan');
-  if (selSearchBulan && selSearchBulan.children.length === 0) {
+  if (selSearchBulan && (selSearchBulan.options?.length ?? selSearchBulan.children?.length ?? 0) === 0) {
     const curMonth = new Date().getMonth() + 1;
     const BULAN_NAMES = [
       'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -212,7 +236,7 @@ function populateSelects() {
 
   // Search Tahun
   const selSearchTahun = document.getElementById('omahSearchTahun');
-  if (selSearchTahun && selSearchTahun.children.length === 0) {
+  if (selSearchTahun && (selSearchTahun.options?.length ?? selSearchTahun.children?.length ?? 0) === 0) {
     const curYear = new Date().getFullYear();
     let opts = '';
     for (let y = 1950; y <= 2040; y++) {
@@ -740,5 +764,6 @@ if (typeof window !== 'undefined') {
   window.cariHariBaikOmahUI = cariHariBaikOmahUI;
   window.pilihTanggalHasilCariOmah = pilihTanggalHasilCariOmah;
   window.setOmahWizardStep = setOmahWizardStep;
+  window.populateOmahSelects = populateSelects;
   window.toggleOmahFormMode = toggleOmahFormMode;
 }

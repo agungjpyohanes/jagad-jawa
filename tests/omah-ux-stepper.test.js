@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import {
   omahStepper,
   setOmahWizardStep,
-  toggleOmahFormMode
+  toggleOmahFormMode,
+  populateSelects
 } from '../js/modules/omah/omah-ui.js';
 import { hitungPetungOmah } from '../js/modules/omah/omah-engine.js';
 
@@ -214,4 +215,24 @@ test('Petung Omah UX - Reset Hari Ini & Date Range / Format Validation', () => {
   mockDoc.getElementById('omahDatePicker').value = '2026-10-08';
   const resValid = setOmahWizardStep(2, true);
   assert.equal(resValid, true);
+});
+
+test('Petung Omah UX - Dropdown Step 2 & Step 3 Terisi Lengkap Dari Data Lokal', () => {
+  const elements = {};
+  const mockDoc = {
+    getElementById(id) {
+      if (!elements[id]) {
+        elements[id] = { id, innerHTML: '', value: '', options: [] };
+      }
+      return elements[id];
+    }
+  };
+  globalThis.document = mockDoc;
+  populateSelects();
+
+  assert.ok(mockDoc.getElementById('omahSelNomorLawang').innerHTML.includes('Posisi Kaping 9'), 'Nomor lawang 1-9 harus ada');
+  assert.ok(mockDoc.getElementById('omahSelArahPindah').innerHTML.includes('Boyongan Arahe Barat'), 'Arah boyongan harus ada');
+  assert.ok(mockDoc.getElementById('omahSelSasi').innerHTML.includes('12. Besar'), '12 Sasi Jawa harus ada');
+  assert.ok(mockDoc.getElementById('omahSelMangsa').innerHTML.includes('12. Saddha'), '12 Pranata mangsa harus ada');
+  assert.ok(mockDoc.getElementById('omahSelLemah').innerHTML.includes('26.'), '26 Karakteristik lemah harus ada');
 });

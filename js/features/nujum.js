@@ -43,6 +43,7 @@ export async function ensureNujumLoaded() {
       window.onTahunHitungChange = nujumUI.onTahunHitungChange;
       window.updateKepribadianQuickInfo = nujumUI.updateKepribadianQuickInfo;
       window.hitungKepribadianLengkap = nujumUI.hitungKepribadianLengkap;
+      window.onNujumFormInputChanged = nujumUI.onNujumFormInputChanged;
       window.switchNujumViewMode = nujumUI.switchNujumViewMode;
       window.switchNujumSubTab = nujumUI.switchNujumSubTab;
       window.openGlosariumNujumModal = nujumUI.openGlosariumNujumModal;
@@ -249,6 +250,14 @@ export function wireNujumFeature() {
     }
   };
   window.hitungKepribadianLengkap = wrapperHitungKepribadian;
+
+  const wrapperOnNujumFormInputChanged = async function () {
+    await ensureNujumLoaded();
+    if (typeof window.onNujumFormInputChanged === 'function' && window.onNujumFormInputChanged !== wrapperOnNujumFormInputChanged) {
+      window.onNujumFormInputChanged();
+    }
+  };
+  window.onNujumFormInputChanged = wrapperOnNujumFormInputChanged;
 
   const wrapperUpdateQuickInfo = async function () {
     await ensureNujumLoaded();

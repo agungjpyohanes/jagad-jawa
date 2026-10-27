@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import {
   initTernakUI,
   syncTernakDariTanggal,
+  switchTernakInputMode,
+  cariTanggalSesuai1Bulan,
   hitungTernakDariUI,
   hitungTernakDariSelect,
   resetTernakUI,
@@ -292,3 +294,45 @@ test('Petung Kehidupan UX - Pemuatan Data Tetanen Gagal Menampilkan Data Error S
   }
 });
 
+
+test('Petung Kehidupan UX - Pemisahan Opsi A (Tanggal Otomatis) dan Opsi B (Cari Hari & Pasaran 1 Bulan)', async () => {
+  const mockDoc = createMockDoc();
+  globalThis.document = mockDoc;
+  globalThis.window = {
+    getLanguage: () => 'id',
+    showToast: () => {}
+  };
+
+  const containerTanggal = mockDoc.getElementById('ternakModeTanggalContainer');
+  const containerWeton = mockDoc.getElementById('ternakModeWetonContainer');
+  const datePicker = mockDoc.getElementById('ternakDatePicker');
+  const lockedDina = mockDoc.getElementById('ternakLockedDinaText');
+  const lockedPasaran = mockDoc.getElementById('ternakLockedPasaranText');
+  const selDina = mockDoc.getElementById('ternakSelDina');
+  const selPasaran = mockDoc.getElementById('ternakSelPasaran');
+  const jadwalBox = mockDoc.getElementById('ternakJadwal1BulanBox');
+
+  // Test 1: Opsi A - Input Tanggal mengisi locked Dina & Pasaran
+  datePicker.value = '2024-06-20'; // Kamis Pon
+  await syncTernakDariTanggal(false);
+  assert.equal(lockedDina.textContent, 'Kamis', 'Dina terkunci harus Kamis');
+  assert.ok(lockedPasaran.textContent.includes('Pon'), 'Pasaran terkunci harus Pon');
+
+  // Test 2: Beralih ke Opsi B (Weton)
+  switchTernakInputMode('weton');
+  assert.equal(containerTanggal.classList.contains('hidden'), true, 'Mode tanggal harus tersembunyi');
+  assert.equal(containerWeton.classList.contains('hidden'), false, 'Mode weton harus aktif');
+
+  // Test 3: Opsi B - Cari Tanggal 1 Bulan ke Depan
+  selDina.value = 'Jumat';
+  selPasaran.value = 'Kliwon';
+  cariTanggalSesuai1Bulan();
+  assert.equal(jadwalBox.classList.contains('hidden'), false, 'Kontainer jadwal 1 bulan harus terbuka');
+  assert.ok(jadwalBox.innerHTML.includes('Jumat Kliwon'), 'Harus menampilkan dinten Jumat Kliwon');
+  assert.ok(jadwalBox.innerHTML.includes('Pilih Tanggal Ini'), 'Harus menyediakan tombol pilih tanggal');
+
+  // Test 4: Kembali ke Opsi A
+  switchTernakInputMode('tanggal');
+  assert.equal(containerTanggal.classList.contains('hidden'), false, 'Mode tanggal harus kembali aktif');
+  assert.equal(containerWeton.classList.contains('hidden'), true, 'Mode weton harus tersembunyi');
+});
