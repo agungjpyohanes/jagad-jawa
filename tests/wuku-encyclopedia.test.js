@@ -74,4 +74,12 @@ test('Ensiklopedia 30 Wuku - Integritas Database', async (t) => {
     assert.equal(summary.imageWuku, '/assets/illustrations/wuku/sinta.jpg');
     assert.equal(summary.imageDewane, '/assets/illustrations/dewane/sinta-dewane.jpg');
   });
+
+  await t.test('Filter 4 Pilar Pawukon (Nambani, Pangupajiwa, Tetanen, Ala & Becik) tidak boleh kosong', async () => {
+    const { searchWukuWithCategory } = await import('../js/modules/wuku/wuku-engine.js');
+    ['all', 'nambani', 'pangupajiwa', 'tetanen', 'ala_becik'].forEach(cat => {
+      const hasil = searchWukuWithCategory('', cat);
+      assert.equal(hasil.length, 30, `Kategori ${cat} harus memuat utuh 30 wuku tanpa kosong`);
+    });
+  });
 });

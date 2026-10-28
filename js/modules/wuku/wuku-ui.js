@@ -78,6 +78,31 @@ export function closeEnsiklopediaWukuModal() {
  * Merender daftar kartu grid 30 wuku (mendukung modal & halaman tab penuh).
  * @param {Array<Object>} list 
  */
+function getWukuPetengetSubtitle(w, isJv) {
+  const p = getWukuPetenget(w.no_wuku);
+  if (currentWukuCategory === 'nambani') {
+    const b = p?.nambani?.becik && p.nambani.becik !== '-' ? p.nambani.becik : null;
+    const a = p?.nambani?.ala && p.nambani.ala !== '-' ? `Sirikan: ${p.nambani.ala}` : null;
+    return b || a || (w.tamba_yen_lara || (isJv ? 'Usada & Jamu' : 'Pengobatan'));
+  }
+  if (currentWukuCategory === 'pangupajiwa') {
+    const b = p?.pangupajiwa?.becik && p.pangupajiwa.becik !== '-' ? p.pangupajiwa.becik : null;
+    const a = p?.pangupajiwa?.ala && p.pangupajiwa.ala !== '-' ? `Sirikan: ${p.pangupajiwa.ala}` : null;
+    return b || a || (w.pangupaya_jiwa || (isJv ? 'Pangupajiwa' : 'Mata Pencaharian'));
+  }
+  if (currentWukuCategory === 'tetanen') {
+    const b = p?.tetanen?.becik && p.tetanen.becik !== '-' ? p.tetanen.becik : null;
+    const a = p?.tetanen?.ala && p.tetanen.ala !== '-' ? `Sirikan: ${p.tetanen.ala}` : null;
+    return b || a || (isJv ? 'Palawija & Tetanduran' : 'Pertanian & Tanaman');
+  }
+  if (currentWukuCategory === 'ala_becik') {
+    const b = p?.alaBecik?.becik && p.alaBecik.becik !== '-' ? p.alaBecik.becik : null;
+    const a = p?.alaBecik?.ala && p.alaBecik.ala !== '-' ? `Sirikan: ${p.alaBecik.ala}` : null;
+    return b || a || (isJv ? 'Ala & Becik' : 'Baik & Buruk');
+  }
+  return w.dewane ? w.dewane.split('(')[0].replace('Sang Hyang', 'SH').trim() : '-';
+}
+
 export function renderWukuGrid(list) {
   const containerModal = document.getElementById('gridEnsiklopediaWuku');
   const containerTab = document.getElementById('tabWukuGrid');
@@ -128,7 +153,7 @@ export function renderWukuGrid(list) {
         </div>
         <div class="min-w-0 flex-1">
           <div class="font-bold text-xs text-sogan-100 truncate">${w.nama_wuku}</div>
-          <div class="text-[10px] text-sogan-400 truncate">${w.dewane ? w.dewane.split('(')[0].replace('Sang Hyang', 'SH').trim() : '-'}</div>
+          <div class="text-[10px] text-sogan-400 truncate" title="${getWukuPetengetSubtitle(w, isJv)}">${getWukuPetengetSubtitle(w, isJv)}</div>
         </div>
       </button>
     `;
@@ -157,6 +182,7 @@ export function setWukuCategoryFilter(category) {
   });
 
   filterWukuGrid();
+  selectWukuDetail(activeWukuNo || 1);
 }
 
 /**
@@ -395,7 +421,7 @@ export function selectWukuDetail(noOrName) {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           
           <!-- 1. Ala & Becik -->
-          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-sky-900/40 space-y-1.5 shadow-sm">
+          <div id="pilarCard-ala_becik" class="p-3.5 rounded-xl bg-sogan-950/70 border ${currentWukuCategory === 'ala_becik' ? 'border-sky-400 ring-2 ring-sky-400/70 bg-sky-950/40 shadow-[0_0_15px_rgba(56,189,248,0.25)]' : 'border-sky-900/40'} space-y-1.5 shadow-sm transition-all duration-200">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-sky-300 flex items-center gap-1.5 tracking-wider">
                 <i class="fa-solid fa-scale-balanced"></i> ${alaBecikTitle}
@@ -415,7 +441,7 @@ export function selectWukuDetail(noOrName) {
           </div>
 
           <!-- 2. Nambani / Usada -->
-          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-emerald-900/40 space-y-1.5 shadow-sm">
+          <div id="pilarCard-nambani" class="p-3.5 rounded-xl bg-sogan-950/70 border ${currentWukuCategory === 'nambani' ? 'border-emerald-400 ring-2 ring-emerald-400/70 bg-emerald-950/40 shadow-[0_0_15px_rgba(52,211,153,0.25)]' : 'border-emerald-900/40'} space-y-1.5 shadow-sm transition-all duration-200">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-emerald-300 flex items-center gap-1.5 tracking-wider">
                 <i class="fa-solid fa-mortar-pestle"></i> ${nambaniTitle}
@@ -435,7 +461,7 @@ export function selectWukuDetail(noOrName) {
           </div>
 
           <!-- 3. Pangupajiwa -->
-          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-900/40 space-y-1.5 shadow-sm">
+          <div id="pilarCard-pangupajiwa" class="p-3.5 rounded-xl bg-sogan-950/70 border ${currentWukuCategory === 'pangupajiwa' ? 'border-amber-400 ring-2 ring-amber-400/70 bg-amber-950/40 shadow-[0_0_15px_rgba(251,191,36,0.25)]' : 'border-amber-900/40'} space-y-1.5 shadow-sm transition-all duration-200">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-amber-300 flex items-center gap-1.5 tracking-wider">
                 <i class="fa-solid fa-coins"></i> ${pangupajiwaTitle}
@@ -455,7 +481,7 @@ export function selectWukuDetail(noOrName) {
           </div>
 
           <!-- 4. Tetanen & Palawija -->
-          <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-teal-900/40 space-y-1.5 shadow-sm">
+          <div id="pilarCard-tetanen" class="p-3.5 rounded-xl bg-sogan-950/70 border ${currentWukuCategory === 'tetanen' ? 'border-teal-400 ring-2 ring-teal-400/70 bg-teal-950/40 shadow-[0_0_15px_rgba(45,212,191,0.25)]' : 'border-teal-900/40'} space-y-1.5 shadow-sm transition-all duration-200">
             <div class="flex items-center justify-between">
               <span class="text-[10px] uppercase font-bold text-teal-300 flex items-center gap-1.5 tracking-wider">
                 <i class="fa-solid fa-wheat-awn"></i> ${tetanenTitle}

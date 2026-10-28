@@ -283,9 +283,10 @@ test('Pustaka Sinengker — Integritas Seluruh Naskah Sakral & Aji Mantra', () =
 
   // 7. Aji Mantra Sinengker
   const ajiList = getAjiMantraSinengkerList();
-  assert.equal(ajiList.length, 3, 'Harus memuat 3 aji mantra (Condo Birowo, Semar Kawak, Waringin Sungsang)');
+  assert.equal(ajiList.length, 3, 'Harus memuat 3 aji mantra (Aji Candrabirawa, Semar Kawak, Waringin Sungsang)');
   const [condo, semar, waringin] = ajiList;
   assert.equal(condo.id, 'condo-birowo');
+  assert.equal(condo.judul, 'AJI CANDRABIRAWA');
   assert.equal(semar.id, 'semar-kawak');
   assert.equal(waringin.id, 'waringin-sungsang');
 });

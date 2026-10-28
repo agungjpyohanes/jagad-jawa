@@ -32,15 +32,16 @@ export const saronScales = {
 };
 
 export function initAudio() {
-  if (!audioCtx) {
+  if (!audioCtx || audioCtx.state === 'closed') {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (AudioContextClass) {
       audioCtx = new AudioContextClass();
     }
   }
   if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume();
+    audioCtx.resume().catch(() => {});
   }
+  return audioCtx;
 }
 
 export function playGamelanTone(freq, type = 'saron') {
@@ -256,11 +257,20 @@ export function renderGamelanKeys() {
       <span class="font-black text-xs sm:text-sm">${item.note}</span>
       <span class="text-[9px] font-mono font-bold bg-black/20 px-1 rounded">[${item.key}]</span>
     `;
-    keyEl.onclick = () => {
+
+    const strike = (e) => {
+      if (e) {
+        if (typeof e.preventDefault === 'function' && e.type === 'touchstart') e.preventDefault();
+      }
       playGamelanTone(item.freq, 'saron');
+      keyEl.classList.remove('hit-anim');
+      void keyEl.offsetWidth;
       keyEl.classList.add('hit-anim');
       setTimeout(() => keyEl.classList.remove('hit-anim'), 150);
     };
+
+    keyEl.addEventListener('pointerdown', strike, { passive: true });
+    keyEl.onclick = strike;
     container.appendChild(keyEl);
   });
 }
@@ -286,6 +296,8 @@ export function setGamelanLaras(laras) {
 export function hitBonang(num, freq, el) {
   playGamelanTone(freq, 'bonang');
   if (el) {
+    el.classList.remove('hit-anim');
+    void el.offsetWidth;
     el.classList.add('hit-anim');
     setTimeout(() => el.classList.remove('hit-anim'), 150);
   }

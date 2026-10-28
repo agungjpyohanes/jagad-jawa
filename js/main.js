@@ -161,6 +161,19 @@ if (typeof window !== 'undefined') {
   window.filterUsadaPenyakit = makeLazyProxy(ensurePustakaLoaded, 'filterUsadaPenyakit');
   window.copyUsadaItem = makeLazyProxy(ensurePustakaLoaded, 'copyUsadaItem');
   window.copyKalacakraFull = makeLazyProxy(ensurePustakaLoaded, 'copyKalacakraFull');
+  window.openPustakaNaskahReader = makeLazyProxy(ensurePustakaLoaded, 'openPustakaNaskahReader');
+  window.setNaskahReaderPupuh = makeLazyProxy(ensurePustakaLoaded, 'setNaskahReaderPupuh');
+  window.unduhNaskahKuno = makeLazyProxy(ensurePustakaLoaded, 'unduhNaskahKuno');
+  window.copyNaskahFull = makeLazyProxy(ensurePustakaLoaded, 'copyNaskahFull');
+  window.onNaskahSearch = makeLazyProxy(ensurePustakaLoaded, 'onNaskahSearch');
+  window.openPustakaReferensiReader = makeLazyProxy(ensurePustakaLoaded, 'openPustakaReferensiReader');
+  window.unduhDokumenReferensi = makeLazyProxy(ensurePustakaLoaded, 'unduhDokumenReferensi');
+  window.copyReferensiDoc = makeLazyProxy(ensurePustakaLoaded, 'copyReferensiDoc');
+  window.onReferensiSearch = makeLazyProxy(ensurePustakaLoaded, 'onReferensiSearch');
+  window.onKamusSearch = makeLazyProxy(ensurePustakaLoaded, 'onKamusSearch');
+  window.switchKamusType = makeLazyProxy(ensurePustakaLoaded, 'switchKamusType');
+  window.unduhKamus = makeLazyProxy(ensurePustakaLoaded, 'unduhKamus');
+  window.copyKamusWord = makeLazyProxy(ensurePustakaLoaded, 'copyKamusWord');
 
   // Pustaka Sinengker bindings
   window.initSinengkerUI = makeLazyProxy(ensureSinengkerLoaded, 'initSinengkerUI');

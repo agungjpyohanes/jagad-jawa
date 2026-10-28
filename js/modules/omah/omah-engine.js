@@ -72,20 +72,76 @@ function norm(str) {
   return String(str || '').trim().toLowerCase();
 }
 
+export const CANONICAL_DINA_MAP = {
+  minggu: 'Minggu',
+  ahad: 'Minggu',
+  ngahad: 'Minggu',
+  senin: 'Senin',
+  senen: 'Senin',
+  selasa: 'Selasa',
+  salasa: 'Selasa',
+  rabu: 'Rabu',
+  rebo: 'Rabu',
+  kamis: 'Kamis',
+  kemis: 'Kamis',
+  jumat: 'Jumat',
+  "jum'at": 'Jumat',
+  jumaat: 'Jumat',
+  sabtu: 'Sabtu',
+  setu: 'Sabtu'
+};
+
+export const CANONICAL_PASARAN_MAP = {
+  legi: 'Legi',
+  manis: 'Legi',
+  pahing: 'Pahing',
+  paing: 'Pahing',
+  pon: 'Pon',
+  wage: 'Wage',
+  kliwon: 'Kliwon',
+  kasih: 'Kliwon',
+  asih: 'Kliwon'
+};
+
+export const MASTER_NEPTU_APP = {
+  dina: { Minggu: 5, Senin: 4, Selasa: 3, Rabu: 7, Kamis: 8, Jumat: 6, Sabtu: 9 },
+  pasaran: { Legi: 5, Pahing: 9, Pon: 7, Wage: 4, Kliwon: 8 }
+};
+
+export const MASTER_NEPTU_NB = {
+  dina: { Minggu: 6, Senin: 4, Selasa: 3, Rabu: 6, Kamis: 5, Jumat: 7, Sabtu: 8 },
+  pasaran: { Legi: 5, Pahing: 9, Pon: 7, Wage: 4, Kliwon: 8 }
+};
+
+export function normalizeDina(dina) {
+  const n = norm(dina).replace(/['`’]/g, "'");
+  return CANONICAL_DINA_MAP[n] || (dina ? String(dina).trim() : '');
+}
+
+export function normalizePasaran(pasaran) {
+  const n = norm(pasaran);
+  return CANONICAL_PASARAN_MAP[n] || (pasaran ? String(pasaran).trim() : '');
+}
+
 /**
  * Ambil Neptu App Standar
  */
 export function getNeptuApp(dina, pasaran) {
-  const nD = norm(dina);
-  const nP = norm(pasaran);
+  const cDina = normalizeDina(dina);
+  const cPasaran = normalizePasaran(pasaran);
+  const nD = norm(cDina);
+  const nP = norm(cPasaran);
   const db = getActiveOmahDb();
-  const rowD = db.NEPTU_APP_WETON.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
-  const rowP = db.NEPTU_APP_WETON.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
-  const dVal = rowD ? rowD.neptu : 0;
-  const pVal = rowP ? rowP.neptu : 0;
+
+  let rowD = db.NEPTU_APP_WETON?.find(r => r.jenis === 'dina' && (norm(r.nama) === nD || norm(r.nama) === norm(dina)));
+  let rowP = db.NEPTU_APP_WETON?.find(r => r.jenis === 'pasaran' && (norm(r.nama) === nP || norm(r.nama) === norm(pasaran)));
+
+  const dVal = (rowD && typeof rowD.neptu === 'number') ? rowD.neptu : (MASTER_NEPTU_APP.dina[cDina] || 0);
+  const pVal = (rowP && typeof rowP.neptu === 'number') ? rowP.neptu : (MASTER_NEPTU_APP.pasaran[cPasaran] || 0);
+
   return {
-    dina,
-    pasaran,
+    dina: cDina || dina,
+    pasaran: cPasaran || pasaran,
     neptuDina: dVal,
     neptuPasaran: pVal,
     neptuJumlah: dVal + pVal,
@@ -97,16 +153,21 @@ export function getNeptuApp(dina, pasaran) {
  * Ambil Neptu NB Tradisi Omah
  */
 export function getNeptuNb(dina, pasaran) {
-  const nD = norm(dina);
-  const nP = norm(pasaran);
+  const cDina = normalizeDina(dina);
+  const cPasaran = normalizePasaran(pasaran);
+  const nD = norm(cDina);
+  const nP = norm(cPasaran);
   const db = getActiveOmahDb();
-  const rowD = db.NEPTU_OMAH_NB.find(r => r.jenis === 'dina' && norm(r.nama) === nD);
-  const rowP = db.NEPTU_OMAH_NB.find(r => r.jenis === 'pasaran' && norm(r.nama) === nP);
-  const dVal = rowD ? rowD.neptu : 0;
-  const pVal = rowP ? rowP.neptu : 0;
+
+  let rowD = db.NEPTU_OMAH_NB?.find(r => r.jenis === 'dina' && (norm(r.nama) === nD || norm(r.nama) === norm(dina)));
+  let rowP = db.NEPTU_OMAH_NB?.find(r => r.jenis === 'pasaran' && (norm(r.nama) === nP || norm(r.nama) === norm(pasaran)));
+
+  const dVal = (rowD && typeof rowD.neptu === 'number') ? rowD.neptu : (MASTER_NEPTU_NB.dina[cDina] || 0);
+  const pVal = (rowP && typeof rowP.neptu === 'number') ? rowP.neptu : (MASTER_NEPTU_NB.pasaran[cPasaran] || 0);
+
   return {
-    dina,
-    pasaran,
+    dina: cDina || dina,
+    pasaran: cPasaran || pasaran,
     neptuDina: dVal,
     neptuPasaran: pVal,
     neptuJumlah: dVal + pVal,
@@ -122,9 +183,16 @@ export function hitungSetA(neptuJumlahApp) {
   let rem = neptuJumlahApp % 4;
   if (rem === 0) rem = 4;
   const db = getActiveOmahDb();
-  const item = db.OMAH_SISA4_SET_A.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const list = db.OMAH_SISA4_SET_A || OMAH_SISA4_SET_A;
+  let item = list?.find(x => x.sisa === rem || (rem === 4 && x.sisa === 0) || String(x.sisa) === String(rem));
+  if (!item || !item.nama || item.nama === 'Unknown') {
+    item = OMAH_SISA4_SET_A.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  }
+  const watakText = (item.watak && typeof item.watak === 'object') ? (item.watak.jv || item.watak.id || '') : (item.watak || '');
   return {
-    ...item,
+    sisa: rem,
+    nama: item.nama,
+    watak: watakText,
     status: rem === 1 ? 'Becik' : 'Ala',
     rumus: `${neptuJumlahApp} mod 4 = ${rem}`
   };
@@ -138,10 +206,17 @@ export function hitungSetB(neptuJumlahApp) {
   let rem = neptuJumlahApp % 5;
   if (rem === 0) rem = 5;
   const db = getActiveOmahDb();
-  const item = db.OMAH_SISA4_SET_B.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const list = db.OMAH_SISA4_SET_B || OMAH_SISA4_SET_B;
+  let item = list?.find(x => x.sisa === rem || (rem === 5 && x.sisa === 0) || String(x.sisa) === String(rem));
+  if (!item || !item.nama || item.nama === 'Unknown') {
+    item = OMAH_SISA4_SET_B.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  }
+  const watakText = (item.watak && typeof item.watak === 'object') ? (item.watak.jv || item.watak.id || '') : (item.watak || '');
   const isBecik = rem === 1 || rem === 2 || rem === 3;
   return {
-    ...item,
+    sisa: rem,
+    nama: item.nama,
+    watak: watakText,
     status: isBecik ? 'Becik' : 'Ala',
     rumus: `${neptuJumlahApp} mod 5 = ${rem}`
   };
@@ -155,10 +230,17 @@ export function hitungSetC(neptuJumlahNb) {
   let rem = neptuJumlahNb % 4;
   if (rem === 0) rem = 4;
   const db = getActiveOmahDb();
-  const item = db.OMAH_SISA4_SET_C.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  const list = db.OMAH_SISA4_SET_C || OMAH_SISA4_SET_C;
+  let item = list?.find(x => x.sisa === rem || (rem === 4 && x.sisa === 0) || String(x.sisa) === String(rem));
+  if (!item || !item.nama || item.nama === 'Unknown') {
+    item = OMAH_SISA4_SET_C.find(x => x.sisa === rem) || { sisa: rem, nama: 'Unknown', watak: '' };
+  }
+  const watakText = (item.watak && typeof item.watak === 'object') ? (item.watak.jv || item.watak.id || '') : (item.watak || '');
   const isBecik = rem === 1 || rem === 2;
   return {
-    ...item,
+    sisa: rem,
+    nama: item.nama,
+    watak: watakText,
     status: isBecik ? 'Becik' : 'Ala',
     rumus: `${neptuJumlahNb} (Neptu NB) mod 4 = ${rem}`
   };
@@ -280,8 +362,10 @@ export function hitungPetungOmah({
     throw new Error('Dina lan Pasaran kedah dipunisi kanggé ngetung Petung Omah.');
   }
 
-  const neptuApp = getNeptuApp(dina, pasaran);
-  const neptuNb = getNeptuNb(dina, pasaran);
+  const canonDina = normalizeDina(dina);
+  const canonPasaran = normalizePasaran(pasaran);
+  const neptuApp = getNeptuApp(canonDina || dina, canonPasaran || pasaran);
+  const neptuNb = getNeptuNb(canonDina || dina, canonPasaran || pasaran);
 
   const setA = hitungSetA(neptuApp.neptuJumlah);
   const setB = hitungSetB(neptuApp.neptuJumlah);
@@ -315,8 +399,8 @@ export function hitungPetungOmah({
   }
 
   return {
-    dina,
-    pasaran,
+    dina: canonDina || dina,
+    pasaran: canonPasaran || pasaran,
     neptuApp,
     neptuNb,
     setA,

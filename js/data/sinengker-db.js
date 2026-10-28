@@ -538,7 +538,7 @@ export const SINENGKER_DATA = {
     ]
   },
   aji_condo_birowo: {
-    judul: "AJI CONDO BIROWO",
+    judul: "AJI CANDRABIRAWA",
     deskripsi: "Mantra panyuwunan usada lan pangreksa saking laraning bongso sesakit.",
     bacaan: [
       "Punika laraning bongso sesakit",

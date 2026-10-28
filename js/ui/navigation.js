@@ -121,6 +121,10 @@ function switchTab(tabId, pushState = true) {
     window.initMitologiUI();
   }
 
+  if (tabId === 'gamelan' && typeof window.renderGamelanKeys === 'function') {
+    window.renderGamelanKeys();
+  }
+
   // Perbarui jejak hierarki Breadcrumb bergaya Windows Explorer
   renderBreadcrumb(tabId);
 

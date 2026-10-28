@@ -19,14 +19,16 @@ let currentPetengetList = (typeof globalThis !== 'undefined' && Array.isArray(gl
 
 function getWukuPetenget(wukuNoOrName) {
   if (typeof globalThis !== 'undefined' && typeof globalThis.getWukuPetenget === 'function' && globalThis.getWukuPetenget !== getWukuPetenget && globalThis.getWukuPetenget !== masterGetWukuPetenget) {
-    return globalThis.getWukuPetenget(wukuNoOrName);
+    const res = globalThis.getWukuPetenget(wukuNoOrName);
+    if (res) return res;
   }
   const active = (typeof globalThis !== 'undefined' && globalThis._currentWukuPetengetData) ? globalThis._currentWukuPetengetData : currentPetengetList;
-  const list = Array.isArray(active) && active.length > 0 ? active : (active?.wukuPetenget || active?.list || []);
-  const parsed = parseInt(wukuNoOrName, 10);
-  const clean = String(wukuNoOrName || '').trim().toLowerCase();
-  const found = list.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean);
-  if (found) return found;
+  if (Array.isArray(active) && active.length > 0) {
+    const parsed = parseInt(wukuNoOrName, 10);
+    const clean = String(wukuNoOrName || '').trim().toLowerCase();
+    const found = active.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean);
+    if (found) return found;
+  }
   return masterGetWukuPetenget(wukuNoOrName);
 }
 
@@ -43,6 +45,12 @@ export async function loadWukuData() {
       currentWukuList = domainData.pawukonList;
       if (typeof window !== 'undefined') {
         window.PAWUKON_LIST = currentWukuList;
+      }
+    }
+    if (domainData && domainData.petengetList) {
+      currentPetengetList = domainData.petengetList;
+      if (typeof globalThis !== 'undefined') {
+        globalThis._currentWukuPetengetData = domainData.petengetList;
       }
     }
   } catch (err) {
@@ -94,19 +102,6 @@ export function getWukuByName(name) {
  */
 export function searchWukuWithCategory(query = '', category = 'all') {
   let list = getAllWuku();
-
-  // Filter awal berdasarkan kategori petenget
-  if (category && category !== 'all') {
-    list = list.filter(w => {
-      const p = getWukuPetenget(w.no_wuku);
-      if (!p) return false;
-      if (category === 'nambani') return p.nambani && p.nambani.becik && p.nambani.becik !== '-';
-      if (category === 'pangupajiwa') return p.pangupajiwa && p.pangupajiwa.becik && p.pangupajiwa.becik !== '-';
-      if (category === 'tetanen') return p.tetanen && p.tetanen.becik && p.tetanen.becik !== '-';
-      if (category === 'ala_becik') return (p.alaBecik && (p.alaBecik.becik !== '-' || p.alaBecik.ala !== '-'));
-      return true;
-    });
-  }
 
   if (!query || typeof query !== 'string' || !query.trim()) {
     return list;

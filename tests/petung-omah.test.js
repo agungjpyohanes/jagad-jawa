@@ -104,3 +104,39 @@ test('Petung Omah - Evaluasi Komprehensif hitungPetungOmah', () => {
   assert.equal(res.laranganBoyongan.isProhibited, true);
   assert.ok(res.disclaimer.includes('Pènget Luhur'));
 });
+
+
+test('Petung Omah - Validasi Rabu Pon / Rebo Pon (Bebas 0 dan Bebas Unknown)', () => {
+  ['Rabu', 'Rebo'].forEach(dinaName => {
+    const res = hitungPetungOmah({
+      dina: dinaName,
+      pasaran: 'Pon'
+    });
+
+    assert.equal(res.neptuApp.neptuDina, 7, 'Neptu App Rabu harus 7');
+    assert.equal(res.neptuApp.neptuPasaran, 7, 'Neptu Pasaran Pon harus 7');
+    assert.equal(res.neptuApp.neptuJumlah, 14);
+
+    assert.equal(res.neptuNb.neptuDina, 6, 'Neptu NB Rebo harus 6');
+    assert.equal(res.neptuNb.neptuPasaran, 7, 'Neptu Pasaran Pon harus 7');
+    assert.equal(res.neptuNb.neptuJumlah, 13);
+
+    // Set A (14 mod 4 = 2): Jalmo
+    assert.equal(res.setA.sisa, 2);
+    assert.equal(res.setA.nama, 'Jalmo');
+    assert.notEqual(res.setA.nama, 'Unknown');
+    assert.ok(res.setA.watak.length > 0);
+
+    // Set B (14 mod 5 = 4): Rogoh
+    assert.equal(res.setB.sisa, 4);
+    assert.equal(res.setB.nama, 'Rogoh');
+    assert.notEqual(res.setB.nama, 'Unknown');
+    assert.ok(res.setB.watak.length > 0);
+
+    // Set C (13 mod 4 = 1): Guru
+    assert.equal(res.setC.sisa, 1);
+    assert.equal(res.setC.nama, 'Guru');
+    assert.notEqual(res.setC.nama, 'Unknown');
+    assert.ok(res.setC.watak.length > 0);
+  });
+});

@@ -59,6 +59,8 @@ let currentReferensiQuery = '';
 let activeReaderEntriId = null;
 let activeReaderType = 'doa'; // 'doa' | 'naskah' | 'referensi'
 let currentReaderName = '';
+let activeNaskahId = null;
+let activeNaskahPupuhIndex = 'all';
 
 /**
  * Mendapatkan tema warna badge berdasarkan kategori.
@@ -1212,7 +1214,14 @@ export function renderPustakaNaskahView(container) {
   `;
 }
 
-export function openPustakaNaskahReader(naskahId) {
+export function setNaskahReaderPupuh(idx) {
+  activeNaskahPupuhIndex = idx;
+  if (activeNaskahId) {
+    openPustakaNaskahReader(activeNaskahId, idx);
+  }
+}
+
+export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIndex) {
   const modal = document.getElementById('modalPustakaReader');
   if (!modal) return;
 
@@ -1221,6 +1230,7 @@ export function openPustakaNaskahReader(naskahId) {
 
   activeReaderType = 'naskah';
   activeNaskahId = naskahId;
+  activeNaskahPupuhIndex = pupuhIdx !== undefined ? pupuhIdx : 'all';
 
   const titleEl = document.getElementById('pustakaReaderTitle');
   const subtitleEl = document.getElementById('pustakaReaderSubtitle');
@@ -1230,8 +1240,51 @@ export function openPustakaNaskahReader(naskahId) {
   if (titleEl) titleEl.textContent = naskah.judul;
   if (subtitleEl) subtitleEl.textContent = `${naskah.subjudul} · Anggitane ${naskah.penganggit} (${naskah.taun})`;
 
+  // Filter pupuh atau bab berdasarkan pilihan lembar
+  const isMacapat = naskah.format === 'tembang-macapat';
+  const allPupuh = naskah.pupuh || [];
+  const allBab = naskah.bab || [];
+  const totalCount = isMacapat ? allPupuh.length : allBab.length;
+
+  const displayPupuh = (activeNaskahPupuhIndex === 'all')
+    ? allPupuh
+    : allPupuh.filter((_, idx) => idx === Number(activeNaskahPupuhIndex));
+
+  const displayBab = (activeNaskahPupuhIndex === 'all')
+    ? allBab
+    : allBab.filter((_, idx) => idx === Number(activeNaskahPupuhIndex));
+
+  // Switcher lembaran HTML
+  const lembarSelectorHtml = `
+    <div class="space-y-1.5 p-3 rounded-2xl bg-sogan-950/70 border border-sogan-800/80">
+      <span class="text-[10px] font-mono uppercase tracking-wider text-amber-300/80 font-bold flex items-center gap-1.5">
+        <i class="fa-solid fa-book-open-reader text-prada"></i> Lembaran / Pupuh Naskah (${totalCount} Bagean):
+      </span>
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 scrollbar-thin">
+        <button
+          onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh('all')"
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === 'all' ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
+          <i class="fa-solid fa-layer-group mr-1"></i> Sedaya Lembar
+        </button>
+        ${isMacapat ? allPupuh.map((p, idx) => `
+          <button
+            onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh(${idx})"
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === idx ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
+            Lembar ${idx + 1}: ${p.nama}
+          </button>
+        `).join('') : allBab.map((b, idx) => `
+          <button
+            onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh(${idx})"
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === idx ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
+            Bab ${idx + 1}: ${b.irah_irahan}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
   bodyEl.innerHTML = `
-    <div class="space-y-6">
+    <div class="space-y-5">
       <!-- Metadata Strip Header -->
       <div class="p-4 rounded-2xl bg-sogan-950/80 border border-sogan-800 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-2 flex-wrap">
@@ -1262,13 +1315,18 @@ export function openPustakaNaskahReader(naskahId) {
         </div>
       </div>
 
+      <!-- Pemilih Lembaran / Pupuh -->
+      ${lembarSelectorHtml}
+
       <!-- Isi Pupuh / Bab -->
       <div class="space-y-5">
-        ${naskah.format === 'tembang-macapat' ? (naskah.pupuh || []).map((pup, pIdx) => `
+        ${isMacapat ? displayPupuh.map((pup, pIdx) => {
+          const actualIdx = (activeNaskahPupuhIndex === 'all') ? pIdx : Number(activeNaskahPupuhIndex);
+          return `
           <div class="rounded-2xl bg-sogan-950/60 border border-sogan-800 p-5 space-y-4">
             <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2.5">
               <div>
-                <span class="text-[10px] font-mono uppercase tracking-widest text-prada block font-semibold">Pupuh ${pIdx + 1}</span>
+                <span class="text-[10px] font-mono uppercase tracking-widest text-prada block font-semibold">Pupuh ${actualIdx + 1} saking ${totalCount}</span>
                 <h4 class="font-marcellus text-base font-bold text-amber-200">Pupuh ${pup.nama}</h4>
               </div>
               <span class="text-xs font-mono text-sogan-400 bg-keraton px-2.5 py-1 rounded-md border border-sogan-800">
@@ -1305,10 +1363,13 @@ export function openPustakaNaskahReader(naskahId) {
               `).join('')}
             </div>
           </div>
-        `).join('') : (naskah.bab || []).map((b, bIdx) => `
+        `;
+        }).join('') : displayBab.map((b, bIdx) => {
+          const actualIdx = (activeNaskahPupuhIndex === 'all') ? bIdx : Number(activeNaskahPupuhIndex);
+          return `
           <div class="rounded-2xl bg-sogan-950/60 border border-sogan-800 p-5 space-y-3">
             <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2">
-              <h4 class="font-marcellus text-base font-bold text-amber-200">Bab ${bIdx + 1}: ${b.irah_irahan}</h4>
+              <h4 class="font-marcellus text-base font-bold text-amber-200">Bab ${actualIdx + 1}: ${b.irah_irahan}</h4>
             </div>
             <p class="text-xs text-sogan-200 leading-relaxed">${b.isi}</p>
             ${b.makna ? `
@@ -1316,10 +1377,17 @@ export function openPustakaNaskahReader(naskahId) {
                 <strong>Nilai Sejarah:</strong> ${b.makna}
               </div>` : ''}
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   `;
+
+  // Update label tombol salin di footer modal
+  const copyBtn = modal.querySelector('button[onclick*="copyPustakaCurrentDoa"]');
+  if (copyBtn) {
+    copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Salin Isi Naskah';
+  }
 
   modal.classList.remove('hidden');
   modal.classList.add('flex');
@@ -1857,6 +1925,7 @@ if (typeof window !== 'undefined') {
   // Fitur Anyar: Naskah Kuno, Kamus, & Referensi Budaya
   window.onNaskahSearch = onNaskahSearch;
   window.openPustakaNaskahReader = openPustakaNaskahReader;
+  window.setNaskahReaderPupuh = setNaskahReaderPupuh;
   window.unduhNaskahKuno = unduhNaskahKuno;
   window.copyNaskahFull = copyNaskahFull;
 

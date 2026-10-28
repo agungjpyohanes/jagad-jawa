@@ -3143,11 +3143,11 @@
           </div>
 
           <div class="md:col-span-4 flex justify-center gap-4">
-            <button id="kempul-btn" onclick="playGamelanTone(140, 'kempul'); showToast('Kempul!');" class="w-20 h-20 rounded-full bg-gradient-to-br from-sogan-600 to-sogan-950 border-2 border-prada/60 flex flex-col items-center justify-center shadow hover:scale-105 active:scale-95 transition">
+            <button id="kempul-btn" onclick="playGamelanTone(140, 'kempul'); this.classList.remove('hit-anim'); void this.offsetWidth; this.classList.add('hit-anim'); setTimeout(() => this.classList.remove('hit-anim'), 150); showToast('Kempul!');" class="w-20 h-20 rounded-full bg-gradient-to-br from-sogan-600 to-sogan-950 border-2 border-prada/60 flex flex-col items-center justify-center shadow hover:scale-105 active:scale-95 transition cursor-pointer">
               <span class="text-xs font-bold text-prada">Kempul</span>
               <span class="text-[9px] text-sogan-400">[K]</span>
             </button>
-            <button id="gong-btn" onclick="playGamelanTone(65, 'gong'); showToast('GONG AGENG!');" class="w-24 h-24 rounded-full bg-gradient-to-br from-sogan-700 via-sogan-900 to-black border-4 border-prada flex flex-col items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition">
+            <button id="gong-btn" onclick="playGamelanTone(65, 'gong'); this.classList.remove('hit-anim'); void this.offsetWidth; this.classList.add('hit-anim'); setTimeout(() => this.classList.remove('hit-anim'), 200); showToast('GONG AGENG!');" class="w-24 h-24 rounded-full bg-gradient-to-br from-sogan-700 via-sogan-900 to-black border-4 border-prada flex flex-col items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-105 active:scale-95 transition cursor-pointer">
               <span class="text-sm font-bold text-prada">GONG</span>
               <span class="text-[10px] text-sogan-400">[Spasi]</span>
             </button>

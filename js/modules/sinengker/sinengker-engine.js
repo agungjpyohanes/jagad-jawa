@@ -274,7 +274,7 @@ export function getRosoSejatiData() {
 }
 
 /**
- * Mengambil koleksi aji mantra sinengker (Condo Birowo, Semar Kawak, Waringin Sungsang)
+ * Mengambil koleksi aji mantra sinengker (Candrabirawa, Semar Kawak, Waringin Sungsang)
  */
 export function getAjiMantraSinengkerList() {
   return [
