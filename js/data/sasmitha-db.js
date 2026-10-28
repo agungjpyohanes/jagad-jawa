@@ -1283,3 +1283,62 @@ export const REF_SASI_JAWA = [
     "padanan_hijriah": "Dzulhijjah"
   }
 ];
+
+export const SASMITHA_MERAPI = [
+  {
+    "id": 1,
+    "arah": "Lor (Utara)",
+    "arah_id": "Utara",
+    "arah_en": "Utara / Boyolali - Magelang",
+    "icon": "fa-arrow-up",
+    "simbol": "Larang Pangan",
+    "warna": "from-amber-950/70 to-red-950/40 border-amber-600/50",
+    "badge_col": "bg-amber-950 border-amber-600/60 text-amber-300",
+    "teges": {
+      "jv": "Nalika lahar utawi lebu kawah Merapi muntah tumuju arah Lor, para winasis Jawa paring sasmitha bilih bakal tumiba mangsa paceklik utawi larang pangan. Palawija asring kambah ama utawi gagal panen, saengga bebrayan agung kedah ngati-ati nyimpen lumbung pari lan ngirit sandhang pangan.",
+      "id": "Ketika lahar atau abu kawah Merapi muntah ke arah Utara, para tetua Jawa memberi sasmitha bahwa akan datang masa paceklik atau krisis pangan. Tanaman sering terserang hama atau gagal panen, sehingga masyarakat diimbau berhati-hati menyimpan lumbung beras dan berhemat pangan."
+    }
+  },
+  {
+    "id": 2,
+    "arah": "Wetan (Timur)",
+    "arah_id": "Timur",
+    "arah_en": "Timur / Klaten - Boyolali",
+    "icon": "fa-arrow-right",
+    "simbol": "Kemakmuran",
+    "warna": "from-emerald-950/70 to-teal-950/40 border-emerald-600/50",
+    "badge_col": "bg-emerald-950 border-emerald-600/60 text-emerald-300",
+    "teges": {
+      "jv": "Nalika lahar utawi lebu Merapi mili tumuju arah Wetan, sasmitha punika ngemu kabar kabungahan lan kemakmuran (gemah ripah loh jinawi). Awu vulkanik ingkang tumiba bakal nyuburaken siti pasawahan, asil tetanen tikel matikel, sarta para tani manggih rejeki ingkang luber.",
+      "id": "Ketika lahar atau abu Merapi mengalir ke arah Timur, sasmitha ini membawa kabar kegembiraan dan kemakmuran (gemah ripah loh jinawi). Abu vulkanik yang turun menyuburkan sawah ladang, hasil panen berlipat ganda, dan para petani berlimpah rezeki."
+    }
+  },
+  {
+    "id": 3,
+    "arah": "Kulon (Barat)",
+    "arah_id": "Barat",
+    "arah_en": "Barat / Magelang - Sleman Kulon",
+    "icon": "fa-arrow-left",
+    "simbol": "Kisruh Pemimpin",
+    "warna": "from-purple-950/70 to-slate-950/40 border-purple-600/50",
+    "badge_col": "bg-purple-950 border-purple-600/60 text-purple-300",
+    "teges": {
+      "jv": "Nalika ilining lahar utawi erupsi tumuju arah Kulon, sasmitha nglambangaken grahita lan pasulayan para panguwasa utawi pamong praja (kisruh pemimpin). Kahanan politik lan kawicaksanan pamarentahan dados gonjang-ganjing, saengga bebrayan dipun-aturi tansah njaga guyub rukun lan mboten gampil kaprabawan kabar fitnah.",
+      "id": "Ketika aliran lahar atau erupsi mengarah ke Barat, sasmitha melambangkan friksi dan perselisihan para penguasa atau pejabat (kisruh kepemimpinan). Situasi politik dan kebijakan menjadi bergejolak, sehingga warga diimbau menjaga kerukunan dan tidak mudah terhasut."
+    }
+  },
+  {
+    "id": 4,
+    "arah": "Kidul (Selatan)",
+    "arah_id": "Selatan",
+    "arah_en": "Selatan / Sleman - Yogyakarta",
+    "icon": "fa-arrow-down",
+    "simbol": "Huru-Hara",
+    "warna": "from-red-950/80 to-rose-950/50 border-red-600/60",
+    "badge_col": "bg-red-950 border-red-600/60 text-red-300",
+    "teges": {
+      "jv": "Nalika erupsi utawi lahar mili tumuju arah Kidul (ngener kutha Ngayogyakarta), punika sasmitha tandha bakal wonten prahara utawi huru-hara (kisruh sosial) ing madyaning bebrayan agung. Kahanan dados panas lan was-was, mrelokaken manah ingkang wening, dedonga memuji dhateng Gusti, lan laku prihatin murih sedaya balak kapuntir dados tentrem.",
+      "id": "Ketika erupsi atau lahar mengalir ke arah Selatan (menghadap kota Yogyakarta), ini tanda sasmitha akan terjadinya prahara atau huru-hara (gejolak sosial). Suasana menjadi tegang dan waspada, membutuhkan hati yang jernih, doa, dan laku prihatin agar bahaya tertolak."
+    }
+  }
+];

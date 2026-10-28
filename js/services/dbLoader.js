@@ -55,7 +55,8 @@ import {
   SASMITHA_KEDUT as MASTER_SASMITHA_KEDUT,
   SASMITHA_GERAHANA as MASTER_SASMITHA_GERAHANA,
   SASMITHA_LINDU as MASTER_SASMITHA_LINDU,
-  SASMITHA_TEJO as MASTER_SASMITHA_TEJO
+  SASMITHA_TEJO as MASTER_SASMITHA_TEJO,
+  SASMITHA_MERAPI as MASTER_SASMITHA_MERAPI
 } from '../data/sasmitha-db.js';
 import { SINENGKER_DATA as MASTER_SINENGKER } from '../data/sinengker-db.js';
 import { PUSTAKA_ENTRI as MASTER_PUSTAKA_ENTRI, PUSTAKA_KATEGORI as MASTER_PUSTAKA_KATEGORI } from '../data/pustaka-db.js';
@@ -1273,6 +1274,8 @@ export async function loadDomainData(domain, options = {}) {
           lindu_sasi: effective?.lindu_sasi || effective?.lindu || MASTER_SASMITHA_LINDU,
           tejo: effective?.tejo || effective?.tejo_arah || MASTER_SASMITHA_TEJO,
           tejo_arah: effective?.tejo_arah || effective?.tejo || MASTER_SASMITHA_TEJO,
+          merapi: effective?.merapi || effective?.sasmitha_merapi || MASTER_SASMITHA_MERAPI,
+          sasmitha_merapi: effective?.sasmitha_merapi || effective?.merapi || MASTER_SASMITHA_MERAPI,
           ref_sasi_jawa: effective?.ref_sasi_jawa || REF_SASI_JAWA
         };
         if (typeof globalThis !== 'undefined') {
@@ -1456,6 +1459,8 @@ export function getDomainFallback(domain) {
         lindu_sasi: d?.lindu_sasi || d?.lindu || MASTER_SASMITHA_LINDU,
         tejo: d?.tejo || d?.tejo_arah || MASTER_SASMITHA_TEJO,
         tejo_arah: d?.tejo_arah || d?.tejo || MASTER_SASMITHA_TEJO,
+        merapi: d?.merapi || d?.sasmitha_merapi || MASTER_SASMITHA_MERAPI,
+        sasmitha_merapi: d?.sasmitha_merapi || d?.merapi || MASTER_SASMITHA_MERAPI,
         ref_sasi_jawa: d?.ref_sasi_jawa || REF_SASI_JAWA
       };
     }

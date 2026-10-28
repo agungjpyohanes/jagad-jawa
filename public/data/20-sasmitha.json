@@ -2658,5 +2658,442 @@
       "sasi_jawa": "Besar",
       "padanan_hijriah": "Dzulhijjah"
     }
+  ],
+  "sasmitha_merapi": [
+    {
+      "id": 1,
+      "arah": "Lor (Utara)",
+      "arah_id": "Utara",
+      "arah_en": "Utara / Boyolali - Magelang",
+      "icon": "fa-arrow-up",
+      "simbol": "Larang Pangan",
+      "warna": "from-amber-950/70 to-red-950/40 border-amber-600/50",
+      "badge_col": "bg-amber-950 border-amber-600/60 text-amber-300",
+      "teges": {
+        "jv": "Nalika lahar utawi lebu kawah Merapi muntah tumuju arah Lor, para winasis Jawa paring sasmitha bilih bakal tumiba mangsa paceklik utawi larang pangan. Palawija asring kambah ama utawi gagal panen, saengga bebrayan agung kedah ngati-ati nyimpen lumbung pari lan ngirit sandhang pangan.",
+        "id": "Ketika lahar atau abu kawah Merapi muntah ke arah Utara, para tetua Jawa memberi sasmitha bahwa akan datang masa paceklik atau krisis pangan. Tanaman sering terserang hama atau gagal panen, sehingga masyarakat diimbau berhati-hati menyimpan lumbung beras dan berhemat pangan."
+      }
+    },
+    {
+      "id": 2,
+      "arah": "Wetan (Timur)",
+      "arah_id": "Timur",
+      "arah_en": "Timur / Klaten - Boyolali",
+      "icon": "fa-arrow-right",
+      "simbol": "Kemakmuran",
+      "warna": "from-emerald-950/70 to-teal-950/40 border-emerald-600/50",
+      "badge_col": "bg-emerald-950 border-emerald-600/60 text-emerald-300",
+      "teges": {
+        "jv": "Nalika lahar utawi lebu Merapi mili tumuju arah Wetan, sasmitha punika ngemu kabar kabungahan lan kemakmuran (gemah ripah loh jinawi). Awu vulkanik ingkang tumiba bakal nyuburaken siti pasawahan, asil tetanen tikel matikel, sarta para tani manggih rejeki ingkang luber.",
+        "id": "Ketika lahar atau abu Merapi mengalir ke arah Timur, sasmitha ini membawa kabar kegembiraan dan kemakmuran (gemah ripah loh jinawi). Abu vulkanik yang turun menyuburkan sawah ladang, hasil panen berlipat ganda, dan para petani berlimpah rezeki."
+      }
+    },
+    {
+      "id": 3,
+      "arah": "Kulon (Barat)",
+      "arah_id": "Barat",
+      "arah_en": "Barat / Magelang - Sleman Kulon",
+      "icon": "fa-arrow-left",
+      "simbol": "Kisruh Pemimpin",
+      "warna": "from-purple-950/70 to-slate-950/40 border-purple-600/50",
+      "badge_col": "bg-purple-950 border-purple-600/60 text-purple-300",
+      "teges": {
+        "jv": "Nalika ilining lahar utawi erupsi tumuju arah Kulon, sasmitha nglambangaken grahita lan pasulayan para panguwasa utawi pamong praja (kisruh pemimpin). Kahanan politik lan kawicaksanan pamarentahan dados gonjang-ganjing, saengga bebrayan dipun-aturi tansah njaga guyub rukun lan mboten gampil kaprabawan kabar fitnah.",
+        "id": "Ketika aliran lahar atau erupsi mengarah ke Barat, sasmitha melambangkan friksi dan perselisihan para penguasa atau pejabat (kisruh kepemimpinan). Situasi politik dan kebijakan menjadi bergejolak, sehingga warga diimbau menjaga kerukunan dan tidak mudah terhasut."
+      }
+    },
+    {
+      "id": 4,
+      "arah": "Kidul (Selatan)",
+      "arah_id": "Selatan",
+      "arah_en": "Selatan / Sleman - Yogyakarta",
+      "icon": "fa-arrow-down",
+      "simbol": "Huru-Hara",
+      "warna": "from-red-950/80 to-rose-950/50 border-red-600/60",
+      "badge_col": "bg-red-950 border-red-600/60 text-red-300",
+      "teges": {
+        "jv": "Nalika erupsi utawi lahar mili tumuju arah Kidul (ngener kutha Ngayogyakarta), punika sasmitha tandha bakal wonten prahara utawi huru-hara (kisruh sosial) ing madyaning bebrayan agung. Kahanan dados panas lan was-was, mrelokaken manah ingkang wening, dedonga memuji dhateng Gusti, lan laku prihatin murih sedaya balak kapuntir dados tentrem.",
+        "id": "Ketika erupsi atau lahar mengalir ke arah Selatan (menghadap kota Yogyakarta), ini tanda sasmitha akan terjadinya prahara atau huru-hara (gejolak sosial). Suasana menjadi tegang dan waspada, membutuhkan hati yang jernih, doa, dan laku prihatin agar bahaya tertolak."
+      }
+    }
+  ],
+  "merapi": [
+    {
+      "id": 1,
+      "arah": "Lor (Utara)",
+      "arah_id": "Utara",
+      "arah_en": "Utara / Boyolali - Magelang",
+      "icon": "fa-arrow-up",
+      "simbol": "Larang Pangan",
+      "warna": "from-amber-950/70 to-red-950/40 border-amber-600/50",
+      "badge_col": "bg-amber-950 border-amber-600/60 text-amber-300",
+      "teges": {
+        "jv": "Nalika lahar utawi lebu kawah Merapi muntah tumuju arah Lor, para winasis Jawa paring sasmitha bilih bakal tumiba mangsa paceklik utawi larang pangan. Palawija asring kambah ama utawi gagal panen, saengga bebrayan agung kedah ngati-ati nyimpen lumbung pari lan ngirit sandhang pangan.",
+        "id": "Ketika lahar atau abu kawah Merapi muntah ke arah Utara, para tetua Jawa memberi sasmitha bahwa akan datang masa paceklik atau krisis pangan. Tanaman sering terserang hama atau gagal panen, sehingga masyarakat diimbau berhati-hati menyimpan lumbung beras dan berhemat pangan."
+      }
+    },
+    {
+      "id": 2,
+      "arah": "Wetan (Timur)",
+      "arah_id": "Timur",
+      "arah_en": "Timur / Klaten - Boyolali",
+      "icon": "fa-arrow-right",
+      "simbol": "Kemakmuran",
+      "warna": "from-emerald-950/70 to-teal-950/40 border-emerald-600/50",
+      "badge_col": "bg-emerald-950 border-emerald-600/60 text-emerald-300",
+      "teges": {
+        "jv": "Nalika lahar utawi lebu Merapi mili tumuju arah Wetan, sasmitha punika ngemu kabar kabungahan lan kemakmuran (gemah ripah loh jinawi). Awu vulkanik ingkang tumiba bakal nyuburaken siti pasawahan, asil tetanen tikel matikel, sarta para tani manggih rejeki ingkang luber.",
+        "id": "Ketika lahar atau abu Merapi mengalir ke arah Timur, sasmitha ini membawa kabar kegembiraan dan kemakmuran (gemah ripah loh jinawi). Abu vulkanik yang turun menyuburkan sawah ladang, hasil panen berlipat ganda, dan para petani berlimpah rezeki."
+      }
+    },
+    {
+      "id": 3,
+      "arah": "Kulon (Barat)",
+      "arah_id": "Barat",
+      "arah_en": "Barat / Magelang - Sleman Kulon",
+      "icon": "fa-arrow-left",
+      "simbol": "Kisruh Pemimpin",
+      "warna": "from-purple-950/70 to-slate-950/40 border-purple-600/50",
+      "badge_col": "bg-purple-950 border-purple-600/60 text-purple-300",
+      "teges": {
+        "jv": "Nalika ilining lahar utawi erupsi tumuju arah Kulon, sasmitha nglambangaken grahita lan pasulayan para panguwasa utawi pamong praja (kisruh pemimpin). Kahanan politik lan kawicaksanan pamarentahan dados gonjang-ganjing, saengga bebrayan dipun-aturi tansah njaga guyub rukun lan mboten gampil kaprabawan kabar fitnah.",
+        "id": "Ketika aliran lahar atau erupsi mengarah ke Barat, sasmitha melambangkan friksi dan perselisihan para penguasa atau pejabat (kisruh kepemimpinan). Situasi politik dan kebijakan menjadi bergejolak, sehingga warga diimbau menjaga kerukunan dan tidak mudah terhasut."
+      }
+    },
+    {
+      "id": 4,
+      "arah": "Kidul (Selatan)",
+      "arah_id": "Selatan",
+      "arah_en": "Selatan / Sleman - Yogyakarta",
+      "icon": "fa-arrow-down",
+      "simbol": "Huru-Hara",
+      "warna": "from-red-950/80 to-rose-950/50 border-red-600/60",
+      "badge_col": "bg-red-950 border-red-600/60 text-red-300",
+      "teges": {
+        "jv": "Nalika erupsi utawi lahar mili tumuju arah Kidul (ngener kutha Ngayogyakarta), punika sasmitha tandha bakal wonten prahara utawi huru-hara (kisruh sosial) ing madyaning bebrayan agung. Kahanan dados panas lan was-was, mrelokaken manah ingkang wening, dedonga memuji dhateng Gusti, lan laku prihatin murih sedaya balak kapuntir dados tentrem.",
+        "id": "Ketika erupsi atau lahar mengalir ke arah Selatan (menghadap kota Yogyakarta), ini tanda sasmitha akan terjadinya prahara atau huru-hara (gejolak sosial). Suasana menjadi tegang dan waspada, membutuhkan hati yang jernih, doa, dan laku prihatin agar bahaya tertolak."
+      }
+    }
+  ],
+  "gerhana": [
+    {
+      "id": 1,
+      "sasi_jawa": "Sura",
+      "alias_sumber": "Suro",
+      "ngalamat": {
+        "id": "Akeh wong pitenah lan nandang kecelakaan/musibah",
+        "jv": "Akeh wong pitenah lan nandang kacilakan"
+      }
+    },
+    {
+      "id": 2,
+      "sasi_jawa": "Sapar",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Segara surut lan sungai akeh kang asat; kemarau / jarang hujan nanging akhire akeh angin lan udan",
+        "jv": "Segara surut lan kali akeh kang asat; larang udan nanging akhire akeh angin lan udan"
+      }
+    },
+    {
+      "id": 3,
+      "sasi_jawa": "Mulud",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Banyak hujan lan angin",
+        "jv": "Akeh udan lan angin"
+      }
+    },
+    {
+      "id": 4,
+      "sasi_jawa": "Bakda Mulud",
+      "alias_sumber": "Bakda Mulud",
+      "ngalamat": {
+        "id": "Akeh wong sugih ngalih panggonan lan wong cupet akeh kang pada kagelan",
+        "jv": "Akeh wong sugih ngalih panggonan lan wong cupet akeh kang pada kagelan"
+      }
+    },
+    {
+      "id": 5,
+      "sasi_jawa": "Jumadilawal",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Banyak hujan thathit lan petir/halilintar sesamberan",
+        "jv": "Akeh udan thathit lan bledeg sesamberan"
+      }
+    },
+    {
+      "id": 6,
+      "sasi_jawa": "Jumadilakir",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Lana sakehing tetanduran; gaga gampang pikolehe; gampang golek pangan lan kanikmatan; murah kang sarwa tinuku",
+        "jv": "Lana sakehing tetanduran; gaga gampang pikolehe; gampang golek pangan lan kanikmatan; murah kang sarwa tinuku"
+      }
+    },
+    {
+      "id": 7,
+      "sasi_jawa": "Rejeb",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Akeh wong kacingkrangan, bilahi, pertengkaran lan akeh bledek sesamberan",
+        "jv": "Akeh wong kacingkrangan, bilahi, padudon lan akeh bledek sesamberan"
+      }
+    },
+    {
+      "id": 8,
+      "sasi_jawa": "Ruwah",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Akeh wong nandur kabecikan lan jurung pamuji",
+        "jv": "Akeh wong nandur kabecikan lan jurung pamuji"
+      }
+    },
+    {
+      "id": 9,
+      "sasi_jawa": "Pasa (Siyam)",
+      "alias_sumber": "Pasa",
+      "ngalamat": {
+        "id": "Akeh wong pada bergembira-bungah, nanging banjur ana pagebluk",
+        "jv": "Akeh wong pada bungah-bungah, nanging banjur ana pagebluk"
+      }
+    },
+    {
+      "id": 10,
+      "sasi_jawa": "Sawal",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Akeh barat gede, lelara lan rajapati; panggede pada tukar padu",
+        "jv": "Akeh barat gede, lelara lan rajapati; panggede pada tukar padu"
+      }
+    },
+    {
+      "id": 11,
+      "sasi_jawa": "Sela (Dulkangidah)",
+      "alias_sumber": "Dulkaidah",
+      "ngalamat": {
+        "id": "Akeh lesus; kekayon pada sol; owah bumine",
+        "jv": "Akeh lesus; kekayon pada sol; owah bumine"
+      }
+    },
+    {
+      "id": 12,
+      "sasi_jawa": "Besar",
+      "alias_sumber": "",
+      "ngalamat": {
+        "id": "Akeh wong pada bergembira lan munggah kaji",
+        "jv": "Akeh wong pada bungah lan munggah kaji"
+      }
+    }
+  ],
+  "lindu": [
+    {
+      "id": 1,
+      "sasi_jawa": "Sura",
+      "ngalamat_awan": {
+        "id": "Akeh wong pada susah lan prihatin",
+        "jv": "Akeh wong pada susah lan prihatin"
+      },
+      "ngalamat_wengi": {
+        "id": "Banyak orang meninggal; para petani tidak ada untunge lan pangan langka/mahal",
+        "jv": "Akeh wong mati; para tani ora ana untunge lan larang pangan"
+      }
+    },
+    {
+      "id": 2,
+      "sasi_jawa": "Sapar",
+      "ngalamat_awan": {
+        "id": "Akeh wong tani pada keluwen lan kena lelara",
+        "jv": "Akeh wong tani pada keluwen lan kena lelara"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong mukmin pada nikmat",
+        "jv": "Akeh wong mukmin pada nikmat"
+      }
+    },
+    {
+      "id": 3,
+      "sasi_jawa": "Mulud",
+      "ngalamat_awan": {
+        "id": "Akeh wong agawe pihala utawa kasusahan",
+        "jv": "Akeh wong agawe pihala utawa kasusahan"
+      },
+      "ngalamat_wengi": {
+        "id": "Banyak hujan lan angin",
+        "jv": "Akeh udan lan angin"
+      }
+    },
+    {
+      "id": 4,
+      "sasi_jawa": "Bakda Mulud",
+      "ngalamat_awan": {
+        "id": "Banyak orang meninggal nanging rajakaya kanggo kaperluan tani lemu-lemu",
+        "jv": "Akeh wong mati nanging rajakaya kanggo kaperluan tani lemu-lemu"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong mukmin pada nikmat",
+        "jv": "Akeh wong mukmin pada nikmat"
+      }
+    },
+    {
+      "id": 5,
+      "sasi_jawa": "Jumadilawal",
+      "ngalamat_awan": {
+        "id": "Akeh mungsuh",
+        "jv": "Akeh mungsuh"
+      },
+      "ngalamat_wengi": {
+        "id": "Keh panas; kekayon tanpa woh bisa kembang nanging tanpa woh",
+        "jv": "Keh panas; kekayon tanpa woh bisa kembang nanging tanpa woh"
+      }
+    },
+    {
+      "id": 6,
+      "sasi_jawa": "Jumadilakir",
+      "ngalamat_awan": {
+        "id": "Reregan kebo lan sapi sarta pangan pada larang",
+        "jv": "Reregan kebo lan sapi sarta pangan pada larang"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong nom-noman pada mati",
+        "jv": "Akeh wong nom-noman pada mati"
+      }
+    },
+    {
+      "id": 7,
+      "sasi_jawa": "Rejeb",
+      "ngalamat_awan": {
+        "id": "Akeh wong bermusuhan",
+        "jv": "Akeh wong memungsuhan"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong pada mati",
+        "jv": "Akeh wong pada mati"
+      }
+    },
+    {
+      "id": 8,
+      "sasi_jawa": "Ruwah",
+      "ngalamat_awan": {
+        "id": "Akeh wong pada mati",
+        "jv": "Akeh wong pada mati"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh lan murah beras pari",
+        "jv": "Akeh lan murah beras pari"
+      }
+    },
+    {
+      "id": 9,
+      "sasi_jawa": "Pasa (Siyam)",
+      "ngalamat_awan": {
+        "id": "Akeh wong pada mati",
+        "jv": "Akeh wong pada mati"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong pradesan pada bermusuhan",
+        "jv": "Akeh wong pradesan pada memungsuhan"
+      }
+    },
+    {
+      "id": 10,
+      "sasi_jawa": "Sawal",
+      "ngalamat_awan": {
+        "id": "Akeh wong nangis jalaran akeh lelara",
+        "jv": "Akeh wong nangis jalaran akeh lelara"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong pradesan pada lelungan",
+        "jv": "Akeh wong pradesan pada lelungan"
+      }
+    },
+    {
+      "id": 11,
+      "sasi_jawa": "Sela (Dulkangidah)",
+      "ngalamat_awan": {
+        "id": "Akeh para pengulu pada bermusuhan",
+        "jv": "Akeh para pengulu pada memungsuhan"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh wong pada pertengkaran lan akeh wong nikmat",
+        "jv": "Akeh wong pada padudon lan akeh wong nikmat"
+      }
+    },
+    {
+      "id": 12,
+      "sasi_jawa": "Besar",
+      "ngalamat_awan": {
+        "id": "Akeh wong prihatin lan kebo sapi pada mati",
+        "jv": "Akeh wong prihatin lan kebo sapi pada mati"
+      },
+      "ngalamat_wengi": {
+        "id": "Akeh desa kang rusak lan murah udan sarta beras pari",
+        "jv": "Akeh desa kang rusak lan murah udan sarta beras pari"
+      }
+    }
+  ],
+  "tejo": [
+    {
+      "id": 1,
+      "arah_jawa": "Wetan",
+      "arah_id": "Timur",
+      "ngalamat": {
+        "id": "Banyak pemimpin/raja pada sesukan lan orang besar dan rakyat kecil pada bergembira",
+        "jv": "Ratu akeh pada sesukan lan wong gede-cilik pada bungah"
+      }
+    },
+    {
+      "id": 2,
+      "arah_jawa": "Kidul-Wetan",
+      "arah_id": "Tenggara",
+      "ngalamat": {
+        "id": "Orang besar dan rakyat kecil nampa ayahane ratu ing paperangan",
+        "jv": "Wong gede-cilik nampa ayahane ratu ing paperangan"
+      }
+    },
+    {
+      "id": 3,
+      "arah_jawa": "Kidul",
+      "arah_id": "Selatan",
+      "ngalamat": {
+        "id": "Larang beras lan pangan, sarta wong pada tindak pitenah",
+        "jv": "Larang beras lan pangan, sarta wong pada tindak pitenah"
+      }
+    },
+    {
+      "id": 4,
+      "arah_jawa": "Kidul-Kulon",
+      "arah_id": "Barat daya",
+      "ngalamat": {
+        "id": "Akeh kasusahan, kemarau / jarang hujan; kebo lan sapi pada mati",
+        "jv": "Akeh kasusahan, larang udan; kebo lan sapi pada mati"
+      }
+    },
+    {
+      "id": 5,
+      "arah_jawa": "Kulon",
+      "arah_id": "Barat",
+      "ngalamat": {
+        "id": "Akeh lelara adem-panas; larang beras lan pari",
+        "jv": "Akeh lelara adem-panas; larang beras lan pari"
+      }
+    },
+    {
+      "id": 6,
+      "arah_jawa": "Lor-Kulon",
+      "arah_id": "Barat laut",
+      "ngalamat": {
+        "id": "Akeh lelara lan rajapati, nanging murah sandang lan pangan",
+        "jv": "Akeh lelara lan rajapati, nanging murah sandang lan pangan"
+      }
+    },
+    {
+      "id": 7,
+      "arah_jawa": "Lor-Wetan",
+      "arah_id": "Timur laut",
+      "ngalamat": {
+        "id": "Ana ratu prihatin; akeh orang besar dan rakyat kecil pada karusakan",
+        "jv": "Ana ratu prihatin; akeh wong gede-cilik pada karusakan"
+      }
+    }
   ]
 }

@@ -11,12 +11,13 @@ import {
   getGerhanaBySasi,
   getLinduBySasi,
   getTejoList,
+  getMerapiList,
+  loadSasmithaDatasetLazy,
   REF_SASI_JAWA
 } from './sasmitha-engine.js';
 import { SASMITHA_KEDUT } from '../../data/sasmitha-db.js';
 import { isPemula } from '../../ui/mode.js';
 import { showToast } from '../../ui/toast.js';
-import { loadDomainData } from '../../services/dbLoader.js';
 import { getBilingualText } from '../../ui/i18n.js';
 
 let currentSubtab = 'impen'; // 'impen' | 'kedut' | 'gerhana' | 'lindu' | 'tejo'
@@ -86,20 +87,16 @@ const KEDUT_CATEGORIES = [
 export function initSasmithaUI() {
   setupEventListeners();
   renderSasmithaView();
-  loadDomainData('sasmitha').then(() => {
+  loadSasmithaDatasetLazy().then(() => {
     renderSasmithaView();
   }).catch((e) => {
-    console.warn('[sasmitha-ui] loadDomainData fallback:', e);
+    console.warn('[sasmitha-ui] loadSasmithaDatasetLazy fallback:', e);
   });
 }
 
 function setupEventListeners() {
-  // Mode changed listener to auto-adjust view
   if (typeof window !== 'undefined') {
     window.addEventListener('mode-changed', () => {
-      if (isPemula() && (currentSubtab === 'gerhana' || currentSubtab === 'lindu' || currentSubtab === 'tejo')) {
-        currentSubtab = 'impen';
-      }
       renderSasmithaView();
     });
     window.addEventListener('language-changed', () => {
@@ -109,13 +106,9 @@ function setupEventListeners() {
 }
 
 /**
- * Ganti sub-tab aktif
+ * Ganti sub-tab aktif (Impen, Kedut, Merapi, Gerhana, Lindu, Tejo)
  */
 export function switchSasmithaSubtab(subtab) {
-  if (isPemula() && (subtab === 'gerhana' || subtab === 'lindu' || subtab === 'tejo')) {
-    showToast('Sub-menu punika namung cumawis ing Mode Ahli (Lengkap).');
-    return;
-  }
   currentSubtab = subtab;
   renderSasmithaView();
 }
@@ -175,50 +168,34 @@ export function renderSasmithaView() {
   const container = document.getElementById('sasmithaResultContainer');
   if (!container) return;
 
-  const isModePemulaActive = isPemula();
-  if (isModePemulaActive && (currentSubtab === 'gerhana' || currentSubtab === 'lindu' || currentSubtab === 'tejo')) {
-    currentSubtab = 'impen';
-  }
-
-  // Subtab buttons HTML
+  // Subtab buttons HTML (6 Dimensi Sasmitha Lengkap)
   const navTabs = [
-    { id: 'impen', icon: 'fa-cloud-moon', label: 'Impen (Mimpi)', pemula: true },
-    { id: 'kedut', icon: 'fa-hand-dots', label: 'Kedut (Kedutan)', pemula: true },
-    { id: 'merapi', icon: 'fa-mountain-sun', label: 'Sasmitha Merapi', pemula: true },
-    { id: 'gerhana', icon: 'fa-circle-half-stroke', label: 'Gerhana', pemula: false },
-    { id: 'lindu', icon: 'fa-volcano', label: 'Lindu (Gempa)', pemula: false },
-    { id: 'tejo', icon: 'fa-sun', label: 'Tejo (Cahaya Langit)', pemula: false }
+    { id: 'impen', icon: 'fa-cloud-moon', label: 'Impen (Mimpi)' },
+    { id: 'kedut', icon: 'fa-hand-dots', label: 'Kedut (Kedutan)' },
+    { id: 'merapi', icon: 'fa-mountain-sun', label: 'Sasmitha Merapi' },
+    { id: 'gerhana', icon: 'fa-circle-half-stroke', label: 'Gerhana' },
+    { id: 'lindu', icon: 'fa-volcano', label: 'Lindu (Gempa)' },
+    { id: 'tejo', icon: 'fa-sun', label: 'Tejo (Cahaya Langit)' }
   ];
 
   const subtabsHtml = navTabs.map(t => {
     const isActive = currentSubtab === t.id;
     const activeCls = isActive
-      ? 'bg-prada text-keraton font-bold shadow'
+      ? 'bg-prada text-keraton font-bold shadow ring-1 ring-prada-light'
       : 'bg-keraton/70 text-sogan-200 hover:bg-sogan-900/60 border border-sogan-800';
-    const ahliCls = !t.pemula ? 'ahli-only' : '';
     return `
-      <button onclick="switchSasmithaSubtab('${t.id}')" class="${ahliCls} px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition ${activeCls}">
+      <button onclick="switchSasmithaSubtab('${t.id}')" class="px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer ${activeCls}">
         <i class="fa-solid ${t.icon}"></i>
         <span>${t.label}</span>
       </button>
     `;
   }).join('');
 
-  const pemulaNoticeHtml = `
-    <div class="pemula-only p-3 rounded-xl bg-sogan-950/40 border border-sogan-800 text-[11.5px] text-sogan-300 mb-4 flex items-center gap-2.5">
-      <i class="fa-solid fa-circle-info text-prada shrink-0"></i>
-      <span>Mode Ringkas (Pemula): Nampilaken pitedah Impen, Kedut, lan Sasmitha Merapi. Mangga gantos dhateng <strong>Mode Ahli (Lengkap)</strong> kanggé mbikak Sasmitha Gerhana, Lindu, lan Tejo.</span>
-    </div>
-  `;
-
   container.innerHTML = `
-    <!-- SUBTABS NAVIGATION -->
+    <!-- SUBTABS NAVIGATION (6 Sub-Menu Sasmitha) -->
     <div class="flex flex-wrap items-center gap-2 mb-4">
       ${subtabsHtml}
     </div>
-
-    <!-- NOTICE MODE PEMULA -->
-    ${pemulaNoticeHtml}
 
     <!-- DYNAMIC SECTION CONTAINER -->
     <div id="sasmithaDynamicContent"></div>
@@ -930,44 +907,7 @@ function renderMerapiContent() {
   const dynamic = document.getElementById('sasmithaDynamicContent');
   if (!dynamic) return;
 
-  const arahMerapiData = [
-    {
-      arah: 'Lor (Utara)',
-      arah_en: 'Utara / Boyolali - Magelang',
-      icon: 'fa-arrow-up',
-      simbol: 'Larang Pangan',
-      warna: 'from-amber-950/70 to-red-950/40 border-amber-600/50',
-      badge_col: 'bg-amber-950 border-amber-600/60 text-amber-300',
-      teges: 'Nalika lahar utawi lebu kawah Merapi muntah tumuju arah Lor, para winasis Jawa paring sasmitha bilih bakal tumiba mangsa paceklik utawi larang pangan. Palawija asring kambah ama utawi gagal panen, saengga bebrayan agung kedah ngati-ati nyimpen lumbung pari lan ngirit sandhang pangan.'
-    },
-    {
-      arah: 'Wetan (Timur)',
-      arah_en: 'Timur / Klaten - Boyolali',
-      icon: 'fa-arrow-right',
-      simbol: 'Kemakmuran',
-      warna: 'from-emerald-950/70 to-teal-950/40 border-emerald-600/50',
-      badge_col: 'bg-emerald-950 border-emerald-600/60 text-emerald-300',
-      teges: 'Nalika lahar utawi lebu Merapi mili tumuju arah Wetan, sasmitha punika ngemu kabar kabungahan lan kemakmuran (gemah ripah loh jinawi). Awu vulkanik ingkang tumiba bakal nyuburaken siti pasawahan, asil tetanen tikel matikel, sarta para tani manggih rejeki ingkang luber.'
-    },
-    {
-      arah: 'Kulon (Barat)',
-      arah_en: 'Barat / Magelang - Sleman Kulon',
-      icon: 'fa-arrow-left',
-      simbol: 'Kisruh Pemimpin',
-      warna: 'from-purple-950/70 to-slate-950/40 border-purple-600/50',
-      badge_col: 'bg-purple-950 border-purple-600/60 text-purple-300',
-      teges: 'Nalika ilining lahar utawi erupsi tumuju arah Kulon, sasmitha nglambangaken grahita lan pasulayan para panguwasa utawi pamong praja (kisruh pemimpin). Kahanan politik lan kawicaksanan pamarentahan dados gonjang-ganjing, saengga bebrayan dipun-aturi tansah njaga guyub rukun lan mboten gampil kaprabawan kabar fitnah.'
-    },
-    {
-      arah: 'Kidul (Selatan)',
-      arah_en: 'Selatan / Sleman - Yogyakarta',
-      icon: 'fa-arrow-down',
-      simbol: 'Huru-Hara',
-      warna: 'from-red-950/80 to-rose-950/50 border-red-600/60',
-      badge_col: 'bg-red-950 border-red-600/60 text-red-300',
-      teges: 'Nalika erupsi utawi lahar mili tumuju arah Kidul (ngener kutha Ngayogyakarta), punika sasmitha tandha bakal wonten prahara utawi huru-hara (kisruh sosial) ing madyaning bebrayan agung. Kahanan dados panas lan was-was, mrelokaken manah ingkang wening, dedonga memuji dhateng Gusti, lan laku prihatin murih sedaya balak kapuntir dados tentrem.'
-    }
-  ];
+  const arahMerapiData = getMerapiList();
 
   dynamic.innerHTML = `
     <div class="space-y-6 mb-6">
@@ -1008,7 +948,7 @@ function renderMerapiContent() {
                 <h4 class="font-marcellus text-xl font-bold text-amber-100">${item.simbol}</h4>
               </div>
               <p class="text-xs text-sogan-200 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/5">
-                ${item.teges}
+                ${getBilingualText(item.teges)}
               </p>
             </div>
             <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-sogan-400">
@@ -1045,6 +985,7 @@ function escapeHtml(str) {
 }
 
 if (typeof window !== 'undefined') {
+  window.initSasmithaUI = initSasmithaUI;
   window.switchSasmithaSubtab = switchSasmithaSubtab;
   window.onImpenSearchInput = onImpenSearchInput;
   window.setKedutViewMode = setKedutViewMode;
