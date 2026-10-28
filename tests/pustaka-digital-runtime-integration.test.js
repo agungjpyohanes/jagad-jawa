@@ -92,6 +92,29 @@ test.describe('Pustaka Digital Runtime Data Integration & Getters Parity', () =>
     assert.strictEqual(searchRes[0].id, 'kawruh-karawitan-gamelan');
   });
 
+  test('openPustakaNaskahReader renders all classical manuscripts without undefined', async () => {
+    const domElements = {
+      modalPustakaReader: { classList: { remove(){}, add(){} }, querySelector: () => ({ innerHTML: '' }) },
+      pustakaReaderTitle: { textContent: '' },
+      pustakaReaderSubtitle: { textContent: '' },
+      pustakaReaderBody: { innerHTML: '' }
+    };
+
+    globalThis.document = {
+      getElementById: (id) => domElements[id] || null,
+      body: { style: {} }
+    };
+
+    const { openPustakaNaskahReader } = await import('../js/modules/pustaka/pustaka-ui.js');
+    ['serat-wedhatama', 'serat-kalatidha', 'serat-wulangreh', 'babad-tanah-jawi', 'serat-centhini'].forEach(id => {
+      openPustakaNaskahReader(id);
+      assert.ok(domElements.pustakaReaderTitle.textContent.length > 0);
+      assert.ok(!domElements.pustakaReaderSubtitle.textContent.includes('undefined'), `Subtitle ${id} tidak boleh undefined`);
+      assert.ok(!domElements.pustakaReaderBody.innerHTML.includes('undefined'), `Body ${id} tidak boleh undefined`);
+      assert.ok(domElements.pustakaReaderBody.innerHTML.length > 1000, `Body ${id} harus berisi bait naskah`);
+    });
+  });
+
   test('Error state and retry callback work properly when dataset is empty', async () => {
     const { renderDataErrorState } = await import('../js/ui/data-error-state.js');
 

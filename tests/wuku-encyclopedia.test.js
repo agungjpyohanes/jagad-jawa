@@ -75,11 +75,24 @@ test('Ensiklopedia 30 Wuku - Integritas Database', async (t) => {
     assert.equal(summary.imageDewane, '/assets/illustrations/dewane/sinta-dewane.jpg');
   });
 
-  await t.test('Filter 4 Pilar Pawukon (Nambani, Pangupajiwa, Tetanen, Ala & Becik) tidak boleh kosong', async () => {
+  await t.test('Filter 4 Pilar Pawukon (Nambani, Pangupajiwa, Tetanen, Ala & Becik) memfilter item secara akurat tanpa kosong', async () => {
     const { searchWukuWithCategory } = await import('../js/modules/wuku/wuku-engine.js');
-    ['all', 'nambani', 'pangupajiwa', 'tetanen', 'ala_becik'].forEach(cat => {
-      const hasil = searchWukuWithCategory('', cat);
-      assert.equal(hasil.length, 30, `Kategori ${cat} harus memuat utuh 30 wuku tanpa kosong`);
-    });
+    const all = searchWukuWithCategory('', 'all');
+    assert.equal(all.length, 30, 'Kategori all harus memuat 30 wuku');
+
+    const alaBecik = searchWukuWithCategory('', 'ala_becik');
+    assert.equal(alaBecik.length, 30, 'Kategori ala_becik harus memuat 30 wuku');
+
+    const nambani = searchWukuWithCategory('', 'nambani');
+    assert.ok(nambani.length > 0 && nambani.length <= 30, 'Kategori nambani tidak boleh kosong');
+    assert.equal(nambani.length, 18, 'Kategori nambani harus memfilter tepat 18 wuku yang memiliki petenget usada');
+
+    const pangupajiwa = searchWukuWithCategory('', 'pangupajiwa');
+    assert.ok(pangupajiwa.length > 0 && pangupajiwa.length <= 30, 'Kategori pangupajiwa tidak boleh kosong');
+    assert.equal(pangupajiwa.length, 14, 'Kategori pangupajiwa harus memfilter tepat 14 wuku rejeki');
+
+    const tetanen = searchWukuWithCategory('', 'tetanen');
+    assert.ok(tetanen.length > 0 && tetanen.length <= 30, 'Kategori tetanen tidak boleh kosong');
+    assert.equal(tetanen.length, 17, 'Kategori tetanen harus memfilter tepat 17 wuku pertanian');
   });
 });

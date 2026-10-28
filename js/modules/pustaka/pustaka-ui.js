@@ -1142,7 +1142,15 @@ export function renderPustakaNaskahView(container) {
 
       <!-- Grid Cards Naskah Kuno -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        ${list.map(n => `
+        ${list.map(n => {
+          const author = n.pengarang || n.penganggit || 'Pujangga Jawi';
+          const year = n.tahun || n.taun || 'Klasik';
+          const category = n.kategori || n.subjudul || 'Naskah Piwulang & Falsafah';
+          const summary = n.deskripsi || n.isiRingkas || n.ringkesan || '';
+          const babList = n.babList || n.pupuh || n.bab || [];
+          const babCount = babList.length;
+
+          return `
           <div class="flex flex-col justify-between rounded-2xl bg-gradient-to-b from-[#141a29] to-[#0A0D14] border border-sogan-800 hover:border-prada/60 transition-all duration-300 p-5 shadow-lg group">
             <div class="space-y-4">
               <!-- Top Row: Judul & Aksara -->
@@ -1151,28 +1159,32 @@ export function renderPustakaNaskahView(container) {
                   <h3 class="font-marcellus text-lg font-bold text-amber-100 group-hover:text-prada-light transition">
                     ${n.judul}
                   </h3>
-                  <div class="text-xs text-sogan-300 mt-0.5">
-                    ${n.subjudul || ''}
+                  ${n.aksaraJawa ? `
+                    <div class="font-hanacaraka text-sm text-prada/80 tracking-wide mt-0.5">
+                      ${n.aksaraJawa}
+                    </div>` : ''}
+                  <div class="text-xs text-sogan-300 mt-1">
+                    ${category}
                   </div>
                 </div>
                 <span class="px-2.5 py-1 rounded-lg bg-prada/15 border border-prada/40 text-prada text-[11px] font-mono shrink-0">
-                  ${n.taun}
+                  ${year}
                 </span>
               </div>
 
               <!-- Penganggit & Format -->
               <div class="flex flex-wrap items-center gap-2 text-xs text-sogan-300">
                 <span class="px-2.5 py-0.5 rounded-full bg-sogan-950 border border-sogan-800 text-[11px] text-amber-200">
-                  <i class="fa-solid fa-feather-pointed text-prada mr-1"></i> ${n.penganggit}
+                  <i class="fa-solid fa-feather-pointed text-prada mr-1"></i> ${author}
                 </span>
                 <span class="px-2 py-0.5 rounded-full bg-sogan-950 border border-sogan-800 text-[11px] text-sogan-300 font-mono">
-                  ${n.format === 'tembang-macapat' ? `${n.pupuh?.length || 0} Pupuh (${n.gunggung_bait || 0} Bait)` : `${n.bab?.length || 0} Bab Teks Klasik`}
+                  ${babCount} Bagean / Pupuh
                 </span>
               </div>
 
               <!-- Ringkesan Filosofis -->
               <p class="text-xs text-sogan-200 leading-relaxed line-clamp-3">
-                ${n.ringkesan}
+                ${summary}
               </p>
 
               <!-- Topik Utama Badges -->
@@ -1208,7 +1220,8 @@ export function renderPustakaNaskahView(container) {
               </div>
             </div>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   `;
@@ -1237,25 +1250,24 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
   const bodyEl = document.getElementById('pustakaReaderBody');
   if (!bodyEl) return;
 
+  const author = naskah.pengarang || naskah.penganggit || 'Pujangga Jawi';
+  const year = naskah.tahun || naskah.taun || '-';
+  const category = naskah.kategori || naskah.subjudul || 'Naskah Adiluhung';
+  const summary = naskah.deskripsi || naskah.isiRingkas || naskah.ringkesan || '-';
+
   if (titleEl) titleEl.textContent = naskah.judul;
-  if (subtitleEl) subtitleEl.textContent = `${naskah.subjudul} · Anggitane ${naskah.penganggit} (${naskah.taun})`;
+  if (subtitleEl) subtitleEl.textContent = `${category} · Anggitane ${author} (${year})`;
 
-  // Filter pupuh atau bab berdasarkan pilihan lembar
-  const isMacapat = naskah.format === 'tembang-macapat';
-  const allPupuh = naskah.pupuh || [];
-  const allBab = naskah.bab || [];
-  const totalCount = isMacapat ? allPupuh.length : allBab.length;
+  // Ambil daftar bab/pupuh (dukung babList, pupuh, utawi bab)
+  const rawList = naskah.babList || naskah.pupuh || naskah.bab || [];
+  const totalCount = rawList.length;
 
-  const displayPupuh = (activeNaskahPupuhIndex === 'all')
-    ? allPupuh
-    : allPupuh.filter((_, idx) => idx === Number(activeNaskahPupuhIndex));
+  const displayList = (activeNaskahPupuhIndex === 'all')
+    ? rawList
+    : rawList.filter((_, idx) => idx === Number(activeNaskahPupuhIndex));
 
-  const displayBab = (activeNaskahPupuhIndex === 'all')
-    ? allBab
-    : allBab.filter((_, idx) => idx === Number(activeNaskahPupuhIndex));
-
-  // Switcher lembaran HTML
-  const lembarSelectorHtml = `
+  // Lembar Selector Tabs HTML
+  const lembarSelectorHtml = (totalCount > 1) ? `
     <div class="space-y-1.5 p-3 rounded-2xl bg-sogan-950/70 border border-sogan-800/80">
       <span class="text-[10px] font-mono uppercase tracking-wider text-amber-300/80 font-bold flex items-center gap-1.5">
         <i class="fa-solid fa-book-open-reader text-prada"></i> Lembaran / Pupuh Naskah (${totalCount} Bagean):
@@ -1266,22 +1278,140 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
           class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === 'all' ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
           <i class="fa-solid fa-layer-group mr-1"></i> Sedaya Lembar
         </button>
-        ${isMacapat ? allPupuh.map((p, idx) => `
-          <button
-            onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh(${idx})"
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === idx ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
-            Lembar ${idx + 1}: ${p.nama}
-          </button>
-        `).join('') : allBab.map((b, idx) => `
-          <button
-            onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh(${idx})"
-            class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${activeNaskahPupuhIndex === idx ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
-            Bab ${idx + 1}: ${b.irah_irahan}
-          </button>
-        `).join('')}
+        ${rawList.map((item, idx) => {
+          const itemTitle = item.namaBab || item.nama || item.irah_irahan || `Bab ${idx + 1}`;
+          const isSelected = activeNaskahPupuhIndex === idx;
+          return `
+            <button
+              onclick="window.setNaskahReaderPupuh && window.setNaskahReaderPupuh(${idx})"
+              class="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition cursor-pointer ${isSelected ? 'bg-prada text-keraton font-bold shadow' : 'bg-keraton border border-sogan-800 text-sogan-300 hover:border-prada/60 hover:text-prada'}">
+              ${itemTitle}
+            </button>
+          `;
+        }).join('')}
       </div>
     </div>
-  `;
+  ` : '';
+
+  // Render each bab/pupuh
+  const renderedContentHtml = displayList.map((item, itemIdx) => {
+    const actualIdx = (activeNaskahPupuhIndex === 'all') ? itemIdx : Number(activeNaskahPupuhIndex);
+    const itemTitle = item.namaBab || item.nama || item.irah_irahan || `Bab ${actualIdx + 1}`;
+
+    let stanzasHtml = '';
+
+    if (item.teksJawa) {
+      // Format naskah standar (babList: teksJawa & terjemahan)
+      const stanzasJawa = item.teksJawa.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+      const stanzasTerjemahan = (item.terjemahan || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+
+      stanzasHtml = `
+        <div class="space-y-4">
+          ${stanzasJawa.map((pada, padaIdx) => {
+            const lines = pada.split('\n').map(l => l.trim()).filter(Boolean);
+            const translation = stanzasTerjemahan[padaIdx] || '';
+            return `
+              <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-3 hover:border-prada/50 transition">
+                <div class="flex items-center justify-between text-[11px] font-mono text-amber-300/80">
+                  <span class="font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-feather-pointed text-prada"></i> Pada / Bait ${padaIdx + 1}
+                  </span>
+                  <span class="text-[10px] text-sogan-400 font-mono">${itemTitle}</span>
+                </div>
+
+                <!-- Teks Tembang / Naskah Basa Jawa -->
+                <div class="pl-3.5 border-l-2 border-prada/70 space-y-1.5 py-0.5">
+                  ${lines.map(line => `
+                    <p class="font-marcellus text-sm sm:text-base text-amber-100 leading-relaxed">${line}</p>
+                  `).join('')}
+                </div>
+
+                <!-- Terjemahan / Surasa Makna Basa Indonesia -->
+                ${translation ? `
+                  <div class="pt-2 text-xs text-sogan-200 leading-relaxed border-t border-sogan-800/60">
+                    <strong class="text-teal-300 block mb-1 text-[11px] font-semibold">
+                      <i class="fa-solid fa-language text-teal-400 mr-1"></i> Terjemahan &amp; Surasa Makna:
+                    </strong>
+                    <p class="italic text-sogan-100">${translation}</p>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } else if (Array.isArray(item.bait_pilihan)) {
+      // Format tembang macapat dengan bait_pilihan
+      stanzasHtml = `
+        <div class="space-y-4">
+          ${item.bait_pilihan.map((b, bIdx) => `
+            <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-3 hover:border-prada/50 transition">
+              <div class="flex items-center justify-between text-[11px] font-mono text-amber-300/80">
+                <span class="font-bold flex items-center gap-1.5">
+                  <i class="fa-solid fa-feather-pointed text-prada"></i> Bait ${b.pada || bIdx + 1}
+                </span>
+                <span class="text-[10px] text-sogan-400 font-mono">${itemTitle}</span>
+              </div>
+
+              <!-- Teks Tembang -->
+              <div class="pl-3.5 border-l-2 border-prada/70 space-y-1 py-0.5">
+                ${(Array.isArray(b.teks) ? b.teks : [b.teks]).map(line => `
+                  <p class="font-marcellus text-sm sm:text-base text-amber-100 leading-relaxed">${line}</p>
+                `).join('')}
+              </div>
+
+              <!-- Terjemahan / Makna -->
+              ${b.arti ? `
+                <div class="pt-2 text-xs text-sogan-200 leading-relaxed border-t border-sogan-800/60">
+                  <strong class="text-teal-300 block mb-1 text-[11px] font-semibold">
+                    <i class="fa-solid fa-language text-teal-400 mr-1"></i> Terjemahan &amp; Surasa Makna:
+                  </strong>
+                  <p class="italic text-sogan-100">${b.arti}</p>
+                </div>
+              ` : ''}
+
+              ${b.makna_filosofis ? `
+                <div class="p-2.5 rounded-lg bg-amber-950/40 border border-amber-700/40 text-[11px] text-amber-200">
+                  <strong>Piwulang:</strong> ${b.makna_filosofis}
+                </div>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else if (item.isi) {
+      // Format prosa / bab isi
+      stanzasHtml = `
+        <div class="space-y-3">
+          <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-3">
+            <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed whitespace-pre-line">${item.isi}</p>
+            ${item.makna ? `
+              <div class="p-3 rounded-xl bg-teal-950/40 border border-teal-700/40 text-xs text-teal-200">
+                <strong>Nilai Sejarah &amp; Piwulang:</strong> ${item.makna}
+              </div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="rounded-2xl bg-sogan-950/70 border border-sogan-800 p-5 space-y-4 shadow-md">
+        <div class="flex items-center justify-between border-b border-sogan-800/80 pb-3 flex-wrap gap-2">
+          <div>
+            <span class="text-[10px] font-mono uppercase tracking-widest text-prada block font-semibold">
+              Bagean ${actualIdx + 1} saking ${totalCount}
+            </span>
+            <h4 class="font-marcellus text-base sm:text-lg font-bold text-amber-200">
+              ${itemTitle}
+            </h4>
+          </div>
+          <span class="text-xs font-mono text-sogan-300 bg-keraton/90 px-3 py-1 rounded-full border border-sogan-700/60">
+            ${category}
+          </span>
+        </div>
+        ${stanzasHtml}
+      </div>
+    `;
+  }).join('');
 
   bodyEl.innerHTML = `
     <div class="space-y-5">
@@ -1289,25 +1419,34 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
       <div class="p-4 rounded-2xl bg-sogan-950/80 border border-sogan-800 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="px-3 py-1 rounded-lg bg-amber-950/70 border border-amber-600/50 text-amber-300 font-semibold">
-            <i class="fa-solid fa-feather-pointed mr-1"></i> ${naskah.penganggit}
+            <i class="fa-solid fa-feather-pointed mr-1"></i> ${author}
           </span>
           <span class="px-2.5 py-1 rounded-lg bg-keraton border border-sogan-800 text-sogan-300 font-mono">
-            Taun: ${naskah.taun}
+            Taun: ${year}
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-keraton border border-sogan-800 text-sogan-300">
+            ${category}
           </span>
         </div>
         <div class="flex items-center gap-2">
           <button
             onclick="window.unduhNaskahKuno && window.unduhNaskahKuno('${naskah.id}')"
-            class="px-3 py-1 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer">
+            class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer hover:brightness-110">
             <i class="fa-solid fa-download"></i> Unduh Naskah (.txt)
           </button>
         </div>
       </div>
 
-      <!-- Ringkasan & Piwulang Luhur -->
+      <!-- Aksara Jawa & Ringkasan Piwulang Luhur -->
       <div class="p-4 rounded-xl bg-keraton border border-sogan-800/80 space-y-2 text-xs leading-relaxed text-sogan-200">
-        <strong class="text-prada block font-marcellus text-sm"><i class="fa-solid fa-landmark mr-1.5"></i> Falsafah &amp; Piwulang Luhur:</strong>
-        <p>${naskah.ringkesan}</p>
+        ${naskah.aksaraJawa ? `
+          <div class="font-hanacaraka text-base sm:text-lg text-prada/90 tracking-wide pb-1 border-b border-sogan-800/60">
+            ${naskah.aksaraJawa}
+          </div>` : ''}
+        <strong class="text-prada block font-marcellus text-sm pt-1">
+          <i class="fa-solid fa-landmark mr-1.5"></i> Falsafah &amp; Piwulang Luhur:
+        </strong>
+        <p class="leading-relaxed">${summary}</p>
         <div class="pt-2 flex flex-wrap gap-1.5">
           ${(naskah.topik_utama || []).map(t => `
             <span class="px-2 py-0.5 rounded bg-sogan-950 border border-sogan-800 text-[10px] text-amber-300">#${t}</span>
@@ -1320,65 +1459,7 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
 
       <!-- Isi Pupuh / Bab -->
       <div class="space-y-5">
-        ${isMacapat ? displayPupuh.map((pup, pIdx) => {
-          const actualIdx = (activeNaskahPupuhIndex === 'all') ? pIdx : Number(activeNaskahPupuhIndex);
-          return `
-          <div class="rounded-2xl bg-sogan-950/60 border border-sogan-800 p-5 space-y-4">
-            <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2.5">
-              <div>
-                <span class="text-[10px] font-mono uppercase tracking-widest text-prada block font-semibold">Pupuh ${actualIdx + 1} saking ${totalCount}</span>
-                <h4 class="font-marcellus text-base font-bold text-amber-200">Pupuh ${pup.nama}</h4>
-              </div>
-              <span class="text-xs font-mono text-sogan-400 bg-keraton px-2.5 py-1 rounded-md border border-sogan-800">
-                ${pup.paugeran || ''}
-              </span>
-            </div>
-
-            <div class="space-y-3">
-              ${(pup.bait_pilihan || []).map(b => `
-                <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-3 hover:border-prada/50 transition">
-                  <div class="flex items-center justify-between text-[11px] font-mono text-amber-300/80">
-                    <span>Bait ${b.pada}</span>
-                    <span class="uppercase">${pup.nama}</span>
-                  </div>
-
-                  <!-- Teks Tembang -->
-                  <div class="pl-3 border-l-2 border-prada/60 space-y-1">
-                    ${(b.teks || []).map(line => `
-                      <p class="font-marcellus text-sm sm:text-base text-amber-100 leading-relaxed">${line}</p>
-                    `).join('')}
-                  </div>
-
-                  <!-- Terjemahan / Makna -->
-                  <div class="pt-2 text-xs text-sogan-300 leading-relaxed border-t border-sogan-800/60">
-                    <strong class="text-teal-300 block mb-0.5">Surasa Makna:</strong>
-                    ${b.arti}
-                  </div>
-
-                  ${b.makna_filosofis ? `
-                    <div class="p-2.5 rounded-lg bg-amber-950/40 border border-amber-700/40 text-[11px] text-amber-200">
-                      <strong>Piwulang:</strong> ${b.makna_filosofis}
-                    </div>` : ''}
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-        }).join('') : displayBab.map((b, bIdx) => {
-          const actualIdx = (activeNaskahPupuhIndex === 'all') ? bIdx : Number(activeNaskahPupuhIndex);
-          return `
-          <div class="rounded-2xl bg-sogan-950/60 border border-sogan-800 p-5 space-y-3">
-            <div class="flex items-center justify-between border-b border-sogan-800/80 pb-2">
-              <h4 class="font-marcellus text-base font-bold text-amber-200">Bab ${actualIdx + 1}: ${b.irah_irahan}</h4>
-            </div>
-            <p class="text-xs text-sogan-200 leading-relaxed">${b.isi}</p>
-            ${b.makna ? `
-              <div class="p-3 rounded-xl bg-teal-950/40 border border-teal-700/40 text-xs text-teal-200">
-                <strong>Nilai Sejarah:</strong> ${b.makna}
-              </div>` : ''}
-          </div>
-        `;
-        }).join('')}
+        ${renderedContentHtml || '<p class="text-sogan-400 text-center py-6">Mboten wonten teks ingkang saged kababar.</p>'}
       </div>
     </div>
   `;

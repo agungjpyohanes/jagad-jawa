@@ -79,28 +79,61 @@ export function closeEnsiklopediaWukuModal() {
  * @param {Array<Object>} list 
  */
 function getWukuPetengetSubtitle(w, isJv) {
-  const p = getWukuPetenget(w.no_wuku);
+  const p = getWukuPetenget(w.no_wuku || w.no || w.id);
+  const lang = isJv ? 'jv' : 'id';
+  const getText = (val) => {
+    if (!val) return '';
+    return getBilingualText(val, lang);
+  };
+
   if (currentWukuCategory === 'nambani') {
-    const b = p?.nambani?.becik && p.nambani.becik !== '-' ? p.nambani.becik : null;
-    const a = p?.nambani?.ala && p.nambani.ala !== '-' ? `Sirikan: ${p.nambani.ala}` : null;
-    return b || a || (w.tamba_yen_lara || (isJv ? 'Usada & Jamu' : 'Pengobatan'));
+    const b = getText(p?.nambani?.becik);
+    const a = getText(p?.nambani?.ala);
+    if (b && b !== '-') return b;
+    if (a && a !== '-') return isJv ? `Sirikan: ${a}` : `Pantangan: ${a}`;
+    const tamba = getText(w.tamba_yen_lara || w.tamba);
+    if (tamba && tamba !== '-') return isJv ? `Tamba: ${tamba}` : `Obat: ${tamba}`;
+    return isJv ? 'Usada & Jamu' : 'Pengobatan Tradisional';
   }
+
   if (currentWukuCategory === 'pangupajiwa') {
-    const b = p?.pangupajiwa?.becik && p.pangupajiwa.becik !== '-' ? p.pangupajiwa.becik : null;
-    const a = p?.pangupajiwa?.ala && p.pangupajiwa.ala !== '-' ? `Sirikan: ${p.pangupajiwa.ala}` : null;
-    return b || a || (w.pangupaya_jiwa || (isJv ? 'Pangupajiwa' : 'Mata Pencaharian'));
+    const b = getText(p?.pangupajiwa?.becik);
+    const a = getText(p?.pangupajiwa?.ala);
+    if (b && b !== '-') return b;
+    if (a && a !== '-') return isJv ? `Sirikan: ${a}` : `Pantangan: ${a}`;
+    const pangupaya = getText(w.pangupaya_jiwa || w.pangupaya);
+    if (pangupaya && pangupaya !== '-') return isJv ? `Karya: ${pangupaya}` : `Profesi: ${pangupaya}`;
+    return isJv ? 'Pangupajiwa' : 'Mata Pencaharian';
   }
+
   if (currentWukuCategory === 'tetanen') {
-    const b = p?.tetanen?.becik && p.tetanen.becik !== '-' ? p.tetanen.becik : null;
-    const a = p?.tetanen?.ala && p.tetanen.ala !== '-' ? `Sirikan: ${p.tetanen.ala}` : null;
-    return b || a || (isJv ? 'Palawija & Tetanduran' : 'Pertanian & Tanaman');
+    const b = getText(p?.tetanen?.becik);
+    const a = getText(p?.tetanen?.ala);
+    if (b && b !== '-') return b;
+    if (a && a !== '-') return isJv ? `Sirikan: ${a}` : `Pantangan: ${a}`;
+    return isJv ? 'Palawija & Tetanduran' : 'Pertanian & Tanaman';
   }
+
   if (currentWukuCategory === 'ala_becik') {
-    const b = p?.alaBecik?.becik && p.alaBecik.becik !== '-' ? p.alaBecik.becik : null;
-    const a = p?.alaBecik?.ala && p.alaBecik.ala !== '-' ? `Sirikan: ${p.alaBecik.ala}` : null;
-    return b || a || (isJv ? 'Ala & Becik' : 'Baik & Buruk');
+    const ab = p?.alaBecik || p?.ala_becik;
+    const b = getText(ab?.becik);
+    const a = getText(ab?.ala);
+    if (b && b !== '-') return b;
+    if (a && a !== '-') return isJv ? `Sirikan: ${a}` : `Pantangan: ${a}`;
+    return isJv ? 'Ala & Becik' : 'Baik & Buruk';
   }
-  return w.dewane ? w.dewane.split('(')[0].replace('Sang Hyang', 'SH').trim() : '-';
+
+  // Kategori 'all' / Kabeh:
+  const dewa = getText(w.dewane || w.dewa);
+  if (dewa && dewa !== '-') {
+    const cleanDewa = dewa.split('(')[0].replace('Sang Hyang', 'SH').trim();
+    if (cleanDewa) return cleanDewa;
+  }
+  const watak = getText(w.watek_budi_pangerti || w.watak || w.watek);
+  if (watak && watak !== '-') {
+    return watak.length > 40 ? watak.slice(0, 38) + '...' : watak;
+  }
+  return '-';
 }
 
 export function renderWukuGrid(list) {
@@ -152,7 +185,7 @@ export function renderWukuGrid(list) {
           />
         </div>
         <div class="min-w-0 flex-1">
-          <div class="font-bold text-xs text-sogan-100 truncate">${w.nama_wuku}</div>
+          <div class="font-bold text-xs text-sogan-100 truncate">${getBilingualText(w.nama_wuku || w.nama)}</div>
           <div class="text-[10px] text-sogan-400 truncate" title="${getWukuPetengetSubtitle(w, isJv)}">${getWukuPetengetSubtitle(w, isJv)}</div>
         </div>
       </button>

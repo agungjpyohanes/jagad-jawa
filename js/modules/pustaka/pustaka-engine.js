@@ -233,22 +233,38 @@ export function searchNaskahKuno(query = '', customDataset = null) {
 
 export function formatNaskahPlainText(naskah) {
   if (!naskah) return '';
+  const author = naskah.pengarang || naskah.penganggit || '-';
+  const year = naskah.tahun || naskah.taun || '-';
+  const category = naskah.kategori || naskah.subjudul || '-';
+  const desc = naskah.deskripsi || naskah.isiRingkas || naskah.ringkesan || '-';
+
   let out = `📜 ${(naskah.judul || '').toUpperCase()}\n`;
-  out += `Panganggit / Pujangga: ${naskah.pengarang || '-'} (${naskah.tahun || '-'})\n`;
-  out += `Kategori: ${naskah.kategori || '-'}\n`;
-  out += `Deskripsi: ${naskah.deskripsi || '-'}\n\n`;
+  out += `Panganggit / Pujangga: ${author} (${year})\n`;
+  out += `Kategori: ${category}\n`;
+  out += `Deskripsi: ${desc}\n\n`;
   out += `====================================================\n\n`;
 
-  if (Array.isArray(naskah.babList)) {
-    naskah.babList.forEach((bab, idx) => {
-      out += `[ ${bab.namaBab || `Bab ${idx + 1}`} ]\n\n`;
-      out += `Teks Basa Jawa:\n${bab.teksJawa || '-'}\n\n`;
-      out += `Terjemahan Basa Indonesia:\n${bab.terjemahan || '-'}\n\n`;
+  const babList = naskah.babList || naskah.pupuh || naskah.bab || [];
+  if (Array.isArray(babList)) {
+    babList.forEach((bab, idx) => {
+      const babTitle = bab.namaBab || bab.nama || bab.irah_irahan || `Bab ${idx + 1}`;
+      out += `[ ${babTitle} ]\n\n`;
+      if (bab.teksJawa) {
+        out += `Teks Basa Jawa:\n${bab.teksJawa}\n\n`;
+      } else if (Array.isArray(bab.bait_pilihan)) {
+        bab.bait_pilihan.forEach((b, bIdx) => {
+          out += `Bait ${b.pada || bIdx + 1}:\n${Array.isArray(b.teks) ? b.teks.join('\n') : b.teks}\n\n`;
+          if (b.arti) out += `Surasa Makna: ${b.arti}\n\n`;
+        });
+      }
+      if (bab.terjemahan) {
+        out += `Terjemahan Basa Indonesia:\n${bab.terjemahan}\n\n`;
+      } else if (bab.isi) {
+        out += `Isi:\n${bab.isi}\n\n`;
+      }
       out += `----------------------------------------------------\n\n`;
     });
   }
-
-  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
   return out;
 }
 

@@ -12,7 +12,7 @@ import {
   wukuIllustrationPath,
   normalizeDewaName
 } from '../../data/dewa-kanon.js';
-import { loadDomainData, mapWukuItem, extractText } from '../../services/dbLoader.js';
+import { loadDomainData, mapWukuItem, extractText, getBilingualText } from '../../services/dbLoader.js';
 import { getWukuPetenget as masterGetWukuPetenget } from '../../data/wuku-petenget-db.js';
 
 let currentPetengetList = (typeof globalThis !== 'undefined' && Array.isArray(globalThis._currentWukuPetengetData)) ? globalThis._currentWukuPetengetData : [];
@@ -23,13 +23,7 @@ function getWukuPetenget(wukuNoOrName) {
     if (res) return res;
   }
   const active = (typeof globalThis !== 'undefined' && globalThis._currentWukuPetengetData) ? globalThis._currentWukuPetengetData : currentPetengetList;
-  if (Array.isArray(active) && active.length > 0) {
-    const parsed = parseInt(wukuNoOrName, 10);
-    const clean = String(wukuNoOrName || '').trim().toLowerCase();
-    const found = active.find(item => item.no === parsed || String(item.wuku || '').trim().toLowerCase() === clean);
-    if (found) return found;
-  }
-  return masterGetWukuPetenget(wukuNoOrName);
+  return masterGetWukuPetenget(wukuNoOrName, active);
 }
 
 let currentWukuList = Array.isArray(PAWUKON_LIST) ? PAWUKON_LIST.map(mapWukuItem) : [];
@@ -103,6 +97,36 @@ export function getWukuByName(name) {
 export function searchWukuWithCategory(query = '', category = 'all') {
   let list = getAllWuku();
 
+  // Helper untuk cek apakah pilar nujum memiliki isi petenget non-kosong
+  function hasPillarContent(entry) {
+    if (!entry) return false;
+    const b = getBilingualText(entry.becik).trim();
+    const a = getBilingualText(entry.ala).trim();
+    return (b !== '' && b !== '-') || (a !== '' && a !== '-');
+  }
+
+  // 1. Filter kategori pilar nujum
+  if (category && category !== 'all') {
+    list = list.filter(w => {
+      const p = getWukuPetenget(w.no_wuku);
+      if (!p) return false;
+      if (category === 'nambani') {
+        return hasPillarContent(p.nambani);
+      }
+      if (category === 'pangupajiwa') {
+        return hasPillarContent(p.pangupajiwa);
+      }
+      if (category === 'tetanen') {
+        return hasPillarContent(p.tetanen);
+      }
+      if (category === 'ala_becik') {
+        return hasPillarContent(p.alaBecik || p.ala_becik);
+      }
+      return true;
+    });
+  }
+
+  // 2. Filter kata kunci pencarian (bila ada)
   if (!query || typeof query !== 'string' || !query.trim()) {
     return list;
   }
@@ -115,35 +139,42 @@ export function searchWukuWithCategory(query = '', category = 'all') {
   return list.filter(w => {
     const p = getWukuPetenget(w.no_wuku);
     const petengetText = p ? (
-      (p.alaBecik?.becik || '') + ' ' + (p.alaBecik?.ala || '') + ' ' +
-      (p.nambani?.becik || '') + ' ' + (p.nambani?.ala || '') + ' ' +
-      (p.pangupajiwa?.becik || '') + ' ' + (p.pangupajiwa?.ala || '') + ' ' +
-      (p.tetanen?.becik || '') + ' ' + (p.tetanen?.ala || '')
+      (getBilingualText(p.alaBecik?.becik || p.ala_becik?.becik) || '') + ' ' +
+      (getBilingualText(p.alaBecik?.ala || p.ala_becik?.ala) || '') + ' ' +
+      (getBilingualText(p.nambani?.becik) || '') + ' ' +
+      (getBilingualText(p.nambani?.ala) || '') + ' ' +
+      (getBilingualText(p.pangupajiwa?.becik) || '') + ' ' +
+      (getBilingualText(p.pangupajiwa?.ala) || '') + ' ' +
+      (getBilingualText(p.tetanen?.becik) || '') + ' ' +
+      (getBilingualText(p.tetanen?.ala) || '')
     ).toLowerCase() : '';
 
-    // Cari di nama wuku, dewane kanon, watak, bilahi, profesi, donga, dan seluruh teks petenget
+    const nama = getBilingualText(w.nama_wuku || w.nama).toLowerCase();
+    const dewa = getBilingualText(w.dewane || w.dewa).toLowerCase();
+    const watak = getBilingualText(w.watek_budi_pangerti || w.watak || w.watek).toLowerCase();
+    const bilahi = getBilingualText(w.bilahi_bebaya || w.bilahi).toLowerCase();
+    const pangupaya = getBilingualText(w.pangupaya_jiwa || w.pangupaya).toLowerCase();
+    const tamba = getBilingualText(w.tamba_yen_lara || w.tamba).toLowerCase();
+    const donga = getBilingualText(w.donga_slamet || w.donga).toLowerCase();
+
     const baseMatch =
-      (w.nama_wuku && w.nama_wuku.toLowerCase().includes(q)) ||
-      (w.dewane    && w.dewane.toLowerCase().includes(q))    ||
-      (w.watek_budi_pangerti && w.watek_budi_pangerti.toLowerCase().includes(q)) ||
-      (w.bilahi_bebaya && w.bilahi_bebaya.toLowerCase().includes(q)) ||
-      (w.pangupaya_jiwa && w.pangupaya_jiwa.toLowerCase().includes(q)) ||
-      (w.donga_slamet && w.donga_slamet.toLowerCase().includes(q)) ||
+      nama.includes(q) ||
+      dewa.includes(q) ||
+      watak.includes(q) ||
+      bilahi.includes(q) ||
+      pangupaya.includes(q) ||
+      tamba.includes(q) ||
+      donga.includes(q) ||
       petengetText.includes(q) ||
-      (String(w.no_wuku) === q);
+      (String(w.no_wuku || w.no || w.id) === q);
 
     if (baseMatch) return true;
 
-    // Pencarian sekunder: coba via term yang sudah dinormalisasi (alias → kanon)
     if (qCanon !== q) {
-      const canonMatch =
-        (w.nama_wuku && w.nama_wuku.toLowerCase().includes(qCanon)) ||
-        (w.dewane    && w.dewane.toLowerCase().includes(qCanon));
-      if (canonMatch) return true;
+      if (nama.includes(qCanon) || dewa.includes(qCanon)) return true;
     }
 
-    // Pencarian tersier: cek aliases dari dewa-kanon.js (backward compat penuh)
-    const dewaEntry = resolveWukuDewa(w.no_wuku);
+    const dewaEntry = resolveWukuDewa(w.no_wuku || w.no || w.id);
     if (dewaEntry?.aliases) {
       return dewaEntry.aliases.some(alias => alias.toLowerCase().includes(q));
     }
@@ -203,38 +234,45 @@ export function getWukuDetailSummary(wukuInput) {
   };
 
   return {
-    no:       data.no_wuku,
-    nama:     data.nama_wuku,
-    // Dewane — selalu gunakan string kanon dari dewa-kanon.js jika tersedia
+    no:       data.no_wuku || data.no || data.id,
+    nama:     getBilingualText(data.nama_wuku || data.nama),
     dewane:        dewaneKanon,
     dewaneKanon,
     dewaneSlug,
     dewaneAliases,
-    // Path gambar kanon
     imageWuku,
     imageDewane,
-    // Path gambar (backward compat)
     wukuImagePath,
     dewaneImagePath,
     wukuIllPath,
     dewaneIllPath,
-    // Data selamatan & ritual
-    watak:    data.watek_budi_pangerti || '-',
-    bilahi:   data.bilahi_bebaya || '-',
-    sesaji:   data.sesaji_ruwat || '-',
-    tindih:   extractText(data.tindih_ruwat || data.tindih) || '-',
-    sega:     data.selamatan_sega || '-',
-    iwak:     data.selamatan_iwak || '-',
-    salawat:  extractText(data.salawat) || '-',
-    donga:    data.donga_slamet || '-',
-    pangupaya: data.pangupaya_jiwa || '-',
-    tamba:    data.tamba_yen_lara || '-',
-    // Data Petenget 4 Pilar (CSV Baru)
+    watak:    getBilingualText(data.watek_budi_pangerti || data.watak || data.watek) || '-',
+    bilahi:   getBilingualText(data.bilahi_bebaya || data.bilahi) || '-',
+    sesaji:   getBilingualText(data.sesaji_ruwat || data.sesaji) || '-',
+    tindih:   getBilingualText(data.tindih_ruwat || data.tindih) || '-',
+    sega:     getBilingualText(data.selamatan_sega || data.sega) || '-',
+    iwak:     getBilingualText(data.selamatan_iwak || data.iwak) || '-',
+    salawat:  getBilingualText(data.salawat) || '-',
+    donga:    getBilingualText(data.donga_slamet || data.donga) || '-',
+    pangupaya: getBilingualText(data.pangupaya_jiwa || data.pangupaya) || '-',
+    tamba:    getBilingualText(data.tamba_yen_lara || data.tamba) || '-',
     petenget,
-    alaBecik:    petenget.alaBecik,
-    nambani:     petenget.nambani,
-    pangupajiwa: petenget.pangupajiwa,
-    tetanen:     petenget.tetanen
+    alaBecik: {
+      becik: getBilingualText(petenget.alaBecik?.becik || petenget.ala_becik?.becik) || '-',
+      ala: getBilingualText(petenget.alaBecik?.ala || petenget.ala_becik?.ala) || '-'
+    },
+    nambani: {
+      becik: getBilingualText(petenget.nambani?.becik) || '-',
+      ala: getBilingualText(petenget.nambani?.ala) || '-'
+    },
+    pangupajiwa: {
+      becik: getBilingualText(petenget.pangupajiwa?.becik) || '-',
+      ala: getBilingualText(petenget.pangupajiwa?.ala) || '-'
+    },
+    tetanen: {
+      becik: getBilingualText(petenget.tetanen?.becik) || '-',
+      ala: getBilingualText(petenget.tetanen?.ala) || '-'
+    }
   };
 }
 
