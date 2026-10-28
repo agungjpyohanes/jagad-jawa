@@ -125,6 +125,10 @@ function switchTab(tabId, pushState = true) {
     window.renderGamelanKeys();
   }
 
+  if (tabId === 'pustaka' && typeof window.initPustakaUI === 'function') {
+    window.initPustakaUI('pustakaContainer');
+  }
+
   // Perbarui jejak hierarki Breadcrumb bergaya Windows Explorer
   renderBreadcrumb(tabId);
 

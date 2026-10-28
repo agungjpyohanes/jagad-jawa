@@ -57,10 +57,13 @@ let currentKamusQuery = '';
 let currentKamusType = 'jawa-indonesia'; // 'jawa-indonesia' | 'jawa-sanskerta'
 let currentReferensiQuery = '';
 let activeReaderEntriId = null;
-let activeReaderType = 'doa'; // 'doa' | 'naskah' | 'referensi'
+let activeReaderType = 'doa';
+const naskahRenderCache = new Map();
+const referensiRenderCache = new Map(); // 'doa' | 'naskah' | 'referensi'
 let currentReaderName = '';
 let activeNaskahId = null;
 let activeNaskahPupuhIndex = 'all';
+let activeReferensiId = null;
 
 /**
  * Mendapatkan tema warna badge berdasarkan kategori.
@@ -213,8 +216,8 @@ export function switchPustakaSubtab(subtab) {
 export function getActivePustakaContainer() {
   const sinengker = document.getElementById('sinengkerSubtabContent');
   const pustaka = document.getElementById('pustakaSubtabContent');
-  if (sinengker && !sinengker.closest('.hidden')) return sinengker;
-  if (pustaka && !pustaka.closest('.hidden')) return pustaka;
+  if (sinengker && (typeof sinengker.closest === 'function' ? !sinengker.closest('.hidden') : true)) return sinengker;
+  if (pustaka && (typeof pustaka.closest === 'function' ? !pustaka.closest('.hidden') : true)) return pustaka;
   return sinengker || pustaka;
 }
 
@@ -1234,11 +1237,17 @@ export function setNaskahReaderPupuh(idx) {
   }
 }
 
-export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIndex) {
+export async function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIndex) {
   const modal = document.getElementById('modalPustakaReader');
   if (!modal) return;
 
-  const naskah = getNaskahKunoById(naskahId);
+  let naskah = getNaskahKunoById(naskahId);
+  if (!naskah && typeof loadDomainData === 'function') {
+    try {
+      await loadDomainData('pustaka');
+      naskah = getNaskahKunoById(naskahId);
+    } catch (_) {}
+  }
   if (!naskah) return;
 
   activeReaderType = 'naskah';
@@ -1257,6 +1266,20 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
 
   if (titleEl) titleEl.textContent = naskah.judul;
   if (subtitleEl) subtitleEl.textContent = `${category} · Anggitane ${author} (${year})`;
+
+  // Cek cache memori lokal
+  const cacheKey = `${naskahId}:${activeNaskahPupuhIndex}`;
+  if (naskahRenderCache.has(cacheKey)) {
+    bodyEl.innerHTML = naskahRenderCache.get(cacheKey);
+    const copyBtn = modal.querySelector('button[onclick*="copyPustakaCurrentDoa"]');
+    if (copyBtn) copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Salin Isi Naskah';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflow = 'hidden';
+    }
+    return;
+  }
 
   // Ambil daftar bab/pupuh (dukung babList, pupuh, utawi bab)
   const rawList = naskah.babList || naskah.pupuh || naskah.bab || [];
@@ -1301,7 +1324,6 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
     let stanzasHtml = '';
 
     if (item.teksJawa) {
-      // Format naskah standar (babList: teksJawa & terjemahan)
       const stanzasJawa = item.teksJawa.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
       const stanzasTerjemahan = (item.terjemahan || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
 
@@ -1341,7 +1363,6 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
         </div>
       `;
     } else if (Array.isArray(item.bait_pilihan)) {
-      // Format tembang macapat dengan bait_pilihan
       stanzasHtml = `
         <div class="space-y-4">
           ${item.bait_pilihan.map((b, bIdx) => `
@@ -1379,7 +1400,6 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
         </div>
       `;
     } else if (item.isi) {
-      // Format prosa / bab isi
       stanzasHtml = `
         <div class="space-y-3">
           <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-3">
@@ -1413,7 +1433,7 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
     `;
   }).join('');
 
-  bodyEl.innerHTML = `
+  const fullHtml = `
     <div class="space-y-5">
       <!-- Metadata Strip Header -->
       <div class="p-4 rounded-2xl bg-sogan-950/80 border border-sogan-800 flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -1463,6 +1483,9 @@ export function openPustakaNaskahReader(naskahId, pupuhIdx = activeNaskahPupuhIn
       </div>
     </div>
   `;
+
+  naskahRenderCache.set(cacheKey, fullHtml);
+  bodyEl.innerHTML = fullHtml;
 
   // Update label tombol salin di footer modal
   const copyBtn = modal.querySelector('button[onclick*="copyPustakaCurrentDoa"]');
@@ -1705,6 +1728,30 @@ export function onReferensiSearch(query) {
   }
 }
 
+function getDocSubcategoryInfo(doc) {
+  const id = String(doc?.id || '').toLowerCase();
+  const cat = String(doc?.kategori || '').toLowerCase();
+  if (id.includes('macapat') || cat.includes('sastra') || cat.includes('tembang')) {
+    return {
+      icon: 'fa-scroll',
+      badge: 'Paugeran 11 Pupuh Tembang',
+      fitur: '<strong>Paugeran:</strong> 11 Pupuh Tembang Lengkap (Guru Gatra, Wilangan & Lagu)'
+    };
+  }
+  if (id.includes('karawitan') || id.includes('gamelan') || cat.includes('musik')) {
+    return {
+      icon: 'fa-drum',
+      badge: 'Laras, Pathet & Ricikan Gamelan',
+      fitur: '<strong>Laras & Pathet:</strong> Slendro &amp; Pelog (3 Pathet) sarta Ricikan Balungan'
+    };
+  }
+  return {
+    icon: 'fa-shirt',
+    badge: 'Busana Adat & Filosofi Batik',
+    fitur: '<strong>Pakem Tradisi:</strong> Busana Takwa Surjan, Keris &amp; Motif Batik Larangan'
+  };
+}
+
 export function renderPustakaReferensiView(container) {
   const targetContainer = container || getActivePustakaContainer();
   if (!targetContainer) return;
@@ -1752,7 +1799,13 @@ export function renderPustakaReferensiView(container) {
 
       <!-- Grid Cards Dokumen Referensi -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        ${list.map(doc => `
+        ${list.map(doc => {
+          const category = doc.kategori || 'Paugeran Budaya';
+          const title = doc.judul || 'Dokumen Budaya';
+          const sub = doc.subjudul || (doc.kategori === 'sastra-macapat' ? '11 Pupuh Tembang' : doc.kategori === 'karawitan-gamelan' ? 'Slendro & Pelog' : 'Busana Adat & Batik');
+          const summary = doc.deskripsi || doc.ringkasan || '-';
+
+          return `
           <div class="flex flex-col justify-between rounded-2xl bg-gradient-to-b from-[#131b26] to-[#0A0D14] border border-sogan-800 hover:border-prada/60 transition-all duration-300 p-5 shadow-lg group">
             <div class="space-y-4">
               <!-- Top Row: Icon & Kategori -->
@@ -1761,23 +1814,23 @@ export function renderPustakaReferensiView(container) {
                   <i class="fa-solid ${doc.kategori === 'sastra-macapat' ? 'fa-scroll' : doc.kategori === 'karawitan-gamelan' ? 'fa-drum' : 'fa-shirt'}"></i>
                 </span>
                 <span class="px-2.5 py-0.5 rounded-full bg-sogan-950 border border-sogan-800 text-[10px] font-mono text-sogan-300">
-                  ${doc.kategori}
+                  ${category}
                 </span>
               </div>
 
               <!-- Title & Subtitle -->
               <div>
                 <h3 class="font-marcellus text-lg font-bold text-amber-100 group-hover:text-prada-light transition">
-                  ${doc.judul}
+                  ${title}
                 </h3>
                 <div class="text-xs text-sogan-300 mt-0.5">
-                  ${doc.subjudul || ''}
+                  ${sub}
                 </div>
               </div>
 
               <!-- Ringkasan -->
               <p class="text-xs text-sogan-200 leading-relaxed line-clamp-3">
-                ${doc.ringkasan}
+                ${summary}
               </p>
 
               <!-- Fitur Utama Badge -->
@@ -1795,25 +1848,41 @@ export function renderPustakaReferensiView(container) {
                 class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 hover:brightness-110 shadow transition cursor-pointer">
                 <i class="fa-solid fa-book-open"></i> Waos Dokumen
               </button>
-              <button
-                onclick="window.unduhDokumenReferensi && window.unduhDokumenReferensi('${doc.id}')"
-                class="px-3 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
-                title="Unduh Dokumen (.txt)">
-                <i class="fa-solid fa-download"></i> Unduh TXT
-              </button>
+              <div class="flex items-center gap-1.5">
+                <button
+                  onclick="window.copyReferensiDoc && window.copyReferensiDoc('${doc.id}')"
+                  class="p-2 rounded-xl bg-sogan-950 border border-sogan-700 text-sogan-300 hover:text-prada hover:border-prada transition text-xs cursor-pointer"
+                  title="Salin Dokumen">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+                <button
+                  onclick="window.unduhDokumenReferensi && window.unduhDokumenReferensi('${doc.id}')"
+                  class="px-3 py-2 rounded-xl bg-sogan-900 border border-prada/50 text-prada hover:bg-prada/20 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+                  title="Unduh Dokumen (.txt)">
+                  <i class="fa-solid fa-download"></i> Unduh TXT
+                </button>
+              </div>
             </div>
           </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     </div>
   `;
 }
 
-export function openPustakaReferensiReader(docId) {
+export async function openPustakaReferensiReader(docId) {
   const modal = document.getElementById('modalPustakaReader');
   if (!modal) return;
 
-  const doc = getDokumenReferensiById(docId);
+  const resolvedId = (docId === 'karawitan-gamelan') ? 'kawruh-karawitan-gamelan' : (docId === 'busana-batik') ? 'filosofi-busana-jarik-batik' : docId;
+  let doc = getDokumenReferensiById(resolvedId);
+  if (!doc && typeof loadDomainData === 'function') {
+    try {
+      await loadDomainData('pustaka');
+      doc = getDokumenReferensiById(docId);
+    } catch (_) {}
+  }
   if (!doc) return;
 
   activeReaderType = 'referensi';
@@ -1824,40 +1893,98 @@ export function openPustakaReferensiReader(docId) {
   const bodyEl = document.getElementById('pustakaReaderBody');
   if (!bodyEl) return;
 
-  if (titleEl) titleEl.textContent = doc.judul;
-  if (subtitleEl) subtitleEl.textContent = `${doc.subjudul} · Pakem Tradisi Budaya Jawa`;
+  const info = getDocSubcategoryInfo(doc);
+  const sub = doc.subjudul || info.badge;
+  const summary = doc.deskripsi || doc.ringkasan || '-';
 
-  bodyEl.innerHTML = `
+  if (titleEl) titleEl.textContent = doc.judul;
+  if (subtitleEl) subtitleEl.textContent = `${sub} · Pakem Tradisi Budaya Jawa`;
+
+  // Cek in-memory cache
+  if (referensiRenderCache.has(docId)) {
+    bodyEl.innerHTML = referensiRenderCache.get(docId);
+    const copyBtn = modal.querySelector('button[onclick*="copyPustakaCurrentDoa"]');
+    if (copyBtn) copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Salin Isi Dokumen';
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.style.overflow = 'hidden';
+    }
+    return;
+  }
+
+  // Parse structured sections of doc.kontenTeks
+  let parsedContentHtml = '';
+  if (doc.kontenTeks) {
+    const rawBlocks = doc.kontenTeks.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+    parsedContentHtml = `
+      <div class="space-y-4">
+        ${rawBlocks.map(block => {
+          const firstLine = block.split('\n')[0].trim();
+          const isHeader = /^[A-Z0-9\.\s\-]{3,40}:?$/.test(firstLine);
+          if (isHeader) {
+            const lines = block.split('\n');
+            const headerLine = lines[0];
+            const subLines = lines.slice(1);
+            return `
+              <div class="p-4 rounded-2xl bg-sogan-950/70 border border-sogan-800 space-y-2">
+                <h4 class="font-marcellus text-base font-bold text-amber-200 border-b border-sogan-800/80 pb-1.5 flex items-center gap-2">
+                  <i class="fa-solid fa-scroll text-prada text-sm"></i> ${headerLine}
+                </h4>
+                ${subLines.length > 0 ? `
+                  <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed whitespace-pre-line font-sans">${subLines.join('\n')}</p>
+                ` : ''}
+              </div>
+            `;
+          }
+          return `
+            <div class="p-4 rounded-xl bg-black/40 border border-prada/20 space-y-2">
+              <p class="text-xs sm:text-sm text-sogan-100 leading-relaxed whitespace-pre-line font-sans">${block}</p>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  const fullHtml = `
     <div class="space-y-6">
       <!-- Metadata Strip Header -->
       <div class="p-4 rounded-2xl bg-sogan-950/80 border border-sogan-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <span class="px-3 py-1 rounded-lg bg-teal-950/70 border border-teal-600/50 text-teal-300 font-semibold">
-            <i class="fa-solid fa-landmark mr-1"></i> ${doc.kategori}
+            <i class="fa-solid fa-landmark mr-1"></i> ${doc.kategori || 'Paugeran Resmi'}
           </span>
           <span class="text-sogan-400 font-mono text-[11px]">Pakem Resmi Kasultanan</span>
         </div>
-        <button
-          onclick="window.unduhDokumenReferensi && window.unduhDokumenReferensi('${doc.id}')"
-          class="px-3 py-1 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer">
-          <i class="fa-solid fa-download"></i> Unduh Dokumen (.txt)
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            onclick="window.unduhDokumenReferensi && window.unduhDokumenReferensi('${doc.id}')"
+            class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-1.5 shadow transition cursor-pointer hover:brightness-110">
+            <i class="fa-solid fa-download"></i> Unduh Dokumen (.txt)
+          </button>
+        </div>
       </div>
 
       <!-- Ringkasan Dokumen -->
       <div class="p-4 rounded-xl bg-keraton border border-sogan-800/80 space-y-2 text-xs leading-relaxed text-sogan-200">
-        <strong class="text-prada block font-marcellus text-sm"><i class="fa-solid fa-circle-info mr-1.5"></i> Ringkasan &amp; Falsafah:</strong>
-        <p>${doc.ringkasan}</p>
+        <strong class="text-prada block font-marcellus text-sm">
+          <i class="fa-solid fa-circle-info mr-1.5"></i> Ringkasan &amp; Falsafah:
+        </strong>
+        <p class="leading-relaxed text-sogan-100">${summary}</p>
       </div>
 
-      <!-- Detail Isi Khusus per Kategori -->
-      ${doc.kategori === 'sastra-macapat' ? `
+      <!-- Isi Lengkap Dokumen Referensi -->
+      ${parsedContentHtml}
+
+      <!-- Detail Isi Tambahan jika ada data struktural -->
+      ${Array.isArray(doc.pupuh_list) && doc.pupuh_list.length > 0 ? `
         <div class="space-y-4">
           <h4 class="font-marcellus text-base font-bold text-amber-200 border-b border-sogan-800/80 pb-2">
-            Paugeran 11 Pupuh Tembang Macapat
+            Matriks 11 Pupuh Tembang Macapat
           </h4>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            ${(doc.pupuh_list || []).map(p => `
+            ${doc.pupuh_list.map(p => `
               <div class="p-4 rounded-xl bg-sogan-950/70 border border-sogan-800 space-y-2">
                 <div class="flex items-center justify-between">
                   <strong class="text-amber-200 font-marcellus text-sm">${p.nama}</strong>
@@ -1879,85 +2006,16 @@ export function openPustakaReferensiReader(docId) {
           </div>
         </div>
       ` : ''}
-
-      ${doc.kategori === 'karawitan-gamelan' ? `
-        <div class="space-y-5">
-          <h4 class="font-marcellus text-base font-bold text-amber-200 border-b border-sogan-800/80 pb-2">
-            Laras, Pathet &amp; Ricikan Gamelan Jawa
-          </h4>
-          
-          <!-- Laras Slendro & Pelog -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-xl bg-sogan-950/70 border border-sogan-800 space-y-2">
-              <h5 class="font-bold text-amber-200 text-sm">Laras Slendro (5 Nada)</h5>
-              <p class="text-xs text-sogan-300">${doc.laras?.slendro?.deskripsi || ''}</p>
-              <div class="text-xs text-amber-300">Nada: ${(doc.laras?.slendro?.nada || []).join(' - ')}</div>
-              <div class="text-xs text-teal-300">Pathet: ${(doc.laras?.slendro?.pathet || []).join(', ')}</div>
-            </div>
-            <div class="p-4 rounded-xl bg-sogan-950/70 border border-sogan-800 space-y-2">
-              <h5 class="font-bold text-amber-200 text-sm">Laras Pelog (7 Nada)</h5>
-              <p class="text-xs text-sogan-300">${doc.laras?.pelog?.deskripsi || ''}</p>
-              <div class="text-xs text-amber-300">Nada: ${(doc.laras?.pelog?.nada || []).join(' - ')}</div>
-              <div class="text-xs text-teal-300">Pathet: ${(doc.laras?.pelog?.pathet || []).join(', ')}</div>
-            </div>
-          </div>
-
-          <!-- Ricikan Balungan & Panerusan -->
-          <div class="space-y-3">
-            <h5 class="font-bold text-prada text-sm">Ricikan Instrumen Gamelan:</h5>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              ${(doc.ricikan || []).map(r => `
-                <div class="p-3 rounded-lg bg-black/40 border border-sogan-800 space-y-1">
-                  <div class="flex items-center justify-between">
-                    <strong class="text-amber-100">${r.nama}</strong>
-                    <span class="text-[10px] font-mono text-sogan-400">${r.kelompok}</span>
-                  </div>
-                  <div class="text-sogan-300 text-[11px]">${r.fungsi}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-      ` : ''}
-
-      ${doc.kategori === 'busana-batik' ? `
-        <div class="space-y-5">
-          <h4 class="font-marcellus text-base font-bold text-amber-200 border-b border-sogan-800/80 pb-2">
-            Motif Batik Adiluhung &amp; Busana Adat Tradisi
-          </h4>
-
-          <!-- Motif Batik Larangan -->
-          <div class="space-y-3">
-            <h5 class="font-bold text-prada text-sm">Motif Batik Larangan (Awisan Dalem):</h5>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              ${(doc.motif_larangan || []).map(m => `
-                <div class="p-3.5 rounded-xl bg-sogan-950/70 border border-amber-800/50 space-y-1.5">
-                  <div class="flex items-center justify-between">
-                    <strong class="text-amber-200 text-sm">${m.nama}</strong>
-                    <span class="text-[10px] text-amber-400 font-mono">${m.peruntukan}</span>
-                  </div>
-                  <p class="text-sogan-200 text-xs">${m.filosofi}</p>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- Busana Jawi Jangkep -->
-          <div class="p-4 rounded-xl bg-sogan-950/70 border border-sogan-800 space-y-2 text-xs">
-            <h5 class="font-bold text-prada text-sm">Tata Busana Adat Jawi Jangkep:</h5>
-            <p class="text-sogan-300">${doc.busana_adat?.jawi_jangkep?.deskripsi || ''}</p>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-[11px]">
-              ${(doc.busana_adat?.jawi_jangkep?.komponen || []).map(c => `
-                <div class="p-2 rounded bg-black/50 border border-sogan-800 text-amber-200 text-center">
-                  ${c}
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        </div>
-      ` : ''}
     </div>
   `;
+
+  referensiRenderCache.set(docId, fullHtml);
+  bodyEl.innerHTML = fullHtml;
+
+  const copyBtn = modal.querySelector('button[onclick*="copyPustakaCurrentDoa"]');
+  if (copyBtn) {
+    copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Salin Isi Dokumen';
+  }
 
   modal.classList.remove('hidden');
   modal.classList.add('flex');
@@ -1967,7 +2025,8 @@ export function openPustakaReferensiReader(docId) {
 }
 
 export function unduhDokumenReferensi(docId) {
-  const doc = getDokumenReferensiById(docId);
+  const resolvedId = (docId === 'karawitan-gamelan') ? 'kawruh-karawitan-gamelan' : (docId === 'busana-batik') ? 'filosofi-busana-jarik-batik' : docId;
+  const doc = getDokumenReferensiById(resolvedId);
   if (!doc) {
     showToast('Dokumen dereng kapanggih.');
     return;
@@ -1979,7 +2038,8 @@ export function unduhDokumenReferensi(docId) {
 }
 
 export function copyReferensiDoc(docId) {
-  const doc = getDokumenReferensiById(docId);
+  const resolvedId = (docId === 'karawitan-gamelan') ? 'kawruh-karawitan-gamelan' : (docId === 'busana-batik') ? 'filosofi-busana-jarik-batik' : docId;
+  const doc = getDokumenReferensiById(resolvedId);
   if (!doc) return;
   const content = formatDokumenReferensiPlainText(doc);
   copyToClipboard(content, `Dokumen "${doc.judul}" kasil disalin!`);

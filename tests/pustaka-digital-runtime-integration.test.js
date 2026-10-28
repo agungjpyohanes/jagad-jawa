@@ -147,4 +147,41 @@ test.describe('Pustaka Digital Runtime Data Integration & Getters Parity', () =>
     assert.ok(container.innerHTML.includes('[PUSTAKA-DIGITAL]'), 'Harus menyebut domain PUSTAKA-DIGITAL');
     assert.ok(container.innerHTML.includes('btn-retry-data'), 'Harus menyediakan tombol coba lagi');
   });
+
+  test('openPustakaReferensiReader renders all cultural reference documents without undefined and uses cache', async () => {
+    const domElements = {
+      modalPustakaReader: { classList: { remove(){}, add(){} }, querySelector: () => ({ innerHTML: '' }) },
+      pustakaReaderTitle: { textContent: '' },
+      pustakaReaderSubtitle: { textContent: '' },
+      pustakaReaderBody: { innerHTML: '' },
+      pustakaSubtabContent: { innerHTML: '', querySelector: () => null }
+    };
+
+    globalThis.document = {
+      getElementById: (id) => domElements[id] || null,
+      body: { style: {} }
+    };
+
+    const { openPustakaReferensiReader, renderPustakaReferensiView } = await import('../js/modules/pustaka/pustaka-ui.js');
+
+    // Test cards rendering
+    renderPustakaReferensiView();
+    assert.ok(!domElements.pustakaSubtabContent.innerHTML.includes('undefined'), 'Kartu referensi tidak boleh memuat undefined');
+    assert.ok(domElements.pustakaSubtabContent.innerHTML.includes('Paugeran 11 Tembang Macapat Jawi'), 'Harus memuat paugeran macapat');
+
+    // Test reading each document
+    const docIds = ['paugeran-macapat', 'kawruh-karawitan-gamelan', 'filosofi-busana-jarik-batik', 'karawitan-gamelan', 'busana-batik'];
+    for (const id of docIds) {
+      await openPustakaReferensiReader(id);
+      assert.ok(domElements.pustakaReaderTitle.textContent.length > 0, 'Judul ' + id + ' harus terisi');
+      assert.ok(!domElements.pustakaReaderSubtitle.textContent.includes('undefined'), 'Subtitle ' + id + ' tidak boleh undefined');
+      assert.ok(!domElements.pustakaReaderBody.innerHTML.includes('undefined'), 'Body ' + id + ' tidak boleh undefined');
+      assert.ok(domElements.pustakaReaderBody.innerHTML.length > 500, 'Body ' + id + ' harus berisi konten dokumen');
+
+      // Verify second call utilizes cache
+      const firstHtml = domElements.pustakaReaderBody.innerHTML;
+      await openPustakaReferensiReader(id);
+      assert.strictEqual(domElements.pustakaReaderBody.innerHTML, firstHtml, 'Panggilan kedua ' + id + ' harus identik dari cache');
+    }
+  });
 });
