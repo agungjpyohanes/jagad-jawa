@@ -1171,10 +1171,10 @@
             <label class="font-mono text-[10px] uppercase text-prada" data-i18n="cal_label_tahun">Tahun Masehi</label>
             <input type="number" id="tahunInput" value="2026" min="1900" max="2200" onchange="renderKalender()" class="bg-keraton border border-sogan-700 rounded-lg px-3 py-2 text-sogan-100 font-semibold w-24 focus:border-prada outline-none">
           </div>
-          <button type="button" id="btnResetKalenderToday" onclick="resetKalenderToday()" class="mt-4 px-3.5 py-2 rounded-lg bg-sogan-900/90 border border-sogan-700/80 hover:border-prada text-sogan-200 hover:text-white font-semibold hover:brightness-110 transition shadow flex items-center gap-1.5 cursor-pointer" title="Kondur dhateng sasi lan dinten saiki (Reset Current Date)">
+          <button type="button" id="btnResetKalenderToday" onclick="resetKalenderToday()" class="btn-secondary-action mt-4 px-3.5 py-2 rounded-lg bg-sogan-900/90 border border-sogan-700/80 hover:border-prada text-sogan-200 hover:text-white font-semibold hover:brightness-110 transition shadow flex items-center gap-1.5 cursor-pointer" title="Kondur dhateng sasi lan dinten saiki (Reset Current Date)">
             <i class="fa-solid fa-rotate-left text-xs"></i> <span data-i18n="cal_btn_reset_today">Hari Ini</span>
           </button>
-          <button onclick="downloadKalenderPdf('parchment')" id="btnPrintKalenderPdf" class="ahli-only mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition shadow flex items-center gap-1.5 cursor-pointer" title="Ekspor PDF Kalender Jawa Kertas Kuno (Resolusi Tinggi)">
+          <button onclick="downloadKalenderPdf('parchment')" id="btnPrintKalenderPdf" class="btn-secondary-action ahli-only mt-4 px-4 py-2 rounded-lg bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition shadow flex items-center gap-1.5 cursor-pointer" title="Ekspor PDF Kalender Jawa Kertas Kuno (Resolusi Tinggi)">
             <i class="fa-solid fa-scroll"></i> <span data-i18n="cal_btn_export_pdf">Ekspor PDF</span>
           </button>
         </div>
@@ -1444,7 +1444,7 @@
 
           <!-- Baris 3: Tombol Aksi Utama -->
           <div class="flex flex-wrap items-center gap-2.5 pt-1">
-            <button onclick="hitungKepribadianLengkap()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-sogan-600 via-prada to-sogan-600 text-keraton font-bold hover:brightness-110 transition shadow-lg text-sm flex items-center justify-center gap-2.5 cursor-pointer">
+            <button onclick="hitungKepribadianLengkap()" class="btn-primary-cta w-full py-3.5 rounded-xl bg-gradient-to-r from-sogan-600 via-prada to-sogan-600 text-keraton font-bold hover:brightness-110 transition shadow-lg text-sm flex items-center justify-center gap-2.5 cursor-pointer">
               <i class="fa-solid fa-calculator text-base"></i> <span data-i18n="nujum_btn_hitung">Hitung Nujum Lengkap</span>
             </button>
             <!-- Hidden semantic anchors for mode tests compatibility -->
@@ -1547,7 +1547,7 @@
                 <option value="keluarga">Hubungan Persaudaraan / Keluarga</option>
               </select>
             </div>
-            <button onclick="hitungKomparasiNonJodoh()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-600 hover:brightness-110 text-white font-bold text-xs flex items-center gap-2 transition shadow">
+            <button onclick="hitungKomparasiNonJodoh()" class="btn-primary-cta px-5 py-2.5 rounded-xl bg-gradient-to-r from-teal-700 to-emerald-600 hover:brightness-110 text-white font-bold text-xs flex items-center gap-2 transition shadow cursor-pointer">
               <i class="fa-solid fa-scale-balanced"></i> Bandingkan Karakter &amp; Sinergi
             </button>
           </div>
@@ -1580,10 +1580,10 @@
             <span id="jodohStepIndicator" class="font-bold text-prada" data-i18n="jodoh_wizard_step1" aria-live="polite">Langkah 1 dari 4: Status Hubungan Pasangan</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onclick="setJodohWizardStep(1)" id="jodohNavBtn1" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn1">1. Status</button>
-            <button type="button" onclick="setJodohWizardStep(2)" id="jodohNavBtn2" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn2">2. Calon Pria</button>
-            <button type="button" onclick="setJodohWizardStep(3)" id="jodohNavBtn3" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn3">3. Calon Wanita</button>
-            <button type="button" onclick="setJodohWizardStep(4)" id="jodohNavBtn4" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn4">4. Hasil & 7 Metode</button>
+            <button type="button" onclick="setJodohWizardStep(1)" id="jodohNavBtn1" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn1">1. Status</button>
+            <button type="button" onclick="setJodohWizardStep(2)" id="jodohNavBtn2" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn2">2. Calon Pria</button>
+            <button type="button" onclick="setJodohWizardStep(3)" id="jodohNavBtn3" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn3">3. Calon Wanita</button>
+            <button type="button" onclick="setJodohWizardStep(4)" id="jodohNavBtn4" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="jodoh_wizard_btn4">4. Hasil & 7 Metode</button>
           </div>
         </div>
         <div class="w-full bg-sogan-900 h-2 rounded-full overflow-hidden" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="jodohProgressBarContainer">
@@ -1600,19 +1600,19 @@
           <p class="text-xs text-sogan-300">Pilih status kanggé nyelarasaken asil pitung kaliyan rekomendasi tanggal utawa panduan keharmonisan.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="groupStatusHubunganPerjodohan">
-          <label class="cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
+          <label class="form-choice-card cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
             <input type="radio" name="statusHubunganPerjodohan" id="statusBelumMenikah" value="planning" checked class="accent-amber-500 w-4 h-4" onchange="if(window.onStatusHubunganChange) window.onStatusHubunganChange(this.value)">
             <span class="font-medium flex items-center gap-2">
               <i class="fa-solid fa-calendar-heart text-sm text-amber-400"></i> <span data-i18n="jodoh_status_planning">Rencana Menikah (Calon Pengantin)</span>
             </span>
           </label>
-          <label class="cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
+          <label class="form-choice-card cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
             <input type="radio" name="statusHubunganPerjodohan" id="statusEngaged" value="engaged" class="accent-amber-500 w-4 h-4" onchange="if(window.onStatusHubunganChange) window.onStatusHubunganChange(this.value)">
             <span class="font-medium flex items-center gap-2">
               <i class="fa-solid fa-ring text-sm text-amber-300"></i> <span data-i18n="jodoh_status_engaged">Lamaran / Tunangan</span>
             </span>
           </label>
-          <label class="cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
+          <label class="form-choice-card cursor-pointer flex items-center gap-3 p-3.5 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
             <input type="radio" name="statusHubunganPerjodohan" id="statusSudahMenikah" value="married" class="accent-amber-500 w-4 h-4" onchange="if(window.onStatusHubunganChange) window.onStatusHubunganChange(this.value)">
             <span class="font-medium flex items-center gap-2">
               <i class="fa-solid fa-house-chimney-window text-sm text-emerald-400"></i> <span data-i18n="jodoh_status_married">Sudah Menikah (Pasutri)</span>
@@ -1622,7 +1622,7 @@
 
         <!-- Tombol Lanjut Langkah 1 -->
         <div class="pt-2 flex justify-end">
-          <button type="button" onclick="setJodohWizardStep(2)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
+          <button type="button" onclick="setJodohWizardStep(2)" class="btn-stepper-next min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
             <span data-i18n="jodoh_lanjut_pria">Lanjut ke Data Calon Pria (Langkah 2)</span>
             <i class="fa-solid fa-arrow-right text-[11px]"></i>
           </button>
@@ -1691,11 +1691,11 @@
 
           <!-- Navigasi Langkah 2 (Kembali ke Status & Lanjut ke Wanita) -->
           <div class="pt-3 flex items-center justify-between gap-2 border-t border-sogan-800/80">
-            <button type="button" onclick="setJodohWizardStep(1)" class="min-h-[44px] px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
+            <button type="button" onclick="setJodohWizardStep(1)" class="btn-stepper-prev min-h-[44px] px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
               <i class="fa-solid fa-arrow-left text-[10px]"></i>
               <span data-i18n="jodoh_kembali_status">Status (Langkah 1)</span>
             </button>
-            <button type="button" onclick="setJodohWizardStep(3)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center gap-1.5 cursor-pointer transition shadow">
+            <button type="button" onclick="setJodohWizardStep(3)" class="btn-stepper-next min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center gap-1.5 cursor-pointer transition shadow">
               <span data-i18n="jodoh_lanjut_wanita">Lanjut ke Data Wanita (Langkah 3)</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
@@ -1762,11 +1762,11 @@
 
           <!-- Navigasi Langkah 3 (Kembali ke Pria & Hitung Nujum / Lanjut Hasil) -->
           <div class="pt-3 flex items-center justify-between gap-2 border-t border-sogan-800/80">
-            <button type="button" onclick="setJodohWizardStep(2)" class="min-h-[44px] px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
+            <button type="button" onclick="setJodohWizardStep(2)" class="btn-stepper-prev min-h-[44px] px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
               <i class="fa-solid fa-arrow-left text-[10px]"></i>
               <span data-i18n="jodoh_kembali_pria">Data Pria (Langkah 2)</span>
             </button>
-            <button type="button" onclick="setJodohWizardStep(4)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-2 cursor-pointer hover:brightness-110 transition shadow">
+            <button type="button" onclick="setJodohWizardStep(4)" class="btn-primary-cta min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-2 cursor-pointer hover:brightness-110 transition shadow">
               <i class="fa-solid fa-heart text-sm"></i>
               <span data-i18n="jodoh_lanjut_hasil">Hitung &amp; Lihat Hasil (Langkah 4)</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -1777,10 +1777,10 @@
       </div>
 
       <div class="flex flex-wrap justify-center items-center gap-2.5 pt-2 hidden" id="jodohActionButtons">
-        <button onclick="hitungNujumPerjodohan()" class="min-h-[44px] px-6 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm cursor-pointer active:scale-95">
+        <button onclick="hitungNujumPerjodohan()" class="btn-primary-cta min-h-[44px] px-6 py-3 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold hover:brightness-110 transition shadow text-sm cursor-pointer active:scale-95">
           <i class="fa-solid fa-heart mr-1.5"></i> <span data-i18n="jodoh_btn_hitung">Hitung Nujum Perjodohan</span>
         </button>
-        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="ahli-only min-h-[44px] px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pitung Perjodohan Kertas Kuno Tradisi Luhur">
+        <button onclick="printLaporanPerjodohan('parchment')" id="btnPrintPerjodohanParchment" class="btn-secondary-action ahli-only min-h-[44px] px-4 py-3 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs sm:text-sm flex items-center gap-2 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pitung Perjodohan Kertas Kuno Tradisi Luhur">
           <i class="fa-solid fa-scroll"></i> <span data-i18n="btn_export_pdf">Ekspor PDF</span>
         </button>
         <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -1913,9 +1913,9 @@
             <span id="selametanStepIndicator" class="font-bold text-prada" data-i18n="selametan_wizard_step1" aria-live="polite">Langkah 1 dari 3: Tanggal Wafat / Geblak</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onclick="setSelametanWizardStep(1)" id="selametanNavBtn1" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn1">1. Tanggal Wafat</button>
-            <button type="button" onclick="setSelametanWizardStep(2)" id="selametanNavBtn2" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn2">2. Waktu Berpulang</button>
-            <button type="button" onclick="setSelametanWizardStep(3)" id="selametanNavBtn3" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn3">3. Jadwal Pengetan</button>
+            <button type="button" onclick="setSelametanWizardStep(1)" id="selametanNavBtn1" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn1">1. Tanggal Wafat</button>
+            <button type="button" onclick="setSelametanWizardStep(2)" id="selametanNavBtn2" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn2">2. Waktu Berpulang</button>
+            <button type="button" onclick="setSelametanWizardStep(3)" id="selametanNavBtn3" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="selametan_wizard_btn3">3. Jadwal Pengetan</button>
           </div>
         </div>
         <div class="w-full bg-sogan-900 h-2 rounded-full overflow-hidden" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" id="selametanProgressBarContainer">
@@ -1946,7 +1946,7 @@
         </div>
 
         <div class="pt-2 flex justify-end">
-          <button type="button" onclick="setSelametanWizardStep(2)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
+          <button type="button" onclick="setSelametanWizardStep(2)" class="btn-stepper-next min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
             <span data-i18n="selametan_lanjut_waktu">Lanjut ke Waktu Berpulang (Langkah 2)</span>
             <i class="fa-solid fa-arrow-right text-[11px]"></i>
           </button>
@@ -1963,7 +1963,7 @@
         <div class="space-y-3">
           <label class="block font-semibold text-prada text-xs" data-i18n="selametan_label_waktu">Waktu Berpulang (Wajib Dipilih):</label>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="groupWaktuWafatRadio">
-            <label class="cursor-pointer flex items-start gap-3 p-4 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
+            <label class="form-choice-card cursor-pointer flex items-start gap-3 p-4 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
               <input type="radio" name="waktuWafatRadio" id="waktuWafatSiang" value="siang" class="accent-amber-500 w-4 h-4 mt-0.5">
               <div class="space-y-1">
                 <strong class="block font-bold text-prada text-xs flex items-center gap-1.5" data-i18n="selametan_opt_siang_title">
@@ -1975,7 +1975,7 @@
               </div>
             </label>
 
-            <label class="cursor-pointer flex items-start gap-3 p-4 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
+            <label class="form-choice-card cursor-pointer flex items-start gap-3 p-4 rounded-xl bg-keraton border border-sogan-700 hover:border-prada transition text-xs text-sogan-200 has-[:checked]:border-prada has-[:checked]:bg-sogan-950 has-[:checked]:text-prada shadow-sm min-h-[44px]">
               <input type="radio" name="waktuWafatRadio" id="waktuWafatMalam" value="malam_maghrib" class="accent-amber-500 w-4 h-4 mt-0.5">
               <div class="space-y-1">
                 <strong class="block font-bold text-amber-300 text-xs flex items-center gap-1.5" data-i18n="selametan_opt_malam_title">
@@ -2018,11 +2018,11 @@
 
         <!-- Tombol Navigasi Langkah 2 -->
         <div class="pt-2 flex items-center justify-between gap-2">
-          <button type="button" onclick="setSelametanWizardStep(1)" class="min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
+          <button type="button" onclick="setSelametanWizardStep(1)" class="btn-stepper-prev min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
             <i class="fa-solid fa-arrow-left text-[10px]"></i>
             <span data-i18n="selametan_kembali_tanggal">Kembali (Langkah 1)</span>
           </button>
-          <button type="button" onclick="setSelametanWizardStep(3)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-2 cursor-pointer transition shadow hover:brightness-110">
+          <button type="button" onclick="setSelametanWizardStep(3)" class="btn-primary-cta min-h-[44px] px-5 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs flex items-center gap-2 cursor-pointer transition shadow hover:brightness-110">
             <span data-i18n="selametan_lanjut_jadwal">Lihat Jadwal 7 Milestone (Langkah 3)</span>
             <i class="fa-solid fa-arrow-right text-[10px]"></i>
           </button>
@@ -2040,10 +2040,10 @@
               <h3 id="selametanSubtitle" class="font-marcellus text-lg sm:text-xl font-bold text-amber-100 mt-0.5">Rincian Hari Peringatan Selametan</h3>
             </div>
             <div class="flex items-center gap-2 flex-wrap">
-              <button onclick="setSelametanWizardStep(1)" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
+              <button onclick="setSelametanWizardStep(1)" class="btn-secondary-action min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
                 <i class="fa-solid fa-pen-to-square text-[10px]"></i> Ubah Tanggal / Waktu
               </button>
-              <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="ahli-only min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs flex items-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pengetan Tilar Donyo Kertas Kuno Tradisi Luhur">
+              <button onclick="printLaporanSelametan('parchment')" id="btnPrintSelametanParchment" class="btn-secondary-action ahli-only min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-r from-[#8c6224] to-[#d4af37] text-keraton font-bold hover:brightness-110 transition text-xs flex items-center gap-1.5 shadow-md cursor-pointer" style="display:none;" title="Ekspor PDF Pengetan Tilar Donyo Kertas Kuno Tradisi Luhur">
                 <i class="fa-solid fa-scroll"></i> <span data-i18n="btn_export_pdf">Ekspor PDF</span>
               </button>
               <!-- Tombol tersembunyi untuk kompatibilitas mundur -->
@@ -2116,11 +2116,11 @@
         </div>
 
         <div class="flex items-center gap-2 flex-wrap">
-          <button id="btnToggleIjabMode" type="button" onclick="toggleIjabFormMode()" class="px-3 py-1.5 rounded-xl border border-prada/40 bg-sogan-950 hover:bg-sogan-900 text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="btnToggleIjabMode" type="button" onclick="toggleIjabFormMode()" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-prada/40 bg-sogan-950 hover:bg-sogan-900 text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-sliders text-amber-400"></i>
             <span id="labelToggleIjabMode">Mode Form Lengkap</span>
           </button>
-          <button id="btnResetIjabToday" type="button" class="px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="btnResetIjabToday" type="button" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-prada"></i> Dinten Punika
           </button>
         </div>
@@ -2150,10 +2150,10 @@
             <span id="ijabStepIndicator" class="font-bold text-prada" data-i18n="ijab_wizard_step1" aria-live="polite">Langkah 1 dari 4: Sumber Data &amp; Tanggal Akad</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onclick="setIjabWizardStep(1)" id="ijabNavBtn1" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn1">1. Sumber Data</button>
-            <button type="button" onclick="setIjabWizardStep(2)" id="ijabNavBtn2" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn2">2. Weton &amp; Wuku</button>
-            <button type="button" onclick="setIjabWizardStep(3)" id="ijabNavBtn3" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn3">3. Panjampet</button>
-            <button type="button" onclick="setIjabWizardStep(4)" id="ijabNavBtn4" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn4">4. Rekomendasi</button>
+            <button type="button" onclick="setIjabWizardStep(1)" id="ijabNavBtn1" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn1">1. Sumber Data</button>
+            <button type="button" onclick="setIjabWizardStep(2)" id="ijabNavBtn2" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn2">2. Weton &amp; Wuku</button>
+            <button type="button" onclick="setIjabWizardStep(3)" id="ijabNavBtn3" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn3">3. Panjampet</button>
+            <button type="button" onclick="setIjabWizardStep(4)" id="ijabNavBtn4" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="ijab_wizard_btn4">4. Rekomendasi</button>
           </div>
         </div>
         <div class="w-full bg-sogan-900 h-2 rounded-full overflow-hidden" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="ijabProgressBarContainer">
@@ -2173,7 +2173,7 @@
 
           <!-- Opsi Sumber Data: Hubungkan Jodoh vs Mandiri -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <label class="cursor-pointer flex items-start gap-3 p-3.5 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
+            <label class="form-choice-card cursor-pointer flex items-start gap-3 p-3.5 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
               <input type="radio" name="ijabSourceModeRadio" id="ijabSourceManual" value="manual" checked class="accent-amber-500 w-4 h-4 mt-0.5">
               <div class="space-y-0.5">
                 <strong class="block font-bold text-prada text-xs">Input Tanggal Mandiri</strong>
@@ -2181,7 +2181,7 @@
               </div>
             </label>
 
-            <label class="cursor-pointer flex items-start gap-3 p-3.5 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
+            <label class="form-choice-card cursor-pointer flex items-start gap-3 p-3.5 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
               <input type="radio" name="ijabSourceModeRadio" id="ijabSourceJodoh" value="jodoh" class="accent-amber-500 w-4 h-4 mt-0.5">
               <div class="space-y-0.5">
                 <strong class="block font-bold text-teal-300 text-xs">Sinkron Hasil Pitung Jodoh</strong>
@@ -2200,7 +2200,7 @@
           </div>
 
           <div class="pt-2 flex justify-end">
-            <button type="button" onclick="setIjabWizardStep(2)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
+            <button type="button" onclick="setIjabWizardStep(2)" class="btn-stepper-next min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition shadow">
               <span data-i18n="ijab_lanjut_weton">Lanjut ke Weton &amp; Wuku (Langkah 2)</span>
               <i class="fa-solid fa-arrow-right text-[11px]"></i>
             </button>
@@ -2231,11 +2231,11 @@
           </div>
 
           <div class="pt-2 flex items-center justify-between gap-2">
-            <button type="button" onclick="setIjabWizardStep(1)" class="min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
+            <button type="button" onclick="setIjabWizardStep(1)" class="btn-stepper-prev min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
               <i class="fa-solid fa-arrow-left text-[10px]"></i>
               <span data-i18n="ijab_kembali_tanggal">Kembali (Langkah 1)</span>
             </button>
-            <button type="button" onclick="setIjabWizardStep(3)" class="min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center gap-2 cursor-pointer transition shadow">
+            <button type="button" onclick="setIjabWizardStep(3)" class="btn-stepper-next min-h-[44px] px-5 py-2.5 rounded-xl bg-sogan-900 border border-prada/50 hover:border-prada text-prada font-bold text-xs flex items-center gap-2 cursor-pointer transition shadow">
               <span data-i18n="ijab_lanjut_panjampet">Lanjut ke Panjampet (Langkah 3)</span>
               <i class="fa-solid fa-arrow-right text-[10px]"></i>
             </button>
@@ -2265,11 +2265,11 @@
           </div>
 
           <div class="pt-2 flex items-center justify-between gap-2">
-            <button type="button" onclick="setIjabWizardStep(2)" class="min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
+            <button type="button" onclick="setIjabWizardStep(2)" class="btn-stepper-prev min-h-[44px] px-4 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-sogan-500 text-sogan-300 hover:text-white font-medium text-xs flex items-center gap-1.5 cursor-pointer transition">
               <i class="fa-solid fa-arrow-left text-[10px]"></i>
               <span data-i18n="ijab_kembali_weton">Kembali (Langkah 2)</span>
             </button>
-            <button id="btnHitungIjab" type="button" onclick="setIjabWizardStep(4)" class="min-h-[44px] px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 via-amber-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
+            <button id="btnHitungIjab" type="button" onclick="setIjabWizardStep(4)" class="btn-primary-cta min-h-[44px] px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 via-amber-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer">
               <i class="fa-solid fa-ring"></i>
               <span data-i18n="ijab_lanjut_rekomendasi">Lihat Rekomendasi &amp; Hasil (Langkah 4)</span>
             </button>
@@ -2281,7 +2281,7 @@
       <!-- LANGKAH 4: CONTAINER HASIL & REKOMENDASI PETUNG IJAB -->
       <div id="ijabStepContainer4" class="hidden space-y-4">
         <div class="flex items-center justify-between">
-          <button type="button" onclick="setIjabWizardStep(1)" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
+          <button type="button" onclick="setIjabWizardStep(1)" class="btn-secondary-action min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
             <i class="fa-solid fa-pen-to-square text-[10px]"></i> Ubah Tanggal / Parameter Ijab
           </button>
         </div>
@@ -2313,11 +2313,11 @@
         </div>
 
         <div class="flex items-center gap-2 flex-wrap">
-          <button id="btnToggleOmahMode" type="button" onclick="window.toggleOmahFormMode && window.toggleOmahFormMode()" class="px-3 py-1.5 rounded-xl border border-prada/40 bg-sogan-950 hover:bg-sogan-900 text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="btnToggleOmahMode" type="button" onclick="window.toggleOmahFormMode && window.toggleOmahFormMode()" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-prada/40 bg-sogan-950 hover:bg-sogan-900 text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-sliders text-amber-400"></i>
             <span id="labelToggleOmahMode" data-i18n="omah_mode_lengkap">Mode Form Lengkap</span>
           </button>
-          <button id="btnResetOmahToday" type="button" class="px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="btnResetOmahToday" type="button" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-prada"></i> <span data-i18n="cal_btn_reset_today">Dinten Punika</span>
           </button>
         </div>
@@ -2331,10 +2331,10 @@
             <span id="omahStepIndicator" class="font-bold text-prada" data-i18n="omah_wizard_step1" aria-live="polite">Langkah 1 dari 4: Tujuan, Tanggal &amp; Arah Pintu Utama</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1)" id="omahNavBtn1" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn1">1. Tujuan &amp; Tanggal</button>
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2)" id="omahNavBtn2" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn2">2. Cempuri</button>
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(3)" id="omahNavBtn3" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn3">3. Lahan &amp; Mangsa</button>
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(4)" id="omahNavBtn4" class="min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn4">4. Hasil Petung</button>
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1)" id="omahNavBtn1" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-prada/60 text-xs font-semibold text-prada cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn1">1. Tujuan &amp; Tanggal</button>
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2)" id="omahNavBtn2" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn2">2. Cempuri</button>
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(3)" id="omahNavBtn3" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn3">3. Lahan &amp; Mangsa</button>
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(4)" id="omahNavBtn4" class="stepper-nav-pill min-h-[44px] px-3 py-2 rounded-xl bg-sogan-900 border border-sogan-700 text-xs font-medium text-sogan-300 hover:text-white cursor-pointer transition active:scale-95" data-i18n="omah_wizard_btn4">4. Hasil Petung</button>
           </div>
         </div>
         <div class="w-full bg-sogan-900 h-2 rounded-full overflow-hidden" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="omahProgressBarContainer">
@@ -2357,14 +2357,14 @@
               <i class="fa-solid fa-bullseye text-prada mr-1"></i> <span data-i18n="omah_label_tujuan">Tujuan Hajat Omah</span>
             </label>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-              <label class="cursor-pointer flex items-start gap-3 p-3 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
+              <label class="form-choice-card cursor-pointer flex items-start gap-3 p-3 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
                 <input type="radio" name="omahTujuanHajat" id="omahTujuanMbangun" value="mbangun" checked class="accent-amber-500 w-4 h-4 mt-0.5">
                 <div class="space-y-0.5">
                   <strong class="block font-bold text-prada text-xs">Ngedekake / Mbangun Omah</strong>
                   <p class="text-[11px] text-sogan-300 leading-relaxed">Mendirikan fondasi, pasang atap (mayu), atau membuka lahan hunian baru.</p>
                 </div>
               </label>
-              <label class="cursor-pointer flex items-start gap-3 p-3 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
+              <label class="form-choice-card cursor-pointer flex items-start gap-3 p-3 rounded-xl bg-keraton/90 border border-sogan-700 hover:border-prada transition text-xs has-[:checked]:border-prada has-[:checked]:bg-sogan-950 shadow-sm min-h-[44px]">
                 <input type="radio" name="omahTujuanHajat" id="omahTujuanBoyongan" value="boyongan" class="accent-amber-500 w-4 h-4 mt-0.5">
                 <div class="space-y-0.5">
                   <strong class="block font-bold text-amber-200 text-xs">Boyongan / Pindah Rumah</strong>
@@ -2403,7 +2403,7 @@
 
           <!-- Navigasi Langkah 1 -->
           <div class="flex items-center justify-end pt-3 border-t border-sogan-800">
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2)" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer">
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2)" class="btn-stepper-next w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer">
               <span data-i18n="omah_lanjut_cempuri">Lanjut ke Posisi Cempuri (Langkah 2)</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -2449,11 +2449,11 @@
 
           <!-- Navigasi Langkah 2 -->
           <div class="flex items-center justify-between pt-3 border-t border-sogan-800 gap-2">
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1, false)" class="px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer min-h-[44px] transition">
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1, false)" class="btn-stepper-prev px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer min-h-[44px] transition">
               <i class="fa-solid fa-arrow-left"></i>
               <span data-i18n="omah_kembali_tanggal">Kembali ke Tanggal &amp; Arah (Langkah 1)</span>
             </button>
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(3)" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center gap-2 min-h-[44px] cursor-pointer">
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(3)" class="btn-stepper-next px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center gap-2 min-h-[44px] cursor-pointer">
               <span data-i18n="omah_lanjut_lahan">Lanjut ke Lahan &amp; Mangsa (Langkah 3)</span>
               <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -2540,11 +2540,11 @@
 
           <!-- Navigasi Langkah 3 & Tombol Hitung -->
           <div class="flex items-center justify-between pt-3 border-t border-sogan-800 gap-2">
-            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2, false)" class="px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer min-h-[44px] transition">
+            <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(2, false)" class="btn-stepper-prev px-4 py-2.5 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer min-h-[44px] transition">
               <i class="fa-solid fa-arrow-left"></i>
               <span data-i18n="omah_kembali_cempuri">Kembali ke Posisi Cempuri (Langkah 2)</span>
             </button>
-            <button id="btnHitungOmah" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 via-amber-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer">
+            <button id="btnHitungOmah" type="button" class="btn-primary-cta w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 via-amber-600 to-prada text-keraton font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer">
               <i class="fa-solid fa-house-chimney"></i>
               <span data-i18n="omah_btn_hitung">Pétung Omah (Babar Padunungan)</span>
             </button>
@@ -2556,7 +2556,7 @@
       <!-- LANGKAH 4: CONTAINER HASIL & REKOMENDASI PETUNG OMAH -->
       <div id="omahStepContainer4" class="hidden space-y-4">
         <div class="flex items-center justify-between">
-          <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1)" class="min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
+          <button type="button" onclick="window.setOmahWizardStep && window.setOmahWizardStep(1)" class="btn-secondary-action min-h-[44px] px-3.5 py-2 rounded-xl bg-sogan-900 border border-sogan-700 hover:border-prada text-sogan-200 hover:text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition">
             <i class="fa-solid fa-pen-to-square text-[10px]"></i> Ubah Tanggal / Parameter Omah
           </button>
         </div>
@@ -2763,7 +2763,7 @@
                 <select id="ternakSelPasaran" class="w-full bg-keraton/90 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[44px]"></select>
               </div>
               <div class="sm:col-span-2 md:col-span-1 flex items-end">
-                <button type="button" id="btnCariTanggal1Bulan" onclick="window.cariTanggalSesuai1Bulan()" class="w-full px-4 py-2.5 rounded-xl bg-sogan-900 border border-prada/60 hover:border-prada text-prada text-xs font-bold transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer shadow hover:bg-sogan-850">
+                <button type="button" id="btnCariTanggal1Bulan" onclick="window.cariTanggalSesuai1Bulan()" class="btn-secondary-action w-full px-4 py-2.5 rounded-xl bg-sogan-900 border border-prada/60 hover:border-prada text-prada text-xs font-bold transition flex items-center justify-center gap-2 min-h-[44px] cursor-pointer shadow hover:bg-sogan-850">
                   <i class="fa-solid fa-calendar-check"></i>
                   <span>Daftar Tanggal (1 Bln)</span>
                 </button>
@@ -2786,7 +2786,7 @@
 
         <!-- Tombol Hitung Petung Kehidupan -->
         <div class="flex items-center justify-end pt-2 border-t border-sogan-800/80">
-          <button id="btnHitungTernak" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px]">
+          <button id="btnHitungTernak" type="button" class="btn-primary-cta w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2 min-h-[44px]">
             <i class="fa-solid fa-calculator"></i>
             <span data-i18n="ternak_btn_hitung">Hitung Petung Kehidupan</span>
           </button>
@@ -2843,7 +2843,7 @@
             </select>
           </div>
           <div class="flex items-end">
-            <button onclick="window.cariHariPetungKehidupanUI()" type="button" class="w-full py-2 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-1.5 min-h-[44px]">
+            <button onclick="window.cariHariPetungKehidupanUI()" type="button" class="btn-primary-cta w-full py-2 px-4 rounded-xl bg-gradient-to-r from-sogan-600 to-prada text-keraton font-bold text-xs shadow hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-1.5 min-h-[44px]">
               <i class="fa-solid fa-magnifying-glass"></i> <span data-i18n="ternak_search_btn">Pados Dinten</span>
             </button>
           </div>

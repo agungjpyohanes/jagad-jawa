@@ -3219,6 +3219,298 @@ html, body {
   transition: all 0.2s ease-in-out;
 }
 
+/* ========================================================================= */
+/* JAWA-V14: DESIGN SYSTEM - HIERARKI VISUAL TOMBOL & STRUKTUR FORM ELEGAN   */
+/* Prinsip Separation of Concerns: Tampilan vs Logika Engine                */
+/* ========================================================================= */
+
+/* 1. PRIMARY CALL-TO-ACTION (CTA) BUTTONS */
+/* Digunakan khusus untuk aksi kalkulasi utama beranda & modul domain */
+.btn-primary-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 46px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.875rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  color: #120e09 !important;
+  background: linear-gradient(135deg, #b8860b 0%, #d4af37 50%, #f3ce70 100%);
+  border: 1px solid rgba(243, 206, 112, 0.5);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.28), 0 2px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary-cta:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 6px 22px rgba(212, 175, 55, 0.45), 0 2px 6px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1.5px);
+  color: #0b0906 !important;
+}
+
+.btn-primary-cta:active {
+  transform: translateY(0.5px) scale(0.985);
+  filter: brightness(0.96);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.25);
+}
+
+.btn-primary-cta:focus-visible {
+  outline: 2px solid #f3ce70 !important;
+  outline-offset: 3px !important;
+}
+
+/* 2. SECONDARY ACTION BUTTONS (Reset, Bagikan, Riwayat, Panduan, Cetak) */
+.btn-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 42px;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0.75rem;
+  font-family: inherit;
+  font-size: 0.775rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  color: #d1bda2;
+  background: rgba(22, 18, 14, 0.85);
+  border: 1px solid rgba(162, 118, 62, 0.45);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  user-select: none;
+}
+
+.btn-secondary-action:hover {
+  background: rgba(36, 28, 20, 0.95);
+  border-color: rgba(212, 175, 55, 0.75);
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(212, 175, 55, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-secondary-action:active {
+  transform: translateY(0.5px);
+  background: rgba(18, 14, 11, 0.95);
+}
+
+/* 3. STEPPER NAVIGATION BUTTONS (Lanjut / Kembali) */
+.btn-stepper-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.35rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fce8b3;
+  background: linear-gradient(135deg, rgba(140, 98, 36, 0.85) 0%, rgba(184, 134, 11, 0.85) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4), 0 0 12px rgba(212, 175, 55, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn-stepper-next:hover {
+  background: linear-gradient(135deg, rgba(160, 112, 42, 0.95) 0%, rgba(212, 175, 55, 0.95) 100%);
+  border-color: #f3ce70;
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-stepper-next:active {
+  transform: translateY(0.5px) scale(0.985);
+}
+
+.btn-stepper-next i {
+  transition: transform 0.2s ease;
+}
+
+.btn-stepper-next:hover i {
+  transform: translateX(2.5px);
+}
+
+.btn-stepper-prev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.65rem 1.15rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a89882;
+  background: rgba(20, 16, 13, 0.75);
+  border: 1px solid rgba(130, 95, 52, 0.35);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn-stepper-prev:hover {
+  background: rgba(30, 24, 18, 0.9);
+  border-color: rgba(162, 118, 62, 0.6);
+  color: #e6dfd5;
+  transform: translateY(-1px);
+}
+
+.btn-stepper-prev:active {
+  transform: translateY(0.5px);
+}
+
+.btn-stepper-prev i {
+  transition: transform 0.2s ease;
+}
+
+.btn-stepper-prev:hover i {
+  transform: translateX(-2.5px);
+}
+
+/* 4. FORM CARD WRAPPER & GRID STRUCTURING */
+.form-card-panel {
+  background: rgba(22, 17, 13, 0.88);
+  border: 1px solid rgba(162, 118, 62, 0.35);
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 175, 55, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@media (max-width: 640px) {
+  .form-card-panel {
+    padding: 1rem 0.875rem;
+  }
+}
+
+.form-group-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.form-label-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.775rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  color: #e5c986;
+  margin-bottom: 0.15rem;
+}
+
+.form-label-hint {
+  font-size: 0.7rem;
+  color: #9f8c74;
+  line-height: 1.35;
+}
+
+.form-input-modern {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.625rem 0.875rem;
+  background: rgba(12, 9, 7, 0.92);
+  border: 1px solid rgba(162, 118, 62, 0.4);
+  border-radius: 0.75rem;
+  color: #f7ede2;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  transition: all 0.18s ease-in-out;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.form-input-modern:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(16, 12, 9, 0.98);
+}
+
+/* 5. INTERACTIVE CHOICE CARDS (Radio / Segmented) */
+.form-choice-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(16, 12, 9, 0.85);
+  border: 1px solid rgba(162, 118, 62, 0.3);
+  color: #d8c8b4;
+  font-size: 0.775rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.form-choice-card:hover {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(26, 20, 15, 0.95);
+  color: #ffffff;
+}
+
+.form-choice-card.is-active,
+.form-choice-card:has(input:checked) {
+  border-color: #d4af37;
+  background: rgba(45, 33, 20, 0.95);
+  color: #fce8b3;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.18), inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+}
+
+/* 6. WIZARD STEPPER TRACK & PILLS */
+.stepper-nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.stepper-nav-pill {
+  min-height: 38px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.65rem;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: #a89882;
+  background: rgba(18, 14, 11, 0.8);
+  border: 1px solid rgba(130, 95, 52, 0.3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.stepper-nav-pill:hover {
+  color: #f7ede2;
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.stepper-nav-pill.active,
+.stepper-nav-pill[aria-current="step"] {
+  color: #d4af37 !important;
+  border-color: #d4af37 !important;
+  background: rgba(35, 26, 17, 0.95) !important;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+
 
 
 
