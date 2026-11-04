@@ -22,6 +22,6 @@ describe('Share Card Weton & WhatsApp Formatter (Tahap 2)', () => {
     assert.ok(text.includes('Neptu:'));
     assert.ok(text.includes('Pranata Mangsa:'));
     assert.ok(text.includes('Pitutur Luhur:'));
-    assert.ok(text.includes('jagad-jawa.web.app'));
+    assert.ok(text.includes('jagad-jawa.pages.dev'));
   });
 });

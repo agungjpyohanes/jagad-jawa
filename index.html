@@ -140,7 +140,7 @@
                   </div>
                   <div class="text-left">
                     <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_kalender_manten">Kalender Hari Baik Nikah</div>
-                    <div class="text-[10px] text-sogan-400" data-i18n="nav_kalender_manten_sub">Tabel 17 Kolom &amp; Pemetaan Hari</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_kalender_manten_sub">Petung Ijab Manten</div>
                   </div>
                 </button>
               </div>
@@ -196,7 +196,7 @@
                   </div>
                   <div class="text-left">
                     <div class="font-bold text-teal-200 group-hover/item:text-teal-100" data-i18n="nav_kalender_manten">Kalender Hari Baik Nikah</div>
-                    <div class="text-[10px] text-teal-300/80" data-i18n="nav_kalender_manten_sub">Tabel 17 Kolom &amp; Pemetaan Hari</div>
+                    <div class="text-[10px] text-teal-300/80" data-i18n="nav_kalender_manten_sub">Petung Ijab Manten</div>
                   </div>
                 </button>
                 <button onclick="switchTab('omah')" class="nav-sublink group/item" data-tab="omah">
@@ -2144,7 +2144,7 @@
           <button id="btnResetIjabToday" type="button" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-prada"></i> Dinten Punika
           </button>
-          <button type="button" onclick="switchTab('hari-baik-pernikahan')" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-teal-500/50 bg-teal-950/80 hover:bg-teal-900 text-teal-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-sm" title="Buka Kalender Hari Baik Pernikahan (Tabel 17 Kolom)">
+          <button type="button" onclick="switchTab('hari-baik-pernikahan')" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-teal-500/50 bg-teal-950/80 hover:bg-teal-900 text-teal-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-sm" title="Buka Kalender Hari Baik Pernikahan (Petung Ijab Manten)">
             <i class="fa-solid fa-calendar-check text-teal-400"></i> Kalender Hari Baik
           </button>
         </div>
@@ -2331,14 +2331,14 @@
                 Primbon Palakrama Nusantara
               </span>
               <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-teal-500/10 text-teal-300 border border-teal-500/30">
-                17 Kolom Lengkap
+                Petung Ijab Manten
               </span>
             </div>
             <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
               <span data-i18n="tab_kalender_manten_title">Kalender Hari Baik Pernikahan</span>
             </h2>
             <p class="text-xs text-sogan-300">
-              <span data-i18n="tab_kalender_manten_desc">Tabel interaktif pemetaan hari baik akad nikah berdasarkan 17 kolom kalkulasi primbon Jawa, Dina Gede, Dina Ijo, Dina Abang, dan analisis sasi jelek tahun.</span>
+              <span data-i18n="tab_kalender_manten_desc">Tabel interaktif pemetaan hari baik akad nikah berdasarkan Petung Ijab Manten, Dina Gede, Dina Ijo, Dina Abang, dan analisis sasi jelek tahun.</span>
             </p>
           </div>
         </div>
@@ -2373,29 +2373,29 @@
           <!-- Preset Cepat (Pill buttons) -->
           <div class="flex items-center gap-1.5 flex-wrap text-xs">
             <span class="text-[11px] text-sogan-400 mr-1 hidden sm:inline">Pilihan Cepat:</span>
-            <button type="button" onclick="setKalenderPresetRange(1)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+            <button type="button" id="kmBtnPreset1" data-preset-months="1" onclick="setKalenderPresetRange(1)" class="px-2.5 py-1 rounded-lg bg-prada/30 border border-prada text-prada font-bold text-xs transition cursor-pointer">
               1 Bulan
             </button>
-            <button type="button" onclick="setKalenderPresetRange(3)" class="px-2.5 py-1 rounded-lg bg-prada/20 hover:bg-prada/30 border border-prada/60 text-prada text-xs font-bold transition cursor-pointer">
+            <button type="button" id="kmBtnPreset3" data-preset-months="3" onclick="setKalenderPresetRange(3)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
               ★ 3 Bulan (Rekomendasi)
             </button>
-            <button type="button" onclick="setKalenderPresetRange(6)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+            <button type="button" id="kmBtnPreset6" data-preset-months="6" onclick="setKalenderPresetRange(6)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
               6 Bulan
             </button>
-            <button type="button" onclick="setKalenderPresetRange(12)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+            <button type="button" id="kmBtnPreset12" data-preset-months="12" onclick="setKalenderPresetRange(12)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
               1 Tahun Penuh
             </button>
           </div>
         </div>
 
         <!-- Baris Input Tanggal & Pencarian -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs items-end">
           <!-- Tanggal Awal -->
           <div>
             <label for="kmStartDate" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
               <i class="fa-solid fa-calendar-day text-prada mr-1"></i> Tanggal Mulai
             </label>
-            <input type="date" id="kmStartDate" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+            <input type="date" id="kmStartDate" value="2026-11-01" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
           </div>
 
           <!-- Tanggal Akhir -->
@@ -2403,7 +2403,18 @@
             <label for="kmEndDate" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
               <i class="fa-solid fa-calendar-check text-prada mr-1"></i> Tanggal Selesai
             </label>
-            <input type="date" id="kmEndDate" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+            <input type="date" id="kmEndDate" value="2026-11-30" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+          </div>
+
+          <!-- Tombol Mulai Hitung Eksplisit -->
+          <div>
+            <label class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1 opacity-0 pointer-events-none select-none">
+              Aksi
+            </label>
+            <button type="button" id="kmBtnMulaiHitung" onclick="terapkanKalenderKustom()" class="w-full bg-prada hover:bg-amber-400 text-keraton font-bold px-3 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-md shadow-prada/20 min-h-[40px] cursor-pointer">
+              <i class="fa-solid fa-calculator"></i>
+              <span>Mulai Hitung</span>
+            </button>
           </div>
 
           <!-- Filter Pasatuan Manten Dropdown -->
@@ -2464,7 +2475,7 @@
               <input type="checkbox" id="kmChkWeekend" onchange="onFilterCheckboxChange()" class="accent-teal-500 w-3.5 h-3.5 rounded">
               <span>Akhir Pekan Saja (Sabtu-Minggu)</span>
             </label>
-            <button type="button" onclick="resetSemuaFilter()" class="text-xs text-sogan-400 hover:text-prada underline ml-1 cursor-pointer">
+            <button type="button" id="kmBtnResetFilter" onclick="resetSemuaFilter()" class="text-xs text-sogan-400 hover:text-prada underline ml-1 cursor-pointer">
               Reset
             </button>
           </div>
@@ -2496,14 +2507,14 @@
           <div class="space-y-1">
             <strong class="text-rose-400 block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Bulan Jelek Tahun Jawa (Windu):</strong>
             <ul class="space-y-0.5 list-disc list-inside leading-relaxed text-sogan-300">
-              <li><strong>Alip:</strong> Jumadilakir &amp; Sela (Kalebo Wisa)</li>
-              <li><strong>Ehe:</strong> Bakda Mulud &amp; Pasa (Lara Balung)</li>
-              <li><strong>Jimawal:</strong> Mulud &amp; Besar (Lara Edan)</li>
-              <li><strong>Je:</strong> Sura &amp; Sawal (Keli ing Banyu)</li>
-              <li><strong>Dal:</strong> Ruwah (Lara Basah)</li>
-              <li><strong>Be:</strong> Sapar &amp; Rejeb (Lara Rumat)</li>
-              <li><strong>Wawu:</strong> Jumadilawal (Prakara Gedhe)</li>
-              <li><strong>Jumakir:</strong> Mulud &amp; Besar (Kesinungan Lara)</li>
+              <li><strong>Alip:</strong> Jumadilakir lan Sela bakal Kalebo Wisa</li>
+              <li><strong>Ehe:</strong> Bakdamulud lan Pasa bakal kena Lara Balung</li>
+              <li><strong>Jimawal:</strong> Mulud lan Besar bakal kena lara Edan</li>
+              <li><strong>Je:</strong> Sura dan Sawal bakal Keli ing Banyu</li>
+              <li><strong>Dal:</strong> Ruwah bakal kena lara Basah</li>
+              <li><strong>Be:</strong> Sapar dan Rejeb bakal kena lara Rumat</li>
+              <li><strong>Wawu:</strong> Jumadilawal bakal kena Prakara kang Gedhe</li>
+              <li><strong>Jumakir:</strong> Mulud lan Besar bakal kesinungan lara</li>
             </ul>
           </div>
           <div class="space-y-1">
@@ -2522,7 +2533,12 @@
 
       <!-- Bar Indikator Jumlah Baris Terfilter -->
       <div class="flex items-center justify-between text-xs text-sogan-400 px-1">
-        <div id="kmFilteredCount" class="font-mono text-sogan-300">Memuat data kalender...</div>
+        <div id="kmFilteredCount" class="font-mono text-sogan-300">
+          <span class="inline-flex items-center gap-1.5 text-xs text-amber-300">
+            <i class="fa-solid fa-circle-notch fa-spin text-prada text-xs"></i>
+            <span>Memuat data kalender...</span>
+          </span>
+        </div>
         <div class="flex items-center gap-2">
           <span class="inline-flex items-center gap-1 text-[11px] text-emerald-300">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Becik Sanget
@@ -2536,8 +2552,18 @@
         </div>
       </div>
 
-      <!-- Container Tabel 17 Kolom Interaktif -->
-      <div id="kmTableContainer"></div>
+      <!-- Container Tabel 17 Kolom Interaktif (dengan Spinner Responsif Default) -->
+      <div id="kmTableContainer">
+        <div id="kmLoadingSpinner" class="p-12 text-center rounded-2xl bg-keraton/90 border border-sogan-800 space-y-4 shadow-xl backdrop-blur-md">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-sogan-950 border border-prada/40 shadow-lg text-prada">
+            <i class="fa-solid fa-circle-notch fa-spin text-2xl text-amber-400"></i>
+          </div>
+          <div class="space-y-1">
+            <h4 class="font-marcellus text-base text-amber-200">Memuat Kalkulasi Primbon Palakrama</h4>
+            <p class="text-xs text-sogan-400 font-mono" id="kmLoadingProgressDetail">Menghitung 17 kolom hari baik pernikahan...</p>
+          </div>
+        </div>
+      </div>
 
     </section>
 

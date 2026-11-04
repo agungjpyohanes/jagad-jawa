@@ -2831,7 +2831,7 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
         <!-- PAGE FOOTER -->
         <div class="page-inner-footer" style="margin-top: 8px; display: flex; justify-content: space-between; font-size: 7pt; border-top: 0.5pt solid currentColor; padding-top: 1mm;">
           <span>${nama} &middot; Transkripsi Ringkas Primbon Nujum Pribadi</span>
-          <span>Jagad Jawa Archival &middot; www.jagad-jawa.web.app</span>
+          <span>Jagad Jawa Archival &middot; jagad-jawa.pages.dev</span>
         </div>
       </div>
     </div>

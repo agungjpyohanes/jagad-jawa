@@ -86,7 +86,7 @@ export function buildSapaDinaShareText(data) {
       `💬 *Piwulang Luhur Dinten Punika:*\n` +
       `"${pitutur.jawa}"\n` +
       `_${pitutur.artiHarfiah}_\n\n` +
-      `Njajah kalendher Jawi & kabudayan Nuswantara:\nhttps://jagad-jawa.vercel.app`
+      `Njajah kalendher Jawi & kabudayan Nuswantara:\nhttps://jagad-jawa.pages.dev`
     );
   }
 
@@ -106,7 +106,7 @@ export function buildSapaDinaShareText(data) {
     `💬 *Pitutur Luhur Hari Ini:*\n` +
     `"${pitutur.jawa}"\n` +
     `_${pitutur.artiHarfiah}_\n\n` +
-    `Jelajahi kalender Jawa & budaya Nusantara:\nhttps://jagad-jawa.vercel.app`
+    `Jelajahi kalender Jawa & budaya Nusantara:\nhttps://jagad-jawa.pages.dev`
   );
 }
 
@@ -364,7 +364,7 @@ export function drawSapaDinaCardToCanvas(canvas, data) {
   // 9. Watermark Footer
   ctx.fillStyle = '#64748b';
   ctx.font = '11px monospace';
-  ctx.fillText('jagad-jawa.web.app · Kasultanan Nusantara · Lestari Budaya Luhur', width / 2, height - 38);
+  ctx.fillText('jagad-jawa.pages.dev · Kasultanan Nusantara · Lestari Budaya Luhur', width / 2, height - 38);
 }
 
 /**
@@ -445,7 +445,7 @@ export async function shareSapaDinaVisual() {
         try {
           await navigator.share({
             title,
-            text: `Sapa Dina — ${_cachedSapaDinaData.wetonDisplay}\nhttps://jagad-jawa.web.app`,
+            text: `Sapa Dina — ${_cachedSapaDinaData.wetonDisplay}\nhttps://jagad-jawa.pages.dev`,
             files: [file]
           });
           showToast('Gambar Sapa Dina kasil dibagikaken!');

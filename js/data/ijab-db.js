@@ -229,84 +229,96 @@ export const IJAB_SASI = [
     "sasi_jawa": "Sura",
     "alias_sumber": "Suro",
     "padanan_hijriah": "Muharram",
-    "kanggo_ijab": "Rusak ing Tembemburine"
+    "kanggo_ijab": "Rusak ing Tembemburine",
+    "status_tegese": "Ala"
   },
   {
     "id": 2,
     "sasi_jawa": "Sapar",
     "alias_sumber": "",
     "padanan_hijriah": "Safar",
-    "kanggo_ijab": "Kekuranga lan Sugih Utang"
+    "kanggo_ijab": "Kekurangan lan Sugih Utang",
+    "status_tegese": "Ala"
   },
   {
     "id": 3,
     "sasi_jawa": "Mulud",
     "alias_sumber": "",
     "padanan_hijriah": "Rabi'ul-Awwal",
-    "kanggo_ijab": "Mati Salah Siji"
+    "kanggo_ijab": "Mati Salah Siji",
+    "status_tegese": "Ala"
   },
   {
     "id": 4,
     "sasi_jawa": "Bakda Mulud",
     "alias_sumber": "Bakdomulud, Bakda Mulud",
     "padanan_hijriah": "Rabi'ul-Akhir",
-    "kanggo_ijab": "Nemu Ujar Kang Alal ing Tembemburine"
+    "kanggo_ijab": "Nemu Ujar Kang Alal ing Tembemburine",
+    "status_tegese": "Ala"
   },
   {
     "id": 5,
     "sasi_jawa": "Jumadilawal",
     "alias_sumber": "",
     "padanan_hijriah": "Jumadil-Awwal",
-    "kanggo_ijab": "Kerep Kemalingan lan Kapusan"
+    "kanggo_ijab": "Kerep Kemalingan lan Kapusan",
+    "status_tegese": "Ala"
   },
   {
     "id": 6,
     "sasi_jawa": "Jumadilakir",
     "alias_sumber": "",
     "padanan_hijriah": "Jumadil-Akhir",
-    "kanggo_ijab": "Sugih Emas Salaka"
+    "kanggo_ijab": "Sugih Emas Salaka",
+    "status_tegese": "Becik"
   },
   {
     "id": 7,
     "sasi_jawa": "Rejeb",
     "alias_sumber": "",
     "padanan_hijriah": "Rajab",
-    "kanggo_ijab": "Sugih Anak"
+    "kanggo_ijab": "Sugih Anak",
+    "status_tegese": "Netral"
   },
   {
     "id": 8,
     "sasi_jawa": "Ruwah",
     "alias_sumber": "",
     "padanan_hijriah": "Sya'ban",
-    "kanggo_ijab": "Rahayu Sakabehe"
+    "kanggo_ijab": "Rahayu Sakabehe",
+    "status_tegese": "Becik"
   },
   {
     "id": 9,
     "sasi_jawa": "Pasa (Siyam)",
     "alias_sumber": "Pasa",
     "padanan_hijriah": "Ramadan",
-    "kanggo_ijab": "Rahayu Sakabehe"
+    "kanggo_ijab": "Rahayu Sakabehe",
+    "status_tegese": "Becik"
   },
   {
     "id": 10,
     "sasi_jawa": "Sawal",
     "alias_sumber": "",
     "padanan_hijriah": "Syawwal",
-    "kanggo_ijab": "Kekurangan lan Sugih Utang"
+    "kanggo_ijab": "Kekurangan lan Sugih Utang",
+    "status_tegese": "Ala"
   },
   {
     "id": 11,
     "sasi_jawa": "Sela (Dulkangidah)",
-    "alias_sumber": "Sela",
+    "alias_sumber": "Sela, Dulkaidah",
     "padanan_hijriah": "Dzulqa'dah",
-    "kanggo_ijab": "Geringen lan Kerep Padudon karo Sanak Kadange"
+    "kanggo_ijab": "Geringen lan Kerep Padudon karo Sanak Kadange",
+    "status_tegese": "Ala"
   },
   {
     "id": 12,
     "sasi_jawa": "Besar",
     "alias_sumber": "",
     "padanan_hijriah": "Dzulhijjah",
-    "kanggo_ijab": "Bisa Sugih lan Nemu Karaharjan"
+    "kanggo_ijab": "Bisa Sugih lan Nemu Karaharjan",
+    "status_tegese": "Becik"
   }
 ];
 
@@ -314,12 +326,12 @@ export const IJAB_TAHUN_WINDU = [
   {
     "id": 1,
     "tahun_jawa": "Alip",
-    "kanggo_ijab": "Jumadilakir lan Sela (Dulkangidah) bakal Kalebo Wisa"
+    "kanggo_ijab": "Jumadilakir lan Sela bakal Kalebo Wisa"
   },
   {
     "id": 2,
     "tahun_jawa": "Ehe",
-    "kanggo_ijab": "Bakda Mulud lan Pasa (Siyam) bakal kena Lara Balung"
+    "kanggo_ijab": "Bakdamulud lan Pasa bakal kena Lara Balung"
   },
   {
     "id": 3,
@@ -329,7 +341,7 @@ export const IJAB_TAHUN_WINDU = [
   {
     "id": 4,
     "tahun_jawa": "Je",
-    "kanggo_ijab": "Sura lan Sawal bakal Keli ing Banyu"
+    "kanggo_ijab": "Sura dan Sawal bakal Keli ing Banyu"
   },
   {
     "id": 5,
@@ -339,7 +351,7 @@ export const IJAB_TAHUN_WINDU = [
   {
     "id": 6,
     "tahun_jawa": "Be",
-    "kanggo_ijab": "Sapar lan Rejeb bakal kena lara Rumat"
+    "kanggo_ijab": "Sapar dan Rejeb bakal kena lara Rumat"
   },
   {
     "id": 7,
@@ -744,36 +756,42 @@ export const IJAB_WETON = [
 export const KAMUS_SURASA_IJAB = [
   {
     "id": 1,
-    "surasane_ijab": "Sanggar Waringin",
-    "tegese": "Bisa Dadi Pangaubaning Keluwarga",
-    "status_ringkas": "Becik"
-  },
-  {
-    "id": 2,
+    "sisa_mod": 1,
     "surasane_ijab": "Kala Tinantang",
     "tegese": "Padudon",
     "status_ringkas": "Ala"
   },
   {
-    "id": 3,
+    "id": 2,
+    "sisa_mod": 2,
     "surasane_ijab": "Demang Kanduruan",
-    "tegese": "Susah lan Lara - laranen",
+    "tegese": "Susah lan Lara-laranen",
     "status_ringkas": "Ala"
   },
   {
+    "id": 3,
+    "sisa_mod": 3,
+    "surasane_ijab": "Sanggar Waringin",
+    "tegese": "Bisa Dadi Pangaubaning Keluwarga",
+    "status_ringkas": "Becik"
+  },
+  {
     "id": 4,
+    "sisa_mod": 4,
     "surasane_ijab": "Satriya Sinarajo",
     "tegese": "Becik lan Rahayu",
     "status_ringkas": "Becik"
   },
   {
     "id": 5,
+    "sisa_mod": 5,
     "surasane_ijab": "Macan Ketawan",
     "tegese": "Kisinan",
     "status_ringkas": "Ala"
   },
   {
     "id": 6,
+    "sisa_mod": 0,
     "surasane_ijab": "Nuju Pati",
     "tegese": "Ala Banget",
     "status_ringkas": "Ala"

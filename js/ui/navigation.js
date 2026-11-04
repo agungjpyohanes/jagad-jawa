@@ -128,6 +128,9 @@ function switchTab(tabId, pushState = true) {
   if (tabId === 'pustaka' && typeof window.initPustakaUI === 'function') {
     window.initPustakaUI('pustakaContainer');
   }
+  if ((tabId === 'hari-baik-pernikahan' || tabId === 'kalender-manten') && typeof window.initKalenderMantenUI === 'function') {
+    window.initKalenderMantenUI();
+  }
 
   // Perbarui jejak hierarki Breadcrumb bergaya Windows Explorer
   renderBreadcrumb(tabId);
@@ -267,13 +270,13 @@ const BREADCRUMB_MAP = {
     category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
     title: { id: 'Kalender Hari Baik Pernikahan', jv: 'Kalendher Dinten Sae Palakrama' },
     icon: 'fa-solid fa-calendar-check',
-    sub: { id: 'Tabel 17 Kolom & Pemetaan Hari', jv: 'Tabel 17 Kolom & Petung Dinten' }
+    sub: { id: 'Petung Ijab Manten', jv: 'Petung Ijab Manten' }
   },
   'kalender-manten': {
     category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
     title: { id: 'Kalender Hari Baik Pernikahan', jv: 'Kalendher Dinten Sae Palakrama' },
     icon: 'fa-solid fa-calendar-check',
-    sub: { id: 'Tabel 17 Kolom & Pemetaan Hari', jv: 'Tabel 17 Kolom & Petung Dinten' }
+    sub: { id: 'Petung Ijab Manten', jv: 'Petung Ijab Manten' }
   },
   'ijab': {
     category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },

@@ -961,7 +961,7 @@ export function copyKompasDanyangResult() {
   text += `✨ Watak Spiritual  : ${r.watak_spiritual}\n\n`;
   text += `📜 *Pitedah Danyang:*\n${r.danyang_pitedah}\n\n`;
   text += `🍶 *Sesaji & Ubarampe:*\n${r.sesaji_ubarampe}\n\n`;
-  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa (Presisi 360°)\nhttps://jagad-jawa.web.app`;
+  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa (Presisi 360°)\nhttps://jagad-jawa.pages.dev`;
 
   copyToClipboard(text, `Pitedah Kompas Danyang ${r.nama_bersih} (${r.sudut}°) kasil disalin!`);
 }
@@ -1112,7 +1112,7 @@ export function copyMendhemAriAri() {
     text += `${i + 1}. ${u}\n`;
   });
   text += `\n📜 *Tata Cara:*\n${ari.tata_cara}\n\n`;
-  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Tata cara mendhem ari-ari kasil disalin!');
 }
 
@@ -1131,7 +1131,7 @@ export function copyUbarampePager() {
   pager.pantek_pager.forEach(p => {
     text += `- ${p.kayu || p.elemen}${p.jumlah ? ' (' + p.jumlah + ')' : ''}: ${p.makna || ''}\n`;
   });
-  text += `\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Ubarampe pager gaib kasil disalin!');
 }
 
@@ -1351,7 +1351,7 @@ export function copySastraJendra() {
   text += `Sebelum: ${as.mantra_saresmi_sejati.sebelum_berhubungan.join(' ')}\n\n`;
   text += `Saat Proses: ${as.mantra_saresmi_sejati.saat_proses.join(' ')}\n\n`;
   text += `Setelah Selesai: ${as.mantra_saresmi_sejati.setelah_selesai.join(' ')}\n\n`;
-  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Ajaran Sastra Jendra kasil disalin!');
 }
 
@@ -1359,7 +1359,7 @@ export function copyBodroSampir() {
   const b = getBodroSampirData();
   let text = `🌌 *${b.judul}*\n_${b.deskripsi}_\n\n`;
   text += b.mantra.join('\n');
-  text += `\n\nCatatan: ${b.catatan}\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `\n\nCatatan: ${b.catatan}\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Mantra Bodro Sampir kasil disalin!');
 }
 
@@ -1369,7 +1369,7 @@ export function copyKasedanJati() {
   k.paragraf_ajaran.forEach((p, i) => {
     text += `[${i + 1}] ${p}\n\n`;
   });
-  text += `Catatan: ${k.catatan}\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `Catatan: ${k.catatan}\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Ajaran Kasedan Jati kasil disalin!');
 }
 
@@ -1378,7 +1378,7 @@ export function copyRosoSejati() {
   let text = `✨ *${r.judul}*\n_${r.deskripsi}_\n\n`;
   text += `BAIT GANDHEWO:\n${r.gandhewo.bait.join('\n')}\n\n`;
   text += `DOA:\n${r.gandhewo.doa}\n\n`;
-  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `Kadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Sarana Roso Sejati kasil disalin!');
 }
 
@@ -1454,7 +1454,7 @@ export function copyAjiMantra(id) {
   if (m.catatan) {
     text += `\n\nCatatan: ${m.catatan}`;
   }
-  text += `\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `\n\nKadhudhah saking Pustaka Sinengker Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
 
   copyToClipboard(text, `${m.judul} kasil disalin!`);
 }

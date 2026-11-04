@@ -1549,7 +1549,7 @@ export async function shareNujumPokemonCard() {
     `👤 *Nama:* ${nama}\n` +
     `⚡ *HP / Neptu:* ${neptu} (${weton})\n` +
     `🪐 *Wuku:* ${wuku}\n` +
-    `Cek kartu karakter lan nujum pribadimu ing:\nhttps://jagad-jawa.web.app`;
+    `Cek kartu karakter lan nujum pribadimu ing:\nhttps://jagad-jawa.pages.dev`;
 
   // Coba bagikan file gambar jika browser mendukung
   if (navigator.canShare && canvas.toBlob) {

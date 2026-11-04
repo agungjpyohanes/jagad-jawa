@@ -225,6 +225,8 @@ if (typeof window !== 'undefined') {
   window.initKalenderMantenUI = makeLazyProxy(ensureKalenderMantenLoaded, 'initKalenderMantenUI');
   window.setKalenderPresetRange = makeLazyProxy(ensureKalenderMantenLoaded, 'setKalenderPresetRange');
   window.onKalenderDateChange = makeLazyProxy(ensureKalenderMantenLoaded, 'onKalenderDateChange');
+  window.terapkanKalenderKustom = makeLazyProxy(ensureKalenderMantenLoaded, 'terapkanKalenderKustom');
+  window.tampilkanPesanPilihRentangTanggal = makeLazyProxy(ensureKalenderMantenLoaded, 'tampilkanPesanPilihRentangTanggal');
   window.setFilterStatus = makeLazyProxy(ensureKalenderMantenLoaded, 'setFilterStatus');
   window.onFilterCheckboxChange = makeLazyProxy(ensureKalenderMantenLoaded, 'onFilterCheckboxChange');
   window.resetSemuaFilter = makeLazyProxy(ensureKalenderMantenLoaded, 'resetSemuaFilter');
@@ -472,6 +474,11 @@ export function bootstrap() {
   loadDomainData('sapa-dina').catch((e) => console.warn('[bootstrap] sapa-dina domain fallback:', e));
 
   // Pemuatan UI dengan boundary resilien agar halaman tidak pernah blank
+  // Kalender Hari Baik Pernikahan bootstrap check
+  const curTabHash = (typeof window !== 'undefined' && window.location.hash.replace('#', '').trim()) || '';
+  if (curTabHash === 'hari-baik-pernikahan' || curTabHash === 'kalender-manten') {
+    try { if (typeof window.initKalenderMantenUI === 'function') window.initKalenderMantenUI(); } catch (e) { console.warn(e); }
+  }
   try { if (typeof window.initKalenderSelects === 'function') window.initKalenderSelects(); } catch (e) { console.warn(e); }
   try { if (typeof window.renderKalender === 'function') window.renderKalender(); } catch (e) { console.warn(e); }
   try { initQuickTodayBadge(); } catch (e) { console.warn(e); }

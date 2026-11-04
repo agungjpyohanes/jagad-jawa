@@ -118,19 +118,35 @@ export const PASATUAN_MODULO_6 = {
   }
 };
 
+// Kamus Baku 12 Sasi Jawa Kanggo Manten beserta Status Tegese (Becik, Ala, Netral)
+export const KAMUS_SASI_MANTEN = {
+  1: { id: 1, sasi: 'Suro', alias: ['suro', 'sura', 'muharram'], pakarti: 'Rusak ing Tembemburine', status: 'Ala' },
+  2: { id: 2, sasi: 'Sapar', alias: ['sapar', 'safar'], pakarti: 'Kekurangan lan Sugih Utang', status: 'Ala' },
+  3: { id: 3, sasi: 'Mulud', alias: ['mulud', 'rabingulawal', 'rabiulawal'], pakarti: 'Mati Salah Siji', status: 'Ala' },
+  4: { id: 4, sasi: 'Bakdomulud', alias: ['bakdomulud', 'bakdamulud', 'bakda mulud', 'rabingulakir', 'rabiulakhir'], pakarti: 'Nemu Ujar Kang Alal ing Tembemburine', status: 'Ala' },
+  5: { id: 5, sasi: 'Jumadilawal', alias: ['jumadilawal', 'jumadilula'], pakarti: 'Kerep Kemalingan lan Kapusan', status: 'Ala' },
+  6: { id: 6, sasi: 'Jumadilakir', alias: ['jumadilakir', 'jumadilakhir'], pakarti: 'Sugih Emas Salaka', status: 'Becik' },
+  7: { id: 7, sasi: 'Rejeb', alias: ['rejeb', 'rajab'], pakarti: 'Sugih Anak', status: 'Netral' },
+  8: { id: 8, sasi: 'Ruwah', alias: ['ruwah', 'saban', 'syaban'], pakarti: 'Rahayu Sakabehe', status: 'Becik' },
+  9: { id: 9, sasi: 'Pasa', alias: ['pasa', 'poso', 'siyam', 'ramadan', 'ramadhan'], pakarti: 'Rahayu Sakabehe', status: 'Becik' },
+  10: { id: 10, sasi: 'Sawal', alias: ['sawal', 'syawal'], pakarti: 'Kekurangan lan Sugih Utang', status: 'Ala' },
+  11: { id: 11, sasi: 'Dulkaidah', alias: ['dulkaidah', 'dulkangidah', 'sela', 'apit', 'dzulqadah'], pakarti: 'Geringen lan Kerep Padudon karo Sanak Kadange', status: 'Ala' },
+  12: { id: 12, sasi: 'Besar', alias: ['besar', 'dulkijah', 'dzulhijjah'], pakarti: 'Bisa Sugih lan Nemu Karaharjan', status: 'Becik' }
+};
+
 // Database Sasi Jelek Miturut Tahun Jawa (Windu)
 // Sumber: Primbon Betaljemur Adammakna & IJAB_TAHUN_WINDU
 export const BULAN_JELEK_TAHUN_JAWA = {
   'Alip': {
-    sasiJelekIds: [6, 11], // Jumadilakir (6) & Sela/Dulkangidah (11)
-    sasiJelekNames: ['Jumadilakir', 'Jumadilakhir', 'Sela', 'Dulkangidah'],
-    keterangan: 'Jumadilakir lan Sela (Dulkangidah) bakal Kalebo Wisa',
+    sasiJelekIds: [6, 11], // Jumadilakir (6) & Sela/Dulkaidah (11)
+    sasiJelekNames: ['Jumadilakir', 'Jumadilakhir', 'Sela', 'Dulkaidah', 'Dulkangidah'],
+    keterangan: 'Jumadilakir lan Sela bakal Kalebo Wisa',
     akibat: 'Kalebo Wisa'
   },
   'Ehe': {
-    sasiJelekIds: [4, 9], // Bakda Mulud (4) & Pasa/Siyam (9)
-    sasiJelekNames: ['Bakda Mulud', 'Bakdomulud', 'Pasa', 'Siyam'],
-    keterangan: 'Bakda Mulud lan Pasa (Siyam) bakal kena Lara Balung',
+    sasiJelekIds: [4, 9], // Bakdamulud (4) & Pasa/Siyam (9)
+    sasiJelekNames: ['Bakdamulud', 'Bakdomulud', 'Bakda Mulud', 'Pasa', 'Siyam'],
+    keterangan: 'Bakdamulud lan Pasa bakal kena Lara Balung',
     akibat: 'Kena Lara Balung'
   },
   'Jimawal': {
@@ -142,7 +158,7 @@ export const BULAN_JELEK_TAHUN_JAWA = {
   'Je': {
     sasiJelekIds: [1, 10], // Sura/Suro (1) & Sawal (10)
     sasiJelekNames: ['Sura', 'Suro', 'Sawal'],
-    keterangan: 'Sura lan Sawal bakal Keli ing Banyu',
+    keterangan: 'Sura dan Sawal bakal Keli ing Banyu',
     akibat: 'Keli ing Banyu'
   },
   'Dal': {
@@ -154,7 +170,7 @@ export const BULAN_JELEK_TAHUN_JAWA = {
   'Be': {
     sasiJelekIds: [2, 7], // Sapar (2) & Rejeb (7)
     sasiJelekNames: ['Sapar', 'Rejeb'],
-    keterangan: 'Sapar lan Rejeb bakal kena lara Rumat',
+    keterangan: 'Sapar dan Rejeb bakal kena lara Rumat',
     akibat: 'Kena Lara Rumat'
   },
   'Wawu': {
@@ -243,10 +259,49 @@ export function getPakartiTanggalJawa(tanggalJawa) {
 }
 
 /**
- * Ambil Pakarti Sasi Jawa Kanggo Manten dari database
+ * Ambil Pakarti Sasi Jawa Kanggo Manten dari database & kamus status tegese
+ * Status baku: Becik (Jumadilakir, Ruwah, Pasa, Besar), Netral (Rejeb), Ala (Suro, Sapar, Mulud, Bakdomulud, Jumadilawal, Sawal, Dulkaidah)
  */
 export function getPakartiSasiJawaKanggoManten(sasiName, sasiId = null) {
+  // 1. Cek langsung berdasarkan sasiId numerik (1 s.d. 12)
+  if (sasiId && KAMUS_SASI_MANTEN[sasiId]) {
+    const item = KAMUS_SASI_MANTEN[sasiId];
+    return {
+      sasi: item.sasi,
+      pakarti: item.pakarti,
+      status: item.status
+    };
+  }
+
+  // 2. Cek eksak berdasarkan nama dan alias di KAMUS_SASI_MANTEN
   const nSasi = normStr(sasiName);
+  for (const key of Object.keys(KAMUS_SASI_MANTEN)) {
+    const item = KAMUS_SASI_MANTEN[key];
+    if (normStr(item.sasi) === nSasi || item.alias.some(a => normStr(a) === nSasi)) {
+      return {
+        sasi: item.sasi,
+        pakarti: item.pakarti,
+        status: item.status
+      };
+    }
+  }
+
+  // 2b. Jika belum cocok, cari apakah ada alias yang terkandung (dengan prioritas string yang lebih panjang)
+  const sortedKeys = Object.keys(KAMUS_SASI_MANTEN).sort((a, b) => {
+    return normStr(KAMUS_SASI_MANTEN[b].sasi).length - normStr(KAMUS_SASI_MANTEN[a].sasi).length;
+  });
+  for (const key of sortedKeys) {
+    const item = KAMUS_SASI_MANTEN[key];
+    if (item.alias.some(a => nSasi.includes(normStr(a)) || normStr(a).includes(nSasi))) {
+      return {
+        sasi: item.sasi,
+        pakarti: item.pakarti,
+        status: item.status
+      };
+    }
+  }
+
+  // 3. Fallback ke IJAB_SASI
   let found = null;
   if (sasiId) {
     found = IJAB_SASI.find(s => s.id === sasiId);
@@ -258,21 +313,17 @@ export function getPakartiSasiJawaKanggoManten(sasiName, sasiId = null) {
   }
 
   if (found) {
-    const teks = found.kanggo_ijab;
-    const isBecik = teks.toLowerCase().includes('rahayu') ||
-                    teks.toLowerCase().includes('sugih') ||
-                    teks.toLowerCase().includes('karaharjan');
     return {
       sasi: found.sasi_jawa,
-      pakarti: teks,
-      status: isBecik ? 'Becik' : 'Ala'
+      pakarti: found.kanggo_ijab,
+      status: found.status_tegese || (found.kanggo_ijab.toLowerCase().includes('rahayu') ? 'Becik' : 'Ala')
     };
   }
 
   return {
     sasi: sasiName || '-',
     pakarti: 'Ora kacathet',
-    status: 'Sedheng'
+    status: 'Netral'
   };
 }
 
@@ -482,7 +533,7 @@ function susunKeteranganDina({
     butir.push(`✓ Pasatuan: ${pasatuanInfo.nama} (${pasatuanInfo.tegese})`);
   } else {
     if (pasatuanInfo.nama === 'Nuju Pati') {
-      poinNegatif += 4;
+      poinNegatif += 5;
       butir.push(`⛔ Pasatuan: Nuju Pati (Ala Banget)`);
     } else {
       poinNegatif += 2;
@@ -490,7 +541,7 @@ function susunKeteranganDina({
     }
   }
 
-  // 3. Pakarti Tanggal Jawa
+  // 3. Pakarti Tanggal Jawa (1 s.d. 30)
   if (pakartiTgl.status === 'Becik') {
     poinPositif += 2;
     butir.push(`✓ Tanggal ${tanggalJawa} Jawa: ${pakartiTgl.pakarti}`);
@@ -499,16 +550,19 @@ function susunKeteranganDina({
     butir.push(`▲ Tanggal ${tanggalJawa} Jawa: ${pakartiTgl.pakarti}`);
   }
 
-  // 4. Pakarti Sasi Jawa Kanggo Manten
+  // 4. Pakarti Sasi Jawa Kanggo Manten (Becik, Netral, Ala)
   if (pakartiSasi.status === 'Becik') {
     poinPositif += 2;
-    butir.push(`✓ Sasi ${sasiJawa}: ${pakartiSasi.pakarti}`);
+    butir.push(`✓ Sasi ${sasiJawa}: ${pakartiSasi.pakarti} (Becik)`);
+  } else if (pakartiSasi.status === 'Netral') {
+    poinPositif += 1;
+    butir.push(`• Sasi ${sasiJawa}: ${pakartiSasi.pakarti} (Netral)`);
   } else {
     poinNegatif += 2;
-    butir.push(`▲ Sasi ${sasiJawa}: ${pakartiSasi.pakarti}`);
+    butir.push(`▲ Sasi ${sasiJawa}: ${pakartiSasi.pakarti} (Ala)`);
   }
 
-  // 5. Wuku Kanggo Ijab
+  // 5. Wuku Kanggo Ijab (Becik, Ala, Normal)
   if (pakartiWuku === 'Becik') {
     poinPositif += 2;
     butir.push(`✓ Wuku ${wuku}: Becik kanggé akad`);
@@ -532,16 +586,46 @@ function susunKeteranganDina({
     butir.push(`★ Dina Gede (Dinten Mirunggan)`);
   }
 
-  // Menentukan Status Akhir Rekomendasi Hari Pernikahan
+  // Menentukan Status Akhir Rekomendasi Hari Pernikahan:
+  // Kategori 1: Becik Sanget (Rekomendasi Utama)
+  // - Bebas sasi jelek tahun
+  // - Pasatuan Manten Becik (Sanggar Waringin / Satriya Sinarajo)
+  // - Sasi Jawa Becik atau Netral (tidak boleh Ala)
+  // - Dina Ijo (wajib)
+  // - Wuku Becik atau Normal (tidak boleh Ala)
+  // - Tanggal Jawa Becik
+  const syaratBecikSanget = (
+    !evaluasiBulanJelek.isBulanJelek &&
+    pasatuanInfo.status === 'Becik' &&
+    pakartiSasi.status !== 'Ala' &&
+    isIjo &&
+    pakartiWuku !== 'Ala' &&
+    pakartiTgl.status === 'Becik'
+  );
+
+  // Kategori 3: Ala / Pantangan
+  // - Masuk sasi jelek tahun Jawa, ATAU
+  // - Pasatuan Nuju Pati, ATAU
+  // - Wuku Ala, ATAU
+  // - Sasi Jawa Ala dikombinasikan dengan pantangan lain (Dina Abang / Tanggal Ala / Pasatuan Ala), ATAU
+  // - Akumulasi poin negatif >= 5
+  const syaratAlaPantangan = (
+    evaluasiBulanJelek.isBulanJelek ||
+    pasatuanInfo.nama === 'Nuju Pati' ||
+    pakartiWuku === 'Ala' ||
+    (pakartiSasi.status === 'Ala' && (isAbang || pakartiTgl.status === 'Ala' || pasatuanInfo.status === 'Ala')) ||
+    poinNegatif >= 5
+  );
+
   let statusAkhir = 'Cukup Sae';
   let warnaBadgeAkhir = 'amber';
   let labelKesimpulan = '';
 
-  if (evaluasiBulanJelek.isBulanJelek || pasatuanInfo.nama === 'Nuju Pati' || poinNegatif >= 6) {
+  if (syaratAlaPantangan) {
     statusAkhir = 'Ala / Pantangan';
     warnaBadgeAkhir = 'rose';
     labelKesimpulan = '[Pantangan Pernikahan] ' + butir.join(' · ');
-  } else if (poinPositif >= 7 && poinNegatif <= 2 && pasatuanInfo.status === 'Becik' && isIjo) {
+  } else if (syaratBecikSanget) {
     statusAkhir = 'Becik Sanget';
     warnaBadgeAkhir = 'emerald';
     labelKesimpulan = '[Rekomendasi Utama / Rahayu] ' + butir.join(' · ');
@@ -559,42 +643,136 @@ function susunKeteranganDina({
   };
 }
 
-/**
- * Generate tabel kalkulasi hari baik pernikahan untuk rentang tanggal Masehi
- * @param {string|Date} startDate - Format YYYY-MM-DD atau Date
- * @param {string|Date} endDate - Format YYYY-MM-DD atau Date
- * @param {Object} [filterOptions] - Opsi filter (status, dina ijo, dll.)
- */
-export function generateKalenderHariBaikRange(startDate, endDate, filterOptions = {}) {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
 
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    throw new Error('Rentang tanggal tidak valid.');
+/**
+ * Ekstraksi komponen tanggal secara aman tanpa timezone shift
+ */
+export function parseDateComponents(dateInput) {
+  if (!dateInput) {
+    const now = new Date();
+    return [now.getFullYear(), now.getMonth() + 1, now.getDate()];
+  }
+  if (dateInput instanceof Date) {
+    if (!isNaN(dateInput.getTime())) {
+      return [dateInput.getFullYear(), dateInput.getMonth() + 1, dateInput.getDate()];
+    }
+    const now = new Date();
+    return [now.getFullYear(), now.getMonth() + 1, now.getDate()];
+  }
+  if (typeof dateInput === 'string') {
+    const trimmed = dateInput.trim();
+    if (trimmed) {
+      const parts = trimmed.split('-').map(Number);
+      if (parts.length === 3 && !isNaN(parts[0]) && !isNaN(parts[1]) && !isNaN(parts[2])) {
+        return [parts[0], parts[1], parts[2]];
+      }
+    }
+  }
+  const d = new Date(dateInput);
+  if (!isNaN(d.getTime())) {
+    return [d.getFullYear(), d.getMonth() + 1, d.getDate()];
+  }
+  const now = new Date();
+  return [now.getFullYear(), now.getMonth() + 1, now.getDate()];
+}
+
+/**
+ * Daftar pasangan tanggal [y, m, d] dalam rentang
+ */
+export function generateDatesList(startDate, endDate, maxDays = 366) {
+  if (!startDate || !endDate) return [];
+  const [sy, sm, sd] = parseDateComponents(startDate);
+  const [ey, em, ed] = parseDateComponents(endDate);
+
+  const startUtc = Date.UTC(sy, sm - 1, sd);
+  const endUtc = Date.UTC(ey, em - 1, ed);
+
+  if (isNaN(startUtc) || isNaN(endUtc) || startUtc > endUtc) {
+    return [];
   }
 
-  // Pastikan rentang maksimal 366 hari untuk menjaga fluiditas browser
-  const diffTime = Math.abs(end.getTime() - start.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-  const maxDays = 366;
-
-  const cur = new Date(start);
-  const rows = [];
+  const dates = [];
+  let curUtc = startUtc;
   let count = 0;
 
-  while (cur <= end && count < maxDays) {
-    const y = cur.getFullYear();
-    const m = cur.getMonth() + 1;
-    const d = cur.getDate();
-
-    const row = hitungHariBaikPernikahan(y, m, d);
-    rows.push(row);
-
-    cur.setDate(cur.getDate() + 1);
+  while (curUtc <= endUtc && count < maxDays) {
+    const dt = new Date(curUtc);
+    dates.push([dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate()]);
+    curUtc += 86400000; // 24 jam dalam milidetik
     count++;
   }
 
-  return rows;
+  return dates;
+}
+
+/**
+ * Generate tabel kalkulasi hari baik pernikahan (Sinkron - Cepat)
+ * @param {string|Date} startDate - Format YYYY-MM-DD atau Date
+ * @param {string|Date} endDate - Format YYYY-MM-DD atau Date
+ * @param {Object} [filterOptions] - Opsi filter
+ */
+export function generateKalenderHariBaikRange(startDate, endDate, filterOptions = {}) {
+  const dates = generateDatesList(startDate, endDate, 366);
+  return dates.map(([y, m, d]) => hitungHariBaikPernikahan(y, m, d));
+}
+
+/**
+ * Generator Asinkron Chunked untuk Rentang Besar (Mencegah Main-Thread Freeze)
+ * @param {string|Date} startDate
+ * @param {string|Date} endDate
+ * @param {Object} options
+ * @param {number} [options.chunkSize=30]
+ * @param {Function} [options.onChunk] Callback saat setiap chunk selesai
+ * @param {Function} [options.onProgress] Callback { loaded, total, percent }
+ * @returns {Promise<Array>}
+ */
+export async function generateKalenderHariBaikRangeAsync(startDate, endDate, {
+  chunkSize = 30,
+  onChunk = null,
+  onProgress = null,
+  maxDays = 366
+} = {}) {
+  const dates = generateDatesList(startDate, endDate, maxDays);
+  const total = dates.length;
+  const allRows = [];
+
+  if (total === 0) {
+    if (typeof onProgress === 'function') {
+      onProgress({ loaded: 0, total: 0, percent: 100 });
+    }
+    if (typeof onChunk === 'function') {
+      onChunk([], []);
+    }
+    return [];
+  }
+
+  let idx = 0;
+  while (idx < total) {
+    const chunkDates = dates.slice(idx, idx + chunkSize);
+    const chunkRows = chunkDates.map(([y, m, d]) => hitungHariBaikPernikahan(y, m, d));
+
+    allRows.push(...chunkRows);
+    idx += chunkRows.length;
+
+    if (onProgress) {
+      onProgress({
+        loaded: idx,
+        total,
+        percent: total > 0 ? Math.round((idx / total) * 100) : 100
+      });
+    }
+
+    if (onChunk) {
+      onChunk(chunkRows, allRows);
+    }
+
+    // Beri jeda 0ms ke event loop agar browser dapat merender UI & memproses interaksi
+    if (idx < total) {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    }
+  }
+
+  return allRows;
 }
 
 /**

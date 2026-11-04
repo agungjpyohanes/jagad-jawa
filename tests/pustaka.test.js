@@ -106,7 +106,7 @@ test('Pustaka Engine - Format Plain-Text Rapih untuk Salin Clipboard', () => {
   assert.ok(text.includes('NYINGKIRAKE SENGKALA ING TANGGAL 1 SURO'), 'Harus memuat judul doa');
   assert.ok(text.includes('Bagus Santoso'), 'Harus memuat nama pengguna yang dipersonalisasi');
   assert.ok(text.includes('Raganing Bagus Santoso'), 'Placeholder harus terganti di dalam baris doa');
-  assert.ok(text.includes('jagad-jawa.web.app'), 'Harus menyertakan tautan aplikasi');
+  assert.ok(text.includes('jagad-jawa.pages.dev'), 'Harus menyertakan tautan aplikasi');
 });
 
 test('Pustaka Engine - Entri Terkait (Cross-Reference)', () => {

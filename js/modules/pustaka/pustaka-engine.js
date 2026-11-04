@@ -169,7 +169,7 @@ export function formatDoaPlainText(entri, namaPengguna = '') {
     out += `✨ *Panutup:* ${entri.penutup}\n\n`;
   }
 
-  out += `Kadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  out += `Kadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   return out;
 }
 
@@ -325,7 +325,7 @@ export function formatKamusPlainText(list, jenis = 'jawa-indo') {
     });
   }
 
-  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
+  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.pages.dev`;
   return out;
 }
 
@@ -404,7 +404,7 @@ export function formatDokumenReferensiPlainText(doc) {
     });
     out += `\n`;
   }
-  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.web.app`;
+  out += `\nKadhudhah saking Pustaka Digital — Jagad Jawa Nusantara\nhttps://jagad-jawa.pages.dev`;
   return out;
 }
 

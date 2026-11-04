@@ -45,7 +45,7 @@ export function buildWhatsAppShareText(y, m, d) {
     `🌾 *Pranata Mangsa:* ${pm.nama} — _${pm.musimTani}_\n` +
     `🪶 *Candrasangkala:* "${pm.candrasangkala}"\n\n` +
     `💬 *Pitutur Luhur:* \n"${quote.jawa}"\n_${quote.arti}_\n\n` +
-    `Telusuri petungan weton lan nujum pribadimu ing:\nhttps://jagad-jawa.web.app`;
+    `Telusuri petungan weton lan nujum pribadimu ing:\nhttps://jagad-jawa.pages.dev`;
 }
 
 /**
@@ -216,7 +216,7 @@ export function drawWetonCardToCanvas(canvas, y, m, d, customNama = '', ratio = 
   ctx.fillStyle = '#64748b';
   ctx.font = '11px monospace';
   ctx.textAlign = 'left';
-  ctx.fillText('jagad-jawa.web.app · Lestari Budaya Luhur Nusantara', 45, height - 35);
+  ctx.fillText('jagad-jawa.pages.dev · Lestari Budaya Luhur Nusantara', 45, height - 35);
   ctx.fillText('Pituduh Gesang & Petungan Kalender Tradisi', 45, height - 20);
 
   // Gambar QR Code visual di pojok kanan bawah

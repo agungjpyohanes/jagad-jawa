@@ -1590,7 +1590,7 @@ export function renderLaporanKalenderPrintHtml(bulan, tahun, theme = 'parchment'
           Paugeran Kasultanan Mataram - Surakarta &amp; Ngayogyakarta Hadiningrat (Sri Sultan Agung 1555 Saka / 1633 M)
         </div>
         <div style="font-style: italic;">
-          Kadhudhah otomatis lumantar Platform Budaya Luhur Jagad Jawa · jagad-jawa.web.app
+          Kadhudhah otomatis lumantar Platform Budaya Luhur Jagad Jawa · jagad-jawa.pages.dev
         </div>
       </div>
 

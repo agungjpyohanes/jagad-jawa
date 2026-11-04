@@ -549,7 +549,7 @@ export function copyKautamanItem(id) {
   const list = getKautamaningLakuList();
   const item = list.find(x => x.id === id);
   if (!item) return;
-  const text = `📜 *KAUTAMANING LAKU — PIWULANG ${item.id}*\n\n"${item.teks_jawa}"\n\n💡 *Makna:*\n${item.makna}\n\nKadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  const text = `📜 *KAUTAMANING LAKU — PIWULANG ${item.id}*\n\n"${item.teks_jawa}"\n\n💡 *Makna:*\n${item.makna}\n\nKadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, `Piwulang ${item.id} kasil disalin!`);
 }
 
@@ -697,7 +697,7 @@ export function copyUsadaItem(penyakit) {
   if (u.catatan) {
     text += `\n⚠️ *Catatan:* ${u.catatan}\n`;
   }
-  text += `\nKadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `\nKadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
 
   copyToClipboard(text, `Resep ramuan ${u.penyakit} kasil disalin!`);
 }
@@ -787,7 +787,7 @@ export function copyKalacakraFull() {
     text += `${i + 1}. *${b.baris}*\n   ⇄ ${b.arti}\n\n`;
   });
 
-  text += `Kadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  text += `Kadhudhah saking Pustaka Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   copyToClipboard(text, 'Aji Rajah Kalacakra lengkap kasil disalin!');
 }
 

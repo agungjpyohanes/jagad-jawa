@@ -208,6 +208,6 @@ export function formatMitologiPlainText(item) {
     out += `💡 Falsafah & Piwulang Luhur:\n${item.pesanMoral}\n\n`;
   }
 
-  out += `Kadhudhah saking Mitologi Nusantara — Jagad Jawa\nhttps://jagad-jawa.web.app`;
+  out += `Kadhudhah saking Mitologi Nusantara — Jagad Jawa\nhttps://jagad-jawa.pages.dev`;
   return out;
 }
