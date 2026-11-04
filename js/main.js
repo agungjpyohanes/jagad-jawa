@@ -76,6 +76,7 @@ async function getOrImportModule(key, importPromiseFn) {
 }
 
 export const ensureIjabLoaded = () => getOrImportModule('ijab', () => import('./modules/ijab/ijab-ui.js'));
+export const ensureKalenderMantenLoaded = () => getOrImportModule('kalenderManten', () => import('./modules/kalender-manten/kalender-manten-ui.js'));
 export const ensureOmahLoaded = () => getOrImportModule('omah', () => import('./modules/omah/omah-ui.js'));
 export const ensureTernakLoaded = () => getOrImportModule('ternak', () => import('./modules/petung-kehidupan/petung-kehidupan-ui.js'));
 export const ensureSasmithaLoaded = () => getOrImportModule('sasmitha', () => import('./modules/sasmitha/sasmitha-ui.js'));
@@ -220,6 +221,17 @@ if (typeof window !== 'undefined') {
   window.terapkanPrefillJodohKeIjab = makeLazyProxy(ensureIjabLoaded, 'terapkanPrefillJodohKeIjab');
   window.tutupBannerPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'tutupBannerPrefillJodoh');
   window.periksaPrefillJodoh = makeLazyProxy(ensureIjabLoaded, 'periksaPrefillJodoh');
+  // Kalender Hari Baik Pernikahan bindings
+  window.initKalenderMantenUI = makeLazyProxy(ensureKalenderMantenLoaded, 'initKalenderMantenUI');
+  window.setKalenderPresetRange = makeLazyProxy(ensureKalenderMantenLoaded, 'setKalenderPresetRange');
+  window.onKalenderDateChange = makeLazyProxy(ensureKalenderMantenLoaded, 'onKalenderDateChange');
+  window.setFilterStatus = makeLazyProxy(ensureKalenderMantenLoaded, 'setFilterStatus');
+  window.onFilterCheckboxChange = makeLazyProxy(ensureKalenderMantenLoaded, 'onFilterCheckboxChange');
+  window.resetSemuaFilter = makeLazyProxy(ensureKalenderMantenLoaded, 'resetSemuaFilter');
+  window.pindahHalamanKalender = makeLazyProxy(ensureKalenderMantenLoaded, 'pindahHalamanKalender');
+  window.unduhKalenderHariBaikCsv = makeLazyProxy(ensureKalenderMantenLoaded, 'unduhKalenderHariBaikCsv');
+  window.cetakKalenderHariBaik = makeLazyProxy(ensureKalenderMantenLoaded, 'cetakKalenderHariBaik');
+  window.bukaSimulasiIjabTanggal = makeLazyProxy(ensureKalenderMantenLoaded, 'bukaSimulasiIjabTanggal');
   window.initOmahUI = makeLazyProxy(ensureOmahLoaded, 'initOmahUI');
   window.setOmahWizardStep = makeLazyProxy(ensureOmahLoaded, 'setOmahWizardStep');
   window.populateOmahSelects = makeLazyProxy(ensureOmahLoaded, 'populateSelects');
@@ -300,6 +312,13 @@ if (typeof window !== 'undefined') {
         }
         break;
 
+      case 'hari-baik-pernikahan':
+      case 'kalender-manten':
+        {
+          const m = await ensureKalenderMantenLoaded();
+          if (m && typeof m.initKalenderMantenUI === 'function') m.initKalenderMantenUI();
+        }
+        break;
       case 'ijab':
         {
           const m = await ensureIjabLoaded();

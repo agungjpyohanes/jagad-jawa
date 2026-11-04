@@ -134,6 +134,15 @@
                     <div class="text-[10px] text-sogan-400" data-i18n="nav_konversi_sub">Masehi ke Jawa &amp; Pranata Mangsa</div>
                   </div>
                 </button>
+                <button onclick="switchTab('hari-baik-pernikahan')" class="nav-sublink group/item" data-tab="hari-baik-pernikahan">
+                  <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-prada/30 flex items-center justify-center text-prada text-[11px] group-hover/item:border-prada group-hover/item:bg-prada/20 transition">
+                    <i class="fa-solid fa-calendar-check"></i>
+                  </div>
+                  <div class="text-left">
+                    <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_kalender_manten">Kalender Hari Baik Nikah</div>
+                    <div class="text-[10px] text-sogan-400" data-i18n="nav_kalender_manten_sub">Tabel 17 Kolom &amp; Pemetaan Hari</div>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -179,6 +188,15 @@
                   <div class="text-left">
                     <div class="font-bold text-amber-100 group-hover/item:text-prada-light" data-i18n="nav_ijab">Petung Ijab (Palakrama)</div>
                     <div class="text-[10px] text-sogan-400" data-i18n="nav_ijab_sub">Neptu Khusus, Wuku, &amp; Surasa</div>
+                  </div>
+                </button>
+                <button onclick="switchTab('hari-baik-pernikahan')" class="nav-sublink group/item" data-tab="hari-baik-pernikahan">
+                  <div class="w-6 h-6 rounded-md bg-sogan-950/80 border border-teal-500/40 flex items-center justify-center text-teal-300 text-[11px] group-hover/item:border-teal-400 group-hover/item:bg-teal-900/30 transition">
+                    <i class="fa-solid fa-calendar-check"></i>
+                  </div>
+                  <div class="text-left">
+                    <div class="font-bold text-teal-200 group-hover/item:text-teal-100" data-i18n="nav_kalender_manten">Kalender Hari Baik Nikah</div>
+                    <div class="text-[10px] text-teal-300/80" data-i18n="nav_kalender_manten_sub">Tabel 17 Kolom &amp; Pemetaan Hari</div>
                   </div>
                 </button>
                 <button onclick="switchTab('omah')" class="nav-sublink group/item" data-tab="omah">
@@ -567,6 +585,9 @@
               </button>
               <button onclick="switchTab('ijab')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="ijab">
                 <i class="fa-solid fa-ring w-4 text-prada"></i> <span data-i18n="nav_ijab">Petung Ijab (Palakrama)</span>
+              </button>
+              <button onclick="switchTab('hari-baik-pernikahan')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-teal-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="hari-baik-pernikahan">
+                <i class="fa-solid fa-calendar-check w-4 text-teal-400"></i> <span data-i18n="nav_kalender_manten">Kalender Hari Baik Nikah</span>
               </button>
               <button onclick="switchTab('omah')" class="nav-sublink w-full text-left px-3 py-1.5 rounded-lg text-sogan-200 hover:bg-sogan-900/80 flex items-center gap-2.5 transition" data-tab="omah">
                 <i class="fa-solid fa-house-chimney w-4 text-prada"></i> <span data-i18n="nav_omah">Petung Omah &amp; Cempuri</span>
@@ -2123,6 +2144,9 @@
           <button id="btnResetIjabToday" type="button" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
             <i class="fa-solid fa-clock-rotate-left text-prada"></i> Dinten Punika
           </button>
+          <button type="button" onclick="switchTab('hari-baik-pernikahan')" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-teal-500/50 bg-teal-950/80 hover:bg-teal-900 text-teal-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-sm" title="Buka Kalender Hari Baik Pernikahan (Tabel 17 Kolom)">
+            <i class="fa-solid fa-calendar-check text-teal-400"></i> Kalender Hari Baik
+          </button>
         </div>
       </div>
 
@@ -2289,6 +2313,234 @@
       </div>
 
     </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB: KALENDER HARI BAIK PERNIKAHAN (PALAKRAMA 17 KOLOM) -->
+    <!-- ========================================================================= -->
+    <section id="tab-hari-baik-pernikahan" class="tab-content hidden space-y-6">
+      
+      <!-- Navigasi & Judul Halaman -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-sogan-800 pb-4">
+        <div class="flex items-center gap-3">
+          <button onclick="switchTab('beranda')" class="w-9 h-9 rounded-xl bg-sogan-950/80 border border-sogan-800 text-sogan-300 hover:text-prada hover:border-prada flex items-center justify-center transition cursor-pointer" aria-label="Kembali ke Beranda">
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-prada/10 text-prada border border-prada/30">
+                Primbon Palakrama Nusantara
+              </span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider bg-teal-500/10 text-teal-300 border border-teal-500/30">
+                17 Kolom Lengkap
+              </span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-cinzel font-bold text-amber-100 flex items-center gap-2 mt-0.5">
+              <span data-i18n="tab_kalender_manten_title">Kalender Hari Baik Pernikahan</span>
+            </h2>
+            <p class="text-xs text-sogan-300">
+              <span data-i18n="tab_kalender_manten_desc">Tabel interaktif pemetaan hari baik akad nikah berdasarkan 17 kolom kalkulasi primbon Jawa, Dina Gede, Dina Ijo, Dina Abang, dan analisis sasi jelek tahun.</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Atas -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" onclick="switchTab('ijab')" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-prada/40 bg-sogan-950 hover:bg-sogan-900 text-prada text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-ring text-amber-400"></i>
+            <span>Simulasi Petung Ijab</span>
+          </button>
+          <button type="button" onclick="unduhKalenderHariBaikCsv()" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-emerald-600/50 bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-sm">
+            <i class="fa-solid fa-file-csv text-emerald-400"></i>
+            <span>Unduh CSV</span>
+          </button>
+          <button type="button" onclick="cetakKalenderHariBaik()" class="btn-secondary-action px-3 py-1.5 rounded-xl border border-sogan-700/80 bg-sogan-950/60 hover:bg-sogan-900 text-sogan-200 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+            <i class="fa-solid fa-print text-prada"></i>
+            <span>Cetak</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Presets & Kontrol Rentang Tanggal Interaktif -->
+      <div class="p-4 sm:p-5 rounded-2xl bg-keraton/90 border border-sogan-700/80 shadow-xl backdrop-blur-md space-y-4">
+        
+        <!-- Header Filter & Presets Cepat -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-sogan-800/80 pb-3">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-prada text-sm"></i>
+            <span class="font-marcellus font-bold text-amber-100 text-sm">Pilih Rentang Tanggal Masehi</span>
+          </div>
+
+          <!-- Preset Cepat (Pill buttons) -->
+          <div class="flex items-center gap-1.5 flex-wrap text-xs">
+            <span class="text-[11px] text-sogan-400 mr-1 hidden sm:inline">Pilihan Cepat:</span>
+            <button type="button" onclick="setKalenderPresetRange(1)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+              1 Bulan
+            </button>
+            <button type="button" onclick="setKalenderPresetRange(3)" class="px-2.5 py-1 rounded-lg bg-prada/20 hover:bg-prada/30 border border-prada/60 text-prada text-xs font-bold transition cursor-pointer">
+              ★ 3 Bulan (Rekomendasi)
+            </button>
+            <button type="button" onclick="setKalenderPresetRange(6)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+              6 Bulan
+            </button>
+            <button type="button" onclick="setKalenderPresetRange(12)" class="px-2.5 py-1 rounded-lg bg-sogan-900 hover:bg-sogan-800 border border-sogan-700 hover:border-prada text-sogan-200 text-xs font-medium transition cursor-pointer">
+              1 Tahun Penuh
+            </button>
+          </div>
+        </div>
+
+        <!-- Baris Input Tanggal & Pencarian -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <!-- Tanggal Awal -->
+          <div>
+            <label for="kmStartDate" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
+              <i class="fa-solid fa-calendar-day text-prada mr-1"></i> Tanggal Mulai
+            </label>
+            <input type="date" id="kmStartDate" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+          </div>
+
+          <!-- Tanggal Akhir -->
+          <div>
+            <label for="kmEndDate" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
+              <i class="fa-solid fa-calendar-check text-prada mr-1"></i> Tanggal Selesai
+            </label>
+            <input type="date" id="kmEndDate" onchange="onKalenderDateChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+          </div>
+
+          <!-- Filter Pasatuan Manten Dropdown -->
+          <div>
+            <label for="kmSelPasatuan" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
+              <i class="fa-solid fa-ring text-prada mr-1"></i> Pasatuan Manten (Mod 6)
+            </label>
+            <select id="kmSelPasatuan" onchange="onFilterCheckboxChange()" class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+              <option value="semua">Semua Pasatuan (6 Nilai)</option>
+              <option value="Sanggar Waringin">Sanggar Waringin (Bisa Dadi Pangaubaning Keluwarga - Becik)</option>
+              <option value="Satriya Sinarajo">Satriya Sinarajo (Becik lan Rahayu - Becik)</option>
+              <option value="Kala Tinantang">Kala Tinantang (Padudon - Ala)</option>
+              <option value="Demang Kanduruan">Demang Kanduruan (Susah lan Lara-laranen - Ala)</option>
+              <option value="Macan Ketawan">Macan Ketawan (Kisinan - Ala)</option>
+              <option value="Nuju Pati">Nuju Pati (Ala Banget - Ala)</option>
+            </select>
+          </div>
+
+          <!-- Pencarian Teks Bebas -->
+          <div>
+            <label for="kmInputSearch" class="block text-[11px] font-mono uppercase tracking-wider text-sogan-300 mb-1">
+              <i class="fa-solid fa-magnifying-glass text-prada mr-1"></i> Cari Teks (Weton/Wuku/Sasi)
+            </label>
+            <input type="text" id="kmInputSearch" oninput="onFilterCheckboxChange()" placeholder="Contoh: Legi, Maktal, Ruwah..." class="w-full bg-sogan-950 border border-sogan-700 focus:border-prada rounded-xl px-3 py-2 text-xs text-amber-100 focus:outline-none transition min-h-[40px]">
+          </div>
+        </div>
+
+        <!-- Filter Status Hari Baik (Chips) & Checkbox Toggles -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 border-t border-sogan-800/60 text-xs">
+          <!-- Status Chips -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] text-sogan-400 mr-1">Status Hari:</span>
+            <button type="button" data-status="semua" onclick="setFilterStatus('semua')" class="km-filter-status-btn px-2.5 py-1 rounded-lg bg-prada text-keraton font-bold border border-prada text-xs transition cursor-pointer">
+              Semua
+            </button>
+            <button type="button" data-status="becik" onclick="setFilterStatus('becik')" class="km-filter-status-btn px-2.5 py-1 rounded-lg bg-sogan-950/70 hover:bg-emerald-950 text-sogan-300 hover:text-emerald-300 border border-sogan-800 hover:border-emerald-500/50 text-xs font-medium transition cursor-pointer">
+              ✓ Becik Sanget (Rekomendasi)
+            </button>
+            <button type="button" data-status="sedheng" onclick="setFilterStatus('sedheng')" class="km-filter-status-btn px-2.5 py-1 rounded-lg bg-sogan-950/70 hover:bg-amber-950 text-sogan-300 hover:text-amber-300 border border-sogan-800 hover:border-amber-500/50 text-xs font-medium transition cursor-pointer">
+              • Cukup Sae
+            </button>
+            <button type="button" data-status="ala" onclick="setFilterStatus('ala')" class="km-filter-status-btn px-2.5 py-1 rounded-lg bg-sogan-950/70 hover:bg-rose-950 text-sogan-300 hover:text-rose-300 border border-sogan-800 hover:border-rose-500/50 text-xs font-medium transition cursor-pointer">
+              ▲ Pantangan
+            </button>
+          </div>
+
+          <!-- Filter Checkbox Toggles -->
+          <div class="flex items-center gap-3 flex-wrap">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-sogan-200 hover:text-white">
+              <input type="checkbox" id="kmChkDinaIjo" onchange="onFilterCheckboxChange()" class="accent-emerald-500 w-3.5 h-3.5 rounded">
+              <span>Hanya Dina Ijo</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-sogan-200 hover:text-white">
+              <input type="checkbox" id="kmChkBebasBulanJelek" onchange="onFilterCheckboxChange()" class="accent-amber-500 w-3.5 h-3.5 rounded">
+              <span>Bebas Sasi Jelek Taun</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer text-xs text-sogan-200 hover:text-white">
+              <input type="checkbox" id="kmChkWeekend" onchange="onFilterCheckboxChange()" class="accent-teal-500 w-3.5 h-3.5 rounded">
+              <span>Akhir Pekan Saja (Sabtu-Minggu)</span>
+            </label>
+            <button type="button" onclick="resetSemuaFilter()" class="text-xs text-sogan-400 hover:text-prada underline ml-1 cursor-pointer">
+              Reset
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Container Metrik Ringkasan (Summary Metric Cards) -->
+      <div id="kmSummaryContainer"></div>
+
+      <!-- Panduan Glosarium Simbol Kalender (Akordeon Ringkas) -->
+      <details class="p-3.5 rounded-2xl bg-sogan-950/70 border border-sogan-800 text-xs group cursor-pointer">
+        <summary class="font-semibold text-amber-200 flex items-center justify-between list-none select-none">
+          <span class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-info text-prada"></i>
+            <span>Glosarium &amp; Pedoman Penanda Kalender Jawa Tradisional</span>
+          </span>
+          <i class="fa-solid fa-chevron-down text-sogan-400 text-[10px] transition group-open:rotate-180"></i>
+        </summary>
+        <div class="mt-3 pt-3 border-t border-sogan-800/70 grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-sogan-300">
+          <div class="space-y-1">
+            <strong class="text-amber-100 block"><i class="fa-solid fa-star text-amber-400 mr-1"></i> Dina Gede:</strong>
+            <p class="leading-relaxed">71 kombinasi dinten mirunggan kanthi bobot sakral luhur miturut primbon pawukon Jawa.</p>
+            <strong class="text-emerald-300 block mt-2"><i class="fa-solid fa-circle text-emerald-400 mr-1"></i> Dina Ijo:</strong>
+            <p class="leading-relaxed">74 kombinasi hari berenergi positif/rahayu (solid green). Sangat dianjurkan untuk hajat mantu.</p>
+            <strong class="text-rose-300 block mt-2"><i class="fa-solid fa-circle text-rose-400 mr-1"></i> Dina Abang:</strong>
+            <p class="leading-relaxed">Hari di luar daftar Dina Ijo yang memiliki pantangan pawukon tersendiri.</p>
+          </div>
+          <div class="space-y-1">
+            <strong class="text-rose-400 block"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Bulan Jelek Tahun Jawa (Windu):</strong>
+            <ul class="space-y-0.5 list-disc list-inside leading-relaxed text-sogan-300">
+              <li><strong>Alip:</strong> Jumadilakir &amp; Sela (Kalebo Wisa)</li>
+              <li><strong>Ehe:</strong> Bakda Mulud &amp; Pasa (Lara Balung)</li>
+              <li><strong>Jimawal:</strong> Mulud &amp; Besar (Lara Edan)</li>
+              <li><strong>Je:</strong> Sura &amp; Sawal (Keli ing Banyu)</li>
+              <li><strong>Dal:</strong> Ruwah (Lara Basah)</li>
+              <li><strong>Be:</strong> Sapar &amp; Rejeb (Lara Rumat)</li>
+              <li><strong>Wawu:</strong> Jumadilawal (Prakara Gedhe)</li>
+              <li><strong>Jumakir:</strong> Mulud &amp; Besar (Kesinungan Lara)</li>
+            </ul>
+          </div>
+          <div class="space-y-1">
+            <strong class="text-amber-200 block"><i class="fa-solid fa-ring mr-1"></i> 6 Pasatuan Manten (Neptu Modulo 6):</strong>
+            <ul class="space-y-0.5 leading-relaxed">
+              <li><strong class="text-emerald-300">Sisa 3 (Sanggar Waringin):</strong> Bisa Dadi Pangaubaning Keluwarga (Becik)</li>
+              <li><strong class="text-emerald-300">Sisa 4 (Satriya Sinarajo):</strong> Becik lan Rahayu (Becik)</li>
+              <li><strong class="text-amber-300">Sisa 1 (Kala Tinantang):</strong> Padudon (Ala)</li>
+              <li><strong class="text-amber-300">Sisa 2 (Demang Kanduruan):</strong> Susah lan Lara-laranen (Ala)</li>
+              <li><strong class="text-rose-300">Sisa 5 (Macan Ketawan):</strong> Kisinan (Ala)</li>
+              <li><strong class="text-red-400">Sisa 0 (Nuju Pati):</strong> Ala Banget (Kudu Disingkiri)</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <!-- Bar Indikator Jumlah Baris Terfilter -->
+      <div class="flex items-center justify-between text-xs text-sogan-400 px-1">
+        <div id="kmFilteredCount" class="font-mono text-sogan-300">Memuat data kalender...</div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1 text-[11px] text-emerald-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Becik Sanget
+          </span>
+          <span class="inline-flex items-center gap-1 text-[11px] text-amber-300">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Cukup Sae
+          </span>
+          <span class="inline-flex items-center gap-1 text-[11px] text-rose-300">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> Pantangan
+          </span>
+        </div>
+      </div>
+
+      <!-- Container Tabel 17 Kolom Interaktif -->
+      <div id="kmTableContainer"></div>
+
+    </section>
+
 
     <!-- ========================================================================= -->
     <!-- TAB: PETUNG OMAH & CEMPURI -->

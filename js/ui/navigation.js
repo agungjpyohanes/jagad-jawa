@@ -38,7 +38,7 @@ function switchTab(tabId, pushState = true) {
   closeMobileMenu();
   
   // ─── BOTTOM NAVIGATION (5-ITEM) ACTIVE STATE UPDATE ───
-  const primbonTabs = ['primbon', 'kepribadian', 'perjodohan', 'selametan', 'ijab', 'omah', 'ternak', 'sasmitha', 'sinengker'];
+  const primbonTabs = ['primbon', 'kepribadian', 'perjodohan', 'selametan', 'ijab', 'hari-baik-pernikahan', 'kalender-manten', 'omah', 'ternak', 'sasmitha', 'sinengker'];
   const belajarTabs = ['belajar', 'aksara', 'gamelan', 'wayang', 'pitutur', 'wuku', 'tumpeng', 'tripurusa', 'pustaka', 'ensiklopedia-budaya', 'mitologi'];
   
   let activeBottomNav = tabId;
@@ -262,6 +262,18 @@ const BREADCRUMB_MAP = {
     title: { id: 'Peringatan Wafat', jv: 'Pengetan Tilar Donyo' },
     icon: 'fa-solid fa-hourglass-half',
     sub: { id: 'Haul Leluhur Geblak - Nyewu', jv: 'Haul Leluhur Geblak - Nyewu' }
+  },
+  'hari-baik-pernikahan': {
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Kalender Hari Baik Pernikahan', jv: 'Kalendher Dinten Sae Palakrama' },
+    icon: 'fa-solid fa-calendar-check',
+    sub: { id: 'Tabel 17 Kolom & Pemetaan Hari', jv: 'Tabel 17 Kolom & Petung Dinten' }
+  },
+  'kalender-manten': {
+    category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
+    title: { id: 'Kalender Hari Baik Pernikahan', jv: 'Kalendher Dinten Sae Palakrama' },
+    icon: 'fa-solid fa-calendar-check',
+    sub: { id: 'Tabel 17 Kolom & Pemetaan Hari', jv: 'Tabel 17 Kolom & Petung Dinten' }
   },
   'ijab': {
     category: { label: { id: 'Nujum & Primbon', jv: 'Nujum & Primbon' }, icon: 'fa-solid fa-wand-magic-sparkles' },
