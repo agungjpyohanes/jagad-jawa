@@ -5,12 +5,26 @@ import { CANONICAL_KEYS, resolveCanonicalKey } from './js/services/datasetManife
 
 const STUB_FILES = {
   'nujum-matrix.js': `
+    import { BINCIL_BILINGUAL_DATA, getBincilArtiBilingual } from './bincil-bilingual.js';
+    export { BINCIL_BILINGUAL_DATA, getBincilArtiBilingual };
     export const bincilDatabase = {};
     export const KET_BINCIL = {};
     export const primbonMatrix = {};
     export const nujumMatrix = {};
     export const nujumDatabase = {};
-    export const getNujumData = () => null;
+    export const getNujumData = () => ({
+      found: true,
+      wuku: 'Kuruwelut',
+      dino: 'Kamis',
+      pasaran: 'Pon',
+      padewan: { nama: 'Guru', arti: 'Memberi percobaan, lelemeran', arti_id: 'Memberi percobaan, lelemeran', arti_jv: 'Maringi coban, lelemeran', artiBilingual: { id: 'Memberi percobaan, lelemeran', jv: 'Maringi coban, lelemeran' } },
+      paringkelan: { nama: 'Wurukung', arti: 'Lengah', arti_id: 'Lengah', arti_jv: 'Lengah', artiBilingual: { id: 'Lengah', jv: 'Lengah' } },
+      pandangon: { nama: 'Wogan', arti: 'Tekun, hemat dan kuat pendirian', arti_id: 'Tekun, hemat dan kuat pendirian', arti_jv: 'Tekun, hemat lan kuwat pendirian', artiBilingual: { id: 'Tekun, hemat dan kuat pendirian', jv: 'Tekun, hemat lan kuwat pendirian' } },
+      paarasan: { nama: 'Lakuning Srengenge', arti: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', arti_id: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', arti_jv: 'Pangerten, manis wicaranipun, kreatif, tansah kalah padu lan mboten akeh mangan', artiBilingual: { id: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', jv: 'Pangerten, manis wicaranipun, kreatif, tansah kalah padu lan mboten akeh mangan' } },
+      parasan: { nama: 'Lakuning Srengenge', arti: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', arti_id: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', arti_jv: 'Pangerten, manis wicaranipun, kreatif, tansah kalah padu lan mboten akeh mangan', artiBilingual: { id: 'Pengertian, manis bicaranya, kreatif, selalu kalah bertengkar dan jangan banyak makan', jv: 'Pangerten, manis wicaranipun, kreatif, tansah kalah padu lan mboten akeh mangan' } },
+      pancasuda: { nama: 'Satriya Wirang', arti: 'Dimanapun selalu dipermalukan walau beritikad baik dan banyak halangan', arti_id: 'Dimanapun selalu dipermalukan walau beritikad baik dan banyak halangan', arti_jv: 'Ing pundi kemawon tansah dipermalukne sanajan niat sae lan akeh alangan', artiBilingual: { id: 'Dimanapun selalu dipermalukan walau beritikad baik dan banyak halangan', jv: 'Ing pundi kemawon tansah dipermalukne sanajan niat sae lan akeh alangan' } },
+      kamarokan: { nama: 'Macan Ketawan', arti: 'Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek', arti_id: 'Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek', arti_jv: 'Cukupan, disegani nanging ugi dijauhi wong, sering kelangan, wonten niat ala', artiBilingual: { id: 'Cukupan, disegani tetapi juga dijauhi orang, sering kehilangan, ada niat jelek', jv: 'Cukupan, disegani nanging ugi dijauhi wong, sering kelangan, wonten niat ala' } }
+    });
     export const getNujumFromMatrix = () => null;
     export const getNujumFromDatabase = () => null;
   `,

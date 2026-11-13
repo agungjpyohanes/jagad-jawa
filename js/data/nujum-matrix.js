@@ -10,6 +10,8 @@
 // Kamus arti       = key lowercase saja
 // Sistem           = 100% Exact Lookup — tanpa rumus modulo
 // =========================================================================
+import { BINCIL_BILINGUAL_DATA, getBincilArtiBilingual } from './bincil-bilingual.js';
+
 (function (root) {
 
 const CANON_WUKU_LIST = ["Sinta", "Landep", "Wukir", "Kurantil", "Tolu", "Gumbreg", "Warigalit", "Warigagung", "Julungwangi", "Sungsang", "Galungan", "Kuningan", "Langkir", "Mandasiya", "Julungpujut", "Pahang", "Kuruwelut", "Marakeh", "Tambir", "Medangkungan", "Maktal", "Wuye", "Manahil", "Prangbakat", "Bala", "Wugu", "Wayang", "Kulawu", "Dukut", "Watugunung"];
@@ -7860,6 +7862,25 @@ function getNujumData(arg1, arg2, arg3) {
   const resPancasuda = (raw && raw.pancasuda && raw.pancasuda !== '-') ? raw.pancasuda : fallbackPancasuda;
   const resKamarokan = (raw && raw.kamarokan && raw.kamarokan !== '-') ? raw.kamarokan : fallbackKamarokan;
 
+  const fnGetBilingual = (typeof getBincilArtiBilingual === 'function')
+    ? getBincilArtiBilingual
+    : (typeof root !== 'undefined' && typeof root.getBincilArtiBilingual === 'function' ? root.getBincilArtiBilingual : () => ({ id: '-', jv: '-' }));
+
+  const artiPadewan = fnGetBilingual('padewan', resPadewan);
+  const artiParingkelan = fnGetBilingual('paringkelan', resParingkelan);
+  const artiPandangon = fnGetBilingual('pandangon', resPandangon);
+  const artiPaarasan = fnGetBilingual('paarasan', resPaarasan);
+  const artiPancasuda = fnGetBilingual('pancasuda', resPancasuda);
+  const artiKamarokan = fnGetBilingual('kamarokan', resKamarokan);
+
+  const paarasanObj = {
+    nama: resPaarasan,
+    arti: artiPaarasan?.id || arti(PAARASAN_ARTI, resPaarasan),
+    arti_id: artiPaarasan?.id || arti(PAARASAN_ARTI, resPaarasan),
+    arti_jv: artiPaarasan?.jv || artiPaarasan?.id || arti(PAARASAN_ARTI, resPaarasan),
+    artiBilingual: artiPaarasan
+  };
+
   return {
     found: true,
     wuku: raw ? raw.wuku : normWuku,
@@ -7868,27 +7889,40 @@ function getNujumData(arg1, arg2, arg3) {
     no_wuku: raw ? raw.no_wuku : null,
     padewan: {
       nama: resPadewan,
-      arti: arti(PADEWAN_ARTI, resPadewan)
+      arti: artiPadewan?.id || arti(PADEWAN_ARTI, resPadewan),
+      arti_id: artiPadewan?.id || arti(PADEWAN_ARTI, resPadewan),
+      arti_jv: artiPadewan?.jv || artiPadewan?.id || arti(PADEWAN_ARTI, resPadewan),
+      artiBilingual: artiPadewan
     },
     paringkelan: {
       nama: resParingkelan,
-      arti: arti(PARINGKELAN_ARTI, resParingkelan)
+      arti: artiParingkelan?.id || arti(PARINGKELAN_ARTI, resParingkelan),
+      arti_id: artiParingkelan?.id || arti(PARINGKELAN_ARTI, resParingkelan),
+      arti_jv: artiParingkelan?.jv || artiParingkelan?.id || arti(PARINGKELAN_ARTI, resParingkelan),
+      artiBilingual: artiParingkelan
     },
     pandangon: {
       nama: resPandangon,
-      arti: arti(PANDANGON_ARTI, resPandangon)
+      arti: artiPandangon?.id || arti(PANDANGON_ARTI, resPandangon),
+      arti_id: artiPandangon?.id || arti(PANDANGON_ARTI, resPandangon),
+      arti_jv: artiPandangon?.jv || artiPandangon?.id || arti(PANDANGON_ARTI, resPandangon),
+      artiBilingual: artiPandangon
     },
-    paarasan: {
-      nama: resPaarasan,
-      arti: arti(PAARASAN_ARTI, resPaarasan)
-    },
+    paarasan: paarasanObj,
+    parasan: paarasanObj,
     pancasuda: {
       nama: resPancasuda,
-      arti: arti(PANCASUDA_ARTI, resPancasuda)
+      arti: artiPancasuda?.id || arti(PANCASUDA_ARTI, resPancasuda),
+      arti_id: artiPancasuda?.id || arti(PANCASUDA_ARTI, resPancasuda),
+      arti_jv: artiPancasuda?.jv || artiPancasuda?.id || arti(PANCASUDA_ARTI, resPancasuda),
+      artiBilingual: artiPancasuda
     },
     kamarokan: {
       nama: resKamarokan,
-      arti: arti(KAMAROKAN_ARTI, resKamarokan)
+      arti: artiKamarokan?.id || arti(KAMAROKAN_ARTI, resKamarokan),
+      arti_id: artiKamarokan?.id || arti(KAMAROKAN_ARTI, resKamarokan),
+      arti_jv: artiKamarokan?.jv || artiKamarokan?.id || arti(KAMAROKAN_ARTI, resKamarokan),
+      artiBilingual: artiKamarokan
     },
     pawukon: (typeof getPawukonData === 'function')
       ? getPawukonData(normWuku || wuku)
@@ -7923,6 +7957,8 @@ const getNujumFromDatabase = getNujumFromMatrix;
   root.PAARASAN_ARTI = PAARASAN_ARTI;
   root.PANCASUDA_ARTI = PANCASUDA_ARTI;
   root.KAMAROKAN_ARTI = KAMAROKAN_ARTI;
+  root.BINCIL_BILINGUAL_DATA = (typeof BINCIL_BILINGUAL_DATA !== 'undefined') ? BINCIL_BILINGUAL_DATA : null;
+  root.getBincilArtiBilingual = (typeof getBincilArtiBilingual !== 'undefined') ? getBincilArtiBilingual : null;
   root.BINCIL_LIST = BINCIL_LIST;
   root.bincilDatabase = bincilDatabase;
   root.primbonMatrix = bincilDatabase;
@@ -7939,6 +7975,7 @@ const getNujumFromDatabase = getNujumFromMatrix;
       KET_BINCIL,
       PADEWAN_ARTI, PARINGKELAN_ARTI, PANDANGON_ARTI,
       PAARASAN_ARTI, PANCASUDA_ARTI, KAMAROKAN_ARTI,
+      BINCIL_BILINGUAL_DATA, getBincilArtiBilingual,
       BINCIL_LIST, bincilDatabase,
       primbonMatrix, nujumMatrix, nujumDatabase,
       CANON_WUKU_LIST, normalizeWukuName,
@@ -7955,6 +7992,7 @@ export const PANDANGON_ARTI = _g.PANDANGON_ARTI;
 export const PAARASAN_ARTI = _g.PAARASAN_ARTI;
 export const PANCASUDA_ARTI = _g.PANCASUDA_ARTI;
 export const KAMAROKAN_ARTI = _g.KAMAROKAN_ARTI;
+export { BINCIL_BILINGUAL_DATA, getBincilArtiBilingual };
 export const BINCIL_LIST = _g.BINCIL_LIST;
 export const bincilDatabase = _g.bincilDatabase;
 export const primbonMatrix = _g.primbonMatrix;
@@ -7974,6 +8012,8 @@ export default {
   PAARASAN_ARTI: _g.PAARASAN_ARTI,
   PANCASUDA_ARTI: _g.PANCASUDA_ARTI,
   KAMAROKAN_ARTI: _g.KAMAROKAN_ARTI,
+  BINCIL_BILINGUAL_DATA: _g.BINCIL_BILINGUAL_DATA,
+  getBincilArtiBilingual: _g.getBincilArtiBilingual,
   BINCIL_LIST: _g.BINCIL_LIST,
   bincilDatabase: _g.bincilDatabase,
   primbonMatrix: _g.primbonMatrix,

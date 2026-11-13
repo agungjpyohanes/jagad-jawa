@@ -93,11 +93,72 @@ const WUKU_ANCHOR_IDX = 19;
 // Cache O(1) instan untuk hasil perhitungan per tanggal
 const DAY_INFO_CACHE = Object.create(null);
 
+// Parser fleksibel untuk input tanggal (Masehi: YYYY-MM-DD, DD/MM/YYYY, Date object)
+export function parseDateComponents(arg1, arg2, arg3) {
+  if (arg1 === null || arg1 === undefined) {
+    const now = new Date();
+    return { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+  }
+  if (typeof arg1 === 'number' && typeof arg2 === 'number' && typeof arg3 === 'number') {
+    return { y: arg1, m: arg2, d: arg3 };
+  }
+  if (arg1 instanceof Date) {
+    if (!isNaN(arg1.getTime())) {
+      return { y: arg1.getFullYear(), m: arg1.getMonth() + 1, d: arg1.getDate() };
+    }
+    const now = new Date();
+    return { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+  }
+  if (typeof arg1 === 'string') {
+    const str = arg1.trim();
+    if (!str) {
+      const now = new Date();
+      return { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+    }
+    const parts = str.split(/[-/.s]+/).map(p => parseInt(p, 10));
+    if (parts.length === 3 && parts.every(n => !isNaN(n) && n > 0)) {
+      if (parts[0] >= 1000 && parts[0] <= 9999) {
+        return { y: parts[0], m: parts[1], d: parts[2] };
+      }
+      if (parts[2] >= 1000 && parts[2] <= 9999) {
+        let d = parts[0];
+        let m = parts[1];
+        const y = parts[2];
+        if (m > 12 && d <= 12) {
+          const temp = d; d = m; m = temp;
+        }
+        return { y, m, d };
+      }
+    }
+    const dObj = new Date(str);
+    if (!isNaN(dObj.getTime())) {
+      return { y: dObj.getFullYear(), m: dObj.getMonth() + 1, d: dObj.getDate() };
+    }
+  }
+  if (typeof arg1 === 'object' && arg1 !== null) {
+    const y = arg1.y ?? arg1.year ?? arg1.tahun;
+    const m = arg1.m ?? arg1.month ?? arg1.bulan;
+    const d = arg1.d ?? arg1.day ?? arg1.tanggal;
+    if (typeof y === 'number' && typeof m === 'number' && typeof d === 'number') {
+      return { y, m, d };
+    }
+  }
+  const now = new Date();
+  return { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() };
+}
+
 export function getDayInfo(y, m, d) {
-  const key = y * 10000 + m * 100 + d;
+  let parsedY = y, parsedM = m, parsedD = d;
+  if (typeof y === 'string' || y instanceof Date || m === undefined || d === undefined || (typeof y === 'object' && y !== null)) {
+    const parsed = parseDateComponents(y, m, d);
+    parsedY = parsed.y;
+    parsedM = parsed.m;
+    parsedD = parsed.d;
+  }
+  const key = parsedY * 10000 + parsedM * 100 + parsedD;
   if (DAY_INFO_CACHE[key]) return DAY_INFO_CACHE[key];
 
-  const jdn = toJDN(y, m, d);
+  const jdn = toJDN(parsedY, parsedM, parsedD);
   const diffDays = jdn - EPOCH_JDN;
   const weekdayId = ((diffDays % 7) + 7) % 7; // 0 = Minggu, 1 = Senin, ... 6 = Sabtu
   const pasaranId = (((diffDays + 1) % 5) + 5) % 5; // 0 = Legi, 1 = Pahing, 2 = Pon, 3 = Wage, 4 = Kliwon
@@ -106,22 +167,48 @@ export function getDayInfo(y, m, d) {
   const [hy, hm, hd] = jdnToIslamic(jdn);
   const ajYear = hy + 512;
 
-  const result = { jdn, weekdayId, pasaranId, wukuId, hijri: [hd, hm, hy], ajYear };
+  const dino = HARI[weekdayId] || 'Kamis';
+  const pas = PASARAN[pasaranId] || 'Pon';
+  const neptu = (NEPTU_HARI[weekdayId] ?? 8) + (NEPTU_PASARAN[pasaranId] ?? 7);
+  const wukuName = WUKU[wukuId] || 'Kuruwelut';
+
+  const result = {
+    jdn,
+    weekdayId,
+    pasaranId,
+    wukuId,
+    hijri: [hd, hm, hy],
+    ajYear,
+    dino,
+    hari: dino,
+    pas,
+    pasaran: pas,
+    neptu,
+    wukuName,
+    wuku: wukuName
+  };
   DAY_INFO_CACHE[key] = result;
   return result;
 }
 
 export function getTanggalJawaLengkap(y, m, d) {
-  const info = getDayInfo(y, m, d);
-  const dino = HARI[info.weekdayId];
-  const pas = PASARAN[info.pasaranId];
-  const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
-  const wukuName = WUKU[info.wukuId];
-  const wukuNo = info.wukuId + 1;
+  let parsedY = y, parsedM = m, parsedD = d;
+  if (typeof y === 'string' || y instanceof Date || m === undefined || d === undefined || (typeof y === 'object' && y !== null)) {
+    const parsed = parseDateComponents(y, m, d);
+    parsedY = parsed.y;
+    parsedM = parsed.m;
+    parsedD = parsed.d;
+  }
+  const info = getDayInfo(parsedY, parsedM, parsedD);
+  const dino = info.dino || HARI[info.weekdayId] || 'Kamis';
+  const pas = info.pas || PASARAN[info.pasaranId] || 'Pon';
+  const neptu = info.neptu ?? ((NEPTU_HARI[info.weekdayId] ?? 8) + (NEPTU_PASARAN[info.pasaranId] ?? 7));
+  const wukuName = info.wukuName || WUKU[info.wukuId] || 'Kuruwelut';
+  const wukuNo = (info.wukuId ?? 0) + 1;
 
-  const tglJawa = info.hijri[0];
-  const bulanJawa = BULAN_JAWA[info.hijri[1] - 1] || "-";
-  const tahunAJ = info.ajYear;
+  const tglJawa = info.hijri?.[0] ?? 1;
+  const bulanJawa = BULAN_JAWA[(info.hijri?.[1] ?? 1) - 1] || "-";
+  const tahunAJ = info.ajYear ?? 1955;
   
   const TAHUN_SIKLUS_8 = ["Alip", "Ehe", "Jimawal", "Je", "Dal", "Be", "Wawu", "Jimakir"];
   const tahunSiklus = TAHUN_SIKLUS_8[((tahunAJ - 1955) % 8 + 8) % 8];
@@ -140,9 +227,12 @@ export function getTanggalJawaLengkap(y, m, d) {
     tahunSiklus,
     namaWindu,
     dino,
+    hari: dino,
     pas,
+    pasaran: pas,
     neptu,
     wukuName,
+    wuku: wukuName,
     wukuNo,
     fullStr,
     shortStr
@@ -536,6 +626,7 @@ if (typeof window !== 'undefined') {
   window.toJDN = toJDN;
   window.jdnToIslamic = jdnToIslamic;
   window.getDayInfo = getDayInfo;
+  window.parseDateComponents = parseDateComponents;
   window.getTanggalJawaLengkap = getTanggalJawaLengkap;
   window.LIBUR_NASIONAL = LIBUR_NASIONAL;
   window.getLiburNasional = getLiburNasional;
@@ -567,6 +658,7 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports.toJDN = toJDN;
   module.exports.jdnToIslamic = jdnToIslamic;
   module.exports.getDayInfo = getDayInfo;
+  module.exports.parseDateComponents = parseDateComponents;
   module.exports.getTanggalJawaLengkap = getTanggalJawaLengkap;
   module.exports.LIBUR_NASIONAL = LIBUR_NASIONAL;
   module.exports.getLiburNasional = getLiburNasional;

@@ -43,6 +43,10 @@ export async function ensureNujumLoaded() {
       window.onTahunHitungChange = nujumUI.onTahunHitungChange;
       window.updateKepribadianQuickInfo = nujumUI.updateKepribadianQuickInfo;
       window.hitungKepribadianLengkap = nujumUI.hitungKepribadianLengkap;
+      window.calculateNujum = nujumUI.calculateNujum || nujumUI.hitungKepribadianLengkap;
+      window.hitungNujumPribadi = nujumUI.hitungKepribadianLengkap;
+      window.hitungNujumLengkap = nujumUI.hitungKepribadianLengkap;
+      window.petungNujumJangkep = nujumUI.calculateNujum || nujumUI.hitungKepribadianLengkap;
       window.onNujumFormInputChanged = nujumUI.onNujumFormInputChanged;
       window.switchNujumViewMode = nujumUI.switchNujumViewMode;
       window.switchNujumSubTab = nujumUI.switchNujumSubTab;
@@ -60,6 +64,8 @@ export async function ensureNujumLoaded() {
       window.NUJUM_GLOSSARY_CONCEPTS = nujumEngine.NUJUM_GLOSSARY_CONCEPTS;
 
       // Unified Nujum Data & Exact Matrix Lookups
+      window.resolveBincilFromMatrix = nujumEngine.resolveBincilFromMatrix;
+      window.resolveBincil = nujumEngine.resolveBincil;
       window.getNujumData = nujumEngine.getNujumData;
       window.getNujumFromMatrix = nujumEngine.getNujumFromMatrix;
       window.getNujumFromDatabase = nujumEngine.getNujumFromDatabase;
@@ -105,6 +111,9 @@ export async function ensureNujumLoaded() {
 
       nujumUI.initTahunHitungSelect();
       nujumUI.updateKepribadianQuickInfo();
+      if (typeof nujumUI.initNujumEventListeners === 'function') {
+        nujumUI.initNujumEventListeners();
+      }
     }
     nujumLoaded = true;
   } catch (err) {
@@ -243,13 +252,63 @@ export function wireNujumFeature() {
   window.selectWukuDetail = wrapperSelectWukuDetail;
 
   // Nujum wrappers (dengan jaminan lazy load jika diklik langsung)
-  const wrapperHitungKepribadian = async function () {
-    await ensureNujumLoaded();
-    if (typeof window.hitungKepribadianLengkap === 'function' && window.hitungKepribadianLengkap !== wrapperHitungKepribadian) {
-      window.hitungKepribadianLengkap();
+  const wrapperHitungKepribadian = async function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    try {
+      await ensureNujumLoaded();
+      if (typeof window.calculateNujum === 'function' && window.calculateNujum !== wrapperHitungKepribadian) {
+        await window.calculateNujum(e);
+      } else if (typeof window.hitungKepribadianLengkap === 'function' && window.hitungKepribadianLengkap !== wrapperHitungKepribadian) {
+        await window.hitungKepribadianLengkap(e);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
   window.hitungKepribadianLengkap = wrapperHitungKepribadian;
+  window.calculateNujum = wrapperHitungKepribadian;
+  window.hitungNujumPribadi = wrapperHitungKepribadian;
+  window.hitungNujumLengkap = wrapperHitungKepribadian;
+  window.petungNujumJangkep = wrapperHitungKepribadian;
+
+  const bindNujumButton = function () {
+    if (typeof document === 'undefined') return;
+    const candidateButtons = [
+      document.getElementById('btnHitungKepribadian'),
+      document.getElementById('btnPetungNujumJangkep'),
+      document.getElementById('btnHitungNujum'),
+      document.getElementById('btnHitungNujumLengkap'),
+      document.getElementById('btnNujumJangkep'),
+      document.querySelector('button[onclick*="hitungKepribadianLengkap"]'),
+      document.querySelector('button[onclick*="calculateNujum"]'),
+      ...Array.from(document.querySelectorAll('button')).filter(b => {
+        const txt = (b.textContent || '').trim();
+        return txt.includes('Hitung Nujum Lengkap') || txt.includes('Pétung Nujum Jangkep') || txt.includes('Petung Nujum Jangkep') || txt.includes('Pétung Nujum');
+      })
+    ].filter(Boolean);
+
+    candidateButtons.forEach(btn => {
+      if (!btn._nujumWired) {
+        btn._nujumWired = true;
+        if (!btn.getAttribute('type')) btn.setAttribute('type', 'button');
+        btn.addEventListener('click', (e) => {
+          if (e && e.preventDefault) e.preventDefault();
+          try {
+            wrapperHitungKepribadian(e);
+          } catch (err) {
+            console.error(err);
+          }
+        });
+      }
+    });
+  };
+  bindNujumButton();
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindNujumButton);
+    }
+  }
+  window.initNujumEventListeners = bindNujumButton;
 
   const wrapperOnNujumFormInputChanged = async function () {
     await ensureNujumLoaded();

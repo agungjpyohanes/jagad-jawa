@@ -9,6 +9,7 @@
 import {
   getDayInfo,
   getTanggalJawaLengkap,
+  parseDateComponents,
   HARI,
   PASARAN,
   NEPTU_HARI,
@@ -19,6 +20,8 @@ import {
 
 import {
   getNujumData,
+  resolveBincilFromMatrix,
+  resolveBincil,
   getFaalakiah,
   getAsesoris,
   NUJUM_GLOSSARY_CONCEPTS,
@@ -30,7 +33,9 @@ import {
   parseAksaraForFaalakiah,
   NABI_FAAL,
   FAAL_DESC,
-  AKSARA_FAAL
+  AKSARA_FAAL,
+  BINCIL_BILINGUAL_DATA,
+  getBincilArtiBilingual
 } from './nujum-engine.js';
 
 import { showToast, copyToClipboard } from '../../ui/toast.js';
@@ -160,7 +165,7 @@ let nujumDebounceTimer = null;
  */
 export function onNujumFormInputChanged() {
   updateKepribadianQuickInfo();
-  const tglVal = document.getElementById('tglLahirKepribadian')?.value;
+  const tglVal = getInputValue('tglLahirKepribadian', 'tanggalMiyos', 'tglMiyos', 'tglLahir', 'nujumTanggalLahir', 'inputTglNujum');
   if (tglVal) {
     clearTimeout(nujumDebounceTimer);
     nujumDebounceTimer = setTimeout(() => {
@@ -190,23 +195,50 @@ export function onTahunHitungChange() {
   updateKepribadianQuickInfo();
   if (lastCalculatedData) {
     const defaultYear = new Date().getFullYear();
-    const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
+    const tahunHitungStr = getInputValue('tahunHitungKepribadian', 'taunPetung', 'taunPetungan', 'tahunHitung', 'tahunPetung', 'nujumTahunHitung');
+    const tahunHitung = parseInt(tahunHitungStr || `${defaultYear}`, 10) || defaultYear;
     const umur = Math.max(0, tahunHitung - lastCalculatedData.y);
     lastCalculatedData.tahunHitung = tahunHitung;
     lastCalculatedData.umur = umur;
+
+    const bincilMatrix = lastCalculatedData.bincilMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
+    if (bincilMatrix && (!lastCalculatedData.nujumRes || !lastCalculatedData.nujumRes.paarasan)) {
+      lastCalculatedData.nujumRes = resolveBincilFromMatrix(bincilMatrix, lastCalculatedData.dino, lastCalculatedData.pas, lastCalculatedData.wukuName) || lastCalculatedData.nujumRes;
+    }
+
+    const bincilData = lastCalculatedData.nujumRes ?? lastCalculatedData.bincil ?? lastCalculatedData;
     lastCalculatedData.summaryRingkas = getNujumSummaryRingkas({
       nama: lastCalculatedData.nama,
       d: lastCalculatedData.d,
       m: lastCalculatedData.m,
       y: lastCalculatedData.y,
-      tahunHitung
+      tahunHitung,
+      dino: lastCalculatedData.dino,
+      pas: lastCalculatedData.pas,
+      neptu: lastCalculatedData.neptu,
+      wukuName: lastCalculatedData.wukuName,
+      paarasan: bincilData?.paarasan ?? bincilData?.parasan ?? {},
+      parasan: bincilData?.paarasan ?? bincilData?.parasan ?? {},
+      data: bincilData,
+      bincil: bincilData,
+      bincilMatrix
     });
     renderHasilNujumContent();
   }
 }
 
-export function updateKepribadianQuickInfo() {
-  const tglVal = document.getElementById('tglLahirKepribadian')?.value;
+export function updateKepribadianQuickInfo(customTglVal) {
+  const tglVal = customTglVal || getInputValue(
+    'tanggalMiyos',
+    'tglLahirKepribadian',
+    'tglMiyos',
+    'tglLahir',
+    'nujumTglLahir',
+    'nujumTanggalLahir',
+    'inputTglNujum',
+    'inputTanggalMiyos',
+    'nujumTanggalMiyos'
+  );
   const elTglJawa = document.getElementById('outTanggalJawaPribadi');
   const elHP = document.getElementById('outHariPasaranPribadi');
   const elNW = document.getElementById('outNeptuWukuPribadi');
@@ -223,20 +255,35 @@ export function updateKepribadianQuickInfo() {
     if (elSirikan) elSirikan.innerText = '-';
     return;
   }
-  const [y, m, d] = tglVal.split('-').map(Number);
-  if (isNaN(y) || isNaN(m) || isNaN(d)) return;
-  const info = getDayInfo(y, m, d);
-  const dino = HARI[info.weekdayId];
-  const pas = PASARAN[info.pasaranId];
-  const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
-  const wukuName = WUKU[info.wukuId];
+  const dateParsed = (typeof parseDateComponents === 'function')
+    ? parseDateComponents(tglVal)
+    : (function(s) {
+        if (!s) return null;
+        const p = String(s).split(/[-/.s]+/).map(Number);
+        if (p.length === 3 && p.every(n => !isNaN(n) && n > 0)) {
+          if (p[0] >= 1000) return { y: p[0], m: p[1], d: p[2] };
+          if (p[2] >= 1000) return { y: p[2], m: p[1], d: p[0] };
+        }
+        return null;
+      })(tglVal);
+
+  if (!dateParsed || isNaN(dateParsed.y) || isNaN(dateParsed.m) || isNaN(dateParsed.d)) return;
+  const { y, m, d } = dateParsed;
+  const info = getDayInfo(y, m, d) || {};
+  const dino = info.hari || info.dino || HARI[info.weekdayId] || 'Kamis';
+  const pas = info.pasaran || info.pas || PASARAN[info.pasaranId] || 'Pon';
+  const neptu = (info.neptu !== undefined)
+    ? info.neptu
+    : ((NEPTU_HARI[info.weekdayId] ?? 8) + (NEPTU_PASARAN[info.pasaranId] ?? 7));
+  const wukuName = info.wukuName || WUKU[info.wukuId] || 'Kuruwelut';
 
   const tglJawaRes = getTanggalJawaLengkap(y, m, d);
   const sasiFn = (typeof window !== 'undefined' && window.getWatakSasiJawa) ? window.getWatakSasiJawa : null;
   const sasiJawaRes = (sasiFn && tglJawaRes?.bulanJawa) ? sasiFn(tglJawaRes.bulanJawa) : null;
 
   const defaultYear = new Date().getFullYear();
-  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
+  const tahunHitungStr = getInputValue('taunPetung', 'taunPetungan', 'tahunHitungKepribadian', 'tahunHitung', 'tahunPetung', 'nujumTahunHitung');
+  const tahunHitung = parseInt(tahunHitungStr || `${defaultYear}`, 10) || defaultYear;
   const umur = Math.max(0, tahunHitung - y);
   const siklusFn = (typeof window !== 'undefined' && window.hitungSiklusTahunan) ? window.hitungSiklusTahunan : null;
   const siklusRes = siklusFn ? siklusFn(umur) : null;
@@ -289,35 +336,212 @@ export function switchNujumViewMode(mode) {
 /**
  * Menghitung Nujum Kepribadian Lengkap
  */
-export async function hitungKepribadianLengkap() {
-  currentNujumMode = 'mendalam';
-  try {
-    await loadDomainData('nujum');
-  } catch (e) {
-    console.warn('[nujum-ui] loadDomainData fallback:', e);
+
+/**
+ * Mengambil nilai masukan secara fleksibel dari berbagai ID alternatif (ID/JV/Legacy)
+ * tanpa pernah mengembalikan null atau undefined.
+ * @param {...string} ids
+ * @returns {string}
+ */
+export function getInputValue(...ids) {
+  if (typeof document === 'undefined') return '';
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el) {
+      const v = el.value !== undefined ? el.value : el.getAttribute?.('value');
+      if (v !== undefined && v !== null && String(v).trim() !== '') {
+        return String(v).trim();
+      }
+    }
   }
-  const tglVal = document.getElementById('tglLahirKepribadian')?.value;
-  if (!tglVal) {
-    showToast('Pilih tanggal lahir terlebih dahulu.');
+  return '';
+}
+
+export function hitungBincilDanWeton(dino, pas, wukuName, maybeMatrix) {
+  const matrix = maybeMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
+  if (matrix && typeof resolveBincilFromMatrix === 'function') {
+    const res = resolveBincilFromMatrix(matrix, dino, pas, wukuName);
+    if (res) return res;
+  }
+  if (typeof getNujumData === 'function') {
+    return getNujumData(dino, pas, wukuName, matrix);
+  }
+  if (typeof window !== 'undefined' && typeof window.getNujumData === 'function') {
+    return window.getNujumData(dino, pas, wukuName, matrix);
+  }
+  return null;
+}
+
+export async function hitungKepribadianLengkap(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  currentNujumMode = 'mendalam';
+  let nujumDomainData = null;
+  try {
+    nujumDomainData = await loadDomainData('nujum');
+  } catch (errDb) {
+    console.warn('[nujum-ui] loadDomainData fallback:', errDb);
+  }
+
+  const bincilMatrix = nujumDomainData?.bincilMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
+
+  if (!bincilMatrix || typeof bincilMatrix !== 'object' || Object.keys(bincilMatrix).length === 0) {
+    console.error('[nujum-ui] bincilMatrix tidak tersedia dari loadDomainData');
+    lastCalculatedData = null;
+    const outBox = document.getElementById('hasilKepribadianBox');
+    if (outBox) {
+      outBox.classList.remove('hidden');
+      outBox.innerHTML = `
+        <div class="p-4 sm:p-5 rounded-2xl bg-red-950/80 border border-red-500/50 text-red-200 text-xs space-y-2">
+          <h4 class="font-bold text-red-300 font-marcellus text-sm flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i> Gagal Memuat Basis Data Nujum
+          </h4>
+          <p>Basis data matriks nujum (bincil) boten saged dipun-undhuh. Mangga priksa sambungan internet utawi cobi malih sawetawis wekdal.</p>
+        </div>
+      `;
+    }
+    if (typeof showToast === 'function') {
+      showToast('Gagal memuat basis data nujum.');
+    }
     return;
   }
 
-  const nama = document.getElementById('namaKepribadian')?.value.trim() || 'Raden / Diajeng';
-  const defaultYear = new Date().getFullYear();
-  const tahunHitung = parseInt(document.getElementById('tahunHitungKepribadian')?.value || `${defaultYear}`) || defaultYear;
-  const alamatTinggalRaw = document.getElementById('alamatTinggal')?.value?.trim();
-  const alamatTinggal = (alamatTinggalRaw && alamatTinggalRaw !== '-') ? alamatTinggalRaw : 'Kutha Ngayogyakarta';
-  const alamatKerjaRaw = document.getElementById('alamatKerja')?.value?.trim();
-  const alamatKerja = (alamatKerjaRaw && alamatKerjaRaw !== '-') ? alamatKerjaRaw : 'Kutha Surakarta';
-  const [y, m, d] = tglVal.split('-').map(Number);
-  const info = getDayInfo(y, m, d);
-  const dino = HARI[info.weekdayId];
-  const pas = PASARAN[info.pasaranId];
-  const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
-  const wukuName = WUKU[info.wukuId];
+  try {
+    // 1. Tanggal Miyos / Tanggal Lahir (Masehi)
+    const tglVal = getInputValue(
+      'tglLahirKepribadian',
+      'tanggalMiyos',
+      'tglMiyos',
+      'tglLahir',
+      'nujumTanggalLahir',
+      'inputTglNujum',
+      'nujumTglLahir',
+      'inputTanggalMiyos',
+      'nujumTanggalMiyos'
+    );
+
+    if (!tglVal) {
+      if (typeof showToast === 'function') {
+        showToast('Pilih tanggal lahir terlebih dahulu.');
+      }
+      return;
+    }
+
+    const dateParsed = (typeof parseDateComponents === 'function')
+      ? parseDateComponents(tglVal)
+      : (function(s) {
+          if (!s) return null;
+          const p = String(s).split(/[-/.s]+/).map(Number);
+          if (p.length === 3 && p.every(n => !isNaN(n) && n > 0)) {
+            if (p[0] >= 1000) return { y: p[0], m: p[1], d: p[2] };
+            if (p[2] >= 1000) return { y: p[2], m: p[1], d: p[0] };
+          }
+          return null;
+        })(tglVal);
+
+    if (!dateParsed || isNaN(dateParsed.y) || isNaN(dateParsed.m) || isNaN(dateParsed.d) || dateParsed.y < 100 || dateParsed.m < 1 || dateParsed.m > 12 || dateParsed.d < 1 || dateParsed.d > 31) {
+      if (typeof showToast === 'function') {
+        showToast('Format tanggal lahir belum lengkap atau tidak valid.');
+      }
+      return;
+    }
+
+    const { y, m, d } = dateParsed;
+
+    // 2. Asma Jangkep / Nama Lengkap (Kanggé Faalakiah)
+    const nama = getInputValue(
+      'namaKepribadian',
+      'asmaJangkep',
+      'namaLengkap',
+      'nujumNama',
+      'nujumAsma'
+    ) || 'Raden / Diajeng';
+
+    // 3. Taun Petung / Tahun Hitung
+    const defaultYear = new Date().getFullYear();
+    const tahunHitungStr = getInputValue(
+      'tahunHitungKepribadian',
+      'taunPetung',
+      'taunPetungan',
+      'tahunHitung',
+      'tahunPetung',
+      'nujumTahunHitung'
+    );
+    const tahunHitung = parseInt(tahunHitungStr || `${defaultYear}`, 10) || defaultYear;
+
+    // 4. Alamat Manggon / Alamat Tinggal (Nama Kalurahan)
+    const alamatTinggalRaw = getInputValue(
+      'alamatTinggal',
+      'alamatManggon',
+      'nujumAlamatTinggal',
+      'nujumAlamatManggon',
+      'alamatPadunungan'
+    );
+    const alamatTinggal = (alamatTinggalRaw && alamatTinggalRaw !== '-') ? alamatTinggalRaw : 'Kutha Ngayogyakarta';
+
+    // 5. Alamat Pakaryan / Alamat Tempat Kerja (Nama Kalurahan)
+    const alamatKerjaRaw = getInputValue(
+      'alamatKerja',
+      'alamatPakaryan',
+      'alamatTempatKerja',
+      'nujumAlamatKerja',
+      'nujumAlamatPakaryan',
+      'alamatPanggonanNyambutDamel',
+      'alamatNyambutDamel',
+      'panggonanNyambutDamel',
+      'inputAlamatPakaryan',
+      'nujumAlamatPanggonanNyambutDamel'
+    );
+    const alamatKerja = (alamatKerjaRaw && alamatKerjaRaw !== '-') ? alamatKerjaRaw : 'Kutha Surakarta';
+
+    try {
+      updateKepribadianQuickInfo(tglVal);
+    } catch (errQuick) {
+      console.warn('[nujum-ui] updateKepribadianQuickInfo error:', errQuick);
+    }
+  const info = getDayInfo(y, m, d) || {};
+  const dino = info.hari || info.dino || HARI[info.weekdayId] || 'Kamis';
+  const pas = info.pasaran || info.pas || PASARAN[info.pasaranId] || 'Pon';
+  const neptu = (info.neptu !== undefined)
+    ? info.neptu
+    : ((NEPTU_HARI[info.weekdayId] ?? 8) + (NEPTU_PASARAN[info.pasaranId] ?? 7));
+  const wukuName = info.wukuName || WUKU[info.wukuId] || 'Kuruwelut';
   const umur = Math.max(0, tahunHitung - y);
 
-  const nujumRes = getNujumData(dino, pas, wukuName);
+  // Validasi objek weton/wuku sebelum ringkasan dibuat (early return jika data belum lengkap / null)
+  const hasilWeton = (info && dino && pas && wukuName && !isNaN(neptu))
+    ? { info, dino, pas, neptu, wukuName, umur, y, m, d }
+    : null;
+
+  if (!hasilWeton) {
+    console.warn('[nujum-ui] Hasil kalkulasi weton/wuku belum lengkap atau bernilai null.');
+    return;
+  }
+
+  const nujumRes = resolveBincilFromMatrix(bincilMatrix, dino, pas, wukuName);
+  if (!nujumRes) {
+    console.error('[nujum-ui] Row bincil tidak ditemukan untuk:', { dino, pas, wukuName });
+    lastCalculatedData = null;
+    const outBox = document.getElementById('hasilKepribadianBox');
+    if (outBox) {
+      outBox.classList.remove('hidden');
+      outBox.innerHTML = `
+        <div class="p-4 sm:p-5 rounded-2xl bg-amber-950/80 border border-amber-500/50 text-amber-200 text-xs space-y-2">
+          <h4 class="font-bold text-amber-300 font-marcellus text-sm flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation"></i> Data Weton Boten Pinanggih
+          </h4>
+          <p>Data petungan bincil kagem weton ${dino} ${pas} Wuku ${wukuName} boten pinanggih wonten ing matriks pawukon.</p>
+        </div>
+      `;
+    }
+    if (typeof showToast === 'function') {
+      showToast('Data bincil kagem weton punika boten pinanggih.');
+    }
+    return;
+  }
+
+  const hasilBincil = nujumRes;
+  const ringkasan = getNujumSummaryRingkas(hasilBincil);
+
   const faal = getFaalakiah(nama);
   let aseso = getAsesoris(m, d);
   if (!aseso) {
@@ -331,7 +555,22 @@ export async function hitungKepribadianLengkap() {
     };
   }
   const kd = hitungKarakterDasarPure(d, m, y);
-  const summaryRingkas = getNujumSummaryRingkas({ nama, d, m, y, tahunHitung });
+  const summaryRingkas = getNujumSummaryRingkas({
+    nama,
+    d,
+    m,
+    y,
+    tahunHitung,
+    dino,
+    pas,
+    neptu,
+    wukuName,
+    paarasan: hasilBincil?.paarasan ?? hasilBincil?.parasan ?? {},
+    parasan: hasilBincil?.paarasan ?? hasilBincil?.parasan ?? {},
+    data: hasilBincil,
+    bincil: hasilBincil,
+    bincilMatrix
+  });
   const tglJawaRes = getTanggalJawaLengkap(y, m, d);
 
   const fnShioByYear = (typeof getShioByYear === 'function') ? getShioByYear : (typeof window !== 'undefined' ? window.getShioByYear : null);
@@ -487,6 +726,7 @@ export async function hitungKepribadianLengkap() {
     nama, tglVal, d, m, y, tahunHitung, umur,
     dino, pas, neptu, wukuName, wukuNo: info.wukuId + 1,
     alamatTinggal, alamatKerja,
+    bincilMatrix,
     nujumRes, faal, aseso, kd, summaryRingkas, tglJawaRes,
     shioLahirRes, zodiakRes, mangsaRes, karakterRes,
     watakDinaRes, watakPasaranRes, sasiJawaRes,
@@ -530,14 +770,73 @@ export async function hitungKepribadianLengkap() {
   }
 
   showToast('Nujum kepribadian kasil kapetung kanthi jangkep!');
+  } catch (err) {
+    console.error(err);
+    console.error('[nujum-ui] Gagal menghitung Nujum Kepribadian:', err);
+    showToast('Gagal memproses perhitungan Nujum: ' + (err.message || 'Periksa input tanggal lahir'));
+    const outBox = document.getElementById('hasilKepribadianBox');
+    if (outBox && !lastCalculatedData) {
+      outBox.innerHTML = `
+        <div class="p-6 rounded-2xl bg-rose-950/80 border border-rose-500/40 text-rose-200 text-xs text-center space-y-2 shadow-xl">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400 text-3xl mb-1"></i>
+          <p class="font-bold text-sm">Gagal Menghitung Nujum Kepribadian</p>
+          <p>${err.message || 'Pastikan format tanggal lahir lengkap dan valid (Hari, Bulan, Tahun).'}</p>
+        </div>
+      `;
+    }
+  }
+}
+
+/**
+ * Merender arti watak bincil bilingual (Jawa & Indonesia) secara rapi dan akurat.
+ * @param {string} dimensi - 'padewan' | 'paringkelan' | 'pandangon' | 'paarasan' | 'pancasuda' | 'kamarokan'
+ * @param {Object} itemObj - Objek bincil dengan { nama, arti, arti_id, arti_jv, artiBilingual }
+ * @returns {string} HTML snippet
+ */
+export function renderBincilArtiHtml(dimensi, itemObj) {
+  if (!itemObj) return '<p class="text-[11px] text-sogan-200 leading-relaxed">-</p>';
+  const nama = itemObj?.nama || '-';
+  if (nama === '-') return '<p class="text-[11px] text-sogan-200 leading-relaxed">-</p>';
+
+  const fnLookup = (typeof getBincilArtiBilingual === 'function')
+    ? getBincilArtiBilingual
+    : (typeof window !== 'undefined' && typeof window.getBincilArtiBilingual === 'function' ? window.getBincilArtiBilingual : null);
+
+  const bilingual = fnLookup ? fnLookup(dimensi, nama) : (itemObj?.artiBilingual || null);
+  const jv = itemObj?.arti_jv || bilingual?.jv || (typeof itemObj?.arti === 'object' ? itemObj?.arti?.jv : null) || itemObj?.arti || '-';
+  const id = itemObj?.arti_id || bilingual?.id || (typeof itemObj?.arti === 'object' ? itemObj?.arti?.id : null) || itemObj?.arti || '-';
+
+  if (!jv || jv === '-' || !id || id === '-') {
+    return `<p class="text-[11px] text-sogan-200 leading-relaxed">${itemObj?.arti || '-'}</p>`;
+  }
+
+  // Jika teks Jawa dan Indonesia sama persis (misal: "Brangasan", "Takabur", "Lengah")
+  if (jv.trim().toLowerCase() === id.trim().toLowerCase()) {
+    return `<p class="text-[11px] text-sogan-200 leading-relaxed">${jv}</p>`;
+  }
+
+  return `
+    <div class="space-y-1.5 pt-0.5">
+      <p class="text-[11px] text-amber-100/95 leading-relaxed font-serif">
+        <span class="inline-block text-[9px] font-sans font-bold uppercase tracking-wider text-amber-400/90 bg-amber-950/60 border border-amber-600/30 px-1 py-0.2 rounded mr-1">JV</span>${jv}
+      </p>
+      <p class="text-[10.5px] text-sogan-300/90 leading-relaxed border-t border-sogan-800/60 pt-1">
+        <span class="inline-block text-[9px] font-sans font-bold uppercase tracking-wider text-sogan-400 bg-sogan-900/60 border border-sogan-700/40 px-1 py-0.2 rounded mr-1">ID</span>${id}
+      </p>
+    </div>
+  `;
 }
 
 /**
  * Render Tampilan Hasil Nujum (Mode Ringkas atau Mode Mendalam)
  */
 function renderHasilNujumContent() {
-  const outBox = document.getElementById('hasilKepribadianBox');
-  if (!outBox || !lastCalculatedData) return;
+  const targetContainers = [
+    document.getElementById('hasilKepribadianBox'),
+    document.getElementById('nujumResultContainer')
+  ].filter(Boolean);
+
+  if (targetContainers.length === 0 || !lastCalculatedData) return;
 
   const data = lastCalculatedData;
   const isRingkas = (currentNujumMode === 'ringkas');
@@ -584,7 +883,23 @@ function renderHasilNujumContent() {
 
   if (isRingkas) {
     // ─── TAMPILAN MODE RINGKAS (RAMAH PEMULA) ─────────────────────────────
-    const sr = data.summaryRingkas;
+    const sr = (typeof data.summaryRingkas === 'object' && data.summaryRingkas !== null)
+      ? data.summaryRingkas
+      : {
+          nama: data.nama || 'Panjenengan',
+          tglMasehiStr: data.tglJawaRes?.fullStr || '-',
+          dino: data.dino || 'Kamis',
+          pas: data.pas || 'Pon',
+          neptu: data.neptu || 15,
+          wukuName: data.wukuName || 'Kuruwelut',
+          tipeKarakter: 'Luhur',
+          deskripsiKarakter: String(data.summaryRingkas || 'Ringkasan nujum belum tersedia.'),
+          kekuatanUtama: [],
+          areaWaspada: '-',
+          arahHoki: 'Pusat & Segala Arah',
+          sirikanRumah: '-',
+          faalRingkas: '-'
+        };
     mainContentHtml = `
       <div class="space-y-4">
         <!-- Hero Summary Card -->
@@ -636,6 +951,21 @@ function renderHasilNujumContent() {
             </div>
           </div>
 
+          <!-- Ageman & Penyelarasan Energi Ringkas -->
+          ${data.aseso ? `
+          <div class="p-3.5 rounded-xl bg-sogan-900/60 border border-prada/30 space-y-2">
+            <span class="text-[10px] text-prada uppercase font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-gem text-amber-400"></i> Ageman &amp; Penyelarasan Energi
+            </span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+              <div><span class="text-sogan-400 block text-[9.5px]">Dina Becik:</span><strong class="text-amber-200">${data.aseso.dino || '-'}</strong></div>
+              <div><span class="text-sogan-400 block text-[9.5px]">Watu Mulia:</span><strong class="text-teal-200">${data.aseso.watu || '-'}</strong></div>
+              <div><span class="text-sogan-400 block text-[9.5px]">Warna Ageman:</span><strong class="text-prada-light">${data.aseso.warna || '-'}</strong></div>
+              <div><span class="text-sogan-400 block text-[9.5px]">Sekar Asih:</span><strong class="text-rose-200">${data.aseso.kembang || '-'}</strong></div>
+            </div>
+          </div>
+          ` : ''}
+
           <!-- Arah Keberuntungan & Faal Spiritual -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="p-3 rounded-xl bg-teal-950/40 border border-teal-500/30 flex items-center gap-2.5">
@@ -675,6 +1005,7 @@ function renderHasilNujumContent() {
     const sirikanCardHtml = renderSirikanAdhepOmahCardHtml(data.sirikanRes);
     const palenggahanCardHtml = renderPalenggahanPedamelanCardHtml(data.palenggahanRes, data.pedamelanRes);
     const pekerjaanPakartiCardHtml = renderPekerjaanPakartiCardHtml(data.pekerjaanRes);
+    const asesorisAgemanCardHtml = renderAsesorisAgemanCardHtml(data.aseso);
 
     mainContentHtml = `
       <div class="space-y-4">
@@ -743,7 +1074,7 @@ function renderHasilNujumContent() {
                 </button>
               </div>
               <strong class="text-amber-300 font-serif text-sm block">${bincil?.padewan?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.padewan?.arti || '-'}</p>
+              ${renderBincilArtiHtml('padewan', bincil?.padewan)}
             </div>
 
             <!-- 2. Paringkelan -->
@@ -755,7 +1086,7 @@ function renderHasilNujumContent() {
                 </button>
               </div>
               <strong class="text-teal-300 font-serif text-sm block">${bincil?.paringkelan?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.paringkelan?.arti || '-'}</p>
+              ${renderBincilArtiHtml('paringkelan', bincil?.paringkelan)}
             </div>
 
             <!-- 3. Pandangon -->
@@ -767,7 +1098,7 @@ function renderHasilNujumContent() {
                 </button>
               </div>
               <strong class="text-cyan-300 font-serif text-sm block">${bincil?.pandangon?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.pandangon?.arti || '-'}</p>
+              ${renderBincilArtiHtml('pandangon', bincil?.pandangon)}
             </div>
 
             <!-- 4. Paarasan -->
@@ -778,8 +1109,8 @@ function renderHasilNujumContent() {
                   <i class="fa-solid fa-circle-question"></i>
                 </button>
               </div>
-              <strong class="text-indigo-300 font-serif text-sm block">${bincil?.paarasan?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.paarasan?.arti || '-'}</p>
+              <strong class="text-indigo-300 font-serif text-sm block">${bincil?.paarasan?.nama || bincil?.parasan?.nama || '-'}</strong>
+              ${renderBincilArtiHtml('paarasan', bincil?.paarasan ?? bincil?.parasan)}
             </div>
 
             <!-- 5. Pancasuda -->
@@ -791,7 +1122,7 @@ function renderHasilNujumContent() {
                 </button>
               </div>
               <strong class="text-emerald-300 font-serif text-sm block">${bincil?.pancasuda?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.pancasuda?.arti || '-'}</p>
+              ${renderBincilArtiHtml('pancasuda', bincil?.pancasuda)}
             </div>
 
             <!-- 6. Kamarokan -->
@@ -803,7 +1134,7 @@ function renderHasilNujumContent() {
                 </button>
               </div>
               <strong class="text-purple-300 font-serif text-sm block">${bincil?.kamarokan?.nama || '-'}</strong>
-              <p class="text-[11px] text-sogan-200 leading-relaxed">${bincil?.kamarokan?.arti || '-'}</p>
+              ${renderBincilArtiHtml('kamarokan', bincil?.kamarokan)}
             </div>
           </div>
         </div>
@@ -846,6 +1177,7 @@ function renderHasilNujumContent() {
         ${shioElemenCardHtml}
         ${karakterDasarCardHtml}
         ${watakDinaPasaranCardHtml}
+        ${asesorisAgemanCardHtml}
         ${pekerjaanPakartiCardHtml}
         ${sirikanCardHtml}
         ${palenggahanCardHtml}
@@ -867,14 +1199,31 @@ function renderHasilNujumContent() {
     </div>
   `;
 
-  outBox.innerHTML = `
-    <div class="space-y-4">
-      ${modeSwitcherHtml}
-      ${mainContentHtml}
-      ${disclaimerHtml}
-    </div>
-  `;
-  outBox.classList.remove('hidden');
+  targetContainers.forEach(box => {
+    box.innerHTML = `
+      <div class="space-y-4">
+        ${modeSwitcherHtml}
+        ${mainContentHtml}
+        ${disclaimerHtml}
+      </div>
+    `;
+    if (box.classList && typeof box.classList.remove === 'function') {
+      box.classList.remove('hidden');
+    }
+    if (box.style && box.style.display === 'none') {
+      box.style.display = 'block';
+    }
+  });
+
+  const wrapperBox = document.getElementById('containerHasilNujum');
+  if (wrapperBox) {
+    if (wrapperBox.classList && typeof wrapperBox.classList.remove === 'function') {
+      wrapperBox.classList.remove('hidden');
+    }
+    if (wrapperBox.style && wrapperBox.style.display === 'none') {
+      wrapperBox.style.display = 'block';
+    }
+  }
 }
 
 // ─── 8 KARTU ANALISIS MENDALAM & INTERAKTIF DOM RENDERING ──────────────────
@@ -1380,19 +1729,19 @@ export function renderWatakDinaPasaranCardHtml(watakDinaRes, watakPasaranRes, sa
           <div class="space-y-2">
             <div class="flex items-center justify-between border-b border-sogan-800 pb-2">
               <span class="text-[10px] uppercase font-bold text-blue-300 tracking-wider flex items-center gap-1.5">
-                <i class="fa-solid fa-compass text-blue-400"></i> Pasaran: ${getBilingualText(watakPasaranRes.pasaran)}
+                <i class="fa-solid fa-compass text-blue-400"></i> Pasaran: ${getBilingualText(watakPasaranRes?.pasaran ?? '-')}
               </span>
               <span class="px-2 py-0.5 rounded bg-sogan-950 border border-blue-500/30 text-[10px] text-prada font-bold">
-                Lambang: ${getBilingualText(watakPasaranRes.lambang)}
+                Lambang: ${getBilingualText(watakPasaranRes?.lambang ?? '-')}
               </span>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Watak Utama:</span>
-              <p class="font-bold text-sogan-100 text-xs">${getBilingualText(watakPasaranRes.watak_utama)}</p>
+              <p class="font-bold text-sogan-100 text-xs">${getBilingualText(watakPasaranRes?.watak_utama ?? '-')}</p>
             </div>
             <div>
               <span class="text-[10px] text-sogan-400 uppercase font-semibold block mb-0.5">Deskripsi Lengkap:</span>
-              <p class="text-sogan-200 text-[11px] leading-relaxed">${getBilingualText(watakPasaranRes.deskripsi)}</p>
+              <p class="text-sogan-200 text-[11px] leading-relaxed">${getBilingualText(watakPasaranRes?.deskripsi ?? '-')}</p>
             </div>
           </div>
           <div class="p-2.5 bg-sogan-950/80 rounded-lg border border-sogan-800">
@@ -1439,7 +1788,7 @@ export function renderPekerjaanPakartiCardHtml(pekerjaanRes) {
           </h4>
         </div>
         <span class="text-[10px] font-mono text-prada/90 bg-sogan-950 px-2.5 py-1 rounded border border-sogan-700/80">
-          Weton: <strong class="text-prada-light">${getBilingualText(pekerjaanRes.dino)} ${getBilingualText(pekerjaanRes.pasaran)}</strong>
+          Weton: <strong class="text-prada-light">${getBilingualText(pekerjaanRes?.dino ?? '-')} ${getBilingualText(pekerjaanRes?.pasaran ?? '-')}</strong>
         </span>
       </div>
 
@@ -1486,6 +1835,87 @@ export function renderPekerjaanPakartiCardHtml(pekerjaanRes) {
           <p class="text-[10px] text-sogan-400 italic">
             *Berdasarkan petungan Primbon Jawa Pakarti Dino &amp; Pasaran untuk memaksimalkan potensi rezeki dan ketenangan batin.
           </p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+/**
+ * Render Kartu Asesoris & Ageman Busana Luhur (Penyelarasan Energi Kelahiran)
+ * @param {Object} aseso
+ * @returns {string} HTML Card
+ */
+export function renderAsesorisAgemanCardHtml(aseso) {
+  if (!aseso) return '';
+  return `
+    <div class="space-y-3 bg-wulung p-4 sm:p-5 rounded-2xl border border-prada/30 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between border-b border-sogan-700/80 pb-2.5 gap-2">
+        <div>
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[10px] text-amber-300 font-bold uppercase tracking-wider">
+            Busana &amp; Ageman
+          </span>
+          <h4 class="font-marcellus font-bold text-prada text-base sm:text-lg mt-1 flex items-center gap-2">
+            <i class="fa-solid fa-gem text-amber-400"></i> Asesoris &amp; Ageman Busana Luhur
+          </h4>
+        </div>
+        <span class="text-[10px] font-mono text-sogan-400">Penyelarasan Energi Kelahiran</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+        <!-- 1. Dina Becik -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-amber-500/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-regular fa-calendar-check text-amber-400"></i> Dina Becik (Hari Baik)
+          </span>
+          <strong class="text-amber-200 font-serif text-sm block">${aseso.dino || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Dina prayogi kanggé miwiti hajat utawi pakaryan wigati.</p>
+        </div>
+
+        <!-- 2. Watu Mulia -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-teal-500/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-ring text-teal-400"></i> Watu Mulia (Batu Permata)
+          </span>
+          <strong class="text-teal-200 font-serif text-sm block">${aseso.watu || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Sela aji panuntun energi lan pangayoman pribadi.</p>
+        </div>
+
+        <!-- 3. Warna Ageman -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-prada/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-shirt text-prada"></i> Warna Ageman (Busana)
+          </span>
+          <strong class="text-prada-light font-serif text-sm block">${aseso.warna || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Warna busana ingkang selaras kanggé ngunggahaken wibawa.</p>
+        </div>
+
+        <!-- 4. Sekar Pengasihan -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-rose-500/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-spa text-rose-400"></i> Sekar Pengasihan (Bunga)
+          </span>
+          <strong class="text-rose-200 font-serif text-sm block">${aseso.kembang || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Aroma sekar panetep katentreman batin lan daya asih.</p>
+        </div>
+
+        <!-- 5. Potensi Lelara -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-orange-500/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-heart-pulse text-orange-400"></i> Potensi Lelara (Kesehatan)
+          </span>
+          <strong class="text-orange-200 font-serif text-sm block">${aseso.lelara || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Titik fisik ingkang kedah dipunjagi kanthi pola gesang resik.</p>
+        </div>
+
+        <!-- 6. Wulan Becik -->
+        <div class="p-3 rounded-xl bg-keraton/90 border border-indigo-500/30 space-y-1">
+          <span class="text-[10px] text-sogan-400 uppercase font-semibold flex items-center gap-1.5">
+            <i class="fa-solid fa-moon text-indigo-400"></i> Wulan Pilihan (Bulan Selaras)
+          </span>
+          <strong class="text-indigo-200 font-serif text-sm block">${aseso.sasi || '-'}</strong>
+          <p class="text-[11px] text-sogan-300 leading-tight">Mangsa ingkang nguntungaken kanggé laku gesang.</p>
         </div>
       </div>
     </div>
@@ -1983,7 +2413,7 @@ export function switchNujumSubTab(tab) {
   }
 }
 
-export function hitungKomparasiNonJodoh() {
+export async function hitungKomparasiNonJodoh() {
   const p1Nama = document.getElementById('nonJodohP1Nama')?.value.trim() || 'Rekan 1';
   const p1Tgl = document.getElementById('nonJodohP1Tgl')?.value;
   const p2Nama = document.getElementById('nonJodohP2Nama')?.value.trim() || 'Rekan 2';
@@ -1991,18 +2421,31 @@ export function hitungKomparasiNonJodoh() {
   const relasiSel = document.getElementById('nonJodohRelasiSel')?.value || 'rekan_kerja';
 
   if (!p1Tgl || !p2Tgl) {
-    showToast('Pilih tanggal lahir kedua belah pihak terlebih dahulu.');
+    if (typeof showToast === 'function') {
+      showToast('Pilih tanggal lahir kedua belah pihak terlebih dahulu.');
+    }
     return;
   }
+
+  let nujumData = null;
+  try {
+    nujumData = await loadDomainData('nujum');
+  } catch (err) {
+    console.warn('[nujum-ui] hitungKomparasiNonJodoh loadDomainData fallback:', err);
+  }
+  const bincilMatrix = nujumData?.bincilMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
 
   const result = compareNonJodoh(
     { nama: p1Nama, tglLahir: p1Tgl },
     { nama: p2Nama, tglLahir: p2Tgl },
-    relasiSel
+    relasiSel,
+    { bincilMatrix }
   );
 
   renderKomparasiNonJodoh(result);
-  showToast('Komparasi sinergi relasi kasil kapetung!');
+  if (typeof showToast === 'function') {
+    showToast('Komparasi sinergi relasi kasil kapetung!');
+  }
 }
 
 export function renderKomparasiNonJodoh(res) {
@@ -2040,7 +2483,7 @@ export function renderKomparasiNonJodoh(res) {
               <div class="flex justify-between"><span class="text-sogan-400">Weton:</span> <strong class="text-sogan-100">${person1.dino} ${person1.pas} (N: ${person1.neptu})</strong></div>
               <div class="flex justify-between"><span class="text-sogan-400">Wuku:</span> <span class="text-sogan-200">${person1.wukuName}</span></div>
               <div class="flex justify-between"><span class="text-sogan-400">Tipe Karakter:</span> <span class="text-amber-300 font-bold">${person1.tipeKarakter}</span></div>
-              <div class="flex justify-between"><span class="text-sogan-400">Paarasan:</span> <span class="text-indigo-300">${person1.bincil.paarasan.nama}</span></div>
+              <div class="flex justify-between"><span class="text-sogan-400">Paarasan:</span> <span class="text-indigo-300">${person1?.bincil?.paarasan?.nama ?? person1?.bincil?.parasan?.nama ?? '-'}</span></div>
               <div class="flex justify-between"><span class="text-sogan-400">Pandangon:</span> <span class="text-cyan-300">${person1.bincil.pandangon.nama}</span></div>
             </div>
           </div>
@@ -2055,7 +2498,7 @@ export function renderKomparasiNonJodoh(res) {
               <div class="flex justify-between"><span class="text-sogan-400">Weton:</span> <strong class="text-sogan-100">${person2.dino} ${person2.pas} (N: ${person2.neptu})</strong></div>
               <div class="flex justify-between"><span class="text-sogan-400">Wuku:</span> <span class="text-sogan-200">${person2.wukuName}</span></div>
               <div class="flex justify-between"><span class="text-sogan-400">Tipe Karakter:</span> <span class="text-amber-300 font-bold">${person2.tipeKarakter}</span></div>
-              <div class="flex justify-between"><span class="text-sogan-400">Paarasan:</span> <span class="text-indigo-300">${person2.bincil.paarasan.nama}</span></div>
+              <div class="flex justify-between"><span class="text-sogan-400">Paarasan:</span> <span class="text-indigo-300">${person2?.bincil?.paarasan?.nama ?? person2?.bincil?.parasan?.nama ?? '-'}</span></div>
               <div class="flex justify-between"><span class="text-sogan-400">Pandangon:</span> <span class="text-cyan-300">${person2.bincil.pandangon.nama}</span></div>
             </div>
           </div>
@@ -2127,7 +2570,7 @@ export function renderLaporanNujumLengkapPrintHtml(d) {
   const pad = d.nujumRes?.padewan || { sisa: '-', nama: '-', arti: '-' };
   const prk = d.nujumRes?.paringkelan || { sisa: '-', nama: '-', arti: '-' };
   const pan = d.nujumRes?.pandangon || { sisa: '-', nama: '-', arti: '-' };
-  const paa = d.nujumRes?.paarasan || { sisa: '-', nama: '-', arti: '-' };
+  const paa = d.nujumRes?.paarasan || d.nujumRes?.parasan || { sisa: '-', nama: '-', arti: '-' };
   const pcs = d.nujumRes?.pancasuda || { sisa: '-', nama: '-', arti: '-' };
   const kam = d.nujumRes?.kamarokan || { sisa: '-', nama: '-', arti: '-' };
   const mangsaRes = d.mangsaRes || {};
@@ -2643,7 +3086,7 @@ export function renderLaporanNujumRingkasPrintHtml(d) {
   const pad = d.nujumRes?.padewan || { sisa: '-', nama: '-', arti: '-' };
   const prk = d.nujumRes?.paringkelan || { sisa: '-', nama: '-', arti: '-' };
   const pan = d.nujumRes?.pandangon || { sisa: '-', nama: '-', arti: '-' };
-  const paa = d.nujumRes?.paarasan || { sisa: '-', nama: '-', arti: '-' };
+  const paa = d.nujumRes?.paarasan || d.nujumRes?.parasan || { sisa: '-', nama: '-', arti: '-' };
   const pcs = d.nujumRes?.pancasuda || { sisa: '-', nama: '-', arti: '-' };
   const kam = d.nujumRes?.kamarokan || { sisa: '-', nama: '-', arti: '-' };
   const sirikanRes = d.sirikanRes || {};
@@ -2913,12 +3356,65 @@ export function printLaporanNujumRingkas(theme = 'parchment') {
   return printLaporanNujum(theme, 'ringkas');
 }
 
+
+/**
+ * Bind event listener pada tombol "Hitung Nujum Lengkap"
+ */
+
+/**
+ * Alias kalkulasi Nujum Kepribadian / Pétung Nujum Jangkep
+ */
+export async function calculateNujum(e) {
+  return hitungKepribadianLengkap(e);
+}
+
+export function initNujumEventListeners() {
+  if (typeof document === 'undefined') return;
+  const candidateButtons = [
+    document.getElementById('btnHitungKepribadian'),
+    document.getElementById('btnPetungNujumJangkep'),
+    document.getElementById('btnHitungNujum'),
+    document.getElementById('btnHitungNujumLengkap'),
+    document.getElementById('btnNujumJangkep'),
+    document.querySelector('button[onclick*="hitungKepribadianLengkap"]'),
+    document.querySelector('button[onclick*="calculateNujum"]'),
+    ...Array.from(document.querySelectorAll('button')).filter(b => {
+      const txt = (b.textContent || '').trim();
+      return txt.includes('Hitung Nujum Lengkap') || txt.includes('Pétung Nujum Jangkep') || txt.includes('Petung Nujum Jangkep') || txt.includes('Pétung Nujum');
+    })
+  ].filter(Boolean);
+
+  candidateButtons.forEach(btn => {
+    if (!btn._nujumListenerAttached) {
+      btn._nujumListenerAttached = true;
+      if (!btn.getAttribute('type')) btn.setAttribute('type', 'button');
+      btn.addEventListener('click', (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        try {
+          hitungKepribadianLengkap(e);
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    }
+  });
+}
+
 // ─── WINDOW EXPOSURE UNTUK INLINE ONCLICK & LEGACY HANDLERS ─────────────────
 if (typeof window !== 'undefined') {
   window.initTahunHitungSelect = initTahunHitungSelect;
   window.onTahunHitungChange = onTahunHitungChange;
   window.updateKepribadianQuickInfo = updateKepribadianQuickInfo;
+  window.hitungBincilDanWeton = hitungBincilDanWeton;
   window.hitungKepribadianLengkap = hitungKepribadianLengkap;
+  window.calculateNujum = calculateNujum;
+  window.hitungNujumPribadi = hitungKepribadianLengkap;
+  window.hitungNujumLengkap = hitungKepribadianLengkap;
+  window.petungNujumJangkep = calculateNujum;
+  window.renderAsesorisAgemanCardHtml = renderAsesorisAgemanCardHtml;
+  window.renderBincilArtiHtml = renderBincilArtiHtml;
+  window.initNujumEventListeners = initNujumEventListeners;
+  initNujumEventListeners();
   window.onNujumFormInputChanged = onNujumFormInputChanged;
   window.switchNujumViewMode = switchNujumViewMode;
   window.openGlosariumNujumModal = openGlosariumNujumModal;

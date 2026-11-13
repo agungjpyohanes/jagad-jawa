@@ -167,7 +167,7 @@ const dbCache = new Map();
 const inflightPromises = new Map();
 const domainCache = new Map();
 
-export const isNodeEnvironment = typeof window === 'undefined' && typeof process !== 'undefined' && Boolean(process.versions?.node);
+export const isNodeEnvironment = typeof process !== 'undefined' && Boolean(process.versions?.node);
 
 let nodeFs = null;
 let nodePath = null;
@@ -1090,6 +1090,9 @@ export async function loadDomainData(domain, options = {}) {
     if (dom === 'wayang' && typeof globalThis !== 'undefined' && cached) {
       globalThis._currentWayangData = cached;
     }
+    if (dom === 'nujum' && typeof globalThis !== 'undefined' && cached) {
+      globalThis._currentNujumData = cached;
+    }
     if (dom === 'mitologi' && typeof globalThis !== 'undefined' && cached) {
       globalThis._currentMitologiData = cached;
     }
@@ -1178,7 +1181,7 @@ export async function loadDomainData(domain, options = {}) {
       }
 
       case 'nujum': {
-        const [rawBincil, rawZodiak, rawShio, rawSasi, rawPasaran, rawKarakter, rawPekerjaan, rawPadewan] = await Promise.all([
+        const [rawBincil, rawZodiak, rawShio, rawSasi, rawPasaran, rawKarakter, rawPekerjaan, rawPadewan, rawBincilArtiAlt] = await Promise.all([
           loadDb('bincilMatrix').catch(() => null),
           loadDb('zodiak').catch(() => null),
           loadDb('shioWuxing').catch(() => null),
@@ -1186,7 +1189,8 @@ export async function loadDomainData(domain, options = {}) {
           loadDb('pasaranWatak').catch(() => null),
           loadDb('karakterDasar').catch(() => null),
           loadDb('pekerjaanWeton').catch(() => null),
-          loadDb('siklusPadewan').catch(() => null)
+          loadDb('siklusPadewan').catch(() => null),
+          loadDb('bincilArtiAlt').catch(() => null)
         ]);
 
         const effectiveBincil = rawBincil || (isNodeEnvironment ? getDbSync('06-bincil-matrix-bilingual.json') : null) || MASTER_BINCIL_DB;
@@ -1194,6 +1198,7 @@ export async function loadDomainData(domain, options = {}) {
         result = {
           bincilMatrix: effectiveBincil,
           ketBincil: (isNodeEnvironment ? getDbSync('03-bincil-arti.json') : null) || MASTER_KET_BINCIL || {},
+          bincilBilingual: rawBincilArtiAlt || (isNodeEnvironment ? getDbSync('27-bincil-arti-bilingual.json') : null) || null,
           zodiak: rawZodiak || (isNodeEnvironment ? getDbSync('07-zodiak-bilingual.json') : []) || MASTER_ZODIAK || [],
           shioWuxing: rawShio || (isNodeEnvironment ? getDbSync('09-shio-wuxing-bilingual.json') : []) || { shio_12: MASTER_SHIO_DETAIL } || {},
           sasiJawa: rawSasi || (isNodeEnvironment ? getDbSync('08-sasi-jawa-bilingual.json') : []) || Object.values(MASTER_SASI_JAWA) || [],
@@ -1202,6 +1207,9 @@ export async function loadDomainData(domain, options = {}) {
           pekerjaanWeton: rawPekerjaan || (isNodeEnvironment ? getDbSync('13-pekerjaan-weton-bilingual.json') : []) || MASTER_PEKERJAAN || [],
           siklusPadewan: rawPadewan || (isNodeEnvironment ? getDbSync('25-siklus-padewan-bilingual.json') : []) || MASTER_SIKLUS_PADEWAN || []
         };
+        if (typeof globalThis !== 'undefined' && result) {
+          globalThis._currentNujumData = result;
+        }
         break;
       }
 

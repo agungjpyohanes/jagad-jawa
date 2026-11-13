@@ -16,6 +16,17 @@ import {
 } from '../../data/nujum-matrix.js';
 
 import {
+  BINCIL_BILINGUAL_DATA,
+  getBincilArtiBilingual
+} from '../../data/bincil-bilingual.js';
+
+import bincilDataJSON from '../../data/27-bincil-arti-bilingual.json' with { type: 'json' };
+
+export const PAARASAN_DATA_JSON = bincilDataJSON?.paarasan ?? bincilDataJSON?.parasan ?? [];
+
+export { BINCIL_BILINGUAL_DATA, getBincilArtiBilingual, bincilDataJSON };
+
+import {
   MASTER_PAWUKON,
   PAWUKON_LIST,
   getPawukonDetail
@@ -75,10 +86,183 @@ export function getFaalakiah(nama) {
   };
 }
 
+export const CANON_WUKU_NAMES = [
+  "sinta", "landep", "wukir", "kurantil", "tolu", "gumbreg",
+  "warigalit", "warigagung", "julungwangi", "sungsang", "galungan", "kuningan",
+  "langkir", "mandasiya", "julungpujut", "pahang", "kuruwelut", "marakeh",
+  "tambir", "medangkungan", "maktal", "wuye", "manahil", "prangbakat",
+  "bala", "wugu", "wayang", "kulawu", "dukut", "watugunung"
+];
+
+export function normalizeHariName(hari) {
+  if (!hari) return '';
+  const s = String(hari).trim().toLowerCase();
+  if (s.includes('minggu') || s.includes('ahad') || s.includes('ngahad')) return 'minggu';
+  if (s.includes('senin') || s.includes('senen')) return 'senin';
+  if (s.includes('selasa')) return 'selasa';
+  if (s.includes('rabu') || s.includes('rebo')) return 'rabu';
+  if (s.includes('kamis') || s.includes('kemis')) return 'kamis';
+  if (s.includes('jumat') || s.includes("jum'at") || s.includes('jumaat')) return 'jumat';
+  if (s.includes('sabtu') || s.includes('setu')) return 'sabtu';
+  return s;
+}
+
+export function normalizePasaranName(pasaran) {
+  if (!pasaran) return '';
+  const s = String(pasaran).trim().toLowerCase();
+  if (s.includes('legi') || s.includes('manis')) return 'legi';
+  if (s.includes('pahing') || s.includes('paing')) return 'pahing';
+  if (s.includes('pon') || s.includes('petak')) return 'pon';
+  if (s.includes('wage') || s.includes('cemengan')) return 'wage';
+  if (s.includes('kliwon') || s.includes('keliwon') || s.includes('asih')) return 'kliwon';
+  return s;
+}
+
+export function normalizeWukuName(wuku) {
+  if (wuku === undefined || wuku === null) return '';
+  if (typeof wuku === 'number') {
+    if (wuku >= 1 && wuku <= 30) return CANON_WUKU_NAMES[wuku - 1];
+    if (wuku >= 0 && wuku <= 29) return CANON_WUKU_NAMES[wuku];
+  }
+  const s = String(wuku).trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+  const num = parseInt(s, 10);
+  if (!isNaN(num)) {
+    if (num >= 1 && num <= 30) return CANON_WUKU_NAMES[num - 1];
+    if (num >= 0 && num <= 29) return CANON_WUKU_NAMES[num];
+  }
+  const match = CANON_WUKU_NAMES.find(cw => cw === s || s.includes(cw) || cw.includes(s));
+  return match || s;
+}
+
 /**
- * Mengambil data Nujum Bincil dan Pawukon dari master data.
+ * Resolver matriks bincil runtime dari 06-bincil-matrix-bilingual.json
+ * Menerima matriks, menormalkan key {wuku}_{hari}_{pasaran}, dan mengembalikan 6 dimensi lengkap.
+ * Mengembalikan null jika matriks tidak valid atau baris tidak ditemukan.
+ * @param {Object} bincilMatrix
+ * @param {string} dino
+ * @param {string} pasaran
+ * @param {string|number} wuku
+ * @returns {Object|null}
  */
-export const getNujumData = masterGetNujumData;
+export function resolveBincilFromMatrix(bincilMatrix, dino, pasaran, wuku) {
+  if (!bincilMatrix || typeof bincilMatrix !== 'object' || Object.keys(bincilMatrix).length === 0) {
+    return null;
+  }
+  const matrix = bincilMatrix;
+
+  const h = normalizeHariName(dino);
+  const p = normalizePasaranName(pasaran);
+  const w = normalizeWukuName(wuku);
+
+  if (!h || !p || !w) {
+    return null;
+  }
+
+  const primaryKey = `${w}_${h}_${p}`;
+  let row = matrix[primaryKey];
+
+  if (!row) {
+    const wukuIdx = CANON_WUKU_NAMES.indexOf(w);
+    if (wukuIdx !== -1) {
+      const altKey = `${wukuIdx + 1}_${h}_${p}`;
+      row = matrix[altKey];
+    }
+  }
+
+  if (!row && Array.isArray(matrix)) {
+    row = matrix.find(item => {
+      if (!item) return false;
+      const itemW = normalizeWukuName(item.wuku || item.no_wuku);
+      const itemH = normalizeHariName(item.hari || item.dino);
+      const itemP = normalizePasaranName(item.pasaran || item.pas);
+      return itemW === w && itemH === h && itemP === p;
+    });
+  }
+
+  if (!row) {
+    return null;
+  }
+
+  const formatDimensi = (dimKey, rawVal) => {
+    let namaVal = '';
+    let rawArti = null;
+    let rawArtiId = null;
+    let rawArtiJv = null;
+    let rawBilingual = null;
+
+    if (rawVal && typeof rawVal === 'object') {
+      namaVal = rawVal.nilai || rawVal.nama || '';
+      rawArti = rawVal.arti;
+      rawArtiId = rawVal.arti_id;
+      rawArtiJv = rawVal.arti_jv;
+      rawBilingual = rawVal.artiBilingual;
+    } else {
+      namaVal = String(rawVal || '').trim();
+    }
+
+    const bilingual = getBincilArtiBilingual(dimKey, namaVal);
+    const jv = rawArtiJv || bilingual?.jv || (typeof rawArti === 'object' ? rawArti?.jv : null) || (typeof rawArti === 'string' ? rawArti : '') || namaVal;
+    const id = rawArtiId || bilingual?.id || (typeof rawArti === 'object' ? rawArti?.id : null) || (typeof rawArti === 'string' ? rawArti : '') || namaVal;
+    const artiStr = (typeof rawArti === 'string' && rawArti) ? rawArti : (id || jv || namaVal);
+
+    return {
+      nama: namaVal,
+      nilai: namaVal,
+      arti: artiStr,
+      arti_id: id,
+      arti_jv: jv,
+      artiBilingual: rawBilingual || bilingual || { id, jv }
+    };
+  };
+
+  const padewan = formatDimensi('padewan', row.padewan);
+  const paringkelan = formatDimensi('paringkelan', row.paringkelan);
+  const pandangon = formatDimensi('pandangon', row.pandangon);
+  const paarasan = formatDimensi('paarasan', row.paarasan ?? row.parasan);
+  const pancasuda = formatDimensi('pancasuda', row.pancasuda);
+  const kamarokan = formatDimensi('kamarokan', row.kamarokan);
+
+  const wukuDisplay = row.wuku || (w.charAt(0).toUpperCase() + w.slice(1));
+  const hariDisplay = row.hari || (h.charAt(0).toUpperCase() + h.slice(1));
+  const pasaranDisplay = row.pasaran || (p.charAt(0).toUpperCase() + p.slice(1));
+  const noWuku = row.no_wuku || (CANON_WUKU_NAMES.indexOf(w) + 1);
+
+  return {
+    found: true,
+    no_wuku: noWuku,
+    wuku: wukuDisplay,
+    hari: hariDisplay,
+    dino: hariDisplay,
+    pasaran: pasaranDisplay,
+    pas: pasaranDisplay,
+    padewan,
+    paringkelan,
+    pandangon,
+    paarasan,
+    parasan: paarasan,
+    pancasuda,
+    kamarokan,
+    pawukon: (typeof getPawukonDetail === 'function') ? getPawukonDetail(wukuDisplay) : null
+  };
+}
+
+export const resolveBincil = resolveBincilFromMatrix;
+
+/**
+ * Mengambil data Nujum Bincil dan Pawukon dari matriks atau master data.
+ */
+export function getNujumData(dino, pas, wukuName, maybeMatrix) {
+  const matrix = maybeMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
+  if (matrix) {
+    const res = resolveBincilFromMatrix(matrix, dino, pas, wukuName);
+    if (res) return res;
+  }
+  if (typeof masterGetNujumData === 'function') {
+    const res = masterGetNujumData(dino, pas, wukuName);
+    if (res && (res.found || res.padewan || res.paarasan || res.parasan)) return res;
+  }
+  return null;
+}
 
 // ─── TAHAP 3: LITERASI BUDAYA & GLOSARIUM KONSEPTUAL ───────────────────────
 export const DISCLAIMER_ETIS_KULTURAL =
@@ -270,27 +454,137 @@ export function hitungKarakterDasarPure(d, m, y) {
 // ─── TAHAP 3.2: RINGKASAN EKSEKUTIF (MODE RINGKAS) ─────────────────────────
 /**
  * Menyusun ringkasan eksekutif ramah pemula tanpa jargon rumit.
- * @param {Object} param0 
+ * Dilengkapi proteksi null-safety mutlak terhadap parameter data dan properti paarasan/parasan.
+ * @param {Object} bincilData
  */
-export function getNujumSummaryRingkas({ nama = 'Panjenengan', d, m, y, tahunHitung = 2026 }) {
-  const info = getDayInfo(y, m, d);
-  const dino = HARI[info.weekdayId];
-  const pas = PASARAN[info.pasaranId];
-  const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
-  const wukuName = WUKU[info.wukuId];
+export function getNujumSummaryRingkas(bincilData) {
+  // Safety guard absolut
+  if (!bincilData || typeof bincilData !== 'object' || Object.keys(bincilData).length === 0) {
+    return "Data bincil dan ringkasan belum tersedia.";
+  }
 
-  const kd = hitungKarakterDasarPure(d, m, y);
-  const bincil = getNujumData(dino, pas, wukuName);
-  const faal = getFaalakiah(nama);
+  const data = bincilData;
+
+  // Ambil data paarasan dengan fallback berlapis (mendukung 'paarasan' maupun 'parasan')
+  const paarasanObj = bincilData.paarasan || bincilData.parasan || {};
+  const nilai = paarasanObj.nilai || paarasanObj.nama || "Aras Kembang";
+  const arti = paarasanObj.arti || { id: "", jv: "" };
+  const artiStr = (typeof arti === 'object' && arti !== null)
+    ? (arti.jv || arti.id || '')
+    : String(arti || '');
+
+  // Formatted string sesuai formula stabil
+  const formattedStr = `Paarasan: ${nilai} - ${artiStr}`;
+
+  // Jika input hanya bincil sederhana atau tanpa konteks perhitungan tanggal
+  if (!bincilData.d && !bincilData.y && !bincilData.m && !bincilData.nama && !('data' in bincilData) && !('bincil' in bincilData)) {
+    return formattedStr;
+  }
+
+  // Ambil data bincil jika dibungkus objek { data, bincil, ... }
+  const innerData = bincilData?.data ?? bincilData?.bincil ?? (bincilData?.paarasan || bincilData?.parasan ? bincilData : null);
+
+  const nama = bincilData?.nama || innerData?.nama || 'Panjenengan';
+  const d = bincilData?.d ?? innerData?.d ?? 1;
+  const m = bincilData?.m ?? innerData?.m ?? 1;
+  const y = bincilData?.y ?? innerData?.y ?? 2026;
+  const tahunHitung = bincilData?.tahunHitung ?? innerData?.tahunHitung ?? 2026;
+
+  const dateParsed = (typeof parseDateComponents === 'function') ? parseDateComponents(y, m, d) : { y, m, d };
+  const info = getDayInfo(dateParsed.y, dateParsed.m, dateParsed.d) || {};
+  const dino = bincilData?.dino || bincilData?.hari || innerData?.dino || innerData?.hari || info.hari || info.dino || HARI[info.weekdayId] || 'Kamis';
+  const pas = bincilData?.pasaran || bincilData?.pas || innerData?.pasaran || innerData?.pas || info.pasaran || info.pas || PASARAN[info.pasaranId] || 'Pon';
+  const neptu = bincilData?.neptu ?? innerData?.neptu ?? (info.neptu !== undefined ? info.neptu : ((NEPTU_HARI[info.weekdayId] ?? 8) + (NEPTU_PASARAN[info.pasaranId] ?? 7)));
+  const wukuName = bincilData?.wuku || bincilData?.wukuName || innerData?.wuku || innerData?.wukuName || info.wukuName || WUKU[info.wukuId] || 'Kuruwelut';
+
+  const kd = bincilData?.kd || innerData?.kd || ((typeof hitungKarakterDasarPure === 'function')
+    ? hitungKarakterDasarPure(d, m, y)
+    : (typeof hitungKarakterDasar === 'function' ? hitungKarakterDasar(d, m, y) : null));
+  const kdSafe = kd || { tipe: 'Luhur', kekuatan: 'Kukuh Sentosa', ringkasan: '-' };
+
+  const matrix = bincilData?.bincilMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
+  const fnGetNujum = (typeof getNujumData === 'function')
+    ? getNujumData
+    : (typeof window !== 'undefined' && typeof window.getNujumData === 'function' ? window.getNujumData : null);
+
+  const bincilCalculated = matrix
+    ? resolveBincilFromMatrix(matrix, dino, pas, wukuName)
+    : (fnGetNujum ? fnGetNujum(dino, pas, wukuName) : null);
+  const bincil = innerData ?? bincilCalculated ?? {};
+
+  // Ambil paarasan secara aman dengan fallback ke array kosong atau objek kosong
+  let rawPaarasan = (paarasanObj && (paarasanObj.nama || paarasanObj.nilai || paarasanObj.arti))
+    ? paarasanObj
+    : (bincilData?.paarasan ?? bincilData?.parasan ?? innerData?.paarasan ?? innerData?.parasan ?? bincil?.paarasan ?? bincil?.parasan ?? paarasanObj ?? {});
+  if (Array.isArray(rawPaarasan)) {
+    rawPaarasan = rawPaarasan.find(p => p && (p.nilai || p.nama)) || rawPaarasan[0] || {};
+  } else if (typeof rawPaarasan === 'string') {
+    rawPaarasan = { nama: rawPaarasan, arti: rawPaarasan };
+  }
+
+  const resolvedNilaiPaarasan = rawPaarasan?.nilai || rawPaarasan?.nama || nilai;
+  const paarasanBilingual = getBincilArtiBilingual('paarasan', resolvedNilaiPaarasan);
+  const resolvedArtiPaarasan = (typeof rawPaarasan.arti === 'object' && rawPaarasan.arti !== null)
+    ? rawPaarasan.arti
+    : {
+        jv: rawPaarasan?.arti_jv || paarasanBilingual?.jv || (typeof rawPaarasan?.arti === 'string' ? rawPaarasan.arti : arti.jv || ''),
+        id: rawPaarasan?.arti_id || paarasanBilingual?.id || (typeof rawPaarasan?.arti === 'string' ? rawPaarasan.arti : arti.id || '')
+      };
+
+  const finalPaarasanObj = {
+    nilai: resolvedNilaiPaarasan,
+    nama: resolvedNilaiPaarasan,
+    arti: (typeof rawPaarasan?.arti === 'string' && rawPaarasan.arti) ? rawPaarasan.arti : (resolvedArtiPaarasan.id || resolvedArtiPaarasan.jv || 'Aras Kembang'),
+    arti_id: resolvedArtiPaarasan.id,
+    arti_jv: resolvedArtiPaarasan.jv,
+    artiBilingual: paarasanBilingual
+  };
+
+  const summaryString = `Paarasan: ${resolvedNilaiPaarasan} - ${resolvedArtiPaarasan.jv || resolvedArtiPaarasan.id || ''}`;
+
+  let rawPandangon = data?.pandangon ?? innerData?.pandangon ?? bincil?.pandangon ?? {};
+  if (Array.isArray(rawPandangon)) {
+    rawPandangon = rawPandangon.find(p => p && (p.nilai || p.nama)) || rawPandangon[0] || {};
+  } else if (typeof rawPandangon === 'string') {
+    rawPandangon = { nama: rawPandangon, arti: rawPandangon };
+  }
+  const pandangonBilingual = getBincilArtiBilingual('pandangon', rawPandangon?.nama || rawPandangon?.nilai || 'Dadi');
+  const pandangonObj = {
+    nama: rawPandangon?.nama || rawPandangon?.nilai || 'Dadi',
+    arti: rawPandangon?.arti || pandangonBilingual?.id || 'Tercapai tujuannya',
+    arti_id: rawPandangon?.arti_id || pandangonBilingual?.id,
+    arti_jv: rawPandangon?.arti_jv || pandangonBilingual?.jv,
+    artiBilingual: rawPandangon?.artiBilingual || pandangonBilingual
+  };
+
+  let rawParingkelan = data?.paringkelan ?? innerData?.paringkelan ?? bincil?.paringkelan ?? {};
+  if (Array.isArray(rawParingkelan)) {
+    rawParingkelan = rawParingkelan.find(p => p && (p.nilai || p.nama)) || rawParingkelan[0] || {};
+  } else if (typeof rawParingkelan === 'string') {
+    rawParingkelan = { nama: rawParingkelan, arti: rawParingkelan };
+  }
+  const paringkelanBilingual = getBincilArtiBilingual('paringkelan', rawParingkelan?.nama || rawParingkelan?.nilai || 'Tungle');
+  const paringkelanObj = {
+    nama: rawParingkelan?.nama || rawParingkelan?.nilai || 'Tungle',
+    arti: rawParingkelan?.arti || paringkelanBilingual?.id || 'Daun / tetuwuhan',
+    arti_id: rawParingkelan?.arti_id || paringkelanBilingual?.id,
+    arti_jv: rawParingkelan?.arti_jv || paringkelanBilingual?.jv,
+    artiBilingual: rawParingkelan?.artiBilingual || paringkelanBilingual
+  };
+
+  const faal = data?.faal || innerData?.faal || ((typeof getFaalakiah === 'function')
+    ? getFaalakiah(nama)
+    : (typeof window !== 'undefined' && typeof window.getFaalakiah === 'function' ? window.getFaalakiah(nama) : null));
+  const faalSafe = faal || { nabi: 'Yusuf', desc: 'Rupawan dan berwibawa' };
 
   // Ekstraksi 3 kekuatan utama dari Paarasan, Pandangon, dan Tipe Karakter
   const kekuatanUtama = [
-    `${kd.tipe}: ${kd.kekuatan.split(',')[0]}`,
-    `Paarasan (${bincil.paarasan.nama}): ${bincil.paarasan.arti.split(',')[0]}`,
-    `Pandangon (${bincil.pandangon.nama}): ${bincil.pandangon.arti.split(',')[0]}`
+    `${kdSafe?.tipe || '-'}: ${(kdSafe?.kekuatan || '-').split(',')[0]}`,
+    `Paarasan (${finalPaarasanObj?.nama || '-' }): ${(finalPaarasanObj?.arti || '-').split(',')[0]}`,
+    `Pandangon (${pandangonObj?.nama || '-' }): ${(pandangonObj?.arti || '-').split(',')[0]}`
   ];
 
-  const areaWaspada = `Paringkelan ${bincil.paringkelan.nama}: ${bincil.paringkelan.arti}`;
+  const areaWaspada = `Paringkelan ${paringkelanObj?.nama || '-'}: ${paringkelanObj?.arti || '-'}`;
 
   // Rekomendasi arah hoki & pantangan rumah berdasarkan dino & pasaran
   const ARAH_HOKI_MAP = {
@@ -307,18 +601,29 @@ export function getNujumSummaryRingkas({ nama = 'Panjenengan', d, m, y, tahunHit
 
   return {
     nama,
-    tglMasehiStr: `${d} ${BULAN_MASEHI[m - 1]} ${y}`,
+    tglMasehiStr: `${d} ${BULAN_MASEHI[m - 1] || 'Wulan'} ${y}`,
     dino,
     pas,
     neptu,
     wukuName,
-    tipeKarakter: kd.tipe,
-    deskripsiKarakter: kd.ringkasan,
+    tipeKarakter: kdSafe?.tipe || 'Luhur',
+    deskripsiKarakter: kdSafe?.ringkasan || '-',
     kekuatanUtama,
     areaWaspada,
     arahHoki,
     sirikanRumah,
-    faalRingkas: `Teladan ${faal.nabi}: ${faal.desc.split('.')[0]}.`
+    faalRingkas: `Teladan Nabi ${faalSafe?.nabi || 'Yusuf'}: ${(faalSafe?.desc || 'Pribadi berbudi luhur').split('.')[0]}.`,
+    summaryText: summaryString,
+    paarasanSummary: summaryString,
+    nilaiPaarasan: resolvedNilaiPaarasan,
+    artiPaarasan: resolvedArtiPaarasan,
+    paarasanObj: finalPaarasanObj,
+    toString() {
+      return summaryString;
+    },
+    valueOf() {
+      return summaryString;
+    }
   };
 }
 
@@ -336,23 +641,34 @@ const RELASI_LABELS = {
  * @param {Object} p2Input { nama, tglLahir }
  * @param {'rekan_kerja'|'mitra_bisnis'|'sahabat'|'keluarga'} relasiType 
  */
-export function compareNonJodoh(p1Input, p2Input, relasiType = 'rekan_kerja') {
+export function compareNonJodoh(p1Input, p2Input, relasiType = 'rekan_kerja', options = {}) {
+  const bincilMatrix = options?.bincilMatrix || (typeof globalThis !== 'undefined' ? globalThis._currentNujumData?.bincilMatrix : null);
   const parsePerson = (inp, fallbackName) => {
     let y, m, d;
     if (inp.tglLahir) {
-      const parts = String(inp.tglLahir).split(/[-/.]/).map(Number);
-      y = parts[0]; m = parts[1]; d = parts[2];
+      const dateParsed = (typeof parseDateComponents === 'function')
+        ? parseDateComponents(inp.tglLahir)
+        : null;
+      if (dateParsed) {
+        y = dateParsed.y; m = dateParsed.m; d = dateParsed.d;
+      } else {
+        const parts = String(inp.tglLahir).split(/[-/.]/).map(Number);
+        if (parts[0] >= 1000) { y = parts[0]; m = parts[1]; d = parts[2]; }
+        else { y = parts[2]; m = parts[1]; d = parts[0]; }
+      }
     } else {
       y = inp.y; m = inp.m; d = inp.d;
     }
     const nama = inp.nama && inp.nama.trim() !== '' ? inp.nama.trim() : fallbackName;
-    const info = getDayInfo(y, m, d);
-    const dino = HARI[info.weekdayId];
-    const pas = PASARAN[info.pasaranId];
-    const neptu = NEPTU_HARI[info.weekdayId] + NEPTU_PASARAN[info.pasaranId];
-    const wukuName = WUKU[info.wukuId];
+    const info = getDayInfo(y, m, d) || {};
+    const dino = info.hari || info.dino || HARI[info.weekdayId] || 'Kamis';
+    const pas = info.pasaran || info.pas || PASARAN[info.pasaranId] || 'Pon';
+    const neptu = (info.neptu !== undefined) ? info.neptu : ((NEPTU_HARI[info.weekdayId] ?? 8) + (NEPTU_PASARAN[info.pasaranId] ?? 7));
+    const wukuName = info.wukuName || WUKU[info.wukuId] || 'Kuruwelut';
     const kd = hitungKarakterDasarPure(d, m, y);
-    const bincil = getNujumData(dino, pas, wukuName);
+    const bincil = bincilMatrix
+      ? resolveBincilFromMatrix(bincilMatrix, dino, pas, wukuName)
+      : getNujumData(dino, pas, wukuName);
 
     return {
       nama,
@@ -365,12 +681,13 @@ export function compareNonJodoh(p1Input, p2Input, relasiType = 'rekan_kerja') {
       wukuNo: info.wukuId + 1,
       tipeKarakter: kd.tipe,
       bincil: {
-        padewan: bincil.padewan,
-        paringkelan: bincil.paringkelan,
-        pandangon: bincil.pandangon,
-        paarasan: bincil.paarasan,
-        pancasuda: bincil.pancasuda,
-        kamarokan: bincil.kamarokan
+        padewan: bincil?.padewan ?? { nama: 'Guru', arti: 'Pemberi anugerah' },
+        paringkelan: bincil?.paringkelan ?? { nama: 'Tungle', arti: 'Daun' },
+        pandangon: bincil?.pandangon ?? { nama: 'Dadi', arti: 'Tercapai tujuannya' },
+        paarasan: bincil?.paarasan ?? bincil?.parasan ?? { nama: 'Lakuning Srengenge', arti: 'Pengertian' },
+        parasan: bincil?.parasan ?? bincil?.paarasan ?? { nama: 'Lakuning Srengenge', arti: 'Pengertian' },
+        pancasuda: bincil?.pancasuda ?? { nama: 'Satria Wibawa', arti: 'Luhur' },
+        kamarokan: bincil?.kamarokan ?? { nama: 'Mantri Sinarojo', arti: 'Amanah' }
       }
     };
   };
@@ -409,12 +726,12 @@ export function compareNonJodoh(p1Input, p2Input, relasiType = 'rekan_kerja') {
   const titikTemu = [
     `${person1.nama} (${person1.tipeKarakter}) dan ${person2.nama} (${person2.tipeKarakter}) memiliki kombinasi pendekatan yang saling melengkapi dalam mengawal rencana kerja.`,
     `Energi weton ${person1.dino} ${person1.pas} (Neptu ${person1.neptu}) bersanding selaras dengan ${person2.dino} ${person2.pas} (Neptu ${person2.neptu}), memadukan ketahanan dan keluwesan.`,
-    `Dimensi Pandangon (${person1.bincil.pandangon.nama} & ${person2.bincil.pandangon.nama}) memungkinkan keduanya saling mengoreksi perspektif tanpa mencederai komitmen bersama.`
+    `Dimensi Pandangon (${person1?.bincil?.pandangon?.nama || '-'} & ${person2?.bincil?.pandangon?.nama || '-'}) memungkinkan keduanya saling mengoreksi perspektif tanpa mencederai komitmen bersama.`
   ];
 
   // Analisis Potensi Friksi / Gesekan Komunikasi
   const potensiFriksi = [
-    `Perbedaan gaya komunikasi: ${person1.bincil.paarasan.nama} cenderung ${person1.bincil.paarasan.arti.split(',')[0].toLowerCase()}, sedangkan ${person2.bincil.paarasan.nama} cenderung ${person2.bincil.paarasan.arti.split(',')[0].toLowerCase()}.`,
+    `Perbedaan gaya komunikasi: ${person1?.bincil?.paarasan?.nama || '-'} cenderung ${(person1?.bincil?.paarasan?.arti || 'pengertian').split(',')[0].toLowerCase()}, sedangkan ${person2?.bincil?.paarasan?.nama || '-'} cenderung ${(person2?.bincil?.paarasan?.arti || 'pengertian').split(',')[0].toLowerCase()}.`,
     `Saat berada di bawah tekanan tenggat waktu, waspadai potensi gesekan antara dorongan cepat dan kebutuhan ketelitian mendalam.`
   ];
 

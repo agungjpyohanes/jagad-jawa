@@ -14,7 +14,7 @@
  *      (bukan HTML SPA fallback), sehingga UI dapat menampilkan pesan error offline yang jujur & tombol retry.
  */
 
-const SW_VERSION = 'v6';
+const SW_VERSION = 'v15';
 const SHELL_CACHE_NAME = `jagad-jawa-shell-${SW_VERSION}`;
 const DATA_CACHE_NAME = `jagad-jawa-data-${SW_VERSION}`;
 const CURRENT_CACHES = [SHELL_CACHE_NAME, DATA_CACHE_NAME];

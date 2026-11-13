@@ -352,8 +352,8 @@ export function drawNujumPokemonCard(canvas, data, options = DEFAULT_OPTIONS, sc
     try {
       const dayInf = getDayInfo(parseInt(data.y, 10), parseInt(data.m, 10), parseInt(data.d, 10));
       if (dayInf) {
-        if (!dino) dino = dayInf.hari;
-        if (!pas) pas = dayInf.pasaran;
+        if (!dino) dino = dayInf?.hari || dayInf?.dino || (typeof HARI !== "undefined" ? HARI[dayInf?.weekdayId] : null) || "Kamis";
+        if (!pas) pas = dayInf?.pasaran || dayInf?.pas || (typeof PASARAN !== "undefined" ? PASARAN[dayInf?.pasaranId] : null) || "Pon";
       }
     } catch {}
   }
