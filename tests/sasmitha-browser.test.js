@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import puppeteer from 'puppeteer-core';
 
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
@@ -40,13 +41,17 @@ describe('Sasmitha Alam Browser E2E - 6 Subtab Navigation & Complete Narratives'
   let server;
   let browser;
   let page;
+  let tempUserDataDir;
 
   before(async () => {
     server = createTestServer();
     await new Promise((resolve) => server.listen(PORT, resolve));
+    tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'jj_puppeteer_sasmitha_'));
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
+      pipe: true,
+      userDataDir: tempUserDataDir,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     page = await browser.newPage();
@@ -56,6 +61,11 @@ describe('Sasmitha Alam Browser E2E - 6 Subtab Navigation & Complete Narratives'
   after(async () => {
     if (browser) await browser.close();
     if (server) await new Promise((resolve) => server.close(resolve));
+    if (tempUserDataDir) {
+      try {
+        fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+      } catch {}
+    }
   });
 
   it('Navigasi ke Sasmitha dan memverifikasi seluruh 6 sub-menu berfungsi normal', async () => {

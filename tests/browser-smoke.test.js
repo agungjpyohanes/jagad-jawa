@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import puppeteer from 'puppeteer-core';
 
 /**
@@ -111,6 +112,7 @@ function createTestServer() {
 describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () => {
   let server;
   let browser;
+  let tempUserDataDir;
 
   before(async () => {
     // Pastikan dist/ dan dist/data/ ada
@@ -121,9 +123,13 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
     server = createTestServer();
     await new Promise((resolve) => server.listen(PORT, '127.0.0.1', resolve));
 
+    tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'jj_puppeteer_smoke_'));
+
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
+      pipe: true,
+      userDataDir: tempUserDataDir,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
   });
@@ -131,6 +137,11 @@ describe('Browser Smoke Test Minimum (Local Build dist/ + Headless Chrome)', () 
   after(async () => {
     if (browser) await browser.close();
     if (server) await new Promise((resolve) => server.close(resolve));
+    if (tempUserDataDir) {
+      try {
+        fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+      } catch {}
+    }
   });
 
   it('Smoke Test: Halaman utama tampil, tidak ada console error fatal, dan request /data/*.json berhasil', async () => {

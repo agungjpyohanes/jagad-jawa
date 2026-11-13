@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import puppeteer from 'puppeteer-core';
 
 /**
@@ -123,6 +124,7 @@ function createTestServer() {
 describe('Browser E2E Interaksi: Jodoh & Selametan (Harness Lokal + Baseline Preservasi)', () => {
   let server;
   let browser;
+  let tempUserDataDir;
 
   before(async () => {
     assert.ok(fs.existsSync(DIST_DIR), 'Folder dist/ harus ada');
@@ -132,9 +134,13 @@ describe('Browser E2E Interaksi: Jodoh & Selametan (Harness Lokal + Baseline Pre
     server = createTestServer();
     await new Promise((resolve) => server.listen(PORT, '127.0.0.1', resolve));
 
+    tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'jj_puppeteer_jodoh_'));
+
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
+      pipe: true,
+      userDataDir: tempUserDataDir,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
   });
@@ -142,6 +148,11 @@ describe('Browser E2E Interaksi: Jodoh & Selametan (Harness Lokal + Baseline Pre
   after(async () => {
     if (browser) await browser.close();
     if (server) await new Promise((resolve) => server.close(resolve));
+    if (tempUserDataDir) {
+      try {
+        fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+      } catch {}
+    }
   });
 
   // =========================================================================

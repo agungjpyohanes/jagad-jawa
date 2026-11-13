@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import puppeteer from 'puppeteer-core';
 import { CANONICAL_KEYS, resolveCanonicalKey } from '../js/services/datasetManifest.js';
 
@@ -102,16 +103,21 @@ function createTestServer() {
 describe('E2E Browser Test Suite (Headless Chrome + Local Fixture Server)', { concurrency: 1 }, () => {
   let server;
   let browser;
+  let tempUserDataDir;
 
   before(async () => {
     // 1. Jalankan server fixture lokal
     server = createTestServer();
     await new Promise((resolve) => server.listen(PORT, '127.0.0.1', resolve));
 
+    tempUserDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'jj_puppeteer_e2e_'));
+
     // 2. Luncurkan browser headless Chrome lokal
     browser = await puppeteer.launch({
       executablePath: CHROME_PATH,
       headless: true,
+      pipe: true,
+      userDataDir: tempUserDataDir,
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
     });
   });
@@ -119,6 +125,11 @@ describe('E2E Browser Test Suite (Headless Chrome + Local Fixture Server)', { co
   after(async () => {
     if (browser) await browser.close();
     if (server) await new Promise((resolve) => server.close(resolve));
+    if (tempUserDataDir) {
+      try {
+        fs.rmSync(tempUserDataDir, { recursive: true, force: true });
+      } catch {}
+    }
   });
 
   it('1. App Shell Load & Canonical API Path tanpa blank page atau uncaught console error', async () => {
